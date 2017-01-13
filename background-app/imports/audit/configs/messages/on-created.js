@@ -2,18 +2,17 @@ import { _ } from 'meteor/underscore';
 import property from 'lodash.property';
 
 import { Discussions } from '/imports/share/collections/discussions';
-import { Messages } from '/imports/share/collections/messages';
 import { getUserId, getLinkedDocAuditConfig } from '../../utils/helpers';
 import { getLinkedDoc } from '/imports/share/helpers';
 import { getMentionData, getMentionDataWithUsers } from '/imports/share/mentions';
-import { propCreatedBy } from '/imports/helpers/props';
 
 const getDocAndConfigByDiscussionId = (discussionId) => {
-  const { linkedTo, documentType } = { ...Discussions.findOne({ _id: discussionId }) };
+  const discussion = { ...Discussions.findOne({ _id: discussionId }) };
+  const { linkedTo, documentType } = discussion;
   const config = getLinkedDocAuditConfig(documentType);
   const doc = getLinkedDoc(linkedTo, documentType);
 
-  return { doc, config };
+  return { doc, config, discussion };
 };
 
 const getDocNameDesc = ({ doc, config }) => ({
@@ -50,15 +49,18 @@ export default {
       receivers({ newDoc: { discussionId }, user }) {
         const receivers = new Set();
         const userId = getUserId(user);
-        const { doc, config } = getDocAndConfigByDiscussionId(discussionId);
+        const {
+          doc,
+          config,
+          discussion: { participants = [] } = {},
+        } = getDocAndConfigByDiscussionId(discussionId);
         const owner = config.docOwner && config.docOwner(doc);
-        const query = { discussionId, createdBy: { $ne: userId } };
-        const addCreatedBy = _.compose(receivers.add.bind(receivers), propCreatedBy);
 
-        // add all discussion participants except current user to receivers
-        Messages.find(query).forEach(addCreatedBy);
+        receivers.add(owner);
 
-        if (owner !== userId) receivers.add(owner); // add owner to receivers if he is not a sender
+        participants.forEach(receivers.add.bind(receivers));
+
+        receivers.delete(userId);
 
         return Array.from(receivers);
       },
