@@ -1,10 +1,10 @@
-import { Meteor } from 'meteor/meteor';
+import property from 'lodash.property';
 
 import { CollectionNames } from '/imports/share/constants';
 import { Discussions } from '/imports/share/collections/discussions';
 import { Messages } from '/imports/share/collections/messages';
-import { Organizations } from '/imports/share/collections/organizations';
 import { getLinkedDocAuditConfig } from '../../utils/helpers';
+import { propId, propOrganizationId } from '/imports/helpers/props';
 
 import onCreated from './on-created';
 
@@ -21,21 +21,16 @@ export default MessageAuditConfig = {
 
   onRemoved: {},
 
-  docId({ _id }) {
-    return _id;
-  },
+  docId: propId,
+
+  docName: property('message'),
 
   docDescription() {
     return 'message';
   },
 
-  docName({ message }) {
-    return message;
-  },
-
   docOrgId({ discussionId }) {
-    const { organizationId } = Discussions.findOne({ _id: discussionId }) || {};
-    return organizationId;
+    return propOrganizationId(Discussions.findOne({ _id: discussionId }));
   },
 
   docUrl({ _id, discussionId }) {

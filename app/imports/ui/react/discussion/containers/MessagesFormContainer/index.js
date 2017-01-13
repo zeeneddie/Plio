@@ -7,7 +7,6 @@ import { Organizations } from '/imports/share/collections/organizations';
 import { submit } from './handlers';
 import MessagesForm from '../../components/MessagesForm';
 
-// TODO: query only organization's users
 export default compose(
   connect(),
   withState('value', 'setValue', ''),

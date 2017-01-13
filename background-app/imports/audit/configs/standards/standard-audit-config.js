@@ -4,6 +4,7 @@ import { CollectionNames } from '/imports/share/constants';
 import { Standards } from '/imports/share/collections/standards';
 import { getStandardDesc, getStandardName } from '/imports/helpers/description';
 import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
+import { propId, propOrganizationId, propNotify, propOwner } from '/imports/helpers/props';
 
 import onCreated from './on-created';
 import onRemoved from './on-removed';
@@ -57,27 +58,19 @@ export default StandardAuditConfig = {
 
   onRemoved,
 
-  docId({ _id }) {
-    return _id;
-  },
+  docId: propId,
 
-  docDescription() {
-    return getStandardDesc();
-  },
+  docOrgId: propOrganizationId,
 
-  docName(doc) {
-    return getStandardName(doc);
-  },
+  docOwner: propOwner,
 
-  docOrgId({ organizationId }) {
-    return organizationId;
-  },
+  docNotifyList: propNotify,
+
+  docDescription: getStandardDesc,
+
+  docName: getStandardName,
 
   docUrl: generateStandardDocUrl,
-
-  docNotifyList({ notify: notifyList = [] }) {
-    return notifyList;
-  },
 
   docUnsubscribeUrl: _.compose(getDocUnsubscribePath, generateStandardDocUrl),
 

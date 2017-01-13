@@ -6,9 +6,8 @@ import { Dropdown } from 'reactstrap';
 import { searchByRegex, createSearchRegex, propEq, omitC } from '/imports/api/helpers';
 import Input from './Input';
 import Menu from './Menu';
-import { MENTION_REGEX } from './constants';
-
-// TODO: add avatar, filter out current user
+import MenuItem from './MenuItem';
+import { MENTION_REGEX } from '/imports/share/mentions';
 
 const propTypes = {
   value: PropTypes.string.isRequired,
@@ -32,7 +31,7 @@ class Mention extends React.Component {
     this.toggle = this.toggle.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
     this.handleInputChange = _.debounce(this.handleInputChange, 300).bind(this);
-    this.handleUserClick = this.handleUserClick.bind(this);
+    this.handleUserSelect = this.handleUserSelect.bind(this);
   }
 
   onInputChange(e) {
@@ -58,7 +57,7 @@ class Mention extends React.Component {
     this.setState({ users, match });
   }
 
-  handleUserClick(e, selectedUser) {
+  handleUserSelect(e, selectedUser) {
     const user = this.state.users.find(propEq('value', selectedUser.value));
 
     if (!user) {
@@ -94,10 +93,10 @@ class Mention extends React.Component {
             getRef: (input) => (this.input = input),
           });
         case Menu:
-          return React.cloneElement(child, {
-            onUserClick: this.handleUserClick,
+          return this.state.users.length ? React.cloneElement(child, {
+            onUserSelect: this.handleUserSelect,
             users: this.state.users,
-          });
+          }) : null;
         default:
           return child;
       }
@@ -118,5 +117,6 @@ Mention.propTypes = propTypes;
 
 Mention.Input = Input;
 Mention.Menu = Menu;
+Mention.MenuItem = MenuItem;
 
 export default Mention;

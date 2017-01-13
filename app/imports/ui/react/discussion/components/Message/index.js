@@ -32,12 +32,11 @@ const Message = ({
     {dateToShow && <MessageDate {...{ date }} />}
 
     <MessageBox className={className}>
-      {!isMergedWithPreviousMessage &&
-        <MessageAvatar
-          avatar={userAvatar}
-          alt={userFullNameOrEmail}
-          onClick={onMessageAvatarClick}
-        />}
+      {!isMergedWithPreviousMessage && (
+        <MessageAvatar onClick={onMessageAvatarClick}>
+          <img src={userAvatar} alt={userFullNameOrEmail} tabIndex="0" />
+        </MessageAvatar>
+      )}
 
       <MessageCard>
         {!isMergedWithPreviousMessage &&
