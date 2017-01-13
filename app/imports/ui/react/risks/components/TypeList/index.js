@@ -1,19 +1,19 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
-import { createStandardTypeItem } from '../../helpers';
-import { TYPE_UNCATEGORIZED } from '../../constants';
+import { CollectionNames } from '/imports/share/constants';
+import { createTypeItem } from '../../../helpers/createTypeItem';
 import LHSItemContainer from '../../../containers/LHSItemContainer';
-import StandardListContainer from '../../containers/StandardListContainer';
+import RisksListContainer from '../../containers/RisksListContainer';
 import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
-import SectionListContainer from '../../containers/SectionListContainer';
 
 const TypeList = ({ types, onToggleCollapse }) => (
   <div>
     {types.map(type => (
       <LHSItemContainer
         key={type._id}
-        item={createStandardTypeItem(type._id)}
+        item={createTypeItem(CollectionNames.RISK_TYPES, type._id)}
+        // todo: move to separated helper
         lText={cx(type.title, type.abbreviation && `(${type.abbreviation})`)}
         rText={type.unreadMessagesCount && (
           <LabelMessagesCount count={type.unreadMessagesCount} />
@@ -22,15 +22,10 @@ const TypeList = ({ types, onToggleCollapse }) => (
         onToggleCollapse={onToggleCollapse}
       >
         <div className="sub">
-          {type._id === TYPE_UNCATEGORIZED ? (
+          {type._id === 'TYPE_UNCATEGORIZED' || false ? (
             <StandardListContainer standards={type.standards} />
           ) : (
-            <SectionListContainer
-              defaultType={types[0]}
-              type={type}
-              standards={type.standards}
-              onToggleCollapse={onToggleCollapse}
-            />
+            <div>Placeholder</div>
           )}
         </div>
       </LHSItemContainer>

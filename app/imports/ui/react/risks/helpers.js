@@ -3,12 +3,11 @@ import { withProps } from 'recompose';
 import curry from 'lodash.curry';
 
 import { CollectionNames } from '/imports/share/constants';
-import { STANDARD_FILTER_MAP } from '/imports/api/constants';
+import { RiskFilterIndexes } from '/imports/api/constants';
 import {
   compose,
   find,
-  propStandards,
-  propSections,
+  propRisks,
   propEqId,
   propId,
   propEq,
@@ -18,136 +17,119 @@ import {
 } from '/imports/api/helpers';
 import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
 import { goTo } from '../../utils/router/actions';
-import { createTypeItem } from '../helpers/createTypeItem';
 import store, { getState } from '/imports/client/store';
-import { SECTION_UNCATEGORIZED, TYPE_UNCATEGORIZED } from './constants';
+import { createTypeItem } from '../helpers/createTypeItem';
 
 export const getSubNestingClassName = ({ nestingLevel = 1 }) =>
   'sub'.repeat(parseInt(nestingLevel, 10) - 1);
 
-export const createSectionItem = key => ({
-  key,
-  type: CollectionNames.STANDARD_BOOK_SECTIONS,
-});
+export const createRiskTypeItem = curry(createTypeItem)(CollectionNames.RISK_TYPES);
 
-export const createStandardTypeItem = curry(createTypeItem)(CollectionNames.STANDARD_TYPES);
+export const findSelectedRisk = id =>
+  compose(find(propEqId(id)), propRisks);
 
-export const findSelectedStandard = id =>
-  compose(find(propEqId(id)), propStandards);
-
-export const findSelectedSection = id =>
-  compose(find(findSelectedStandard(id)), propSections);
-
-export const getStandardsByFilter = ({ filter, standards }) => (
-  filter === STANDARD_FILTER_MAP.DELETED
+export const getRisksByFilter = ({ filter, standards }) => (
+  filter === RiskFilterIndexes.DELETED
     ? standards.filter(propEq('isDeleted', true))
     : standards.filter(notDeleted)
 );
 
-export const addCollapsedType = compose(addCollapsed, createStandardTypeItem, propId);
-
-export const addCollapsedSection = compose(addCollapsed, createSectionItem, propId);
-
-export const createUncategorizedSection = ({ standards, sections }) => ({
-  _id: SECTION_UNCATEGORIZED,
-  title: 'Uncategorized',
-  organizationId: getC('organizationId', standards[0]),
-  standards: standards.filter(standard => !sections.find(propEqId(standard.sectionId))),
-});
+export const addCollapsedType = compose(addCollapsed, createRiskTypeItem, propId);
 
 export const createUncategorizedType = ({ standards, types }) => ({
-  _id: TYPE_UNCATEGORIZED,
+  _id: 'TYPE_UNCATEGORIZED',
   title: 'Uncategorized',
   organizationId: getC('organizationId', standards[0]),
   standards: standards.filter(standard => !types.find(propEqId(standard.typeId))),
 });
 
-export const getSelectedAndDefaultStandardByFilter = ({
+export const getSelectedAndDefaultRiskByFilter = ({
   sections, types, standards, filter, urlItemId,
 }) => {
-  const findStandard = findSelectedStandard(urlItemId);
+  const findRisk = findSelectedRisk(urlItemId);
   switch (filter) {
-    case STANDARD_FILTER_MAP.SECTION: {
-      const containedIn = sections.find(findStandard);
+    case RiskFilterIndexes.STATUS: {
+      const containedIn = sections.find(findRisk);
       return {
         containedIn,
-        selectedStandard: findStandard(containedIn),
-        defaultStandard: getC('sections[0].standards[0]', { sections }),
+        selectedRisk: findRisk(containedIn),
+        defaultRisk: getC('sections[0].standards[0]', { sections }),
         defaultContainedIn: _.first(sections),
       };
     }
-    case STANDARD_FILTER_MAP.TYPE: {
-      const containedIn = types.find(findStandard);
+    case RiskFilterIndexes.DEPARTMENT: {
+      const containedIn = sections.find(findRisk);
       return {
         containedIn,
-        selectedStandard: findStandard(containedIn),
-        defaultStandard: getC('types[0].standards[0]', { types }),
+        selectedRisk: findRisk(containedIn),
+        defaultRisk: getC('sections[0].standards[0]', { sections }),
+        defaultContainedIn: _.first(sections),
+      };
+    }
+    case RiskFilterIndexes.TYPE: {
+      const containedIn = types.find(findRisk);
+      return {
+        containedIn,
+        selectedRisk: findRisk(containedIn),
+        defaultRisk: getC('types[0].standards[0]', { types }),
         defaultContainedIn: _.first(types),
       };
     }
-    case STANDARD_FILTER_MAP.DELETED:
+    case RiskFilterIndexes.DELETED:
     default:
       return {
-        selectedStandard: findStandard({ standards }),
-        defaultStandard: getC('standards[0]', { standards }),
+        selectedRisk: findRisk({ standards }),
+        defaultRisk: getC('standards[0]', { standards }),
         containedIn: null,
         defaultContainedIn: null,
       };
   }
 };
 
-export const redirectToStandardOrDefault = ({
-  selectedStandard,
-  defaultStandard,
-}) => !selectedStandard && (
-  defaultStandard
-    ? goTo('standard')({ urlItemId: getId(defaultStandard) })
-    : goTo('standards')()
+export const redirectToRiskOrDefault = ({
+  selectedRisk,
+  defaultRisk,
+}) => !selectedRisk && (
+  defaultRisk
+    ? goTo('risk')({ urlItemId: getId(defaultRisk) })
+    : goTo('risks')()
 );
 
-export const openStandardByFilter = ({
-  selectedStandard,
+export const openRiskByFilter = ({
+  selectedRisk,
   containedIn,
   defaultContainedIn,
   filter,
   dispatch,
 }) => {
-  const parentItem = selectedStandard ? containedIn : defaultContainedIn;
+  const parentItem = selectedRisk ? containedIn : defaultContainedIn;
   const topLevelKey = getId(parentItem);
   let result;
 
   switch (filter) {
     case 1:
     default: {
-      const sectionItem = createSectionItem(topLevelKey);
-      result = dispatch(addCollapsed({ ...sectionItem, close: { type: sectionItem.type } }));
-      break;
-    }
-    case 2: {
-      const typeItem = createStandardTypeItem(topLevelKey);
+      const typeItem = createRiskTypeItem(topLevelKey);
       result = dispatch(addCollapsed({ ...typeItem, close: { type: typeItem.type } }));
       break;
     }
-    case 3:
+    case 2: {
       result = null;
       break;
+    }
   }
 
   return result;
 };
 
-export const expandCollapsedStandard = (_id) => {
+export const expandCollapsedRisk = (_id) => {
   const { collections: { standardsByIds }, global: { filter } } = getState();
   const standard = { ...standardsByIds[_id] };
-  const sectionItem = createSectionItem(standard.sectionId);
-  const typeItem = createStandardTypeItem(standard.typeId);
+  const typeItem = createRiskTypeItem(standard.typeId);
   let action;
 
   switch (filter) {
-    case STANDARD_FILTER_MAP.SECTION:
-      action = addCollapsed({ ...sectionItem, close: { type: sectionItem.type } });
-      break;
-    case STANDARD_FILTER_MAP.TYPE:
+    case RiskFilterIndexes.TYPE:
       action = chainActions(
         [typeItem, sectionItem].map(item => addCollapsed({ ...item, close: { type: item.type } }))
       );
@@ -159,7 +141,7 @@ export const expandCollapsedStandard = (_id) => {
   return store.dispatch(action);
 };
 
-export const expandCollapsedStandards = (ids) => {
+export const expandCollapsedRisks = (ids) => {
   const {
     collections: { standards, standardBookSections, standardTypes },
     global: { filter, collapsed },
@@ -181,9 +163,7 @@ export const expandCollapsedStandards = (ids) => {
     : sections;
 
   switch (filter) {
-    case STANDARD_FILTER_MAP.SECTION:
-      return store.dispatch(chainActions(sections.map(addCollapsedSection)));
-    case STANDARD_FILTER_MAP.TYPE: {
+    case RiskFilterIndexes.TYPE: {
       const uncategorizedType = createUncategorizedType({
         standards: standardsFound,
         types: standardTypes,
@@ -206,17 +186,17 @@ export const expandCollapsedStandards = (ids) => {
   }
 };
 
-export const collapseExpandedStandards = () => {
+export const collapseExpandedRisks = () => {
   const {
     collections: { standardsByIds, standardTypesByIds, standardBookSectionsByIds },
     global: { filter, urlItemId },
   } = getState();
   // expand section and type with currently selected standard and close others
-  const selectedStandard = standardsByIds[urlItemId];
+  const selectedRisk = standardsByIds[urlItemId];
 
-  if (!selectedStandard) return false;
+  if (!selectedRisk) return false;
 
-  const selectedSection = standardBookSectionsByIds[selectedStandard.sectionId] ||
+  const selectedSection = standardBookSectionsByIds[selectedRisk.sectionId] ||
     { _id: SECTION_UNCATEGORIZED };
   const selectedSectionItem = createSectionItem(getId(selectedSection));
   const addClose = item => ({
@@ -226,16 +206,12 @@ export const collapseExpandedStandards = () => {
   const sectionCollapseAction = addCollapsed(addClose(selectedSectionItem));
 
   switch (filter) {
-    case STANDARD_FILTER_MAP.SECTION:
-      // if standards are filtered by 'section'
-      // collapse all sections except the one that is holding selected standard
-      return store.dispatch(sectionCollapseAction);
     case STANDARD_FILTER_MAP.TYPE: {
       // if standards are filtered by 'type'
       // collapse all types and sections except the one that is holding selected standard
-      const selectedType = standardTypesByIds[selectedStandard.typeId] ||
+      const selectedType = standardTypesByIds[selectedRisk.typeId] ||
         { _id: TYPE_UNCATEGORIZED };
-      const selectedTypeItem = createStandardTypeItem(getId(selectedType));
+      const selectedTypeItem = createRiskTypeItem(getId(selectedType));
       const typeCollapseAction = addCollapsed(addClose(selectedTypeItem));
 
       return store.dispatch(chainActions([typeCollapseAction, sectionCollapseAction]));
@@ -245,12 +221,12 @@ export const collapseExpandedStandards = () => {
   }
 };
 
-export const withStandard = withProps(props => ({
-  standard: findSelectedStandard(props.urlItemId)(props),
+export const withRisk = withProps(props => ({
+  standard: findSelectedRisk(props.urlItemId)(props),
 }));
 
-export const getSelectedStandardDeletedState = state => ({
-  isSelectedStandardDeleted: getC(
+export const getSelectedRiskDeletedState = state => ({
+  isSelectedRiskDeleted: getC(
     'isDeleted',
     state.collections.standardsByIds[state.global.urlItemId]
   ),

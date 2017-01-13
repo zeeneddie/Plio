@@ -112,6 +112,10 @@ export const propStandards = property('standards');
 
 export const lengthStandards = compose(length, propStandards);
 
+export const propRisks = property('risks');
+
+export const lengthRisks = compose(length, propRisks);
+
 export const propSections = property('sections');
 
 export const lengthSections = compose(length, propSections);

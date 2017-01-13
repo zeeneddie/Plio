@@ -3,15 +3,21 @@ import React from 'react';
 import { RiskFilterIndexes } from '/imports/api/constants';
 import propTypes from './propTypes';
 import LHSContainer from '../../../containers/LHSContainer';
+import TypeListContainer from '../../containers/T'
 
 const RisksLHS = (props) => {
   const contentByFilter = {
-    [RiskFilterIndexes.TYPE]: <div>TYPE</div>,
+    [RiskFilterIndexes.TYPE]: (
+      <TypeListContainer
+        risks={props.risks}
+        onToggleCollapse={props.onToggleCollapse}
+      />
+    ),
     [RiskFilterIndexes.STATUS]: <div>STATUS</div>,
     [RiskFilterIndexes.DEPARTMENT]: <div>DEPARTMENT</div>,
     [RiskFilterIndexes.DELETED]: <div>DELETED</div>,
   };
-  console.log(props);
+
   return (
     <LHSContainer
       animating={props.animating}
