@@ -61,15 +61,15 @@ Template.Risks_List.viewmodel({
 
     switch(this.activeRiskFilterId()) {
       case 1:
-        const types = this.types();
+        const types = this.risksByTypes();
         return resulstsFromItems(types);
         break;
       case 2:
-        const statuses = this.statuses();
+        const statuses = this.risksByStatuses();
         return resulstsFromItems(statuses);
         break;
       case 3:
-        const departments = this.departments();
+        const departments = this.risksByDepartments();
         return resulstsFromItems(departments);
         break;
       case 4:
@@ -154,6 +154,13 @@ Template.Risks_List.viewmodel({
   },
   onSearchInputValue() {
     return value => extractIds(this._findRiskForFilter().array);
+  },
+  onAfterSearch() {
+    return (searchText, searchResult) => {
+      if (searchText && searchResult.length) {
+        this.goToRisk(searchResult[0]);
+      }
+    };
   },
   _getTotalUnreadMessages(risks) {
     const riskIds = extractIds(risks);

@@ -240,6 +240,10 @@ const OrganizationSchema = new SimpleSchema([
       type: transferSchema,
       optional: true,
     },
+    lastAccessedDate: {
+      type: Date,
+      defaultValue: new Date,
+    }
   },
 ]);
 

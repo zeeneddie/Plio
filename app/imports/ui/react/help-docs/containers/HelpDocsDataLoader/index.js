@@ -46,9 +46,10 @@ export default compose(
   }),
 
   connect(pickDeep([
+    'global.searchText',
     'global.urlItemId',
     'collections.helpDocs',
-    'helpDocs.helpSectionsData',
+    'helpDocs.helpDocsFiltered',
   ])),
 
   lifecycle({

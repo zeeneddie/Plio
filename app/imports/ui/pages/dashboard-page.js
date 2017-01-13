@@ -4,6 +4,7 @@ import property from 'lodash.property';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { UserSubs, CountSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers.js';
+import { updateLastAccessedDate } from '/imports/api/organizations/methods.js';
 
 Template.Dashboard_Page.viewmodel({
   mixin: ['organization', { 'counter': 'counter' }],
@@ -27,10 +28,20 @@ Template.Dashboard_Page.viewmodel({
 
       BackgroundSubs.subscribe('organizationDeps', this.organizationId());
     },
-    function() {
+    function () {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
     }
   ],
+  onRendered() {
+    const currentOrganization = this.organization();
+    const organizationId = this.organizationId();
+    const lastAccessedDate = currentOrganization.lastAccessedDate || new Date(0);
+    const currentDate = new Date;
+
+    if (lastAccessedDate.toDateString() !== currentDate.toDateString()) {
+      updateLastAccessedDate.call({ organizationId });
+    }
+  },
   _renderMetrics(pluralizeWord = '', totalCount = 0) {
 
     // Workaround for https://github.com/blakeembrey/pluralize/pull/12
