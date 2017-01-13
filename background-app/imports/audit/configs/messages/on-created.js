@@ -1,15 +1,27 @@
+import { _ } from 'meteor/underscore';
+import property from 'lodash.property';
+
 import { Discussions } from '/imports/share/collections/discussions';
 import { Messages } from '/imports/share/collections/messages';
-import { Standards } from '/imports/share/collections/standards';
 import { getUserId, getLinkedDocAuditConfig } from '../../utils/helpers';
-import StandardAuditConfig from '../standards/standard-audit-config';
 import { getLinkedDoc } from '/imports/share/helpers';
 import { getMentionData, getMentionDataWithUsers } from '/imports/share/mentions';
+import { propCreatedBy } from '/imports/helpers/props';
 
-const getDiscussionStandard = (discussionId) => {
-  const { linkedTo } = Discussions.findOne({ _id: discussionId }) || {};
-  return linkedTo && (Standards.findOne({ _id: linkedTo }) || {});
+const getDocAndConfigByDiscussionId = (discussionId) => {
+  const { linkedTo, documentType } = { ...Discussions.findOne({ _id: discussionId }) };
+  const config = getLinkedDocAuditConfig(documentType);
+  const doc = getLinkedDoc(linkedTo, documentType);
+
+  return { doc, config };
 };
+
+const getDocNameDesc = ({ doc, config }) => ({
+  docName: config.docName && config.docName(doc),
+  docDesc: config.docDescription && config.docDescription(doc),
+});
+
+const getDocNameDescByData = _.compose(getDocNameDesc, getDocAndConfigByDiscussionId);
 
 export default {
   logs: [],
@@ -22,11 +34,8 @@ export default {
         'the discussion of {{{docDesc}}} {{{docName}}}',
       title: 'New message in discussion',
       data({ newDoc: { discussionId, type } }) {
-        const standard = getDiscussionStandard(discussionId);
-
         return {
-          docDesc: StandardAuditConfig.docDescription(standard),
-          docName: StandardAuditConfig.docName(standard),
+          ...getDocNameDescByData(discussionId),
           isFile: type === 'file',
         };
       },
@@ -41,14 +50,15 @@ export default {
       receivers({ newDoc: { discussionId }, user }) {
         const receivers = new Set();
         const userId = getUserId(user);
+        const { doc, config } = getDocAndConfigByDiscussionId(discussionId);
+        const owner = config.docOwner && config.docOwner(doc);
+        const query = { discussionId, createdBy: { $ne: userId } };
+        const addCreatedBy = _.compose(receivers.add.bind(receivers), propCreatedBy);
 
-        const { owner } = getDiscussionStandard(discussionId) || {};
-        if (owner !== userId) receivers.add(owner);
+        // add all discussion participants except current user to receivers
+        Messages.find(query).forEach(addCreatedBy);
 
-        Messages.find({
-          discussionId,
-          createdBy: { $ne: userId },
-        }).forEach(({ createdBy }) => receivers.add(createdBy));
+        if (owner !== userId) receivers.add(owner); // add owner to receivers if he is not a sender
 
         return Array.from(receivers);
       },
@@ -56,17 +66,7 @@ export default {
     {
       text: '{{userName}} have mentioned you in the discussion of {{{docDesc}}} {{{docName}}}',
       title: 'You have been mentioned',
-      data({ newDoc: { discussionId } }) {
-        const { linkedTo, documentType } = { ...Discussions.findOne({ _id: discussionId }) };
-        const config = getLinkedDocAuditConfig(documentType);
-        const doc = getLinkedDoc(linkedTo, documentType);
-        const docDesc = config.docDescription && config.docDescription(doc);
-        const docName = config.docName && config.docName(doc);
-        return {
-          docDesc,
-          docName,
-        };
-      },
+      data: _.compose(getDocNameDescByData, property('newDoc.discussionId')),
       emailTemplateData({ newDoc, auditConfig }) {
         return {
           button: {
@@ -77,22 +77,22 @@ export default {
       },
       receivers({ newDoc: { text, type }, organization, user }) {
         if (type !== 'text') return [];
-
+        const userId = getUserId(user);
         const data = getMentionDataWithUsers(getMentionData(text));
         const reducer = (receivers, mention) => {
           const shouldSkip = !!(
             !mention.user ||
-            mention.user._id === user._id ||
-            ![...organization.users].find(({ userId }) => userId === mention.user._id)
+            mention.user._id === userId ||
+            ![...organization.users].find(usr => usr.userId === mention.user._id)
           );
 
           if (shouldSkip) return receivers;
 
-          return receivers.concat(mention.user._id);
+          return receivers.add(mention.user._id);
         };
-        const receivers = data.reduce(reducer, []);
+        const receivers = data.reduce(reducer, new Set());
 
-        return receivers;
+        return Array.from(receivers);
       },
     },
   ],
