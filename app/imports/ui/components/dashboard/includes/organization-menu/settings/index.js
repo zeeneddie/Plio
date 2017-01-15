@@ -16,3 +16,4 @@ import './settings.html';
 import './settings.js';
 import './risk-types';
 import './homescreen-title';
+import './review-configs';

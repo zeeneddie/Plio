@@ -121,6 +121,48 @@
       }
     }
   },
+  "review": {
+    "risks": {
+      "frequency": {
+        "timeValue": 12,
+        "timeUnit": "months"
+      },
+      "reminders": {
+        "start": {
+          "timeValue": 2,
+          "timeUnit": "weeks"
+        },
+        "interval": {
+          "timeValue": 1,
+          "timeUnit": "weeks"
+        },
+        "until": {
+          "timeValue": 4,
+          "timeUnit": "weeks"
+        }
+      }
+    },
+    "standards": {
+      "frequency": {
+        "timeValue": 12,
+        "timeUnit": "months"
+      },
+      "reminders": {
+        "start": {
+          "timeValue": 2,
+          "timeUnit": "weeks"
+        },
+        "interval": {
+          "timeValue": 1,
+          "timeUnit": "weeks"
+        },
+        "until": {
+          "timeValue": 4,
+          "timeUnit": "weeks"
+        }
+      }
+    }
+  },
   "ncGuidelines" : {
     "minor" : "Please go to Org Settings to define what a minor non-conformity means in your organization.",
     "major" : "Please go to Org Settings to define what a major non-conformity means in your organization.",

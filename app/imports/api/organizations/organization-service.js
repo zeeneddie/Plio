@@ -140,6 +140,38 @@ export default OrganizationService = {
     });
   },
 
+  setReviewFrequency({ _id, documentKey, timeValue, timeUnit }) {
+    return this.collection.update({ _id }, {
+      $set: {
+        [`review.${documentKey}.frequency`]: { timeValue, timeUnit },
+      },
+    });
+  },
+
+  setReviewAnnualDate({ _id, documentKey, annualDate }) {
+    return this.collection.update({ _id }, {
+      $set: {
+        [`review.${documentKey}.annualDate`]: annualDate,
+      },
+    });
+  },
+
+  setReviewReminderTimeValue({ _id, documentKey, reminderType, timeValue }) {
+    return this.collection.update({ _id }, {
+      $set: {
+        [`review.${documentKey}.reminders.${reminderType}.timeValue`]: timeValue,
+      },
+    });
+  },
+
+  setReviewReminderTimeUnit({ _id, documentKey, reminderType, timeUnit }) {
+    return this.collection.update({ _id }, {
+      $set: {
+        [`review.${documentKey}.reminders.${reminderType}.timeUnit`]: timeUnit,
+      },
+    });
+  },
+
   setNCGuideline({ _id, type, text }) {
     return this.collection.update({ _id }, {
       $set: {

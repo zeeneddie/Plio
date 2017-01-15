@@ -16,7 +16,7 @@ import {
 import {
   IdSchema, ReminderTimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
-  UserIdSchema, TimezoneSchema,
+  UserIdSchema, TimezoneSchema, TimePeriodSchema,
 } from '/imports/share/schemas/schemas';
 import Method from '../method.js';
 import { chain } from '/imports/api/helpers.js';
@@ -258,6 +258,103 @@ export const setRKScoringGuidelines = new Method({
 
   run({ _id, rkScoringGuidelines }) {
     return OrganizationService.setRKScoringGuidelines({ _id, rkScoringGuidelines });
+  }
+});
+
+const reviewDocumetKeySchema = new SimpleSchema({
+  documentKey: {
+    type: String,
+    allowedValues: ['standards', 'risks'],
+  },
+});
+
+export const setReviewFrequency = new Method({
+  name: 'Organizations.setReviewFrequency',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    TimePeriodSchema,
+    reviewDocumetKeySchema,
+  ]).validator(),
+
+  check(checker) {
+    return checker(ensureCanChange.bind(this));
+  },
+
+  run(args) {
+    return OrganizationService.setReviewFrequency(args);
+  },
+});
+
+export const setReviewAnnualDate = new Method({
+  name: 'Organizations.setReviewAnnualDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    reviewDocumetKeySchema,
+    {
+      annualDate: { type: Date },
+    }
+  ]).validator(),
+
+  check(checker) {
+    return checker(ensureCanChange.bind(this));
+  },
+
+  run(args) {
+    return OrganizationService.setReviewAnnualDate(args);
+  },
+});
+
+export const setReviewReminderTimeValue = new Method({
+  name: 'Organizations.setReviewReminderTimeValue',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    reviewDocumetKeySchema,
+    {
+      timeValue: {
+        type: Number,
+      },
+      reminderType: {
+        type: String,
+        allowedValues: ['start', 'interval', 'until']
+      },
+    },
+  ]).validator(),
+
+  check(checker) {
+    return checker(ensureCanChange.bind(this));
+  },
+
+  run(args) {
+    return OrganizationService.setReviewReminderTimeValue(args);
+  }
+});
+
+export const setReviewReminderTimeUnit = new Method({
+  name: 'Organizations.setReviewReminderTimeUnit',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    reviewDocumetKeySchema,
+    {
+      timeUnit: {
+        type: String,
+      },
+      reminderType: {
+        type: String,
+        allowedValues: ['start', 'interval', 'until']
+      },
+    },
+  ]).validator(),
+
+  check(checker) {
+    return checker(ensureCanChange.bind(this));
+  },
+
+  run(args) {
+    return OrganizationService.setReviewReminderTimeUnit(args);
   }
 });
 

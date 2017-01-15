@@ -9,7 +9,7 @@ export default class DatePicker extends React.Component {
   static get propTypes() {
     return {
       className: React.PropTypes.string,
-      date: React.PropTypes.instanceOf(Date),
+      value: React.PropTypes.instanceOf(Date),
       disabled: PropTypes.bool,
       onChange: PropTypes.func,
       placeholder: PropTypes.string,
@@ -38,7 +38,7 @@ export default class DatePicker extends React.Component {
   }
 
   _dateString() {
-    return this.props.date ? getFormattedDate(this.props.date, 'DD MMM YYYY') : '';
+    return this.props.value ? getFormattedDate(this.props.value, 'DD MMM YYYY') : '';
   }
 
   render() {

@@ -92,6 +92,7 @@ Meteor.publish('currentUserOrganizationBySerialNumber', function(serialNumber) {
     ncGuidelines: 1,
     rkGuidelines: 1,
     rkScoringGuidelines: 1,
+    review: 1,
     homeScreenTitles: 1,
     isAdminOrg: 1,
     createdAt: 1,
