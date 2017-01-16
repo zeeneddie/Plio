@@ -4,13 +4,14 @@ import {
   Dropdown,
   InputGroup,
   InputGroupButton,
-  DropdownMenu,
+  // DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
 
 import TextInput from '../../TextInput';
 import Button from '../../../../components/Buttons/Button';
 import Icon from '../../../../components/Icons/Icon';
+import DropdownMenu from '../../../../components/DropdownMenu';
 
 const SelectInputView = ({
   value,
@@ -40,12 +41,11 @@ const SelectInputView = ({
         </Button>
       </InputGroupButton>
     </InputGroup>
-    <DropdownMenu className="dropdown-menu-full">
+    <DropdownMenu>
       {!!items.length ? (
         items.map((item) => (
-          <DropdownItem
+          <DropdownMenu.Item
             key={item.value}
-            tag="a"
             onMouseDown={e => onSelect(e, item)}
             className={cx('pointer', {
               indent: item.indent,
@@ -53,7 +53,7 @@ const SelectInputView = ({
             })}
           >
             <span>{item.text}</span>
-          </DropdownItem>
+          </DropdownMenu.Item>
         ))
       ) : !noHint && (
         <DropdownItem tag="div">
@@ -63,7 +63,6 @@ const SelectInputView = ({
           })()}
         </DropdownItem>
       )}
-      {children}
     </DropdownMenu>
   </Dropdown>
 );

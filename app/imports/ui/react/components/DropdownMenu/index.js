@@ -19,7 +19,7 @@ const enhance = compose(
   }),
   mapProps(({ focused, children, setFocus, ...props }) => ({
     ...props,
-    children: React.Children.map(children, (child, index) => {
+    children: React.Children.map(React.Children.toArray(children), (child, index) => {
       if (child.type !== Item) return child;
 
       return React.cloneElement(child, { setFocus, focused: focused === index });
