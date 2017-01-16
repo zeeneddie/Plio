@@ -20,9 +20,9 @@ export default {
   notifications: [
     {
       shouldSendNotification({ diffs: { status: { newValue } } }) {
-        // 18 - Closed - action(s) completed
-        // 19 - Closed - action(s) verified, standard(s) reviewed
-        return (newValue === 18) || (newValue === 19);
+        // 19 - Closed - action(s) completed
+        // 20 - Closed - action(s) verified, standard(s) reviewed
+        return (newValue === 19) || (newValue === 20);
       },
       text: 'Status of {{{docDesc}}} {{{docName}}} was changed to "{{{newValue}}}"',
       title: '{{{docDescCapitalized}}} {{{docName}}} closed',
