@@ -12,10 +12,14 @@ export default compose(
   withState('value', 'setValue', ''),
   withProps(({ doc, organizationId }) => {
     const organization = { ...Organizations.findOne({ _id: organizationId }) };
-    const query = { $and: [
-      { _id: { $ne: Meteor.userId() } },
-      { _id: { $in: [...organization.users.map(property('userId'))] } },
-    ] };
+    const query = {
+      'profile.firstName': { $exists: true },
+      'profile.lastName': { $exists: true },
+      $and: [
+        { _id: { $ne: Meteor.userId() } },
+        { _id: { $in: [...organization.users].map(property('userId')) } },
+      ],
+    };
     const users = Meteor.users.find(query).map((user) => ({
       text: user.fullNameOrEmail(),
       value: user._id,
