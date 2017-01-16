@@ -8,9 +8,6 @@ import MenuItem from '../MenuItem';
 import { handleKeyDown } from './handlers';
 import { omitProps } from '/imports/api/helpers';
 
-// BUG: when menu is opened and user manually focuses
-// input and types something the input loses focus
-
 const enhance = compose(
   defaultProps({ focused: null }),
   withState('focused', 'setFocus', property('focused')),

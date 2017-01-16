@@ -2,15 +2,19 @@ import React, { PropTypes } from 'react';
 
 import MessageAvatar from '../../../discussion/components/MessageAvatar';
 import { omitC } from '/imports/api/helpers';
-import { keyMap } from '/imports/ui/constants';
+import { KeyMap } from '/imports/api/constants';
 
 class MentionMenuItem extends React.Component {
   componentDidMount() {
-    if (this.props.focused) this.node.focus();
+    if (this.props.focused) this.focus();
   }
 
   componentDidUpdate() {
-    if (this.props.focused) this.node.focus();
+    if (this.props.focused) this.focus();
+  }
+
+  focus() {
+    this.node.focus();
   }
 
   render() {
@@ -22,7 +26,7 @@ class MentionMenuItem extends React.Component {
         href=""
         ref={node => (this.node = node)}
         onClick={e => onUserSelect && onUserSelect(e, user)}
-        onKeyUp={e => e.keyCode === keyMap.enter && onUserSelect && onUserSelect(e, user)}
+        onKeyUp={e => e.keyCode === KeyMap.enter && onUserSelect && onUserSelect(e, user)}
         {...omitC(['focused'], other)}
       >
         <MessageAvatar tag="div">
