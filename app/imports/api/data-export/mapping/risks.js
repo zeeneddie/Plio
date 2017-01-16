@@ -6,14 +6,10 @@ import { formatUser, formatLessonsLearned, formatMap, formatDate } from '../form
 export const mapping = {
   collection: Risks,
   filterField: 'status',
-  defaultFilterIndexes: _.difference(
-    _.values(ProblemIndexes),
-    [
-      ProblemIndexes.DELETED,
-      ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED,
-      ProblemIndexes.CLOSED_ACTIONS_COMPLETED,
-    ],
-  ),
+  defaultFilterIndexes: _.chain(ProblemIndexes)
+    .values()
+    .difference([ProblemIndexes.DELETED])
+    .value(),
   fields: {
     _id: {
       label: 'Risk ID',
