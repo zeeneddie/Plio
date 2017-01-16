@@ -1,21 +1,19 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import moment from 'moment-timezone';
 import { Template } from 'meteor/templating';
+import { Meteor } from 'meteor/meteor';
 
-import { Discussions } from '/imports/share/collections/discussions.js';
-import { Messages } from '/imports/share/collections/messages.js';
-import { Files } from '/imports/share/collections/files.js';
-import { bulkUpdateViewedByTotal } from '/imports/api/messages/methods.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { CountSubs, MessageSubs } from '/imports/startup/client/subsmanagers.js';
+import { Discussions } from '/imports/share/collections/discussions';
+import { Messages } from '/imports/share/collections/messages';
+import { Files } from '/imports/share/collections/files';
+import { MessageSubs } from '/imports/startup/client/subsmanagers';
 import pluralize from 'pluralize';
-import { updateViewedByOrganization } from '/imports/api/discussions/methods.js';
-import { handleMethodResult } from '/imports/api/helpers.js';
+import { updateViewedByOrganization } from '/imports/api/discussions/methods';
+import { handleMethodResult } from '/imports/api/helpers';
+import { removeEmails } from '/imports/share/mentions';
 
 Template.Dashboard_MessageStats.viewmodel({
-  mixin: ['user', 'organization', {
-    counter: 'counter'
-  }],
+  mixin: ['user', 'organization', { counter: 'counter' }],
   _subHandlers: [],
   isInitialDataReady: false,
   isReady: false,
@@ -33,7 +31,8 @@ Template.Dashboard_MessageStats.viewmodel({
     }
   },
   onCreated(template) {
-    // we need a dummy variable to update publish function because meteor doesn't depend on reactive variables inside of publish
+    // we need a dummy variable to update publish function
+    // because meteor doesn't depend on reactive variables inside of publish
     let dummy = 0;
     template.autorun(() => {
       this.listener.depend();
@@ -42,7 +41,12 @@ Template.Dashboard_MessageStats.viewmodel({
 
       this._subHandlers([
         MessageSubs.subscribe('unreadMessages', { organizationId, limit }),
-        template.subscribe('messagesNotViewedCountTotal', 'unread-messages-count-' + organizationId, organizationId, dummy++)
+        template.subscribe(
+          'messagesNotViewedCountTotal',
+          `unread-messages-count-${organizationId}`,
+          organizationId,
+          dummy++
+        ),
       ]);
     });
 
@@ -62,7 +66,7 @@ Template.Dashboard_MessageStats.viewmodel({
     return total > current;
   },
   unreadMessagesCount() {
-    return this.counter.get('unread-messages-count-' + this.organizationId());
+    return this.counter.get(`unread-messages-count-${this.organizationId()}`);
   },
   hiddenUnreadMessagesNumber() {
     const count = this.unreadMessagesCount() || Object.assign([], this.unreadMessages()).length;
@@ -74,23 +78,23 @@ Template.Dashboard_MessageStats.viewmodel({
   },
   messages() {
     return Messages.find({
-      organizationId: this.organizationId()
+      organizationId: this.organizationId(),
     }, {
       sort: { createdAt: -1 },
-      limit: this.enableLimit() ? this.limit() : 0
+      limit: this.enableLimit() ? this.limit() : 0,
     }).fetch();
   },
   unreadMessages() {
     const self = this;
     const messages = Object.assign([], this.messages());
     const docs = messages.map((message) => {
-      let messageData = {};
+      const messageData = {};
       if (message.type === 'file') {
         const file = Files.findOne({ _id: message.fileId });
         messageData.text = file && file.name;
         messageData.extension = file && file.extension;
       } else {
-        messageData.text = message.text;
+        messageData.text = removeEmails(message.text);
       }
 
       /**
@@ -99,13 +103,9 @@ Template.Dashboard_MessageStats.viewmodel({
        */
       const discussion = Discussions.findOne({ _id: message.discussionId });
 
-      if (!discussion) {
-        return;
-      }
+      if (!discussion) return false;
 
-      const {
-        linkedTo, organizationId
-      } = discussion;
+      const { linkedTo } = discussion;
 
       const orgSerialNumber = this.organizationSerialNumber();
 
@@ -130,10 +130,10 @@ Template.Dashboard_MessageStats.viewmodel({
         );
       }
 
-      _.extend(messageData, {
+      Object.assign(messageData, {
         url,
         fullName: self.userNameOrEmail(message.createdBy),
-        timeString: moment(message.createdAt).from(this.currentDate(), true)
+        timeString: moment(message.createdAt).from(this.currentDate(), true),
       });
 
       return messageData;
@@ -155,5 +155,5 @@ Template.Dashboard_MessageStats.viewmodel({
     };
 
     updateViewedByOrganization.call({ _id: this.organizationId() }, handleMethodResult(cb));
-  }
+  },
 });
