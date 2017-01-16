@@ -65,7 +65,7 @@ class Mention extends React.Component {
     }
 
     const lastMatch = `${_.last(this.state.match)}`;
-    const userDisplayName = `@${user.text.split(' ')[0]} (${user.email})`;
+    const userDisplayName = `@${user.text.split(' ')[0]} (${user.email}) `;
     const value = this.props.value.replace(lastMatch, userDisplayName);
     const match = this.state.match.slice(0, this.state.match.length - 1).concat(selectedUser.email);
 
