@@ -10,7 +10,7 @@ import DiscussionContainer from '../../../discussion/containers/DiscussionContai
 const enhance = mapProps(props => (
   props.isDiscussionOpened ? ({
     ...props,
-    doc: props.standard,
+    doc: props.risk,
     classNames: {
       lhs: 'content-cards scroll',
       rhs: 'content-cards content-cards-flush scroll',

@@ -28,23 +28,25 @@ export const createRiskTypeItem = curry(createTypeItem)(CollectionNames.RISK_TYP
 export const findSelectedRisk = id =>
   compose(find(propEqId(id)), propRisks);
 
-export const getRisksByFilter = ({ filter, standards }) => (
+export const getRisksByFilter = ({ filter, risks }) => (
   filter === RiskFilterIndexes.DELETED
-    ? standards.filter(propEq('isDeleted', true))
-    : standards.filter(notDeleted)
+    ? risks.filter(propEq('isDeleted', true))
+    : risks.filter(notDeleted)
 );
 
 export const addCollapsedType = compose(addCollapsed, createRiskTypeItem, propId);
 
-export const createUncategorizedType = ({ standards, types }) => ({
-  _id: 'TYPE_UNCATEGORIZED',
-  title: 'Uncategorized',
-  organizationId: getC('organizationId', standards[0]),
-  standards: standards.filter(standard => !types.find(propEqId(standard.typeId))),
-});
+export const createUncategorizedType = ({ risks, types }) => {
+  return ({
+    _id: 'TYPE_UNCATEGORIZED',
+    title: 'Uncategorized',
+    organizationId: getC('organizationId', risks[0]),
+    risks: risks.filter(risk => !types.find(propEqId(risk.typeId))),
+  });
+}
 
 export const getSelectedAndDefaultRiskByFilter = ({
-  sections, types, standards, filter, urlItemId,
+  sections, types, risks, filter, urlItemId,
 }) => {
   const findRisk = findSelectedRisk(urlItemId);
   switch (filter) {
@@ -53,7 +55,7 @@ export const getSelectedAndDefaultRiskByFilter = ({
       return {
         containedIn,
         selectedRisk: findRisk(containedIn),
-        defaultRisk: getC('sections[0].standards[0]', { sections }),
+        defaultRisk: getC('sections[0].risks[0]', { sections }),
         defaultContainedIn: _.first(sections),
       };
     }
@@ -62,7 +64,7 @@ export const getSelectedAndDefaultRiskByFilter = ({
       return {
         containedIn,
         selectedRisk: findRisk(containedIn),
-        defaultRisk: getC('sections[0].standards[0]', { sections }),
+        defaultRisk: getC('sections[0].risks[0]', { sections }),
         defaultContainedIn: _.first(sections),
       };
     }
@@ -71,15 +73,15 @@ export const getSelectedAndDefaultRiskByFilter = ({
       return {
         containedIn,
         selectedRisk: findRisk(containedIn),
-        defaultRisk: getC('types[0].standards[0]', { types }),
+        defaultRisk: getC('types[0].risks[0]', { types }),
         defaultContainedIn: _.first(types),
       };
     }
     case RiskFilterIndexes.DELETED:
     default:
       return {
-        selectedRisk: findRisk({ standards }),
-        defaultRisk: getC('standards[0]', { standards }),
+        selectedRisk: findRisk({ risks }),
+        defaultRisk: getC('risks[0]', { risks }),
         containedIn: null,
         defaultContainedIn: null,
       };
@@ -123,9 +125,9 @@ export const openRiskByFilter = ({
 };
 
 export const expandCollapsedRisk = (_id) => {
-  const { collections: { standardsByIds }, global: { filter } } = getState();
-  const standard = { ...standardsByIds[_id] };
-  const typeItem = createRiskTypeItem(standard.typeId);
+  const { collections: { risksByIds }, global: { filter } } = getState();
+  const risk = { ...risksByIds[_id] };
+  const typeItem = createRiskTypeItem(risk.typeId);
   let action;
 
   switch (filter) {
@@ -143,37 +145,37 @@ export const expandCollapsedRisk = (_id) => {
 
 export const expandCollapsedRisks = (ids) => {
   const {
-    collections: { standards, standardBookSections, standardTypes },
+    collections: { risks, riskBookSections, riskTypes },
     global: { filter, collapsed },
   } = getState();
 
   const notCollapsed = _id => !collapsed.find(propEq('key', _id)); // reject already expanded
-  const standardsFound = standards.filter(standard => ids.includes(standard._id));
+  const risksFound = risks.filter(risk => ids.includes(risk._id));
   const uncategorizedSection = createUncategorizedSection({
-    sections: standardBookSections,
-    standards: standardsFound,
+    sections: riskBookSections,
+    risks: risksFound,
   });
-  let sections = standardBookSections.filter(section =>
+  let sections = riskBookSections.filter(section =>
     notCollapsed(section._id) &&
-    standardsFound.filter(propEq('sectionId', section._id)).length
+    risksFound.filter(propEq('sectionId', section._id)).length
   );
 
-  sections = uncategorizedSection.standards.length
+  sections = uncategorizedSection.risks.length
     ? sections.concat(uncategorizedSection)
     : sections;
 
   switch (filter) {
     case RiskFilterIndexes.TYPE: {
       const uncategorizedType = createUncategorizedType({
-        standards: standardsFound,
-        types: standardTypes,
+        risks: risksFound,
+        types: riskTypes,
       });
-      let types = standardTypes.filter(type =>
+      let types = riskTypes.filter(type =>
         notCollapsed(type._id) &&
-        standardsFound.filter(propEq('typeId', type._id)).length
+        risksFound.filter(propEq('typeId', type._id)).length
       );
 
-      types = uncategorizedType.standards.length
+      types = uncategorizedType.risks.length
         ? types.concat(uncategorizedType)
         : types;
 
@@ -188,15 +190,15 @@ export const expandCollapsedRisks = (ids) => {
 
 export const collapseExpandedRisks = () => {
   const {
-    collections: { standardsByIds, standardTypesByIds, standardBookSectionsByIds },
+    collections: { risksByIds, riskTypesByIds, riskBookSectionsByIds },
     global: { filter, urlItemId },
   } = getState();
-  // expand section and type with currently selected standard and close others
-  const selectedRisk = standardsByIds[urlItemId];
+  // expand section and type with currently selected risk and close others
+  const selectedRisk = risksByIds[urlItemId];
 
   if (!selectedRisk) return false;
 
-  const selectedSection = standardBookSectionsByIds[selectedRisk.sectionId] ||
+  const selectedSection = riskBookSectionsByIds[selectedRisk.sectionId] ||
     { _id: SECTION_UNCATEGORIZED };
   const selectedSectionItem = createSectionItem(getId(selectedSection));
   const addClose = item => ({
@@ -207,9 +209,9 @@ export const collapseExpandedRisks = () => {
 
   switch (filter) {
     case STANDARD_FILTER_MAP.TYPE: {
-      // if standards are filtered by 'type'
-      // collapse all types and sections except the one that is holding selected standard
-      const selectedType = standardTypesByIds[selectedRisk.typeId] ||
+      // if risks are filtered by 'type'
+      // collapse all types and sections except the one that is holding selected risk
+      const selectedType = riskTypesByIds[selectedRisk.typeId] ||
         { _id: TYPE_UNCATEGORIZED };
       const selectedTypeItem = createRiskTypeItem(getId(selectedType));
       const typeCollapseAction = addCollapsed(addClose(selectedTypeItem));
@@ -222,12 +224,12 @@ export const collapseExpandedRisks = () => {
 };
 
 export const withRisk = withProps(props => ({
-  standard: findSelectedRisk(props.urlItemId)(props),
+  risk: findSelectedRisk(props.urlItemId)(props),
 }));
 
 export const getSelectedRiskDeletedState = state => ({
   isSelectedRiskDeleted: getC(
     'isDeleted',
-    state.collections.standardsByIds[state.global.urlItemId]
+    state.collections.risksByIds[state.global.urlItemId]
   ),
 });

@@ -4,21 +4,21 @@ import RisksListItemContainer from '../../containers/RisksListItemContainer';
 
 const RisksList = (props) => (
   <div className="list-group">
-    {props.standards.map(standard => (
+    {props.risks.map(risk => (
       <RisksListItemContainer
-        key={standard._id}
+        key={risk._id}
         section={props.section}
         orgSerialNumber={props.orgSerialNumber}
         organization={props.organization}
         userId={props.userId}
         filter={props.filter}
         urlItemId={props.urlItemId}
-        _id={standard._id}
-        type={standard.type}
-        // {...standard}
+        _id={risk._id}
+        type={risk.type}
+        // {...risk}
       />
     ))}
   </div>
 );
 
-export default StandardList;
+export default RisksList;

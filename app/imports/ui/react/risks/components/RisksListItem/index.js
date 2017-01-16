@@ -7,7 +7,7 @@ import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
 import Label from '../../../components/Labels/Label';
 import LabelDraft from '../../../components/Labels/LabelDraft';
 
-const StandardListItem = ({
+const RiskListItem = ({
   isActive,
   onClick,
   href,
@@ -67,6 +67,6 @@ const StandardListItem = ({
   </ListItemLink>
 );
 
-StandardListItem.propTypes = propTypes;
+RiskListItem.propTypes = propTypes;
 
-export default StandardListItem;
+export default RiskListItem;

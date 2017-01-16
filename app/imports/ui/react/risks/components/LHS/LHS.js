@@ -3,7 +3,7 @@ import React from 'react';
 import { RiskFilterIndexes } from '/imports/api/constants';
 import propTypes from './propTypes';
 import LHSContainer from '../../../containers/LHSContainer';
-import TypeListContainer from '../../containers/T'
+import TypeListContainer from '../../containers/TypeListContainer';
 
 const RisksLHS = (props) => {
   const contentByFilter = {

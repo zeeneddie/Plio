@@ -5,6 +5,7 @@ import { ORGANIZATION_CHANGED, USER_LOGOUT } from '../actions/types';
 
 import discussion from './discussionReducer';
 import standards from './standardsReducer';
+import risks from './risksReducer';
 import organizations from './organizationsReducer';
 import changelog from './changelogReducer';
 import customers from './customersReducer';
@@ -19,6 +20,7 @@ import modal from './modalReducer';
 const appReducer = combineReducers({
   discussion,
   standards,
+  risks,
   organizations,
   changelog,
   customers,

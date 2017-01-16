@@ -8,7 +8,7 @@ export default {
   })),
   sections: PropTypes.arrayOf(PropTypes.object),
   types: PropTypes.arrayOf(PropTypes.object),
-  standards: PropTypes.arrayOf(PropTypes.object),
+  risks: PropTypes.arrayOf(PropTypes.object),
   orgSerialNumber: PropTypes.number,
   onSectionToggleCollapse: PropTypes.func,
   onTypeToggleCollapse: PropTypes.func,

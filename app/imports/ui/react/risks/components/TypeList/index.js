@@ -23,7 +23,7 @@ const TypeList = ({ types, onToggleCollapse }) => (
       >
         <div className="sub">
           {type._id === 'TYPE_UNCATEGORIZED' || false ? (
-            <StandardListContainer standards={type.standards} />
+            <RiskListContainer risks={type.risks} />
           ) : (
             <div>Placeholder</div>
           )}

@@ -26,12 +26,12 @@ import { getRiskFiles, createRiskCardPublicationTree } from '../utils';
 
 const getRisksLayoutPub = (userId, serialNumber, isDeleted) => [
   {
-    find({ _id:organizationId }) {
+    find({ _id: organizationId }) {
       return RiskTypes.find({ organizationId });
     }
   },
   {
-    find({ _id:organizationId }) {
+    find({ _id: organizationId }) {
       const query = { organizationId, isDeleted };
       const options = { fields: RisksListProjection };
 

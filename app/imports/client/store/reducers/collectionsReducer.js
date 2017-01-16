@@ -3,6 +3,7 @@ import {
   SET_FILES,
   SET_NCS,
   SET_RISKS,
+  SET_RISK_TYPES,
   SET_ACTIONS,
   SET_WORK_ITEMS,
   SET_STANDARD_BOOK_SECTIONS,
@@ -52,6 +53,7 @@ export default function reducer(state = initialState, action) {
     case SET_FILES:
     case SET_NCS:
     case SET_RISKS:
+    case SET_RISK_TYPES:
     case SET_ACTIONS:
     case SET_WORK_ITEMS:
     case SET_STANDARD_BOOK_SECTIONS:

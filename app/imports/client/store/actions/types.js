@@ -30,6 +30,14 @@ export const SET_STANDARD_DEPS_READY = 'SET_STANDARD_DEPS_READY';
 
 export const SET_STANDARDS_INITIALIZING = 'SET_STANDARDS_INITIALIZING';
 
+// Risks types
+
+export const SET_FILTERED_RISKS = 'SET_FILTERED_RISKS';
+
+export const SET_RISK_DEPS_READY = 'SET_RISK_DEPS_READY';
+
+export const SET_RISKS_INITIALIZING = 'SET_RISKS_INITIALIZING';
+
 // Organization
 
 export const SET_ORG = 'SET_ORG';
@@ -104,6 +112,8 @@ export const SET_NCS = 'SET_NCS';
 
 export const SET_RISKS = 'SET_RISKS';
 
+export const SET_RISK_TYPES = 'SET_RISK_TYPES';
+
 export const SET_ACTIONS = 'SET_ACTIONS';
 
 export const SET_WORK_ITEMS = 'SET_WORK_ITEMS';
@@ -133,6 +143,18 @@ export const ADD_STANDARD_TYPE = 'ADD_STANDARD_TYPE';
 export const UPDATE_STANDARD_TYPE = 'UPDATE_STANDARD_TYPE';
 
 export const REMOVE_STANDARD_TYPE = 'REMOVE_STANDARD_TYPE';
+
+export const ADD_RISK = 'ADD_RISK';
+
+export const UPDATE_RISK = 'UPDATE_RISK';
+
+export const REMOVE_RISK = 'REMOVE_RISK';
+
+export const ADD_RISK_TYPE = 'ADD_RISK_TYPE';
+
+export const UPDATE_RISK_TYPE = 'UPDATE_RISK_TYPE';
+
+export const REMOVE_RISK_TYPE = 'REMOVE_RISK_TYPE';
 
 export const ADD_ORGANIZATION = 'ADD_ORGANIZATION';
 
