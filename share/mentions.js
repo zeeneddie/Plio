@@ -36,3 +36,15 @@ export const getMentionDataWithUsers = (data = []) => {
 
   return newData;
 };
+
+export const removeEmails = (text) => {
+  const data = getMentionData(text);
+  const reducer = (prev, { match, firstName, mentionString }) => {
+    if (!match) return prev.concat(mentionString);
+
+    return prev.concat(firstName);
+  };
+  const textArray = Object.assign([], data).reduce(reducer, []);
+
+  return textArray.join('');
+};
