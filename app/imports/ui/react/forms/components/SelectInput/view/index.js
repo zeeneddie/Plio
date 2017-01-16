@@ -63,6 +63,7 @@ const SelectInputView = ({
           })()}
         </DropdownItem>
       )}
+      {children}
     </DropdownMenu>
   </Dropdown>
 );
