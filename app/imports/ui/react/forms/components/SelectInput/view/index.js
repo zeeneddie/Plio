@@ -42,9 +42,9 @@ const SelectInputView = ({
     </InputGroup>
     <DropdownMenu className="dropdown-menu-full">
       {!!items.length ? (
-        items.map((item, i) => (
+        items.map((item) => (
           <DropdownItem
-            key={i}
+            key={item.value}
             tag="a"
             onMouseDown={e => onSelect(e, item)}
             className={cx('pointer', {

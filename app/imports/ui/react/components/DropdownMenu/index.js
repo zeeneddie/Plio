@@ -1,38 +1,26 @@
 import React, { PropTypes } from 'react';
 import { DropdownMenu as DropdownMenuBase } from 'reactstrap';
-import { compose, defaultProps, withState, withHandlers, mapProps } from 'recompose';
+import { compose, defaultProps, withState, withHandlers, mapProps, withContext } from 'recompose';
 import property from 'lodash.property';
 import cx from 'classnames';
 
-import MenuItem from './MenuItem';
-import { KeyMap } from '/imports/api/constants';
-
-export const handleKeyDown = ({ focused, setFocus, children }) => (e) => {
-  e.preventDefault();
-
-  if (e.keyCode === KeyMap.up) {
-    if (focused === 0 || focused === null) setFocus(children.length - 1);
-    else setFocus(focused - 1);
-  } else if ((e.keyCode === KeyMap.down || e.keyCode === KeyMap.tab)) {
-    if (focused === children.length - 1) setFocus(0);
-    // when tab is first time pressed this event will not fire
-    else if (focused === null && children.length > 0) setFocus(1);
-    else setFocus(focused + 1);
-  }
-};
+import Item from './Item';
+import { handleKeyDown } from './handlers';
+import { pickC } from '/imports/api/helpers';
 
 const enhance = compose(
   defaultProps({ focused: null }),
   withState('focused', 'setFocus', property('focused')),
+  withContext({ setFocus: PropTypes.func }, pickC(['setFocus'])),
   withHandlers({
-    onKeyDown: props => (props.onKeyDown
-      ? props.onKeyDown(handleKeyDown(props))
+    onKeyDown: ({ onKeyDown, ...props }) => (onKeyDown
+      ? onKeyDown(props, handleKeyDown(props))
       : handleKeyDown(props)),
   }),
   mapProps(({ focused, children, setFocus, ...props }) => ({
     ...props,
     children: React.Children.map(children, (child, index) => {
-      if (typeof child.type !== 'function') return child;
+      if (child.type !== Item) return child;
 
       return React.cloneElement(child, { setFocus, focused: focused === index });
     }),
@@ -55,6 +43,6 @@ DropdownMenu.propTypes = {
   onKeyDown: PropTypes.func,
 };
 
-DropdownMenu.Item = MenuItem;
+DropdownMenu.Item = Item;
 
 export default DropdownMenu;
