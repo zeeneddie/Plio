@@ -4,7 +4,6 @@ import {
   Dropdown,
   InputGroup,
   InputGroupButton,
-  // DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
 
@@ -45,6 +44,7 @@ const SelectInputView = ({
       {!!items.length ? (
         items.map((item) => (
           <DropdownMenu.Item
+            href=""
             key={item.value}
             onMouseDown={e => onSelect(e, item)}
             className={cx('pointer', {
