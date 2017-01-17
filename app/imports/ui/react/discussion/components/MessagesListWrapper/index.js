@@ -96,9 +96,10 @@ class MessagesListWrapper extends React.Component {
   }
 
   componentWillUnmount() {
-    handleMouseWheel(this.chat, this._triggerLoadMore.bind(this), 'removeEventListener');
+    const args = [this.chat, this._triggerLoadMore.bind(this), 'removeEventListener'];
+    handleMouseWheel(...args);
 
-    swipedetect(this.chat, this._triggerLoadMore.bind(this), 'removeEventListener');
+    swipedetect(...args);
   }
 
   _scrollToBottom() {

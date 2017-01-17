@@ -4,7 +4,7 @@ import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
-import { compose, lifecycle, shallowEqual, shouldUpdate } from 'recompose';
+import { compose, lifecycle, shouldUpdate } from 'recompose';
 import { _ } from 'meteor/underscore';
 
 import MessagesListWrapper from '../../components/MessagesListWrapper';
@@ -19,7 +19,7 @@ import {
   markMessagesAsRead,
 } from '/imports/client/store/actions/discussionActions';
 import notifications from '/imports/startup/client/mixins/notifications';
-import { pickFromDiscussion, omitC, invokeC, notEquals, diff } from '/imports/api/helpers';
+import { pickFromDiscussion, omitC, invokeC, notEquals } from '/imports/api/helpers';
 import LastDiscussionMessage from '/imports/client/collections/lastDiscussionMessage';
 
 const observer = () => {
@@ -54,7 +54,7 @@ const readMessages = (props) => {
   props.dispatch(markMessagesAsRead(props.discussion, getLastMessage()));
 };
 
-const a = ({
+const loadMessagesData = ({
   discussionId,
   dispatch,
   sort = { createdAt: -1 },
@@ -63,13 +63,12 @@ const a = ({
   followingLimit = 25,
   resetCompleted = false,
 }, onData) => {
+  dispatch(setLoading(true));
+
   const subOpts = { sort, at, priorLimit, followingLimit };
   const messagesSubscription = Meteor.subscribe('messages', discussionId, subOpts);
   const lastMessageSubscription = Meteor.subscribe('discussionMessagesLast', discussionId);
   const subscriptions = [messagesSubscription, lastMessageSubscription];
-  console.log('called');
-
-  dispatch(setLoading(true));
 
   if (subscriptions.every(invokeC('ready'))) {
     const query = { discussionId };
@@ -100,7 +99,7 @@ export default compose(
   connect(pickFromDiscussion([
     'at', 'sort', 'priorLimit', 'followingLimit', 'resetCompleted',
   ])),
-  composeWithTracker(a, PreloaderPage, null, { shouldResubscribe }),
+  composeWithTracker(loadMessagesData, PreloaderPage, null, { shouldResubscribe }),
   connect(pickFromDiscussion([
     'loading', 'messages', 'priorLimit', 'followingLimit', 'lastMessageId', 'sort',
   ])),
