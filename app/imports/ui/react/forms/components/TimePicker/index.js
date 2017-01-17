@@ -14,7 +14,8 @@ const TimePicker = (props) => {
         type="number"
         className="form-control"
         min="1"
-        defaultValue={props.timeValue}
+        value={props.timeValue}
+        onChange={props.onTimeValueInputChanged}
         onBlur={props.onTimeValueChanged}
       />
 

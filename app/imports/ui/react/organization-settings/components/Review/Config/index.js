@@ -1,33 +1,47 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { compose, withProps } from 'recompose';
+import { _ } from 'meteor/underscore';
 
-import Form from '/imports/ui/react/forms/components/Form';
-import ReviewFrequencySelect from '../FrequencySelect';
-import ReviewAnnualDate from '../AnnualDate';
-import ReviewReminders from '../Reminders';
+import ReviewFrequencyForm from '../FrequencyForm';
+import ReviewAnnualDateForm from '../AnnualDateForm';
+import ReviewRemindersForm from '../RemindersForm';
 
-const Config = (props) => (
-  <div>
-    <Form autosave onFormChange={props.onFrequencyChanged}>
-      <ReviewFrequencySelect
-        frequency={props.config.frequency}
-        documentKey={props.documentKey}
-      />
-    </Form>
-
-    <Form autosave onFormChange={props.onAnnualDateChanged}>
-      <ReviewAnnualDate
-        annualDate={props.config.annualDate}
-        documentKey={props.documentKey}
-      />
-    </Form>
-
-    <Form autosave onFormChange={props.onReminderChanged}>
-      <ReviewReminders
-        reminders={props.config.reminders}
-        documentKey={props.documentKey}
-      />
-    </Form>
-  </div>
+const enhance = compose(
+  withProps(({ config }) => ({
+    frequencyFormData: _.pick(config, 'frequency'),
+    annualDateFormData: _.pick(config, 'annualDate'),
+    remindersFormData: _.pick(config, 'reminders'),
+  }))
 );
 
-export default Config;
+const ReviewConfig = enhance((props) => (
+  <div>
+    <ReviewFrequencyForm
+      onFrequencyChanged={props.onFrequencyChanged}
+      data={props.frequencyFormData}
+      documentKey={props.documentKey}
+    />
+
+    <ReviewAnnualDateForm
+      onAnnualDateChanged={props.onAnnualDateChanged}
+      data={props.annualDateFormData}
+      documentKey={props.documentKey}
+    />
+
+    <ReviewRemindersForm
+      onReminderChanged={props.onReminderChanged}
+      data={props.remindersFormData}
+      documentKey={props.documentKey}
+    />
+  </div>
+));
+
+ReviewConfig.propTypes = {
+  config: PropTypes.object,
+  documentKey: PropTypes.string,
+  onAnnualDateChanged: PropTypes.func,
+  onFrequencyChanged: PropTypes.func,
+  onReminderChanged: PropTypes.func,
+};
+
+export default ReviewConfig;

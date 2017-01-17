@@ -5,20 +5,32 @@ import DatePicker from '../../../../forms/components/DatePicker';
 
 
 const enhance = compose(
-  getContext({ changeField: PropTypes.func }),
+  getContext({
+    changeField: PropTypes.func,
+    getField: PropTypes.func,
+  }),
   withProps((props) => ({
+    value: props.getField(props.fieldName),
     onChange: (e) => {
-      const fieldName = `${props.documentKey}.annualDate`;
-      props.changeField(fieldName, e.date);
+      props.changeField(props.fieldName, e.date);
     },
   })),
 );
 
 const ReviewAnnualDate = enhance((props) => (
-  <DatePicker
-    value={props.annualDate}
-    onChange={props.onChange}
-  />
+  <div className="form-group">
+    <label className="form-control-label">
+      Annual date
+    </label>
+    <DatePicker
+      value={props.value}
+      onChange={props.onChange}
+    />
+  </div>
 ));
+
+ReviewAnnualDate.propTypes = {
+  fieldName: PropTypes.string,
+};
 
 export default ReviewAnnualDate;

@@ -3,8 +3,15 @@ import React, { PropTypes } from 'react';
 import Subcard from '../../../../components/Subcard';
 import ReviewConfig from '../Config';
 
-const ReviewSubcard = ({ organization: { review }, ...rest }) => (
-  <Subcard {...rest}>
+const ReviewSubcard = ({
+  collapsed,
+  setCollapsed,
+  organization: { review },
+  onAnnualDateChanged,
+  onFrequencyChanged,
+  onReminderChanged,
+}) => (
+  <Subcard collapsed={collapsed} setCollapsed={setCollapsed}>
     <Subcard.Title>
       <Subcard.TitleItem pull="left">
         Review
@@ -16,25 +23,30 @@ const ReviewSubcard = ({ organization: { review }, ...rest }) => (
       <ReviewConfig
         config={review.standards}
         documentKey="standards"
-        {...rest}
+        onAnnualDateChanged={onAnnualDateChanged}
+        onFrequencyChanged={onFrequencyChanged}
+        onReminderChanged={onReminderChanged}
       />
 
       <legend>Risks</legend>
       <ReviewConfig
         config={review.risks}
         documentKey="risks"
-        {...rest}
+        onAnnualDateChanged={onAnnualDateChanged}
+        onFrequencyChanged={onFrequencyChanged}
+        onReminderChanged={onReminderChanged}
       />
     </Subcard.Content>
   </Subcard>
 );
 
-/*ReviewSubcard.propTypes = {
-  loading: PropTypes.bool,
-  onFieldChangeHandler: PropTypes.func,
+ReviewSubcard.propTypes = {
+  collapsed: PropTypes.bool,
+  setCollapsed: PropTypes.func,
   organization: PropTypes.object,
-  isHelpCollapsed: PropTypes.bool,
-  setIsHelpCollapsed: PropTypes.func,
-};*/
+  onAnnualDateChanged: PropTypes.func,
+  onFrequencyChanged: PropTypes.func,
+  onReminderChanged: PropTypes.func,
+};
 
 export default ReviewSubcard;

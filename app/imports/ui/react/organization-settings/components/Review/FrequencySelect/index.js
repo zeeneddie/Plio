@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { compose, getContext, withProps } from 'recompose';
+import get from 'lodash.get';
 import pluralize from 'pluralize';
 
 import { PossibleReviewFrequencies } from '/imports/share/constants';
@@ -17,33 +18,49 @@ const selectOptions = (() => {
   }));
 })();
 
-const getSelectValue = ({ timeValue, timeUnit }) => {
+const getSelectValue = ({ timeValue, timeUnit } = {}) => {
   const selectedFrequency = PossibleReviewFrequencies.find(frequency => (
     (frequency.timeUnit === timeUnit) && (frequency.timeValue === timeValue)
   ));
 
-  return PossibleReviewFrequencies.indexOf(selectedFrequency);
+  const selectValue = PossibleReviewFrequencies.indexOf(selectedFrequency);
+
+  return selectValue > -1 ? selectValue : 0;
 };
 
 const enhance = compose(
-  getContext({ changeField: PropTypes.func }),
+  getContext({
+    changeField: PropTypes.func,
+    getField: PropTypes.func,
+  }),
   withProps((props) => ({
     options: selectOptions,
-    value: getSelectValue(props.frequency),
+    value: getSelectValue(props.getField(props.fieldName)),
     onChange: (e) => {
-      const reviewFrequency = PossibleReviewFrequencies[e.target.value];
-      const fieldName = `${props.documentKey}.frequency`;
-      props.changeField(fieldName, reviewFrequency);
+      const newSelectValue = get(e, 'target.value');
+      const reviewFrequency = PossibleReviewFrequencies[newSelectValue];
+      if (reviewFrequency) {
+        props.changeField(props.fieldName, reviewFrequency);
+      }
     },
   })),
 );
 
 const ReviewFrequencySelect = enhance((props) => (
-  <Select
-    value={props.value}
-    options={props.options}
-    onChange={props.onChange}
-  />
+  <div className="form-group">
+    <label className="form-control-label">
+      Frequency
+    </label>
+    <Select
+      value={props.value}
+      options={props.options}
+      onChange={props.onChange}
+    />
+  </div>
 ));
+
+ReviewFrequencySelect.propTypes = {
+  fieldName: PropTypes.string,
+};
 
 export default ReviewFrequencySelect;
