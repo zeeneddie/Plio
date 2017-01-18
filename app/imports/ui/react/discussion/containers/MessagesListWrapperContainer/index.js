@@ -19,10 +19,11 @@ import {
   markMessagesAsRead,
 } from '/imports/client/store/actions/discussionActions';
 import notifications from '/imports/startup/client/mixins/notifications';
-import { pickFromDiscussion, omitC, invokeC, notEquals } from '/imports/api/helpers';
+import { pickFromDiscussion, pickC, invokeC, notEquals } from '/imports/api/helpers';
 import LastDiscussionMessage from '/imports/client/collections/lastDiscussionMessage';
+import { MESSAGES_PER_PAGE_LIMIT } from '../../constants';
 
-const observer = () => {
+const initObservers = () => {
   const handle = LastDiscussionMessage.find().observe({
     changed({ createdBy }) {
       if (!Object.is(createdBy, Meteor.userId())) {
@@ -35,17 +36,18 @@ const observer = () => {
   return () => handle.stop();
 };
 
-const interval = (fn) => {
+const initInterval = (fn) => {
   const handle = Meteor.setInterval(() => fn(), 3000);
 
   return () => Meteor.clearInterval(handle);
 };
 
 const shouldResubscribe = (props, nextProps) => {
-  const omitProps = omitC(['at', 'resetCompleted']);
-  // we don't want to trigger resubscribe when the user selects a message
-  return (!props.resetCompleted && nextProps.resetCompleted) ||
-          notEquals(omitProps(props), omitProps(nextProps));
+  const pickProps = pickC(['priorLimit', 'followingLimit', 'discussionId', 'sort']);
+  return (
+    !props.resetCompleted && nextProps.resetCompleted ||
+    notEquals(pickProps(props), pickProps(nextProps))
+  );
 };
 
 const readMessages = (props) => {
@@ -59,8 +61,8 @@ const loadMessagesData = ({
   dispatch,
   sort = { createdAt: -1 },
   at = null,
-  priorLimit = 25,
-  followingLimit = 25,
+  priorLimit = MESSAGES_PER_PAGE_LIMIT,
+  followingLimit = MESSAGES_PER_PAGE_LIMIT,
   resetCompleted = false,
 }, onData) => {
   dispatch(setLoading(true));
@@ -72,7 +74,7 @@ const loadMessagesData = ({
 
   if (subscriptions.every(invokeC('ready'))) {
     const query = { discussionId };
-    const options = { sort: { createdAt: 1 } };
+    const options = { sort: { createdAt: 1 }, fields: { viewedBy: 0 } };
     const messages = Messages.find(query, options).fetch();
     const lastMessageId = Tracker.nonreactive(() =>
       get(LastDiscussionMessage.findOne(), 'lastMessageId'));
@@ -101,7 +103,7 @@ export default compose(
   ])),
   composeWithTracker(loadMessagesData, PreloaderPage, null, { shouldResubscribe }),
   connect(pickFromDiscussion([
-    'loading', 'messages', 'priorLimit', 'followingLimit', 'lastMessageId', 'sort',
+    'loading', 'messages', 'priorLimit', 'followingLimit', 'lastMessageId', 'sort', 'discussion',
   ])),
   shouldUpdate(notEquals),
   lifecycle({
@@ -109,9 +111,9 @@ export default compose(
       readMessages(this.props);
       // run observer and interval that returns a cleanup function
 
-      this.intervalCleanup = interval(() => readMessages(this.props));
+      this.intervalCleanup = initInterval(() => readMessages(this.props));
 
-      this.observerCleanup = observer();
+      this.observerCleanup = initObservers();
     },
     componentWillUnmount() {
       readMessages(this.props);

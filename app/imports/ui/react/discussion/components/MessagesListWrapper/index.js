@@ -21,6 +21,7 @@ import {
 } from '/imports/client/store/actions/discussionActions';
 import { swipedetect } from '/client/lib/mobile';
 import { lengthMessages, $isAlmostScrolledToBottom } from '/imports/api/helpers';
+import { MESSAGES_PER_PAGE_LIMIT } from '../../constants';
 
 const receivedOneNewMessage = (props, prevProps) =>
   Object.is(lengthMessages(props), lengthMessages(prevProps) + 1);
@@ -152,8 +153,8 @@ class MessagesListWrapper extends React.Component {
       const actions = ((() => {
         const _at = FlowRouter.getQueryParam('at');
         const setSortDir = setSort(sort);
-        const incFollowingLimit = setFollowingLimit(followingLimit + 25);
-        const incPriorLimit = setPriorLimit(priorLimit + 25);
+        const incFollowingLimit = setFollowingLimit(followingLimit + MESSAGES_PER_PAGE_LIMIT);
+        const incPriorLimit = setPriorLimit(priorLimit + MESSAGES_PER_PAGE_LIMIT);
 
         const _actions = _at
           ? [setSortDir, sortDir > 0 ? incFollowingLimit : incPriorLimit]

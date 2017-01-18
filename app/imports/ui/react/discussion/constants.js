@@ -1,0 +1,3 @@
+export const MESSAGES_PER_PAGE_LIMIT = 25;
+
+export const MESSAGES_COUNT_LIMIT_BEFORE_RESET = 100;
