@@ -219,11 +219,11 @@ Template.WorkInbox_List.viewmodel({
       };
       const deletedActions = sortItems(this._getActionsByQuery(deletedQuery).fetch());
       const deletedActionsIds = extractIds(deletedActions);
-      const deleted = sortItems(this.getPendingItems({
+      const deletedItems = this.getPendingItems({
         'linkedDoc._id': { $in: deletedActionsIds },
         isDeleted: true,
-      }));
-
+      });
+      const deleted = _.sortBy(deletedItems, 'deletedAt').reverse();
       const current = byStatus(isInProgress, sortItems(workItems, ORDER.DESC));
       const completed = byStatus(isCompleted, sortItems(workItems));
 
