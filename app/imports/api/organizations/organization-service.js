@@ -335,7 +335,6 @@ export default OrganizationService = {
   },
 
   updateLastAccessedDate({ organizationId }) {
-    console.log('updateLastAccessedDate service run', organizationId);
     return this.collection.update({
       _id: organizationId
     }, {
