@@ -22,7 +22,7 @@ const StandardsRHSBody = ({
     </CollapseBlock>
     {[standard.source1, standard.source2].map((source, key) => (
       getC('htmlUrl', source) && (
-        <SourceWordDocument key={key} src={source.htmlUrl}>
+        <SourceWordDocument {...{ key }} src={source.htmlUrl}>
           <FileProvider flat={false} component={Source} {...{ ...source }} />
         </SourceWordDocument>
       )
