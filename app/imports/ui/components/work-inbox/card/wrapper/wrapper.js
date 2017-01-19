@@ -6,6 +6,7 @@ import { WorkItemsStore } from '/imports/share/constants.js';
 const { LINKED_TYPES } = WorkItemsStore;
 
 Template.WorkInbox_Card_Read_Wrapper.viewmodel({
+  share: 'search',
   isRendered: false,
   mixin: ['workInbox', 'organization', 'utils'],
   onRendered() {
@@ -35,5 +36,8 @@ Template.WorkInbox_Card_Read_Wrapper.viewmodel({
   },
   linkedDocId() {
     return get('linkedDoc._id', this.workItem());
+  },
+  noSearchResults() {
+    return this.searchText() && !this.searchResult().array().length;
   },
 });

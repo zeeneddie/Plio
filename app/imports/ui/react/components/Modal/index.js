@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react';
 
-import Icon from '../Icon';
 import Heading from './Heading';
 import HelpPanel from '../HelpPanel';
-import Collapse from '../Collapse';
+import ErrorSection from '../ErrorSection';
 
 const Modal = ({
   variation,
@@ -46,13 +45,7 @@ const Modal = ({
           </HelpPanel.Body>
         )}
 
-        {/* notification panel */}
-        <Collapse className="modal-error-section" collapsed={!errorText}>
-          <div className="card-block">
-            <Icon name="exclamation-circle" size="4" aria-hidden="true" />
-            {errorText}
-          </div>
-        </Collapse>
+        <ErrorSection {...{ errorText }} />
 
         <div className="modal-window-content">
           {children}

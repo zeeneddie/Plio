@@ -12,6 +12,7 @@ import { CollectionNames, ProblemsStatuses } from '/imports/share/constants';
 const dataExportProps = {
   docType: CollectionNames.NCS,
   statuses: ProblemsStatuses,
+  checkedFilters: mapping.defaultFilterIndexes,
   fields: Object.keys(mapping.fields).map(key => ({
     name: key,
     ...mapping.fields[key],
@@ -22,7 +23,7 @@ const enhance = withState('isOpen', 'setIsOpen', false);
 const HeaderMenu = (props) => (
   <HeaderOptionsMenu {...props}>
     <DataExportModal title="Data export" {...dataExportProps}>
-      <DropdownItem tag="a">Export Data</DropdownItem>
+      <DropdownItem tag="a">Data export</DropdownItem>
     </DataExportModal>
   </HeaderOptionsMenu>
 );

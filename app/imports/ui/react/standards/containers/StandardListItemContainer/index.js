@@ -1,4 +1,4 @@
-import { compose, withHandlers, withProps, shouldUpdate } from 'recompose';
+import { compose, withHandlers, withProps, shouldUpdate, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
 import { getSubNestingClassName } from '../../helpers';

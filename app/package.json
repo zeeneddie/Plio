@@ -8,9 +8,11 @@
     "deploy-staging": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy staging.pliohub.com --settings settings-staging.json"
   },
   "dependencies": {
+    "autolinker": "^1.4.0",
     "aws-sdk": "^2.4.3",
     "bcrypt": "^0.8.7",
     "canvas": "^1.6.0",
+    "checksum": "^0.1.1",
     "classnames": "^2.2.5",
     "clipboard": "^1.5.12",
     "core-js": "^2.4.1",

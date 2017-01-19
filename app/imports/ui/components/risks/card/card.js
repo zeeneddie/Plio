@@ -8,13 +8,14 @@ import { restore, remove } from '/imports/api/risks/methods.js';
 import { RisksHelp } from '/imports/api/help-messages.js';
 
 Template.Risks_Card_Read.viewmodel({
+  share: 'search',
   mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'workInbox'],
   isReadOnly: false,
   isReady: false,
   RiskRCALabel: AnalysisTitles.riskAnalysis,
   RiskUOSLabel: AnalysisTitles.updateOfRiskRecord,
   showCard() {
-    return this.risks().length;
+    return this.risks().length && !this.noSearchResults();
   },
   ActionTypes() {
     return ActionTypes;
@@ -72,5 +73,8 @@ Template.Risks_Card_Read.viewmodel({
     const callback = (err) => cb(err, () => this.handleRouteRisks());
 
     remove.call({ _id }, callback);
+  },
+  noSearchResults() {
+    return this.searchText() && !this.searchResult().array().length;
   },
 });

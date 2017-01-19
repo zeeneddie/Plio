@@ -1,20 +1,35 @@
+/* eslint max-len: ["error", 300] */
+
 export const ActionPlanOptions = {
   YES: 'Yes',
   NO: 'No',
   NOT_NEEDED: 'Not needed',
 };
 
+export const ActionIndexes = {
+  IN_PROGRESS: 1,
+  DUE_COMPLETION_TODAY: 2,
+  COMPLETION_OVERDUE: 3,
+  NOT_YET_VERIFY: 4,
+  VERIFY_DUE_TODAY: 5,
+  VERIFY_OVERDUE: 6,
+  COMPLETED_FAILED: 7,
+  COMPLETED_EFFECTIVE: 8,
+  COMPLETED: 9,
+  DELETED: 10,
+};
+
 export const ActionStatuses = {
-  1: 'In progress',
-  2: 'In progress - due for completion today',
-  3: 'In progress - completion overdue',
-  4: 'In progress - completed, not yet verified',
-  5: 'In progress - completed, verification due today',
-  6: 'In progress - completed, verification overdue',
-  7: 'Completed - failed verification',
-  8: 'Completed - verified as effective',
-  9: 'Completed',
-  10: 'Deleted',
+  [ActionIndexes.IN_PROGRESS]: 'In progress',
+  [ActionIndexes.DUE_COMPLETION_TODAY]: 'In progress - due for completion today',
+  [ActionIndexes.COMPLETION_OVERDUE]: 'In progress - completion overdue',
+  [ActionIndexes.NOT_YET_VERIFY]: 'In progress - completed, not yet verified',
+  [ActionIndexes.VERIFY_DUE_TODAY]: 'In progress - completed, verification due today',
+  [ActionIndexes.VERIFY_OVERDUE]: 'In progress - completed, verification overdue',
+  [ActionIndexes.COMPLETED_FAILED]: 'Completed - failed verification',
+  [ActionIndexes.COMPLETED_EFFECTIVE]: 'Completed - verified as effective',
+  [ActionIndexes.COMPLETED]: 'Completed',
+  [ActionIndexes.DELETED]: 'Deleted',
 };
 
 export const ActionTypes = {
@@ -214,27 +229,53 @@ export const ProblemMagnitudes = {
   CRITICAL: 'critical',
 };
 
+
+export const ProblemIndexes = {
+  REPORTED: 1,
+  AWAITING_ANALYSIS: 2,
+  ACTIONS_TO_BE_ADDED: 3,
+  ANALYSIS_DUE_TODAY: 4,
+  ANALYSIS_OVERDUE: 5,
+  ANALYSIS_COMPLETED_ACTIONS_NEED: 6,
+  ANALYSIS_COMPLETED_ACTIONS_IN_PLACE: 7,
+  ACTIONS_IN_PLACE: 8,
+  ACTIONS_DUE_TODAY: 9,
+  ACTIONS_OVERDUE: 10,
+  OPEN_ACTIONS_COMPLETED: 11,
+  ACTIONS_COMPLETED_WAITING_VERIFY: 12,
+  VERIFY_DUE_TODAY: 13,
+  VERIFY_PAST_DUE: 14,
+  ACTIONS_AWAITING_UPDATE: 15,
+  ACTIONS_UPDATE_DUE_TODAY: 16,
+  ACTIONS_UPDATE_PAST_DUE: 17,
+  ACTIONS_FAILED_VERIFICATION: 18,
+  CLOSED_ACTIONS_COMPLETED: 19,
+  ACTIONS_VERIFIED_STANDARDS_REVIEWED: 20,
+  DELETED: 21,
+};
+
 export const ProblemsStatuses = {
-  1: 'Open - just reported',
-  2: 'Open - just reported, awaiting analysis',
-  3: 'Open - just reported, action(s) to be added',
-  4: 'Open - analysis due today',
-  5: 'Open - analysis overdue',
-  6: 'Open - analysis completed, action(s) need to be added',
-  7: 'Open - analysis completed, action(s) in place',
-  8: 'Open - action(s) due today',
-  9: 'Open - action(s) overdue',
-  10: 'Open - action(s) completed',
-  11: 'Open - action(s) completed, awaiting verification',
-  12: 'Open - verification due today',
-  13: 'Open - verification past due',
-  14: 'Open - action(s) verified as effective, awaiting update of standard(s)',
-  15: 'Open - action(s) verified as effective, update of standard(s) due today',
-  16: 'Open - action(s) verified as effective, update of standard(s) past due',
-  17: 'Open - action(s) failed verification',
-  18: 'Closed - action(s) completed',
-  19: 'Closed - action(s) verified, standard(s) reviewed',
-  20: 'Deleted',
+  [ProblemIndexes.REPORTED]: 'Open - just reported',
+  [ProblemIndexes.AWAITING_ANALYSIS]: 'Open - just reported, awaiting analysis',
+  [ProblemIndexes.ACTIONS_TO_BE_ADDED]: 'Open - just reported, action(s) to be added',
+  [ProblemIndexes.ANALYSIS_DUE_TODAY]: 'Open - analysis due today',
+  [ProblemIndexes.ANALYSIS_OVERDUE]: 'Open - analysis overdue',
+  [ProblemIndexes.ANALYSIS_COMPLETED_ACTIONS_NEED]: 'Open - analysis completed, action(s) need to be added',
+  [ProblemIndexes.ANALYSIS_COMPLETED_ACTIONS_IN_PLACE]: 'Open - analysis completed, action(s) in place',
+  [ProblemIndexes.ACTIONS_IN_PLACE]: 'Open - action(s) in place',
+  [ProblemIndexes.ACTIONS_DUE_TODAY]: 'Open - action(s) due today',
+  [ProblemIndexes.ACTIONS_OVERDUE]: 'Open - action(s) overdue',
+  [ProblemIndexes.OPEN_ACTIONS_COMPLETED]: 'Open - action(s) completed',
+  [ProblemIndexes.ACTIONS_COMPLETED_WAITING_VERIFY]: 'Open - action(s) completed, awaiting verification',
+  [ProblemIndexes.VERIFY_DUE_TODAY]: 'Open - verification due today',
+  [ProblemIndexes.VERIFY_PAST_DUE]: 'Open - verification past due',
+  [ProblemIndexes.ACTIONS_AWAITING_UPDATE]: 'Open - action(s) verified as effective, awaiting update of standard(s)',
+  [ProblemIndexes.ACTIONS_UPDATE_DUE_TODAY]: 'Open - action(s) verified as effective, update of standard(s) due today',
+  [ProblemIndexes.ACTIONS_UPDATE_PAST_DUE]: 'Open - action(s) verified as effective, update of standard(s) past due',
+  [ProblemIndexes.ACTIONS_FAILED_VERIFICATION]: 'Open - action(s) failed verification',
+  [ProblemIndexes.CLOSED_ACTIONS_COMPLETED]: 'Closed - action(s) completed',
+  [ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED]: 'Closed - action(s) verified, standard(s) reviewed',
+  [ProblemIndexes.DELETED]: 'Deleted',
 };
 
 export const ProblemTypes = {

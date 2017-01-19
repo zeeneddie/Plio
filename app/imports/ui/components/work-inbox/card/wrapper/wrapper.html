@@ -1,26 +1,34 @@
 <template name="WorkInbox_Card_Read_Wrapper">
   {{#if isRendered}}
     {{#if workItem}}
-      {{#if isDocType LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
-        {{#unless workItem.isDeleted}}
+      {{#if noSearchResults}}
+        <div class="content-cards-inner flex scroll">
+          {{#CardHeading}}
+            <h5>Your search did not match any work items</h5>
+          {{/CardHeading}}
+        </div>
+      {{else}}
+        {{#if isDocType LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
+          {{#unless workItem.isDeleted}}
+            {{> WorkInbox_QAPanel_Read doc=workItem}}
+          {{/unless}}
+
+          {{> Actions_Card_Read (cardArgs)}}
+        {{/if}}
+
+        {{#if isDocType LINKED_TYPES.NON_CONFORMITY}}
           {{> WorkInbox_QAPanel_Read doc=workItem}}
-        {{/unless}}
+          {{> NC_Card_Read (cardArgs)}}
+        {{/if}}
 
-        {{> Actions_Card_Read (cardArgs)}}
-      {{/if}}
+        {{#if isDocType LINKED_TYPES.RISK}}
+          {{> WorkInbox_QAPanel_Read doc=workItem}}
+          {{> Risks_Card_Read (cardArgs)}}
+        {{/if}}
 
-      {{#if isDocType LINKED_TYPES.NON_CONFORMITY}}
-        {{> WorkInbox_QAPanel_Read doc=workItem}}
-        {{> NC_Card_Read (cardArgs)}}
-      {{/if}}
-
-      {{#if isDocType LINKED_TYPES.RISK}}
-        {{> WorkInbox_QAPanel_Read doc=workItem}}
-        {{> Risks_Card_Read (cardArgs)}}
-      {{/if}}
-
-      {{#if (some (isActiveWorkInboxFilter 5) (isActiveWorkInboxFilter 6))}}
-        {{> Actions_Card_Read isReady=isReady _id=workItemId showCard=true}}
+        {{#if (some (isActiveWorkInboxFilter 5) (isActiveWorkInboxFilter 6))}}
+          {{> Actions_Card_Read isReady=isReady _id=workItemId showCard=true}}
+        {{/if}}
       {{/if}}
     {{else}}
       <div class="content-cards-inner flex scroll">

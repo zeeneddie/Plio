@@ -13,7 +13,7 @@ const HelpPanelBody = ({ onToggleCollapse, collapsed, children }) => (
       <div className="btn-group">
         <Button
           component="button"
-          type="link"
+          color="link"
           className="guidance-panel-close pointer"
           onClick={onToggleCollapse}
         >

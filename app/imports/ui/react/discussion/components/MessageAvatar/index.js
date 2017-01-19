@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-const MessageAvatar = (props) => (
-  <a className="chat-item-avatar img-wrapper sm" role="button" onClick={props.onClick}>
-    <img tabIndex="0" src={props.avatar} alt={props.alt} />
-  </a>
-);
+const MessageAvatar = ({ tag = 'a', children, ...other }) => {
+  const Tag = tag;
+
+  return (
+    <Tag {...{ ...other }} className="chat-item-avatar img-wrapper sm">
+      {children}
+    </Tag>
+  );
+};
+
+MessageAvatar.propTypes = {
+  tag: PropTypes.string,
+  children: PropTypes.node,
+};
 
 export default MessageAvatar;

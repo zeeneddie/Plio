@@ -1,11 +1,9 @@
 import { Meteor } from 'meteor/meteor';
-import get from 'lodash.get';
 
 import { Discussions } from '/imports/share/collections/discussions.js';
-import { Standards } from '/imports/share/collections/standards.js'
 import { isOrgMember } from '../../checkers.js';
 
-Meteor.publish('discussionsByDocId', function({ docId, organizationId }) {
+Meteor.publish('discussionsByDocId', function ({ docId, organizationId }) {
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {

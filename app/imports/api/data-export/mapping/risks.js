@@ -1,11 +1,15 @@
 import { _ } from 'meteor/underscore';
-import { CollectionNames, ProblemsStatuses } from '/imports/share/constants';
+import { CollectionNames, ProblemsStatuses, ProblemIndexes } from '/imports/share/constants';
 import { Risks } from '/imports/share/collections/risks';
 import { formatUser, formatLessonsLearned, formatMap, formatDate } from '../formatters';
 
 export const mapping = {
   collection: Risks,
   filterField: 'status',
+  defaultFilterIndexes: _.chain(ProblemIndexes)
+    .values()
+    .difference([ProblemIndexes.DELETED])
+    .value(),
   fields: {
     _id: {
       label: 'Risk ID',

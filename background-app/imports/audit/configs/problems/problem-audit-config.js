@@ -1,5 +1,5 @@
+import { _ } from 'meteor/underscore';
 import { getProblemName } from '/imports/helpers/description';
-
 import onCreated from './on-created';
 import onRemoved from './on-removed';
 
@@ -26,6 +26,8 @@ import updateOfStandardsCompletionComments from './fields/updateOfStandards.comp
 import updateOfStandardsExecutor from './fields/updateOfStandards.executor';
 import updateOfStandardsStatus from './fields/updateOfStandards.status';
 import updateOfStandardsTargetDate from './fields/updateOfStandards.targetDate';
+
+import { propId, propOrganizationId, propNotify, propIdentifiedBy } from '/imports/helpers/props';
 
 
 export default ProblemAuditConfig = {
@@ -60,20 +62,14 @@ export default ProblemAuditConfig = {
 
   onRemoved,
 
-  docId({ _id }) {
-    return _id;
-  },
+  docId: propId,
 
-  docName(doc) {
-    return getProblemName(doc);
-  },
+  docName: getProblemName,
 
-  docOrgId({ organizationId }) {
-    return organizationId;
-  },
+  docOrgId: propOrganizationId,
 
-  docNotifyList({ notify = [] }) {
-    return notify;
-  },
+  docNotifyList: propNotify,
+
+  docOwner: propIdentifiedBy,
 
 };

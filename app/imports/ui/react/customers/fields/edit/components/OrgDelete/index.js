@@ -4,7 +4,7 @@ import Button from '../../../../../components/Buttons/Button';
 
 const OrgDelete = ({ onOrgDelete: onClick }) => (
   <div className="card-block text-xs-center">
-    <Button type="secondary" {...{ onClick }}>Delete</Button>
+    <Button color="danger" {...{ onClick }}>Delete organization</Button>
   </div>
 );
 

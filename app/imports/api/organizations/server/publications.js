@@ -99,6 +99,7 @@ Meteor.publish('currentUserOrganizationBySerialNumber', function(serialNumber) {
     createdBy: 1,
     updatedAt: 1,
     updatedBy: 1,
+    lastAccessedDate: 1,
   };
 
   if (this.userId) {
@@ -165,6 +166,7 @@ Meteor.publishComposite('organizationsInfo', {
           name: 1,
           users: 1,
           createdAt: 1,
+          lastAccessedDate: 1,
         },
       });
     }
