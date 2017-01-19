@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 const MessageDate = ({ className, children, ...other }) => (
   <div className={cx('chat-item-date', className)} {...other}>
-    {children}
+    <span>{children}</span>
   </div>
 );
 
