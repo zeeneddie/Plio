@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { composeWithTracker, compose as kompose } from 'react-komposer';
 import { setInitializing } from '/imports/client/store/actions/risksActions';
 import { pickDeep } from '/imports/api/helpers';
-import { RiskFilters } from '/imports/api/constants';
+import { RiskFilters, RiskFilterIndexes } from '/imports/api/constants';
 import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers';
 import RisksLayout from '../../components/RisksLayout';
 import onHandleFilterChange from '../../../handlers/onHandleFilterChange';
@@ -25,7 +25,7 @@ import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
 import { observeRisks, observeRiskTypes } from '../../observers';
 
 const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
-  const isDeleted = filter === 3
+  const isDeleted = filter === RiskFilterIndexes.DELETED
     ? true
     : { $in: [null, false] };
 

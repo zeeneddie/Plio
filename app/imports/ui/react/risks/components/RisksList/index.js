@@ -15,7 +15,7 @@ const RisksList = (props) => (
         urlItemId={props.urlItemId}
         _id={risk._id}
         type={risk.type}
-        // {...risk}
+        {...risk}
       />
     ))}
   </div>

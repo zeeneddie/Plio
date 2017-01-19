@@ -4,6 +4,9 @@ import { RiskFilterIndexes } from '/imports/api/constants';
 import propTypes from './propTypes';
 import LHSContainer from '../../../containers/LHSContainer';
 import TypeListContainer from '../../containers/TypeListContainer';
+import DepatrmentListContainer from '../../containers/DepatrmentListContainer';
+import StatusListContainer from '../../containers/StatusListContainer';
+import DeletedRisksListContainer from '../../containers/DeletedRisksListContainer';
 
 const RisksLHS = (props) => {
   const contentByFilter = {
@@ -13,9 +16,23 @@ const RisksLHS = (props) => {
         onToggleCollapse={props.onToggleCollapse}
       />
     ),
-    [RiskFilterIndexes.STATUS]: <div>STATUS</div>,
-    [RiskFilterIndexes.DEPARTMENT]: <div>DEPARTMENT</div>,
-    [RiskFilterIndexes.DELETED]: <div>DELETED</div>,
+    [RiskFilterIndexes.STATUS]: (
+      <StatusListContainer
+        risks={props.risks}
+        onToggleCollapse={props.onToggleCollapse}
+      />
+    ),
+    [RiskFilterIndexes.DEPARTMENT]: (
+      <DepatrmentListContainer
+        risks={props.risks}
+        onToggleCollapse={props.onToggleCollapse}
+      />
+    ),
+    [RiskFilterIndexes.DELETED]: (
+      <div className="list-group">
+        <DeletedRisksListContainer risks={props.risks} />
+      </div>
+    ),
   };
 
   return (

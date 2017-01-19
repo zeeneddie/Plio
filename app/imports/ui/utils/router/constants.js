@@ -8,6 +8,7 @@ export const PATH_MAP = {
   standard: { orgSerialNumber, filter },
   standardDiscussion: { orgSerialNumber, filter },
   nonconformity: { orgSerialNumber, filter },
+  risks: { orgSerialNumber, filter },
   risk: { orgSerialNumber, filter },
   workInboxItem: { orgSerialNumber, filter },
   customers: {},

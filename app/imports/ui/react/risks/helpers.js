@@ -2,6 +2,7 @@ import { _ } from 'meteor/underscore';
 import { withProps } from 'recompose';
 import curry from 'lodash.curry';
 
+import { TYPE_UNCATEGORIZED } from './constants';
 import { CollectionNames } from '/imports/share/constants';
 import { RiskFilterIndexes } from '/imports/api/constants';
 import {
@@ -24,6 +25,7 @@ export const getSubNestingClassName = ({ nestingLevel = 1 }) =>
   'sub'.repeat(parseInt(nestingLevel, 10) - 1);
 
 export const createRiskTypeItem = curry(createTypeItem)(CollectionNames.RISK_TYPES);
+export const createRiskDepartmentItem = curry(createTypeItem)(CollectionNames.DEPARTMENTS);
 
 export const findSelectedRisk = id =>
   compose(find(propEqId(id)), propRisks);
@@ -38,34 +40,46 @@ export const addCollapsedType = compose(addCollapsed, createRiskTypeItem, propId
 
 export const createUncategorizedType = ({ risks, types }) => {
   return ({
-    _id: 'TYPE_UNCATEGORIZED',
+    _id: TYPE_UNCATEGORIZED,
     title: 'Uncategorized',
     organizationId: getC('organizationId', risks[0]),
     risks: risks.filter(risk => !types.find(propEqId(risk.typeId))),
   });
-}
+};
+
+export const createUncategorizedDepartment = ({ risks, departments }) => {
+  return ({
+    _id: TYPE_UNCATEGORIZED,
+    name: 'Uncategorized',
+    organizationId: getC('organizationId', risks[0]),
+    risks: risks.filter(risk => !departments.find(
+      department => _.contains(risk.departmentsIds, department._id)
+    )),
+  });
+};
 
 export const getSelectedAndDefaultRiskByFilter = ({
-  sections, types, risks, filter, urlItemId,
+  statuses, departments, types, risks, filter, urlItemId,
 }) => {
   const findRisk = findSelectedRisk(urlItemId);
   switch (filter) {
     case RiskFilterIndexes.STATUS: {
-      const containedIn = sections.find(findRisk);
+      const containedIn = statuses.find(findRisk);
       return {
         containedIn,
         selectedRisk: findRisk(containedIn),
-        defaultRisk: getC('sections[0].risks[0]', { sections }),
-        defaultContainedIn: _.first(sections),
+        defaultRisk: getC('statuses[0].risks[0]', { statuses }),
+        defaultContainedIn: _.first(statuses),
       };
     }
     case RiskFilterIndexes.DEPARTMENT: {
-      const containedIn = sections.find(findRisk);
+      const containedIn = departments.find(findRisk);
+
       return {
         containedIn,
         selectedRisk: findRisk(containedIn),
-        defaultRisk: getC('sections[0].risks[0]', { sections }),
-        defaultContainedIn: _.first(sections),
+        defaultRisk: getC('departments[0].risks[0]', { departments }),
+        defaultContainedIn: _.first(departments),
       };
     }
     case RiskFilterIndexes.TYPE: {
@@ -109,13 +123,24 @@ export const openRiskByFilter = ({
   let result;
 
   switch (filter) {
-    case 1:
+    case RiskFilterIndexes.TYPE:
     default: {
       const typeItem = createRiskTypeItem(topLevelKey);
       result = dispatch(addCollapsed({ ...typeItem, close: { type: typeItem.type } }));
       break;
     }
-    case 2: {
+    case RiskFilterIndexes.STATUS: {
+      // todo: move RISK.STATUSES to constant
+      const statusItem = createTypeItem('RISK.STATUSES', parentItem.number);
+      result = dispatch(addCollapsed({ ...statusItem, close: { type: statusItem.type } }));
+      break;
+    }
+    case RiskFilterIndexes.DEPARTMENT: {
+      const departmentItem = createRiskDepartmentItem(topLevelKey);
+      result = dispatch(addCollapsed({ ...departmentItem, close: { type: departmentItem.type } }));
+      break;
+    }
+    case RiskFilterIndexes.DELETED: {
       result = null;
       break;
     }

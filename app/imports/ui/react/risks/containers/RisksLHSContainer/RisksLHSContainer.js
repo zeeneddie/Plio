@@ -38,9 +38,10 @@ export default compose(
     ...props,
     risks: props.risks.map(pickC([
       '_id',
-      'sectionId',
+      'departmentsIds',
       'typeId',
       'titlePrefix',
+      'status',
       'isDeleted',
     ])),
   })),

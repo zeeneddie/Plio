@@ -8,22 +8,22 @@ import RisksListContainer from '../../containers/RisksListContainer';
 import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
 import { TYPE_UNCATEGORIZED } from '../../constants';
 
-const TypeList = ({ types, onToggleCollapse }) => (
+const TypeList = ({ departments, onToggleCollapse }) => (
   <div>
-    {types.map(type => (
+    {departments.map(department => (
       <LHSItemContainer
-        key={type._id}
-        item={createTypeItem(CollectionNames.RISK_TYPES, type._id)}
+        key={department._id}
+        item={createTypeItem(CollectionNames.DEPARTMENTS, department._id)}
         // TODO: move to separated helper
-        lText={cx(type.title, type.abbreviation && `(${type.abbreviation})`)}
-        rText={type.unreadMessagesCount && (
-          <LabelMessagesCount count={type.unreadMessagesCount} />
+        lText={cx(department.name)}
+        rText={department.unreadMessagesCount && (
+          <LabelMessagesCount count={department.unreadMessagesCount} />
         )}
         hideRTextOnCollapse
         onToggleCollapse={onToggleCollapse}
       >
         <div className="sub">
-          <RisksListContainer risks={type.risks} />
+          <RisksListContainer risks={department.risks} />
         </div>
       </LHSItemContainer>
     ))}
@@ -31,7 +31,7 @@ const TypeList = ({ types, onToggleCollapse }) => (
 );
 
 TypeList.propTypes = {
-  types: PropTypes.array.isRequired,
+  departments: PropTypes.array.isRequired,
   onToggleCollapse: PropTypes.func.isRequired,
 };
 
