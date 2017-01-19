@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 
 import DropdownMenu from '../../DropdownMenu';
-import MessageAvatar from '../../../discussion/components/MessageAvatar';
+import Message from '../../../discussion/components/Message';
 
 const MentionMenu = ({
   users,
@@ -11,9 +11,9 @@ const MentionMenu = ({
   <DropdownMenu {...other}>
     {users.map((user) => (
       <DropdownMenu.Item key={user.value} onMouseDown={e => onUserSelect && onUserSelect(e, user)}>
-        <MessageAvatar tag="div">
+        <Message.Avatar tag="div">
           <img src={user.avatar} alt={user.text} tabIndex="-1" />
-        </MessageAvatar>
+        </Message.Avatar>
         <span>{user.text} </span>
         <span className="text-muted">{user.email}</span>
       </DropdownMenu.Item>
