@@ -20,12 +20,13 @@ export const submit = ({
   const callback = (__, getState) => (err) => {
     if (err) return;
 
-    const { messages = [] } = getState().discussion;
+    const { messages = [], lastMessageId } = getState().discussion;
 
     if (FlowRouter.getQueryParam('at') || messages.length > MESSAGES_COUNT_LIMIT_BEFORE_RESET) {
       FlowRouter.setQueryParams({ at: null });
 
       const resetParams = {
+        lastMessageId,
         isDiscussionOpened: true,
         messages: messages.reverse().slice(0, MESSAGES_PER_PAGE_LIMIT),
       };

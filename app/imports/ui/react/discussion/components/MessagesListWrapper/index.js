@@ -13,13 +13,13 @@ import cx from 'classnames';
 import InfiniteLoader from '/imports/ui/react/components/InfiniteLoader';
 import MessagesListContainer from '../../containers/MessagesListContainer';
 import MessagesListHeaderContainer from '../../containers/MessagesListHeaderContainer';
-import { handleMouseWheel, wheelDirection } from '/client/lib/scroll';
+import { handleMouseWheel, wheelDirection } from '/imports/client/lib/scroll';
 import {
   setSort,
   setPriorLimit,
   setFollowingLimit,
 } from '/imports/client/store/actions/discussionActions';
-import { swipedetect } from '/client/lib/mobile';
+import { swipedetect } from '/imports/client/lib/mobile';
 import { lengthMessages, $isAlmostScrolledToBottom } from '/imports/api/helpers';
 import { MESSAGES_PER_PAGE_LIMIT } from '../../constants';
 
