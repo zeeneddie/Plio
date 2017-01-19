@@ -3,15 +3,15 @@ import React from 'react';
 import propTypes from './propTypes';
 import RHS from '../../../../components/RHS';
 
-const StandardsRHSNotFound = ({ filter }) => {
+const RisksRHSNotFound = ({ filter }) => {
   let text;
 
   switch (filter) {
     case 3:
-      text = 'There are no deleted standards yet!';
+      text = 'There are no deleted risks yet!';
       break;
     default:
-      text = 'There are no standards yet! Click on the "Add" button to create your first standard.';
+      text = 'There are no risks yet! Click on the "Add" button to create your first risk.';
   }
 
   return (
@@ -25,6 +25,6 @@ const StandardsRHSNotFound = ({ filter }) => {
   );
 };
 
-StandardsRHSNotFound.propTypes = propTypes;
+RisksRHSNotFound.propTypes = propTypes;
 
-export default StandardsRHSNotFound;
+export default RisksRHSNotFound;

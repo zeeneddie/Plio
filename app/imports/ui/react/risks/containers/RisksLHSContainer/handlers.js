@@ -1,21 +1,21 @@
 import { extractIds } from '/imports/api/helpers';
 import {
-  expandCollapsedStandards,
-  collapseExpandedStandards,
+  expandCollapsedRisks,
+  collapseExpandedRisks,
 } from '../../helpers';
 import _modal_ from '/imports/startup/client/mixins/modal';
 import {
-  setFilteredStandards,
-} from '/imports/client/store/actions/standardsActions';
+  setFilteredRisks,
+} from '/imports/client/store/actions/risksActions';
 import { onSearchTextClear, onSearch } from '/imports/ui/react/share/LHS/handlers';
 
 const getItems = ({ risks }, search) =>
   extractIds(search(['title', 'description', 'status'], risks));
 
-const getActions = (ids) => [setFilteredStandards(ids)];
+const getActions = (ids) => [setFilteredRisks(ids)];
 
 export const onSearchTextChange =
-  onSearch(getItems, getActions, expandCollapsedStandards, collapseExpandedStandards);
+  onSearch(getItems, getActions, expandCollapsedRisks, collapseExpandedRisks);
 
 export const onClear = onSearchTextClear(onSearchTextChange);
 

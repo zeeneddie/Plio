@@ -176,18 +176,6 @@ export const expandCollapsedRisks = (ids) => {
 
   const notCollapsed = _id => !collapsed.find(propEq('key', _id)); // reject already expanded
   const risksFound = risks.filter(risk => ids.includes(risk._id));
-  const uncategorizedSection = createUncategorizedSection({
-    sections: riskBookSections,
-    risks: risksFound,
-  });
-  let sections = riskBookSections.filter(section =>
-    notCollapsed(section._id) &&
-    risksFound.filter(propEq('sectionId', section._id)).length
-  );
-
-  sections = uncategorizedSection.risks.length
-    ? sections.concat(uncategorizedSection)
-    : sections;
 
   switch (filter) {
     case RiskFilterIndexes.TYPE: {
@@ -205,7 +193,7 @@ export const expandCollapsedRisks = (ids) => {
         : types;
 
       return store.dispatch(chainActions(
-        types.map(addCollapsedType).concat(sections.map(addCollapsedSection))
+        types.map(addCollapsedType)
       ));
     }
     default:
@@ -215,7 +203,7 @@ export const expandCollapsedRisks = (ids) => {
 
 export const collapseExpandedRisks = () => {
   const {
-    collections: { risksByIds, riskTypesByIds, riskBookSectionsByIds },
+    collections: { risksByIds, riskTypesByIds, departmentsByIds },
     global: { filter, urlItemId },
   } = getState();
   // expand section and type with currently selected risk and close others
@@ -223,17 +211,8 @@ export const collapseExpandedRisks = () => {
 
   if (!selectedRisk) return false;
 
-  const selectedSection = riskBookSectionsByIds[selectedRisk.sectionId] ||
-    { _id: SECTION_UNCATEGORIZED };
-  const selectedSectionItem = createSectionItem(getId(selectedSection));
-  const addClose = item => ({
-    ...item,
-    close: { type: item.type },
-  });
-  const sectionCollapseAction = addCollapsed(addClose(selectedSectionItem));
-
   switch (filter) {
-    case STANDARD_FILTER_MAP.TYPE: {
+    case RiskFilterIndexes.TYPE: {
       // if risks are filtered by 'type'
       // collapse all types and sections except the one that is holding selected risk
       const selectedType = riskTypesByIds[selectedRisk.typeId] ||

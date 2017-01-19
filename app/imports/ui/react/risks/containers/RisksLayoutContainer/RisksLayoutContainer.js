@@ -18,6 +18,7 @@ import RisksLayout from '../../components/RisksLayout';
 import onHandleFilterChange from '../../../handlers/onHandleFilterChange';
 import onHandleReturn from '../../../handlers/onHandleReturn';
 import loadDeps from '../../loaders/loadDeps';
+import loadCardData from '../../loaders/loadCardData';
 import loadMainData from '../../loaders/loadMainData';
 import loadLayoutData from '../../../loaders/loadLayoutData';
 import loadInitialData from '../../../loaders/loadInitialData';
@@ -65,12 +66,12 @@ const enhance = compose(
     },
   }),
   connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
-  // composeWithTracker(loadCardData, null, null, {
-  //   shouldResubscribe: (props, nextProps) => !!(
-  //     props.organizationId !== nextProps.organizationId ||
-  //     props.urlItemId !== nextProps.urlItemId
-  //   ),
-  // }),
+  composeWithTracker(loadCardData, null, null, {
+    shouldResubscribe: (props, nextProps) => Boolean(
+      props.organizationId !== nextProps.organizationId ||
+      props.urlItemId !== nextProps.urlItemId
+    ),
+  }),
   connect(pickDeep(['organizations.organizationId', 'risks.initializing'])),
   composeWithTracker(loadDeps, null, null, {
     shouldResubscribe: (props, nextProps) =>

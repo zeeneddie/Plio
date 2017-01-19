@@ -12,9 +12,9 @@ import RHSHeaderButtonsContainer from '../../containers/RHSHeaderButtonsContaine
 import RHSBodyContainer from '../../containers/RHSBodyContainer';
 import ChangelogContainer from '../../../changelog/containers/ChangelogContainer';
 
-const StandardsRHS = ({
+const RisksRHS = ({
   isFullScreenMode,
-  standard,
+  risk,
   isReady = true,
   hasDocxAttachment,
 }) => (
@@ -25,33 +25,33 @@ const StandardsRHS = ({
   >
     <RHS.Card className="document-details">
       <RHS.Header
-        title="Standard"
+        title="Risk"
         isReady={isReady}
       >
-        <RHSHeaderButtonsContainer {...{ standard, hasDocxAttachment }} />
+        <RHSHeaderButtonsContainer {...{ risk, hasDocxAttachment }} />
       </RHS.Header>
 
       <RHS.ContentList isReady={isReady}>
-        <RHSBodyContainer {...{ standard, hasDocxAttachment }} />
+        <RHSBodyContainer {...{ risk, hasDocxAttachment }} />
         <ChangelogContainer
-          documentId={getId(standard)}
-          collection={CollectionNames.STANDARDS}
+          documentId={getId(risk)}
+          collection={CollectionNames.RISKS}
         />
       </RHS.ContentList>
     </RHS.Card>
   </RHS>
 );
 
-StandardsRHS.propTypes = {
+RisksRHS.propTypes = {
   hasDocxAttachment: PropTypes.bool,
   isFullScreenMode: PropTypes.bool,
-  standard: PropTypes.object,
+  risk: PropTypes.object,
   isReady: PropTypes.bool,
 };
 
-StandardsRHS.HeaderButtons = HeaderButtons;
-StandardsRHS.Body = Body;
-StandardsRHS.NotFound = NotFound;
-StandardsRHS.NotExist = NotExist;
+RisksRHS.HeaderButtons = HeaderButtons;
+RisksRHS.Body = Body;
+RisksRHS.NotFound = NotFound;
+RisksRHS.NotExist = NotExist;
 
-export default StandardsRHS;
+export default RisksRHS;

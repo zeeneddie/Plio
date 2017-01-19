@@ -2,6 +2,7 @@ import React from 'react';
 import { mapProps } from 'recompose';
 
 import RisksLHSContainer from '../../containers/RisksLHSContainer';
+import RisksRHSContainer from '../../containers/RisksRHSContainer';
 
 import PageContainer from '../../../containers/PageContainer';
 import NotFoundPage from '../../../components/NotFoundPage';
@@ -21,7 +22,9 @@ const enhance = mapProps(props => (
 const RisksPage = enhance((props) => (
   props.organization ? (
     <PageContainer classNames={props.classNames}>
-      {(!props.isDiscussionOpened ? <RisksLHSContainer {...props} /> : null)}
+      {(!props.isDiscussionOpened ? <RisksLHSContainer /> : null)}
+      <RisksRHSContainer />
+      {(props.isDiscussionOpened ? <DiscussionContainer {...props} /> : null)}
       <div>RHS component</div>
     </PageContainer>
   ) : (
