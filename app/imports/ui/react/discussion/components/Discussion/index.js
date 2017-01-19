@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-pascal-case */
+
 import React, { PropTypes } from 'react';
 
 import PreloaderPage from '../../../components/PreloaderPage';
@@ -12,7 +14,7 @@ import RHS from '../../../components/RHS';
 
 const Discussion = (props) => (
   <RHS className="flexbox-column">
-    <RHS.Card className="card chat">
+    <RHS.Card className="chat">
       <CardHeader className="chat-heading">
         <Wrapper className="discussions-hd-top">
           <CardHeader.Item pull="left" className="card-heading-buttons">
