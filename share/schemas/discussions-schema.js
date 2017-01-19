@@ -47,5 +47,10 @@ export const DiscussionsSchema = new SimpleSchema([
       optional: true,
       defaultValue: [],
     },
+    mutedBy: {
+      type: [idSchemaDoc],
+      optional: true,
+      defaultValue: [],
+    },
   },
 ]);

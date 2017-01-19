@@ -1,3 +1,4 @@
+import { $ } from 'meteor/jquery';
 import invoke from 'lodash.invoke';
 import { Meteor } from 'meteor/meteor';
 import ReactDOM from 'react-dom';
@@ -19,8 +20,8 @@ export const getUser = (_id) => {
     fields: {
       profile: 1,
       emails: 1,
-      roles: 1
-    }
+      roles: 1,
+    },
   };
 
   return Meteor.users.findOne(query, options);

@@ -1,126 +1,112 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+/* eslint-disable no-new */
+
+import React, { PropTypes } from 'react';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
 import Clipboard from 'clipboard';
-import { connect } from 'react-redux';
-import { shallowEqual } from 'recompose';
+import { $ } from 'meteor/jquery';
+import { _ } from 'meteor/underscore';
+import { Meteor } from 'meteor/meteor';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import cx from 'classnames';
 
 import InfiniteLoader from '/imports/ui/react/components/InfiniteLoader';
 import MessagesListContainer from '../../containers/MessagesListContainer';
 import MessagesListHeaderContainer from '../../containers/MessagesListHeaderContainer';
-import { handleMouseWheel, wheelDirection } from '/client/lib/scroll';
+import { handleMouseWheel, wheelDirection } from '/imports/client/lib/scroll';
 import {
   setSort,
   setPriorLimit,
-  setFollowingLimit
+  setFollowingLimit,
 } from '/imports/client/store/actions/discussionActions';
-import { swipedetect } from '/client/lib/mobile';
+import { swipedetect } from '/imports/client/lib/mobile';
 import { lengthMessages, $isAlmostScrolledToBottom } from '/imports/api/helpers';
+import { MESSAGES_PER_PAGE_LIMIT } from '../../constants';
 
 const receivedOneNewMessage = (props, prevProps) =>
   Object.is(lengthMessages(props), lengthMessages(prevProps) + 1);
 const isOwnerOfNewMessage = props =>
   Object.is(Object.assign({}, _.last(props.messages)).createdBy, Meteor.userId());
 
-let prevChatScrollTop, prevChatScrollHeight;
+const propTypes = {
+  at: PropTypes.string,
+  loading: PropTypes.bool,
+  priorLimit: PropTypes.number,
+  followingLimit: PropTypes.number,
+  dispatch: PropTypes.func,
+  messages: PropTypes.arrayOf(PropTypes.object),
+  lastMessageId: PropTypes.string,
+  discussion: PropTypes.object,
+};
 
-export default class MessagesListWrapper extends React.Component {
+class MessagesListWrapper extends React.Component {
   constructor(props) {
     super(props);
 
-    this._triggerLoadMore = _.throttle(this._triggerLoadMore, 1000).bind(this);
+    this._triggerLoadMore = _.throttle(this._triggerLoadMore, 500).bind(this);
+    this._scrollToBottom = this._scrollToBottom.bind(this);
   }
 
-  shouldComponentUpdate(nextProps) {
-    return !shallowEqual(this.props, nextProps);
+  componentDidMount() {
+    if (!this.props.at) this._scrollToBottom();
+
+    const args = [this.chat, this._triggerLoadMore.bind(this), 'addEventListener'];
+
+    swipedetect(...args);
+
+    handleMouseWheel(...args);
+
+    new Clipboard('.js-message-copy-link');
   }
 
   componentWillUpdate(nextProps) {
-    const { chat } = this.refs;
-
     if (nextProps.loading) {
-      prevChatScrollTop = $(chat).scrollTop();
-      prevChatScrollHeight = chat.scrollHeight;
+      this.prevChatScrollTop = $(this.chat).scrollTop();
+      this.prevChatScrollHeight = this.chat.scrollHeight;
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { chat } = this.refs;
-
     const notLoading = !this.props.loading;
     const receivedOneMessage = receivedOneNewMessage(this.props, prevProps);
 
-    // scroll to the last position if not loading, current messages count is bigger than last count and it receives more than 1 message (means it has loaded messages through subscription)
+    // scroll to the last position if not loading,
+    // current messages count is bigger than last count and it receives more than 1 message
+    // (means it has loaded messages through subscription)
     if (notLoading &&
         !receivedOneMessage &&
         lengthMessages(this.props) > lengthMessages(prevProps)) {
       if (prevProps.sort.createdAt > 0) {
         // downscroll
-        $(chat).scrollTop(prevChatScrollTop);
+        $(this.chat).scrollTop(this.prevChatScrollTop);
       } else {
         // upscroll
-        $(chat).scrollTop(prevChatScrollTop + chat.scrollHeight - prevChatScrollHeight);
+        const st = this.prevChatScrollTop + this.chat.scrollHeight - this.prevChatScrollHeight;
+        $(this.chat).scrollTop(st);
       }
     }
 
     // scroll to the bottom if component receives only 1 new message and the sender is current user
-    // have to use $isAlmostScrolledToBottom because sometimes chat is not scrolled down when new message was appended
+    // have to use $isAlmostScrolledToBottom because sometimes
+    // chat is not scrolled down when new message was appended
     if (notLoading &&
         receivedOneMessage &&
-        (isOwnerOfNewMessage(this.props) || $isAlmostScrolledToBottom($(chat)))) {
-      $(chat).scrollTop(9E99);
+        (isOwnerOfNewMessage(this.props) || $isAlmostScrolledToBottom($(this.chat)))) {
+      this._scrollToBottom();
     }
-  }
-
-  componentDidMount() {
-    const { chat } = this.refs;
-    const scrollHeight = chat.scrollHeight;
-    const height = $(chat).height();
-
-    if (!this.props.at) {
-      // scroll to the bottom of the chat
-      $(chat).scrollTop(9E99);
-    }
-
-    swipedetect(chat, this._triggerLoadMore.bind(this), 'addEventListener');
-
-    handleMouseWheel(chat, this._triggerLoadMore.bind(this), 'addEventListener');
-
-    new Clipboard('.js-message-copy-link');
   }
 
   componentWillUnmount() {
-    const { chat } = this.refs;
+    const args = [this.chat, this._triggerLoadMore.bind(this), 'removeEventListener'];
+    handleMouseWheel(...args);
 
-    handleMouseWheel(chat, this._triggerLoadMore.bind(this), 'removeEventListener');
-
-    swipedetect(chat, this._triggerLoadMore.bind(this), 'removeEventListener');
+    swipedetect(...args);
   }
 
-  render() {
-    const { discussion, messages } = this.props;
+  _scrollToBottom() {
+    const $chat = $(this.chat);
 
-    return (
-      <div className="chat-content scroll" ref="chat">
-        <div className="chat-messages">
-          {discussion.isStarted && <MessagesListHeaderContainer discussion={discussion}/>}
-
-          <InfiniteLoader
-            loading={this.props.loading}
-            className='infinite-load-older text-xs-center'/>
-
-          <div className="chat-messages-list">
-            <MessagesListContainer messages={messages} discussion={discussion}/>
-          </div>
-
-          <InfiniteLoader
-            loading={this.props.loading}
-            className='infinite-load-newer text-xs-center'/>
-
-        </div>
-      </div>
-    );
+    $chat.scrollTop($chat.prop('scrollHeight'));
   }
 
   _triggerLoadMore(e) {
@@ -139,7 +125,8 @@ export default class MessagesListWrapper extends React.Component {
   }
 
   _handleTouchEvents(dir) {
-    // we need to reverse sort direction because of how swipe works: to scroll up you need to swipe down
+    // we need to reverse sort direction because of how swipe works:
+    // to scroll up you need to swipe down
     if (Object.is(dir, 'up')) {
       this._loadMore(1);
     } else if (Object.is(dir, 'down')) {
@@ -150,12 +137,11 @@ export default class MessagesListWrapper extends React.Component {
   _loadMore(sortDir) {
     const {
       loading,
-      limit,
       priorLimit,
       followingLimit,
       dispatch,
       messages = [],
-      lastMessageId
+      lastMessageId,
     } = this.props;
 
     if (loading) return;
@@ -167,8 +153,8 @@ export default class MessagesListWrapper extends React.Component {
       const actions = ((() => {
         const _at = FlowRouter.getQueryParam('at');
         const setSortDir = setSort(sort);
-        const incFollowingLimit = setFollowingLimit(followingLimit + 25);
-        const incPriorLimit = setPriorLimit(priorLimit + 25);
+        const incFollowingLimit = setFollowingLimit(followingLimit + MESSAGES_PER_PAGE_LIMIT);
+        const incPriorLimit = setPriorLimit(priorLimit + MESSAGES_PER_PAGE_LIMIT);
 
         const _actions = _at
           ? [setSortDir, sortDir > 0 ? incFollowingLimit : incPriorLimit]
@@ -184,12 +170,12 @@ export default class MessagesListWrapper extends React.Component {
       // upscroll
       if (messages.length < 50) return;
 
-      if ($('.infinite-load-older').isAlmostVisible()) {
+      if ($(this.loaderOlder).isAlmostVisible()) {
         dispatchAll();
       }
     } else {
       // downscroll
-      if ($('.infinite-load-newer').isAlmostVisible()) {
+      if ($(this.loaderNewer).isAlmostVisible()) {
         // load if the last message of discussion is not equal to the last rendered message
         if (!Object.is(get(message, '_id'), lastMessageId)) {
           dispatchAll();
@@ -197,4 +183,36 @@ export default class MessagesListWrapper extends React.Component {
       }
     }
   }
-};
+
+  render() {
+    const { discussion, messages, loading } = this.props;
+    const loader = (getRef) => (
+      <InfiniteLoader
+        {...{ getRef }}
+        loading
+        className={cx('text-xs-center', { invisible: !loading })}
+      />
+    );
+
+    return (
+      <div className="chat-content scroll" ref={node => (this.chat = node)}>
+        <div className="chat-messages">
+          {discussion.isStarted && <MessagesListHeaderContainer {...{ discussion }} />}
+
+          {loader(node => (this.loaderOlder = node))}
+
+          <div className="chat-messages-list">
+            <MessagesListContainer {...{ messages, discussion }} />
+          </div>
+
+          {loader(node => (this.loaderNewer = node))}
+
+        </div>
+      </div>
+    );
+  }
+}
+
+MessagesListWrapper.propTypes = propTypes;
+
+export default MessagesListWrapper;

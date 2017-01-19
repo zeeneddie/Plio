@@ -10,7 +10,7 @@ const HelpDocsRHSNotFound = (props) => {
   }
 
   return (
-    <RHS>
+    <RHS flex>
       <RHS.Card className="standard-details">
         <div className="card-block card-heading">
           <h5>{text}</h5>

@@ -224,9 +224,8 @@ export const checkDocExistance = (collection, query) => {
   return doc;
 };
 
-export const checkDocAndMembership = (collection, _id, userId) => {
-  return chain(checkDocExistance, checkOrgMembershipByDoc)(collection, _id, userId);
-};
+export const checkDocAndMembership = (collection, _id, userId) =>
+  chain(checkDocExistance, checkOrgMembershipByDoc)(collection, _id, userId);
 
 export const checkDocAndMembershipAndMore = (collection, _id, userId) => {
   const [doc] = checkDocAndMembership(collection, _id, userId);

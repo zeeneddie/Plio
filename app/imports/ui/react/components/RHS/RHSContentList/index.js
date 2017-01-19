@@ -6,7 +6,7 @@ import Wrapper from '../../Wrapper';
 
 const CustomersRHSContentList = ({
   isReady = true,
-  preloaderSize = 2,
+  preloaderSize = 3,
   className,
   children,
 }) => (

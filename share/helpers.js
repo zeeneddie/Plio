@@ -8,12 +8,14 @@ import {
   DocumentTypes,
   ProblemMagnitudes,
   SystemName,
+  AllDocumentTypes,
 } from './constants.js';
 import { Actions } from './collections/actions.js';
 import { NonConformities } from './collections/non-conformities.js';
 import { Risks } from './collections/risks.js';
 import { Standards } from './collections/standards.js';
 import { Organizations } from './collections/organizations';
+import { Discussions } from './collections/discussions';
 
 
 export const capitalize = str => str.charAt(0).toUpperCase() + str.substring(1);
@@ -43,20 +45,23 @@ export const getCollectionByName = (colName) => {
 };
 
 export const getCollectionByDocType = (docType) => {
-  switch(docType) {
-    case DocumentTypes.STANDARD:
+  switch (docType) {
+    case AllDocumentTypes.STANDARD:
       return Standards;
 
-    case DocumentTypes.NON_CONFORMITY:
+    case AllDocumentTypes.NON_CONFORMITY:
       return NonConformities;
 
-    case DocumentTypes.RISK:
+    case AllDocumentTypes.RISK:
       return Risks;
 
-    case DocumentTypes.CORRECTIVE_ACTION:
-    case DocumentTypes.PREVENTATIVE_ACTION:
-    case DocumentTypes.RISK_CONTROL:
+    case AllDocumentTypes.CORRECTIVE_ACTION:
+    case AllDocumentTypes.PREVENTATIVE_ACTION:
+    case AllDocumentTypes.RISK_CONTROL:
       return Actions;
+
+    case AllDocumentTypes.DISCUSSION:
+      return Discussions;
 
     default:
       return undefined;
