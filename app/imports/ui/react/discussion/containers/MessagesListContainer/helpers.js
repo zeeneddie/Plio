@@ -1,17 +1,18 @@
 import get from 'lodash.get';
 
+import { propEqId } from '/imports/api/helpers';
+
 import {
   isMessageSelected,
-  getUser,
   getDate,
   scrollToSelectedMessage,
 } from '/imports/ui/react/discussion/helpers';
 
-export const transformMessages = ({ discussion, messages, at }) => {
+export const transformMessages = ({ discussion, messages, at, users }) => {
   const messagesMapped = messages.map((message, i) => {
     const { _id, createdBy, createdAt } = message;
 
-    const user = getUser(createdBy);
+    const user = users.find(propEqId(createdBy));
 
     const obj = (() => {
       const date = getDate(createdAt);
