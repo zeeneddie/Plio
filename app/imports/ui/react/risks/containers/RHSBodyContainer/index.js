@@ -1,21 +1,10 @@
-import { compose, lifecycle } from 'recompose';
-import property from 'lodash.property';
-import { _ } from 'meteor/underscore';
+import { connect } from 'react-redux';
 
-import RisksRHSBody from '../../components/RHS/Body';
-import withStateCollapsed from '../../../helpers/withStateCollapsed';
+import BodyContents from '../../components/RHS/Body';
 
-const setCollapsed = _.throttle((props) =>
-  props.setCollapsed(() => props.hasDocxAttachment), 800);
+const mapStateToProps = ((state, { departmentId, typeId }) => ({
+  departments: state.collections.departmentsByIds[departmentId],
+  type: state.collections.riskTypesByIds[typeId],
+}));
 
-export default compose(
-  withStateCollapsed(property('hasDocxAttachment')),
-  lifecycle({
-    componentWillReceiveProps(nextProps) {
-      if (this.props.risk._id !== nextProps.risk._id &&
-          this.props.hasDocxAttachment !== nextProps.hasDocxAttachment) {
-        setCollapsed(nextProps);
-      }
-    },
-  }),
-)(RisksRHSBody);
+export default connect(mapStateToProps)(BodyContents);

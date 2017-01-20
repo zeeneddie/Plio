@@ -25,7 +25,6 @@ const RisksPage = enhance((props) => (
       {(!props.isDiscussionOpened ? <RisksLHSContainer /> : null)}
       <RisksRHSContainer />
       {(props.isDiscussionOpened ? <DiscussionContainer {...props} /> : null)}
-      <div>RHS component</div>
     </PageContainer>
   ) : (
     <NotFoundPage
