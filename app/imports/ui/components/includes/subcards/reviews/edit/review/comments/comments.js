@@ -6,6 +6,8 @@ Template.Review_Comments.viewmodel({
   comments: '',
   onUpdate() {
     const { comments } = this.data();
-    this.parent().update({ comments });
-  }
+    this.parent().update({
+      comments: comments.length ? comments : undefined,
+    });
+  },
 });

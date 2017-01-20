@@ -19,10 +19,10 @@ const enhance = compose(
       timeValue: props.getField(fieldNames.timeValue),
       timeUnit: props.getField(fieldNames.timeUnit),
       onTimeValueInputChanged: (e) => {
-        props.changeField(fieldNames.timeValue, e.target.value, false);
+        props.changeField(fieldNames.timeValue, parseInt(e.target.value, 10), false);
       },
       onTimeValueChanged: (e) => {
-        props.changeField(fieldNames.timeValue, e.target.value);
+        props.changeField(fieldNames.timeValue, parseInt(e.target.value, 10));
       },
       onTimeUnitChanged: (unit) => {
         props.changeField(fieldNames.timeUnit, unit);

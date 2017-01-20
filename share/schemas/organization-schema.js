@@ -5,12 +5,11 @@ import {
   OrgCurrencies, WorkflowTypes, UserMembership,
   StandardTitles, RiskTitles, NonConformitiesTitles,
   WorkInboxTitles, CustomerTypes, PossibleReviewFrequencies,
-  TimeUnits,
-} from '../constants.js';
+} from '../constants';
 import {
   BaseEntitySchema, ReminderTimePeriodSchema,
   TimezoneSchema, TimePeriodSchema,
-} from './schemas.js';
+} from './schemas';
 
 export const HomeTitlesSchema = new SimpleSchema({
   standards: {
@@ -164,7 +163,7 @@ const rkGuidelinesSchema = new SimpleSchema({
   },
 });
 
-const reviewConfigSchema = new SimpleSchema({
+export const reviewFrequencySchema = new SimpleSchema({
   frequency: {
     type: TimePeriodSchema,
     custom() {
@@ -175,6 +174,9 @@ const reviewConfigSchema = new SimpleSchema({
       return isValid ? true : 'notAllowed';
     },
   },
+});
+
+export const reviewAnnualDateSchema = new SimpleSchema({
   annualDate: {
     type: Date,
     autoValue() {
@@ -186,12 +188,19 @@ const reviewConfigSchema = new SimpleSchema({
       }
     },
   },
-  reminders: {
-    type: reminderSchema,
-  },
 });
 
-const docsReviewSchema = new SimpleSchema({
+export const reviewConfigSchema = new SimpleSchema([
+  reviewFrequencySchema,
+  reviewAnnualDateSchema,
+  {
+    reminders: {
+      type: reminderSchema,
+    },
+  },
+]);
+
+const reviewSchema = new SimpleSchema({
   risks: {
     type: reviewConfigSchema,
   },
@@ -228,7 +237,7 @@ const OrganizationEditableFields = {
     optional: true,
   },
   review: {
-    type: docsReviewSchema,
+    type: reviewSchema,
     optional: true,
   },
   ...OrganizationCurrencySchema,

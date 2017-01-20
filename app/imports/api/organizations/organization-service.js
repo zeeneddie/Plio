@@ -140,10 +140,10 @@ export default OrganizationService = {
     });
   },
 
-  setReviewFrequency({ _id, documentKey, timeValue, timeUnit }) {
+  setReviewFrequency({ _id, documentKey, frequency }) {
     return this.collection.update({ _id }, {
       $set: {
-        [`review.${documentKey}.frequency`]: { timeValue, timeUnit },
+        [`review.${documentKey}.frequency`]: frequency,
       },
     });
   },

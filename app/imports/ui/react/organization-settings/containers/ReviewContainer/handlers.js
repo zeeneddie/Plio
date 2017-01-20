@@ -11,7 +11,7 @@ export const onFrequencyChanged = ({ organization }) => (fieldName, fieldValue) 
   setReviewFrequency.call({
     _id: organization._id,
     frequency: {
-      timeValue: fieldValue.timeValue,
+      timeValue: parseInt(fieldValue.timeValue, 10),
       timeUnit: fieldValue.timeUnit,
     },
     documentKey,

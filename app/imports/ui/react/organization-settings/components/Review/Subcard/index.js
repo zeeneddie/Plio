@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
+import { CardBlock } from 'reactstrap';
 
-import Subcard from '../../../../components/Subcard';
+import CardBlockCollapse from '/imports/ui/react/components/CardBlockCollapse';
 import ReviewConfig from '../Config';
 
 const ReviewSubcard = ({
@@ -11,14 +12,8 @@ const ReviewSubcard = ({
   onFrequencyChanged,
   onReminderChanged,
 }) => (
-  <Subcard collapsed={collapsed} setCollapsed={setCollapsed}>
-    <Subcard.Title>
-      <Subcard.TitleItem pull="left">
-        Review
-      </Subcard.TitleItem>
-    </Subcard.Title>
-
-    <Subcard.Content>
+  <CardBlockCollapse leftText="Review">
+    <CardBlock>
       <legend>Standards</legend>
       <ReviewConfig
         config={review.standards}
@@ -36,8 +31,8 @@ const ReviewSubcard = ({
         onFrequencyChanged={onFrequencyChanged}
         onReminderChanged={onReminderChanged}
       />
-    </Subcard.Content>
-  </Subcard>
+    </CardBlock>
+  </CardBlockCollapse>
 );
 
 ReviewSubcard.propTypes = {

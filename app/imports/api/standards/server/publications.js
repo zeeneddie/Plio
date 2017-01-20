@@ -8,6 +8,7 @@ import { LessonsLearned } from '/imports/share/collections/lessons';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
 import { Departments } from '/imports/share/collections/departments';
+import { Reviews } from '/imports/share/collections/reviews';
 import Counter from '../../counter/server';
 import {
   StandardsListProjection,
@@ -15,7 +16,7 @@ import {
   StandardTypesListProjection,
   DepartmentsListProjection,
 } from '/imports/api/constants';
-import { ActionTypes } from '/imports/share/constants';
+import { ActionTypes, DocumentTypes } from '/imports/share/constants';
 import get from 'lodash.get';
 import { check } from 'meteor/check';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
@@ -154,12 +155,14 @@ Meteor.publish('standardsDeps', function(organizationId) {
   const departments = Departments.find({ organizationId }, makeOptionsFields(DepartmentsListProjection));
   const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
   const riskTypes = RiskTypes.find({ organizationId });
+  const reviews = Reviews.find({ organizationId, documentType: DocumentTypes.STANDARD });
 
   return [
     actions,
     departments,
     standards,
-    riskTypes
+    riskTypes,
+    reviews,
   ];
 });
 

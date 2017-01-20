@@ -10,7 +10,7 @@ import './risk-scoring';
 import './risk-evaluation';
 import './root-cause-analysis';
 import './notes';
-import './review';
+import './reviews';
 import './risks';
 import './wrapper';
 import './subcard';

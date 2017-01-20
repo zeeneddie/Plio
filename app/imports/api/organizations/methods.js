@@ -9,6 +9,8 @@ import {
   OrganizationCurrencySchema,
   UserSettingsSchema,
   CustomerTypeSchema,
+  reviewFrequencySchema,
+  reviewAnnualDateSchema,
 } from '/imports/share/schemas/organization-schema';
 import {
   WorkflowTypes, ProblemMagnitudes, InvitationStatuses,
@@ -16,7 +18,7 @@ import {
 import {
   IdSchema, ReminderTimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
-  UserIdSchema, TimezoneSchema, TimePeriodSchema,
+  UserIdSchema, TimezoneSchema,
 } from '/imports/share/schemas/schemas';
 import Method from '../method.js';
 import { chain } from '/imports/api/helpers.js';
@@ -177,22 +179,26 @@ export const setWorkflowDefaults = new Method({
   }
 });
 
+const reminderTypeSchema = new SimpleSchema({
+  reminderType: {
+    type: String,
+    allowedValues: ['start', 'interval', 'until'],
+  },
+});
+
 export const setReminder = new Method({
   name: 'Organizations.setReminder',
 
   validate: new SimpleSchema([
     IdSchema,
     ReminderTimePeriodSchema,
+    reminderTypeSchema,
     {
       type: {
         type: String,
-        allowedValues: ['minorNc', 'majorNc', 'criticalNc', 'improvementPlan']
+        allowedValues: ['minorNc', 'majorNc', 'criticalNc', 'improvementPlan'],
       },
-      reminderType: {
-        type: String,
-        allowedValues: ['start', 'interval', 'until']
-      }
-    }
+    },
   ]).validator(),
 
   check(checker) {
@@ -273,8 +279,8 @@ export const setReviewFrequency = new Method({
 
   validate: new SimpleSchema([
     IdSchema,
-    TimePeriodSchema,
     reviewDocumetKeySchema,
+    reviewFrequencySchema,
   ]).validator(),
 
   check(checker) {
@@ -292,9 +298,7 @@ export const setReviewAnnualDate = new Method({
   validate: new SimpleSchema([
     IdSchema,
     reviewDocumetKeySchema,
-    {
-      annualDate: { type: Date },
-    }
+    reviewAnnualDateSchema,
   ]).validator(),
 
   check(checker) {
@@ -312,14 +316,9 @@ export const setReviewReminderTimeValue = new Method({
   validate: new SimpleSchema([
     IdSchema,
     reviewDocumetKeySchema,
+    reminderTypeSchema,
     {
-      timeValue: {
-        type: Number,
-      },
-      reminderType: {
-        type: String,
-        allowedValues: ['start', 'interval', 'until']
-      },
+      timeValue: ReminderTimePeriodSchema.schema('timeValue'),
     },
   ]).validator(),
 
@@ -329,7 +328,7 @@ export const setReviewReminderTimeValue = new Method({
 
   run(args) {
     return OrganizationService.setReviewReminderTimeValue(args);
-  }
+  },
 });
 
 export const setReviewReminderTimeUnit = new Method({
@@ -338,14 +337,9 @@ export const setReviewReminderTimeUnit = new Method({
   validate: new SimpleSchema([
     IdSchema,
     reviewDocumetKeySchema,
+    reminderTypeSchema,
     {
-      timeUnit: {
-        type: String,
-      },
-      reminderType: {
-        type: String,
-        allowedValues: ['start', 'interval', 'until']
-      },
+      timeUnit: ReminderTimePeriodSchema.schema('timeUnit'),
     },
   ]).validator(),
 
@@ -355,7 +349,7 @@ export const setReviewReminderTimeUnit = new Method({
 
   run(args) {
     return OrganizationService.setReviewReminderTimeUnit(args);
-  }
+  },
 });
 
 export const inviteUserByEmail = new Method({

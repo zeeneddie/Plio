@@ -20,7 +20,7 @@ const enhance = compose(
 const ReviewAnnualDate = enhance((props) => (
   <div className="form-group">
     <label className="form-control-label">
-      Annual date
+      Review annual date
     </label>
     <DatePicker
       value={props.value}

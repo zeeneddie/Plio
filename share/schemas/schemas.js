@@ -449,10 +449,6 @@ export const ReviewSchema = ((() => {
       allowedValues: _.keys(ReviewStatuses).map(status => parseInt(status, 10)),
       defaultValue: 2,
     },
-    reviewTargetDate: {
-      type: Date,
-      optional: true,
-    },
     reviewedAt: {
       type: Date,
       optional: true,

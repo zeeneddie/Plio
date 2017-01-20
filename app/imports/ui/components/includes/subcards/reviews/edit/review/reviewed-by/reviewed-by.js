@@ -8,8 +8,10 @@ Template.Review_ReviewedBy.viewmodel({
   reviewedBy: '',
   onUpdate() {
     return (viewmodel) => {
-      const { selected:reviewedBy } = viewmodel.getData();
-      this.parent().update({ reviewedBy });
+      const { selected: reviewedBy } = viewmodel.getData();
+      this.parent().update({
+        reviewedBy: reviewedBy.length ? reviewedBy : undefined,
+      });
     };
-  }
+  },
 });

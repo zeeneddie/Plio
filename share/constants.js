@@ -83,6 +83,7 @@ export const CollectionNames = {
   NOTIFICATIONS: 'Notifications',
   OCCURRENCES: 'Occurrences',
   ORGANIZATIONS: 'Organizations',
+  REVIEWS: 'Reviews',
   RISK_TYPES: 'RiskTypes',
   RISKS: 'Risks',
   STANDARD_TYPES: 'StandardTypes',

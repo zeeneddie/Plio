@@ -1,5 +1,5 @@
 import { _ } from 'meteor/underscore';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
 import { TimeUnits } from '/imports/share/constants';
@@ -44,6 +44,16 @@ const TimePicker = (props) => {
       </span>
     </div>
   );
+};
+
+TimePicker.propTypes = {
+  className: PropTypes.string,
+  onTimeUnitChanged: PropTypes.func,
+  onTimeValueChanged: PropTypes.func,
+  onTimeValueInputChanged: PropTypes.func,
+  timeUnits: PropTypes.array,
+  timeUnit: PropTypes.string,
+  timeValue: PropTypes.number,
 };
 
 export default TimePicker;

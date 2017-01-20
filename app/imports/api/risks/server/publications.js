@@ -8,6 +8,7 @@ import { RiskTypes } from '/imports/share/collections/risk-types';
 import { isOrgMember } from '../../checkers';
 import { Files } from '/imports/share/collections/files';
 import { Departments } from '/imports/share/collections/departments';
+import { Reviews } from '/imports/share/collections/reviews';
 import { RisksListProjection, DepartmentsListProjection } from '/imports/api/constants';
 import Counter from '../../counter/server';
 import {
@@ -21,7 +22,7 @@ import { getStandardsCursorByIds } from '../../standards/utils';
 import { getLessonsCursorByDocumentId } from '../../lessons/utils';
 import { getActionsCursorByLinkedDoc, getActionsWithLimitedFields } from '../../actions/utils';
 import { createProblemsTree, getProblemsWithLimitedFields } from '../../problems/utils';
-import { ActionTypes } from '/imports/share/constants';
+import { ActionTypes, DocumentTypes } from '/imports/share/constants';
 import { getRiskFiles, createRiskCardPublicationTree } from '../utils';
 
 const getRisksLayoutPub = (userId, serialNumber, isDeleted) => [
@@ -102,13 +103,15 @@ Meteor.publish('risksDeps', function(organizationId) {
   const actions = getActionsWithLimitedFields(actionsQuery);
   const NCs = getProblemsWithLimitedFields({ organizationId }, NonConformities);
   const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
+  const reviews = Reviews.find({ organizationId, documentType: DocumentTypes.RISK });
 
   return [
     departments,
     actions,
     NCs,
-    standards
-  ]
+    standards,
+    reviews,
+  ];
 });
 
 Meteor.publishComposite('risksByStandardId', function(standardId, isDeleted = { $in: [null, false] }) {

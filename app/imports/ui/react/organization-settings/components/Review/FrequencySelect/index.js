@@ -49,7 +49,7 @@ const enhance = compose(
 const ReviewFrequencySelect = enhance((props) => (
   <div className="form-group">
     <label className="form-control-label">
-      Frequency
+      Review frequency
     </label>
     <Select
       value={props.value}

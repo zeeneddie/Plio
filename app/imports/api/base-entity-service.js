@@ -12,6 +12,10 @@ export default class BaseEntityService {
     this.collection = collection;
   }
 
+  insert(args) {
+    return this.collection.insert(args);
+  }
+
   update({ _id, query = {}, options = {}, ...args }) {
     if (!_.keys(query).length > 0) {
       query = { _id };
