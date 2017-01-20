@@ -24,6 +24,8 @@ import {
   REMOVE_ORGANIZATION,
   SET_HELP_DOCS,
   SET_HELP_SECTIONS,
+  SET_USERS,
+  SET_USERS_BY_ORG_IDS,
 } from '../actions/types';
 import { flattenObjects } from '/imports/api/helpers';
 import { CollectionNames } from '/imports/share/constants';
@@ -34,12 +36,16 @@ import {
   addC,
   updateC,
   removeC,
+  setUsersByOrgIds,
 } from '../lib/collectionsHelpers';
 
-const initialState = flattenObjects(Object.keys(STORE_COLLECTION_NAMES).map(key => {
-  const value = STORE_COLLECTION_NAMES[key];
-  return { [value]: [], [getNormalizedDataKey(value)]: [] };
-}));
+const initialState = {
+  usersByOrgIds: [],
+  ...flattenObjects(Object.keys(STORE_COLLECTION_NAMES).map(key => {
+    const value = STORE_COLLECTION_NAMES[key];
+    return { [value]: [], [getNormalizedDataKey(value)]: [] };
+  })),
+};
 
 export default function reducer(state = initialState, action) {
   const set = setC(state, action);
@@ -61,6 +67,7 @@ export default function reducer(state = initialState, action) {
     case SET_ORGANIZATIONS:
     case SET_HELP_DOCS:
     case SET_HELP_SECTIONS:
+    case SET_USERS:
       return set(Object.keys(action.payload)[0]);
     case ADD_STANDARD:
       return add(STORE_COLLECTION_NAMES[CollectionNames.STANDARDS]);
@@ -86,6 +93,8 @@ export default function reducer(state = initialState, action) {
       return update(STORE_COLLECTION_NAMES[CollectionNames.ORGANIZATIONS]);
     case REMOVE_ORGANIZATION:
       return remove(STORE_COLLECTION_NAMES[CollectionNames.ORGANIZATIONS]);
+    case SET_USERS_BY_ORG_IDS:
+      return setUsersByOrgIds(state, action);
     default:
       return state;
   }

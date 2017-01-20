@@ -1,6 +1,8 @@
 import curry from 'lodash.curry';
 
 import { mapByIndex, omitC, findIndexById } from '/imports/api/helpers';
+import { STORE_COLLECTION_NAMES } from './constants';
+import { CollectionNames } from '/imports/share/constants';
 
 export const getNormalizedDataKey = prop => `${prop}ByIds`;
 
@@ -48,4 +50,19 @@ export const removeC = curry((state, action, prop) => {
                        .concat(state[prop].slice(index + 1)),
     [normalizedKey]: { ...omitC([action.payload], state[normalizedKey]) },
   };
+});
+
+export const setUsersByOrgIds = (state, action) => ({
+  ...state,
+  [`${STORE_COLLECTION_NAMES[CollectionNames.USERS]}ByOrgIds`]:
+    state.organizations.reduce((map, { _id, users }) => ({
+      ...map,
+      [_id]: users.reduce((prev, { userId, isRemoved }) => {
+        const user = { ...state.usersByIds[userId] };
+
+        if (!user || isRemoved) return prev;
+
+        return prev.concat(user);
+      }, []),
+    }), {}),
 });

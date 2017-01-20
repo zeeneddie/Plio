@@ -100,6 +100,8 @@ export const SET_DEPARTMENTS = 'SET_DEPARTMENTS';
 
 export const SET_FILES = 'SET_FILES';
 
+export const SET_STANDARDS = 'SET_STANDARDS';
+
 export const SET_NCS = 'SET_NCS';
 
 export const SET_RISKS = 'SET_RISKS';
@@ -143,6 +145,10 @@ export const REMOVE_ORGANIZATION = 'REMOVE_ORGANIZATION';
 export const SET_HELP_DOCS = 'SET_HELP_DOCS';
 
 export const SET_HELP_SECTIONS = 'SET_HELP_SECTIONS';
+
+export const SET_USERS = 'SET_USERS';
+
+export const SET_USERS_BY_ORG_IDS = 'SET_USERS_BY_ORG_IDS';
 
 // window
 
