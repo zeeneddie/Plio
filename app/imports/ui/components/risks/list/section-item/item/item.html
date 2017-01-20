@@ -21,7 +21,7 @@
       {{else}}
         <p class="list-group-item-text pull-left" {{b "text: this.sequentialId"}}></p>
       {{/if}}
-      <p class="list-group-item-text pull-right" {{b "text: renderDate(this.identifiedAt)"}}></p>
+      <p class="list-group-item-text pull-right" {{b "text: getDate(this)"}}></p>
     </div>
   {{/ListItemLink}}
 </template>
