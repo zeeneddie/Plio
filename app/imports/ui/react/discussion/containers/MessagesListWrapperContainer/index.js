@@ -22,11 +22,13 @@ import notifications from '/imports/startup/client/mixins/notifications';
 import { pickFromDiscussion, pickC, invokeC, notEquals } from '/imports/api/helpers';
 import LastDiscussionMessage from '/imports/client/collections/lastDiscussionMessage';
 import { MESSAGES_PER_PAGE_LIMIT } from '../../constants';
+import { getState } from '/imports/client/store';
 
 const initObservers = () => {
   const handle = LastDiscussionMessage.find().observe({
     changed({ createdBy }) {
-      if (!Object.is(createdBy, Meteor.userId())) {
+      const userId = getState().global.userId;
+      if (!Object.is(createdBy, userId)) {
         // play new-message sound if the sender is not a current user
         notifications.playNewMessageSound();
       }
@@ -102,9 +104,13 @@ export default compose(
     'at', 'sort', 'priorLimit', 'followingLimit', 'resetCompleted',
   ])),
   composeWithTracker(loadMessagesData, PreloaderPage, null, { shouldResubscribe }),
-  connect(pickFromDiscussion([
-    'loading', 'messages', 'priorLimit', 'followingLimit', 'lastMessageId', 'sort', 'discussion',
-  ])),
+  connect((state) => ({
+    userId: state.global.userId,
+    ...pickFromDiscussion([
+      'loading', 'messages', 'priorLimit',
+      'followingLimit', 'lastMessageId', 'sort', 'discussion',
+    ])(state),
+  })),
   shouldUpdate(notEquals),
   lifecycle({
     componentWillMount() {

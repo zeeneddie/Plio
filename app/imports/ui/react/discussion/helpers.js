@@ -1,31 +1,19 @@
 import { $ } from 'meteor/jquery';
-import invoke from 'lodash.invoke';
-import { Meteor } from 'meteor/meteor';
 import ReactDOM from 'react-dom';
 import { getFormattedDate } from '/imports/share/helpers';
 
-export const isAuthor = message => Object.is(Meteor.userId(), message.createdBy);
+import { getFullName } from '/imports/api/users/helpers';
+import { propEqId } from '/imports/api/helpers';
 
-export const getStartedByText = ({ discussion: { startedBy } = {} }) =>
-  invoke(Meteor.users.findOne({ _id: startedBy }), 'fullNameOrEmail');
+export const isAuthor = ({ userId, createdBy }) => Object.is(userId, createdBy);
+
+export const getStartedByText = ({ users = [], discussion: { startedBy } = {} }) =>
+  getFullName(users.find(propEqId(startedBy)));
 
 export const getStartedAtText = ({ discussion: { startedAt } = {} }) =>
   getFormattedDate(startedAt, 'MMMM Do, YYYY');
 
 export const isMessageSelected = (props, at) => Object.is(props._id, at);
-
-export const getUser = (_id) => {
-  const query = { _id };
-  const options = {
-    fields: {
-      profile: 1,
-      emails: 1,
-      roles: 1,
-    },
-  };
-
-  return Meteor.users.findOne(query, options);
-};
 
 export const getDate = (date) => {
   const format = 'MMMM Do, YYYY';

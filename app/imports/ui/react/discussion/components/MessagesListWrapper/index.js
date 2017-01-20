@@ -6,7 +6,6 @@ import get from 'lodash.get';
 import Clipboard from 'clipboard';
 import { $ } from 'meteor/jquery';
 import { _ } from 'meteor/underscore';
-import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import cx from 'classnames';
 
@@ -25,8 +24,8 @@ import { MESSAGES_PER_PAGE_LIMIT } from '../../constants';
 
 const receivedOneNewMessage = (props, prevProps) =>
   Object.is(lengthMessages(props), lengthMessages(prevProps) + 1);
-const isOwnerOfNewMessage = props =>
-  Object.is(Object.assign({}, _.last(props.messages)).createdBy, Meteor.userId());
+const isOwnerOfNewMessage = ({ messages, userId }) =>
+  Object.is(Object.assign({}, _.last(messages)).createdBy, userId);
 
 const propTypes = {
   at: PropTypes.string,
@@ -36,7 +35,9 @@ const propTypes = {
   dispatch: PropTypes.func,
   messages: PropTypes.arrayOf(PropTypes.object),
   lastMessageId: PropTypes.string,
-  discussion: PropTypes.object,
+  discussion: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired,
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 class MessagesListWrapper extends React.Component {
@@ -168,7 +169,7 @@ class MessagesListWrapper extends React.Component {
 
     if (sortDir < 0) {
       // upscroll
-      if (messages.length < 50) return;
+      if (messages.length < MESSAGES_PER_PAGE_LIMIT * 2) return;
 
       if ($(this.loaderOlder).isAlmostVisible()) {
         dispatchAll();
@@ -185,7 +186,7 @@ class MessagesListWrapper extends React.Component {
   }
 
   render() {
-    const { discussion, messages, loading } = this.props;
+    const { discussion, messages, loading, userId, users } = this.props;
     const loader = (getRef) => (
       <InfiniteLoader
         {...{ getRef }}
@@ -197,12 +198,12 @@ class MessagesListWrapper extends React.Component {
     return (
       <div className="chat-content scroll" ref={node => (this.chat = node)}>
         <div className="chat-messages">
-          {discussion.isStarted && <MessagesListHeaderContainer {...{ discussion }} />}
+          {discussion.isStarted && <MessagesListHeaderContainer {...{ discussion, users }} />}
 
           {loader(node => (this.loaderOlder = node))}
 
           <div className="chat-messages-list">
-            <MessagesListContainer {...{ messages, discussion }} />
+            <MessagesListContainer {...{ messages, discussion, userId, users }} />
           </div>
 
           {loader(node => (this.loaderNewer = node))}
