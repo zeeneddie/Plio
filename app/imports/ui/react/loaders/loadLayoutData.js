@@ -3,6 +3,7 @@ import { batchActions } from 'redux-batched-actions';
 import { Organizations } from '/imports/share/collections/organizations';
 import { setOrg, setOrgId } from '/imports/client/store/actions/organizationsActions';
 import { setDataLoading } from '/imports/client/store/actions/globalActions';
+import { setOrganizations } from '/imports/client/store/actions/collectionsActions';
 import { getId } from '/imports/api/helpers';
 
 export default subscribe => function loadLayoutData({
@@ -18,6 +19,7 @@ export default subscribe => function loadLayoutData({
     const actions = [
       setOrg(organization),
       setOrgId(organizationId),
+      setOrganizations([organization]),
       setDataLoading(false),
     ];
 

@@ -15,4 +15,5 @@ export const STORE_COLLECTION_NAMES = {
   [CollectionNames.HELP_SECTIONS]: 'helpSections',
   [CollectionNames.ORGANIZATIONS]: 'organizations',
   [CollectionNames.MESSAGES]: 'messages',
+  [CollectionNames.USERS]: 'users',
 };
