@@ -11,7 +11,6 @@ import { getCollectionByDocType } from '/imports/share/helpers';
 import { INVALID_DOC_TYPE } from '../errors';
 import { DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED } from './errors';
 import { checkAndThrow } from '../helpers';
-import { Discussions } from '/imports/share/collections/discussions';
 
 export const updateViewedBy = new Method({
   name: 'Notifications.updateViewedBy',
@@ -72,35 +71,6 @@ export const unsubscribe = new Method({
       userId: this.userId,
     }, {
       collection,
-    });
-  },
-});
-
-export const unsubscribeFromDiscussion = new Method({
-  name: 'Notifications.unsubscribeFromDiscussion',
-
-  validate: new SimpleSchema([DocumentIdSchema, DocumentTypeSchema]).validator(),
-
-  check(checker) {
-    if (this.isSimulation) return undefined;
-
-    return checker(({ documentId: linkedTo, documentType }) => {
-      const query = { linkedTo, documentType, mutedBy: { $ne: this.userId } };
-      const doc = Discussions.findOne(query);
-
-      checkAndThrow(!doc, DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED);
-
-      checkOrgMembership(this.userId, doc.organizationId);
-    });
-  },
-
-  run({ documentId, documentType }) {
-    if (this.isSimulation) return undefined;
-
-    return NotificationsService.unsubscribeFromDiscussion({
-      documentId,
-      documentType,
-      userId: this.userId,
     });
   },
 });
