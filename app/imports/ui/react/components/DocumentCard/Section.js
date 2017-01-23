@@ -1,13 +1,15 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Children } from 'react';
 import { mapProps } from 'recompose';
-import SectionDetailItem from './SectionItem';
+import SectionItem from './SectionItem';
 
 const enhance = mapProps(({ children, ...rest }) => ({
   ...rest,
-  children: children.filter(({ props }) => Boolean(props.children)),
+  children: Children.map(children, child =>
+    (Boolean(child.props.children) ? child : null)
+  ),
 }));
 
-const SectionDetail = enhance(({ children, name }) => (
+const Section = enhance(({ children, name }) => (
   <div>
     {name && (
       <div className="card-block card-subheading">
@@ -20,11 +22,11 @@ const SectionDetail = enhance(({ children, name }) => (
   </div>
 ));
 
-SectionDetail.propTypes = {
+Section.propTypes = {
   children: PropTypes.node.isRequired,
   name: PropTypes.string,
 };
 
-SectionDetail.Item = SectionDetailItem;
+Section.Item = SectionItem;
 
-export default SectionDetail;
+export default Section;

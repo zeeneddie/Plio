@@ -1,19 +1,19 @@
 import React, { PropTypes } from 'react';
 
-function DocumentDetailItem({ title, children }) {
+function SectionItem({ title, children }) {
   return (
     <div className="list-group-item">
       {title && <p className="list-group-item-text">{title}</p>}
-      <h4 className="list-group-item-heading">
+      <div className="list-group-item-heading">
         {children}
-      </h4>
+      </div>
     </div>
   );
 }
 
-DocumentDetailItem.propTypes = {
+SectionItem.propTypes = {
   title: PropTypes.string,
   children: PropTypes.node,
 };
 
-export default DocumentDetailItem;
+export default SectionItem;

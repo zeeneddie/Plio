@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-function DocumentDetailItem({ header, values }) {
+function SectionTableItem({ header, values }) {
   return (
     <table className="table borderless big">
       <thead>
@@ -30,9 +30,9 @@ function DocumentDetailItem({ header, values }) {
   );
 }
 
-DocumentDetailItem.propTypes = {
+SectionTableItem.propTypes = {
   header: PropTypes.arrayOf(PropTypes.string),
   values: PropTypes.arrayOf(PropTypes.node),
 };
 
-export default DocumentDetailItem;
+export default SectionTableItem;
