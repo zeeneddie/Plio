@@ -54,12 +54,6 @@ export const StandardFilters = {
   3: { title: 'Standards', name: 'deleted', prepend: '' },
 };
 
-export const STANDARD_FILTER_MAP = {
-  SECTION: 1,
-  TYPE: 2,
-  DELETED: 3,
-};
-
 export const WorkInboxFilters = {
   1: { title: 'Work', name: 'my current', prepend: '' },
   2: { title: 'Work', name: 'team current', prepend: '' },
@@ -67,6 +61,12 @@ export const WorkInboxFilters = {
   4: { title: 'Work', name: 'team completed', prepend: '' },
   5: { name: 'My deleted actions' },
   6: { name: 'Team deleted actions' },
+};
+
+export const STANDARD_FILTER_MAP = {
+  SECTION: 1,
+  TYPE: 2,
+  DELETED: 3,
 };
 
 export const UncategorizedTypeSection = {
@@ -196,6 +196,7 @@ export const CustomersListProjection = {
   createdAt: 1,
   customerType: 1,
   isAdminOrg: 1,
+  lastAccessedDate: 1,
   'users.userId': 1,
   'users.role': 1,
   'users.isRemoved': 1,
@@ -281,3 +282,12 @@ export const ORDER = {
 };
 
 export const COLLECTION_NAME_MAP = mirrorKeys(CollectionNames);
+
+export const KeyMap = {
+  tab: 9,
+  enter: 13,
+  left: 37,
+  up: 38,
+  right: 39,
+  down: 40,
+};

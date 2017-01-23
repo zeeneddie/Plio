@@ -333,4 +333,14 @@ export default OrganizationService = {
 
     return this.collection.update(query, modifier);
   },
+
+  updateLastAccessedDate({ organizationId }) {
+    return this.collection.update({
+      _id: organizationId
+    }, {
+      $set: {
+        lastAccessedDate: new Date
+      }
+    });
+  },
 };

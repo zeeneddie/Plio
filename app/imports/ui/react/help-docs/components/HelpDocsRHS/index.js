@@ -8,6 +8,7 @@ import propTypes from './propTypes';
 
 const HelpDocsRHS = (props) => (
   <RHS
+    flex
     className={cx('expandable', {
       expanded: props.isFullScreenMode,
     })}

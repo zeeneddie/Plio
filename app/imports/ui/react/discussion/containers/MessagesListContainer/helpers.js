@@ -1,18 +1,18 @@
-import { Meteor } from 'meteor/meteor';
 import get from 'lodash.get';
+
+import { propEqId } from '/imports/api/helpers';
 
 import {
   isMessageSelected,
-  getUser,
   getDate,
-  scrollToSelectedMessage
+  scrollToSelectedMessage,
 } from '/imports/ui/react/discussion/helpers';
 
-export const transformMessages = ({ discussion, messages, at }) => {
-  const messagesMapped = messages.map((message, i, arr) => {
+export const transformMessages = ({ discussion, messages, at, users }) => {
+  const messagesMapped = messages.map((message, i) => {
     const { _id, createdBy, createdAt } = message;
 
-    const user = getUser(createdBy);
+    const user = users.find(propEqId(createdBy));
 
     const obj = (() => {
       const date = getDate(createdAt);
@@ -32,8 +32,8 @@ export const transformMessages = ({ discussion, messages, at }) => {
         const prevCreatedAt = get(prevMessage, 'createdAt');
         const prevCreatedBy = get(prevMessage, 'createdBy');
 
-         return (message.createdBy === prevCreatedBy &&
-                 message.createdAt - prevCreatedAt < 5 * 60 * 1000);
+        return (message.createdBy === prevCreatedBy &&
+                message.createdAt - prevCreatedAt < 5 * 60 * 1000);
       })());
 
       return {
@@ -45,7 +45,7 @@ export const transformMessages = ({ discussion, messages, at }) => {
         isSelected,
         dateToShow,
         isMergedWithPreviousMessage,
-        ...(() => isSelected ? { scrollToSelectedMessage } : null)()
+        ...(() => (isSelected ? { scrollToSelectedMessage } : null))(),
       };
     })();
 

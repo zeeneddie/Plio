@@ -3,12 +3,27 @@ import { Meteor } from 'meteor/meteor';
 
 import { propEqId } from '/imports/api/helpers';
 import { addCollapsed } from '/imports/client/store/actions/globalActions';
-import { createHelpSectionItem } from '../../helpers';
+import { createHelpSectionsData, createHelpSectionItem } from '../../helpers';
 import { goTo } from '/imports/ui/utils/router/actions';
 
-export const redirectToHelpDoc = ({ urlItemId, helpDocs, helpSectionsData }) => {
+export const redirectToHelpDoc = ({
+  urlItemId,
+  helpDocs,
+  helpSections,
+  searchText,
+  helpDocsFiltered,
+}) => {
   const helpDoc = helpDocs.find(propEqId(urlItemId));
-  const shouldRedirect = FlowRouter.getRouteName() === 'helpDocs' || !helpDoc;
+
+  const shouldRedirect = FlowRouter.getRouteName() === 'helpDocs'
+    || !helpDoc
+    || (searchText && helpDocsFiltered.length);
+
+  helpDocs = (searchText && helpDocsFiltered.length)
+    ? helpDocs.filter(help => helpDocsFiltered.includes(help._id))
+    : helpDocs;
+
+  const helpSectionsData = createHelpSectionsData(helpSections, helpDocs);
 
   if (shouldRedirect && helpSectionsData.length) {
     const params = {

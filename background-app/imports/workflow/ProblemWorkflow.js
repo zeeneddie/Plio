@@ -56,7 +56,7 @@ export default class ProblemWorkflow extends Workflow {
   }
 
   _getThreeStepStatus() {
-    // 3: Open - just reported, awaiting action
+    // 3: Open - just reported, action(s) to be added
     return this._getDeletedStatus() || this._getActionStatus() || 3;
   }
 
@@ -71,7 +71,7 @@ export default class ProblemWorkflow extends Workflow {
 
   _getDeletedStatus() {
     if (this._doc.deleted()) {
-      return 20; // Deleted
+      return 21; // Deleted
     }
   }
 
@@ -83,7 +83,7 @@ export default class ProblemWorkflow extends Workflow {
     }
 
     if (this._standardsUpdated()) {
-      return 19; // Closed - action(s) verified, standard(s) reviewed
+      return 20; // Closed - action(s) verified, standard(s) reviewed
     }
 
     const { updateOfStandards } = this._doc || {};
@@ -91,11 +91,11 @@ export default class ProblemWorkflow extends Workflow {
     const timezone = this._timezone;
 
     if (isOverdue(targetDate, timezone)) {
-      return 16; // Open - action(s) verified as effective, update of standard(s) past due
+      return 17; // Open - action(s) verified as effective, update of standard(s) past due
     }
 
     if (isDueToday(targetDate, timezone)) {
-      return 15; // Open - action(s) verified as effective, update of standard(s) due today
+      return 16; // Open - action(s) verified as effective, update of standard(s) due today
     }
   }
 
@@ -121,7 +121,7 @@ export default class ProblemWorkflow extends Workflow {
 
     // check if all actions are verified
     if (this._allActionsVerifiedAsEffective()) {
-      return 14; // Open - action(s) verified as effective, awaiting update of standard(s)
+      return 15; // Open - action(s) verified as effective, awaiting update of standard(s)
     }
 
     const actions = this._actions;
@@ -135,7 +135,7 @@ export default class ProblemWorkflow extends Workflow {
     ));
 
     if (overduded) {
-      return 13; // Open - verification past due
+      return 14; // Open - verification past due
     }
 
     // check if there is verification for today
@@ -144,14 +144,14 @@ export default class ProblemWorkflow extends Workflow {
     ));
 
     if (dueToday) {
-      return 12; // Open - verification due today
+      return 13; // Open - verification due today
     }
 
     // check if there is failed verification
     const failed = actions.find(action => action.failedVerification());
 
     if (failed) {
-      return 17; // Open - action(s) failed verification
+      return 18; // Open - action(s) failed verification
     }
   }
 
@@ -166,8 +166,8 @@ export default class ProblemWorkflow extends Workflow {
     // check if all actions are completed
     if (this._allActionsCompleted()) {
       return {
-        [WorkflowTypes.THREE_STEP]: 18, // Closed - action(s) completed
-        [WorkflowTypes.SIX_STEP]: 11, // Open - action(s) completed, awaiting verification
+        [WorkflowTypes.THREE_STEP]: 19, // Closed - action(s) completed
+        [WorkflowTypes.SIX_STEP]: 12, // Open - action(s) completed, awaiting verification
       }[workflowType];
     }
 
@@ -182,7 +182,7 @@ export default class ProblemWorkflow extends Workflow {
     ));
 
     if (overduded) {
-      return 9; // Open - action(s) overdue
+      return 10; // Open - action(s) overdue
     }
 
     // check if there is an action that must completed today
@@ -191,15 +191,20 @@ export default class ProblemWorkflow extends Workflow {
     ));
 
     if (dueToday) {
-      return 8; // Open - action(s) due today
+      return 9; // Open - action(s) due today
     }
 
     // check if there is at least one completed action
     if (this._completedActionsLength >= 1) {
       return {
-        [WorkflowTypes.THREE_STEP]: 10, // Open - action(s) completed
-        [WorkflowTypes.SIX_STEP]: 11, // Open - action(s) completed, awaiting verification
+        [WorkflowTypes.THREE_STEP]: 11, // Open - action(s) completed
+        [WorkflowTypes.SIX_STEP]: 12, // Open - action(s) completed, awaiting verification
       }[workflowType];
+    }
+
+    if ((workflowType === WorkflowTypes.THREE_STEP)
+          && actions.length) {
+      return 8; // Open - action(s) in place
     }
   }
 
@@ -209,7 +214,7 @@ export default class ProblemWorkflow extends Workflow {
         return 7; // Open - analysis completed, action(s) in place
       }
 
-      return 6; // Open - analysis completed, action needed
+      return 6; // Open - analysis completed, action(s) need to be added
     }
 
     const { analysis } = this._doc || {};

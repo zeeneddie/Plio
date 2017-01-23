@@ -91,21 +91,32 @@ Template.WorkInbox_List.viewmodel({
     return results(itemsForFilter);
   },
   _getWorkItemsForFilter(items, filter) {
-    const { my = {}, team = {} } = items || {};
+    const { my = {} } = items || {};
+    const assignees = this.assignees();
+
+    const getUserItems = (typeKey) => (
+      _.flatten(
+        assignees[typeKey].map(usersId => this.getTeamItems(usersId, typeKey))
+      )
+    );
+
+    const teamCurrent = getUserItems('current');
+    const teamCompleted = getUserItems('completed');
+    const teamDeleted = getUserItems('deleted');
 
     switch (filter) {
       case 1:
         return my.current;
       case 2:
-        return team.current;
+        return teamCurrent;
       case 3:
         return my.completed;
       case 4:
-        return team.completed;
+        return teamCompleted;
       case 5:
         return my.deleted;
       case 6:
-        return team.deleted;
+        return teamDeleted;
       default:
         return {};
     }
@@ -208,11 +219,11 @@ Template.WorkInbox_List.viewmodel({
       };
       const deletedActions = sortItems(this._getActionsByQuery(deletedQuery).fetch());
       const deletedActionsIds = extractIds(deletedActions);
-      const deleted = sortItems(this.getPendingItems({
+      const deletedItems = this.getPendingItems({
         'linkedDoc._id': { $in: deletedActionsIds },
         isDeleted: true,
-      }));
-
+      });
+      const deleted = _.sortBy(deletedItems, 'deletedAt').reverse();
       const current = byStatus(isInProgress, sortItems(workItems, ORDER.DESC));
       const completed = byStatus(isCompleted, sortItems(workItems));
 
@@ -230,6 +241,13 @@ Template.WorkInbox_List.viewmodel({
   },
   onSearchInputValue() {
     return () => extractIds(this._findWorkItemForFilter().array);
+  },
+  onAfterSearch() {
+    return (searchText, searchResult) => {
+      if (searchText && searchResult.length) {
+        this.goToWorkItem(searchResult[0]);
+      }
+    };
   },
   onModalOpen() {
     return () =>

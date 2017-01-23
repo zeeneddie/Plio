@@ -12,7 +12,7 @@ import Button from '../../../components/Buttons/Button';
 import ModalEdit from '../ModalEdit';
 
 const CustomersRHS = ({ isReady, organization }) => (
-  <RHS>
+  <RHS flex>
     <RHS.Card className="document-details">
       <RHS.Header
         title="Organization"
@@ -21,7 +21,7 @@ const CustomersRHS = ({ isReady, organization }) => (
       {organization && (
         <ModalHandle
           title="Organization"
-          openByClickOn={(<Button type="primary">Edit</Button>)}
+          openByClickOn={(<Button color="primary">Edit</Button>)}
         >
           <ModalEdit organization={organization} />
         </ModalHandle>

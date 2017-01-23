@@ -18,6 +18,7 @@ const CustomersRHSBody = ({
   createdAt,
   customerType,
   timezone,
+  lastAccessedDate,
 }) => {
   const owner = getC('userId', users.find(propEq('role', UserMembership.ORG_OWNER)));
   const tz = getFormattedTzDate(timezone);
@@ -32,6 +33,8 @@ const CustomersRHSBody = ({
     { label: 'Org owner', text: getUserFullNameOrEmail(owner) },
     { label: 'Org timezone', text: orgTimezone },
     { label: 'Default currency', text: currency },
+    { label: 'Number of members', text: _.filter(users, (user) => !user.isRemoved).length },
+    { label: 'Last accessed', text: lastAccessedDate && _date_.renderDate(lastAccessedDate) || 'No date available' },
     { label: 'Created date', text: _date_.renderDate(createdAt) },
     { label: 'Type', text: CustomerTypesNames[customerType] },
   ];

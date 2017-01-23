@@ -6,7 +6,7 @@ import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { ViewModel } from 'meteor/manuel:viewmodel';
-import { shallowEqual } from 'recompose';
+import { shallowEqual, mapProps } from 'recompose';
 import { $ } from 'meteor/jquery';
 
 import {
@@ -217,6 +217,30 @@ export const includes = curry((value, array) => Object.assign([], array).include
 
 export const identity = _.identity;
 
+/*
+  compose(
+    join(' '),
+    chain(getFirstName, getLastName)
+  )(user);
+  => 'FirstName LastName';
+*/
+export const join = curry((separator, array) => Object.assign([], array).join(separator));
+
+/*
+  const gt10 = n => n > 10;
+  either(gt10, identity)(2);
+  => 2;
+*/
+export const either = (...fns) => (...args) => {
+  let result;
+  for (let i = 0; i < fns.length; i++) {
+    result = fns[i](...args);
+    if (!result) continue;
+    else break;
+  }
+  return result;
+};
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {
@@ -402,20 +426,21 @@ export const getProblemStatusColor = (status) => {
     case 6:
     case 7:
     case 8:
-    case 10:
+    case 9:
     case 11:
     case 12:
-    case 14:
+    case 13:
     case 15:
+    case 16:
       return 'amber';
     case 5:
-    case 9:
-    case 13:
-    case 16:
+    case 10:
+    case 14:
     case 17:
-      return 'red';
     case 18:
+      return 'red';
     case 19:
+    case 20:
       return 'green';
     default:
       return '';
@@ -548,3 +573,5 @@ export const searchByRegex = curry((regex, transformOrArrayOfProps, array) =>
     return transformOrArrayOfProps.filter(prop =>
       typeof item[prop] === 'string' && item[prop].search(regex) >= 0).length;
   }));
+
+export const omitProps = compose(mapProps, omitC);

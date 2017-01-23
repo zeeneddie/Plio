@@ -20,6 +20,7 @@ import { StandardFilters } from '/imports/api/constants';
 import onHandleFilterChange from '../../../handlers/onHandleFilterChange';
 import onHandleReturn from '../../../handlers/onHandleReturn';
 import loadInitialData from '../../../loaders/loadInitialData';
+import loadUsersData from '../../../loaders/loadUsersData';
 import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
 import loadLayoutData from '../../../loaders/loadLayoutData';
 import loadMainData from '../../loaders/loadMainData';
@@ -65,6 +66,7 @@ export default compose(
     renderComponent(StandardsLayout),
     _.identity
   ),
+  composeWithTracker(loadUsersData),
   connect(pickDeep(['organizations.organizationId'])),
   lifecycle({
     componentWillMount() {

@@ -1,35 +1,33 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { compose, withProps, withState, lifecycle } from 'recompose';
+import { InputGroupButton } from 'reactstrap';
 
 import UploadService from '/imports/ui/utils/uploads/UploadService';
 
-import Blaze from 'meteor/blaze-react-component';
 import FileUploader from '../../../components/FileUploader';
-import Wrapper from '../../../components/Wrapper';
-
-const BlazeComp = (props) => (<Blaze
-  template="DiscussionFileUploader"
-  className="input-group-btn file-uploader"
-  afterInsert={(...args) => props.onAddFile(...args)}
-  metaContext={props.uploaderMetaContext}
-  slingshotDirective={props.slingshotDirective}/>);
 
 const enhance = compose(
   withState('attachments', 'setAttachments', []),
-  withProps((props) => ({
+  withProps(({
+    slingshotDirective,
+    uploaderMetaContext,
+    setAttachments,
+    onAddFile,
+    organizationId,
+  }) => ({
     fileUploader: new UploadService({
-      slingshotDirective: props.slingshotDirective,
-      slingshotContext: props.uploaderMetaContext,
+      slingshotDirective,
+      slingshotContext: uploaderMetaContext,
       maxFileSize: Meteor.settings.public.discussionFilesMaxSize,
-      fileData: { organizationId: props.organizationId },
+      fileData: { organizationId },
       hooks: {
         beforeInsert: () => {
           // this.playNewMessageSound();
-          props.setAttachments([]);
+          setAttachments([]);
         },
-        afterInsert: (...args) => props.onAddFile(...args),
+        afterInsert: onAddFile,
       },
     }),
   })),
@@ -44,10 +42,17 @@ const enhance = compose(
   })
 );
 
-const DiscussionFileUploader = enhance((props) => (
-  <Wrapper className="input-group-btn file-uploader">
-    <FileUploader onChange={props.setAttachments} />
-  </Wrapper>
+const DiscussionFileUploader = enhance(({ setAttachments }) => (
+  <InputGroupButton className="file-uploader">
+    <FileUploader onChange={setAttachments} />
+  </InputGroupButton>
 ));
+
+DiscussionFileUploader.propTypes = {
+  slingshotDirective: PropTypes.string.isRequired,
+  uploaderMetaContext: PropTypes.object.isRequired,
+  onAddFile: PropTypes.func.isRequired,
+  organizationId: PropTypes.string.isRequired,
+};
 
 export default DiscussionFileUploader;

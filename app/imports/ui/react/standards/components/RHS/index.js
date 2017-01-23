@@ -6,6 +6,7 @@ import { getId } from '/imports/api/helpers';
 import RHS from '../../../components/RHS';
 import HeaderButtons from './HeaderButtons';
 import Body from './Body';
+import NoResults from './NoResults';
 import NotFound from './NotFound';
 import NotExist from './NotExist';
 import RHSHeaderButtonsContainer from '../../containers/RHSHeaderButtonsContainer';
@@ -19,6 +20,7 @@ const StandardsRHS = ({
   hasDocxAttachment,
 }) => (
   <RHS
+    flex
     className={cx('expandable', {
       expanded: isFullScreenMode,
     })}
@@ -53,5 +55,6 @@ StandardsRHS.HeaderButtons = HeaderButtons;
 StandardsRHS.Body = Body;
 StandardsRHS.NotFound = NotFound;
 StandardsRHS.NotExist = NotExist;
+StandardsRHS.NoResults = NoResults;
 
 export default StandardsRHS;

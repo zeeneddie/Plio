@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers, mapProps, shouldUpdate } from 'recompose';
+import { _ } from 'meteor/underscore';
 
 import StandardsLHS from '../../components/LHS';
 import {
@@ -10,6 +11,7 @@ import {
 import { getStandardsByFilter } from '../../helpers';
 import { sortArrayByTitlePrefix, pickC, notEquals } from '/imports/api/helpers';
 import { onToggleCollapse } from '/imports/ui/react/share/LHS/handlers';
+import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 
 const mapStateToProps = ({
   standards: { standardsFiltered },
@@ -42,6 +44,8 @@ export default compose(
       'typeId',
       'titlePrefix',
       'isDeleted',
+      'deletedBy',
+      'deletedAt',
     ])),
   })),
   shouldUpdate((props, nextProps) => !!(
@@ -60,7 +64,9 @@ export default compose(
       ? props.standards.filter(standard => props.standardsFiltered.includes(standard._id))
       : props.standards;
     standards = getStandardsByFilter({ standards, filter: props.filter });
-    standards = sortArrayByTitlePrefix(standards);
+
+    if (props.filter !== STANDARD_FILTER_MAP.DELETED) standards = sortArrayByTitlePrefix(standards);
+    else standards = _.sortBy(standards, 'deletedAt').reverse();
 
     const searchResultsText = props.searchText ? `${standards.length} matching results` : '';
 

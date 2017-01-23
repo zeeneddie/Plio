@@ -6,11 +6,12 @@ import { Notifications } from '/imports/share/collections/notifications';
 import { RequiredSchema } from '/imports/share/schemas/notifications-schema';
 import { IdSchema, DocumentIdSchema, DocumentTypeSchema } from '/imports/share/schemas/schemas';
 import Method from '../method';
-import { checkDocExistance } from '../checkers';
+import { checkDocExistance, checkOrgMembership } from '../checkers';
 import { getCollectionByDocType } from '/imports/share/helpers';
 import { INVALID_DOC_TYPE } from '../errors';
 import { DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED } from './errors';
 import { checkAndThrow } from '../helpers';
+import { Discussions } from '/imports/share/collections/discussions';
 
 export const updateViewedBy = new Method({
   name: 'Notifications.updateViewedBy',
@@ -50,9 +51,13 @@ export const unsubscribe = new Method({
 
       checkAndThrow(!collection, INVALID_DOC_TYPE);
 
-      const doc = collection.findOne({ _id: documentId, notify: this.userId });
+      const query = { _id: documentId, notify: this.userId };
+
+      const doc = collection.findOne(query);
 
       checkAndThrow(!doc, DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED);
+
+      checkOrgMembership(this.userId, doc.organizationId);
 
       return { collection };
     });
@@ -67,6 +72,35 @@ export const unsubscribe = new Method({
       userId: this.userId,
     }, {
       collection,
+    });
+  },
+});
+
+export const unsubscribeFromDiscussion = new Method({
+  name: 'Notifications.unsubscribeFromDiscussion',
+
+  validate: new SimpleSchema([DocumentIdSchema, DocumentTypeSchema]).validator(),
+
+  check(checker) {
+    if (this.isSimulation) return undefined;
+
+    return checker(({ documentId: linkedTo, documentType }) => {
+      const query = { linkedTo, documentType, mutedBy: { $ne: this.userId } };
+      const doc = Discussions.findOne(query);
+
+      checkAndThrow(!doc, DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED);
+
+      checkOrgMembership(this.userId, doc.organizationId);
+    });
+  },
+
+  run({ documentId, documentType }) {
+    if (this.isSimulation) return undefined;
+
+    return NotificationsService.unsubscribeFromDiscussion({
+      documentId,
+      documentType,
+      userId: this.userId,
     });
   },
 });

@@ -18,7 +18,7 @@ const enhance = compose(
     fileId: PropTypes.string.isRequired,
     flat: PropTypes.bool,
   }),
-  connect((_, { fileId }) => (state) => ({
+  connect((state, { fileId }) => ({
     file: state.collections.filesByIds[fileId],
   })),
   defaultProps({ component: FileItem, flat: true }),

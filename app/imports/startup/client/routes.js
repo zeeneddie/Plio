@@ -20,6 +20,7 @@ import TransitionalLayout from '/imports/ui/react/layouts/TransitionalLayout';
 import UnsubscribeFromNotifications
   from '/imports/ui/react/pages/components/Unsubscribe/Notifications';
 import UnsubscribeFromDailyRecap from '/imports/ui/react/pages/components/Unsubscribe/DailyRecap';
+import UnsubscribeFromDiscussion from '/imports/ui/react/pages/components/Unsubscribe/Discussion';
 
 BlazeLayout.setRoot('#app');
 
@@ -402,6 +403,22 @@ FlowRouter.route('/:orgSerialNumber/unsubscribe', {
     mount2(TransitionalLayout, {
       content: (
         <UnsubscribeFromDailyRecap {...{ orgSerialNumber }} />
+      ),
+    });
+  },
+});
+
+FlowRouter.route('/:orgSerialNumber/:route/:documentId/discussion/unsubscribe', {
+  name: 'unsubscribeFromDiscussionNotifications',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action({ documentId, route, orgSerialNumber }) {
+    const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
+
+    mount2(TransitionalLayout, {
+      content: (
+        <UnsubscribeFromDiscussion
+          {...{ documentId, documentType, orgSerialNumber }}
+        />
       ),
     });
   },

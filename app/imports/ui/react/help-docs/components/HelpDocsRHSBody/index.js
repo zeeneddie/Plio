@@ -38,7 +38,7 @@ const HelpDocsRHSBody = (props) => (
       </div>
     ) : (
       <div className="m-t-3">
-        <PreloaderPage size={2} />
+        <PreloaderPage size={3} />
       </div>
     )}
   </div>
