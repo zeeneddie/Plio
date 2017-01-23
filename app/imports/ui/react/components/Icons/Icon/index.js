@@ -16,7 +16,7 @@ const Icon = ({ margin, size = 1, sizePrefix = '', className, name }) => {
 };
 
 Icon.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   margin: PropTypes.oneOf(_.keys(MarginMap)),
   size: FaSize.propTypes.size,
   sizePrefix: FaSize.propTypes.prefix,

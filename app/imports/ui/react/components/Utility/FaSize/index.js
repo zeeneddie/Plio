@@ -10,13 +10,13 @@ const sizeMap = {
   6: '5x',
 };
 
-const FaSize = ({ size = '1', prefix = '', children }) => {
+const FaSize = ({ size = '1', prefix = '', className: cn, children, ...other }) => {
   const child = React.Children.only(children);
   const sizeValue = sizeMap[size];
-  const sizeCx = `fa-${prefix ? `${prefix}-` : ''}${sizeValue}`;
-  const className = cx(sizeCx, child.props.className);
+  const sizeCx = sizeValue && `fa-${prefix ? `${prefix}-` : ''}${sizeValue}`;
+  const className = cx(sizeCx, cn, child.props.className);
 
-  return React.cloneElement(child, { className });
+  return React.cloneElement(child, { className, ...other });
 };
 
 const sizeKeys = Object.keys(sizeMap);

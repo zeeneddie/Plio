@@ -116,11 +116,13 @@ export default {
   toggleMute({ _id, userId }, { doc }) {
     const query = { _id };
     const modifier = {};
-    if (doc.mutedBy.includes(userId)) {
+
+    if (doc.mutedBy && doc.mutedBy.includes(userId)) {
       Object.assign(modifier, { $pull: { mutedBy: userId } });
     } else {
       Object.assign(modifier, { $addToSet: { mutedBy: userId } });
     }
+
     this.collection.update(query, modifier);
   },
 };

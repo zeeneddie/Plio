@@ -3,15 +3,15 @@ import React, { PropTypes } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import Button from '../../../components/Buttons/Button';
 import Wrapper from '../../../components/Wrapper';
-import { Icon, IconStack } from '../../../components/Icons';
+import { Icon, VolumeMute } from '../../../components/Icons';
 import CardHeadingButtons from '../../../components/CardHeadingButtons';
-import { Pull } from '../../../components/Utility';
+import { Pull, TextAlign } from '../../../components/Utility';
 
-const DiscussionHeader = ({ onBackArrowClick }) => (
+const DiscussionHeader = ({ onToggleMute, onBackArrowClick, isMuted }) => (
   <CardHeader className="chat-heading">
     <Wrapper className="discussions-hd-top">
       <Pull left>
-        <CardHeadingButtons tag={CardHeader.Item}>
+        <CardHeadingButtons>
           <Button color="secondary" onClick={onBackArrowClick}>
             <Icon name="angle-left" margin="right-2x" size="2" />
             <span>Back</span>
@@ -19,21 +19,29 @@ const DiscussionHeader = ({ onBackArrowClick }) => (
         </CardHeadingButtons>
       </Pull>
       <Pull right>
-        <CardHeadingButtons tag={CardHeader.Item}>
-          <IconStack>
-            <Icon name="volume-off nudge-left" size="3" sizePrefix="stack" />
-            <Icon name="times right" size="1" />
-          </IconStack>
+        <CardHeadingButtons>
+          <VolumeMute style={{ cursor: 'pointer' }} onClick={onToggleMute}>
+            <VolumeMute.Volume />
+            {isMuted ? (
+              <VolumeMute.Cross />
+            ) : (
+              <Icon name="wifi rotate-90 right" />
+            )}
+          </VolumeMute>
         </CardHeadingButtons>
       </Pull>
-      <CardHeader.Title>
-        Discussion
-      </CardHeader.Title>
+      <TextAlign center>
+        <CardHeader.Title>
+          Discussion
+        </CardHeader.Title>
+      </TextAlign>
     </Wrapper>
   </CardHeader>
 );
 
 DiscussionHeader.propTypes = {
+  isMuted: PropTypes.bool,
+  onToggleMute: PropTypes.func,
   onBackArrowClick: PropTypes.func,
 };
 

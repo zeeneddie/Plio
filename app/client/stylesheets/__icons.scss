@@ -124,7 +124,7 @@ i {
 
 .fa-stack {
   &> .fa-nudge {
-    &-up {
+    &-top {
       top: auto;
       bottom: 12%;
     }
@@ -134,7 +134,7 @@ i {
       right: auto;
     }
 
-    &-down {
+    &-bottom {
       top: 12%;
       bottom: auto;
     }
@@ -146,7 +146,7 @@ i {
   }
 
   &> .fa {
-    &-up {
+    &-top {
       position: absolute;
       width: 100%;
       left: 0;
@@ -160,7 +160,7 @@ i {
       right: 0;
     }
 
-    &-down {
+    &-bottom {
       position: absolute;
       width: 100%;
       left: 0;

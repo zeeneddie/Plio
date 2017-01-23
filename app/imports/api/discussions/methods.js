@@ -97,8 +97,6 @@ export const toggleMute = new Method({
   validate: new SimpleSchema([IdSchema]).validator(),
 
   check(checker) {
-    if (this.isSimulation) return undefined;
-
     return checker(({ _id }) => {
       const doc = checkDocExistance(Discussions, { _id });
 
@@ -108,9 +106,7 @@ export const toggleMute = new Method({
     });
   },
 
-  run({ _id }, { doc }) {
-    if (this.isSimulation) return undefined;
-
+  run({ _id }, { doc } = {}) {
     return DiscussionsService.toggleMute({
       _id,
       userId: this.userId,
