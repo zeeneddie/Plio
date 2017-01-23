@@ -2,7 +2,7 @@ import { $ } from 'meteor/jquery';
 import { Meteor } from 'meteor/meteor';
 
 import modal from '/imports/startup/client/mixins/modal';
-import { StandardsHelp } from '/imports/api/help-messages';
+import { RisksHelp } from '/imports/api/help-messages';
 import swal from '/imports/ui/utils/swal';
 import { restore, remove } from '/imports/api/risks/methods';
 import { isOrgOwner } from '/imports/api/checkers';
@@ -51,9 +51,9 @@ export const onToggleScreenMode = props => e => {
 export const onModalOpen = ({ _id }) => () =>
   modal.modal.open({
     _id,
-    _title: 'Standard',
-    template: 'EditStandard',
-    helpText: StandardsHelp.risk,
+    _title: 'Risk',
+    template: 'Risks_Card_Edit',
+    helpText: RisksHelp.risk,
   });
 
 

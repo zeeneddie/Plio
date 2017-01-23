@@ -1,4 +1,5 @@
 import React from 'react';
+import { ListGroup } from 'reactstrap';
 
 import { RiskFilterIndexes } from '/imports/api/constants';
 import propTypes from './propTypes';
@@ -8,43 +9,40 @@ import DepatrmentListContainer from '../../containers/DepatrmentListContainer';
 import StatusListContainer from '../../containers/StatusListContainer';
 import DeletedRisksListContainer from '../../containers/DeletedRisksListContainer';
 
-const RisksLHS = (props) => {
-  const contentByFilter = {
-    [RiskFilterIndexes.TYPE]: (
-      <TypeListContainer
-        risks={props.risks}
-        onToggleCollapse={props.onToggleCollapse}
-      />
-    ),
-    [RiskFilterIndexes.STATUS]: (
-      <StatusListContainer
-        risks={props.risks}
-        onToggleCollapse={props.onToggleCollapse}
-      />
-    ),
-    [RiskFilterIndexes.DEPARTMENT]: (
-      <DepatrmentListContainer
-        risks={props.risks}
-        onToggleCollapse={props.onToggleCollapse}
-      />
-    ),
-    [RiskFilterIndexes.DELETED]: (
-      <div className="list-group">
-        <DeletedRisksListContainer risks={props.risks} />
-      </div>
-    ),
+const RisksLHS = ({
+  filter,
+  onToggleCollapse,
+  risks,
+  animating,
+  searchText,
+  searchResultsText,
+  onClear,
+  onSearchTextChange: onChange,
+  onModalOpen: onModalButtonClick,
+}) => {
+  const renderContent = () => {
+    switch (filter) {
+      case RiskFilterIndexes.TYPE:
+      default:
+        return (<TypeListContainer {...{ risks, onToggleCollapse }} />);
+      case RiskFilterIndexes.STATUS:
+        return (<StatusListContainer {...{ risks, onToggleCollapse }} />);
+      case RiskFilterIndexes.DEPARTMENT:
+        return (<DepatrmentListContainer {...{ risks, onToggleCollapse }} />);
+      case RiskFilterIndexes.DELETED:
+        return (
+          <ListGroup>
+            <DeletedRisksListContainer {...{ risks }} />
+          </ListGroup>
+        );
+    }
   };
 
   return (
     <LHSContainer
-      animating={props.animating}
-      searchText={props.searchText}
-      searchResultsText={props.searchResultsText}
-      onChange={props.onSearchTextChange}
-      onClear={props.onClear}
-      onModalButtonClick={props.onModalOpen}
+      {...{ animating, searchText, searchResultsText, onChange, onClear, onModalButtonClick }}
     >
-      {contentByFilter[props.filter]}
+      {renderContent()}
     </LHSContainer>
   );
 };

@@ -1,34 +1,32 @@
 import React from 'react';
+import cx from 'classnames';
 
 import propTypes from './propTypes';
 import ListItemLink from '../../../components/ListItemLink';
 import ListItem from '../../../components/ListItem';
 import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
 import Label from '../../../components/Labels/Label';
-import LabelDraft from '../../../components/Labels/LabelDraft';
+import { getClassByScore } from '/imports/api/risks/helpers';
 
 const RiskListItem = ({
   isActive,
-  onClick,
-  href,
-  className,
   title,
+  sequentialId,
   status,
-  issueNumber,
-  uniqueNumber,
   isDeleted,
   deletedByText,
   deletedAtText,
   unreadMessagesCount,
   isNew,
-  type = {},
+  primaryScore = {},
+  ...other
 }) => (
   <ListItemLink
-    className={className}
-    isActive={isActive}
-    onClick={onClick}
-    href={href}
+    {...{ isActive, ...other }}
   >
+    <Label className={cx('risk-square', `impact-${getClassByScore(primaryScore.value)}`)}>
+      {primaryScore.value}
+    </Label>
     <ListItem>
       <div className="flexbox-row">
         <ListItem.Heading>
@@ -36,10 +34,6 @@ const RiskListItem = ({
 
           {isNew && (
             <Label names="primary">New</Label>
-          )}
-
-          {status === 'draft' && !!issueNumber && (
-            <LabelDraft issueNumber={issueNumber} />
           )}
         </ListItem.Heading>
         <div className="flex">
@@ -56,7 +50,7 @@ const RiskListItem = ({
         </div>
       </div>
       <ListItem.LeftText>
-        {type.abbreviation && type.abbreviation + (uniqueNumber || '')}
+        {sequentialId}
       </ListItem.LeftText>
       {isDeleted && (
         <ListItem.RightText>
