@@ -169,7 +169,7 @@ export const generateSerialNumber = (collection, query = {}, defaultNumber = 1) 
 };
 
 export const generateUserInitials = (userProfile) => {
-  const { firstName, lastName} = userProfile;
+  const { firstName, lastName } = userProfile;
   let initials = '';
   if (firstName) {
     initials += firstName.charAt(0);

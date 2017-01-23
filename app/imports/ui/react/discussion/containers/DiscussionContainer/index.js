@@ -40,7 +40,11 @@ export default compose(
       props.urlItemId !== nextProps.urlItemId ||
       nextProps.resetCompleted,
   }),
-  connect(pickDeep(['discussion.discussion', 'global.userId'])),
+  connect(({ collections, discussion, global: { userId } }, { organizationId }) => ({
+    userId,
+    discussion: discussion.discussion,
+    users: collections.usersByOrgIds[organizationId],
+  })),
   withProps(({ discussion, userId }) => ({
     discussionId: getId(discussion),
     documentPath: FlowRouter.current().path.replace('/discussion', ''),

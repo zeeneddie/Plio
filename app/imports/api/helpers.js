@@ -213,6 +213,30 @@ export const includes = curry((value, array) => Object.assign([], array).include
 
 export const identity = _.identity;
 
+/*
+  compose(
+    join(' '),
+    chain(getFirstName, getLastName)
+  )(user);
+  => 'FirstName LastName';
+*/
+export const join = curry((separator, array) => Object.assign([], array).join(separator));
+
+/*
+  const gt10 = n => n > 10;
+  either(gt10, identity)(2);
+  => 2;
+*/
+export const either = (...fns) => (...args) => {
+  let result;
+  for (let i = 0; i < fns.length; i++) {
+    result = fns[i](...args);
+    if (!result) continue;
+    else break;
+  }
+  return result;
+};
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {

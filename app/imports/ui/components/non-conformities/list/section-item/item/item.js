@@ -63,6 +63,9 @@ Template.NC_Item.viewmodel({
     const title = this.title();
     return count > 0 ? `${title} (x ${count})` : title;
   },
+  getDate({ identifiedAt, deletedAt, isDeleted }) {
+    return isDeleted ? this.renderDate(deletedAt) : this.renderDate(identifiedAt);
+  },
   occurrences() {
     const query = { nonConformityId: this._id && this._id() };
     return Occurrences.find(query);

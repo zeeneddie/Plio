@@ -1,4 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Meteor } from 'meteor/meteor';
 
 import modal from '/imports/startup/client/mixins/modal';
 import { setAt, removeMessage } from '/imports/client/store/actions/discussionActions';
@@ -18,8 +19,11 @@ const clearAtWithRouter = (props) => {
 export const openUserDetails = ({ user }) => (e) => {
   e.preventDefault();
 
+  // we need the user from minimongo here because blaze template uses collection helpers
+  // which can only be accessed from minimongo document
+
   modal.modal.open({
-    user,
+    user: Meteor.users.findOne({ _id: user._id }),
     template: 'UserDirectory_Card_Read_Inner',
     _title: 'User details',
   });
