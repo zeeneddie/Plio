@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { batchActions } from 'redux-batched-actions';
 
 import { BackgroundSubs } from '/imports/startup/client/subsmanagers';
@@ -12,6 +13,7 @@ import {
   setRisks,
   setActions,
   setStandards,
+  setUsers,
 } from '/imports/client/store/actions/collectionsActions';
 import { setDepsReady } from '/imports/client/store/actions/risksActions';
 
@@ -25,7 +27,10 @@ export default function loadDeps({ dispatch, organizationId, initializing }, onD
     const ncs = NonConformities.find(query, pOptions).fetch();
     const standards = Standards.find(query, pOptions).fetch();
     const actions = Actions.find(query, pOptions).fetch();
+    const users = Meteor.users.find().fetch();
+
     let reduxActions = [
+      setUsers(users),
       setDepartments(departments),
       setNCs(ncs),
       setStandards(standards),

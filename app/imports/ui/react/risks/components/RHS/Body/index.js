@@ -1,52 +1,44 @@
 import React from 'react';
-import cx from 'classnames';
 
 import propTypes from './propTypes';
 import { ProblemsStatuses } from '/imports/share/constants';
-import { getUserFullNameOrEmail } from '/imports/share/helpers';
-import createReadFields from '../../../../helpers/createReadFields';
-import DepartmentsContainer from '../../../../fields/read/containers/DepartmentsContainer';
-import Source from '../../../../fields/read/components/Source';
-import Notify from '../../../../fields/read/components/Notify';
-import ImprovementPlan from '../../../../fields/read/components/ImprovementPlan';
-import FileProvider from '../../../../containers/providers/FileProvider';
-import ConnectedDocListContainer from '../../../fields/read/containers/ConnectedDocListContainer';
+import DocumentCard from '/imports/ui/react/components/DocumentCard';
+import Label from '/imports/ui/react/components/Labels/Label';
 
 const BodyContents = (props => {
-  console.log(props);
   const { title, sequentialId, status, description } = props.risk;
 
   return (
-    <div>
-      <div className="list-group">
-        <div className="list-group-item">
-          <p className="list-group-item-text">Risk name</p>
-          <h4 className="list-group-item-heading">
-            <span>{title}</span>
-            <span className="label margin-left label-warning">{sequentialId}</span>
-            <span className="label text-default">{ProblemsStatuses[status]}</span>
-          </h4>
-        </div>
+    <DocumentCard>
+      <DocumentCard.Section>
+        <DocumentCard.SectionItem title="Risk name">
+          {title && (
+            <span>
+              <span>{title}</span>
+              <Label names="warning" margin="left">{sequentialId}</Label>
+              <Label names="" className="text-default">{ProblemsStatuses[status]}</Label>
+            </span>
+          )}
+        </DocumentCard.SectionItem>
 
-        <div className="list-group-item">
-          <p className="list-group-item-text">Description</p>
-          <h4 className="list-group-item-heading">
-            <span>{description}</span>
-          </h4>
-        </div>
-      </div>
+        <DocumentCard.SectionItem title="Risk description">
+          {description}
+        </DocumentCard.SectionItem>
+      </DocumentCard.Section>
 
-      {/*{notify ? (<Notify users={[...notify]} />) : null}*/}
-
-      {/*<ConnectedDocListContainer riskId={_id}>*/}
-        {/*{improvementPlan && (*/}
-          {/*<ImprovementPlan*/}
-            {/*label="Improvement Plan"*/}
-            {/*{...improvementPlan}*/}
-          {/*/>*/}
-        {/*)}*/}
-      {/*</ConnectedDocListContainer>*/}
-    </div>
+      <DocumentCard.Section name="Notify changes">
+        <DocumentCard.SectionItem>
+          {props.notify.map(user => (
+            <h4
+              key={user.userId}
+              className="list-group-item-heading"
+            >
+              {user.firstName} {user.lastName}
+            </h4>
+          ))}
+        </DocumentCard.SectionItem>
+      </DocumentCard.Section>
+    </DocumentCard>
   );
 });
 
