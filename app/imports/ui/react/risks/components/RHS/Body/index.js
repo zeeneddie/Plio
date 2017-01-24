@@ -26,68 +26,68 @@ const BodyContents = ({
   scores,
   correctiveActions,
   preventativeActions,
-}) => {
-  return (
-    <DocumentCard>
-      <DocumentCard.Section>
-        <DocumentCard.SectionItem title="Risk name">
-          {title && (
-            <span>
-              <span>{title}</span>
-              <Label names="warning" margin="left">{sequentialId}</Label>
-              <Label names="" className="text-default">{ProblemsStatuses[status]}</Label>
-            </span>
-          )}
-        </DocumentCard.SectionItem>
+}) => (
+  <DocumentCard>
+    <DocumentCard.Section>
+      <DocumentCard.SectionItem title="Risk name">
+        {title && (
+          <span>
+            <span>{title}</span>
+            <Label names="warning" margin="left">{sequentialId}</Label>
+            <Label names="" className="text-default">{ProblemsStatuses[status]}</Label>
+          </span>
+        )}
+      </DocumentCard.SectionItem>
 
-        <DocumentCard.SectionItem title="Risk description">
-          {description}
-        </DocumentCard.SectionItem>
+      <DocumentCard.SectionItem title="Risk description">
+        {description}
+      </DocumentCard.SectionItem>
 
-        <DocumentCard.SectionItem title="Standard(s)">
-          {standards && standards.map(standard => (
-            <Button
-              tag="a"
-              href={`/${orgSerialNumber}/standards/${standard._id}`}
-              key={`standard-button-${standard._id}`}
-              color="secondary"
-              className="btn-inline"
-            >
-              {standard.title}
-            </Button>
-          ))}
-        </DocumentCard.SectionItem>
+      <DocumentCard.SectionItem title="Standard(s)">
+        {standards.length > 0 && standards.map(standard => (
+          <Button
+            tag="a"
+            href={`/${orgSerialNumber}/standards/${standard._id}`}
+            key={`standard-button-${standard._id}`}
+            color="secondary"
+            className="btn-inline"
+          >
+            {standard.title}
+          </Button>
+        ))}
+      </DocumentCard.SectionItem>
 
-        <Row>
-          <Col sm="6">
-            <DocumentCard.SectionItem title="Identified by">
-              {identifiedBy.firstName} {identifiedBy.lastName}
-            </DocumentCard.SectionItem>
-          </Col>
-          <Col sm="6">
-            <DocumentCard.SectionItem title="Date identified">
-              {identifiedAt}
-            </DocumentCard.SectionItem>
-          </Col>
-        </Row>
+      <Row>
+        <Col sm="6">
+          <DocumentCard.SectionItem title="Identified by">
+            {identifiedBy.firstName} {identifiedBy.lastName}
+          </DocumentCard.SectionItem>
+        </Col>
+        <Col sm="6">
+          <DocumentCard.SectionItem title="Date identified">
+            {identifiedAt}
+          </DocumentCard.SectionItem>
+        </Col>
+      </Row>
 
-        <Row>
-          <Col sm="6">
-            <DocumentCard.SectionItem title="Initial categorization">
-              {magnitude}
-            </DocumentCard.SectionItem>
-          </Col>
-          <Col sm="6">
-            <DocumentCard.SectionItem title="Type">
-              {type.title}
-            </DocumentCard.SectionItem>
-          </Col>
-        </Row>
-        <DocumentCard.SectionItem title="Department(s)">
-          {departments && departments.map(property('name')).join(', ')}
-        </DocumentCard.SectionItem>
-      </DocumentCard.Section>
+      <Row>
+        <Col sm="6">
+          <DocumentCard.SectionItem title="Initial categorization">
+            {magnitude}
+          </DocumentCard.SectionItem>
+        </Col>
+        <Col sm="6">
+          <DocumentCard.SectionItem title="Type">
+            {type.title}
+          </DocumentCard.SectionItem>
+        </Col>
+      </Row>
+      <DocumentCard.SectionItem title="Department(s)">
+        {departments.length > 0 && departments.map(property('name')).join(', ')}
+      </DocumentCard.SectionItem>
+    </DocumentCard.Section>
 
+    {notify.length > 0 && (
       <DocumentCard.Section name="Notify changes">
         <DocumentCard.SectionItem>
           {notify.map(user => (
@@ -100,9 +100,18 @@ const BodyContents = ({
           ))}
         </DocumentCard.SectionItem>
       </DocumentCard.Section>
+    )}
 
+    {scores.length > 0 && (
       <DocumentCard.Section name="Risk scoring">
-        <DocumentCard.SectionTableItem header={['Score type', 'Score', 'Scored date', 'Scored by']}>
+        <DocumentCard.SectionTableItem
+          header={[
+            'Score type',
+            'Score',
+            'Scored date',
+            'Scored by',
+          ]}
+        >
           {scores.map(score => [
             <span className="list-group-item-heading">{score.scoreTypeId}</span>,
             <div>
@@ -116,7 +125,9 @@ const BodyContents = ({
           ])}
         </DocumentCard.SectionTableItem>
       </DocumentCard.Section>
+    )}
 
+    {correctiveActions.length > 0 && (
       <DocumentCard.Section name="Corrective actions">
         <DocumentCard.SectionItem>
           {correctiveActions && correctiveActions.map(action => (
@@ -133,10 +144,12 @@ const BodyContents = ({
           ))}
         </DocumentCard.SectionItem>
       </DocumentCard.Section>
+    )}
 
+    {preventativeActions.length > 0 && (
       <DocumentCard.Section name="Preventative actions">
         <DocumentCard.SectionItem>
-          {preventativeActions && preventativeActions.map(action => (
+          {preventativeActions.map(action => (
             <Button
               tag="a"
               href={`/${orgSerialNumber}/work-inbox/${action._id}`}
@@ -150,9 +163,9 @@ const BodyContents = ({
           ))}
         </DocumentCard.SectionItem>
       </DocumentCard.Section>
-    </DocumentCard>
-  );
-};
+    )}
+  </DocumentCard>
+);
 
 BodyContents.propTypes = propTypes;
 
