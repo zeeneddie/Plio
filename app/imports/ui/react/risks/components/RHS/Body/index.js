@@ -50,7 +50,7 @@ const BodyContents = ({
             href={`/${orgSerialNumber}/standards/${standard._id}`}
             key={`standard-button-${standard._id}`}
             color="secondary"
-            className="btn-inline"
+            className="margin-right"
           >
             {standard.title}
           </Button>
@@ -115,8 +115,8 @@ const BodyContents = ({
           {scores.map(score => [
             <span className="list-group-item-heading">{score.scoreTypeId}</span>,
             <div>
-              <Label className={`impact-${score.className}`}>{score.value}</Label>
-              <span className="list-group-item-heading">{score.priority}</span>
+              <Label margin="right" className={`impact-${score.className}`}>{score.value}</Label>
+              <span className="list-group-item-heading margin-right">{score.priority}</span>
             </div>,
             <span className="list-group-item-heading">{score.scoredAt}</span>,
             <span className="list-group-item-heading">
@@ -136,7 +136,7 @@ const BodyContents = ({
               href={`/${orgSerialNumber}/work-inbox/${action._id}`}
               key={`standard-button-${action._id}`}
               color="secondary"
-              className="btn-inline"
+              className="margin-right"
             >
               {action.sequentialId} {action.title}
               <Icon name="circle" margin="left" className={`text-${action.className}`} />
@@ -155,7 +155,7 @@ const BodyContents = ({
               href={`/${orgSerialNumber}/work-inbox/${action._id}`}
               key={`standard-button-${action._id}`}
               color="secondary"
-              className="btn-inline"
+              className="margin-right"
             >
               {action.sequentialId} {action.title}
               <Icon name="circle" margin="left" className={`text-${action.className}`} />

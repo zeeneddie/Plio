@@ -7,6 +7,7 @@ import Header from '../../../components/Header';
 import Dropdown from '../../../components/Dropdown';
 import RisksPage from '../Page';
 import PreloaderPage from '../../../components/PreloaderPage';
+import HeaderMenu from '../HeaderMenu';
 
 const getMenuItems = ({ filters, filter }) => (
   _.map(filters, ({ prepend, name }, key) => {
@@ -56,6 +57,7 @@ const RisksLayout = (props) => {
           </Dropdown>
         )}
         <Header.ArrowBack pull="left" onClick={props.onHandleReturn} />
+        <HeaderMenu />
       </Header>
       <div className="content">
         <div className="container-fluid">
