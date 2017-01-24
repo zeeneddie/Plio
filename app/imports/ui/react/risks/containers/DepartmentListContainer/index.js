@@ -1,11 +1,10 @@
 import { _ } from 'meteor/underscore';
-import { compose, lifecycle, mapProps } from 'recompose';
+import { compose, mapProps } from 'recompose';
 import { connect } from 'react-redux';
 
 import DepartmentList from '../../components/DepartmentList';
 import {
   lengthRisks,
-  pickDeep,
   getId,
 } from '/imports/api/helpers';
 import {
@@ -13,6 +12,7 @@ import {
   createUncategorizedDepartment,
   handleRisksRedirectAndOpen,
   createRiskDepartmentItem,
+  withRisksRedirectAndOpen,
 } from '../../helpers';
 
 const mapStateToProps = (state) => ({
@@ -45,17 +45,5 @@ export default compose(
 
     return { ...props, departments: types };
   }),
-  connect(pickDeep(['global.searchText', 'risks.risksFiltered', 'collections.risksByIds'])),
-  lifecycle({
-    componentWillMount() {
-      redirectAndOpen(this.props);
-    },
-    // if selected risk is deleted open the default type
-    componentWillReceiveProps(nextProps) {
-      if ((!this.props.isSelectedRiskDeleted && nextProps.isSelectedRiskDeleted) ||
-          (nextProps.searchText && nextProps.risksFiltered.length)) {
-        redirectAndOpen(nextProps);
-      }
-    },
-  }),
+  withRisksRedirectAndOpen(redirectAndOpen),
 )(DepartmentList);

@@ -1,11 +1,10 @@
-import { compose, lifecycle, mapProps } from 'recompose';
+import { compose, mapProps } from 'recompose';
 import { connect } from 'react-redux';
 
 import TypeList from '../../components/TypeList';
 import {
   lengthRisks,
   propEq,
-  pickDeep,
   getId,
 } from '/imports/api/helpers';
 import {
@@ -13,6 +12,7 @@ import {
   createUncategorizedType,
   createRiskTypeItem,
   handleRisksRedirectAndOpen,
+  withRisksRedirectAndOpen,
 } from '../../helpers';
 
 const mapStateToProps = (state) => ({
@@ -46,17 +46,5 @@ export default compose(
 
     return { ...props, types };
   }),
-  connect(pickDeep(['global.searchText', 'risks.risksFiltered', 'collections.risksByIds'])),
-  lifecycle({
-    componentWillMount() {
-      redirectAndOpen(this.props);
-    },
-    // if selected risk is deleted open the default type
-    componentWillReceiveProps(nextProps) {
-      if ((!this.props.isSelectedRiskDeleted && nextProps.isSelectedRiskDeleted) ||
-          (nextProps.searchText && nextProps.risksFiltered.length)) {
-        redirectAndOpen(nextProps);
-      }
-    },
-  }),
+  withRisksRedirectAndOpen(redirectAndOpen),
 )(TypeList);

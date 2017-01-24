@@ -14,11 +14,17 @@ import {
   getC,
   notDeleted,
   getId,
+  pickDeep,
 } from '/imports/api/helpers';
 import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
 import { goTo } from '../../utils/router/actions';
 import store, { getState } from '/imports/client/store';
-import { createTypeItem, getListData, handleRedirectAndOpen } from '../helpers';
+import {
+  createTypeItem,
+  getListData,
+  handleRedirectAndOpen,
+  withRedirectAndOpen,
+} from '../helpers';
 
 export const goToRisk = goTo('risk');
 export const goToRisks = goTo('risks');
@@ -61,6 +67,12 @@ export const handleRisksRedirectAndOpen = handleRedirectAndOpen(
   getRiskListData,
   goToRisk,
   goToRisks
+);
+
+export const withRisksRedirectAndOpen = withRedirectAndOpen(
+  (props, nextProps) => (!props.isSelectedRiskDeleted && nextProps.isSelectedRiskDeleted) ||
+    (nextProps.searchText && nextProps.risksFiltered.length),
+  pickDeep(['global.searchText', 'risks.risksFiltered', 'collections.risksByIds']),
 );
 
 // for removal

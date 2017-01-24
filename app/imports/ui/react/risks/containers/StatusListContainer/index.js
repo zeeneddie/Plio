@@ -1,4 +1,4 @@
-import { compose, lifecycle, mapProps } from 'recompose';
+import { compose, mapProps } from 'recompose';
 import { connect } from 'react-redux';
 import property from 'lodash.property';
 
@@ -6,13 +6,13 @@ import StatusList from '../../components/StatusList';
 import {
   lengthRisks,
   propEq,
-  pickDeep,
 } from '/imports/api/helpers';
 import { ProblemsStatuses } from '/imports/share/constants';
 import {
   getSelectedRiskDeletedState,
   handleRisksRedirectAndOpen,
   createRiskStatusItem,
+  withRisksRedirectAndOpen,
 } from '../../helpers';
 
 const mapStateToProps = (state) => ({
@@ -45,17 +45,5 @@ export default compose(
 
     return { ...props, statuses };
   }),
-  connect(pickDeep(['global.searchText', 'risks.risksFiltered', 'collections.risksByIds'])),
-  lifecycle({
-    componentWillMount() {
-      redirectAndOpen(this.props);
-    },
-    // if selected risk is deleted open the default type
-    componentWillReceiveProps(nextProps) {
-      if ((!this.props.isSelectedRiskDeleted && nextProps.isSelectedRiskDeleted) ||
-          (nextProps.searchText && nextProps.risksFiltered.length)) {
-        redirectAndOpen(nextProps);
-      }
-    },
-  }),
+  withRisksRedirectAndOpen(redirectAndOpen),
 )(StatusList);
