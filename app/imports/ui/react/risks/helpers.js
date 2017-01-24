@@ -75,55 +75,6 @@ export const withRisksRedirectAndOpen = withRedirectAndOpen(
   pickDeep(['global.searchText', 'risks.risksFiltered', 'collections.risksByIds']),
 );
 
-// for removal
-export const redirectToRiskOrDefault = ({
-  selected,
-  defaultRisk,
-}) => !selected && (
-  defaultRisk
-    ? goToRisk({ urlItemId: getId(defaultRisk) })
-    : goToRisks()
-);
-
-// for removal
-export const openRiskByFilter = ({
-  selectedRisk,
-  containedIn,
-  defaultContainedIn,
-  filter,
-  dispatch,
-}) => {
-  const parentItem = selectedRisk ? containedIn : defaultContainedIn;
-  const topLevelKey = getId(parentItem);
-  let result;
-
-  switch (filter) {
-    case RiskFilterIndexes.TYPE:
-    default: {
-      const typeItem = createRiskTypeItem(topLevelKey);
-      result = dispatch(addCollapsed({ ...typeItem, close: { type: typeItem.type } }));
-      break;
-    }
-    case RiskFilterIndexes.STATUS: {
-      // todo: move RISK.STATUSES to constant
-      const statusItem = createRiskStatusItem(parentItem.number);
-      result = dispatch(addCollapsed({ ...statusItem, close: { type: statusItem.type } }));
-      break;
-    }
-    case RiskFilterIndexes.DEPARTMENT: {
-      const departmentItem = createRiskDepartmentItem(topLevelKey);
-      result = dispatch(addCollapsed({ ...departmentItem, close: { type: departmentItem.type } }));
-      break;
-    }
-    case RiskFilterIndexes.DELETED: {
-      result = null;
-      break;
-    }
-  }
-
-  return result;
-};
-
 export const expandCollapsedRisk = (_id) => {
   const { collections: { risksByIds }, global: { filter } } = getState();
   const risk = { ...risksByIds[_id] };

@@ -116,6 +116,10 @@ export const propRisks = property('risks');
 
 export const lengthRisks = compose(length, propRisks);
 
+export const propActions = property('actions');
+
+export const lengthActions = compose(length, propActions);
+
 export const propSections = property('sections');
 
 export const lengthSections = compose(length, propSections);

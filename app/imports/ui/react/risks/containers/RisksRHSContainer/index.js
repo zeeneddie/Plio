@@ -1,3 +1,4 @@
+import { _ } from 'meteor/underscore';
 import {
   compose,
   mapProps,
@@ -11,6 +12,7 @@ import {
   some,
   getC,
   lengthRisks,
+  lengthActions,
   notEquals,
   omitC,
   pickDeep,
@@ -23,12 +25,18 @@ import { getRisksByFilter } from '../../helpers';
 const mapStateToProps = state => ({
   ...pickC(['isFullScreenMode', 'isCardReady', 'urlItemId'])(state.global),
   risk: state.collections.risksByIds[state.global.urlItemId],
+  actions: state.collections.actions.filter(action => (
+    _.find(action.linkedTo, ({ documentId }) => (
+      documentId === state.global.urlItemId
+    ))
+  )),
 });
 
 export default compose(
   connect(pickDeep(['global.filter', 'collections.risks'])),
   shouldUpdate((props, nextProps) => Boolean(
     lengthRisks(props) !== lengthRisks(nextProps) ||
+    lengthActions(props) !== lengthActions(nextProps) ||
     props.filter !== nextProps.filter
   )),
   mapProps(props => ({ risks: getRisksByFilter(props) })),

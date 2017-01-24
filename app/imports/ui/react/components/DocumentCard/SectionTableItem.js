@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-function SectionTableItem({ header, values }) {
+function SectionTableItem({ header, children }) {
   return (
     <table className="table borderless big">
       <thead>
@@ -16,7 +16,7 @@ function SectionTableItem({ header, values }) {
         </tr>
       </thead>
       <tbody>
-        {values.map((value, index) => (
+        {children.map((value, index) => (
           <tr key={`document-record-${index}`}>
             {value.map((cell, cellIndex) => (
               <td key={`document-cell-${cellIndex}`}>
@@ -32,7 +32,7 @@ function SectionTableItem({ header, values }) {
 
 SectionTableItem.propTypes = {
   header: PropTypes.arrayOf(PropTypes.string),
-  values: PropTypes.arrayOf(PropTypes.node),
+  children: PropTypes.arrayOf(PropTypes.node),
 };
 
 export default SectionTableItem;

@@ -15,8 +15,8 @@ import ChangelogContainer from '../../../changelog/containers/ChangelogContainer
 const RisksRHS = ({
   isFullScreenMode,
   risk,
+  actions,
   isReady = true,
-  hasDocxAttachment,
 }) => (
   <RHS
     className={cx('expandable', {
@@ -28,11 +28,11 @@ const RisksRHS = ({
         title="Risk"
         isReady={isReady}
       >
-        <RHSHeaderButtonsContainer {...{ risk, hasDocxAttachment }} />
+        <RHSHeaderButtonsContainer {...{ risk }} />
       </RHS.Header>
 
       <RHS.ContentList isReady={isReady}>
-        <RHSBodyContainer {...{ risk, hasDocxAttachment }} />
+        <RHSBodyContainer {...{ risk, actions }} />
         <ChangelogContainer
           documentId={getId(risk)}
           collection={CollectionNames.RISKS}
