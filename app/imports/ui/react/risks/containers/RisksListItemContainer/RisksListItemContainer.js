@@ -1,21 +1,19 @@
-import React from 'react';
 import { compose, withHandlers, withProps, shouldUpdate } from 'recompose';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 
 import RisksListItem from '../../components/RisksListItem';
-import _user_ from '/imports/startup/client/mixins/user';
+import { getFullNameOrEmail } from '/imports/api/users/helpers';
 import _date_ from '/imports/startup/client/mixins/date';
 import { setUrlItemId } from '/imports/client/store/actions/globalActions';
 import { updateViewedBy } from '/imports/api/risks/methods';
 import withUpdateViewedBy from '../../../helpers/withUpdateViewedBy';
-import { pickC, notEquals } from '/imports/api/helpers';
+import { pickC, notEquals, getC } from '/imports/api/helpers';
 import { RiskFilterIndexes } from '/imports/api/constants';
 import { isNewDoc } from '/imports/api/checkers';
 import { getPath } from '/imports/ui/utils/router/paths';
-import { getPrimaryScore } from '/imports/api/risks/helpers';
-import ListItem from '../../../components/ListItem';
-import _problemsStatus_ from '/imports/startup/client/mixins/problemsStatus';
+import { getClassByScore, getPrimaryScore } from '/imports/api/risks/helpers';
+import { getClassByStatus } from '/imports/api/problems/helpers';
 
 export default compose(
   shouldUpdate((props, nextProps) => Boolean(
@@ -24,9 +22,14 @@ export default compose(
     (props._id !== props.urlItemId && props._id === nextProps.urlItemId) ||
     (props._id === props.urlItemId && props._id !== nextProps.urlItemId)
   )),
-  connect((_, { _id }) => (state) => ({
-    ...{ ...state.collections.risksByIds[_id] },
-  })),
+  connect((_, { _id }) => (state) => {
+    const risk = { ...state.collections.risksByIds[_id] };
+
+    return {
+      ...risk,
+      deletedBy: state.collections.usersByIds[risk.deletedBy],
+    };
+  }),
   withProps((props) => ({
     isNew: isNewDoc(props.organization, props.userId, props),
     primaryScore: getPrimaryScore(props.scores),
@@ -37,7 +40,7 @@ export default compose(
       'unreadMessagesCount', 'userId', 'isNew',
       'primaryScore',
     ]);
-    const pickKeysDeleted = pickC(['deletedByText', 'deletedAtText']);
+    const pickKeysDeleted = pickC(['deletedAt', 'deletedBy']);
     return Boolean(
       (props._id !== props.urlItemId && props._id === nextProps.urlItemId) ||
       (props._id === props.urlItemId && props._id !== nextProps.urlItemId) ||
@@ -67,25 +70,27 @@ export default compose(
       return getPath('risk')(params, queryParams);
     })();
     const isNew = isNewDoc(props.organization, props.userId, props);
-    const deletedByText = _user_.userNameOrEmail(props.deletedBy);
+    const createdAtText = _date_.renderDate(props.createdAt);
+    const deletedByText = getFullNameOrEmail(props.deletedBy);
     const deletedAtText = _date_.renderDate(props.deletedAt);
     const isActive = props.urlItemId === props._id;
-    const className = props.filter === RiskFilterIndexes.STATUS
-      ? cx('label', `label-${_problemsStatus_.getClassByStatus(props.status)}`)
-      : '';
-    const sequentialId = (
-      <ListItem.LeftText {...{ className }}>
-        {props.sequentialId}
-      </ListItem.LeftText>
-    );
+    const sequentialId = {
+      className: props.filter === RiskFilterIndexes.STATUS
+        ? cx('label', `label-${getClassByStatus(props.status)}`)
+        : '',
+    };
+    const primaryScore = {
+      className: `impact-${getClassByScore(getC('primaryScore.value', props))}`,
+    };
 
     return {
       href,
       isNew,
+      createdAtText,
       deletedByText,
       deletedAtText,
       isActive,
-      sequentialId,
+      attrs: { sequentialId, primaryScore },
     };
   }),
   withUpdateViewedBy(updateViewedBy),

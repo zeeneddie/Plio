@@ -1,15 +1,13 @@
 import { Template } from 'meteor/templating';
-import get from 'lodash.get';
 import curry from 'lodash.curry';
 
 import { RiskTypes } from '/imports/share/collections/risk-types.js';
-import { Departments } from '/imports/share/collections/departments.js';
-import { ProblemsStatuses } from '/imports/share/constants.js';
 import {
   extractIds, findById, lengthItems,
-  flattenMapItems, inspire, getSortedItems,
-  compareRisksByScore, compareStatusesByPriority,
+  flattenMapItems, getSortedItems,
+  compareRisksByScore,
 } from '/imports/api/helpers.js';
+import { compareStatusesByPriority } from '/imports/api/problems/helpers';
 
 
 Template.Risks_List.viewmodel({
