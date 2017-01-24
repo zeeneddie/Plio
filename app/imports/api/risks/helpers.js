@@ -21,3 +21,15 @@ export const getClassByScore = (score) => {
 
   return 'high';
 };
+
+export const getNameByScore = (score) => {
+  if (score > 0 && score <= 20) {
+    return 'Low';
+  } else if (score > 20 && score <= 45) {
+    return 'Medium';
+  } else if (score > 45 && score <= 66) {
+    return 'High';
+  }
+
+  return 'Very high';
+};

@@ -58,12 +58,7 @@ export const getSelectedAndDefaultRiskByFilter = ({
   switch (filter) {
     case RiskFilterIndexes.TYPE: {
       const containedIn = find(findRisk, types);
-      console.log({
-        containedIn,
-        selectedRisk: findRisk(containedIn),
-        defaultRisk: getC('types[0].risks[0]', { types }),
-        defaultContainedIn: _.first(types),
-      });
+
       return {
         containedIn,
         selectedRisk: findRisk(containedIn),
