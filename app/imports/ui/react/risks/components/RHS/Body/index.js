@@ -10,7 +10,7 @@ const BodyContents = (props => {
 
   return (
     <DocumentCard>
-      {/* <DocumentCard.Section>
+      <DocumentCard.Section>
         <DocumentCard.SectionItem title="Risk name">
           {title && (
             <span>
@@ -37,7 +37,7 @@ const BodyContents = (props => {
             </h4>
           ))}
         </DocumentCard.SectionItem>
-      </DocumentCard.Section> */}
+      </DocumentCard.Section>
     </DocumentCard>
   );
 });
