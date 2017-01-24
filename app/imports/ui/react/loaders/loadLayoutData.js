@@ -16,12 +16,13 @@ export default subscribe => function loadLayoutData({
   if (subscription.ready()) {
     const organization = Organizations.findOne({ serialNumber: orgSerialNumber });
     const organizationId = getId(organization);
-    const actions = [
+    let actions = [
       setOrg(organization),
       setOrgId(organizationId),
-      setOrganizations([organization]),
       setDataLoading(false),
     ];
+
+    if (organization) actions = actions.concat(setOrganizations([organization]));
 
     dispatch(batchActions(actions));
 
