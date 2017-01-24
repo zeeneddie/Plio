@@ -5,7 +5,7 @@ import { RiskFilterIndexes } from '/imports/api/constants';
 import propTypes from './propTypes';
 import LHSContainer from '../../../containers/LHSContainer';
 import TypeListContainer from '../../containers/TypeListContainer';
-import DepatrmentListContainer from '../../containers/DepatrmentListContainer';
+import DepartmentListContainer from '../../containers/DepartmentListContainer';
 import StatusListContainer from '../../containers/StatusListContainer';
 import DeletedRisksListContainer from '../../containers/DeletedRisksListContainer';
 
@@ -28,7 +28,7 @@ const RisksLHS = ({
       case RiskFilterIndexes.STATUS:
         return (<StatusListContainer {...{ risks, onToggleCollapse }} />);
       case RiskFilterIndexes.DEPARTMENT:
-        return (<DepatrmentListContainer {...{ risks, onToggleCollapse }} />);
+        return (<DepartmentListContainer {...{ risks, onToggleCollapse }} />);
       case RiskFilterIndexes.DELETED:
         return (
           <ListGroup>

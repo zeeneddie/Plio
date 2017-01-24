@@ -5,14 +5,14 @@ import { connect } from 'react-redux';
 import DepartmentList from '../../components/DepartmentList';
 import {
   lengthRisks,
+  pickDeep,
+  getId,
 } from '/imports/api/helpers';
-import { getState } from '/imports/client/store';
-import { RiskFilterIndexes } from '/imports/api/constants';
 import {
-  openRiskByFilter,
-  getSelectedAndDefaultRiskByFilter,
   getSelectedRiskDeletedState,
   createUncategorizedDepartment,
+  handleRisksRedirectAndOpen,
+  createRiskDepartmentItem,
 } from '../../helpers';
 
 const mapStateToProps = (state) => ({
@@ -20,34 +20,12 @@ const mapStateToProps = (state) => ({
   ...getSelectedRiskDeletedState(state),
 });
 
-const openType = (props) => setTimeout(() => {
-  const urlItemId = getState('global.urlItemId');
-  const risksByIds = getState('collections.risksByIds');
-  const {
-    containedIn,
-    defaultContainedIn,
-    selectedRisk,
-  } = getSelectedAndDefaultRiskByFilter({
-    urlItemId,
-    departments: props.departments,
-    filter: RiskFilterIndexes.DEPARTMENT,
-  });
-
-  // if risk does not exist, do not open type.
-  // show message that risk does not exist instead.
-  if (urlItemId && !risksByIds[urlItemId]) {
-    return;
-  }
-
-  // if a type contains selected risk open that type otherwise open default type collapse
-  openRiskByFilter({
-    selectedRisk,
-    containedIn,
-    defaultContainedIn,
-    dispatch: props.dispatch,
-    filter: RiskFilterIndexes.DEPARTMENT,
-  });
-}, 0);
+const redirectAndOpen = ({ departments, risksByIds, ...props }) => handleRisksRedirectAndOpen(
+  compose(createRiskDepartmentItem, getId),
+  departments,
+  risksByIds,
+  props,
+);
 
 export default compose(
   connect(mapStateToProps),
@@ -67,14 +45,16 @@ export default compose(
 
     return { ...props, departments: types };
   }),
+  connect(pickDeep(['global.searchText', 'risks.risksFiltered', 'collections.risksByIds'])),
   lifecycle({
     componentWillMount() {
-      openType(this.props);
+      redirectAndOpen(this.props);
     },
     // if selected risk is deleted open the default type
     componentWillReceiveProps(nextProps) {
-      if (!this.props.isSelectedRiskDeleted && nextProps.isSelectedRiskDeleted) {
-        openType(nextProps);
+      if ((!this.props.isSelectedRiskDeleted && nextProps.isSelectedRiskDeleted) ||
+          (nextProps.searchText && nextProps.risksFiltered.length)) {
+        redirectAndOpen(nextProps);
       }
     },
   }),

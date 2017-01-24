@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import { createTypeItem } from '../../../helpers/createTypeItem';
+import createTypeItem from '../../../helpers/createTypeItem';
 import LHSItemContainer from '../../../containers/LHSItemContainer';
 import RisksListContainer from '../../containers/RisksListContainer';
 

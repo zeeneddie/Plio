@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
 import { CollectionNames } from '/imports/share/constants';
-import { createTypeItem } from '../../../helpers/createTypeItem';
+import createTypeItem from '../../../helpers/createTypeItem';
 import LHSItemContainer from '../../../containers/LHSItemContainer';
 import RisksListContainer from '../../containers/RisksListContainer';
 import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';

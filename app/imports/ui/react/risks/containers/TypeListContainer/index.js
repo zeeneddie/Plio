@@ -6,15 +6,13 @@ import {
   lengthRisks,
   propEq,
   pickDeep,
+  getId,
 } from '/imports/api/helpers';
-import { getState } from '/imports/client/store';
-import { RiskFilterIndexes } from '/imports/api/constants';
 import {
-  openRiskByFilter,
-  getSelectedAndDefaultRiskByFilter,
   getSelectedRiskDeletedState,
   createUncategorizedType,
-  redirectToRiskOrDefault,
+  createRiskTypeItem,
+  handleRisksRedirectAndOpen,
 } from '../../helpers';
 
 const mapStateToProps = (state) => ({
@@ -22,42 +20,12 @@ const mapStateToProps = (state) => ({
   ...getSelectedRiskDeletedState(state),
 });
 
-const redirectAndOpen = (props) => setTimeout(() => {
-  const state = getState();
-  const { global: { urlItemId }, collections: { risksByIds } } = state;
-  const {
-    containedIn,
-    defaultContainedIn,
-    selectedRisk,
-    defaultRisk,
-  } = getSelectedAndDefaultRiskByFilter({
-    urlItemId,
-    types: props.types,
-    filter: RiskFilterIndexes.TYPE,
-  });
-
-  let redirectOptions = { selectedRisk, defaultRisk };
-  if (props.searchText) redirectOptions = { defaultRisk };
-
-  const redirect = () => redirectToRiskOrDefault(redirectOptions);
-
-  const openType = () => openRiskByFilter({
-    selectedRisk,
-    containedIn,
-    defaultContainedIn,
-    dispatch: props.dispatch,
-    filter: RiskFilterIndexes.SECTION,
-  });
-
-  // if risk does not exist, do not open type.
-  // show message that risk does not exist instead.
-  if (urlItemId && !risksByIds[urlItemId]) return;
-
-  // redirect to the selected or default risk
-  // and open the type which contains that standard
-  redirect();
-  if (!props.searchText) openType();
-}, 0);
+const redirectAndOpen = ({ types, risksByIds, ...props }) => handleRisksRedirectAndOpen(
+  compose(createRiskTypeItem, getId),
+  types,
+  risksByIds,
+  props,
+);
 
 export default compose(
   connect(mapStateToProps),
@@ -78,7 +46,7 @@ export default compose(
 
     return { ...props, types };
   }),
-  connect(pickDeep(['global.searchText', 'risks.risksFiltered'])),
+  connect(pickDeep(['global.searchText', 'risks.risksFiltered', 'collections.risksByIds'])),
   lifecycle({
     componentWillMount() {
       redirectAndOpen(this.props);

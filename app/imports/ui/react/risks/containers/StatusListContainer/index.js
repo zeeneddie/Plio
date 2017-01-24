@@ -1,18 +1,18 @@
 import { compose, lifecycle, mapProps } from 'recompose';
 import { connect } from 'react-redux';
+import property from 'lodash.property';
 
 import StatusList from '../../components/StatusList';
 import {
   lengthRisks,
   propEq,
+  pickDeep,
 } from '/imports/api/helpers';
-import { getState } from '/imports/client/store';
-import { RiskFilterIndexes } from '/imports/api/constants';
 import { ProblemsStatuses } from '/imports/share/constants';
 import {
-  openRiskByFilter,
-  getSelectedAndDefaultRiskByFilter,
   getSelectedRiskDeletedState,
+  handleRisksRedirectAndOpen,
+  createRiskStatusItem,
 } from '../../helpers';
 
 const mapStateToProps = (state) => ({
@@ -23,34 +23,12 @@ const mapStateToProps = (state) => ({
   ...getSelectedRiskDeletedState(state),
 });
 
-const openType = (props) => setTimeout(() => {
-  const urlItemId = getState('global.urlItemId');
-  const risksByIds = getState('collections.risksByIds');
-  const {
-    containedIn,
-    defaultContainedIn,
-    selectedRisk,
-  } = getSelectedAndDefaultRiskByFilter({
-    urlItemId,
-    statuses: props.statuses,
-    filter: RiskFilterIndexes.STATUS,
-  });
-
-  // if risk does not exist, do not open type.
-  // show message that risk does not exist instead.
-  if (urlItemId && !risksByIds[urlItemId]) {
-    return;
-  }
-
-  // if a type contains selected risk open that type otherwise open default type collapse
-  openRiskByFilter({
-    selectedRisk,
-    containedIn,
-    defaultContainedIn,
-    dispatch: props.dispatch,
-    filter: RiskFilterIndexes.STATUS,
-  });
-}, 0);
+const redirectAndOpen = ({ statuses, risksByIds, ...props }) => handleRisksRedirectAndOpen(
+  compose(createRiskStatusItem, property('number')),
+  statuses,
+  risksByIds,
+  props
+);
 
 export default compose(
   connect(mapStateToProps),
@@ -67,14 +45,16 @@ export default compose(
 
     return { ...props, statuses };
   }),
+  connect(pickDeep(['global.searchText', 'risks.risksFiltered', 'collections.risksByIds'])),
   lifecycle({
     componentWillMount() {
-      openType(this.props);
+      redirectAndOpen(this.props);
     },
     // if selected risk is deleted open the default type
     componentWillReceiveProps(nextProps) {
-      if (!this.props.isSelectedRiskDeleted && nextProps.isSelectedRiskDeleted) {
-        openType(nextProps);
+      if ((!this.props.isSelectedRiskDeleted && nextProps.isSelectedRiskDeleted) ||
+          (nextProps.searchText && nextProps.risksFiltered.length)) {
+        redirectAndOpen(nextProps);
       }
     },
   }),

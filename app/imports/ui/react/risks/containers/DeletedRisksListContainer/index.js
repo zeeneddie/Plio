@@ -1,39 +1,31 @@
 import { lifecycle, compose } from 'recompose';
+import { connect } from 'react-redux';
 
 import RisksListContainer from '../RisksListContainer';
 import {
-  getSelectedAndDefaultRiskByFilter,
-  redirectToRiskOrDefault,
+  handleRisksRedirectAndOpen,
 } from '../../helpers';
-import { getState } from '/imports/client/store';
-import { RiskFilterIndexes } from '/imports/api/constants';
+import { pickDeep } from '/imports/api/helpers';
 
-const redirectHandle = (props) => setTimeout(() => {
-  const { urlItemId } = getState('global');
-  const risksByIds = getState('collections.risksByIds');
-  const {
-    defaultStandard,
-    selectedStandard,
-  } = getSelectedAndDefaultRiskByFilter({
-    urlItemId,
-    risks: props.risks,
-    filter: RiskFilterIndexes.DELETED,
-  });
-
-  // if risk does not exist, do not redirect.
-  // show message that risk does not exist instead.
-  if (urlItemId && !risksByIds[urlItemId]) {
-    return;
-  }
-
-  redirectToRiskOrDefault({ selectedStandard, defaultStandard });
-}, 0);
+const redirect = ({ risks, risksByIds, ...props }) => handleRisksRedirectAndOpen(
+  () => null,
+  [{ risks }],
+  risksByIds,
+  props,
+);
 
 export default compose(
+  connect(pickDeep(['global.searchText', 'risks.risksFiltered', 'collections.risksByIds'])),
   lifecycle({
     componentWillMount() {
       // handle redirect to default risk
-      redirectHandle(this.props);
+      redirect(this.props);
+    },
+    componentWillReceiveProps(nextProps) {
+      if ((!this.props.isSelectedRiskDeleted && nextProps.isSelectedRiskDeleted) ||
+          (nextProps.searchText && nextProps.risksFiltered.length)) {
+        redirect(nextProps);
+      }
     },
   })
 )(RisksListContainer);

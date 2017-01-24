@@ -18,10 +18,14 @@ import {
 import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
 import { goTo } from '../../utils/router/actions';
 import store, { getState } from '/imports/client/store';
-import { createTypeItem } from '../helpers/createTypeItem';
+import { createTypeItem, getListData, handleRedirectAndOpen } from '../helpers';
+
+export const goToRisk = goTo('risk');
+export const goToRisks = goTo('risks');
 
 export const createRiskTypeItem = createTypeItem(CollectionNames.RISK_TYPES);
 export const createRiskDepartmentItem = createTypeItem(CollectionNames.DEPARTMENTS);
+export const createRiskStatusItem = createTypeItem('RISK.STATUSES');
 
 export const findSelectedRisk = id =>
   compose(find(propEqId(id)), propRisks);
@@ -51,65 +55,25 @@ export const createUncategorizedDepartment = ({ risks, departments }) => ({
   )),
 });
 
-export const getSelectedAndDefaultRiskByFilter = ({
-  statuses, departments, types, risks, filter, urlItemId,
-}) => {
-  const findRisk = findSelectedRisk(urlItemId);
-  switch (filter) {
-    case RiskFilterIndexes.TYPE: {
-      const containedIn = find(findRisk, types);
-      console.log({
-        containedIn,
-        selectedRisk: findRisk(containedIn),
-        defaultRisk: getC('types[0].risks[0]', { types }),
-        defaultContainedIn: _.first(types),
-      });
-      return {
-        containedIn,
-        selectedRisk: findRisk(containedIn),
-        defaultRisk: getC('types[0].risks[0]', { types }),
-        defaultContainedIn: _.first(types),
-      };
-    }
-    case RiskFilterIndexes.STATUS: {
-      const containedIn = statuses.find(findRisk);
-      return {
-        containedIn,
-        selectedRisk: findRisk(containedIn),
-        defaultRisk: getC('statuses[0].risks[0]', { statuses }),
-        defaultContainedIn: _.first(statuses),
-      };
-    }
-    case RiskFilterIndexes.DEPARTMENT: {
-      const containedIn = departments.find(findRisk);
+export const getRiskListData = getListData('risks');
 
-      return {
-        containedIn,
-        selectedRisk: findRisk(containedIn),
-        defaultRisk: getC('departments[0].risks[0]', { departments }),
-        defaultContainedIn: _.first(departments),
-      };
-    }
-    case RiskFilterIndexes.DELETED:
-    default:
-      return {
-        selectedRisk: findRisk({ risks }),
-        defaultRisk: getC('risks[0]', { risks }),
-        containedIn: null,
-        defaultContainedIn: null,
-      };
-  }
-};
-
-export const redirectToRiskOrDefault = ({
-  selectedRisk,
-  defaultRisk,
-}) => !selectedRisk && (
-  defaultRisk
-    ? goTo('risk')({ urlItemId: getId(defaultRisk) })
-    : goTo('risks')()
+export const handleRisksRedirectAndOpen = handleRedirectAndOpen(
+  getRiskListData,
+  goToRisk,
+  goToRisks
 );
 
+// for removal
+export const redirectToRiskOrDefault = ({
+  selected,
+  defaultRisk,
+}) => !selected && (
+  defaultRisk
+    ? goToRisk({ urlItemId: getId(defaultRisk) })
+    : goToRisks()
+);
+
+// for removal
 export const openRiskByFilter = ({
   selectedRisk,
   containedIn,
@@ -130,7 +94,7 @@ export const openRiskByFilter = ({
     }
     case RiskFilterIndexes.STATUS: {
       // todo: move RISK.STATUSES to constant
-      const statusItem = createTypeItem('RISK.STATUSES', parentItem.number);
+      const statusItem = createRiskStatusItem(parentItem.number);
       result = dispatch(addCollapsed({ ...statusItem, close: { type: statusItem.type } }));
       break;
     }

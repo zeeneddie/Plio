@@ -18,7 +18,7 @@ import {
 } from '/imports/api/helpers';
 import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
 import { goTo } from '../../utils/router/actions';
-import { createTypeItem } from '../helpers/createTypeItem';
+import createTypeItem from '../helpers/createTypeItem';
 import store, { getState } from '/imports/client/store';
 import { SECTION_UNCATEGORIZED, TYPE_UNCATEGORIZED } from './constants';
 
