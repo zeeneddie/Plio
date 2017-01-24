@@ -1,6 +1,5 @@
 import { _ } from 'meteor/underscore';
 import { withProps } from 'recompose';
-import curry from 'lodash.curry';
 
 import { TYPE_UNCATEGORIZED } from './constants';
 import { CollectionNames } from '/imports/share/constants';
@@ -21,11 +20,8 @@ import { goTo } from '../../utils/router/actions';
 import store, { getState } from '/imports/client/store';
 import { createTypeItem } from '../helpers/createTypeItem';
 
-export const getSubNestingClassName = ({ nestingLevel = 1 }) =>
-  'sub'.repeat(parseInt(nestingLevel, 10) - 1);
-
-export const createRiskTypeItem = curry(createTypeItem)(CollectionNames.RISK_TYPES);
-export const createRiskDepartmentItem = curry(createTypeItem)(CollectionNames.DEPARTMENTS);
+export const createRiskTypeItem = createTypeItem(CollectionNames.RISK_TYPES);
+export const createRiskDepartmentItem = createTypeItem(CollectionNames.DEPARTMENTS);
 
 export const findSelectedRisk = id =>
   compose(find(propEqId(id)), propRisks);
@@ -38,31 +34,43 @@ export const getRisksByFilter = ({ filter, risks }) => (
 
 export const addCollapsedType = compose(addCollapsed, createRiskTypeItem, propId);
 
-export const createUncategorizedType = ({ risks, types }) => {
-  return ({
-    _id: TYPE_UNCATEGORIZED,
-    title: 'Uncategorized',
-    organizationId: getC('organizationId', risks[0]),
-    risks: risks.filter(risk => !types.find(propEqId(risk.typeId))),
-  });
-};
+export const createUncategorizedType = ({ risks, types }) => ({
+  _id: TYPE_UNCATEGORIZED,
+  title: 'Uncategorized',
+  organizationId: getC('organizationId', risks[0]),
+  risks: risks.filter(risk => !find(propEqId(risk.typeId), types)),
+});
 
-export const createUncategorizedDepartment = ({ risks, departments }) => {
-  return ({
-    _id: TYPE_UNCATEGORIZED,
-    name: 'Uncategorized',
-    organizationId: getC('organizationId', risks[0]),
-    risks: risks.filter(risk => !departments.find(
-      department => _.contains(risk.departmentsIds, department._id)
-    )),
-  });
-};
+export const createUncategorizedDepartment = ({ risks, departments }) => ({
+  _id: TYPE_UNCATEGORIZED,
+  name: 'Uncategorized',
+  organizationId: getC('organizationId', risks[0]),
+  risks: risks.filter(risk => !find(
+    department => _.contains(risk.departmentsIds, department._id),
+    departments
+  )),
+});
 
 export const getSelectedAndDefaultRiskByFilter = ({
   statuses, departments, types, risks, filter, urlItemId,
 }) => {
   const findRisk = findSelectedRisk(urlItemId);
   switch (filter) {
+    case RiskFilterIndexes.TYPE: {
+      const containedIn = find(findRisk, types);
+      console.log({
+        containedIn,
+        selectedRisk: findRisk(containedIn),
+        defaultRisk: getC('types[0].risks[0]', { types }),
+        defaultContainedIn: _.first(types),
+      });
+      return {
+        containedIn,
+        selectedRisk: findRisk(containedIn),
+        defaultRisk: getC('types[0].risks[0]', { types }),
+        defaultContainedIn: _.first(types),
+      };
+    }
     case RiskFilterIndexes.STATUS: {
       const containedIn = statuses.find(findRisk);
       return {
@@ -80,15 +88,6 @@ export const getSelectedAndDefaultRiskByFilter = ({
         selectedRisk: findRisk(containedIn),
         defaultRisk: getC('departments[0].risks[0]', { departments }),
         defaultContainedIn: _.first(departments),
-      };
-    }
-    case RiskFilterIndexes.TYPE: {
-      const containedIn = types.find(findRisk);
-      return {
-        containedIn,
-        selectedRisk: findRisk(containedIn),
-        defaultRisk: getC('types[0].risks[0]', { types }),
-        defaultContainedIn: _.first(types),
       };
     }
     case RiskFilterIndexes.DELETED:
