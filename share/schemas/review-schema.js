@@ -43,4 +43,10 @@ export const ReviewSchema = new SimpleSchema([
   BaseEntitySchema,
   RequiredSchema,
   ViewedBySchema,
+  {
+    scheduledDate: {
+      type: Date,
+      optional: true, //temp
+    },
+  },
 ]);

@@ -18,6 +18,7 @@ Template.Subcards_Review.viewmodel({
   reviewedAt: '',
   reviewedBy: '',
   comments: '',
+  scheduledDate: '',
   update({ ...args }, cb) {
     if (_.keys(args).every(key => this.data()[key] === args[key])) return;
 

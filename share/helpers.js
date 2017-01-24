@@ -1,4 +1,5 @@
 import { check } from 'meteor/check';
+import get from 'lodash.get';
 import moment from 'moment-timezone';
 import Handlebars from 'handlebars';
 
@@ -240,4 +241,18 @@ export const sanitizeFilename = (str) => {
   check(str, String);
 
   return str.replace(/[^a-z0-9.]/gi, '_').replace(/_{2,}/g, '_');
+};
+
+export const getDocByIdAndType = (documentId, documentType) => {
+  const collection = getCollectionByDocType(documentType);
+  return collection && collection.findOne({ _id: documentId });
+};
+
+export const getReviewConfig = (organization, documentType) => {
+  const documentKey = {
+    [DocumentTypes.STANDARD]: 'standards',
+    [DocumentTypes.RISK]: 'risks',
+  }[documentType];
+
+  return get(organization, `review.${documentKey}`);
 };

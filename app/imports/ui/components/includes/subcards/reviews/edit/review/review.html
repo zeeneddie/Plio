@@ -1,6 +1,8 @@
 <template name="Subcards_Review">
   <div class="card-block">
     <div id="review">
+      {{> Review_ScheduledDate scheduledDate=scheduledDate}}
+
       {{> Review_ReviewedAt reviewedAt=reviewedAt}}
 
       {{> Review_ReviewedBy reviewedBy=reviewedBy}}
