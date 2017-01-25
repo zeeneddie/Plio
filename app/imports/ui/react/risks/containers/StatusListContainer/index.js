@@ -7,19 +7,16 @@ import {
   lengthRisks,
   propEq,
 } from '/imports/api/helpers';
-import { ProblemsStatuses } from '/imports/share/constants';
 import {
   getSelectedRiskDeletedState,
   handleRisksRedirectAndOpen,
   createRiskStatusItem,
   withRisksRedirectAndOpen,
 } from '../../helpers';
+import { problemsStatuses } from '../../../problems/constants';
 
 const mapStateToProps = (state) => ({
-  riskStatuses: Object.keys(ProblemsStatuses).map(status => ({
-    number: status,
-    title: ProblemsStatuses[status],
-  })),
+  riskStatuses: problemsStatuses,
   ...getSelectedRiskDeletedState(state),
 });
 
