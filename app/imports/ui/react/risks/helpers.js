@@ -1,7 +1,7 @@
 import { _ } from 'meteor/underscore';
 import { withProps } from 'recompose';
 
-import { TYPE_UNCATEGORIZED } from './constants';
+import { TYPE_UNCATEGORIZED, RISK_STATUSES } from './constants';
 import { CollectionNames } from '/imports/share/constants';
 import { RiskFilterIndexes } from '/imports/api/constants';
 import {
@@ -31,7 +31,7 @@ export const goToRisks = goTo('risks');
 
 export const createRiskTypeItem = createTypeItem(CollectionNames.RISK_TYPES);
 export const createRiskDepartmentItem = createTypeItem(CollectionNames.DEPARTMENTS);
-export const createRiskStatusItem = createTypeItem('RISK.STATUSES');
+export const createRiskStatusItem = createTypeItem(RISK_STATUSES);
 
 export const findSelectedRisk = id =>
   compose(find(propEqId(id)), propRisks);
@@ -106,7 +106,7 @@ export const expandCollapsedRisk = (_id) => {
 
 export const expandCollapsedRisks = (ids) => {
   const {
-    collections: { risks, riskBookSections, riskTypes },
+    collections: { risks, riskDepertments, riskTypes },
     global: { filter, collapsed },
   } = getState();
 
