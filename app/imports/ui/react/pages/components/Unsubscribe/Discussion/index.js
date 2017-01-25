@@ -2,7 +2,7 @@ import { compose, withProps, lifecycle } from 'recompose';
 import React, { PropTypes } from 'react';
 
 import { handleMethodResult } from '/imports/api/helpers';
-import { unsubscribeFromDiscussion } from '/imports/api/notifications/methods';
+import { unsubscribe } from '/imports/api/discussions/methods';
 
 import renderUnsubscribePage from '../helpers/withState';
 
@@ -11,7 +11,7 @@ const enhancer = compose(
     componentDidMount() {
       const { documentId, documentType } = this.props;
 
-      unsubscribeFromDiscussion.call({ documentId, documentType }, handleMethodResult((error) =>
+      unsubscribe.call({ documentId, documentType }, handleMethodResult((error) =>
         this.props.setState({ error, loading: false })
       ));
     },

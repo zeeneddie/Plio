@@ -13,13 +13,11 @@ export default (dispatch) => {
   const handle = Organizations.find(query).observeChanges({
     added(_id, fields) {
       if (handle) {
-        console.log('added');
         dispatch(addOrganization({ _id, ...fields }));
       }
     },
 
     changed(_id, fields) {
-      console.log('changed');
       dispatch(updateOrganization({ _id, ...fields }));
 
       if (fields.customerType && getState('global.urlItemId') === _id) {
@@ -28,7 +26,6 @@ export default (dispatch) => {
     },
 
     removed(_id) {
-      console.log('removed');
       dispatch(removeOrganization(_id));
     },
   });

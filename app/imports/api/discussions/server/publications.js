@@ -22,6 +22,7 @@ Meteor.publish('discussionsByDocId', function ({ docId, organizationId }) {
       isPrimary: 1,
       organizationId: 1,
       viewedBy: { $elemMatch: { userId } },
+      mutedBy: userId,
     },
   };
 

@@ -4,12 +4,13 @@ import { compose, lifecycle, withProps, withHandlers } from 'recompose';
 import get from 'lodash.get';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { pickFromDiscussion, pickDeep } from '/imports/api/helpers';
+import { pickDeep, handleMethodResult, equals, getId, find } from '/imports/api/helpers';
 import { DiscussionSubs } from '/imports/startup/client/subsmanagers';
 import Discussion from '../../components/Discussion';
 import { setAt, reset, setDiscussion } from '/imports/client/store/actions/discussionActions';
 import { setShowCard } from '/imports/client/store/actions/mobileActions';
 import { Discussions } from '/imports/share/collections/discussions';
+import { toggleMute } from '/imports/api/discussions/methods';
 
 const discussionLoad = ({ dispatch, urlItemId, organizationId }, onData) => {
   const subscription = DiscussionSubs.subscribe(
@@ -39,19 +40,23 @@ export default compose(
       props.urlItemId !== nextProps.urlItemId ||
       nextProps.resetCompleted,
   }),
-  connect(({ collections, discussion }, { organizationId }) => ({
+  connect(({ collections, discussion, global: { userId } }, { organizationId }) => ({
+    userId,
     discussion: discussion.discussion,
     users: collections.usersByOrgIds[organizationId],
   })),
-  withProps((props) => ({
-    discussionId: get(props, 'discussion._id'),
+  withProps(({ discussion, userId }) => ({
+    discussionId: getId(discussion),
     documentPath: FlowRouter.current().path.replace('/discussion', ''),
+    isMuted: !!find(equals(userId), get(discussion, 'mutedBy')),
   })),
   withHandlers({
-    onBackArrowClick: (props) => (e) => {
+    onToggleMute: ({ discussion: { _id } = {} }) => () =>
+      toggleMute.call({ _id }, handleMethodResult),
+    onBackArrowClick: ({ dispatch, documentPath }) => (e) => {
       e.preventDefault();
-      props.dispatch(setShowCard(true));
-      FlowRouter.go(props.documentPath);
+      dispatch(setShowCard(true));
+      FlowRouter.go(documentPath);
     },
   }),
   lifecycle({

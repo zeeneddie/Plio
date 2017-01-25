@@ -2,30 +2,24 @@ import React, { PropTypes } from 'react';
 import { _ } from 'meteor/underscore';
 import cx from 'classnames';
 
+import { FaSize } from '/imports/ui/react/components/Utility';
 import { MarginMap } from '/imports/api/constants';
 
-const sizeMap = {
-  1: '',
-  2: 'lg',
-  3: '2x',
-  4: '3x',
-  5: '4x',
-  6: '5x',
-};
-
-const Icon = ({ margin, size = 1, className, name }) => {
-  const sizeCx = sizeMap[size] && `fa-${sizeMap[size]}`;
+const Icon = ({ margin, size = 1, sizePrefix = '', className, name }) => {
   const marginCx = margin && MarginMap[margin];
   const nameCx = name.split(' ').map(a => `fa-${a}`);
   return (
-    <i className={cx('fa', ...nameCx, sizeCx, marginCx, className)} />
+    <FaSize {...{ size, prefix: sizePrefix }}>
+      <i className={cx('fa', ...nameCx, marginCx, className)} />
+    </FaSize>
   );
 };
 
 Icon.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   margin: PropTypes.oneOf(_.keys(MarginMap)),
-  size: PropTypes.oneOf(_.keys(sizeMap)),
+  size: FaSize.propTypes.size,
+  sizePrefix: FaSize.propTypes.prefix,
   className: PropTypes.string,
 };
 

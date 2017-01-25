@@ -1,5 +1,4 @@
 import { Notifications } from '/imports/share/collections/notifications';
-import { Discussions } from '/imports/share/collections/discussions';
 
 export default {
   collection: Notifications,
@@ -42,16 +41,5 @@ export default {
     };
 
     return collection.update(query, modifier);
-  },
-
-  unsubscribeFromDiscussion({ documentId: linkedTo, documentType, userId }) {
-    const query = { linkedTo, documentType };
-    const modifier = {
-      $addToSet: {
-        mutedBy: userId,
-      },
-    };
-
-    return Discussions.update(query, modifier);
   },
 };
