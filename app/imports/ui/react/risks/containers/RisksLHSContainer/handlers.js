@@ -21,6 +21,6 @@ export const onClear = onSearchTextClear(onSearchTextChange);
 
 export const onModalOpen = () => () => _modal_.modal.open({
   _title: 'Risk',
-  template: 'CreateRisk',
+  template: 'Risks_Create',
   variation: 'save',
 });

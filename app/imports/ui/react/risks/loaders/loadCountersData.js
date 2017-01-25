@@ -1,8 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 
-import { setStandardMessagesNotViewedCountMap } from '/imports/client/store/actions/countersActions';
 import _counter_ from '/imports/startup/client/mixins/counter';
 import { NOT_VIEWED_COUNTER_PREFIX } from '../constants';
+
+import {
+  setStandardMessagesNotViewedCountMap,
+} from '/imports/client/store/actions/countersActions';
 
 export default function loadCountersData({ dispatch, standards }, onData) {
   const subscriptions = standards.map(({ _id }) => Meteor.subscribe(

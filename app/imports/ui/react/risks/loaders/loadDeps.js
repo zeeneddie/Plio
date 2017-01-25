@@ -27,10 +27,8 @@ export default function loadDeps({ dispatch, organizationId, initializing }, onD
     const ncs = NonConformities.find(query, pOptions).fetch();
     const standards = Standards.find(query, pOptions).fetch();
     const actions = Actions.find(query, pOptions).fetch();
-    const users = Meteor.users.find().fetch();
 
     let reduxActions = [
-      setUsers(users),
       setDepartments(departments),
       setNCs(ncs),
       setStandards(standards),
@@ -39,7 +37,7 @@ export default function loadDeps({ dispatch, organizationId, initializing }, onD
     ];
 
     if (initializing) {
-      // set standards only when initializing because
+      // set risks only when initializing because
       // later observers will be running
       const risks = Risks.find(query, { sort: { title: 1 } }).fetch();
 

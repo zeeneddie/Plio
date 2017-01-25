@@ -10,7 +10,7 @@ import Label from '/imports/ui/react/components/Labels/Label';
 import Icon from '/imports/ui/react/components/Icons/Icon';
 import Button from 'reactstrap/lib/Button';
 
-const BodyContents = ({
+const Body = ({
   title,
   sequentialId,
   status,
@@ -167,6 +167,6 @@ const BodyContents = ({
   </DocumentCard>
 );
 
-BodyContents.propTypes = propTypes;
+Body.propTypes = propTypes;
 
-export default BodyContents;
+export default Body;

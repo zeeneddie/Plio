@@ -22,6 +22,7 @@ import loadCardData from '../../loaders/loadCardData';
 import loadMainData from '../../loaders/loadMainData';
 import loadLayoutData from '../../../loaders/loadLayoutData';
 import loadInitialData from '../../../loaders/loadInitialData';
+import loadUsersData from '../../../loaders/loadUsersData';
 import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
 import { observeRisks, observeRiskTypes } from '../../observers';
 
@@ -59,6 +60,7 @@ const enhance = compose(
     renderComponent(RisksLayout),
     _.identity
   ),
+  composeWithTracker(loadUsersData),
   connect(pickDeep(['organizations.organizationId'])),
   lifecycle({
     componentWillMount() {

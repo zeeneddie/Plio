@@ -22,9 +22,13 @@ const enhance = mapProps(props => (
 const RisksPage = enhance((props) => (
   props.organization ? (
     <PageContainer classNames={props.classNames}>
-      {(!props.isDiscussionOpened ? <RisksLHSContainer /> : null)}
-      <RisksRHSContainer />
-      {(props.isDiscussionOpened ? <DiscussionContainer {...props} /> : null)}
+      {(!props.isDiscussionOpened ? ([
+        <RisksLHSContainer key="risks-lhs-container" />,
+        <RisksRHSContainer key="risks-rhs-container" />,
+      ]) : ([
+        <RisksRHSContainer key="risks-rhs-container" />,
+        <DiscussionContainer key="discussion-container" {...props} />,
+      ]))}
     </PageContainer>
   ) : (
     <NotFoundPage

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { CustomerTypesNames } from '/imports/share/constants';
-import createTypeItem from '../../helpers';
+import { createTypeItem } from '../../helpers';
 import LHSItemContainer from '../../../containers/LHSItemContainer';
 import CustomersListContainer from '../../containers/ListContainer';
 import propTypes from './propTypes';

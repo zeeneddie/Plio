@@ -1,24 +1,11 @@
 import React, { PropTypes } from 'react';
 
-import createTypeItem from '../../../helpers/createTypeItem';
-import LHSItemContainer from '../../../containers/LHSItemContainer';
-import RisksListContainer from '../../containers/RisksListContainer';
-
+import StatusListItem from '../StatusListItem';
 
 const StatusList = ({ statuses, onToggleCollapse }) => (
   <div>
     {statuses.map(status => (
-      <LHSItemContainer
-        key={status.number}
-        item={createTypeItem('RISK.STATUSES', status.number)}
-        lText={status.title}
-        hideRTextOnCollapse
-        onToggleCollapse={onToggleCollapse}
-      >
-        <div className="sub">
-          <RisksListContainer risks={status.risks} />
-        </div>
-      </LHSItemContainer>
+      <StatusListItem key={status.value} {...{ status, onToggleCollapse }} />
     ))}
   </div>
 );

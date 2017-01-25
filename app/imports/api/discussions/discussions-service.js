@@ -95,10 +95,34 @@ export default {
       return true;
     });
   },
-  
+
   participate(_id, userId) {
     const query = { _id };
     const modifier = { $addToSet: { participants: userId } };
     return this.collection.update(query, modifier);
+  },
+
+  unsubscribe({ documentId: linkedTo, documentType, userId }) {
+    const query = { linkedTo, documentType };
+    const modifier = {
+      $addToSet: {
+        mutedBy: userId,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
+
+  toggleMute({ _id, userId }, { doc }) {
+    const query = { _id };
+    const modifier = {};
+
+    if (doc.mutedBy && doc.mutedBy.includes(userId)) {
+      Object.assign(modifier, { $pull: { mutedBy: userId } });
+    } else {
+      Object.assign(modifier, { $addToSet: { mutedBy: userId } });
+    }
+
+    this.collection.update(query, modifier);
   },
 };

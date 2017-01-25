@@ -8,8 +8,6 @@ import {
 import { connect } from 'react-redux';
 
 import {
-  some,
-  getC,
   lengthRisks,
   notEquals,
   omitC,
@@ -61,16 +59,5 @@ export default compose(
       props.isFullScreenMode !== nextProps.isFullScreenMode ||
       notEquals(omitRiskKeys(props.risk), omitRiskKeys(nextProps.risk))
     );
-  }),
-  mapProps((props) => {
-    const hasDocxAttachment = some([
-      getC('source1.htmlUrl'),
-      getC('source2.htmlUrl'),
-    ], props.risk);
-
-    return {
-      ...props,
-      hasDocxAttachment,
-    };
   }),
 )(RisksRHS);

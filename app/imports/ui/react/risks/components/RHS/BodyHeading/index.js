@@ -1,7 +1,6 @@
 import React from 'react';
 
 import propTypes from './propTypes';
-import LabelDraft from '../../../../components/Labels/LabelDraft';
 
 const RisksRHSBodyHeading = ({ title }) => (
   <div className="flexbox-row">

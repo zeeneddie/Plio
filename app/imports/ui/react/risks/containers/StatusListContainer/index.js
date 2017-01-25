@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import property from 'lodash.property';
 
 import StatusList from '../../components/StatusList';
-import {
-  lengthRisks,
-  propEq,
-} from '/imports/api/helpers';
+import { propEq } from '/imports/api/helpers';
 import {
   getSelectedRiskDeletedState,
   handleRisksRedirectAndOpen,
@@ -16,12 +13,11 @@ import {
 import { problemsStatuses } from '../../../problems/constants';
 
 const mapStateToProps = (state) => ({
-  riskStatuses: problemsStatuses,
   ...getSelectedRiskDeletedState(state),
 });
 
 const redirectAndOpen = ({ statuses, risksByIds, ...props }) => handleRisksRedirectAndOpen(
-  compose(createRiskStatusItem, property('number')),
+  compose(createRiskStatusItem, property('value')),
   statuses,
   risksByIds,
   props
@@ -29,16 +25,17 @@ const redirectAndOpen = ({ statuses, risksByIds, ...props }) => handleRisksRedir
 
 export default compose(
   connect(mapStateToProps),
-  mapProps(({ riskStatuses, risks, ...props }) => {
-    let statuses = riskStatuses;
+  mapProps(({ risks = [], ...props }) => {
+    // add own risks to each status
+    const reducer = (prev, status) => {
+      const ownRisks = risks.filter(propEq('status', status.value));
 
-    // add own risks to each type
-    statuses = statuses.map(status => ({
-      ...status,
-      risks: risks.filter(propEq('status', Number(status.number))),
-    }));
+      if (ownRisks.length) return prev.concat({ ...status, risks: ownRisks });
 
-    statuses = statuses.filter(lengthRisks);
+      return prev;
+    };
+
+    const statuses = problemsStatuses.reduce(reducer, []);
 
     return { ...props, statuses };
   }),

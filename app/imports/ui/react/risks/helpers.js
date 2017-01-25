@@ -2,7 +2,7 @@ import { _ } from 'meteor/underscore';
 import { withProps } from 'recompose';
 import property from 'lodash.property';
 
-import { TYPE_UNCATEGORIZED } from './constants';
+import { TYPE_UNCATEGORIZED, RISK_STATUSES } from './constants';
 import { CollectionNames } from '/imports/share/constants';
 import { RiskFilterIndexes } from '/imports/api/constants';
 import {
@@ -34,7 +34,7 @@ export const goToRisks = goTo('risks');
 
 export const createRiskTypeItem = createTypeItem(CollectionNames.RISK_TYPES);
 export const createRiskDepartmentItem = createTypeItem(CollectionNames.DEPARTMENTS);
-export const createRiskStatusItem = createTypeItem('RISK.STATUSES');
+export const createRiskStatusItem = createTypeItem(RISK_STATUSES);
 
 export const findSelectedRisk = id =>
   compose(find(propEqId(id)), propRisks);
@@ -46,7 +46,7 @@ export const getRisksByFilter = ({ filter, risks }) => (
 );
 
 export const addCollapsedType = compose(addCollapsed, createRiskTypeItem, propId);
-export const addCollapsedStatus = compose(addCollapsed, createRiskStatusItem, property('number'));
+export const addCollapsedStatus = compose(addCollapsed, createRiskStatusItem, property('value'));
 export const addCollapsedDepartment = compose(addCollapsed, createRiskDepartmentItem, propId);
 
 export const createUncategorizedType = ({ risks, types }) => ({
@@ -135,9 +135,9 @@ export const expandCollapsedRisks = (ids) => {
       return store.dispatch(chainActions(types.map(addCollapsedType)));
     }
     case RiskFilterIndexes.STATUS: {
-      const statuses = problemsStatuses.filter(({ number }) =>
-        notCollapsed(number) &&
-        risksFound.filter(propEq('status', Number(number))).length);
+      const statuses = problemsStatuses.filter(({ value }) =>
+        notCollapsed(value) &&
+        risksFound.filter(propEq('status', value)).length);
 
       return store.dispatch(chainActions(statuses.map(addCollapsedStatus)));
     }
@@ -188,17 +188,26 @@ export const collapseExpandedRisks = () => {
       return store.dispatch(typeCollapseAction);
     }
     case RiskFilterIndexes.STATUS: {
-      const selectedStatusItem = createRiskStatusItem(String(selectedRisk.status));
+      const selectedStatusItem = createRiskStatusItem(selectedRisk.status);
       const statusCollapseAction = addCollapsed(addClose(selectedStatusItem));
 
       return store.dispatch(statusCollapseAction);
     }
     case RiskFilterIndexes.DEPARTMENT: {
-      const selectedDepartments = Object.assign([], selectedRisk.departmentsIds)
+      let selectedDepartments = Object.assign([], selectedRisk.departmentsIds)
         .map(id => departmentsByIds[id]);
-      const selectedDepartmentsItems = selectedDepartments.map(createRiskDepartmentItem);
+
+      if (!selectedDepartments.length) selectedDepartments = [{ _id: TYPE_UNCATEGORIZED }];
+
+      const selectedDepartmentsItems = selectedDepartments.map(
+        compose(createRiskDepartmentItem, propId)
+      );
+      const addDepartmentsClose = (item) => ({
+        ...item,
+        close: ({ key, type }) => type !== item.type || selectedRisk.departmentsIds.includes(key),
+      });
       const departmentsCollapseActions = selectedDepartmentsItems.map(
-        compose(addCollapsed, addClose)
+        compose(addCollapsed, addDepartmentsClose)
       );
 
       return store.dispatch(chainActions(departmentsCollapseActions));

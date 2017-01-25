@@ -1,31 +1,55 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { propEq } from '/imports/api/helpers';
 import CollapseBlock from '../../components/CollapseBlock';
-import propTypes from './propTypes';
 
-const isCollapsed = props => !props.collapsed.find(propEq('key', props.item.key));
+const propTypeItem = PropTypes.shape({
+  key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  type: PropTypes.string.isRequired,
+});
 
-const LHSItem = (props) => (
-  <CollapseBlock
-    collapsed={isCollapsed(props)}
-    onToggleCollapse={e => props.onToggleCollapse(e, props.item)}
-  >
-    <div>
-      <h4 className="list-group-item-heading pull-left">{props.lText}</h4>
-      {!!props.rText && (isCollapsed(props) && !props.hideRTextOnExpand) && (
-        <p
-          className="list-group-item-text text-danger pull-right"
-        >
-          {props.rText}
-        </p>
-      )}
-    </div>
-    <div className="list-group">
-      {props.children}
-    </div>
-  </CollapseBlock>
-);
+const propTypes = {
+  collapsed: PropTypes.arrayOf(propTypeItem).isRequired,
+  onToggleCollapse: PropTypes.func.isRequired,
+  children: PropTypes.node,
+  lText: PropTypes.string.isRequired,
+  rText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  hideRTextOnExpand: PropTypes.bool,
+  item: propTypeItem,
+};
+
+const LHSItem = ({
+  item,
+  collapsed,
+  onToggleCollapse,
+  lText,
+  rText,
+  hideRTextOnExpand,
+  children,
+}) => {
+  const isCollapsed = !collapsed.find(propEq('key', item.key));
+
+  return (
+    <CollapseBlock
+      collapsed={isCollapsed}
+      onToggleCollapse={e => onToggleCollapse(e, item)}
+    >
+      <div>
+        <h4 className="list-group-item-heading pull-left">{lText}</h4>
+        {!!rText && (isCollapsed && !hideRTextOnExpand) && (
+          <p
+            className="list-group-item-text text-danger pull-right"
+          >
+            {rText}
+          </p>
+        )}
+      </div>
+      <div className="list-group">
+        {children}
+      </div>
+    </CollapseBlock>
+  );
+};
 
 LHSItem.propTypes = propTypes;
 
