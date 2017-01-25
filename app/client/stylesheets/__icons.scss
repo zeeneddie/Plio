@@ -121,3 +121,57 @@ i {
 .fa.fa-spin.pull-right {
   min-width: 13px;
 }
+
+.fa-stack {
+  &> .fa-nudge {
+    &-top {
+      top: auto;
+      bottom: 12%;
+    }
+
+    &-right {
+      left: 12%;
+      right: auto;
+    }
+
+    &-bottom {
+      top: 12%;
+      bottom: auto;
+    }
+
+    &-left {
+      left: auto;
+      right: 12%;
+    }
+  }
+
+  &> .fa {
+    &-top {
+      position: absolute;
+      width: 100%;
+      left: 0;
+      text-align: center;
+      top: 0;
+    }
+
+    &-right {
+      position: absolute;
+      line-height: inherit;
+      right: 0;
+    }
+
+    &-bottom {
+      position: absolute;
+      width: 100%;
+      left: 0;
+      text-align: center;
+      bottom: 0;
+    }
+
+    &-left {
+      position: absolute;
+      line-height: inherit;
+      left: 0;
+    }
+  }
+}
