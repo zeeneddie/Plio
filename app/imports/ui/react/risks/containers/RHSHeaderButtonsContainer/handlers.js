@@ -6,7 +6,7 @@ import { RisksHelp } from '/imports/api/help-messages';
 import swal from '/imports/ui/utils/swal';
 import { restore, remove } from '/imports/api/risks/methods';
 import { isOrgOwner } from '/imports/api/checkers';
-import { STANDARD_FILTER_MAP, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { RiskFilterIndexes, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 import { goTo } from '../../../../utils/router/actions';
 import { setIsFullScreenMode } from '/imports/client/store/actions/globalActions';
 
@@ -80,7 +80,7 @@ export const onRestore = ({
     });
 
     const params = { urlItemId: _id };
-    const queryParams = { filter: STANDARD_FILTER_MAP.SECTION };
+    const queryParams = { filter: RiskFilterIndexes.TYPE };
 
     Meteor.defer(() => goTo('risk')(params, queryParams));
   };
