@@ -45,21 +45,13 @@ class ReviewWorkflow {
   getStatus() {
     const nextReviewSchedule = this.getReviewSchedule();
 
-    console.log(nextReviewSchedule)
-
     if (this._isRelatedToSchedule(nextReviewSchedule)) {
-      return 1;
+      return 1; // Awaiting review
     } else if (moment(this._date).isBefore(nextReviewSchedule)) {
-      return 2;
+      return 2; // Up-to-date
     }
 
-    return 0;
-  }
-
-  canReviewBeAdded() {
-
-    // can not add review before scheduled date
-
+    return 0; // Overdue
   }
 
   _getStartDate() {
@@ -96,19 +88,14 @@ class ReviewWorkflow {
       timeUnit: frequencyTimeUnit,
     } = this.reviewConfig.frequency;
 
-    let lastSchedule = this._getLastReviewSchedule();
-    if (lastSchedule) {
-      lastSchedule = moment(lastSchedule)
-        .add(frequencyTimeValue, frequencyTimeUnit)
-        .toDate();
-    } else {
-      lastSchedule = startDate;
-    }
+    let lastSchedule = this._getLastReviewSchedule() || startDate;
+    lastSchedule = moment(lastSchedule)
+      .add(frequencyTimeValue, frequencyTimeUnit)
+      .toDate();
 
     const passedFromStartDate = this._getPassedPeriods(startDate, lastSchedule);
     let nextSchedule = moment(startDate)
       .add(passedFromStartDate, frequencyTimeUnit)
-      .add(frequencyTimeValue, frequencyTimeUnit)
       .toDate();
 
     if (moment(nextSchedule).isSameOrAfter(this._date)) {

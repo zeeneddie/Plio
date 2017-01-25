@@ -46,7 +46,6 @@ export const ReviewSchema = new SimpleSchema([
   {
     scheduledDate: {
       type: Date,
-      optional: true, //temp
     },
   },
 ]);
