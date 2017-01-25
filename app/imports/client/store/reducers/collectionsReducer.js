@@ -27,6 +27,9 @@ import {
   SET_HELP_SECTIONS,
   SET_USERS,
   SET_USERS_BY_ORG_IDS,
+  ADD_RISK,
+  UPDATE_RISK,
+  REMOVE_RISK,
 } from '../actions/types';
 import { flattenObjects } from '/imports/api/helpers';
 import { CollectionNames } from '/imports/share/constants';
@@ -95,6 +98,12 @@ export default function reducer(state = initialState, action) {
       return update(STORE_COLLECTION_NAMES[CollectionNames.ORGANIZATIONS]);
     case REMOVE_ORGANIZATION:
       return remove(STORE_COLLECTION_NAMES[CollectionNames.ORGANIZATIONS]);
+    case ADD_RISK:
+      return add(STORE_COLLECTION_NAMES[CollectionNames.RISKS]);
+    case UPDATE_RISK:
+      return update(STORE_COLLECTION_NAMES[CollectionNames.RISKS]);
+    case REMOVE_RISK:
+      return remove(STORE_COLLECTION_NAMES[CollectionNames.RISKS]);
     case SET_USERS_BY_ORG_IDS:
       return setUsersByOrgIds(state, action);
     default:

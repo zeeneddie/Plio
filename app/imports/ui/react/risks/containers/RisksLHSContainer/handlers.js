@@ -10,7 +10,7 @@ import {
 import { onSearchTextClear, onSearch } from '/imports/ui/react/share/LHS/handlers';
 
 const getItems = ({ risks }, search) =>
-  extractIds(search(['title', 'description', 'status'], risks));
+  extractIds(search(['title', 'sequentialId'], risks));
 
 const getActions = (ids) => [setFilteredRisks(ids)];
 

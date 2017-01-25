@@ -20,15 +20,20 @@ export const observeRisks = (dispatch, query, options) => {
     added(_id, fields) {
       if (handle) {
         dispatch(addRisk({ _id, ...fields }));
-        // expand the section and type that are holding a newly created risk
-        expandCollapsedRisk(_id);
+
+        if (fields.createdBy === getState('global.userId')) {
+          expandCollapsedRisk(_id);
+        }
       }
     },
     changed(_id, fields) {
       dispatch(updateRisk({ _id, ...fields }));
 
       // expand the section and type that are holding selected risk
-      if (getState('global.urlItemId') === _id && (fields.sectionId || fields.typeId)) {
+      if (getState('global.urlItemId') === _id && (
+          fields.status ||
+          fields.typeId ||
+          fields.departmentsIds)) {
         expandCollapsedRisk(_id);
       }
     },

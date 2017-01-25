@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers, mapProps, shouldUpdate } from 'recompose';
+import { _ } from 'meteor/underscore';
 
 import RiskLHS from '../../components/LHS';
 import {
@@ -10,6 +11,7 @@ import {
 import { getRisksByFilter } from '../../helpers';
 import { sortArrayByTitlePrefix, pickC, notEquals } from '/imports/api/helpers';
 import { onToggleCollapse } from '/imports/ui/react/share/LHS/handlers';
+import { RiskFilterIndexes } from '/imports/api/constants';
 
 const mapStateToProps = ({
   risks: { risksFiltered },
@@ -45,12 +47,13 @@ export default compose(
       'isDeleted',
     ])),
   })),
-  shouldUpdate((props, nextProps) => Boolean(
+  shouldUpdate((props, nextProps) => !!(
     props.searchText !== nextProps.searchText ||
     props.filter !== nextProps.filter ||
     props.animating !== nextProps.animating ||
     notEquals(props.risks, nextProps.risks)
   )),
+  // TODO: departments filter is broken
   withHandlers({
     onToggleCollapse,
     onClear,
@@ -61,7 +64,8 @@ export default compose(
       ? props.risks.filter(risk => props.risksFiltered.includes(risk._id))
       : props.risks;
     risks = getRisksByFilter({ risks, filter: props.filter });
-    risks = sortArrayByTitlePrefix(risks);
+    if (props.filter !== RiskFilterIndexes.DELETED) risks = sortArrayByTitlePrefix(risks);
+    else risks = _.sortBy(risks, 'deletedAt').reverse();
 
     const searchResultsText = props.searchText ? `${risks.length} matching results` : '';
 

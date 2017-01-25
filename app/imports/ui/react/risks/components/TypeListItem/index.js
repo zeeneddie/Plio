@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
 import { CollectionNames } from '/imports/share/constants';
-import createTypeItem from '../../../helpers/createTypeItem';
+import { createRiskTypeItem } from '../../helpers';
 import LHSItemContainer from '../../../containers/LHSItemContainer';
 import RisksListContainer from '../../containers/RisksListContainer';
 import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
@@ -14,7 +14,7 @@ const TypeListItem = ({
   <LHSItemContainer
     hideRTextOnCollapse
     {...{ onToggleCollapse }}
-    item={createTypeItem(CollectionNames.RISK_TYPES, _id)}
+    item={createRiskTypeItem(_id)}
     // TODO: move to separated helper
     lText={cx(title, abbreviation && `(${abbreviation})`)}
     rText={!!unreadMessagesCount && (

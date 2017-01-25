@@ -43,6 +43,7 @@ export const getRisksByFilter = ({ filter, risks }) => (
 );
 
 export const addCollapsedType = compose(addCollapsed, createRiskTypeItem, propId);
+export const addCollapsedDepartment = compose(addCollapsed, createRiskDepartmentItem);
 
 export const createUncategorizedType = ({ risks, types }) => ({
   _id: TYPE_UNCATEGORIZED,
@@ -78,14 +79,23 @@ export const withRisksRedirectAndOpen = withRedirectAndOpen(
 export const expandCollapsedRisk = (_id) => {
   const { collections: { risksByIds }, global: { filter } } = getState();
   const risk = { ...risksByIds[_id] };
-  const typeItem = createRiskTypeItem(risk.typeId);
   let action;
 
+  if (!risk) return false;
+
   switch (filter) {
-    case RiskFilterIndexes.TYPE:
-      action = chainActions(
-        [typeItem, sectionItem].map(item => addCollapsed({ ...item, close: { type: item.type } }))
-      );
+    case RiskFilterIndexes.TYPE: {
+      const typeItem = createRiskTypeItem(risk.typeId);
+      action = addCollapsed({ ...typeItem, close: { type: typeItem.type } });
+      break;
+    }
+    case RiskFilterIndexes.STATUS: {
+      const statusItem = createRiskStatusItem(risk.status);
+      action = addCollapsed({ ...statusItem, close: { type: statusItem.type } });
+      break;
+    }
+    case RiskFilterIndexes.DEPARTMENT:
+      action = chainActions(Object.assign([], risk.departmentsIds).map(addCollapsedDepartment));
       break;
     default:
       return false;
