@@ -40,6 +40,7 @@ import {
   CollectionNames,
   SystemName,
   CustomerTypes,
+  OrganizationDefaults,
 } from '/imports/share/constants';
 
 Migrations.add({
@@ -148,6 +149,46 @@ Migrations.add({
     Organizations.update(query, modifier);
 
     console.log('Customer type was removed from all organizations');
+  },
+});
+
+Migrations.add({
+  version: 5,
+  name: 'Add review settings to organizations',
+  up() {
+    const organizations = Organizations.find({
+      review: { $exists: false },
+    });
+
+    organizations.forEach((org) => {
+      Organizations.update({
+        _id: org._id,
+      }, {
+        $set: {
+          review: {
+            risks: {
+              annualDate: org.createdAt,
+              ...OrganizationDefaults.review.risks,
+            },
+            standards: {
+              annualDate: org.createdAt,
+              ...OrganizationDefaults.review.standards,
+            },
+          },
+        },
+      });
+    });
+
+    console.log('Review settings were added to organizations');
+  },
+  down() {
+    Organizations.update({}, {
+      $unset: { review: '' },
+    }, {
+      multi: true,
+    });
+
+    console.log('Review settings were removed from organizations');
   },
 });
 
