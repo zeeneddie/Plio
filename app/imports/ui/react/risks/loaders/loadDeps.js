@@ -39,7 +39,7 @@ export default function loadDeps({ dispatch, organizationId, initializing }, onD
     ];
 
     if (initializing) {
-      // set standards only when initializing because
+      // set risks only when initializing because
       // later observers will be running
       const risks = Risks.find(query, { sort: { title: 1 } }).fetch();
 
