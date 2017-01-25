@@ -6,7 +6,6 @@ import createTypeItem from '../../../helpers/createTypeItem';
 import LHSItemContainer from '../../../containers/LHSItemContainer';
 import RisksListContainer from '../../containers/RisksListContainer';
 import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
-import { TYPE_UNCATEGORIZED } from '../../constants';
 
 const TypeList = ({ departments, onToggleCollapse }) => (
   <div>

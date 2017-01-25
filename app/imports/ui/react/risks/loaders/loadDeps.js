@@ -27,10 +27,8 @@ export default function loadDeps({ dispatch, organizationId, initializing }, onD
     const ncs = NonConformities.find(query, pOptions).fetch();
     const standards = Standards.find(query, pOptions).fetch();
     const actions = Actions.find(query, pOptions).fetch();
-    const users = Meteor.users.find().fetch();
 
     let reduxActions = [
-      setUsers(users),
       setDepartments(departments),
       setNCs(ncs),
       setStandards(standards),

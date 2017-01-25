@@ -1,14 +1,9 @@
 import React, { PropTypes } from 'react';
 
-import ToggleExpandButton from '../../../../components/Buttons/ToggleExpandButton';
 import DiscussButton from '../../../../components/Buttons/DiscussButton';
 import Button from '../../../../components/Buttons/Button';
 
 const HeaderButtons = (props) => {
-  const toggleExpandButton = props.hasDocxAttachment && (
-    <ToggleExpandButton onClick={props.onToggleScreenMode} />
-  );
-
   const discussionButton = !props.isDiscussionOpened && (
     <DiscussButton
       onClick={props.onDiscussionOpen}
@@ -43,7 +38,6 @@ const HeaderButtons = (props) => {
 
   return (
     <div>
-      {toggleExpandButton}
       {discussionButton}
       {restoreButton}
       {deleteButton}
@@ -53,7 +47,6 @@ const HeaderButtons = (props) => {
 };
 
 HeaderButtons.propTypes = {
-  hasDocxAttachment: PropTypes.bool,
   isDiscussionOpened: PropTypes.bool,
   isDeleted: PropTypes.bool,
   unreadMessagesCount: PropTypes.number,
