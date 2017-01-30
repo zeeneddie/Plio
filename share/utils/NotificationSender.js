@@ -125,7 +125,7 @@ export default class NotificationSender {
       to: emails,
       bcc,
       html,
-      text: htmlToPlainText(html),
+      // text: htmlToPlainText(html),
     };
 
     Email.send(emailOptions);
