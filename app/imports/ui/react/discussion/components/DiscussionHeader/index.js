@@ -18,6 +18,7 @@ const DiscussionHeader = ({ onToggleMute, onBackArrowClick, isMuted }) => (
           </Button>
         </CardHeadingButtons>
       </Pull>
+      {/*
       <Pull right>
         <CardHeadingButtons>
           <VolumeMute style={{ cursor: 'pointer' }} onClick={onToggleMute}>
@@ -30,6 +31,7 @@ const DiscussionHeader = ({ onToggleMute, onBackArrowClick, isMuted }) => (
           </VolumeMute>
         </CardHeadingButtons>
       </Pull>
+      */}
       <TextAlign center>
         <CardHeader.Title>
           Discussion
