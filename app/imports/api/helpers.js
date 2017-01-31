@@ -130,6 +130,10 @@ export const lengthTypes = compose(length, propTypes);
 
 export const propIsDeleted = property('isDeleted');
 
+export const propType = property('type');
+
+export const propKey = property('key');
+
 export const notDeleted = compose(not, propIsDeleted);
 
 export const flattenMapItems = flattenMap(propItems);
@@ -186,6 +190,10 @@ export const notEquals = compose(not, equals);
 export const propEq = curry((path, assumption, obj) => equals(get(obj, path), assumption));
 
 export const propEqId = propEq('_id');
+
+export const propEqType = propEq('type');
+
+export const propEqKey = propEq('key');
 
 export const findIndexById = curry((_id, array) => array.findIndex(propEqId(_id)));
 
@@ -245,8 +253,8 @@ export const either = (...fns) => (...args) => {
   return result;
 };
 
-export const filter = curry((predicate, array) => Object.assign([], array).filter(predicate));
-export const map = curry((transformer, array) => Object.assign([], array).map(transformer));
+export const filterC = curry((predicate, array) => Object.assign([], array).filter(predicate));
+export const mapC = curry((transformer, array) => Object.assign([], array).map(transformer));
 
 export const handleMethodResult = (cb) => {
   return (err, res) => {

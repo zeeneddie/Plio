@@ -1,6 +1,6 @@
 import { _ } from 'meteor/underscore';
 
-import { equals } from '/imports/api/helpers';
+import { equals, compose, assoc } from '/imports/api/helpers';
 import {
   SET_USER_ID,
   SET_FILTER,
@@ -82,6 +82,9 @@ export function addCollapsed(payload) {
     },
   };
 }
+
+export const addCollapsedWithClose = close => item =>
+  compose(addCollapsed, assoc('close', close(item)))(item);
 
 export function removeCollapsed(payload) {
   return {

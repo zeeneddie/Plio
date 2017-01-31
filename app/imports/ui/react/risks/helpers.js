@@ -1,10 +1,9 @@
 import { _ } from 'meteor/underscore';
-import { withProps } from 'recompose';
 import property from 'lodash.property';
 
 import { TYPE_UNCATEGORIZED, RISK_STATUSES } from './constants';
 import { CollectionNames } from '/imports/share/constants';
-import { RiskFilterIndexes } from '/imports/api/constants';
+import { RiskFilterIndexes, DEPARTMENT_UNCATEGORIZED } from '/imports/api/constants';
 import {
   compose,
   find,
@@ -17,8 +16,14 @@ import {
   getId,
   pickDeep,
   includes,
+  some,
+  every,
+  filterC,
+  propEqType,
+  mapC,
+  not,
 } from '/imports/api/helpers';
-import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
+import { addCollapsed, chainActions, addCollapsedWithClose } from '/imports/client/store/actions/globalActions';
 import { goTo } from '../../utils/router/actions';
 import store, { getState } from '/imports/client/store';
 import {
@@ -35,9 +40,6 @@ export const goToRisks = goTo('risks');
 export const createRiskTypeItem = createTypeItem(CollectionNames.RISK_TYPES);
 export const createRiskDepartmentItem = createTypeItem(CollectionNames.DEPARTMENTS);
 export const createRiskStatusItem = createTypeItem(RISK_STATUSES);
-
-export const findSelectedRisk = id =>
-  compose(find(propEqId(id)), propRisks);
 
 export const getRisksByFilter = ({ filter, risks }) => (
   filter === RiskFilterIndexes.DELETED
@@ -57,7 +59,7 @@ export const createUncategorizedType = ({ risks, types }) => ({
 });
 
 export const createUncategorizedDepartment = ({ risks, departments }) => ({
-  _id: TYPE_UNCATEGORIZED,
+  _id: DEPARTMENT_UNCATEGORIZED,
   name: 'Uncategorized',
   organizationId: getC('organizationId', risks[0]),
   risks: risks.filter(risk => !find(
@@ -123,45 +125,55 @@ export const expandCollapsedRisks = (ids) => {
   const notCollapsed = key => !collapsed.find(propEq('key', key)); // reject already expanded
   const risksFound = risks.filter(risk => ids.includes(risk._id));
 
+  const getExpandedFiltered = (prop, predicate) => filterC(every([
+    compose(notCollapsed, property(prop)),
+    obj => filterC(predicate(obj), risksFound).length,
+  ]));
+
   switch (filter) {
     case RiskFilterIndexes.TYPE: {
       const uncategorizedType = createUncategorizedType({
         risks: risksFound,
         types: riskTypes,
       });
-      let types = riskTypes.filter(type =>
-        notCollapsed(type._id) &&
-        risksFound.filter(propEq('typeId', type._id)).length
-      );
-
-      types = uncategorizedType.risks.length
+      const getTypes = getExpandedFiltered('_id', compose(propEq('typeId'), property('_id')));
+      const types = getTypes(riskTypes);
+      const resultTypes = uncategorizedType.risks.length
         ? types.concat(uncategorizedType)
         : types;
+      const actions = mapC(addCollapsedType, resultTypes);
 
-      return store.dispatch(chainActions(types.map(addCollapsedType)));
+      return store.dispatch(chainActions(actions));
     }
     case RiskFilterIndexes.STATUS: {
-      const statuses = problemsStatuses.filter(({ value }) =>
-        notCollapsed(value) &&
-        risksFound.filter(propEq('status', value)).length);
+      const getStatuses = getExpandedFiltered(
+        'value',
+        compose(propEq('status'), property('value')),
+      );
+      const statuses = getStatuses(problemsStatuses);
+      const actions = mapC(addCollapsedStatus, statuses);
 
-      return store.dispatch(chainActions(statuses.map(addCollapsedStatus)));
+      return store.dispatch(chainActions(actions));
     }
     case RiskFilterIndexes.DEPARTMENT: {
-      let dps = departments.filter(({ _id }) => !!(
-        notCollapsed(_id) &&
-        risksFound.filter(compose(includes(_id), property('departmentsIds'))).length
-      ));
+      const getDepartments = getExpandedFiltered(
+        '_id',
+        ({ _id }) => compose(includes(_id), property('departmentsIds'))
+      );
+      const filteredDepartments = getDepartments(departments);
+
       const uncategorizedDepartment = createUncategorizedDepartment({
         departments,
         risks: risksFound,
       });
 
-      dps = uncategorizedDepartment.risks.length
-        ? dps.concat(uncategorizedDepartment)
-        : dps;
+      const resultDepartments = uncategorizedDepartment.risks.length
+        ? filteredDepartments.concat(uncategorizedDepartment)
+        : filteredDepartments;
 
-      return store.dispatch(chainActions(dps.map(addCollapsedDepartment)));
+      const actions = mapC(addCollapsedDepartment, resultDepartments);
+
+      return store.dispatch(chainActions(actions));
     }
     default:
       return false;
@@ -169,9 +181,10 @@ export const expandCollapsedRisks = (ids) => {
 };
 
 export const collapseExpandedRisks = () => {
+  // close all collapses except selected
   const {
-    collections: { risksByIds, riskTypesByIds, departmentsByIds },
-    global: { filter, urlItemId },
+    collections: { risksByIds, riskTypesByIds },
+    global: { filter, urlItemId, collapsed },
   } = getState();
   // expand type with currently selected risk and close others
   const selectedRisk = risksByIds[urlItemId];
@@ -200,32 +213,29 @@ export const collapseExpandedRisks = () => {
       return store.dispatch(statusCollapseAction);
     }
     case RiskFilterIndexes.DEPARTMENT: {
-      let selectedDepartments = Object.assign([], selectedRisk.departmentsIds)
-        .map(id => departmentsByIds[id]);
+      const selectedDepartments = selectedRisk.departmentsIds;
+      const includesKey = ({ key }) => includes(key, selectedDepartments);
+      const selectedExpandedDepartments = filterC(every([
+        includesKey,
+        some([
+          propEqType(CollectionNames.DEPARTMENTS),
+          propEqType(DEPARTMENT_UNCATEGORIZED),
+        ]),
+      ]), collapsed);
 
-      if (!selectedDepartments.length) selectedDepartments = [{ _id: TYPE_UNCATEGORIZED }];
+      const close = ({ type }) => some([
+        compose(not, propEqType(type)),
+        includesKey,
+      ]);
 
-      const selectedDepartmentsItems = selectedDepartments.map(
-        compose(createRiskDepartmentItem, propId)
-      );
-      const addDepartmentsClose = (item) => ({
-        ...item,
-        close: ({ key, type }) => type !== item.type || selectedRisk.departmentsIds.includes(key),
-      });
-      const departmentsCollapseActions = selectedDepartmentsItems.map(
-        compose(addCollapsed, addDepartmentsClose)
-      );
+      const actions = mapC(addCollapsedWithClose(close), selectedExpandedDepartments);
 
-      return store.dispatch(chainActions(departmentsCollapseActions));
+      return store.dispatch(chainActions(actions));
     }
     default:
       return false;
   }
 };
-
-export const withRisk = withProps(props => ({
-  risk: findSelectedRisk(props.urlItemId)(props),
-}));
 
 export const getSelectedRiskDeletedState = state => ({
   isSelectedRiskDeleted: getC(

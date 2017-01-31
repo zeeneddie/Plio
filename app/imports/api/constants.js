@@ -291,3 +291,5 @@ export const KeyMap = {
   right: 39,
   down: 40,
 };
+
+export const DEPARTMENT_UNCATEGORIZED = 'DEPARTMENTS.UNCATEGORIZED';

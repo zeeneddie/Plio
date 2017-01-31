@@ -28,7 +28,7 @@ const TextInput = enhance(({
   onChange,
   setInternalValue,
   getRef,
-  ...other,
+  ...other
 }) => (
   <Input
     value={internalValue}
@@ -39,8 +39,7 @@ const TextInput = enhance(({
 
       return typeof onChange === 'function' && onChange(e);
     }}
-    ref={getRef}
-    {...other}
+    {...{ ...other, getRef }}
   />
 ));
 

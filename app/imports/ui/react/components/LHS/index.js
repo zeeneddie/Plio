@@ -33,15 +33,12 @@ const LHS = ({
           )}
         >
           <ClearField
+            {...{ animating, isFocused }}
             onClick={e => onClear && onClear(searchInput)(e)}
-            animating={animating}
-            isFocused={isFocused}
           >
             <TextInput
+              {...{ onChange, onBlur, onFocus }}
               value={searchText}
-              onChange={onChange}
-              onBlur={onBlur}
-              onFocus={onFocus}
               disabled={animating}
               getRef={input => (searchInput = input)}
               className="form-control"
