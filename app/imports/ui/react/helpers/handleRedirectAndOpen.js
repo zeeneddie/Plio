@@ -1,35 +1,12 @@
 import curry from 'lodash.curry';
-import property from 'lodash.property';
-import { _ } from 'meteor/underscore';
 
-import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
 import handleListRedirect from './handleListRedirect';
+import handleListCollapse from './handleListCollapse';
 import { getState } from '/imports/client/store';
-import { propEq, assoc, map, filter, compose, some } from '/imports/api/helpers';
-
-const handleOpen = (createItem, dispatch, containedInArray, defaultContainedInArray) => {
-  const parentItems = containedInArray.length ? containedInArray : defaultContainedInArray;
-  const items = compose(filter(property('key')), map(createItem))(parentItems);
-
-  if (!items.length) return false;
-
-  const close = some([
-    compose(propEq('type', _.first(items)), property('type')),
-    property(find(propEq('key'), items), property('key')),
-  ]);
-
-  const withCollapsedAndClosed = compose(assoc('close', close), addCollapsed);
-
-  const actions = map(withCollapsedAndClosed, items);
-
-  console.log(actions);
-
-  return dispatch(chainActions(actions));
-};
 
 const handleRedirectAndOpen = (getListData, goToDoc, goToDocs, createItem, items, childItemsByIds, {
   redirect = handleListRedirect,
-  open = handleOpen,
+  open = handleListCollapse,
   searchText,
   dispatch,
 }) => setTimeout(() => {

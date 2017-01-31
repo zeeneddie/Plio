@@ -10,5 +10,6 @@ export { default as withContextCollapsed } from './withContextCollapsed';
 export { default as withStateCollapsed } from './withStateCollapsed';
 export { default as withUpdateViewedBy } from './withUpdateViewedBy';
 export { default as handleListRedirect } from './handleListRedirect';
+export { default as handleListCollapse } from './handleListCollapse';
 export { default as handleRedirectAndOpen } from './handleRedirectAndOpen';
 export { default as withRedirectAndOpen } from './withRedirectAndOpen';
