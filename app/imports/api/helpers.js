@@ -245,6 +245,9 @@ export const either = (...fns) => (...args) => {
   return result;
 };
 
+export const filter = curry((predicate, array) => Object.assign([], array).filter(predicate));
+export const map = curry((transformer, array) => Object.assign([], array).map(transformer));
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {

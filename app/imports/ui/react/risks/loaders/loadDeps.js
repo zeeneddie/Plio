@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { batchActions } from 'redux-batched-actions';
 
 import { BackgroundSubs } from '/imports/startup/client/subsmanagers';
@@ -13,7 +12,6 @@ import {
   setRisks,
   setActions,
   setStandards,
-  setUsers,
 } from '/imports/client/store/actions/collectionsActions';
 import { setDepsReady } from '/imports/client/store/actions/risksActions';
 

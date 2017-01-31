@@ -76,8 +76,14 @@ export const handleRisksRedirectAndOpen = handleRedirectAndOpen(
 
 export const withRisksRedirectAndOpen = withRedirectAndOpen(
   (props, nextProps) => (!props.isSelectedRiskDeleted && nextProps.isSelectedRiskDeleted) ||
-    (nextProps.searchText && nextProps.risksFiltered.length),
-  pickDeep(['global.searchText', 'risks.risksFiltered', 'collections.risksByIds']),
+    (nextProps.searchText && nextProps.risksFiltered.length) ||
+    !props.areDepsReady && nextProps.areDepsReady,
+  pickDeep([
+    'global.searchText',
+    'risks.risksFiltered',
+    'collections.risksByIds',
+    'risks.areDepsReady',
+  ]),
 );
 
 export const expandCollapsedRisk = (_id) => {

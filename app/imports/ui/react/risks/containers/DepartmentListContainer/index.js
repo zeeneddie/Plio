@@ -1,6 +1,7 @@
 import { _ } from 'meteor/underscore';
 import { compose, mapProps } from 'recompose';
 import { connect } from 'react-redux';
+import property from 'lodash.property';
 
 import DepartmentList from '../../components/DepartmentList';
 import {
@@ -45,5 +46,6 @@ export default compose(
 
     return { ...props, departments: types };
   }),
-  withRisksRedirectAndOpen(redirectAndOpen),
+  // redirect and open on mount only if departments are ready
+  withRisksRedirectAndOpen(redirectAndOpen, { processOnMount: property('areDepsReady') }),
 )(DepartmentList);

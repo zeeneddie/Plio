@@ -1,16 +1,30 @@
 import curry from 'lodash.curry';
+import property from 'lodash.property';
+import { _ } from 'meteor/underscore';
 
-import { addCollapsed } from '/imports/client/store/actions/globalActions';
+import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
 import handleListRedirect from './handleListRedirect';
 import { getState } from '/imports/client/store';
+import { propEq, assoc, map, filter, compose, some } from '/imports/api/helpers';
 
-const handleOpen = (createItem, dispatch, containedIn, defaultContainedIn) => {
-  const parentItem = containedIn || defaultContainedIn;
-  const item = createItem(parentItem);
+const handleOpen = (createItem, dispatch, containedInArray, defaultContainedInArray) => {
+  const parentItems = containedInArray.length ? containedInArray : defaultContainedInArray;
+  const items = compose(filter(property('key')), map(createItem))(parentItems);
 
-  if (!item || !item.key) return false;
+  if (!items.length) return false;
 
-  return dispatch(addCollapsed({ ...item, close: { type: item.type } }));
+  const close = some([
+    compose(propEq('type', _.first(items)), property('type')),
+    property(find(propEq('key'), items), property('key')),
+  ]);
+
+  const withCollapsedAndClosed = compose(assoc('close', close), addCollapsed);
+
+  const actions = map(withCollapsedAndClosed, items);
+
+  console.log(actions);
+
+  return dispatch(chainActions(actions));
 };
 
 const handleRedirectAndOpen = (getListData, goToDoc, goToDocs, createItem, items, childItemsByIds, {
@@ -21,10 +35,12 @@ const handleRedirectAndOpen = (getListData, goToDoc, goToDocs, createItem, items
 }) => setTimeout(() => {
   const { global: { urlItemId } } = getState();
   const {
-    containedIn,
-    defaultContainedIn,
+    containedInArray,
+    defaultContainedInArray,
     selectedDoc,
     defaultDoc,
+    // containedIn,
+    // defaultContainedIn,
   } = getListData(urlItemId, items);
 
   // if the document does not exist, do not expand.
@@ -34,7 +50,7 @@ const handleRedirectAndOpen = (getListData, goToDoc, goToDocs, createItem, items
   // redirect to the selected or default document
   // and expand the collapse which contains that document
   redirect(goToDoc, goToDocs, selectedDoc, defaultDoc);
-  if (!searchText) open(createItem, dispatch, containedIn, defaultContainedIn);
+  if (!searchText) open(createItem, dispatch, containedInArray, defaultContainedInArray);
 }, 0);
 
 export default curry(handleRedirectAndOpen);
