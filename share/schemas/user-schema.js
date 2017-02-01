@@ -71,6 +71,10 @@ const UserPreferencesSchema = new SimpleSchema({
     type: Boolean,
     defaultValue: true,
   },
+  areEmailNotificationsEnabled: {
+    type: Boolean,
+    defaultValue: true,
+  },
   notificationSound: {
     type: String,
     defaultValue: '/sounds/graceful',

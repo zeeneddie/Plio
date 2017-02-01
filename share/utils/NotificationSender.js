@@ -4,7 +4,6 @@ import { Email } from 'meteor/email';
 
 import { Notifications } from '../collections/notifications.js';
 import HandlebarsCache from './handlebars-cache.js';
-import { htmlToPlainText } from '/imports/share/helpers.js';
 
 
 /**

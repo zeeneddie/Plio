@@ -108,12 +108,12 @@ export default {
     return this.collection.update({ _id }, update);
   },
 
-  toggleEmailNotificationsPreference({ _id }) {
+  setEmailNotifications({ _id, enabled }) {
     const query = { _id };
-    const user = this.collection.findOne(query);
-    const receiveEmailNotifications = !getC('receiveEmailNotifications', user, true);
     const modifier = {
-      $set: { receiveEmailNotifications },
+      $set: {
+        'preferences.areEmailNotificationsEnabled': enabled,
+      },
     };
 
     return this.collection.update(query, modifier);

@@ -156,23 +156,25 @@ Migrations.add({
 
 Migrations.add({
   version: 5,
-  name: 'Adds default value for \'receiveEmailNotifications\' to user preferences',
+  name: 'Adds default value for \'areEmailNotificationsEnabled\' to user preferences',
   up() {
-    const query = { receiveEmailNotifications: null };
+    const query = { 'preferences.areEmailNotificationsEnabled': null };
     const modifier = {
       $set: {
-        receiveEmailNotifications: true,
+        'preferences.areEmailNotificationsEnabled': true,
       },
     };
     const options = { multi: true };
 
     Meteor.users.update(query, modifier, options);
 
-    console.log('Default value for \'receiveEmailNotifications\' was set for all users without it');
+    console.log(
+      'Default value for \'areEmailNotificationsEnabled\' was set for all users without it'
+    );
   },
   down() {
     const query = {};
-    const modifier = { $unset: { receiveEmailNotifications: '' } };
+    const modifier = { $unset: { 'preferences.areEmailNotificationsEnabled': '' } };
     const options = { multi: true };
 
     Meteor.users.update(query, modifier, options);

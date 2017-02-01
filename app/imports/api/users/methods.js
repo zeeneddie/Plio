@@ -1,39 +1,36 @@
 import { Meteor } from 'meteor/meteor';
-import { check } from 'meteor/check';
 import { ValidationError } from 'meteor/mdg:validation-error';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { Accounts } from 'meteor/accounts-base'
+import { Accounts } from 'meteor/accounts-base';
 import { Roles } from 'meteor/alanning:roles';
+import { _ } from 'meteor/underscore';
 
 import UserService from './user-service.js';
 import { UserProfileSchema, PhoneNumberSchema } from '/imports/share/schemas/user-schema.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
 import { IdSchema, UserIdSchema } from '/imports/share/schemas/schemas.js';
-import { UserRoles, UserMembership } from '/imports/share/constants.js';
+import { UserRoles } from '/imports/share/constants.js';
 import Method from '../method.js';
-import { withUserId, chain, mapArgsTo } from '/imports/api/helpers.js';
+import { withUserId, chain, mapArgsTo, compose } from '/imports/api/helpers.js';
 import {
   USR_EnsureUpdatingHimselfChecker,
   USR_EnsureCanChangeRolesChecker,
   USR_EnsureIsNotOrgOwnerChecker
 } from '../checkers.js';
 
-const { compose } = _;
-
 const ensureUpdatingHimself = withUserId(USR_EnsureUpdatingHimselfChecker);
 
 const ensureCanChangeRoles = withUserId(USR_EnsureCanChangeRolesChecker);
 
-const userIdToId = ({ userId:_id }) => ({ _id });
+const userIdToId = ({ userId: _id }) => ({ _id });
 
 export const remove = new Method({
   name: 'Users.remove',
 
   validate: new SimpleSchema({}).validator(),
 
-  run({}) {
+  run() {
     return UserService.remove({ _id: this.userId });
-  }
+  },
 });
 
 export const updateProfile = new Method({
@@ -42,7 +39,7 @@ export const updateProfile = new Method({
   validate(doc) {
     const validationContext = new SimpleSchema([
       IdSchema,
-      UserProfileSchema
+      UserProfileSchema,
     ]).newContext();
 
     for (let key in doc) {
@@ -62,7 +59,7 @@ export const updateProfile = new Method({
 
   run({ _id, ...args }) {
     UserService.updateProfile(_id, args);
-  }
+  },
 });
 
 export const unsetProfileProperty = new Method({
@@ -73,9 +70,9 @@ export const unsetProfileProperty = new Method({
     {
       fieldName: {
         type: String,
-        allowedValues: UserProfileSchema.objectKeys()
-      }
-    }
+        allowedValues: UserProfileSchema.objectKeys(),
+      },
+    },
   ]).validator(),
 
   check(checker) {
@@ -94,7 +91,7 @@ export const unsetProfileProperty = new Method({
     }
 
     UserService.unsetProfileProperty({ _id, fieldName });
-  }
+  },
 });
 
 export const updateEmail = new Method({
@@ -103,8 +100,8 @@ export const updateEmail = new Method({
   validate: new SimpleSchema([IdSchema, {
     email: {
       type: String,
-      regEx: SimpleSchema.RegEx.Email
-    }
+      regEx: SimpleSchema.RegEx.Email,
+    },
   }]).validator(),
 
   check(checker) {
@@ -115,7 +112,7 @@ export const updateEmail = new Method({
 
   run({ _id, email }) {
     return UserService.updateEmail(_id, email);
-  }
+  },
 });
 
 export const updatePhoneNumber = new Method({
@@ -123,7 +120,7 @@ export const updatePhoneNumber = new Method({
 
   validate: new SimpleSchema([
     UserIdSchema,
-    PhoneNumberSchema
+    PhoneNumberSchema,
   ]).validator(),
 
   check(checker) {
@@ -132,7 +129,7 @@ export const updatePhoneNumber = new Method({
 
   run({ userId, ...args }) {
     return UserService.updatePhoneNumber({ userId, ...args });
-  }
+  },
 });
 
 export const addPhoneNumber = new Method({
@@ -140,7 +137,7 @@ export const addPhoneNumber = new Method({
 
   validate: new SimpleSchema([
     UserIdSchema,
-    PhoneNumberSchema
+    PhoneNumberSchema,
   ]).validator(),
 
   check(checker) {
@@ -149,7 +146,7 @@ export const addPhoneNumber = new Method({
 
   run({ userId, ...args }) {
     return UserService.addPhoneNumber({ userId, ...args });
-  }
+  },
 });
 
 export const removePhoneNumber = new Method({
@@ -157,7 +154,7 @@ export const removePhoneNumber = new Method({
 
   validate: new SimpleSchema([
     UserIdSchema,
-    IdSchema
+    IdSchema,
   ]).validator(),
 
   check(checker) {
@@ -166,18 +163,18 @@ export const removePhoneNumber = new Method({
 
   run({ userId, ...args }) {
     return UserService.removePhoneNumber({ userId, ...args });
-  }
+  },
 });
 
 const changeRoleSchema = new SimpleSchema([IdSchema, {
   organizationId: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    regEx: SimpleSchema.RegEx.Id,
   },
   role: {
     type: String,
-    allowedValues: _.values(UserRoles)
-  }
+    allowedValues: _.values(UserRoles),
+  },
 }]);
 
 export const assignRole = new Method({
@@ -186,12 +183,15 @@ export const assignRole = new Method({
   validate: changeRoleSchema.validator(),
 
   check(checker) {
-    return compose(checker, chain)(USR_EnsureIsNotOrgOwnerChecker, ensureCanChangeRoles(this.userId));
+    return compose(checker, chain)(
+      USR_EnsureIsNotOrgOwnerChecker,
+      ensureCanChangeRoles(this.userId)
+    );
   },
 
   run({ _id, organizationId, role }) {
     return Roles.addUsersToRoles(_id, role, organizationId);
-  }
+  },
 });
 
 export const revokeRole = new Method({
@@ -200,12 +200,15 @@ export const revokeRole = new Method({
   validate: changeRoleSchema.validator(),
 
   check(checker) {
-    return compose(checker, chain)(USR_EnsureIsNotOrgOwnerChecker, ensureCanChangeRoles(this.userId));
+    return compose(checker, chain)(
+      USR_EnsureIsNotOrgOwnerChecker,
+      ensureCanChangeRoles(this.userId)
+    );
   },
 
   run({ _id, organizationId, role }) {
     return Roles.removeUsersFromRoles(_id, role, organizationId);
-  }
+  },
 });
 
 export const sendVerificationEmail = new Method({
@@ -214,20 +217,20 @@ export const sendVerificationEmail = new Method({
   validate: new SimpleSchema({}).validator(),
 
   run() {
-    if (!this.isSimulation) {
-      return Accounts.sendVerificationEmail(this.userId);
-    }
-  }
+    if (this.isSimulation) return undefined;
+
+    return Accounts.sendVerificationEmail(this.userId);
+  },
 });
 
 export const setNotifications = new Method({
-  name: 'Users.setNotifications',
+  name: 'Users.preferences.setNotifications',
 
   validate: new SimpleSchema([
     IdSchema,
     {
-      enabled: { type: Boolean }
-    }
+      enabled: { type: Boolean },
+    },
   ]).validator(),
 
   check(checker) {
@@ -262,14 +265,16 @@ export const setNotificationSound = new Method({
   },
 });
 
-export const toggleEmailNotificationsPreference = new Method({
-  name: 'Users.toggleEmailNotificationsPreference',
+export const setEmailNotifications = new Method({
+  name: 'Users.preferences.setEmailNotifications',
 
-  validate: null,
+  validate: new SimpleSchema({
+    enabled: { type: Boolean },
+  }).validator(),
 
-  run() {
+  run({ enabled }) {
     const _id = this.userId;
 
-    return UserService.toggleEmailNotificationsPreference({ _id });
+    return UserService.setEmailNotifications({ _id, enabled });
   },
 });
