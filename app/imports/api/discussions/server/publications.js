@@ -21,8 +21,9 @@ Meteor.publish('discussionsByDocId', function ({ docId, organizationId }) {
       startedBy: 1,
       isPrimary: 1,
       organizationId: 1,
-      viewedBy: 1
-    }
+      viewedBy: { $elemMatch: { userId } },
+      mutedBy: userId,
+    },
   };
 
   return Discussions.find(query, options);

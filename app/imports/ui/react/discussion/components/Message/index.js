@@ -1,14 +1,25 @@
 import React, { PropTypes } from 'react';
+import { compose, withState, withHandlers } from 'recompose';
 
-import MessageDate from '../MessageDate';
-import MessageBox from '../MessageBox';
-import MessageAvatar from '../MessageAvatar';
-import MessageCard from '../MessageCard';
-import MessageAuthor from '../MessageAuthor';
-import MessageTime from '../MessageTime';
-import MessageGutter from '../MessageGutter';
-import MessageContent from '../MessageContent';
-import MessageMenu from '../MessageMenu';
+import { not } from '/imports/api/helpers';
+
+import Author from './Author';
+import Avatar from './Avatar';
+import Box from './Box';
+import Card from './Card';
+import Container from './Container';
+import Content from './Content';
+import Date from './Date';
+import Gutter from './Gutter';
+import Menu from './Menu';
+import Time from './Time';
+
+const MenuEnhanced = compose(
+  withState('isOpen', 'setOpen', false),
+  withHandlers({
+    toggle: ({ setOpen }) => () => setOpen(not),
+  }),
+)(Menu);
 
 const Message = ({
   date,
@@ -28,46 +39,42 @@ const Message = ({
   contents,
   onMessageContentsClick,
 }) => (
-  <div className="chat-message-container">
-    {dateToShow && <MessageDate {...{ date }} />}
+  <Container>
+    {dateToShow && <Date>{date}</Date>}
 
-    <MessageBox className={className}>
+    <Box className={className}>
       {!isMergedWithPreviousMessage && (
-        <MessageAvatar onClick={onMessageAvatarClick}>
+        <Avatar onClick={onMessageAvatarClick}>
           <img src={userAvatar} alt={userFullNameOrEmail} tabIndex="0" />
-        </MessageAvatar>
+        </Avatar>
       )}
 
-      <MessageCard>
+      <Card>
         {!isMergedWithPreviousMessage &&
           (<div>
-            <MessageAuthor name={userFirstName} />
+            <Author>{userFirstName}</Author>
 
-            <MessageTime
-              {...{ time }}
-              onClick={onMessageTimeClick}
-              href={pathToMessage}
-            />
+            <Time onClick={onMessageTimeClick} href={pathToMessage}>
+              {time}
+            </Time>
           </div>)}
 
-        <MessageMenu
+        <MenuEnhanced
           {...{ isAuthor }}
-          pathToMessageToCopy={pathToMessageToCopy}
-          delete={onMessageDelete}
+          pathToMessage={pathToMessageToCopy}
+          onDelete={onMessageDelete}
         />
 
-        <MessageGutter>
-          <MessageTime
-            onClick={onMessageTimeClick}
-            href={pathToMessage}
-            time={time.split(' ')[0]}
-          />
-        </MessageGutter>
+        <Gutter>
+          <Time onClick={onMessageTimeClick} href={pathToMessage}>
+            {`${time}`.split(' ')[0]}
+          </Time>
+        </Gutter>
 
-        <MessageContent {...{ contents }} onClick={onMessageContentsClick} />
-      </MessageCard>
-    </MessageBox>
-  </div>
+        <Content onClick={onMessageContentsClick}>{contents}</Content>
+      </Card>
+    </Box>
+  </Container>
 );
 
 Message.propTypes = {
@@ -88,5 +95,19 @@ Message.propTypes = {
   contents: PropTypes.any,
   onMessageContentsClick: PropTypes.func,
 };
+
+const components = {
+  Author,
+  Avatar,
+  Box,
+  Card,
+  Container,
+  Content,
+  Date,
+  Gutter,
+  Menu,
+};
+
+Object.assign(Message, components);
 
 export default Message;

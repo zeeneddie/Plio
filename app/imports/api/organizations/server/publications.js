@@ -165,7 +165,7 @@ Meteor.publishComposite('organizationsInfo', {
           name: 1,
           users: 1,
           createdAt: 1,
-          lastAccessedDay: 1,
+          lastAccessedDate: 1,
         },
       });
     }

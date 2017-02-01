@@ -1,14 +1,13 @@
 import { compose, lifecycle, withProps, withHandlers } from 'recompose';
 import invoke from 'lodash.invoke';
+import property from 'lodash.property';
 
 import { transsoc } from '/imports/api/helpers';
 import Message from '../../components/Message';
 import { isAuthor } from '/imports/ui/react/discussion/helpers';
+import { getAvatar, getFirstName, getFullNameOrEmail } from '/imports/api/users/helpers';
 import {
   getMessagePath,
-  getUserAvatar,
-  getUserFirstName,
-  getUserFullNameOrEmail,
   getMessageTime,
   getMessageContents,
   getPathToMessageToCopy,
@@ -21,6 +20,9 @@ import {
   deselect,
   remove,
 } from './handlers';
+
+const propUser = property('user');
+const withUser = fn => compose(fn, propUser);
 
 export default compose(
   lifecycle({
@@ -44,9 +46,9 @@ export default compose(
   }),
   withProps(transsoc({
     isAuthor,
-    userAvatar: getUserAvatar,
-    userFirstName: getUserFirstName,
-    userFullNameOrEmail: getUserFullNameOrEmail,
+    userAvatar: withUser(getAvatar),
+    userFirstName: withUser(getFirstName),
+    userFullNameOrEmail: withUser(getFullNameOrEmail),
     pathToMessage: getMessagePath,
     time: getMessageTime,
     contents: getMessageContents,

@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Dropdown, DropdownToggle } from 'reactstrap';
 
 import OrgName from '../../fields/edit/components/OrgName';
 import CustomerTypeSelectContainer from '../../fields/edit/containers/CustomerTypeSelectContainer';

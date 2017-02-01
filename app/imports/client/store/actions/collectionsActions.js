@@ -24,6 +24,8 @@ import {
   REMOVE_ORGANIZATION,
   SET_HELP_DOCS,
   SET_HELP_SECTIONS,
+  SET_USERS,
+  SET_USERS_BY_ORG_IDS,
 } from './types';
 import { createAction } from './helpers';
 
@@ -117,6 +119,15 @@ export function setHelpSections(helpSections) {
     payload: { helpSections },
   };
 }
+
+export function setUsers(users) {
+  return {
+    type: SET_USERS,
+    payload: { users },
+  };
+}
+
+export const setUsersByOrgIds = createAction(SET_USERS_BY_ORG_IDS);
 
 export const addStandard = createAction(ADD_STANDARD);
 

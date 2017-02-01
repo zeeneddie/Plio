@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
-import { Item } from './Item';
 import { Title } from './Title';
 
 const CardHeader = ({ children, className }) => (
@@ -18,6 +17,5 @@ CardHeader.propTypes = {
 };
 
 CardHeader.Title = Title;
-CardHeader.Item = Item;
 
 export default CardHeader;

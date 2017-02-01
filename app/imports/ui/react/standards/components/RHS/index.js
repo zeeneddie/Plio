@@ -20,6 +20,7 @@ const StandardsRHS = ({
   hasDocxAttachment,
 }) => (
   <RHS
+    flex
     className={cx('expandable', {
       expanded: isFullScreenMode,
     })}

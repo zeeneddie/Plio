@@ -5,6 +5,7 @@ import { PullMap } from '/imports/api/constants';
 import Button from '../Buttons/Button';
 import IconLoading from '../Icons/IconLoading';
 import HelpPanel from '../HelpPanel';
+import CardHeadingButtons from '../CardHeadingButtons';
 
 const ModalHeading = ({
   variation,
@@ -16,66 +17,55 @@ const ModalHeading = ({
   submitCaptionText,
   onModalClose,
   closeCaptionText,
-}) => (
-  <div className="card-block card-heading modal-window-heading">
+}) => {
+  let pull;
+  if (variation === 'save') pull = PullMap.left;
+  else pull = PullMap.right;
 
-    {variation !== 'simple' && (
-      <div
-        className={cx(
-          'card-heading-buttons',
-          {
-            [PullMap.left]: variation !== 'save',
-            [PullMap.right]: variation === 'save',
-          }
-        )}
-      >
-        {helpContent && (
-          <HelpPanel.Head
-            collapsed={isHelpPanelCollapsed}
-            onToggleCollapse={onToggleHelpPanel}
-          />
-        )}
-        {variation === 'save' && (
-          <Button
-            color="primary"
-            className={cx('submit-modal-button', { disabled: isSaving })}
-            disabled={isSaving}
-          >
-            {isSaving && (
-              <IconLoading margin="bottom" />
-            )}
-            <span>{submitCaptionText}</span>
-          </Button>
-        )}
-      </div>
-    )}
-
-    <h4 className="card-title">{title}</h4>
-
-    <div
-      className={cx(
-        'card-heading-buttons',
-        {
-          [PullMap.left]: variation === 'save',
-          [PullMap.right]: variation !== 'save',
-        }
+  return (
+    <div className="card-block card-heading modal-window-heading">
+      {variation !== 'simple' && (
+        <CardHeadingButtons className={pull}>
+          {helpContent && (
+            <HelpPanel.Head
+              collapsed={isHelpPanelCollapsed}
+              onToggleCollapse={onToggleHelpPanel}
+            />
+          )}
+          {variation === 'save' && (
+            <Button
+              color="primary"
+              className={cx('submit-modal-button', { disabled: isSaving })}
+              disabled={isSaving}
+            >
+              {isSaving && (
+                <IconLoading margin="bottom" />
+              )}
+              <span>{submitCaptionText}</span>
+            </Button>
+          )}
+        </CardHeadingButtons>
       )}
-    >
-      <Button
-        component="button"
-        color="secondary"
-        className={cx({ disabled: isSaving })}
-        disabled={isSaving}
-        onMouseDown={onModalClose}
-      >
-        {isSaving && variation !== 'save' && (
-          <IconLoading margin="bottom" />
-        )}
-        {closeCaptionText}
-      </Button>
+
+      <h4 className="card-title">{title}</h4>
+
+      <CardHeadingButtons className={pull}>
+        <Button
+          component="button"
+          color="secondary"
+          className={cx({ disabled: isSaving })}
+          disabled={isSaving}
+          onMouseDown={onModalClose}
+        >
+          {isSaving && variation !== 'save' && (
+            <IconLoading margin="bottom" />
+          )}
+          {closeCaptionText}
+        </Button>
+      </CardHeadingButtons>
     </div>
-  </div>
-);
+  );
+};
 
 ModalHeading.propTypes = {
   variation: PropTypes.oneOf(['save', 'simple', null, undefined]),

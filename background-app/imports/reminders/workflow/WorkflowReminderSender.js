@@ -250,7 +250,7 @@ export default class WorkflowReminderSender {
   }
 
   _getReminderEmailData(reminder) {
-    const { date, reminderType } = reminder;
+    const { targetDate, reminderType } = reminder;
     const config = ReminderConfig[reminderType];
 
     const args = {
@@ -262,11 +262,11 @@ export default class WorkflowReminderSender {
 
     const today = this._date;
     let templateKey;
-    if (moment(today).isBefore(date)) {
+    if (moment(today).isBefore(targetDate)) {
       templateKey = TimeRelations.BEFORE_DUE;
-    } else if (moment(today).isSame(date)) {
+    } else if (moment(today).isSame(targetDate)) {
       templateKey = TimeRelations.DUE_TODAY;
-    } else if (moment(today).isAfter(date)) {
+    } else if (moment(today).isAfter(targetDate)) {
       templateKey = TimeRelations.OVERDUE;
     }
 

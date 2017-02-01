@@ -3,6 +3,7 @@ import { batchActions } from 'redux-batched-actions';
 import { Organizations } from '/imports/share/collections/organizations';
 import { setOrg, setOrgId } from '/imports/client/store/actions/organizationsActions';
 import { setDataLoading } from '/imports/client/store/actions/globalActions';
+import { setOrganizations } from '/imports/client/store/actions/collectionsActions';
 import { getId } from '/imports/api/helpers';
 
 export default subscribe => function loadLayoutData({
@@ -15,11 +16,13 @@ export default subscribe => function loadLayoutData({
   if (subscription.ready()) {
     const organization = Organizations.findOne({ serialNumber: orgSerialNumber });
     const organizationId = getId(organization);
-    const actions = [
+    let actions = [
       setOrg(organization),
       setOrgId(organizationId),
       setDataLoading(false),
     ];
+
+    if (organization) actions = actions.concat(setOrganizations([organization]));
 
     dispatch(batchActions(actions));
 

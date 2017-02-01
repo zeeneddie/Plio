@@ -11,7 +11,7 @@ import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
-import { DocumentTypes, ActionTypes } from '/imports/share/constants';
+import { DocumentTypes } from '/imports/share/constants';
 import StandardsProvider from '/imports/ui/react/standards/components/Provider';
 import CustomersProvider from '/imports/ui/react/customers/components/Provider';
 import HelpDocsProvider from '/imports/ui/react/help-docs/components/HelpDocsProvider';
@@ -19,6 +19,7 @@ import TransitionalLayout from '/imports/ui/react/layouts/TransitionalLayout';
 import UnsubscribeFromNotifications
   from '/imports/ui/react/pages/components/Unsubscribe/Notifications';
 import UnsubscribeFromDailyRecap from '/imports/ui/react/pages/components/Unsubscribe/DailyRecap';
+import UnsubscribeFromDiscussion from '/imports/ui/react/pages/components/Unsubscribe/Discussion';
 
 BlazeLayout.setRoot('#app');
 
@@ -408,6 +409,22 @@ FlowRouter.route('/:orgSerialNumber/unsubscribe', {
     mount2(TransitionalLayout, {
       content: (
         <UnsubscribeFromDailyRecap {...{ orgSerialNumber }} />
+      ),
+    });
+  },
+});
+
+FlowRouter.route('/:orgSerialNumber/:route/:documentId/discussion/unsubscribe', {
+  name: 'unsubscribeFromDiscussionNotifications',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action({ documentId, route, orgSerialNumber }) {
+    const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
+
+    mount2(TransitionalLayout, {
+      content: (
+        <UnsubscribeFromDiscussion
+          {...{ documentId, documentType, orgSerialNumber }}
+        />
       ),
     });
   },

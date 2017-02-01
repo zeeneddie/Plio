@@ -64,3 +64,5 @@ export const getDocUrlByOrganizationId = prefix => ({ _id, organizationId }) => 
 };
 
 export const getDocUnsubscribePath = path => (path ? `${path}/unsubscribe` : '');
+
+export const removeQueryParams = str => `${str}`.split('?')[0];

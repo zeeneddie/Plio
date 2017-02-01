@@ -238,19 +238,20 @@ export const ProblemIndexes = {
   ANALYSIS_OVERDUE: 5,
   ANALYSIS_COMPLETED_ACTIONS_NEED: 6,
   ANALYSIS_COMPLETED_ACTIONS_IN_PLACE: 7,
-  ACTIONS_DUE_TODAY: 8,
-  ACTIONS_OVERDUE: 9,
-  OPEN_ACTIONS_COMPLETED: 10,
-  ACTIONS_COMPLETED_WAITING_VERIFY: 11,
-  VERIFY_DUE_TODAY: 12,
-  VERIFY_PAST_DUE: 13,
-  ACTIONS_AWAITING_UPDATE: 14,
-  ACTIONS_UPDATE_DUE_TODAY: 15,
-  ACTIONS_UPDATE_PAST_DUE: 16,
-  ACTIONS_FAILED_VERIFICATION: 17,
-  CLOSED_ACTIONS_COMPLETED: 18,
-  ACTIONS_VERIFIED_STANDARDS_REVIEWED: 19,
-  DELETED: 20,
+  ACTIONS_IN_PLACE: 8,
+  ACTIONS_DUE_TODAY: 9,
+  ACTIONS_OVERDUE: 10,
+  OPEN_ACTIONS_COMPLETED: 11,
+  ACTIONS_COMPLETED_WAITING_VERIFY: 12,
+  VERIFY_DUE_TODAY: 13,
+  VERIFY_PAST_DUE: 14,
+  ACTIONS_AWAITING_UPDATE: 15,
+  ACTIONS_UPDATE_DUE_TODAY: 16,
+  ACTIONS_UPDATE_PAST_DUE: 17,
+  ACTIONS_FAILED_VERIFICATION: 18,
+  CLOSED_ACTIONS_COMPLETED: 19,
+  ACTIONS_VERIFIED_STANDARDS_REVIEWED: 20,
+  DELETED: 21,
 };
 
 export const ProblemsStatuses = {
@@ -261,6 +262,7 @@ export const ProblemsStatuses = {
   [ProblemIndexes.ANALYSIS_OVERDUE]: 'Open - analysis overdue',
   [ProblemIndexes.ANALYSIS_COMPLETED_ACTIONS_NEED]: 'Open - analysis completed, action(s) need to be added',
   [ProblemIndexes.ANALYSIS_COMPLETED_ACTIONS_IN_PLACE]: 'Open - analysis completed, action(s) in place',
+  [ProblemIndexes.ACTIONS_IN_PLACE]: 'Open - action(s) in place',
   [ProblemIndexes.ACTIONS_DUE_TODAY]: 'Open - action(s) due today',
   [ProblemIndexes.ACTIONS_OVERDUE]: 'Open - action(s) overdue',
   [ProblemIndexes.OPEN_ACTIONS_COMPLETED]: 'Open - action(s) completed',
@@ -285,6 +287,11 @@ export const DocumentTypes = {
   STANDARD: 'standard',
   ...ProblemTypes,
   ...ActionTypes,
+};
+
+export const AllDocumentTypes = {
+  ...DocumentTypes,
+  DISCUSSION: 'discussion',
 };
 
 export const ReviewStatuses = {

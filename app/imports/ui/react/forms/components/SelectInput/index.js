@@ -86,7 +86,12 @@ export default class SelectInput extends React.Component {
     }
 
     const callback = (err, res) => {
-      if (err) this.setState({ value: getValue(this.props) });
+      let state = { isOpen: false };
+
+      if (err) state = { ...state, value: getValue(this.props) };
+
+      this.setState(state);
+
       if (cb) cb(err, res);
     };
 

@@ -1,10 +1,8 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { _ } from 'meteor/underscore';
-import { TextAlignMap } from '/imports/api/constants';
 
-export const Title = ({ children, className, textAlign = 'center' }) => (
-  <h3 className={cx('card-title', className, TextAlignMap[textAlign])}>
+export const Title = ({ children, className, ...other }) => (
+  <h3 className={cx('card-title', className)} {...other}>
     {children}
   </h3>
 );
@@ -12,5 +10,4 @@ export const Title = ({ children, className, textAlign = 'center' }) => (
 Title.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  textAlign: PropTypes.oneOf(_.keys(TextAlignMap)),
 };
