@@ -23,13 +23,11 @@ const DiscussionHeader = ({ onToggleMute, onBackArrowClick, isMuted }) => (
           </Button>
         </CardHeadingButtons>
       </Pull>
-      {/*
       <Pull right>
         <CardHeadingButtons>
           <MenuEnhanced {...{ isMuted, onToggleMute }} />
         </CardHeadingButtons>
       </Pull>
-      */}
       <TextAlign center>
         <CardHeader.Title>
           Discussion
