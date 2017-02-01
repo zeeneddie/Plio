@@ -15,6 +15,7 @@ import {
   getC,
   notDeleted,
   getId,
+  propEqKey,
 } from '/imports/api/helpers';
 import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
 import { goTo } from '../../utils/router/actions';
@@ -165,7 +166,7 @@ export const expandCollapsedStandards = (ids) => {
     global: { filter, collapsed },
   } = getState();
 
-  const notCollapsed = _id => !collapsed.find(propEq('key', _id)); // reject already expanded
+  const notCollapsed = _id => !collapsed.find(propEqKey(_id)); // reject already expanded
   const standardsFound = standards.filter(standard => ids.includes(standard._id));
   const uncategorizedSection = createUncategorizedSection({
     sections: standardBookSections,

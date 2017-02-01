@@ -7,7 +7,6 @@ import { RiskFilterIndexes, DEPARTMENT_UNCATEGORIZED } from '/imports/api/consta
 import {
   compose,
   find,
-  propRisks,
   propEqId,
   propId,
   propEq,
@@ -22,6 +21,7 @@ import {
   propEqType,
   mapC,
   not,
+  propEqKey,
 } from '/imports/api/helpers';
 import { addCollapsed, chainActions, addCollapsedWithClose } from '/imports/client/store/actions/globalActions';
 import { goTo } from '../../utils/router/actions';
@@ -122,7 +122,7 @@ export const expandCollapsedRisks = (ids) => {
     global: { filter, collapsed },
   } = getState();
 
-  const notCollapsed = key => !collapsed.find(propEq('key', key)); // reject already expanded
+  const notCollapsed = key => !collapsed.find(propEqKey(key)); // reject already expanded
   const risksFound = risks.filter(risk => ids.includes(risk._id));
 
   const getExpandedFiltered = (prop, predicate) => filterC(every([

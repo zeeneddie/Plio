@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import { propEq } from '/imports/api/helpers';
+import { propEqKey } from '/imports/api/helpers';
 import CollapseBlock from '../../components/CollapseBlock';
 
 const propTypeItem = PropTypes.shape({
@@ -27,7 +27,7 @@ const LHSItem = ({
   hideRTextOnExpand,
   children,
 }) => {
-  const isCollapsed = !collapsed.find(propEq('key', item.key));
+  const isCollapsed = !collapsed.find(propEqKey(item.key));
 
   return (
     <CollapseBlock
