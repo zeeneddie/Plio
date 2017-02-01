@@ -17,7 +17,6 @@ import {
 } from '/imports/api/constants';
 import Counter from '../../counter/server';
 import {
-  getPublishCompositeOrganizationUsers,
   getCursorNonDeleted,
   makeOptionsFields,
   getRequiredFieldsByCollection,
@@ -29,6 +28,7 @@ import { createNonConformityCardPublicationTree } from '../../non-conformities/u
 import { createRiskCardPublicationTree } from '../../risks/utils';
 import { createActionCardPublicationTree } from '../../actions/utils';
 import { getProblemsWithLimitedFields } from '../../problems/utils';
+import { getPublishCompositeOrganizationUsers } from '/imports/server/helpers/pub-helpers';
 
 const getWorkInboxLayoutPub = (userId, serialNumber, isDeleted) => [
   {
@@ -55,19 +55,22 @@ const getWorkInboxLayoutPub = (userId, serialNumber, isDeleted) => [
   },
 ];
 
-Meteor.publishComposite('workInboxLayout', getPublishCompositeOrganizationUsers(getWorkInboxLayoutPub));
+Meteor.publishComposite(
+  'workInboxLayout',
+  getPublishCompositeOrganizationUsers(getWorkInboxLayoutPub)
+);
 
-Meteor.publish('workItemsList', function(organizationId, isDeleted = { $in: [null, false] }) {
+Meteor.publish('workItemsList', function (organizationId, isDeleted = { $in: [null, false] }) {
   const userId = this.userId;
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
   return WorkItems.find({ organizationId, isDeleted }, {
-    fields: WorkItemsListProjection
+    fields: WorkItemsListProjection,
   });
 });
 
-Meteor.publishComposite('workItemCard', function({ _id, organizationId }) {
+Meteor.publishComposite('workItemCard', function ({ _id, organizationId }) {
   check(_id, String);
   check(organizationId, String);
 
@@ -78,8 +81,8 @@ Meteor.publishComposite('workItemCard', function({ _id, organizationId }) {
         return this.ready();
       }
       return WorkItems.find({ _id, organizationId });
-    }
-  }
+    },
+  };
 });
 
 const createRelativeCardPublicationTree = (collection) => {
@@ -97,7 +100,7 @@ const createRelativeCardPublicationTree = (collection) => {
   }
 };
 
-Meteor.publishComposite('workInboxCard', function({ _id, organizationId }) {
+Meteor.publishComposite('workInboxCard', function ({ _id, organizationId }) {
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -122,7 +125,7 @@ Meteor.publishComposite('workInboxCard', function({ _id, organizationId }) {
   };
 });
 
-Meteor.publish('workInboxDeps', function(organizationId) {
+Meteor.publish('workInboxDeps', function (organizationId) {
   const query = { organizationId };
   const standardsFields = {
     title: 1,
@@ -143,11 +146,11 @@ Meteor.publish('workInboxDeps', function(organizationId) {
     standards,
     NCs,
     risks,
-    riskTypes
+    riskTypes,
   ];
 });
 
-Meteor.publish('workItemsOverdue', function(organizationId, limit) {
+Meteor.publish('workItemsOverdue', function (organizationId, limit) {
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -158,10 +161,10 @@ Meteor.publish('workItemsOverdue', function(organizationId, limit) {
     organizationId,
     assigneeId: userId,
     isDeleted: { $in: [null, false] },
-    status: 2 // overdue
+    status: 2, // overdue
   };
   const options = {
-    sort: { targetDate: -1 }
+    sort: { targetDate: -1 },
   };
 
   // Check if limit is an integer number
@@ -172,7 +175,7 @@ Meteor.publish('workItemsOverdue', function(organizationId, limit) {
   return WorkItems.find(query, options);
 });
 
-Meteor.publish('workItemsCount', function(counterName, organizationId) {
+Meteor.publish('workItemsCount', function (counterName, organizationId) {
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -181,14 +184,14 @@ Meteor.publish('workItemsCount', function(counterName, organizationId) {
 
   const query = {
     organizationId,
-    isDeleted: { $in: [false, null] }
+    isDeleted: { $in: [false, null] },
   };
   const cursor = WorkItems.find(query);
 
   return new Counter(counterName, cursor);
 });
 
-Meteor.publish('workItemsNotViewedCount', function(counterName, organizationId) {
+Meteor.publish('workItemsNotViewedCount', function (counterName, organizationId) {
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -196,16 +199,16 @@ Meteor.publish('workItemsNotViewedCount', function(counterName, organizationId) 
   }
 
   const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
-    organizationId, userId
+    organizationId, userId,
   });
   const query = {
     organizationId,
     viewedBy: { $ne: userId },
     isCompleted: false,
-    isDeleted: { $in: [false, null] }
+    isDeleted: { $in: [false, null] },
   };
 
-  if(currentOrgUserJoinedAt){
+  if (currentOrgUserJoinedAt) {
     query.createdAt = { $gt: currentOrgUserJoinedAt };
   }
 
@@ -214,7 +217,7 @@ Meteor.publish('workItemsNotViewedCount', function(counterName, organizationId) 
   return new Counter(counterName, cursor);
 });
 
-Meteor.publish('workItemsOverdueCount', function(counterName, organizationId) {
+Meteor.publish('workItemsOverdueCount', function (counterName, organizationId) {
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -225,6 +228,6 @@ Meteor.publish('workItemsOverdueCount', function(counterName, organizationId) {
     organizationId,
     assigneeId: userId,
     status: 2,
-    isDeleted: { $in: [false, null] }
+    isDeleted: { $in: [false, null] },
   }));
 });
