@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 // import { Migrations } from 'meteor/percolate:migrations';
 //
 // import { NonConformities } from '/imports/share/collections/non-conformities.js';
@@ -144,10 +146,36 @@ Migrations.add({
   down() {
     const query = {};
     const modifier = { $unset: { customerType: '' } };
+    const options = { multi: true };
 
-    Organizations.update(query, modifier);
+    Organizations.update(query, modifier, options);
 
     console.log('Customer type was removed from all organizations');
+  },
+});
+
+Migrations.add({
+  version: 5,
+  name: 'Adds default value for \'receiveEmailNotifications\' to user preferences',
+  up() {
+    const query = { receiveEmailNotifications: null };
+    const modifier = {
+      $set: {
+        receiveEmailNotifications: true,
+      },
+    };
+    const options = { multi: true };
+
+    Meteor.users.update(query, modifier, options);
+
+    console.log('Default value for \'receiveEmailNotifications\' was set for all users without it');
+  },
+  down() {
+    const query = {};
+    const modifier = { $unset: { receiveEmailNotifications: '' } };
+    const options = { multi: true };
+
+    Meteor.users.update(query, modifier, options);
   },
 });
 

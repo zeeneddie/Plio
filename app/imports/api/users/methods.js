@@ -238,7 +238,7 @@ export const setNotifications = new Method({
 
   run({ _id, enabled }) {
     return UserService.setNotifications({ _id, enabled });
-  }
+  },
 });
 
 export const setNotificationSound = new Method({
@@ -247,8 +247,8 @@ export const setNotificationSound = new Method({
   validate: new SimpleSchema([
     IdSchema,
     {
-      soundFile: { type: String }
-    }
+      soundFile: { type: String },
+    },
   ]).validator(),
 
   check(checker) {
@@ -259,5 +259,17 @@ export const setNotificationSound = new Method({
 
   run({ _id, soundFile }) {
     return UserService.setNotificationSound({ _id, soundFile });
-  }
+  },
+});
+
+export const toggleEmailNotificationsPreference = new Method({
+  name: 'Users.toggleEmailNotificationsPreference',
+
+  validate: null,
+
+  run() {
+    const _id = this.userId;
+
+    return UserService.toggleEmailNotificationsPreference({ _id });
+  },
 });
