@@ -8,10 +8,6 @@ import { Occurrences } from '/imports/share/collections/occurrences';
 import { Departments } from '/imports/share/collections/departments';
 import { Risks } from '/imports/share/collections/risks';
 import { isOrgMember } from '../../checkers.js';
-import {
-  NonConformitiesListProjection,
-  DepartmentsListProjection,
-} from '/imports/api/constants.js';
 import { ActionTypes } from '/imports/share/constants';
 import Counter from '../../counter/server.js';
 import {
@@ -35,7 +31,7 @@ const getNCLayoutPub = (userId, serialNumber, isDeleted) => [
   {
     find({ _id: organizationId }) {
       const query = { organizationId, isDeleted };
-      const options = { fields: NonConformitiesListProjection };
+      const options = { fields: NonConformities.publicFields };
       return NonConformities.find(query, options);
     },
     children: [
@@ -63,7 +59,7 @@ Meteor.publishComposite('nonConformitiesList', function (
       }
 
       return NonConformities.find({ organizationId, isDeleted }, {
-        fields: NonConformitiesListProjection,
+        fields: NonConformities.publicFields,
       });
     },
   };
@@ -107,7 +103,7 @@ Meteor.publish('nonConformitiesDeps', function (organizationId) {
 
   const departments = Departments.find(
     { organizationId },
-    makeOptionsFields(DepartmentsListProjection)
+    makeOptionsFields(Departments.publicFields)
   );
   const occurrences = Occurrences.find({ organizationId });
   const actions = getActionsWithLimitedFields(actionsQuery);

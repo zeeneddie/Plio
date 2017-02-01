@@ -8,11 +8,6 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import { shallowEqual, mapProps } from 'recompose';
 import { $ } from 'meteor/jquery';
 
-import {
-  ActionsListProjection,
-  NonConformitiesListProjection,
-  RisksListProjection,
-} from '/imports/share/constants.js';
 import { Actions } from '/imports/share/collections/actions.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Risks } from '/imports/share/collections/risks.js';
@@ -302,11 +297,11 @@ export const toObjFind = value => ({ find: value });
 export const getRequiredFieldsByCollection = (collection) => {
   switch (collection) {
     case Actions:
-      return ActionsListProjection;
+      return Actions.publicFields;
     case NonConformities:
-      return NonConformitiesListProjection;
+      return NonConformities.publicFields;
     case Risks:
-      return RisksListProjection;
+      return Risks.publicFields;
     default:
       return {};
   }

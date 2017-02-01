@@ -9,12 +9,6 @@ import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
 import { Departments } from '/imports/share/collections/departments';
 import Counter from '../../counter/server';
-import {
-  StandardsListProjection,
-  StandardsBookSectionsListProjection,
-  StandardTypesListProjection,
-  DepartmentsListProjection,
-} from '/imports/api/constants';
 import { ActionTypes } from '/imports/share/constants';
 import get from 'lodash.get';
 import { check } from 'meteor/check';
@@ -62,14 +56,14 @@ const getStandardsLayoutPub = function (userId, serialNumber, isDeleted) {
     {
       find({ _id: organizationId }) {
         return StandardsBookSections.find({ organizationId }, {
-          fields: StandardsBookSectionsListProjection,
+          fields: StandardsBookSections.publicFields,
         });
       },
     },
     {
       find({ _id: organizationId }) {
         return StandardTypes.find({ organizationId }, {
-          fields: StandardTypesListProjection,
+          fields: StandardTypes.publicFields,
         });
       },
     },
@@ -105,7 +99,7 @@ Meteor.publishComposite('standardsList', function (
       return Standards.find({
         organizationId,
         isDeleted,
-      }, { fields: StandardsListProjection });
+      }, { fields: Standards.publicFields });
     },
   };
 });
@@ -159,7 +153,7 @@ Meteor.publish('standardsDeps', function (organizationId) {
   const actions = getActionsWithLimitedFields(actionsQuery);
   const departments = Departments.find(
     { organizationId },
-    makeOptionsFields(DepartmentsListProjection)
+    makeOptionsFields(Departments.publicFields)
   );
   const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
   const riskTypes = RiskTypes.find({ organizationId });

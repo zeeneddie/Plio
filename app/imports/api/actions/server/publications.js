@@ -3,9 +3,6 @@ import { check } from 'meteor/check';
 
 import { Actions } from '/imports/share/collections/actions.js';
 import { isOrgMember } from '../../checkers.js';
-import {
-  ActionsListProjection,
-} from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
 import { getActionFiles, createActionCardPublicationTree } from '../utils';
 
@@ -24,7 +21,7 @@ Meteor.publishComposite('actionsList', function (
         organizationId,
         isDeleted,
       }, {
-        fields: ActionsListProjection,
+        fields: Actions.publicFields,
       });
     },
   };

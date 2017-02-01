@@ -11,10 +11,6 @@ import { Actions } from '/imports/share/collections/actions';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
 import { isOrgMember } from '../../checkers';
-import {
-  WorkItemsListProjection,
-  DepartmentsListProjection,
-} from '/imports/api/constants';
 import Counter from '../../counter/server';
 import {
   getCursorNonDeleted,
@@ -35,7 +31,7 @@ const getWorkInboxLayoutPub = (userId, serialNumber, isDeleted) => [
     find({ _id: organizationId }) {
       const query = { organizationId, isDeleted };
 
-      return WorkItems.find(query, makeOptionsFields(WorkItemsListProjection));
+      return WorkItems.find(query, makeOptionsFields(WorkItems.publicFields));
     },
     children: [
       {
@@ -66,7 +62,7 @@ Meteor.publish('workItemsList', function (organizationId, isDeleted = { $in: [nu
     return this.ready();
   }
   return WorkItems.find({ organizationId, isDeleted }, {
-    fields: WorkItemsListProjection,
+    fields: WorkItems.publicFields,
   });
 });
 
@@ -135,7 +131,7 @@ Meteor.publish('workInboxDeps', function (organizationId) {
 
   const getProblems = getProblemsWithLimitedFields(query);
 
-  const departments = Departments.find(query, makeOptionsFields(DepartmentsListProjection));
+  const departments = Departments.find(query, makeOptionsFields(Departments.publicFields));
   const standards = getCursorNonDeleted(query, standardsFields, Standards);
   const riskTypes = RiskTypes.find(query);
   const NCs = getProblems(NonConformities);

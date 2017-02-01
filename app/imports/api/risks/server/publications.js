@@ -8,7 +8,6 @@ import { RiskTypes } from '/imports/share/collections/risk-types';
 import { isOrgMember } from '../../checkers';
 import { Departments } from '/imports/share/collections/departments';
 import { NonConformities } from '/imports/share/collections/non-conformities';
-import { RisksListProjection, DepartmentsListProjection } from '/imports/api/constants';
 import Counter from '../../counter/server';
 import {
   makeOptionsFields,
@@ -30,7 +29,7 @@ const getRisksLayoutPub = (userId, serialNumber, isDeleted) => [
   {
     find({ _id: organizationId }) {
       const query = { organizationId, isDeleted };
-      const options = { fields: RisksListProjection };
+      const options = { fields: Risks.publicFields };
 
       return Risks.find(query, options);
     },
@@ -56,7 +55,7 @@ Meteor.publishComposite('risksList', function (
       }
 
       return Risks.find({ organizationId, isDeleted }, {
-        fields: RisksListProjection,
+        fields: Risks.publicFields,
       });
     },
   };
@@ -100,7 +99,7 @@ Meteor.publish('risksDeps', function (organizationId) {
 
   const departments = Departments.find(
     { organizationId },
-    makeOptionsFields(DepartmentsListProjection),
+    makeOptionsFields(Departments.publicFields),
   );
   const actions = getActionsWithLimitedFields(actionsQuery);
   const NCs = getProblemsWithLimitedFields({ organizationId }, NonConformities);
