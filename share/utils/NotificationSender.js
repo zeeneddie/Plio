@@ -75,11 +75,26 @@ export default class NotificationSender {
    */
   _getUserEmail(userId) {
     if (userId && userId.indexOf('@') > -1) {
-      return userId;
-    }
+      const query = { 'emails.address': userId };
+      const user = Meteor.users.findOne(query);
 
-    const user = Meteor.users.findOne(userId);
-    return user && user.emails && user.emails.length ? user.emails[0].address : false;
+      // check if recipient has email notifications enabled
+      return user && user.preferences && user.preferences.areEmailNotificationsEnabled
+        ? userId
+        : false;
+    }
+  
+    const user = Meteor.users.findOne({ _id: userId });
+    const email = (
+      user &&
+      user.preferences &&
+      user.preferences.areEmailNotificationsEnabled &&
+      user.emails &&
+      user.emails[0] &&
+      user.emails[0].address
+    );
+
+    return email || false;
   }
 
   /**
@@ -102,16 +117,18 @@ export default class NotificationSender {
    * @private
    */
   _getUserEmails(userIds) {
-    const userEmails = [];
-    userIds.forEach((userId) => {
+    const userEmails = userIds.reduce((prev, userId) => {
       const email = this._getUserEmail(userId);
-      email && userEmails.push(email);
-    });
+      return email ? prev.concat(email) : prev;
+    }, []);
     return userEmails;
   }
 
   _sendEmailBasic({ recipients, html, isReportEnabled = false }) {
     const emails = this._getUserEmails(recipients);
+
+    if (!emails.length) return;
+
     const bcc = [];
     if (isReportEnabled) {
       // Reporting of beta user activity
