@@ -78,6 +78,14 @@
       &.pull-xs-left {
         left: 10px;
 
+        .dropdown {
+          float: left;
+          clear: left;
+
+          .btn {
+            color: #373a3c;
+          }
+        }
         .btn {
           margin-right: 10px;
 
@@ -91,6 +99,14 @@
       &.pull-xs-right {
         right: 10px;
 
+        .dropdown {
+          float: right;
+          clear: right;
+
+          .btn {
+            color: #373a3c;
+          }
+        }
         .btn {
           margin-left: 10px;
         }
