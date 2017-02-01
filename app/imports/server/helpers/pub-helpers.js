@@ -5,6 +5,25 @@ import property from 'lodash.property';
 import { getUserOrganizations } from '../../api/organizations/utils';
 import { isOrgMemberBySelector } from '../../api/checkers';
 
+export const getUsersCursorByIdsAndOrgId = (
+  ids,
+  organizationId,
+  query,
+  { fields, ...projection } = {},
+) => {
+  const _query = { _id: { $in: ids }, ...query };
+  const _projection = {
+    fields: {
+      ...Meteor.users.publicFields,
+      [`roles.${organizationId}`]: 1,
+      ...fields,
+    },
+    ...projection,
+  };
+
+  return Meteor.users.find(_query, _projection);
+};
+
 export const getPublishCompositeOrganizationUsersObject = (userId, selector) => ({
   find() {
     return getUserOrganizations(userId, selector);
@@ -13,15 +32,8 @@ export const getPublishCompositeOrganizationUsersObject = (userId, selector) => 
     {
       find({ _id, users = [] }) {
         const userIds = users.map(property('userId'));
-        const query = { _id: { $in: userIds } };
-        const options = {
-          fields: {
-            ...Meteor.users.publicFields,
-            [`roles.${_id}`]: 1,
-          },
-        };
 
-        return Meteor.users.find(query, options);
+        return getUsersCursorByIdsAndOrgId(userIds, _id);
       },
     },
   ],
