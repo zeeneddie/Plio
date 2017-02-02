@@ -215,7 +215,7 @@ export default class WorkflowReminderSender {
     const { start, until } = timeConfig;
     const { startDate, endDate } = this._getDateRange(start, until);
 
-    const reminderType = ReminderTypes.IMPROVEMENT_PLAN_REVIEW;
+      const reminderType = ReminderTypes.IMPROVEMENT_PLAN_REVIEW;
 
     const createReminders = (collection, docType) => {
       const query = {

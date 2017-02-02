@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import moment from 'moment-timezone';
 
 import { Actions } from '/imports/share/collections/actions';
@@ -6,7 +5,7 @@ import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
 import { Organizations } from '/imports/share/collections/organizations';
 import { ProblemTypes, WorkflowTypes } from '/imports/share/constants';
-import { capitalize, getFormattedDate } from '/imports/share/helpers';
+import { capitalize } from '/imports/share/helpers';
 import { getDiffInDays, getPrettyTzDate } from '/imports/helpers/date';
 import { getProblemName, getProblemDesc } from '/imports/helpers/description';
 import { getProblemUrl, getDocUnsubscribePath } from '/imports/helpers/url';
@@ -108,7 +107,7 @@ export default class ActionCreationReminderSender {
   _getReminderEmailData(problem, problemType) {
     const receivers = this._getReceivers(problem);
     if (!receivers.length) {
-      return;
+      return false;
     }
 
     const problemDesc = getProblemDesc(problemType);
