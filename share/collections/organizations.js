@@ -44,7 +44,27 @@ Organizations.helpers({
     });
 
     return memberIds;
-  }
+  },
 });
+
+Organizations.listFields = {
+  name: 1,
+  serialNumber: 1,
+  createdAt: 1,
+  customerType: 1,
+  isAdminOrg: 1,
+  lastAccessedDate: 1,
+  'users.userId': 1,
+  'users.role': 1,
+  'users.isRemoved': 1,
+  'users.removedAt': 1,
+  'users.removedBy': 1,
+};
+
+Organizations.cardFields = {
+  ...Organizations.listFields,
+  timezone: 1,
+  currency: 1,
+};
 
 export { Organizations };

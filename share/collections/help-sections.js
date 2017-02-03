@@ -8,4 +8,9 @@ const HelpSections = new Mongo.Collection(CollectionNames.HELP_SECTIONS);
 
 HelpSections.attachSchema(HelpSectionSchema);
 
+HelpSections.publicFields = {
+  index: 1,
+  title: 1,
+};
+
 export { HelpSections };
