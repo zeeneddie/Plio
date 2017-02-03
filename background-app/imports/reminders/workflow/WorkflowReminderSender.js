@@ -12,6 +12,7 @@ import { Standards } from '/imports/share/collections/standards';
 import { ReminderTypes, TimeRelations } from './config/constants';
 import ReminderConfig from './config';
 import NotificationSender from '/imports/share/utils/NotificationSender';
+import { isDateScheduled } from '../../helpers/date';
 
 
 const REMINDER_EMAIL_TEMPLATE = 'defaultEmail';
@@ -215,7 +216,7 @@ export default class WorkflowReminderSender {
     const { start, until } = timeConfig;
     const { startDate, endDate } = this._getDateRange(start, until);
 
-      const reminderType = ReminderTypes.IMPROVEMENT_PLAN_REVIEW;
+    const reminderType = ReminderTypes.IMPROVEMENT_PLAN_REVIEW;
 
     const createReminders = (collection, docType) => {
       const query = {
@@ -346,31 +347,7 @@ export default class WorkflowReminderSender {
   }
 
   _shouldSendReminder(targetDate, dateConfig) {
-    const { start, interval, until } = dateConfig;
-
-    const startDate = moment(targetDate)
-        .subtract(start.timeValue, start.timeUnit)
-        .tz(this._timezone)
-        .startOf('day')
-        .toDate();
-
-    const endDate = moment(targetDate)
-        .add(until.timeValue, until.timeUnit)
-        .tz(this._timezone)
-        .startOf('day')
-        .toDate();
-
-    let temp = startDate;
-
-    while (moment(temp).isSameOrBefore(endDate)) {
-      if (moment(temp).isSame(this._date)) {
-        return true;
-      }
-
-      temp = moment(temp).add(interval.timeValue, interval.timeUnit).toDate();
-    }
-
-    return false;
+    return isDateScheduled(dateConfig, targetDate, this._timezone, this._date);
   }
 
 }

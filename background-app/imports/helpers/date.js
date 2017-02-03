@@ -26,3 +26,33 @@ export const getDiffInDays = (targetDate, timezone) => {
 
   return `${days} ${pluralize('day', days)}`;
 };
+
+// Determines whether or not date is in interval startDate < targetDate < endDate
+// with the step of interval
+export const isDateScheduled = (dateConfig, targetDate, timezone, date) => {
+  const { start, interval, until } = dateConfig;
+
+  const startDate = moment(targetDate)
+      .subtract(start.timeValue, start.timeUnit)
+      .tz(timezone)
+      .startOf('day')
+      .toDate();
+
+  const endDate = moment(targetDate)
+      .add(until.timeValue, until.timeUnit)
+      .tz(timezone)
+      .startOf('day')
+      .toDate();
+
+  let temp = startDate;
+
+  while (moment(temp).isSameOrBefore(endDate)) {
+    if (moment(temp).isSame(date)) {
+      return true;
+    }
+
+    temp = moment(temp).add(interval.timeValue, interval.timeUnit).toDate();
+  }
+
+  return false;
+};
