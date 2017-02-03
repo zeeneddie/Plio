@@ -2,23 +2,15 @@ import curry from 'lodash.curry';
 import get from 'lodash.get';
 import property from 'lodash.property';
 import invoke from 'lodash.invoke';
-import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { shallowEqual, mapProps } from 'recompose';
 import { $ } from 'meteor/jquery';
 
-import {
-  ActionsListProjection,
-  NonConformitiesListProjection,
-  RisksListProjection,
-} from '/imports/share/constants.js';
 import { Actions } from '/imports/share/collections/actions.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Risks } from '/imports/share/collections/risks.js';
-import { getUserOrganizations } from './organizations/utils';
-import { isOrgMemberBySelector } from './checkers';
 import { renderTemplate, getTitlePrefix } from '/imports/share/helpers';
 
 export const { compose } = _;
@@ -274,46 +266,6 @@ export const sortArrayByTitlePrefix = (arr) => [...arr].sort((a, b) => {
 
 export const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));
 
-export const getPublishCompositeOrganizationUsersObject = (userId, selector) => ({
-  find() {
-    return getUserOrganizations(userId, selector);
-  },
-  children: [
-    {
-      find({ users = [] }) {
-        const userIds = users.map(property('userId'));
-        const query = { _id: { $in: userIds } };
-        const options = { profile: 1 };
-
-        return Meteor.users.find(query, options);
-      },
-    },
-  ],
-});
-
-export const getPublishCompositeOrganizationUsers = (fn) =>
-  function publishCompositeOrganizationUsers(serialNumber, isDeleted = { $in: [null, false] }) {
-    check(serialNumber, Number);
-    check(isDeleted, Match.OneOf(Boolean, {
-      $in: Array
-    }));
-
-    const userId = this.userId;
-
-    if (!userId || !isOrgMemberBySelector(userId, { serialNumber })) {
-      return this.ready();
-    }
-
-    const pubObj = getPublishCompositeOrganizationUsersObject(userId, { serialNumber });
-
-    return Object.assign({}, pubObj, {
-      children: [
-        ...pubObj.children,
-        ...(() => _.isFunction(fn) && fn.call(this, userId, serialNumber, isDeleted))(),
-      ],
-    });
-  };
-
 export const explainMongoQuery = (
   collection,
   query = {},
@@ -345,11 +297,11 @@ export const toObjFind = value => ({ find: value });
 export const getRequiredFieldsByCollection = (collection) => {
   switch (collection) {
     case Actions:
-      return ActionsListProjection;
+      return Actions.publicFields;
     case NonConformities:
-      return NonConformitiesListProjection;
+      return NonConformities.publicFields;
     case Risks:
-      return RisksListProjection;
+      return Risks.publicFields;
     default:
       return {};
   }

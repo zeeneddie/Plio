@@ -10,12 +10,17 @@ Template.UserDirectory_Page.viewmodel({
   mixin: ['search', 'organization'],
   autorun() {
     const userIds = this.getCurrentOrganizationUsers();
+    const organizationId = this.organizationId();
     if (userIds && userIds.length) {
-      const organizationUsersHandle = UserSubs.subscribe('organizationUsers', userIds);
+      const organizationUsersHandle = UserSubs.subscribe(
+        'organizationUsers',
+        userIds,
+        organizationId
+      );
       if (!this.activeUser() && organizationUsersHandle.ready()) {
         FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
           orgSerialNumber: this.organizationSerialNumber(),
-          userId: this.organizationUsers().fetch()[0]._id
+          userId: this.organizationUsers().fetch()[0]._id,
         }));
       }
     }
@@ -38,7 +43,7 @@ Template.UserDirectory_Page.viewmodel({
       { name: 'profile.address' },
       { name: 'profile.initials' },
       { name: 'profile.country' },
-      { name: 'profile.phoneNumbers', subField: 'number' }
+      { name: 'profile.phoneNumbers', subField: 'number' },
     ];
 
     const searchUsers = this.searchObject('searchText', searchFields);

@@ -3,9 +3,14 @@ import React, { PropTypes } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import Button from '../../../components/Buttons/Button';
 import Wrapper from '../../../components/Wrapper';
-import { Icon, VolumeMute } from '../../../components/Icons';
+import { Icon } from '../../../components/Icons';
 import CardHeadingButtons from '../../../components/CardHeadingButtons';
 import { Pull, TextAlign } from '../../../components/Utility';
+import withStateToggle from '/imports/ui/react/helpers/withStateToggle';
+
+import Menu from './Menu';
+
+const MenuEnhanced = withStateToggle(false, 'isOpen', 'toggle')(Menu);
 
 const DiscussionHeader = ({ onToggleMute, onBackArrowClick, isMuted }) => (
   <CardHeader className="chat-heading">
@@ -18,20 +23,11 @@ const DiscussionHeader = ({ onToggleMute, onBackArrowClick, isMuted }) => (
           </Button>
         </CardHeadingButtons>
       </Pull>
-      {/*
       <Pull right>
         <CardHeadingButtons>
-          <VolumeMute style={{ cursor: 'pointer' }} onClick={onToggleMute}>
-            <VolumeMute.Volume />
-            {isMuted ? (
-              <VolumeMute.Cross />
-            ) : (
-              <Icon name="wifi rotate-90 right" />
-            )}
-          </VolumeMute>
+          <MenuEnhanced {...{ isMuted, onToggleMute }} />
         </CardHeadingButtons>
       </Pull>
-      */}
       <TextAlign center>
         <CardHeader.Title>
           Discussion

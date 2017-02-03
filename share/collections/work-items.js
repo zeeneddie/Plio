@@ -21,13 +21,28 @@ WorkItems.helpers({
       [LINKED_TYPES.RISK]: Risks,
       [LINKED_TYPES.CORRECTIVE_ACTION]: Actions,
       [LINKED_TYPES.PREVENTATIVE_ACTION]: Actions,
-      [LINKED_TYPES.RISK_CONTROL]: Actions
+      [LINKED_TYPES.RISK_CONTROL]: Actions,
     };
 
     const docCollection = collections[type];
 
     return docCollection && docCollection.findOne({ _id });
-  }
+  },
 });
+
+WorkItems.publicFields = {
+  organizationId: 1,
+  targetDate: 1,
+  type: 1,
+  status: 1,
+  linkedDoc: 1,
+  assigneeId: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  isCompleted: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1,
+};
 
 export { WorkItems };
