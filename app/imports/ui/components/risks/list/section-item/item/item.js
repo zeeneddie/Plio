@@ -2,12 +2,12 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 
-import { updateViewedBy } from '/imports/api/risks/methods.js';
+import { updateViewedBy } from '/imports/api/risks/methods';
 
 Template.Risks_Item.viewmodel({
   share: 'window',
   mixin: ['risk', 'user', 'date', 'riskScore', 'organization', 'problemsStatus', {
-    counter: 'counter'
+    counter: 'counter',
   }],
   onCreated(template) {
     template.autorun((computation) => {
@@ -33,7 +33,6 @@ Template.Risks_Item.viewmodel({
   status: '',
   scores: '',
   title: '',
-  primaryScore: '',
   viewedBy: [],
   primaryScore() {
     const scoresSorted = this.sortScores(this.scores(), -1);
@@ -47,17 +46,20 @@ Template.Risks_Item.viewmodel({
       href: (() => {
         const params = {
           riskId: _id,
-          orgSerialNumber: this.organizationSerialNumber()
+          orgSerialNumber: this.organizationSerialNumber(),
         };
         const queryParams = { filter: this.activeRiskFilterId() };
         return FlowRouter.path('risk', params, queryParams);
-      })()
+      })(),
     };
   },
-  getUserText({ isDeleted, createdBy, deletedBy }) {
+  getUserText({ isDeleted, deletedBy }) {
     return isDeleted
             ? `Deleted by: ${this.userNameOrEmail(deletedBy)}`
             : '';
+  },
+  getDate({ identifiedAt, deletedAt, isDeleted }) {
+    return isDeleted ? this.renderDate(deletedAt) : this.renderDate(identifiedAt);
   },
   isNew() {
     const userId = Meteor.userId();
@@ -71,5 +73,5 @@ Template.Risks_Item.viewmodel({
     const _id = this._id();
 
     Meteor.defer(() => updateViewedBy.call({ _id }, cb));
-  }
+  },
 });

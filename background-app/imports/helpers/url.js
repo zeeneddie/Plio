@@ -76,3 +76,5 @@ export const getCollectionUrlByDocType = (docType, serialNumber) => {
 
   return url;
 };
+
+export const removeQueryParams = str => `${str}`.split('?')[0];

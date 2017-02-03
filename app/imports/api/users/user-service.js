@@ -1,5 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
+import { _ } from 'meteor/underscore';
+
+import { getC } from '/imports/api/helpers';
 
 
 export default {
@@ -8,7 +11,7 @@ export default {
 
   update(_id, { ...args }) {
     return this.collection.update({ _id }, {
-      $set: args
+      $set: args,
     });
   },
 
@@ -24,13 +27,13 @@ export default {
     });
 
     return this.collection.update({ _id }, {
-      $set: updateDoc
+      $set: updateDoc,
     });
   },
 
   unsetProfileProperty({ _id, fieldName }) {
     return this.collection.update({ _id }, {
-      $unset: { [`profile.${fieldName}`]: '' }
+      $unset: { [`profile.${fieldName}`]: '' },
     });
   },
 
@@ -49,42 +52,42 @@ export default {
   updatePhoneNumber({ userId, _id, number, type }) {
     return this.collection.update({
       _id: userId,
-      'profile.phoneNumbers._id': _id
+      'profile.phoneNumbers._id': _id,
     }, {
       $set: {
         'profile.phoneNumbers.$.number': number,
-        'profile.phoneNumbers.$.type': type
-      }
+        'profile.phoneNumbers.$.type': type,
+      },
     });
   },
 
   addPhoneNumber({ userId, _id, number, type }) {
     return this.collection.update({
-      _id: userId
+      _id: userId,
     }, {
       $push: {
-        'profile.phoneNumbers': { _id, number, type }
-      }
+        'profile.phoneNumbers': { _id, number, type },
+      },
     });
   },
 
   removePhoneNumber({ userId, _id }) {
     return this.collection.update({
-      _id: userId
+      _id: userId,
     }, {
       $pull: {
-        'profile.phoneNumbers': { _id }
-      }
+        'profile.phoneNumbers': { _id },
+      },
     });
   },
 
   setNotifications({ _id, enabled }) {
     const update = {
-      $set: { 'preferences.areNotificationsEnabled': enabled }
+      $set: { 'preferences.areNotificationsEnabled': enabled },
     };
 
     if (enabled === false) {
-      update['$unset'] = { 'preferences.notificationSound': '' };
+      update.$unset = { 'preferences.notificationSound': '' };
     }
 
     return this.collection.update({ _id }, update);
@@ -94,15 +97,26 @@ export default {
     let update;
     if (soundFile) {
       update = {
-        $set: { 'preferences.notificationSound': soundFile }
+        $set: { 'preferences.notificationSound': soundFile },
       };
     } else {
       update = {
-        $unset: { 'preferences.notificationSound': '' }
+        $unset: { 'preferences.notificationSound': '' },
       };
     }
 
     return this.collection.update({ _id }, update);
-  }
+  },
+
+  setEmailNotifications({ _id, enabled }) {
+    const query = { _id };
+    const modifier = {
+      $set: {
+        'preferences.areEmailNotificationsEnabled': enabled,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
 
 };

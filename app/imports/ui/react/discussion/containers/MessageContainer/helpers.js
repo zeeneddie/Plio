@@ -3,7 +3,6 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import React from 'react';
 
 import { getFormattedDate } from '/imports/share/helpers';
-import { invokeC } from '/imports/api/helpers';
 import { TruncatedStringLengths } from '/imports/api/constants';
 import FileProvider from '../../../containers/providers/FileProvider';
 import { openUserDetails } from './handlers';
@@ -11,8 +10,6 @@ import ReactAutolinker from '../../../components/ReactAutolinker';
 import { getMentionData, getMentionDataWithUsers } from '/imports/share/mentions';
 
 // Helpers
-
-export const invokeUser = path => obj => invokeC(path, obj.user);
 
 const renderMentions = (text, defaultRenderer) => {
   const data = getMentionDataWithUsers(getMentionData(text));
@@ -38,12 +35,6 @@ export const getMessagePath = (props) => {
 
   return FlowRouter.path(currentRouteName, params, queryParams);
 };
-
-export const getUserAvatar = invokeUser('avatar');
-
-export const getUserFullNameOrEmail = invokeUser('fullNameOrEmail');
-
-export const getUserFirstName = invokeUser('firstName');
 
 export const getMessageTime = props => getFormattedDate(props.createdAt, 'h:mm A');
 

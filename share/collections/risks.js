@@ -5,6 +5,7 @@ import { _ } from 'meteor/underscore';
 import { RisksSchema } from '../schemas/risks-schema.js';
 import { CollectionNames, riskScoreTypes } from '../constants.js';
 import { WorkItems } from './work-items.js';
+import { Standards } from './standards';
 
 
 const Risks = new Mongo.Collection(CollectionNames.RISKS);
@@ -40,6 +41,23 @@ Risks.helpers({
       || getScoreByType(riskScoreTypes.inherent.id);
   },
 });
+
+Risks.publicFields = {
+  organizationId: 1,
+  serialNumber: 1,
+  sequentialId: 1,
+  title: 1,
+  identifiedAt: 1,
+  typeId: 1,
+  scores: 1,
+  departmentsIds: 1,
+  status: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1,
+};
 
 
 export { Risks };

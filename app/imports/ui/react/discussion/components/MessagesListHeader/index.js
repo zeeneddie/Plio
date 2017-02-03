@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const MessagesListHeader = ({ startedAt, startedBy }) => (
   <div className="chat-item chat-item-start">
@@ -10,5 +10,10 @@ const MessagesListHeader = ({ startedAt, startedBy }) => (
     </p>
   </div>
 );
+
+MessagesListHeader.propTypes = {
+  startedAt: PropTypes.string,
+  startedBy: PropTypes.string,
+};
 
 export default MessagesListHeader;

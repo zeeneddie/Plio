@@ -9,12 +9,6 @@ import { StandardsBookSections } from '/imports/share/collections/standards-book
 import { RiskTypes } from '/imports/share/collections/risk-types';
 import { getUserOrganizations } from '../utils';
 import { isPlioUser, isOrgMember } from '../../checkers';
-import {
-  StandardsBookSectionsListProjection,
-  StandardTypesListProjection,
-  CustomersListProjection,
-  CustomerCardProjection,
-} from '../../constants';
 import { makeOptionsFields } from '../../helpers';
 import { UserMembership } from '/imports/share/constants';
 
@@ -143,8 +137,11 @@ Meteor.publish('organizationDeps', function(organizationId) {
 
   const query = { organizationId };
 
-  const standardsBookSections = StandardsBookSections.find(query, makeOptionsFields(StandardsBookSectionsListProjection));
-  const standardsTypes = StandardTypes.find(query, makeOptionsFields(StandardTypesListProjection));
+  const standardsBookSections = StandardsBookSections.find(
+    query,
+    makeOptionsFields(StandardsBookSections.publicFields)
+  );
+  const standardsTypes = StandardTypes.find(query, makeOptionsFields(StandardTypes.publicFields));
   const riskTypes = RiskTypes.find(query);
   const users = Meteor.users.find({ _id: { $in: userIds } });
 
@@ -196,7 +193,7 @@ Meteor.publishComposite('customersLayout', {
     }
 
     return Organizations.find({}, {
-      fields: CustomersListProjection,
+      fields: Organizations.listFields,
     });
   },
   children: [{
@@ -220,6 +217,6 @@ Meteor.publish('customerCard', function getCustomerData(orgId) {
   }
 
   return Organizations.find({ _id: orgId }, {
-    fields: CustomerCardProjection,
+    fields: Organizations.cardFields,
   });
 });

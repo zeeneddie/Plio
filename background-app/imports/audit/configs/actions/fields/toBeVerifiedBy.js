@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} set to be verified by of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
+          '{{{userName}}} assigned {{{newValue}}} to verify the {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed to be verified by of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
+          '{{{userName}}} assigned {{{newValue}}} to verify the {{{docDesc}}} {{{docName}}} instead of {{{oldValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{{userName}}} removed to be verified by of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed {{{oldValue}}} from the verification process of the {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

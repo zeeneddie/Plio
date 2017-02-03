@@ -34,7 +34,7 @@ const CustomersRHSBody = ({
     { label: 'Org timezone', text: orgTimezone },
     { label: 'Default currency', text: currency },
     { label: 'Number of members', text: _.filter(users, (user) => !user.isRemoved).length },
-    { label: 'Last accessed', text: _date_.renderDate(lastAccessedDate) },
+    { label: 'Last accessed', text: lastAccessedDate && _date_.renderDate(lastAccessedDate) || 'No date available' },
     { label: 'Created date', text: _date_.renderDate(createdAt) },
     { label: 'Type', text: CustomerTypesNames[customerType] },
   ];

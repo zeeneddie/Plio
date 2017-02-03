@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import MessageContainer from '../../containers/MessageContainer';
 
-const MessagesList = (props) => (
+const MessagesList = ({ messages, at, dispatch, userId }) => (
   <div>
-    {props.messages.map(message =>
-      <MessageContainer
-        key={message._id}
-        at={props.at}
-        dispatch={props.dispatch}
-        {...message} />)}
+    {messages.map((message) => (
+      <MessageContainer key={message._id} {...{ ...message, at, dispatch, userId }} />
+    ))}
   </div>
 );
+
+MessagesList.propTypes = {
+  messages: PropTypes.arrayOf(PropTypes.object),
+  at: PropTypes.string,
+  dispatch: PropTypes.func,
+  userId: PropTypes.string,
+};
 
 export default MessagesList;

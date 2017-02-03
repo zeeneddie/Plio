@@ -32,12 +32,6 @@ export const StandardFilters = {
   3: { title: 'Standards', name: 'deleted', prepend: '' },
 };
 
-export const STANDARD_FILTER_MAP = {
-  SECTION: 1,
-  TYPE: 2,
-  DELETED: 3,
-};
-
 export const WorkInboxFilters = {
   1: { title: 'Work', name: 'my current', prepend: '' },
   2: { title: 'Work', name: 'team current', prepend: '' },
@@ -45,6 +39,12 @@ export const WorkInboxFilters = {
   4: { title: 'Work', name: 'team completed', prepend: '' },
   5: { name: 'My deleted actions' },
   6: { name: 'Team deleted actions' },
+};
+
+export const STANDARD_FILTER_MAP = {
+  SECTION: 1,
+  TYPE: 2,
+  DELETED: 3,
 };
 
 export const UncategorizedTypeSection = {
@@ -55,137 +55,6 @@ export const UncategorizedTypeSection = {
 
 export const TruncatedStringLengths = {
   c40: 40,
-};
-
-export const StandardsListProjection = {
-  organizationId: 1,
-  title: 1,
-  typeId: 1,
-  sectionId: 1,
-  nestingLevel: 1,
-  viewedBy: 1,
-  createdAt: 1,
-  owner: 1,
-  isDeleted: 1,
-  deletedAt: 1,
-  deletedBy: 1,
-};
-
-export const RisksListProjection = {
-  organizationId: 1,
-  serialNumber: 1,
-  sequentialId: 1,
-  title: 1,
-  identifiedAt: 1,
-  typeId: 1,
-  scores: 1,
-  departmentsIds: 1,
-  status: 1,
-  viewedBy: 1,
-  createdAt: 1,
-  isDeleted: 1,
-  deletedAt: 1,
-  deletedBy: 1,
-};
-
-export const ActionsListProjection = {
-  organizationId: 1,
-  serialNumber: 1,
-  sequentialId: 1,
-  title: 1,
-  linkedTo: 1,
-  type: 1,
-  status: 1,
-  ownerId: 1,
-  isCompleted: 1,
-  completionTargetDate: 1,
-  toBeCompletedBy: 1,
-  viewedBy: 1,
-  createdAt: 1,
-  isDeleted: 1,
-  deletedAt: 1,
-  deletedBy: 1,
-};
-
-export const NonConformitiesListProjection = {
-  organizationId: 1,
-  serialNumber: 1,
-  sequentialId: 1,
-  title: 1,
-  cost: 1,
-  ref: 1,
-  createdAt: 1,
-  identifiedAt: 1,
-  magnitude: 1,
-  status: 1,
-  departmentsIds: 1,
-  viewedBy: 1,
-  isDeleted: 1,
-  deletedAt: 1,
-  deletedBy: 1,
-};
-
-export const WorkItemsListProjection = {
-  organizationId: 1,
-  targetDate: 1,
-  type: 1,
-  status: 1,
-  linkedDoc: 1,
-  assigneeId: 1,
-  viewedBy: 1,
-  createdAt: 1,
-  isCompleted: 1,
-  isDeleted: 1,
-  deletedAt: 1,
-  deletedBy: 1,
-};
-
-export const HelpDocsListProjection = {
-  sectionId: 1,
-  title: 1,
-  issueNumber: 1,
-  status: 1,
-};
-
-export const HelpSectionProjection = {
-  index: 1,
-  title: 1,
-};
-
-export const StandardsBookSectionsListProjection = {
-  organizationId: 1,
-  title: 1,
-};
-
-export const StandardTypesListProjection = {
-  organizationId: 1,
-  title: 1,
-  abbreviation: 1,
-};
-
-export const DepartmentsListProjection = {
-  organizationId: 1,
-  name: 1,
-};
-
-export const CustomersListProjection = {
-  name: 1,
-  serialNumber: 1,
-  createdAt: 1,
-  customerType: 1,
-  isAdminOrg: 1,
-  lastAccessedDate: 1,
-  'users.userId': 1,
-  'users.role': 1,
-  'users.isRemoved': 1,
-  'users.removedAt': 1,
-  'users.removedBy': 1,
-};
-
-export const CustomerCardProjection = {
-  ...CustomersListProjection,
-  timezone: 1,
-  currency: 1,
 };
 
 export const AnalysisTitles = {
@@ -260,3 +129,12 @@ export const ORDER = {
 };
 
 export const COLLECTION_NAME_MAP = mirrorKeys(CollectionNames);
+
+export const KeyMap = {
+  tab: 9,
+  enter: 13,
+  left: 37,
+  up: 38,
+  right: 39,
+  down: 40,
+};
