@@ -2,6 +2,8 @@ import { check } from 'meteor/check';
 import get from 'lodash.get';
 import moment from 'moment-timezone';
 import Handlebars from 'handlebars';
+import { _ } from 'meteor/underscore';
+import { Meteor } from 'meteor/meteor';
 
 import {
   AvatarPlaceholders,
@@ -9,6 +11,7 @@ import {
   DocumentTypes,
   ProblemMagnitudes,
   SystemName,
+  DocumentTypesPlural,
 } from './constants.js';
 import { Actions } from './collections/actions.js';
 import { NonConformities } from './collections/non-conformities.js';
@@ -37,14 +40,14 @@ export const getCollectionByName = (colName) => {
     [CollectionNames.NCS]: NonConformities,
     [CollectionNames.RISKS]: Risks,
     [CollectionNames.STANDARDS]: Standards,
-    [CollectionNames.ORGANIZATIONS]: Organizations
+    [CollectionNames.ORGANIZATIONS]: Organizations,
   };
 
   return collections[colName];
 };
 
 export const getCollectionByDocType = (docType) => {
-  switch(docType) {
+  switch (docType) {
     case DocumentTypes.STANDARD:
       return Standards;
 
@@ -64,17 +67,19 @@ export const getCollectionByDocType = (docType) => {
   }
 };
 
-export const getCollectionNameByDocType = (docType) => {
-  return {
-    [DocumentTypes.STANDARD]: CollectionNames.STANDARDS,
-    [DocumentTypes.NON_CONFORMITY]: CollectionNames.NCS,
-    [DocumentTypes.RISK]: CollectionNames.RISKS
-  }[docType];
-};
+export const getCollectionNameByDocType = (docType) => ({
+  [DocumentTypes.STANDARD]: CollectionNames.STANDARDS,
+  [DocumentTypes.NON_CONFORMITY]: CollectionNames.NCS,
+  [DocumentTypes.RISK]: CollectionNames.RISKS,
+})[docType];
 
-export const getFormattedDate = (date, stringFormat) => {
-  return moment(date).format(stringFormat);
-};
+export const getDocTypePlural = (docType) => ({
+  [DocumentTypes.STANDARD]: DocumentTypesPlural.STANDARDS,
+  [DocumentTypes.RISK]: DocumentTypesPlural.RISKS,
+  [DocumentTypes.NON_CONFORMITY]: DocumentTypesPlural.NON_CONFORMITIES,
+})[docType];
+
+export const getFormattedDate = (date, stringFormat) => moment(date).format(stringFormat);
 
 export const getLinkedDoc = (documentId, documentType) => {
   const collection = getCollectionByDocType(documentType);
@@ -109,11 +114,9 @@ export const getTitlePrefix = (title) => {
   return titlePrefix;
 };
 
-export const getTzTargetDate = (targetDate, timezone) => {
-  return targetDate && moment.tz([
-    targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate()
-  ], timezone).toDate();
-};
+export const getTzTargetDate = (targetDate, timezone) => targetDate && moment.tz([
+  targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate(),
+], timezone).toDate();
 
 export const getFormattedTzDate = (timezone, format = 'z Z') =>
   moment.tz(timezone).format(format);
@@ -153,19 +156,19 @@ export const generateSerialNumber = (collection, query = {}, defaultNumber = 1) 
   const last = collection.findOne({
     ...query,
     serialNumber: {
-      $type: 16 // 32-bit integer
-    }
+      $type: 16, // 32-bit integer
+    },
   }, {
     sort: {
-      serialNumber: -1
-    }
+      serialNumber: -1,
+    },
   });
 
   return last ? last.serialNumber + 1 : defaultNumber;
 };
 
 export const generateUserInitials = (userProfile) => {
-  const { firstName, lastName} = userProfile;
+  const { firstName, lastName } = userProfile;
   let initials = '';
   if (firstName) {
     initials += firstName.charAt(0);
@@ -197,22 +200,16 @@ const checkTargetDate = (targetDate, timezone) => {
   }
 };
 
-export const isDueToday = (targetDate, timezone) => {
-  return checkTargetDate(targetDate, timezone) === 0;
-};
+export const isDueToday = (targetDate, timezone) => checkTargetDate(targetDate, timezone) === 0;
 
-export const isOverdue = (targetDate, timezone) => {
-  return checkTargetDate(targetDate, timezone) === 1;
-};
+export const isOverdue = (targetDate, timezone) => checkTargetDate(targetDate, timezone) === 1;
 
 export const renderTemplate = (template, data = {}) => {
   const compiledTemplate = Handlebars.compile(template);
   return compiledTemplate(data);
 };
 
-export const getUser = (userId) => {
-  return Meteor.users.findOne({ _id: userId });
-};
+export const getUser = (userId) => Meteor.users.findOne({ _id: userId });
 
 export const getUserFullNameOrEmail = (userOrId) => {
   let user = userOrId;
@@ -230,10 +227,10 @@ export const getUserFullNameOrEmail = (userOrId) => {
 export const htmlToPlainText = (html) => {
   check(html, String);
 
-  return html.replace(/<br>/gi, "\n")
-    .replace(/<p.*>/gi, "\n")
-    .replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 (Link->$1) ")
-    .replace(/<(?:.|\s)*?>/g, "")
+  return html.replace(/<br>/gi, '\n')
+    .replace(/<p.*>/gi, '\n')
+    .replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, ' $2 (Link->$1) ')
+    .replace(/<(?:.|\s)*?>/g, '')
     .trim();
 };
 

@@ -290,6 +290,12 @@ export const DocumentTypes = {
   ...ActionTypes,
 };
 
+export const DocumentTypesPlural = {
+  STANDARDS: 'standards',
+  NON_CONFORMITIES: 'non-conformities',
+  RISKS: 'risks',
+};
+
 export const ReviewStatuses = {
   0: 'Overdue',
   1: 'Awaiting review',
@@ -591,6 +597,13 @@ export const WorkInboxTitles = [
   'Work items',
   'Work',
 ];
+
+export const HomeScreenTitlesTypes = {
+  STANDARDS: 'standards',
+  RISKS: 'risks',
+  NON_CONFORMITIES: 'nonConformities',
+  WORK_INBOX: 'workInbox',
+};
 
 export const EmailsForPlioReporting = [
   'james.ives@pliohub.com',
