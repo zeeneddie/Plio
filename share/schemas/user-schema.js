@@ -1,4 +1,5 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { _ } from 'meteor/underscore';
 
 import { PhoneTypes } from '../constants.js';
 import { TimezoneSchema } from './schemas.js';
@@ -7,148 +8,157 @@ import { TimezoneSchema } from './schemas.js';
 const PhoneNumberSchema = new SimpleSchema({
   _id: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    regEx: SimpleSchema.RegEx.Id,
   },
   number: {
     type: String,
-    regEx: /^[\+|0-9][0-9\-\s\(\)]+$/
+    regEx: /^[\+|0-9][0-9\-\s\(\)]+$/,
   },
   type: {
     type: String,
-    allowedValues: _.values(PhoneTypes)
-  }
+    allowedValues: _.values(PhoneTypes),
+  },
 });
 
 const UserProfileSchema = new SimpleSchema({
   firstName: {
     type: String,
-    min: 1
+    min: 1,
   },
   lastName: {
     type: String,
-    min: 1
+    min: 1,
   },
   initials: {
     type: String,
     min: 2,
     max: 3,
-    optional: true
+    optional: true,
   },
   description: {
     type: String,
-    optional: true
+    optional: true,
   },
   avatar: {
-    type: String
+    type: String,
   },
   skype: {
     type: String,
-    optional: true
+    optional: true,
   },
   country: {
     type: String,
-    optional: true
+    optional: true,
   },
   address: {
     type: String,
-    optional: true
+    optional: true,
   },
   phoneNumbers: {
     type: [PhoneNumberSchema],
-    optional: true
+    optional: true,
   },
   // temporary fields, needed to create an organization
   organizationName: {
     type: String,
-    optional: true
+    optional: true,
   },
-  organizationTimezone: TimezoneSchema.getDefinition('timezone')
+  organizationTimezone: TimezoneSchema.getDefinition('timezone'),
 });
 
 const UserPreferencesSchema = new SimpleSchema({
   areNotificationsEnabled: {
     type: Boolean,
-    defaultValue: true
+    defaultValue: true,
+  },
+  areEmailNotificationsEnabled: {
+    type: Boolean,
+    defaultValue: true,
   },
   notificationSound: {
     type: String,
     defaultValue: '/sounds/graceful',
-    optional: true
-  }
+    optional: true,
+  },
 });
 
 const UserEmailSchema = new SimpleSchema({
   address: {
     type: String,
-    regEx: SimpleSchema.RegEx.Email
+    regEx: SimpleSchema.RegEx.Email,
   },
   verified: {
     type: Boolean,
-    defaultValue: false
-  }
+    defaultValue: false,
+  },
 });
 
 const UserSchema = new SimpleSchema({
   createdAt: {
-    type: Date
+    type: Date,
   },
   services: {
     type: Object,
-    blackbox: true
+    blackbox: true,
   },
   emails: {
-    type: [UserEmailSchema]
+    type: [UserEmailSchema],
   },
   profile: {
-    type: UserProfileSchema
+    type: UserProfileSchema,
   },
   status: {
     type: String,
-    optional: true
+    optional: true,
   },
   statusConnection: {
     type: String,
-    optional: true
+    optional: true,
   },
   statusDefault: {
     type: String,
-    optional: true
+    optional: true,
   },
   roles: {
     type: Object,
     blackbox: true,
-    optional: true
+    optional: true,
   },
   preferences: {
-    type: UserPreferencesSchema
+    type: UserPreferencesSchema,
   },
   invitationId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    optional: true
+    optional: true,
   },
   invitedAt: {
     type: Date,
-    optional: true
+    optional: true,
   },
   invitedBy: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    optional: true
+    optional: true,
   },
   invitationExpirationDate: {
     type: Date,
-    optional: true
+    optional: true,
   },
   invitationOrgId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    optional: true
+    optional: true,
   },
   selectedOrganizationSerialNumber: {
     type: Number,
-    optional: true
-  }
+    optional: true,
+  },
+  receiveEmailNotifications: {
+    type: Boolean,
+    optional: true,
+    defaultValue: true,
+  },
 });
 
 export { UserSchema, UserProfileSchema, PhoneNumberSchema };

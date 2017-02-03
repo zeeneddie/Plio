@@ -159,7 +159,7 @@ export const pickFromCollections = pickFrom('collections');
 
 export const omitC = curry((keys, obj) => _.omit(obj, ...keys));
 
-export const getC = curry((path, obj) => get(obj, path));
+export const getC = curry((path, obj, defaultValue) => get(obj, path, defaultValue), 2);
 
 export const getId = getC('_id');
 

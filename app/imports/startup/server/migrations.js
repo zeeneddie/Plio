@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 // import { Migrations } from 'meteor/percolate:migrations';
 //
 // import { NonConformities } from '/imports/share/collections/non-conformities.js';
@@ -144,10 +146,38 @@ Migrations.add({
   down() {
     const query = {};
     const modifier = { $unset: { customerType: '' } };
+    const options = { multi: true };
 
-    Organizations.update(query, modifier);
+    Organizations.update(query, modifier, options);
 
     console.log('Customer type was removed from all organizations');
+  },
+});
+
+Migrations.add({
+  version: 5,
+  name: 'Adds default value for \'areEmailNotificationsEnabled\' to user preferences',
+  up() {
+    const query = { 'preferences.areEmailNotificationsEnabled': null };
+    const modifier = {
+      $set: {
+        'preferences.areEmailNotificationsEnabled': true,
+      },
+    };
+    const options = { multi: true };
+
+    Meteor.users.update(query, modifier, options);
+
+    console.log(
+      'Default value for \'areEmailNotificationsEnabled\' was set for all users without it'
+    );
+  },
+  down() {
+    const query = {};
+    const modifier = { $unset: { 'preferences.areEmailNotificationsEnabled': '' } };
+    const options = { multi: true };
+
+    Meteor.users.update(query, modifier, options);
   },
 });
 
