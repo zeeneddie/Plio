@@ -12,7 +12,7 @@ const ReviewSubcard = ({
   onFrequencyChanged,
   onReminderChanged,
 }) => (
-  <CardBlockCollapse leftText="Review">
+  <CardBlockCollapse leftText="Review frequency">
     <CardBlock>
       <legend>Standards</legend>
       <ReviewConfig
