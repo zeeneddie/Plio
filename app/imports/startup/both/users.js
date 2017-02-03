@@ -80,3 +80,19 @@ Meteor.users.helpers({
     return this.preferences && this.preferences.areNotificationsEnabled;
   },
 });
+
+Meteor.users.publicFields = {
+  _id: 1,
+  'emails.address': 1,
+  'profile.address': 1,
+  'profile.avatar': 1,
+  'profile.country': 1,
+  'profile.description': 1,
+  'profile.firstName': 1,
+  'profile.lastName': 1,
+  'profile.initials': 1,
+  'profile.phoneNumbers': 1,
+  'profile.skype': 1,
+  status: 1,
+  statusConnection: 1,
+};
