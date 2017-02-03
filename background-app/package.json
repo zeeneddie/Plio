@@ -4,7 +4,7 @@
   "scripts": {
     "start": "MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor run --port 4000 --settings settings-local.json",
     "debug": "MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor debug --settings settings-local.json",
-    "start-windows": "cmd /c \"SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&SET MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local&&meteor --port 4000 --settings settings-local.json\""
+    "start-windows": "cmd /c \"SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&SET MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local&&meteor --production --port 4000 --settings settings-local.json\""
   },
   "dependencies": {
     "babel-runtime": "^6.20.0",
