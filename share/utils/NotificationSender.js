@@ -30,8 +30,11 @@ export default class NotificationSender {
    * @param {string} [config.emailSubject] Subject of the email
    * @param {object} [config.templateData] Template data scope
    * @param {string} [config.templateName] Name of template
-   * @param {object} [config.notificationData] Notification configuration (Check out Notification API)
+   * @param {object} [config.notificationData] Notification configuration
+   & (Check out Notification API)
    * @param {string} [config.options] Additional options
+   * @param {boolean} [config.options.isImportant] Whether or not
+   * recipient's email notification preference should be ignored
    * @constructor
    */
   constructor({ recipients, emailSubject, templateData, templateName, notificationData, options = {} }) {
@@ -74,27 +77,28 @@ export default class NotificationSender {
    * @private
    */
   _getUserEmail(userId) {
+    // check if recipient has email notifications enabled or the notification is important
+    const shouldSend = (user) => user && (
+      this._options.isImportant ||
+      user.preferences && user.preferences.areEmailNotificationsEnabled
+    );
+
     if (userId && userId.indexOf('@') > -1) {
       const query = { 'emails.address': userId };
       const user = Meteor.users.findOne(query);
 
-      // check if recipient has email notifications enabled
-      return user && user.preferences && user.preferences.areEmailNotificationsEnabled
-        ? userId
-        : false;
+      return shouldSend(user) ? userId : false;
     }
-  
+
     const user = Meteor.users.findOne({ _id: userId });
     const email = (
       user &&
-      user.preferences &&
-      user.preferences.areEmailNotificationsEnabled &&
       user.emails &&
       user.emails[0] &&
       user.emails[0].address
     );
 
-    return email || false;
+    return shouldSend(user) && email || false;
   }
 
   /**

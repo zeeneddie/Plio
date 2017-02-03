@@ -25,7 +25,8 @@ export default class UserNotificationsSender {
       recipients: this._userId,
       templateName: 'personalEmail',
       emailSubject,
-      templateData
+      templateData,
+      options: { isImportant: true },
     }).sendEmail();
   }
 
