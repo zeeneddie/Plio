@@ -128,8 +128,6 @@ export default class ReviewReminderSender {
       },
     };
 
-    console.log(emailSubject, templateData);
-
     return {
       recipients: receivers,
       emailSubject,
