@@ -2,13 +2,14 @@
 
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import moment from 'moment-timezone';
+import get from 'lodash.get';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { Risks } from '/imports/share/collections/risks';
 import { Standards } from '/imports/share/collections/standards';
 import ReviewWorkflow from '/imports/share/utils/ReviewWorkflow';
 import { reviewConfigSchema } from '/imports/share/schemas/organization-schema';
-import { DocumentTypes } from '/imports/share/constants';
+import { DocumentTypes, SystemName } from '/imports/share/constants';
 import { capitalize, getDocTypePlural } from '/imports/share/helpers';
 import { getCollectionUrlByDocType } from '../../helpers/url';
 import { isDateScheduled, getPrettyTzDate } from '../../helpers/date';
@@ -101,7 +102,7 @@ export default class ReviewReminderSender {
   }
 
   _getReminderEmailData({ collection, reviewConfig, docType }) {
-    const receivers = this._getReceivers(collection, reviewConfig, docType);
+    const receivers = this._getReceivers({ collection, reviewConfig, docType });
 
     if (!receivers.length) return false;
 
@@ -135,7 +136,12 @@ export default class ReviewReminderSender {
     };
   }
 
-  _getReceivers() {
+  _getReceivers({ docType }) {
+    const docTypePlural = getDocTypePlural(docType);
+    const reviewerId = get(this._organization, `review.${docTypePlural}.reviewerId`);
+
+    if (reviewerId && reviewerId !== SystemName) return [reviewerId];
+
     const ownerId = typeof this._organization.ownerId === 'function' &&
       this._organization.ownerId();
 
