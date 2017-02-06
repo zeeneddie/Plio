@@ -21,8 +21,8 @@ const enhance = compose(
     })),
   })),
   withHandlers({
-    onSelect: ({ changeField, fieldName }) => (e, { value }) => {
-      if (value) changeField(fieldName, value);
+    onSelect: ({ changeField, fieldName }) => (e, { value }, callback) => {
+      if (value) changeField(fieldName, value, true, callback);
     },
   }),
 );

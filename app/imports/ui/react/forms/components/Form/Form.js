@@ -31,12 +31,12 @@ const enhance = compose(
       getField: PropTypes.func,
     },
     (props) => ({
-      changeField(fieldName, newFieldValue, shouldSave = true) {
+      changeField(fieldName, newFieldValue, shouldSave = true, ...other) {
         const newFormData = set({ ...props.formData }, fieldName, newFieldValue);
         props.setFormData(newFormData);
 
         if (shouldSave && props.autosave && _.isFunction(props.onFormChange)) {
-          props.onFormChange(fieldName, newFieldValue);
+          props.onFormChange(fieldName, newFieldValue, ...other);
         }
       },
       getField(fieldName) {

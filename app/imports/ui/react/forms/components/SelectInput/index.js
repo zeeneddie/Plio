@@ -77,6 +77,7 @@ export default class SelectInput extends React.Component {
   onSelect(e, { text, ...other }, cb) {
     // prevent "close" code to execute on select
     // it will fire otherwise because of onBlur event and will reset the value back
+
     this.shouldCallOnBlur = false;
 
     if (!this.props.uncontrolled) {
@@ -95,11 +96,12 @@ export default class SelectInput extends React.Component {
       if (cb) cb(err, res);
     };
 
+    this.setState({ isOpen: false });
+
     // we need a timeout there to prevent some flushy things to happen
     // also provide a callback to reset the value if method thrown an error
     setTimeout(() => {
       this.props.onSelect(e, { text, ...other }, callback);
-
       this.shouldCallOnBlur = true;
     }, 50);
   }
@@ -162,6 +164,7 @@ export default class SelectInput extends React.Component {
     return (
       <SelectInputView
         {...{ ...this.props, ...this.state }}
+        getRef={input => (this.input = input)}
         onFocus={this.open}
         onBlur={this.close}
         toggle={this.toggle}

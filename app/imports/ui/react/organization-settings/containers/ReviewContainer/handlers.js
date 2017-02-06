@@ -51,7 +51,7 @@ export const onReminderChanged = ({ organization }) => (fieldName, fieldValue) =
   method.call(Object.assign({}, commonArgs, args), handleMethodResult);
 };
 
-export const onReviewerChanged = ({ organization }) => (fieldName, fieldValue) => {
+export const onReviewerChanged = ({ organization }) => (fieldName, fieldValue, callback) => {
   const [documentKey] = fieldName.split('.');
   const methodProps = {
     documentKey,
@@ -59,5 +59,5 @@ export const onReviewerChanged = ({ organization }) => (fieldName, fieldValue) =
     _id: organization._id,
   };
 
-  setReviewReviewerId.call(methodProps, handleMethodResult);
+  setReviewReviewerId.call(methodProps, handleMethodResult(callback));
 };
