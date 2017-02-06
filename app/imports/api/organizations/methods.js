@@ -11,9 +11,10 @@ import {
   CustomerTypeSchema,
   reviewFrequencySchema,
   reviewAnnualDateSchema,
+  reviewReviewerIdSchema,
 } from '/imports/share/schemas/organization-schema';
 import {
-  WorkflowTypes, ProblemMagnitudes, InvitationStatuses,
+  WorkflowTypes, ProblemMagnitudes, InvitationStatuses, DocumentTypesPlural,
 } from '/imports/share/constants';
 import {
   IdSchema, ReminderTimePeriodSchema,
@@ -264,13 +265,31 @@ export const setRKScoringGuidelines = new Method({
 
   run({ _id, rkScoringGuidelines }) {
     return OrganizationService.setRKScoringGuidelines({ _id, rkScoringGuidelines });
-  }
+  },
 });
 
-const reviewDocumetKeySchema = new SimpleSchema({
+const reviewDocumentKeySchema = new SimpleSchema({
   documentKey: {
     type: String,
-    allowedValues: ['standards', 'risks'],
+    allowedValues: [DocumentTypesPlural.STANDARDS, DocumentTypesPlural.RISKS],
+  },
+});
+
+export const setReviewReviewerId = new Method({
+  name: 'Organizations.setReviewReviewerId',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    reviewDocumentKeySchema,
+    reviewReviewerIdSchema,
+  ]).validator(),
+
+  check(checker) {
+    return checker(ensureCanChange.bind(this));
+  },
+
+  run(args) {
+    return OrganizationService.setReviewReviewerId(args);
   },
 });
 
@@ -279,7 +298,7 @@ export const setReviewFrequency = new Method({
 
   validate: new SimpleSchema([
     IdSchema,
-    reviewDocumetKeySchema,
+    reviewDocumentKeySchema,
     reviewFrequencySchema,
   ]).validator(),
 
@@ -297,7 +316,7 @@ export const setReviewAnnualDate = new Method({
 
   validate: new SimpleSchema([
     IdSchema,
-    reviewDocumetKeySchema,
+    reviewDocumentKeySchema,
     reviewAnnualDateSchema,
   ]).validator(),
 
@@ -315,7 +334,7 @@ export const setReviewReminderTimeValue = new Method({
 
   validate: new SimpleSchema([
     IdSchema,
-    reviewDocumetKeySchema,
+    reviewDocumentKeySchema,
     reminderTypeSchema,
     {
       timeValue: ReminderTimePeriodSchema.schema('timeValue'),
@@ -336,7 +355,7 @@ export const setReviewReminderTimeUnit = new Method({
 
   validate: new SimpleSchema([
     IdSchema,
-    reviewDocumetKeySchema,
+    reviewDocumentKeySchema,
     reminderTypeSchema,
     {
       timeUnit: ReminderTimePeriodSchema.schema('timeUnit'),
