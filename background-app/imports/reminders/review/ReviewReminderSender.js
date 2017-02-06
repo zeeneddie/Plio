@@ -129,9 +129,9 @@ export default class ReviewReminderSender {
     };
 
     return {
-      recipients: receivers,
       emailSubject,
       templateData,
+      recipients: receivers,
     };
   }
 

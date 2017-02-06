@@ -1,21 +1,32 @@
 import React, { PropTypes } from 'react';
 import { compose, withProps } from 'recompose';
-import { _ } from 'meteor/underscore';
+import property from 'lodash.property';
 
+import { pickC, transsoc } from '/imports/api/helpers';
 import ReviewFrequencyForm from '../FrequencyForm';
 import ReviewAnnualDateForm from '../AnnualDateForm';
 import ReviewRemindersForm from '../RemindersForm';
+import ReviewReviewerForm from '../ReviewerForm';
+
+const getData = key => compose(pickC([key]), property('config'));
 
 const enhance = compose(
-  withProps(({ config }) => ({
-    frequencyFormData: _.pick(config, 'frequency'),
-    annualDateFormData: _.pick(config, 'annualDate'),
-    remindersFormData: _.pick(config, 'reminders'),
-  }))
+  withProps(transsoc({
+    reviewerFormData: getData('reviewer'),
+    frequencyFormData: getData('frequency'),
+    annualDateFormData: getData('annualDate'),
+    remindersFormData: getData('reminders'),
+  })),
 );
 
 const ReviewConfig = enhance((props) => (
   <div>
+    <ReviewReviewerForm
+      onReviewerChanged={props.onReviewerChanged}
+      data={props.reviewerFormData}
+      documentKey={props.documentKey}
+    />
+
     <ReviewFrequencyForm
       onFrequencyChanged={props.onFrequencyChanged}
       data={props.frequencyFormData}
@@ -39,6 +50,7 @@ const ReviewConfig = enhance((props) => (
 ReviewConfig.propTypes = {
   config: PropTypes.object,
   documentKey: PropTypes.string,
+  onReviewerChanged: PropTypes.func,
   onAnnualDateChanged: PropTypes.func,
   onFrequencyChanged: PropTypes.func,
   onReminderChanged: PropTypes.func,

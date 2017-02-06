@@ -191,17 +191,21 @@ Migrations.add({
     });
 
     organizations.forEach((org) => {
+      const reviewerId = org.createdBy;
+      const annualDate = org.createdAt;
       Organizations.update({
         _id: org._id,
       }, {
         $set: {
           review: {
             risks: {
-              annualDate: org.createdAt,
+              reviewerId,
+              annualDate,
               ...OrganizationDefaults.review.risks,
             },
             standards: {
-              annualDate: org.createdAt,
+              reviewerId,
+              annualDate,
               ...OrganizationDefaults.review.standards,
             },
           },

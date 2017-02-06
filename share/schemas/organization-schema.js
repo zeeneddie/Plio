@@ -10,6 +10,7 @@ import {
 import {
   BaseEntitySchema, ReminderTimePeriodSchema,
   TimezoneSchema, TimePeriodSchema,
+  idSchemaDoc,
 } from './schemas';
 
 export const HomeTitlesSchema = new SimpleSchema({
@@ -164,6 +165,20 @@ const rkGuidelinesSchema = new SimpleSchema({
   },
 });
 
+export const reviewReviewerIdSchema = new SimpleSchema({
+  reviewer: {
+    type: idSchemaDoc,
+    autoValue() {
+      if (this.isInsert && !this.isSet) {
+        const createdBy = this.field('createdBy');
+        if (createdBy.isSet) {
+          return createdBy.value;
+        }
+      }
+    },
+  },
+});
+
 export const reviewFrequencySchema = new SimpleSchema({
   frequency: {
     type: TimePeriodSchema,
@@ -192,6 +207,7 @@ export const reviewAnnualDateSchema = new SimpleSchema({
 });
 
 export const reviewConfigSchema = new SimpleSchema([
+  reviewReviewerIdSchema,
   reviewFrequencySchema,
   reviewAnnualDateSchema,
   {

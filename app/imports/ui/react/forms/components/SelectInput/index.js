@@ -24,7 +24,7 @@ export default class SelectInput extends React.Component {
       onSelect: PropTypes.func.isRequired,
       disabled: PropTypes.bool,
       placeholder: PropTypes.string,
-      isControlled: PropTypes.bool,
+      uncontrolled: PropTypes.bool,
       value: PropTypes.string,
       setValue: PropTypes.func,
       children: PropTypes.node,
@@ -34,7 +34,7 @@ export default class SelectInput extends React.Component {
   constructor(props) {
     super(props);
 
-    if (props.isControlled && (
+    if (!props.uncontrolled && (
       typeof props.value === 'undefined' || props.value === null || !props.setValue
     )) {
       throw new Error('Controlled select input should have "value" and "setValue" props');
@@ -45,7 +45,7 @@ export default class SelectInput extends React.Component {
       items: props.items || [],
     };
 
-    if (!props.isControlled) {
+    if (props.uncontrolled) {
       this.state = {
         ...this.state,
         value: getValue(props),
@@ -69,7 +69,7 @@ export default class SelectInput extends React.Component {
   }
 
   componentWillMount() {
-    if (this.props.isControlled) {
+    if (!this.props.uncontrolled) {
       this.props.setValue(getValue(this.props));
     }
   }
@@ -79,7 +79,7 @@ export default class SelectInput extends React.Component {
     // it will fire otherwise because of onBlur event and will reset the value back
     this.shouldCallOnBlur = false;
 
-    if (this.props.isControlled) {
+    if (!this.props.uncontrolled) {
       this.props.setValue(text);
     } else {
       this.setState({ value: text });
@@ -107,7 +107,7 @@ export default class SelectInput extends React.Component {
   onChange(e) {
     const value = e.target.value;
 
-    if (this.props.isControlled) {
+    if (!this.props.uncontrolled) {
       this.props.setValue(value);
     }
 
@@ -128,7 +128,7 @@ export default class SelectInput extends React.Component {
   open() {
     const newState = { isOpen: true, items: this.props.items };
 
-    if (this.props.isControlled) this.props.setValue('');
+    if (!this.props.uncontrolled) this.props.setValue('');
     else Object.assign(newState, { value: '' });
 
     this.setState(newState);
@@ -143,7 +143,7 @@ export default class SelectInput extends React.Component {
 
       const value = getValue(this.props);
 
-      if (this.props.isControlled) this.props.setValue(value);
+      if (!this.props.uncontrolled) this.props.setValue(value);
       else Object.assign(newState, { value });
 
       this.setState(newState);

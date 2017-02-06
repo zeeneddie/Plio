@@ -11,7 +11,7 @@ const enhance = withState('value', 'setValue', '');
 const HomeScreenTitle = enhance(({ value, setValue, label, ...other }) => (
   <FormField>
     <span>{label}</span>
-    <SelectInput isControlled {...{ value, setValue, ...other }}>
+    <SelectInput {...{ value, setValue, ...other }}>
       <DropdownItem divider />
       <HomeScreenTitleAdd {...{ value, setValue, ...other }} />
     </SelectInput>
