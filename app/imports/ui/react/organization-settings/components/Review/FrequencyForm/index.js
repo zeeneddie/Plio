@@ -1,13 +1,11 @@
 import React, { PropTypes } from 'react';
-import { compose, withProps } from 'recompose';
+import { withProps } from 'recompose';
 
 import Form from '/imports/ui/react/forms/components/Form';
 import ReviewFrequencySelect from '../FrequencySelect';
 import { getFormProps } from '../helpers';
 
-const enhance = compose(
-  withProps(props => getFormProps(props)),
-);
+const enhance = withProps(getFormProps);
 
 const ReviewFrequencyForm = enhance((props) => (
   <Form
