@@ -214,6 +214,8 @@ export const identity = _.identity;
 */
 export const join = curry((separator, array) => Object.assign([], array).join(separator));
 
+export const trim = str => `${str}`.trim();
+
 /*
   const gt10 = n => n > 10;
   either(gt10, identity)(2);

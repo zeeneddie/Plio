@@ -10,14 +10,12 @@ import ReviewReviewerForm from '../ReviewerForm';
 
 const getData = key => compose(pickC([key]), property('config'));
 
-const enhance = compose(
-  withProps(transsoc({
-    reviewerFormData: getData('reviewer'),
-    frequencyFormData: getData('frequency'),
-    annualDateFormData: getData('annualDate'),
-    remindersFormData: getData('reminders'),
-  })),
-);
+const enhance = withProps(transsoc({
+  reviewerFormData: getData('reviewerId'),
+  frequencyFormData: getData('frequency'),
+  annualDateFormData: getData('annualDate'),
+  remindersFormData: getData('reminders'),
+}));
 
 const ReviewConfig = enhance((props) => (
   <div>
@@ -25,6 +23,7 @@ const ReviewConfig = enhance((props) => (
       onReviewerChanged={props.onReviewerChanged}
       data={props.reviewerFormData}
       documentKey={props.documentKey}
+      users={props.users}
     />
 
     <ReviewFrequencyForm
@@ -50,6 +49,7 @@ const ReviewConfig = enhance((props) => (
 ReviewConfig.propTypes = {
   config: PropTypes.object,
   documentKey: PropTypes.string,
+  users: PropTypes.arrayOf(PropTypes.object),
   onReviewerChanged: PropTypes.func,
   onAnnualDateChanged: PropTypes.func,
   onFrequencyChanged: PropTypes.func,

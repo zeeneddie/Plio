@@ -1,10 +1,9 @@
 import React, { PropTypes } from 'react';
 import { compose, getContext, withProps, withState, withHandlers } from 'recompose';
 import { FormGroup } from 'reactstrap';
-import { Meteor } from 'meteor/meteor';
 
 import { getId, transsoc } from '/imports/api/helpers';
-import { getFullName } from '/imports/api/users/helpers';
+import { getFullNameOrEmail } from '/imports/api/users/helpers';
 import SelectInput from '../../../../forms/components/SelectInput';
 
 const SelectInputEnhanced = withState('value', 'setValue', '')(SelectInput);
@@ -14,11 +13,11 @@ const enhance = compose(
     changeField: PropTypes.func,
     getField: PropTypes.func,
   }),
-  withProps(() => ({
-    selected: Meteor.userId(),
-    items: Meteor.users.find().fetch().map(transsoc({
+  withProps(({ getField, fieldName, users = [] }) => ({
+    selected: getField(fieldName) || '',
+    items: users.map(transsoc({
       value: getId,
-      text: getFullName,
+      text: getFullNameOrEmail,
     })),
   })),
   withHandlers({
@@ -33,12 +32,16 @@ const ReviewReviewerSelect = enhance(({ value, setValue, selected, items, onSele
     <label className="form-control-label">
       Reviewer
     </label>
-    <SelectInputEnhanced {...{ value, setValue, selected, items, onSelect }} />
+    <SelectInputEnhanced
+      placeholder="Select a reviewer"
+      {...{ value, setValue, selected, items, onSelect }}
+    />
   </FormGroup>
 ));
 
 ReviewReviewerSelect.propTypes = {
   fieldName: PropTypes.string,
+  users: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default ReviewReviewerSelect;

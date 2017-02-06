@@ -166,7 +166,7 @@ const rkGuidelinesSchema = new SimpleSchema({
 });
 
 export const reviewReviewerIdSchema = new SimpleSchema({
-  reviewer: {
+  reviewerId: {
     type: idSchemaDoc,
     autoValue() {
       if (this.isInsert && !this.isSet) {

@@ -7,13 +7,13 @@ import ReviewReviewerSelect from '../ReviewerSelect';
 
 const enhance = withProps(getFormProps);
 
-const ReviewerForm = enhance(({ initialFormData, onReviewerChanged, fieldNames }) => (
+const ReviewerForm = enhance(({ initialFormData, onReviewerChanged, fieldNames, users }) => (
   <Form
     {...{ initialFormData }}
     autosave
     onFormChange={onReviewerChanged}
   >
-    <ReviewReviewerSelect fieldName={fieldNames.reviewer} />
+    <ReviewReviewerSelect {...{ users }} fieldName={fieldNames.reviewerId} />
   </Form>
 ));
 
@@ -21,6 +21,7 @@ ReviewerForm.propTypes = {
   data: PropTypes.object,
   documentKey: PropTypes.string,
   onFrequencyChanged: PropTypes.func,
+  users: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default ReviewerForm;
