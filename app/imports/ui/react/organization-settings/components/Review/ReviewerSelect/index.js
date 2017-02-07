@@ -33,7 +33,9 @@ const ReviewReviewerSelect = enhance(({ value, setValue, selected, items, onSele
       Reviewer
     </label>
     <SelectInputEnhanced
-      placeholder="Select a reviewer"
+      caret
+      hint
+      input={{ placeholder: 'Select a reviewer...' }}
       {...{ value, setValue, selected, items, onSelect }}
     />
   </FormGroup>

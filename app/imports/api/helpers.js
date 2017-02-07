@@ -239,6 +239,10 @@ export const empty = (a) => {
   return a;
 };
 
+export const filterC = curry((f, array) => Object.assign([], array).filter(f));
+
+export const mapC = curry((transformer, array) => Object.assign([], array).map(transformer));
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {

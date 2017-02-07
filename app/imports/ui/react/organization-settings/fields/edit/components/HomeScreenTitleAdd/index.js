@@ -19,7 +19,7 @@ const enhance = compose(
         const showSuccessAlert = () =>
           swal.success('Added!', `Title "${value}" was added successfully.`);
 
-        onSelect(e, newItem, err => !err && showSuccessAlert());
+        onSelect(null, newItem, err => !err && showSuccessAlert());
       };
 
       swal({
