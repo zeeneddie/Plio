@@ -39,8 +39,7 @@ const TextInput = enhance(({
 
       return typeof onChange === 'function' && onChange(e);
     }}
-    ref={getRef}
-    {...other}
+    {...{ ...other, getRef }}
   />
 ));
 

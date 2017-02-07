@@ -27,6 +27,7 @@ const SelectInputView = ({
   noHint,
   uncontrolled,
   getRef,
+  onCaretMouseDown,
   children,
 }) => (
   <Dropdown
@@ -37,7 +38,7 @@ const SelectInputView = ({
       <TextInput
         {...{ uncontrolled, value, disabled, placeholder, onChange, onFocus, onBlur, getRef }}
       />
-      <InputGroupButton onClick={e => (isOpen ? onBlur(e) : onFocus(e))}>
+      <InputGroupButton onMouseDown={e => onCaretMouseDown(e, isOpen)}>
         <Button color="secondary icon" className={cx({ disabled })} {...{ disabled }}>
           <Icon name="caret-down" />
         </Button>
@@ -89,6 +90,8 @@ SelectInputView.propTypes = {
   onBlur: PropTypes.func.isRequired,
   noHint: PropTypes.bool,
   uncontrolled: PropTypes.bool,
+  getRef: PropTypes.func,
+  onCaretMouseDown: PropTypes.func,
   children: PropTypes.node,
 };
 

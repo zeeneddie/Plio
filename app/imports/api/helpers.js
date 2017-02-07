@@ -231,6 +231,14 @@ export const either = (...fns) => (...args) => {
   return result;
 };
 
+export const empty = (a) => {
+  if (typeof a === 'string') return '';
+  else if (typeof a === 'function') return () => null;
+  else if (Array.isArray(a)) return [];
+  else if (a !== null && typeof a === 'object') return {};
+  return a;
+};
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {

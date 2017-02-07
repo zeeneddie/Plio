@@ -11,6 +11,9 @@ const enhance = compose(
     showAlert: ({ id, value, onSelect }) => (e) => {
       if (!value) return;
 
+      e.preventDefault();
+      e.stopPropagation();
+
       const addNewItem = () => {
         const newItem = { text: value, value: createWorkspaceTitleValue(id, value) };
         const showSuccessAlert = () =>
