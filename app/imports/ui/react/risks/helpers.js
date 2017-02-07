@@ -23,7 +23,11 @@ import {
   not,
   propEqKey,
 } from '/imports/api/helpers';
-import { addCollapsed, chainActions, addCollapsedWithClose } from '/imports/client/store/actions/globalActions';
+import {
+  addCollapsed,
+  chainActions,
+  addCollapsedWithClose,
+} from '/imports/client/store/actions/globalActions';
 import { goTo } from '../../utils/router/actions';
 import store, { getState } from '/imports/client/store';
 import {
@@ -213,7 +217,9 @@ export const collapseExpandedRisks = () => {
       return store.dispatch(statusCollapseAction);
     }
     case RiskFilterIndexes.DEPARTMENT: {
-      const selectedDepartments = selectedRisk.departmentsIds;
+      const selectedDepartments = selectedRisk.departmentsIds.length
+        ? selectedRisk.departmentsIds
+        : [DEPARTMENT_UNCATEGORIZED];
       const includesKey = ({ key }) => includes(key, selectedDepartments);
       const selectedExpandedDepartments = filterC(every([
         includesKey,
@@ -224,11 +230,14 @@ export const collapseExpandedRisks = () => {
       ]), collapsed);
 
       const close = ({ type }) => some([
-        compose(not, propEqType(type)),
         includesKey,
+        compose(not, propEqType(type)),
       ]);
 
-      const actions = mapC(addCollapsedWithClose(close), selectedExpandedDepartments);
+      const actions = mapC(item =>
+        addCollapsed({ ...item, close: close(item) }),
+        selectedExpandedDepartments
+      );
 
       return store.dispatch(chainActions(actions));
     }
