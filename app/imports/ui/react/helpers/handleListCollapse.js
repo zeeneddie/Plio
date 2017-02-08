@@ -8,6 +8,7 @@ import {
   propEqType,
   propEqKey,
   not,
+  find,
 } from '/imports/api/helpers';
 import { addCollapsedWithClose, chainActions } from '/imports/client/store/actions/globalActions';
 
@@ -19,9 +20,10 @@ const handleListCollapse = (createItem, dispatch, containedInArray, defaultConta
   if (!items.length) return false;
 
   // close items that are not the current item's type or that are not contained in 'items' array
-    // item => collapsed[item] => Bool
+  // item => collapsed[item] => Bool
+  const findKey = ({ key }) => find(propEqKey(key), items);
   const close = ({ type }) => some([
-    ({ key }) => find(propEqKey(key), items),
+    findKey,
     compose(not, propEqType(type)),
   ]);
 
