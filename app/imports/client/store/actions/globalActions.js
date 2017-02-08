@@ -1,6 +1,7 @@
 import { _ } from 'meteor/underscore';
+import curry from 'lodash.curry';
 
-import { equals, compose, assoc } from '/imports/api/helpers';
+import { equals, assoc, compose } from '/imports/api/helpers';
 import {
   SET_USER_ID,
   SET_FILTER,
@@ -83,8 +84,15 @@ export function addCollapsed(payload) {
   };
 }
 
-export const addCollapsedWithClose = close => item =>
-  compose(addCollapsed, assoc('close', close(item)))(item);
+export const addCollapsedWithClose = curry((close, item) => {
+  let fn = close;
+
+  if (!close || typeof close !== 'function') {
+    fn = a => ({ type: a.type });
+  }
+
+  return compose(addCollapsed, assoc('close', fn(item)))(item);
+});
 
 export function removeCollapsed(payload) {
   return {

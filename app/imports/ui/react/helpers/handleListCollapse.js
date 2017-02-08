@@ -19,9 +19,10 @@ const handleListCollapse = (createItem, dispatch, containedInArray, defaultConta
   if (!items.length) return false;
 
   // close items that are not the current item's type or that are not contained in 'items' array
+    // item => collapsed[item] => Bool
   const close = ({ type }) => some([
-    compose(not, propEqType(type), property('type')),
-    compose(find(propEqKey, items), property('key')),
+    ({ key }) => find(propEqKey(key), items),
+    compose(not, propEqType(type)),
   ]);
 
   const actions = mapC(addCollapsedWithClose(close), items);
