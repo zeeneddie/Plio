@@ -9,7 +9,12 @@ import {
   onModalOpen,
 } from './handlers';
 import { getRisksByFilter } from '../../helpers';
-import { sortArrayByTitlePrefix, pickC, notEquals } from '/imports/api/helpers';
+import {
+  sortArrayByTitlePrefix,
+  pickC,
+  notEquals,
+  getSearchMatchText,
+} from '/imports/api/helpers';
 import { onToggleCollapse } from '/imports/ui/react/share/LHS/handlers';
 import { RiskFilterIndexes } from '/imports/api/constants';
 
@@ -45,6 +50,7 @@ export default compose(
       'titlePrefix',
       'status',
       'isDeleted',
+      'sequentialId',
     ])),
   })),
   shouldUpdate((props, nextProps) => !!(
@@ -53,7 +59,6 @@ export default compose(
     props.animating !== nextProps.animating ||
     notEquals(props.risks, nextProps.risks)
   )),
-  // TODO: departments filter is broken
   withHandlers({
     onToggleCollapse,
     onClear,
@@ -64,10 +69,17 @@ export default compose(
       ? props.risks.filter(risk => props.risksFiltered.includes(risk._id))
       : props.risks;
     risks = getRisksByFilter({ risks, filter: props.filter });
-    if (props.filter !== RiskFilterIndexes.DELETED) risks = sortArrayByTitlePrefix(risks);
-    else risks = _.sortBy(risks, 'deletedAt').reverse();
+    const sortBy = props.searchText ? 'sequentialId' : 'deletedAt';
 
-    const searchResultsText = props.searchText ? `${risks.length} matching results` : '';
+    if (props.filter !== RiskFilterIndexes.DELETED) {
+      if (sortBy !== 'sequentialId') risks = sortArrayByTitlePrefix(risks);
+      else risks = _.sortBy(risks, sortBy);
+    } else {
+      risks = _.sortBy(risks, sortBy);
+      if (sortBy !== 'sequentialId') risks = risks.reverse();
+    }
+
+    const searchResultsText = getSearchMatchText(props.searchText, risks.length);
 
     return {
       ...props,

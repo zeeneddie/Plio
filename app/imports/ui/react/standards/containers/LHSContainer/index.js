@@ -9,7 +9,12 @@ import {
   onModalOpen,
 } from './handlers';
 import { getStandardsByFilter } from '../../helpers';
-import { sortArrayByTitlePrefix, pickC, notEquals } from '/imports/api/helpers';
+import {
+  sortArrayByTitlePrefix,
+  pickC,
+  notEquals,
+  getSearchMatchText,
+} from '/imports/api/helpers';
 import { onToggleCollapse } from '/imports/ui/react/share/LHS/handlers';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 
@@ -68,7 +73,7 @@ export default compose(
     if (props.filter !== STANDARD_FILTER_MAP.DELETED) standards = sortArrayByTitlePrefix(standards);
     else standards = _.sortBy(standards, 'deletedAt').reverse();
 
-    const searchResultsText = props.searchText ? `${standards.length} matching results` : '';
+    const searchResultsText = getSearchMatchText(props.searchText, standards.length);
 
     return {
       ...props,
