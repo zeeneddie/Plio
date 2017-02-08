@@ -80,7 +80,6 @@ export default compose(
     }
 
     const searchResultsText = getSearchMatchText(props.searchText, risks.length);
-
     return {
       ...props,
       risks,

@@ -1,3 +1,4 @@
+import React from 'react';
 import { compose, mapProps } from 'recompose';
 import { connect } from 'react-redux';
 import property from 'lodash.property';
@@ -11,6 +12,9 @@ import {
   withRisksRedirectAndOpen,
 } from '../../helpers';
 import { problemsStatuses } from '../../../problems/constants';
+import { getClassByStatus } from '/imports/api/problems/helpers';
+import Icon from '../../../components/Icons/Icon';
+import { Pull } from '../../../components/Utility';
 
 const mapStateToProps = (state) => ({
   ...getSelectedRiskDeletedState(state),
@@ -30,7 +34,16 @@ export default compose(
     const reducer = (prev, status) => {
       const ownRisks = risks.filter(propEq('status', status.value));
 
-      if (ownRisks.length) return prev.concat({ ...status, risks: ownRisks });
+      if (ownRisks.length) {
+        const indicatorCx = `text-${getClassByStatus(status.value)}`;
+        const indicator = (
+          <Pull right>
+            <Icon name="circle" margin="right" className={indicatorCx} />
+          </Pull>
+        );
+
+        return prev.concat({ ...status, risks: ownRisks, indicator });
+      }
 
       return prev;
     };

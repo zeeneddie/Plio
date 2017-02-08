@@ -27,7 +27,21 @@ const LHSItem = ({
   hideRTextOnExpand,
   children,
 }) => {
+  let rContent = null;
   const isCollapsed = !collapsed.find(propEqKey(item.key));
+  if (rText && (hideRTextOnExpand && !isCollapsed) || !hideRTextOnExpand) {
+    rContent = rText;
+
+    if (typeof rText === 'string') {
+      rContent = (
+        <p
+          className="list-group-item-text text-danger pull-right"
+        >
+          {rText}
+        </p>
+      );
+    }
+  }
 
   return (
     <CollapseBlock
@@ -36,13 +50,7 @@ const LHSItem = ({
     >
       <div>
         <h4 className="list-group-item-heading pull-left">{lText}</h4>
-        {!!rText && (isCollapsed && !hideRTextOnExpand) && (
-          <p
-            className="list-group-item-text text-danger pull-right"
-          >
-            {rText}
-          </p>
-        )}
+        {rContent}
       </div>
       <div className="list-group">
         {children}

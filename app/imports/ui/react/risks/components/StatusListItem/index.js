@@ -7,10 +7,10 @@ import { RISK_STATUSES } from '../../constants';
 
 const StatusListItem = ({ status, onToggleCollapse }) => (
   <LHSItemContainer
-    hideRTextOnCollapse
     {...{ onToggleCollapse }}
     item={createTypeItem(RISK_STATUSES, status.value)}
     lText={status.text}
+    rText={status.indicator}
   >
     <div className="sub">
       <RisksListContainer risks={status.risks} />
