@@ -12,7 +12,7 @@ import {
 } from '/imports/api/helpers';
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 import ConnectedDocList from '../../components/ConnectedDocList';
-import { getLinkedLessons } from '/imports/ui/react/share/helpers/linked';
+import { getLinkedLessons, getLinkedActions } from '/imports/ui/react/share/helpers/linked';
 
 export default compose(
   setPropTypes({
@@ -31,14 +31,15 @@ export default compose(
     ]);
     const ncs = props.ncs.filter(problemFilter);
     const risks = props.risks.filter(problemFilter);
-    const actions = props.actions.filter(every([
+    const predicate = every([
       notDeleted,
       ({ linkedTo }) => linkedTo.find(({ documentId, documentType }) => !!(
         (documentType !== ProblemTypes.NON_CONFORMITY ||
         documentType !== ProblemTypes.RISK) &&
         ncs.concat(risks).find(propEqId(documentId))
       )),
-    ]));
+    ]);
+    const actions = getLinkedActions(predicate, props, props.actions);
     const lessons = getLinkedLessons(props.standardId, DocumentTypes.STANDARD, props.lessons);
 
     return { ...props, ncs, risks, actions, lessons };

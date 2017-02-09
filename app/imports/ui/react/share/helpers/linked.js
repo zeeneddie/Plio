@@ -1,26 +1,31 @@
 import curry from 'lodash.curry';
 
-import { mapC, propEq, find, every, reduceC } from '/imports/api/helpers';
+import { propEq, find, every, reduceC } from '/imports/api/helpers';
 import { getQueryParams } from '/imports/api/work-items/helpers';
 import { getPath } from '/imports/ui/utils/router';
 import { getClassByStatus as getActionClassByStatus } from '/imports/api/actions/helpers';
 
-export const getLinkedActions = curry(({ userId, workItems }, actions) => mapC((action) => {
-  const workItem = find(propEq('linkedDoc._id', action._id), workItems);
-  const href = ((() => {
-    if (!workItem) return '#';
+export const getLinkedActions = curry((predicate, { userId, workItems }, actions) =>
+  reduceC((prev, action) => {
+    if (typeof predicate === 'function' && !predicate(action)) return prev;
 
-    const params = { workItemId: workItem._id };
-    const queryParams = getQueryParams(workItem)(userId);
+    const workItem = find(propEq('linkedDoc._id', action._id), workItems);
+    const href = ((() => {
+      if (!workItem) return '#';
 
-    return getPath('workInboxItem')(params, queryParams);
-  })());
-  return {
-    ...action,
-    href,
-    indicator: getActionClassByStatus(action.status),
-  };
-}, actions));
+      const params = { workItemId: workItem._id };
+      const queryParams = getQueryParams(workItem)(userId);
+
+      return getPath('workInboxItem')(params, queryParams);
+    })());
+    const result = {
+      ...action,
+      href,
+      indicator: getActionClassByStatus(action.status),
+    };
+
+    return prev.concat(result);
+  }, [], actions));
 
 export const getLinkedLessons = curry((docId, docType, lessons) => reduceC((prev, lesson) => {
   const pred = every([

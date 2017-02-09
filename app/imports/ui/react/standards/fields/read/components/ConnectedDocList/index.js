@@ -4,7 +4,6 @@ import { ActionTypes } from '/imports/share/constants';
 import { splitActionsByType } from '/imports/api/actions/helpers';
 import LinkItemList from '../../../../../fields/read/components/LinkItemList';
 import { getPath } from '../../../../../../utils/router/paths';
-import { getLinkedActions } from '/imports/ui/react/share/helpers/linked';
 import { getClassByStatus } from '/imports/api/problems/helpers';
 
 // TODO: change param to urlItemId for every route
@@ -20,8 +19,7 @@ const ConnectedDocList = (props) => {
     indicator: getClassByStatus(risk.status),
     href: getPath('risk')({ riskId: risk._id }),
   }));
-  const actions = getLinkedActions(props, props.actions);
-  const actionsByType = splitActionsByType(actions);
+  const actionsByType = splitActionsByType(props.actions);
 
   const lists = [
     {

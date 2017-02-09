@@ -18,9 +18,9 @@ import { Organizations } from './collections/organizations';
 import { Discussions } from './collections/discussions';
 
 
-export const capitalize = str => str.charAt(0).toUpperCase() + str.substring(1);
+export const capitalize = str => `${str}`.charAt(0).toUpperCase() + `${str}`.substring(1);
 
-export const lowercase = str => str.charAt(0).toLowerCase() + str.substring(1);
+export const lowercase = str => `${str}`.charAt(0).toLowerCase() + `${str}`.substring(1);
 
 export const deepExtend = (dest, src) => {
   _(src).each((val, key) => {

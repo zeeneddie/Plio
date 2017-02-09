@@ -2,7 +2,17 @@ import { connect } from 'react-redux';
 import { compose, mapProps } from 'recompose';
 import property from 'lodash.property';
 
-import { pickC, pickDocuments, mapC, transsoc, propValue } from '/imports/api/helpers';
+import {
+  pickC,
+  pickDocuments,
+  mapC,
+  transsoc,
+  propValue,
+  every,
+  notDeleted,
+  propEq,
+  find,
+} from '/imports/api/helpers';
 import { capitalize, getFormattedDate } from '/imports/share/helpers';
 import { getNameByScore, getClassByScore } from '/imports/api/risks/helpers';
 import { getLinkedActions, getLinkedLessons } from '/imports/ui/react/share/helpers/linked';
@@ -34,7 +44,11 @@ const propsMapper = ({
   ...props
 }) => {
   const pickUsers = pickDocuments(['_id', 'profile.firstName', 'profile.lastName'], usersByIds);
-  const linkedActions = getLinkedActions(props, props.actions);
+  const predicate = every([
+    notDeleted,
+    compose(find(propEq('documentId', risk._id)), property('linkedTo')),
+  ]);
+  const linkedActions = getLinkedActions(predicate, props, props.actions);
   const actionsByType = splitActionsByType(linkedActions);
   const preventativeActions = actionsByType[ActionTypes.PREVENTATIVE_ACTION];
   const correctiveActions = actionsByType[ActionTypes.CORRECTIVE_ACTION];
