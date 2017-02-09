@@ -67,7 +67,8 @@ export default class OrgNotificationsSender {
       emailSubject,
       templateData,
       templateName: 'personalEmail',
-      notificationData: { title, body, url }
+      notificationData: { title, body, url },
+      options: { isImportant: true },
     }).sendAll();
   }
 
@@ -93,7 +94,8 @@ export default class OrgNotificationsSender {
       templateName: 'personalEmail',
       emailSubject,
       templateData,
-      notificationData
+      notificationData,
+      options: { isImportant: true },
     }).sendAll();
   }
 
@@ -123,7 +125,8 @@ export default class OrgNotificationsSender {
       templateName: 'personalEmail',
       emailSubject,
       templateData,
-      notificationData
+      notificationData,
+      options: { isImportant: true },
     }).sendAll();
   }
 
@@ -152,7 +155,8 @@ export default class OrgNotificationsSender {
       templateName: 'personalEmail',
       emailSubject,
       templateData,
-      notificationData
+      notificationData,
+      options: { isImportant: true },
     }).sendAll();
   }
 
@@ -185,7 +189,8 @@ export default class OrgNotificationsSender {
       templateName: 'personalEmail',
       emailSubject,
       templateData,
-      notificationData
+      notificationData,
+      options: { isImportant: true },
     }).sendAll();
   }
 }

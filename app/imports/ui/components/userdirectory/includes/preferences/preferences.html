@@ -1,9 +1,17 @@
 <template name="UserPreferences">
   <div class="card-block">
+    {{#FormField label="Email notifications"}}
+      <button type="button" class="btn btn-checkbox btn-secondary"
+          id="email-notifications-checkbox" data-toggle="button" autocomplete="off"
+          {{b "click: updateEmailNotifications, class: { active: areEmailNotificationsEnabled }"}}>
+        <i class="fa fa-check"></i>
+      </button>
+    {{/FormField}}
+
     {{#FormField label="Desktop notifications"}}
       <button type="button" class="btn btn-checkbox btn-secondary"
           id="notifications-checkbox" data-toggle="button" autocomplete="off"
-          {{b "click: updateNotifications, class: {active: areNotificationsEnabled}"}}>
+          {{b "click: updateNotifications, class: { active: areNotificationsEnabled }"}}>
         <i class="fa fa-check"></i>
       </button>
     {{/FormField}}

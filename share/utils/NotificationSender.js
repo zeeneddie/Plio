@@ -4,7 +4,6 @@ import { Email } from 'meteor/email';
 
 import { Notifications } from '../collections/notifications.js';
 import HandlebarsCache from './handlebars-cache.js';
-import { htmlToPlainText } from '/imports/share/helpers.js';
 
 
 /**
@@ -31,8 +30,11 @@ export default class NotificationSender {
    * @param {string} [config.emailSubject] Subject of the email
    * @param {object} [config.templateData] Template data scope
    * @param {string} [config.templateName] Name of template
-   * @param {object} [config.notificationData] Notification configuration (Check out Notification API)
+   * @param {object} [config.notificationData] Notification configuration
+   & (Check out Notification API)
    * @param {string} [config.options] Additional options
+   * @param {boolean} [config.options.isImportant] Whether or not
+   * recipient's email notification preference should be ignored
    * @constructor
    */
   constructor({ recipients, emailSubject, templateData, templateName, notificationData, options = {} }) {
@@ -75,12 +77,28 @@ export default class NotificationSender {
    * @private
    */
   _getUserEmail(userId) {
+    // check if recipient has email notifications enabled or the notification is important
+    const shouldSend = (user) => user && (
+      this._options.isImportant ||
+      user.preferences && user.preferences.areEmailNotificationsEnabled
+    );
+
     if (userId && userId.indexOf('@') > -1) {
-      return userId;
+      const query = { 'emails.address': userId };
+      const user = Meteor.users.findOne(query);
+
+      return shouldSend(user) ? userId : false;
     }
 
-    const user = Meteor.users.findOne(userId);
-    return user && user.emails && user.emails.length ? user.emails[0].address : false;
+    const user = Meteor.users.findOne({ _id: userId });
+    const email = (
+      user &&
+      user.emails &&
+      user.emails[0] &&
+      user.emails[0].address
+    );
+
+    return shouldSend(user) && email || false;
   }
 
   /**
@@ -103,16 +121,18 @@ export default class NotificationSender {
    * @private
    */
   _getUserEmails(userIds) {
-    const userEmails = [];
-    userIds.forEach((userId) => {
+    const userEmails = userIds.reduce((prev, userId) => {
       const email = this._getUserEmail(userId);
-      email && userEmails.push(email);
-    });
+      return email ? prev.concat(email) : prev;
+    }, []);
     return userEmails;
   }
 
   _sendEmailBasic({ recipients, html, isReportEnabled = false }) {
     const emails = this._getUserEmails(recipients);
+
+    if (!emails.length) return;
+
     const bcc = [];
     if (isReportEnabled) {
       // Reporting of beta user activity
@@ -125,7 +145,7 @@ export default class NotificationSender {
       to: emails,
       bcc,
       html,
-      text: htmlToPlainText(html),
+      // text: htmlToPlainText(html),
     };
 
     Email.send(emailOptions);
