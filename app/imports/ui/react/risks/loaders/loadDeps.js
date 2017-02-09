@@ -6,12 +6,16 @@ import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
 import { Actions } from '/imports/share/collections/actions';
 import { Standards } from '/imports/share/collections/standards';
+import { LessonsLearned } from '/imports/share/collections/lessons';
+import { WorkItems } from '/imports/share/collections/work-items';
 import {
   setDepartments,
   setNCs,
   setRisks,
   setActions,
   setStandards,
+  setWorkItems,
+  setLessons,
 } from '/imports/client/store/actions/collectionsActions';
 import { setDepsReady } from '/imports/client/store/actions/risksActions';
 
@@ -25,12 +29,16 @@ export default function loadDeps({ dispatch, organizationId, initializing }, onD
     const ncs = NonConformities.find(query, pOptions).fetch();
     const standards = Standards.find(query, pOptions).fetch();
     const actions = Actions.find(query, pOptions).fetch();
+    const lessons = LessonsLearned.find(query, pOptions).fetch();
+    const workItems = WorkItems.find(query).fetch();
 
     let reduxActions = [
       setDepartments(departments),
       setNCs(ncs),
       setStandards(standards),
       setActions(actions),
+      setWorkItems(workItems),
+      setLessons(lessons),
       setDepsReady(true),
     ];
 

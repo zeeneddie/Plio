@@ -8,6 +8,7 @@ import { _ } from 'meteor/underscore';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { shallowEqual } from 'recompose';
 import { $ } from 'meteor/jquery';
+import moment from 'moment';
 
 import {
   ActionsListProjection,
@@ -157,9 +158,12 @@ export const invokeC = curry((path, obj, ...args) => invoke(obj, path, ...args))
 // Object<key: path, value: func> -> obj -> obj
 export const transsoc = curry((transformations, obj) => {
   const keys = Object.keys(Object.assign({}, transformations));
-  const result = keys.map(key => assoc(key, transformations[key](obj), obj));
+  const result = keys.reduce((prev, key) => ({
+    ...prev,
+    [key]: transformations[key](obj),
+  }), {});
 
-  return _.pick(flattenObjects(result), ...keys);
+  return result;
 });
 
 export const pickC = curry((keys, obj) => _.pick(Object.assign({}, obj), ...keys));
@@ -204,6 +208,8 @@ export const F = () => false;
 export const find = curry((transformation, array) => Object.assign([], array).find(transformation));
 
 export const propId = property('_id');
+
+export const propValue = property('value');
 
 export const every = curry((fns, value) => fns.every(fn => fn(value)));
 
@@ -253,8 +259,31 @@ export const either = (...fns) => (...args) => {
   return result;
 };
 
-export const filterC = curry((predicate, array) => Object.assign([], array).filter(predicate));
-export const mapC = curry((transformer, array) => Object.assign([], array).map(transformer));
+const createArrayFn = method => curry((fn, array) => Object.assign([], array)[method](fn));
+export const filterC = createArrayFn('filter');
+export const mapC = createArrayFn('map');
+export const reduceC = curry((reducer, initialValue, array) =>
+  Object.assign([], array).reduce(reducer, initialValue));
+
+// pickDocuments(
+//   ['_id', 'profile.firstName'],
+//   [{ _id: 1, profile: { firstName: 'Alan', ... }, ... }, ...],
+//   1
+// );
+// => { _id: 1, firstName: 'Alan' }
+export const pickDocuments = curry((fields, collection, ids) => {
+  if (typeof ids === 'string') return pickDeep(fields, collection[ids]);
+
+  const reducer = (prev, cur) => {
+    const doc = collection[cur];
+
+    if (doc) return prev.concat(pickDeep(fields, doc));
+
+    return prev;
+  };
+
+  return reduceC(reducer, [], ids);
+});
 
 export const handleMethodResult = (cb) => {
   return (err, res) => {

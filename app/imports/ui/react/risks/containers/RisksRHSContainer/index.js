@@ -1,4 +1,3 @@
-import { _ } from 'meteor/underscore';
 import {
   compose,
   mapProps,
@@ -23,18 +22,12 @@ import { getRisksByFilter } from '../../helpers';
 const mapStateToProps = state => ({
   ...pickC(['isFullScreenMode', 'isCardReady', 'urlItemId'])(state.global),
   risk: state.collections.risksByIds[state.global.urlItemId],
-  actions: state.collections.actions.filter(action => (
-    _.find(action.linkedTo, ({ documentId }) => (
-      documentId === state.global.urlItemId
-    ))
-  )),
 });
 
 export default compose(
   connect(pickDeep(['global.filter', 'collections.risks'])),
-  shouldUpdate((props, nextProps) => Boolean(
+  shouldUpdate((props, nextProps) => !!(
     lengthRisks(props) !== lengthRisks(nextProps) ||
-    lengthActions(props) !== lengthActions(nextProps) ||
     props.filter !== nextProps.filter
   )),
   mapProps(props => ({ risks: getRisksByFilter(props) })),
@@ -48,12 +41,14 @@ export default compose(
     isCardReady,
     risk,
     risks,
-    ...props,
+    urlItemId,
+    ...props
   }) => ({
     ...props,
     risk,
     isCardReady,
-    isReady: Boolean(isCardReady && risks.length && risk),
+    urlItemId,
+    isReady: !!(isCardReady && risks.length && risk),
   })),
   branch(
     props => props.isCardReady && props.urlItemId && !props.risk,
@@ -62,7 +57,7 @@ export default compose(
   ),
   shouldUpdate((props, nextProps) => {
     const omitRiskKeys = omitC(['updatedAt']);
-    return Boolean(
+    return !!(
       props.isReady !== nextProps.isReady ||
       props.isFullScreenMode !== nextProps.isFullScreenMode ||
       notEquals(omitRiskKeys(props.risk), omitRiskKeys(nextProps.risk))

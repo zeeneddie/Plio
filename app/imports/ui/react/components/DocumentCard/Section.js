@@ -1,15 +1,7 @@
-import React, { PropTypes, Children } from 'react';
-import { mapProps } from 'recompose';
+import React, { PropTypes } from 'react';
 import SectionItem from './SectionItem';
 
-const enhance = mapProps(({ children, ...rest }) => ({
-  ...rest,
-  children: Children.map(children, child =>
-    (Boolean(child.props.children) ? child : null)
-  ),
-}));
-
-const Section = enhance(({ children, name }) => (
+const Section = ({ children, name }) => (
   <div>
     {name && (
       <div className="card-block card-subheading">
@@ -20,7 +12,7 @@ const Section = enhance(({ children, name }) => (
       <span>{children}</span>
     </div>
   </div>
-));
+);
 
 Section.propTypes = {
   children: PropTypes.node.isRequired,

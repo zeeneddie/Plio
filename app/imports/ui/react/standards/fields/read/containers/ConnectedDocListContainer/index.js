@@ -9,10 +9,10 @@ import {
   includes,
   propEqId,
   pickC,
-  propEq,
 } from '/imports/api/helpers';
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 import ConnectedDocList from '../../components/ConnectedDocList';
+import { getLinkedLessons } from '/imports/ui/react/share/helpers/linked';
 
 export default compose(
   setPropTypes({
@@ -39,13 +39,7 @@ export default compose(
         ncs.concat(risks).find(propEqId(documentId))
       )),
     ]));
-    const lessons = props.lessons.filter(every([
-      propEq('documentId', props.standardId),
-      propEq('documentType', DocumentTypes.STANDARD),
-    ])).map(ll => ({
-      ...ll,
-      sequentialId: `LL${ll.serialNumber}`,
-    }));
+    const lessons = getLinkedLessons(props.standardId, DocumentTypes.STANDARD, props.lessons);
 
     return { ...props, ncs, risks, actions, lessons };
   })

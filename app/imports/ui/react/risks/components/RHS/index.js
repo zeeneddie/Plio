@@ -15,7 +15,6 @@ import ChangelogContainer from '../../../changelog/containers/ChangelogContainer
 const RisksRHS = ({
   isFullScreenMode,
   risk,
-  actions,
   isReady = true,
 }) => (
   <RHS
@@ -32,7 +31,7 @@ const RisksRHS = ({
       </RHS.Header>
 
       <RHS.ContentList isReady={isReady}>
-        <RHSBodyContainer {...{ risk, actions }} />
+        <RHSBodyContainer {...{ risk }} />
         <ChangelogContainer
           documentId={getId(risk)}
           collection={CollectionNames.RISKS}

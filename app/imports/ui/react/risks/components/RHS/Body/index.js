@@ -1,14 +1,12 @@
 import React from 'react';
 import property from 'lodash.property';
-import Row from 'reactstrap/lib/Row';
-import Col from 'reactstrap/lib/Col';
+import { ListGroupItemHeading, Row, Col } from 'reactstrap';
 
 import propTypes from './propTypes';
 import { ProblemsStatuses } from '/imports/share/constants';
 import DocumentCard from '/imports/ui/react/components/DocumentCard';
 import Label from '/imports/ui/react/components/Labels/Label';
-import Icon from '/imports/ui/react/components/Icons/Icon';
-import Button from 'reactstrap/lib/Button';
+import LinkItemList from '/imports/ui/react/fields/read/components/LinkItemList';
 
 const Body = ({
   title,
@@ -17,7 +15,6 @@ const Body = ({
   description,
   notify,
   standards,
-  orgSerialNumber,
   identifiedBy,
   identifiedAt,
   magnitude,
@@ -26,6 +23,7 @@ const Body = ({
   scores,
   correctiveActions,
   preventativeActions,
+  lessons,
 }) => (
   <DocumentCard>
     <DocumentCard.Section>
@@ -43,19 +41,9 @@ const Body = ({
         {description}
       </DocumentCard.SectionItem>
 
-      <DocumentCard.SectionItem title="Standard(s)">
-        {standards.length > 0 && standards.map(standard => (
-          <Button
-            tag="a"
-            href={`/${orgSerialNumber}/standards/${standard._id}`}
-            key={`standard-button-${standard._id}`}
-            color="secondary"
-            className="margin-right"
-          >
-            {standard.title}
-          </Button>
-        ))}
-      </DocumentCard.SectionItem>
+      {standards.length > 0 && (
+        <LinkItemList label="Standard(s)" items={standards} />
+      )}
 
       <Row>
         <Col sm="6">
@@ -91,12 +79,9 @@ const Body = ({
       <DocumentCard.Section name="Notify changes">
         <DocumentCard.SectionItem>
           {notify.map(user => (
-            <h4
-              key={user._id}
-              className="list-group-item-heading"
-            >
+            <ListGroupItemHeading tag="h4" key={user._id}>
               {user.firstName} {user.lastName}
-            </h4>
+            </ListGroupItemHeading>
           ))}
         </DocumentCard.SectionItem>
       </DocumentCard.Section>
@@ -113,56 +98,32 @@ const Body = ({
           ]}
         >
           {scores.map(score => [
-            <span className="list-group-item-heading">{score.scoreTypeId}</span>,
+            <ListGroupItemHeading tag="span">{score.scoreTypeId}</ListGroupItemHeading>,
             <div>
               <Label margin="right" className={`impact-${score.className}`}>{score.value}</Label>
-              <span className="list-group-item-heading margin-right">{score.priority}</span>
+              <ListGroupItemHeading tag="span" className="margin-right">
+                {score.priority}
+              </ListGroupItemHeading>
             </div>,
-            <span className="list-group-item-heading">{score.scoredAt}</span>,
-            <span className="list-group-item-heading">
+            <ListGroupItemHeading tag="span">{score.scoredAt}</ListGroupItemHeading>,
+            <ListGroupItemHeading tag="span">
               {score.scoredBy.firstName} {score.scoredBy.lastName}
-            </span>,
+            </ListGroupItemHeading>,
           ])}
         </DocumentCard.SectionTableItem>
       </DocumentCard.Section>
     )}
 
     {correctiveActions.length > 0 && (
-      <DocumentCard.Section name="Corrective actions">
-        <DocumentCard.SectionItem>
-          {correctiveActions && correctiveActions.map(action => (
-            <Button
-              tag="a"
-              href={`/${orgSerialNumber}/work-inbox/${action._id}`}
-              key={`standard-button-${action._id}`}
-              color="secondary"
-              className="margin-right"
-            >
-              {action.sequentialId} {action.title}
-              <Icon name="circle" margin="left" className={`text-${action.className}`} />
-            </Button>
-          ))}
-        </DocumentCard.SectionItem>
-      </DocumentCard.Section>
+      <LinkItemList label="Corrective actions" items={correctiveActions} />
     )}
 
     {preventativeActions.length > 0 && (
-      <DocumentCard.Section name="Preventative actions">
-        <DocumentCard.SectionItem>
-          {preventativeActions.map(action => (
-            <Button
-              tag="a"
-              href={`/${orgSerialNumber}/work-inbox/${action._id}`}
-              key={`standard-button-${action._id}`}
-              color="secondary"
-              className="margin-right"
-            >
-              {action.sequentialId} {action.title}
-              <Icon name="circle" margin="left" className={`text-${action.className}`} />
-            </Button>
-          ))}
-        </DocumentCard.SectionItem>
-      </DocumentCard.Section>
+      <LinkItemList label="Preventative actions" items={preventativeActions} />
+    )}
+
+    {lessons.length > 0 && (
+      <LinkItemList label="Lessons Learned" items={lessons} />
     )}
   </DocumentCard>
 );
