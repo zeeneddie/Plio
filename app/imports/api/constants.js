@@ -79,6 +79,106 @@ export const TruncatedStringLengths = {
   c40: 40,
 };
 
+export const StandardsListProjection = {
+  organizationId: 1,
+  title: 1,
+  typeId: 1,
+  sectionId: 1,
+  nestingLevel: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  owner: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1,
+};
+
+export const RisksListProjection = {
+  organizationId: 1,
+  serialNumber: 1,
+  sequentialId: 1,
+  title: 1,
+  identifiedAt: 1,
+  typeId: 1,
+  scores: 1,
+  departmentsIds: 1,
+  status: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1,
+  magnitude: 1,
+};
+
+export const ActionsListProjection = {
+  organizationId: 1,
+  serialNumber: 1,
+  sequentialId: 1,
+  title: 1,
+  linkedTo: 1,
+  type: 1,
+  status: 1,
+  ownerId: 1,
+  isCompleted: 1,
+  completionTargetDate: 1,
+  toBeCompletedBy: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1,
+};
+
+export const NonConformitiesListProjection = {
+  organizationId: 1,
+  serialNumber: 1,
+  sequentialId: 1,
+  title: 1,
+  cost: 1,
+  ref: 1,
+  createdAt: 1,
+  identifiedAt: 1,
+  magnitude: 1,
+  status: 1,
+  departmentsIds: 1,
+  viewedBy: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1,
+  magnitude: 1,
+};
+
+export const WorkItemsListProjection = {
+  organizationId: 1,
+  targetDate: 1,
+  type: 1,
+  status: 1,
+  linkedDoc: 1,
+  assigneeId: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  isCompleted: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1,
+};
+
+export const StandardsBookSectionsListProjection = {
+  organizationId: 1,
+  title: 1,
+};
+
+export const StandardTypesListProjection = {
+  organizationId: 1,
+  title: 1,
+};
+
+export const DepartmentsListProjection = {
+  organizationId: 1,
+  name: 1,
+};
+
 export const AnalysisTitles = {
   rootCauseAnalysis: 'Root cause analysis',
   riskAnalysis: 'Initial risk analysis',
