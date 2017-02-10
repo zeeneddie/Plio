@@ -1,9 +1,8 @@
 import React from 'react';
-import { ListGroupItemHeading, Row, Col, ListGroup } from 'reactstrap';
+import { Row, Col, ListGroup } from 'reactstrap';
 
 import propTypes from './propTypes';
 import { ProblemsStatuses } from '/imports/share/constants';
-import DocumentCard from '/imports/ui/react/components/DocumentCard';
 import Label from '/imports/ui/react/components/Labels/Label';
 import LinkItemList from '/imports/ui/react/fields/read/components/LinkItemList';
 import ImprovementPlan from '/imports/ui/react/fields/read/components/ImprovementPlan';
@@ -12,6 +11,7 @@ import { getFullName } from '/imports/api/users/helpers';
 import Field from '/imports/ui/react/fields/read/components/Field';
 import Block from '/imports/ui/react/fields/read/components/Block';
 import Departments from '/imports/ui/react/fields/read/components/Departments';
+import ScoringTable from '/imports/ui/react/components/ScoringTable';
 
 const Body = ({
   title,
@@ -87,28 +87,7 @@ const Body = ({
     {!!scores.length && (
       <Block>
         <span>Risk scoring</span>
-        <DocumentCard.SectionTableItem
-          header={[
-            'Score type',
-            'Score',
-            'Scored date',
-            'Scored by',
-          ]}
-        >
-          {scores.map(score => [
-            <ListGroupItemHeading tag="span">{score.scoreTypeId}</ListGroupItemHeading>,
-            <div>
-              <Label margin="right" className={`impact-${score.className}`}>{score.value}</Label>
-              <ListGroupItemHeading tag="span" className="margin-right">
-                {score.priority}
-              </ListGroupItemHeading>
-            </div>,
-            <ListGroupItemHeading tag="span">{score.scoredAt}</ListGroupItemHeading>,
-            <ListGroupItemHeading tag="span">
-              {getFullName(score.scoredBy)}
-            </ListGroupItemHeading>,
-          ])}
-        </DocumentCard.SectionTableItem>
+        <ScoringTable big borderless {...{ scores }} />
       </Block>
     )}
 
