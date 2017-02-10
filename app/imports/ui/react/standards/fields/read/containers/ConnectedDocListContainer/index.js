@@ -9,8 +9,10 @@ import {
   includes,
   propEqId,
   pickC,
+  find,
+  filterC,
 } from '/imports/api/helpers';
-import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
+import { DocumentTypes } from '/imports/share/constants';
 import ConnectedDocList from '../../components/ConnectedDocList';
 import { getLinkedLessons, getLinkedActions } from '/imports/ui/react/share/helpers/linked';
 
@@ -25,19 +27,21 @@ export default compose(
     ], state.collections),
   })),
   mapProps((props) => {
-    const problemFilter = every([
+    const filterProblems = filterC(every([
       notDeleted,
       compose(includes(props.standardId), property('standardsIds')),
-    ]);
-    const ncs = props.ncs.filter(problemFilter);
-    const risks = props.risks.filter(problemFilter);
+    ]));
+    const ncs = filterProblems(props.ncs);
+    const risks = filterProblems(props.risks);
     const predicate = every([
       notDeleted,
-      ({ linkedTo }) => linkedTo.find(({ documentId, documentType }) => !!(
-        (documentType !== ProblemTypes.NON_CONFORMITY ||
-        documentType !== ProblemTypes.RISK) &&
-        ncs.concat(risks).find(propEqId(documentId))
-      )),
+      compose(
+        find(({ documentId }) => find(
+          propEqId(documentId),
+          ncs.concat(risks),
+        )),
+        property('linkedTo'),
+      ),
     ]);
     const actions = getLinkedActions(predicate, props, props.actions);
     const lessons = getLinkedLessons(props.standardId, DocumentTypes.STANDARD, props.lessons);

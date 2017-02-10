@@ -236,6 +236,8 @@ export const identity = _.identity;
 */
 export const join = curry((separator, array) => Object.assign([], array).join(separator));
 
+export const trim = str => `${str}`.trim();
+
 /*
   const gt10 = n => n > 10;
   either(gt10, identity)(2);
@@ -254,6 +256,7 @@ export const either = (...fns) => (...args) => {
 const createArrayFn = method => curry((fn, array) => Object.assign([], array)[method](fn));
 export const filterC = createArrayFn('filter');
 export const mapC = createArrayFn('map');
+export const sortC = createArrayFn('sort');
 export const reduceC = curry((reducer, initialValue, array) =>
   Object.assign([], array).reduce(reducer, initialValue));
 
@@ -264,6 +267,8 @@ export const reduceC = curry((reducer, initialValue, array) =>
 // );
 // => { _id: 1, firstName: 'Alan' }
 export const pickDocuments = curry((fields, collection, ids) => {
+  if (!ids) return ids;
+
   if (typeof ids === 'string') return pickDeep(fields, collection[ids]);
 
   const reducer = (prev, cur) => {

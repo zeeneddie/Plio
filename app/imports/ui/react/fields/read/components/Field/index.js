@@ -1,19 +1,23 @@
 import React, { PropTypes } from 'react';
-import cx from 'classnames';
+import { ListGroupItem, ListGroupItemHeading, ListGroupItemText } from 'reactstrap';
 
-const Field = ({ label, className, children }) => (
-  <div className="list-group-item">
+const Field = ({ label, tag = 'h4', wrapper, heading, text, children }) => (
+  <ListGroupItem {...wrapper}>
     {label && (
-      <p className="list-group-item-text">{label}</p>
+      <ListGroupItemText {...text}>{label}</ListGroupItemText>
     )}
-    <h4 className={cx(className, 'list-group-item-heading')}>
+    <ListGroupItemHeading {...{ tag, ...heading }}>
       {children}
-    </h4>
-  </div>
+    </ListGroupItemHeading>
+  </ListGroupItem>
 );
 
 Field.propTypes = {
-  label: PropTypes.string,
+  wrapper: PropTypes.object,
+  heading: PropTypes.object,
+  text: PropTypes.object,
+  tag: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   className: PropTypes.string,
   children: PropTypes.node,
 };

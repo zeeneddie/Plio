@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
-import propTypes from './propTypes';
-import { getUserFullNameOrEmail } from '/imports/share/helpers';
+import { getFullNameOrEmail } from '/imports/api/users/helpers';
 import createReadFields from '../../../../helpers/createReadFields';
 import DepartmentsContainer from '../../../../fields/read/containers/DepartmentsContainer';
 import Source from '../../../../fields/read/components/Source';
@@ -10,6 +9,21 @@ import Notify from '../../../../fields/read/components/Notify';
 import ImprovementPlan from '../../../../fields/read/components/ImprovementPlan';
 import FileProvider from '../../../../containers/providers/FileProvider';
 import ConnectedDocListContainer from '../../../fields/read/containers/ConnectedDocListContainer';
+
+const propTypes = {
+  _id: PropTypes.string,
+  description: PropTypes.string,
+  issueNumber: PropTypes.number,
+  owner: PropTypes.object,
+  departmentsIds: PropTypes.arrayOf(PropTypes.string),
+  source1: PropTypes.object,
+  source2: PropTypes.object,
+  section: PropTypes.object,
+  type: PropTypes.object,
+  files: PropTypes.arrayOf(PropTypes.object),
+  notify: PropTypes.arrayOf(PropTypes.object),
+  improvementPlan: PropTypes.object,
+};
 
 const BodyContents = ({
   _id,
@@ -30,7 +44,7 @@ const BodyContents = ({
     { label: 'Issue number', text: issueNumber, wrap },
     { label: 'Section', text: section.title, wrap },
     { label: 'Type', text: cx(type.title, type.abbreviation && `(${type.abbreviation})`), wrap },
-    { label: 'Owner', text: getUserFullNameOrEmail(owner), wrap },
+    { label: 'Owner', text: getFullNameOrEmail(owner), wrap },
   ];
   const fields = createReadFields(data);
 
@@ -64,7 +78,7 @@ const BodyContents = ({
         ))}
       </div>
 
-      {notify ? (<Notify users={[...notify]} />) : null}
+      {!!notify.length && (<Notify users={notify} />)}
 
       <ConnectedDocListContainer standardId={_id}>
         {improvementPlan && (

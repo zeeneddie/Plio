@@ -6,8 +6,6 @@ import LinkItemList from '../../../../../fields/read/components/LinkItemList';
 import { getPath } from '../../../../../../utils/router/paths';
 import { getClassByStatus } from '/imports/api/problems/helpers';
 
-// TODO: change param to urlItemId for every route
-
 const ConnectedDocList = (props) => {
   const ncs = props.ncs.map(nc => ({
     ...nc,
@@ -17,7 +15,7 @@ const ConnectedDocList = (props) => {
   const risks = props.risks.map(risk => ({
     ...risk,
     indicator: getClassByStatus(risk.status),
-    href: getPath('risk')({ riskId: risk._id }),
+    href: getPath('risk')({ urlItemId: risk._id }),
   }));
   const actionsByType = splitActionsByType(props.actions);
 

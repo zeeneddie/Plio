@@ -1,12 +1,17 @@
 import React from 'react';
-import property from 'lodash.property';
-import { ListGroupItemHeading, Row, Col } from 'reactstrap';
+import { ListGroupItemHeading, Row, Col, ListGroup } from 'reactstrap';
 
 import propTypes from './propTypes';
 import { ProblemsStatuses } from '/imports/share/constants';
 import DocumentCard from '/imports/ui/react/components/DocumentCard';
 import Label from '/imports/ui/react/components/Labels/Label';
 import LinkItemList from '/imports/ui/react/fields/read/components/LinkItemList';
+import ImprovementPlan from '/imports/ui/react/fields/read/components/ImprovementPlan';
+import Notify from '/imports/ui/react/fields/read/components/Notify';
+import { getFullName } from '/imports/api/users/helpers';
+import Field from '/imports/ui/react/fields/read/components/Field';
+import Block from '/imports/ui/react/fields/read/components/Block';
+import Departments from '/imports/ui/react/fields/read/components/Departments';
 
 const Body = ({
   title,
@@ -24,10 +29,11 @@ const Body = ({
   correctiveActions,
   preventativeActions,
   lessons,
+  improvementPlan,
 }) => (
-  <DocumentCard>
-    <DocumentCard.Section>
-      <DocumentCard.SectionItem title="Risk name">
+  <div>
+    <ListGroup>
+      <Field label="Risk name">
         {title && (
           <span>
             <span>{title}</span>
@@ -35,60 +41,52 @@ const Body = ({
             <Label names="" className="text-default">{ProblemsStatuses[status]}</Label>
           </span>
         )}
-      </DocumentCard.SectionItem>
+      </Field>
 
-      <DocumentCard.SectionItem title="Risk description">
-        {description}
-      </DocumentCard.SectionItem>
+      {description && (
+        <Field label="Risk description">
+          {description}
+        </Field>
+      )}
 
-      {standards.length > 0 && (
+      {!!standards.length && (
         <LinkItemList label="Standard(s)" items={standards} />
       )}
 
       <Row>
         <Col sm="6">
-          <DocumentCard.SectionItem title="Identified by">
-            {identifiedBy.firstName} {identifiedBy.lastName}
-          </DocumentCard.SectionItem>
+          <Field label="Identified by">
+            {getFullName(identifiedBy)}
+          </Field>
         </Col>
         <Col sm="6">
-          <DocumentCard.SectionItem title="Date identified">
+          <Field label="Date identified">
             {identifiedAt}
-          </DocumentCard.SectionItem>
+          </Field>
         </Col>
       </Row>
 
       <Row>
         <Col sm="6">
-          <DocumentCard.SectionItem title="Initial categorization">
+          <Field label="Initial categorization">
             {magnitude}
-          </DocumentCard.SectionItem>
+          </Field>
         </Col>
         <Col sm="6">
-          <DocumentCard.SectionItem title="Type">
+          <Field label="Type">
             {type.title}
-          </DocumentCard.SectionItem>
+          </Field>
         </Col>
       </Row>
-      <DocumentCard.SectionItem title="Department(s)">
-        {departments.length > 0 && departments.map(property('name')).join(', ')}
-      </DocumentCard.SectionItem>
-    </DocumentCard.Section>
 
-    {notify.length > 0 && (
-      <DocumentCard.Section name="Notify changes">
-        <DocumentCard.SectionItem>
-          {notify.map(user => (
-            <ListGroupItemHeading tag="h4" key={user._id}>
-              {user.firstName} {user.lastName}
-            </ListGroupItemHeading>
-          ))}
-        </DocumentCard.SectionItem>
-      </DocumentCard.Section>
-    )}
+      {!!departments.length && (<Departments departments={departments} />)}
+    </ListGroup>
 
-    {scores.length > 0 && (
-      <DocumentCard.Section name="Risk scoring">
+    {!!notify.length && (<Notify users={notify} />)}
+
+    {!!scores.length && (
+      <Block>
+        <span>Risk scoring</span>
         <DocumentCard.SectionTableItem
           header={[
             'Score type',
@@ -107,25 +105,29 @@ const Body = ({
             </div>,
             <ListGroupItemHeading tag="span">{score.scoredAt}</ListGroupItemHeading>,
             <ListGroupItemHeading tag="span">
-              {score.scoredBy.firstName} {score.scoredBy.lastName}
+              {getFullName(score.scoredBy)}
             </ListGroupItemHeading>,
           ])}
         </DocumentCard.SectionTableItem>
-      </DocumentCard.Section>
+      </Block>
     )}
 
-    {correctiveActions.length > 0 && (
+    {improvementPlan && (
+      <ImprovementPlan label="Treatment plan" {...improvementPlan} />
+    )}
+
+    {!!correctiveActions.length && (
       <LinkItemList label="Corrective actions" items={correctiveActions} />
     )}
 
-    {preventativeActions.length > 0 && (
+    {!!preventativeActions.length && (
       <LinkItemList label="Preventative actions" items={preventativeActions} />
     )}
 
-    {lessons.length > 0 && (
+    {!!lessons.length && (
       <LinkItemList label="Lessons Learned" items={lessons} />
     )}
-  </DocumentCard>
+  </div>
 );
 
 Body.propTypes = propTypes;

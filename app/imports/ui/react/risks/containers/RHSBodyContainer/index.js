@@ -12,12 +12,15 @@ import {
   notDeleted,
   propEq,
   find,
+  filterC,
+  getC,
 } from '/imports/api/helpers';
 import { capitalize, getFormattedDate } from '/imports/share/helpers';
 import { getNameByScore, getClassByScore } from '/imports/api/risks/helpers';
 import { getLinkedActions, getLinkedLessons } from '/imports/ui/react/share/helpers/linked';
 import { DocumentTypes, ActionTypes } from '/imports/share/constants';
 import { splitActionsByType } from '/imports/api/actions/helpers';
+import { getPath } from '/imports/ui/utils/router';
 
 import BodyContents from '../../components/RHS/Body';
 
@@ -43,10 +46,13 @@ const propsMapper = ({
   standardsByIds,
   ...props
 }) => {
-  const pickUsers = pickDocuments(['_id', 'profile.firstName', 'profile.lastName'], usersByIds);
+  const pickUsers = pickDocuments(['_id', 'profile', 'emails'], usersByIds);
   const predicate = every([
     notDeleted,
-    compose(find(propEq('documentId', risk._id)), property('linkedTo')),
+    compose(
+      find(propEq('documentId', risk._id)),
+      property('linkedTo')
+    ),
   ]);
   const linkedActions = getLinkedActions(predicate, props, props.actions);
   const actionsByType = splitActionsByType(linkedActions);
@@ -67,7 +73,15 @@ const propsMapper = ({
   const identifiedAt = getFormattedDate(risk.identifiedAt);
   const notify = pickUsers(risk.notify);
   const departments = pickDocuments(['_id', 'name'], departmentsByIds, risk.departmentsIds);
-  const standards = pickDocuments(['_id', 'title'], standardsByIds, risk.standardsIds);
+  const standards = compose(
+    mapC(s => ({ ...s, href: getPath('standard')({ urlItemId: s._id }) })),
+    filterC(notDeleted),
+    pickDocuments(['_id', 'title'], standardsByIds),
+  )(risk.standardsIds);
+  const improvementPlan = {
+    ...risk.improvementPlan,
+    owner: pickUsers(getC('improvementPlan.owner', risk)),
+  };
 
   return {
     ...props,
@@ -83,6 +97,7 @@ const propsMapper = ({
     departments,
     standards,
     lessons,
+    improvementPlan,
   };
 };
 
