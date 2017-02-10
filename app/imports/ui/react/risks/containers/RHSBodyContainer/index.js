@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { compose, mapProps } from 'recompose';
 import property from 'lodash.property';
+import set from 'lodash.set';
 
 import {
   pickC,
@@ -46,6 +47,7 @@ const propsMapper = ({
   standardsByIds,
   ...props
 }) => {
+  const p1 = performance.now();
   const pickUsers = pickDocuments(['_id', 'profile', 'emails'], usersByIds);
   const predicate = every([
     notDeleted,
@@ -69,19 +71,25 @@ const propsMapper = ({
     className: compose(getClassByScore, propValue),
     value: propValue,
   }), risk.scores);
-  const identifiedBy = pickUsers(risk.identifiedBy);
   const identifiedAt = getFormattedDate(risk.identifiedAt);
-  const notify = pickUsers(risk.notify);
   const departments = pickDocuments(['_id', 'name'], departmentsByIds, risk.departmentsIds);
   const standards = compose(
     mapC(s => ({ ...s, href: getPath('standard')({ urlItemId: s._id }) })),
     filterC(notDeleted),
     pickDocuments(['_id', 'title'], standardsByIds),
   )(risk.standardsIds);
-  const improvementPlan = {
-    ...risk.improvementPlan,
-    owner: pickUsers(getC('improvementPlan.owner', risk)),
-  };
+
+  const setUsers = () => [
+    'identifiedBy',
+    'notify',
+    'improvementPlan.owner',
+    'analysis.executor',
+    'analysis.completedBy',
+    'updateOfStandards.executor',
+    'updateOfStandards.completedBy',
+  ].map(path => set(risk, path, pickUsers(getC(path, risk))));
+
+  setUsers();
 
   return {
     ...props,
@@ -92,12 +100,9 @@ const propsMapper = ({
     magnitude,
     scores,
     identifiedAt,
-    identifiedBy,
-    notify,
     departments,
     standards,
     lessons,
-    improvementPlan,
   };
 };
 

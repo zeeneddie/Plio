@@ -3,6 +3,7 @@ import { Row, Col, ListGroup } from 'reactstrap';
 import { _ } from 'meteor/underscore';
 
 import { ProblemsStatuses } from '/imports/share/constants';
+import { AnalysisTitles } from '/imports/api/constants';
 import Label from '/imports/ui/react/components/Labels/Label';
 import LinkItemList from '/imports/ui/react/fields/read/components/LinkItemList';
 import ImprovementPlan from '/imports/ui/react/fields/read/components/ImprovementPlan';
@@ -14,6 +15,7 @@ import Departments from '/imports/ui/react/fields/read/components/Departments';
 import ScoringTable from '/imports/ui/react/components/ScoringTable';
 import Evaluation from '/imports/ui/react/components/Evaluation';
 import FileProvider from '/imports/ui/react/containers/providers/FileProvider';
+import Analysis from '/imports/ui/react/fields/read/components/Analysis';
 
 const propTypes = {
   title: PropTypes.string,
@@ -34,6 +36,8 @@ const propTypes = {
   improvementPlan: PropTypes.object,
   riskEvaluation: PropTypes.object,
   fileIds: PropTypes.arrayOf(PropTypes.string),
+  analysis: PropTypes.object,
+  updateOfStandards: PropTypes.object,
 };
 
 const Body = ({
@@ -55,6 +59,8 @@ const Body = ({
   improvementPlan,
   riskEvaluation,
   fileIds,
+  analysis,
+  updateOfStandards,
 }) => (
   <div>
     <ListGroup>
@@ -106,6 +112,20 @@ const Body = ({
 
       {!!departments.length && (<Departments {...{ departments }} />)}
     </ListGroup>
+
+    {!_.isEmpty(analysis) && (
+      <Block>
+        <span>{AnalysisTitles.riskAnalysis}</span>
+        <Analysis {...analysis} />
+      </Block>
+    )}
+
+    {!_.isEmpty(updateOfStandards) && (
+      <Block>
+        <span>{AnalysisTitles.updateOfRiskRecord}</span>
+        <Analysis {...updateOfStandards} />
+      </Block>
+    )}
 
     {!!notify.length && (<Notify users={notify} />)}
 

@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
+import { Col } from 'reactstrap';
 
 import { getFullNameOrEmail } from '/imports/api/users/helpers';
 import createReadFields from '../../../../helpers/createReadFields';
@@ -38,13 +39,13 @@ const BodyContents = ({
   section = {},
   type = {},
 }) => {
-  const wrap = 'col-md-6';
+  const render = (field) => (<Col sm="6">{field}</Col>);
   const data = [
     { label: 'Description', text: description },
-    { label: 'Issue number', text: issueNumber, wrap },
-    { label: 'Section', text: section.title, wrap },
-    { label: 'Type', text: cx(type.title, type.abbreviation && `(${type.abbreviation})`), wrap },
-    { label: 'Owner', text: getFullNameOrEmail(owner), wrap },
+    { label: 'Issue number', text: issueNumber, render },
+    { label: 'Section', text: section.title, render },
+    { label: 'Type', text: cx(type.title, type.abbreviation && `(${type.abbreviation})`), render },
+    { label: 'Owner', text: getFullNameOrEmail(owner), render },
   ];
   const fields = createReadFields(data);
 
