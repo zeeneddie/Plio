@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers, mapProps, shouldUpdate } from 'recompose';
+import { compose, withHandlers, mapProps, onlyUpdateForKeys } from 'recompose';
 import { _ } from 'meteor/underscore';
 
 import RiskLHS from '../../components/LHS';
@@ -12,7 +12,6 @@ import { getRisksByFilter } from '../../helpers';
 import {
   sortArrayByTitlePrefix,
   pickC,
-  notEquals,
   getSearchMatchText,
 } from '/imports/api/helpers';
 import { onToggleCollapse } from '/imports/ui/react/share/LHS/handlers';
@@ -51,14 +50,10 @@ export default compose(
       'status',
       'isDeleted',
       'sequentialId',
+      'deletedAt',
     ])),
   })),
-  shouldUpdate((props, nextProps) => !!(
-    props.searchText !== nextProps.searchText ||
-    props.filter !== nextProps.filter ||
-    props.animating !== nextProps.animating ||
-    notEquals(props.risks, nextProps.risks)
-  )),
+  onlyUpdateForKeys(['searchText', 'filter', 'animating', 'risks']),
   withHandlers({
     onToggleCollapse,
     onClear,

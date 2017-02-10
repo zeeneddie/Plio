@@ -5,7 +5,6 @@ import { getPath } from '../../../../utils/router/paths';
 import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
 import { pickDeep } from '/imports/api/helpers';
 import {
-  onToggleScreenMode,
   onDiscussionOpen,
   onModalOpen,
   onRestore,
@@ -39,7 +38,6 @@ export default compose(
     };
   }),
   withHandlers({
-    onToggleScreenMode,
     onDiscussionOpen,
     onModalOpen,
     onRestore,
