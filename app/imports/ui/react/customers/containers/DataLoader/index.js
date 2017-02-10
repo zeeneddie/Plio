@@ -24,6 +24,7 @@ import loadInitialData from '../../../loaders/loadInitialData';
 import loadLayoutData from '../../../loaders/loadLayoutData';
 import loadCardData from '../../../loaders/loadCardData';
 import loadMainData from '../../loaders/loadMainData';
+import loadUsersData from '../../../loaders/loadUsersData';
 import observeOrganizations from '../../observers/observeOrganizations';
 
 const getLayoutData = () => loadLayoutData(() => (
@@ -50,6 +51,10 @@ export default compose(
     renderComponent(CustomersLayout),
     identity
   ),
+
+  composeWithTracker(loadUsersData, null, null, {
+    shouldResubscribe: false,
+  }),
 
   lifecycle({
     componentWillMount() {

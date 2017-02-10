@@ -30,7 +30,6 @@ const OrganizationSettingsHelp = {
   organizationSettings: `Organization settings is where you can customize the behaviour of the Plio system.  For example, you can customize lists (e.g.  Departments, Standards types, Risk types) and create a section structure for your standards documents. You can also configure whether you want simple (3-step) or full (6-step) workflows for key Plio processes, for example the non-conformity handling process.`,
   organizationName: `You can choose to set up all your users within a single organization in Plio, or create different Plio organizations for different business units. Either way, you will need to give your Plio organization a name.  This is usually identical to your company name, or a shortened version of it.`,
   organizationOwner: `The organization owner in Plio is the user who controls the administration of the Plio workspace, and is the designated person for account billing.  You can request to change the organization owner and if this request is accepted by the new owner, he or she will take over administration and billing responsibilities.`,
-  organizationOwnerEmail: `Hello World`,
   timeZone: `Use this setting to set the time that Plio sends out certain notification messages.`,
   defaultCurrency: `Use this setting to set the currency that Plio uses in your organization workspace.  This will also be used as the default currency for your Plio billing.`,
   departments: `Create a list of departments or business sectors for your organization.`,

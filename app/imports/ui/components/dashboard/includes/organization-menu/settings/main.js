@@ -22,7 +22,6 @@ Template.OrgSettings_MainSettings.viewmodel({
   ownerFieldHelp: OrganizationSettingsHelp.organizationOwner,
   timezoneFieldHelp: OrganizationSettingsHelp.timeZone,
   currencyFieldHelp: OrganizationSettingsHelp.defaultCurrency,
-  ownerEmailFieldHelp: OrganizationSettingsHelp.organizationOwnerEmail,
   ownerEmail() {
     return getEmail(Meteor.users.findOne({ _id: this.ownerId() }));
   },

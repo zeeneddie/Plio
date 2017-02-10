@@ -77,7 +77,9 @@ export const getCollectionNameByDocType = (docType) => {
 };
 
 export const getFormattedDate = (date, stringFormat) => {
-  return moment(date).format(stringFormat);
+  let format = stringFormat;
+  if (typeof format !== 'string') format = 'DD MMM YYYY';
+  return moment(date).format(format);
 };
 
 export const getLinkedDoc = (documentId, documentType) => {
