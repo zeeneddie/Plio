@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Row, Col, ListGroup } from 'reactstrap';
+import { _ } from 'meteor/underscore';
 
-import propTypes from './propTypes';
 import { ProblemsStatuses } from '/imports/share/constants';
 import Label from '/imports/ui/react/components/Labels/Label';
 import LinkItemList from '/imports/ui/react/fields/read/components/LinkItemList';
@@ -12,6 +12,29 @@ import Field from '/imports/ui/react/fields/read/components/Field';
 import Block from '/imports/ui/react/fields/read/components/Block';
 import Departments from '/imports/ui/react/fields/read/components/Departments';
 import ScoringTable from '/imports/ui/react/components/ScoringTable';
+import Evaluation from '/imports/ui/react/components/Evaluation';
+import FileProvider from '/imports/ui/react/containers/providers/FileProvider';
+
+const propTypes = {
+  title: PropTypes.string,
+  sequentialId: PropTypes.string,
+  status: PropTypes.number,
+  description: PropTypes.string,
+  notify: PropTypes.arrayOf(PropTypes.object),
+  standards: PropTypes.arrayOf(PropTypes.object),
+  identifiedBy: PropTypes.object,
+  identifiedAt: PropTypes.string,
+  magnitude: PropTypes.string,
+  type: PropTypes.object,
+  departments: PropTypes.arrayOf(PropTypes.object),
+  scores: PropTypes.arrayOf(PropTypes.object),
+  correctiveActions: PropTypes.arrayOf(PropTypes.object),
+  preventativeActions: PropTypes.arrayOf(PropTypes.object),
+  lessons: PropTypes.arrayOf(PropTypes.object),
+  improvementPlan: PropTypes.object,
+  riskEvaluation: PropTypes.object,
+  fileIds: PropTypes.arrayOf(PropTypes.string),
+};
 
 const Body = ({
   title,
@@ -30,6 +53,8 @@ const Body = ({
   preventativeActions,
   lessons,
   improvementPlan,
+  riskEvaluation,
+  fileIds,
 }) => (
   <div>
     <ListGroup>
@@ -79,10 +104,17 @@ const Body = ({
         </Col>
       </Row>
 
-      {!!departments.length && (<Departments departments={departments} />)}
+      {!!departments.length && (<Departments {...{ departments }} />)}
     </ListGroup>
 
     {!!notify.length && (<Notify users={notify} />)}
+
+    {!_.isEmpty(riskEvaluation) && (
+      <Block>
+        <span>Risk evaluation</span>
+        <Evaluation {...riskEvaluation} />
+      </Block>
+    )}
 
     {!!scores.length && (
       <Block>
@@ -91,7 +123,7 @@ const Body = ({
       </Block>
     )}
 
-    {improvementPlan && (
+    {!_.isEmpty(improvementPlan) && (
       <ImprovementPlan label="Treatment plan" {...improvementPlan} />
     )}
 
@@ -105,6 +137,17 @@ const Body = ({
 
     {!!lessons.length && (
       <LinkItemList label="Lessons Learned" items={lessons} />
+    )}
+
+    {!!fileIds.length && (
+      <Block>
+        <span>Other files</span>
+        <Field>
+          {fileIds.map((fileId) => (
+            <FileProvider key={fileId} {...{ fileId }} />
+          ))}
+        </Field>
+      </Block>
     )}
   </div>
 );

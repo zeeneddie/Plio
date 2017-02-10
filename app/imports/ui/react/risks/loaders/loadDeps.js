@@ -8,6 +8,7 @@ import { Actions } from '/imports/share/collections/actions';
 import { Standards } from '/imports/share/collections/standards';
 import { LessonsLearned } from '/imports/share/collections/lessons';
 import { WorkItems } from '/imports/share/collections/work-items';
+import { Files } from '/imports/share/collections/files';
 import {
   setDepartments,
   setNCs,
@@ -16,6 +17,7 @@ import {
   setStandards,
   setWorkItems,
   setLessons,
+  setFiles,
 } from '/imports/client/store/actions/collectionsActions';
 import { setDepsReady } from '/imports/client/store/actions/risksActions';
 
@@ -31,6 +33,7 @@ export default function loadDeps({ dispatch, organizationId, initializing }, onD
     const actions = Actions.find(query, pOptions).fetch();
     const lessons = LessonsLearned.find(query, pOptions).fetch();
     const workItems = WorkItems.find(query).fetch();
+    const files = Files.find(query, { sort: { updatedAt: -1 } }).fetch();
 
     let reduxActions = [
       setDepartments(departments),
@@ -39,6 +42,7 @@ export default function loadDeps({ dispatch, organizationId, initializing }, onD
       setActions(actions),
       setWorkItems(workItems),
       setLessons(lessons),
+      setFiles(files),
       setDepsReady(true),
     ];
 
