@@ -10,6 +10,10 @@
       {{/FormField}}
     {{/if}}
 
+    {{#FormField label="Email address" helpText=ownerEmailFieldHelp}}
+      <input type="text" class="form-control" disabled {{b "value: ownerEmail"}} />
+    {{/FormField}}
+
     {{> OrgSettings_OrgTimezone timezone=timezone helpText=timezoneFieldHelp}}
 
     {{> OrgSettings_OrgCurrency currency=currency helpText=currencyFieldHelp}}
