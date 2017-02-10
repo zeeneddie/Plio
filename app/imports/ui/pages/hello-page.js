@@ -16,15 +16,32 @@ Template.HelloPage.viewmodel({
       const organizationsHandle = template.subscribe('currentUserOrganizations');
       if (!Meteor.loggingIn() && organizationsHandle.ready()) {
         if (currentUser) {
-          const selectedOrganizationSerialNumber = localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`);
+          const query = {
+            users: {
+              $elemMatch: {
+                userId: currentUser._id,
+                isRemoved: false,
+                removedBy: { $exists: false },
+                removedAt: { $exists: false },
+              },
+            },
+          };
+          const selectedOrganizationSerialNumber =
+            localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`);
           const serialNumber = parseInt(selectedOrganizationSerialNumber, 10);
-          const orgExists = !!Organizations.findOne({ serialNumber });
+          const orgExists = !!Organizations.findOne({ ...query, serialNumber });
 
           if (serialNumber && orgExists) {
             this.goToDashboard(serialNumber);
           } else {
-            const org = Organizations.findOne();
-            !!org && this.goToDashboard(org.serialNumber);
+            const org = Organizations.findOne(query);
+            if (org) {
+              localStorage.setItem(
+                `${Meteor.userId()}: selectedOrganizationSerialNumber`,
+                org.serialNumber
+              );
+              this.goToDashboard(org.serialNumber);
+            }
           }
         } else {
           FlowRouter.withReplaceState(() => {
@@ -59,13 +76,21 @@ Template.HelloPage.viewmodel({
     }, () => {
       remove.call({}, (err) => {
         if (err) {
-          swal('Oops... Something went wrong!', err.reason, 'error');
+          swal({
+            title: 'Oops... Something went wrong!',
+            text: err.reason,
+            type:'error',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         } else {
-          swal(
-            'Removed!',
-            `Your account was removed successfully!`,
-            'success'
-          );
+          swal({
+            title: 'Removed!',
+            text: `Your account was removed successfully!`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         }
       });
     });

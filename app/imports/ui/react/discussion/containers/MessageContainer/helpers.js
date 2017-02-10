@@ -1,16 +1,30 @@
+/* eslint-disable react/prop-types */
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Autolinker } from 'meteor/konecty:autolinker';
 import React from 'react';
 
 import { getFormattedDate } from '/imports/share/helpers';
-import { invokeC } from '/imports/api/helpers';
 import { TruncatedStringLengths } from '/imports/api/constants';
-
-import FileItemRead from '../../../components/FileItemRead';
+import FileProvider from '../../../containers/providers/FileProvider';
+import { openUserDetails } from './handlers';
+import ReactAutolinker from '../../../components/ReactAutolinker';
+import { getMentionData, getMentionDataWithUsers } from '/imports/share/mentions';
 
 // Helpers
 
-export const invokeUser = path => obj => invokeC(path, obj.user);
+const renderMentions = (text, defaultRenderer) => {
+  const data = getMentionDataWithUsers(getMentionData(text));
+  const content = data.map(({ firstName, email, user, mentionString }, i) => (user ? (
+    <a key={email} onClick={openUserDetails({ user })}>{firstName}</a>
+  ) : defaultRenderer(mentionString, i, text)));
+
+  return content;
+};
+
+const renderText = ({ text }) => {
+  const options = { mention: 'twitter', truncate: TruncatedStringLengths.c40 };
+
+  return renderMentions(text, (str, i) => <ReactAutolinker key={i} text={str} {...{ options }} />);
+};
 
 // Prop creators
 
@@ -22,27 +36,16 @@ export const getMessagePath = (props) => {
   return FlowRouter.path(currentRouteName, params, queryParams);
 };
 
-export const getUserAvatar = invokeUser('avatar');
-
-export const getUserFullNameOrEmail = invokeUser('fullNameOrEmail');
-
-export const getUserFirstName = invokeUser('firstName');
-
 export const getMessageTime = props => getFormattedDate(props.createdAt, 'h:mm A');
 
-export const getMessageContents = (props) => {
-  switch (props.type) {
+export const getMessageContents = ({ text = '', type, fileId }) => {
+  switch (type) {
     case 'text':
-      const createMarkup = () => ({
-        __html: Autolinker.link(props.text || '', {
-          truncate: TruncatedStringLengths.c40
-        })
-      });
-      return <span dangerouslySetInnerHTML={createMarkup()}></span>;
+      return renderText({ text });
     case 'file':
-      return <FileItemRead {...props} />;
+      return fileId && <FileProvider {...{ fileId }} />;
     default:
-      return props.text;
+      return text;
   }
 };
 

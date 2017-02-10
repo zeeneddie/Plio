@@ -1,6 +1,6 @@
-import { Organizations } from '/imports/share/collections/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations';
 import { getTimezones } from './helpers';
-import RecapSender from '/imports/recaps/RecapSender.js';
+import DailyRecapSender from '/imports/recaps/daily/DailyRecapSender';
 
 
 // send recaps at 05:00
@@ -17,11 +17,11 @@ SyncedCron.add({
     const timezones = getTimezones(RECAP_SENDING_TIME);
 
     Organizations.find({
-      timezone: { $in: timezones }
+      timezone: { $in: timezones },
     }, {
-      fields: { _id: 1 }
+      fields: { _id: 1 },
     }).forEach((org) => {
-      new RecapSender(org._id).send();
+      new DailyRecapSender(org._id).send();
     });
-  }
+  },
 });

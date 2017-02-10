@@ -1,6 +1,7 @@
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { Blaze } from 'meteor/blaze';
 
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.UserEdit_PhoneNumbers.viewmodel({
   mixin: ['addForm'],
@@ -47,13 +48,21 @@ Template.UserEdit_PhoneNumbers.viewmodel({
     }, () => {
       this.parent().removePhoneNumber(viewModel, (err) => {
         if (err) {
-          swal('Oops... Something went wrong!', err.reason, 'error');
+          swal({
+            title: 'Oops... Something went wrong!',
+            text: err.reason,
+            type: 'error',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         } else {
-          swal(
-            'Removed!',
-            `Phone number "${number}" was removed successfully.`,
-            'success'
-          );
+          swal({
+            title: 'Removed!',
+            text: `Phone number "${number}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         }
       });
     });

@@ -1,60 +1,46 @@
+import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
+import { Random } from 'meteor/random';
 import { _ } from 'meteor/underscore';
 
 import AWS from 'aws-sdk';
 import Future from 'fibers/future';
 import mammoth from 'mammoth';
 
-import StandardsService from '/imports/api/standards/standards-service.js';
-
 
 export default {
 
-  convertToHtml({ url, fileName, source, standardId, options }) {
-    const standard = Standards.findOne({ _id: standardId });
-    const organizationId = standard && standard.organizationId;
-    const doesSourceExist = Meteor.bindEnvironment(() => {
-      const standardQuery = { _id: standardId };
-      standardQuery[source] = { $exists: true };
-      const standard = Standards.findOne(standardQuery);
-      return !!standard;
-    });
-
-    const updateSource = Meteor.bindEnvironment((_id, source, htmlUrl) => {
-      if (doesSourceExist()) {
-        StandardsService.update({
-          _id,
-          [`${source}.htmlUrl`]: htmlUrl
-        });
-      }
-    });
-
-    const { bucketName, acl, standardFilesDir } = Meteor.settings.AWSS3Bucket;
-
+  convertToHtml({ fileUrl, htmlFileName, s3Params, convertParams, afterConvertation }) {
+    const afterConvertBinded = Meteor.bindEnvironment(afterConvertation);
     const fut = new Future();
 
-    HTTP.call('GET', url, {
+    HTTP.call('GET', fileUrl, {
       npmRequestOptions: {
-        encoding: null
+        encoding: null,
       },
-      responseType: 'buffer'
-    }, (error, result) => {
-      if (error) {
-        return fut.return(new Meteor.Error(error.message));
+      responseType: 'buffer',
+    }, (err1, res1) => {
+      if (err1) {
+        return fut.return(new Meteor.Error(err1.message));
       }
 
       if (!_.contains([
         'application/vnd.openxmlformats',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'binary/octet-stream'
-      ], result.headers['content-type'])) {
-        return fut.return(new Meteor.Error('TypeError', `Invalid content type - ${result.headers['content-type']}`));
+        'binary/octet-stream',
+      ], res1.headers['content-type'])) {
+        return fut.return(
+          new Meteor.Error(
+            'TypeError',
+            `Invalid content type - ${res1.headers['content-type']}`
+          )
+        );
       }
 
       mammoth.convertToHtml({
-          buffer: result.content
-        }, options)
-        .then((result) => {
+        buffer: res1.content,
+      }, convertParams)
+        .then((res2) => {
           const s3 = new AWS.S3();
 
           // Add some styles here
@@ -69,27 +55,29 @@ export default {
               </head>
               <body>
                 <div id="content">
-                  ${result.value}
+                  ${res2.value}
                 </div>
               </body>
             </html>
           `;
 
-          const params = {
-            Bucket: bucketName,
-            ACL: acl,
-            Key: `uploads/${organizationId}/${standardFilesDir}/${standardId}/${Random.id()}-${fileName}`,
+          const defaultParams = {
+            Bucket: Meteor.settings.AWSS3Bucket.bucketName,
+            ACL: Meteor.settings.AWSS3Bucket.acl,
+            Key: `uploads/${Random.id()}-${htmlFileName}`,
             Body: htmlString,
-            ContentType: 'text/html; charset=UTF-8'
+            ContentType: 'text/html; charset=UTF-8',
           };
 
-          const uploader = s3.upload(params, (error, data) => {
-            if (error) {
-              fut.return(new Meteor.Error(error.message));
+          const params = Object.assign({}, defaultParams, s3Params);
+
+          s3.upload(params, (err2, data) => {
+            if (err2) {
+              fut.return(new Meteor.Error(err2.message));
             } else {
-              updateSource(standardId, source, data.Location);
+              afterConvertBinded(data.Location);
               fut.return(data.Location);
-            };
+            }
           });
         })
         .catch((e) => {
@@ -99,6 +87,6 @@ export default {
     });
 
     return fut.wait();
-  }
+  },
 
 };

@@ -1,15 +1,16 @@
 import { Template } from 'meteor/templating';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
 import { Departments } from '/imports/share/collections/departments.js';
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { RiskTypes } from '/imports/share/collections/risk-types.js';
 import {
-  StandardsBookSections
+  StandardsBookSections,
 } from '/imports/share/collections/standards-book-sections.js';
 import { isOrgOwner } from '/imports/api/checkers';
 import { setNCGuideline, setRKGuideline } from '/imports/api/organizations/methods.js';
 
+import HomeTitlesSubcardContainer
+  from '/imports/ui/react/organization-settings/containers/HomeTitlesSubcardContainer';
 
 Template.OrgSettings.viewmodel({
   mixin: 'organization',
@@ -21,6 +22,9 @@ Template.OrgSettings.viewmodel({
     if (org) {
       this.load(_.pick(org, ['name', 'currency', 'timezone']));
     }
+  },
+  homeTitlesSubcard() {
+    return HomeTitlesSubcardContainer;
   },
   departments() {
     const query = { organizationId: this.organizationId() };

@@ -13,7 +13,7 @@ import {
   setAllLogsLoaded,
   setChangelogDocumentData,
   setShowAll,
-} from '/client/redux/actions/changelogActions';
+} from '/imports/client/store/actions/changelogActions';
 import { lastLogsLimit } from '../../constants';
 import Changelog from '../../components/Changelog';
 import propTypes from './propTypes';
@@ -94,10 +94,9 @@ const onViewAllClick = (props) => () => {
 const ChangelogContainer = compose(
   connect(),
 
-  kompose(onPropsChange, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.documentId !== nextProps.documentId,
-  }),
+  shouldUpdate((props, nextProps) => props.documentId !== nextProps.documentId),
+
+  kompose(onPropsChange),
 
   connect(state => pickC([
     'documentId',

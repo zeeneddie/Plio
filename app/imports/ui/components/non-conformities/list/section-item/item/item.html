@@ -19,7 +19,7 @@
         </div>
       </div>
       <p class="list-group-item-text label pull-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></p>
-      <p class="list-group-item-text pull-right" {{b "text: renderDate(this.identifiedAt)"}}></p>
+      <p class="list-group-item-text pull-right" {{b "text: getDate(this)"}}></p>
     </div>
   {{/ListItemLink}}
 </template>

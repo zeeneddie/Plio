@@ -1,33 +1,48 @@
+/* eslint max-len: ["error", 300] */
+
 export const ActionPlanOptions = {
   YES: 'Yes',
   NO: 'No',
-  NOT_NEEDED: 'Not needed'
+  NOT_NEEDED: 'Not needed',
+};
+
+export const ActionIndexes = {
+  IN_PROGRESS: 1,
+  DUE_COMPLETION_TODAY: 2,
+  COMPLETION_OVERDUE: 3,
+  NOT_YET_VERIFY: 4,
+  VERIFY_DUE_TODAY: 5,
+  VERIFY_OVERDUE: 6,
+  COMPLETED_FAILED: 7,
+  COMPLETED_EFFECTIVE: 8,
+  COMPLETED: 9,
+  DELETED: 10,
 };
 
 export const ActionStatuses = {
-  1: 'In progress',
-  2: 'In progress - due for completion today',
-  3: 'In progress - completion overdue',
-  4: 'In progress - completed, not yet verified',
-  5: 'In progress - completed, verification due today',
-  6: 'In progress - completed, verification overdue',
-  7: 'Completed - failed verification',
-  8: 'Completed - verified as effective',
-  9: 'Completed',
-  10: 'Deleted'
+  [ActionIndexes.IN_PROGRESS]: 'In progress',
+  [ActionIndexes.DUE_COMPLETION_TODAY]: 'In progress - due for completion today',
+  [ActionIndexes.COMPLETION_OVERDUE]: 'In progress - completion overdue',
+  [ActionIndexes.NOT_YET_VERIFY]: 'In progress - completed, not yet verified',
+  [ActionIndexes.VERIFY_DUE_TODAY]: 'In progress - completed, verification due today',
+  [ActionIndexes.VERIFY_OVERDUE]: 'In progress - completed, verification overdue',
+  [ActionIndexes.COMPLETED_FAILED]: 'Completed - failed verification',
+  [ActionIndexes.COMPLETED_EFFECTIVE]: 'Completed - verified as effective',
+  [ActionIndexes.COMPLETED]: 'Completed',
+  [ActionIndexes.DELETED]: 'Deleted',
 };
 
 export const ActionTypes = {
   CORRECTIVE_ACTION: 'CA',
   PREVENTATIVE_ACTION: 'PA',
-  RISK_CONTROL: 'RC'
+  RISK_CONTROL: 'RC',
 };
 
 export const ActionUndoTimeInHours = 1;
 
 export const AnalysisStatuses = {
   0: 'Not completed',
-  1: 'Completed'
+  1: 'Completed',
 };
 
 export const AvatarPlaceholders = [
@@ -46,12 +61,12 @@ export const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/13.png',
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/14.png',
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/15.png',
-  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png'
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png',
 ];
 
 export const PlioS3Logos = {
-  square: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png'
-}
+  square: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png',
+};
 
 export const CollectionNames = {
   ACTIONS: 'Actions',
@@ -60,6 +75,8 @@ export const CollectionNames = {
   DEPARTMENTS: 'Departments',
   DISCUSSIONS: 'Discussions',
   FILES: 'Files',
+  HELP_DOCS: 'HelpDocs',
+  HELP_SECTIONS: 'HelpSections',
   LESSONS: 'LessonsLearned',
   MESSAGES: 'Messages',
   NCS: 'NonConformities',
@@ -71,205 +88,278 @@ export const CollectionNames = {
   STANDARD_TYPES: 'StandardTypes',
   STANDARD_BOOK_SECTIONS: 'StandardsBookSections',
   STANDARDS: 'Standards',
-  WORK_ITEMS: 'WorkItems'
+  WORK_ITEMS: 'WorkItems',
+  USERS: 'users',
 };
 
 export const DefaultRiskTypes = [
   {
-    title: 'Credit risk'
+    title: 'Credit risk',
   },
   {
-    title: 'Liquidity risk'
+    title: 'Liquidity risk',
   },
   {
-    title: 'Market risk'
+    title: 'Market risk',
   },
   {
-    title: 'Operational risk'
+    title: 'Operational risk',
   },
   {
-    title: 'Regulatory risk'
+    title: 'Regulatory risk',
   },
   {
-    title: 'Reputational risk'
+    title: 'Reputational risk',
   },
   {
-    title: 'Infosecurity risk'
-  }
+    title: 'Infosecurity risk',
+  },
 ];
 
 export const DefaultStandardSections = [
   {
-    title: 'Introduction'
+    title: 'Introduction',
   },
   {
-    title: 'High level standards'
+    title: 'High level standards',
   },
   {
-    title: 'Business standards'
-  }
+    title: 'Business standards',
+  },
 ];
 
 export const DefaultStandardTypes = [
   {
     title: 'Process',
-    abbreviation: 'PRO'
+    abbreviation: 'PRO',
   },
   {
     title: 'Policy',
-    abbreviation: 'POL'
+    abbreviation: 'POL',
   },
   {
     title: 'Checklist',
-    abbreviation: 'CHK'
+    abbreviation: 'CHK',
   },
   {
     title: 'Compliance management objective',
-    abbreviation: 'CMO'
+    abbreviation: 'CMO',
   },
   {
     title: 'Compliance obligation',
-    abbreviation: 'COB'
+    abbreviation: 'COB',
   },
   {
     title: 'Standard operating procedure',
-    abbreviation: 'SOP'
+    abbreviation: 'SOP',
   },
   {
     title: 'Work instruction',
-    abbreviation: 'WORK'
+    abbreviation: 'WORK',
   },
   {
     title: 'Product specification',
-    abbreviation: 'SPEC'
+    abbreviation: 'SPEC',
   },
   {
     title: 'Risk control',
-    abbreviation: 'RSC'
+    abbreviation: 'RSC',
   },
   {
-    title: 'Section header'
-  }
+    title: 'Section header',
+  },
 ];
 
 export const DocChangesKinds = {
   DOC_CREATED: 1,
   DOC_UPDATED: 2,
-  DOC_REMOVED: 3
+  DOC_REMOVED: 3,
 };
+
+export const DefaultHelpSections = [
+  {
+    index: 1,
+    title: 'How to get help',
+  },
+  {
+    index: 2,
+    title: 'Getting started',
+  },
+  {
+    index: 3,
+    title: 'Creating your Standards manual',
+  },
+  {
+    index: 4,
+    title: 'Managing risks',
+  },
+  {
+    index: 5,
+    title: 'Managing non-conformities',
+  },
+  {
+    index: 6,
+    title: 'Managing workflows',
+  },
+  {
+    index: 7,
+    title: 'User management',
+  },
+  {
+    index: 8,
+    title: 'FAQs',
+  },
+];
 
 export const InvitationStatuses = {
   failed: 0,
   invited: 1,
-  added: 2
+  added: 2,
 };
 
 export const PhoneTypes = {
   WORK: 'Work',
   HOME: 'Home',
-  MOBILE: 'Mobile'
+  MOBILE: 'Mobile',
 };
 
 export const ProblemMagnitudes = {
   MINOR: 'minor',
   MAJOR: 'major',
-  CRITICAL: 'critical'
+  CRITICAL: 'critical',
+};
+
+
+export const ProblemIndexes = {
+  REPORTED: 1,
+  AWAITING_ANALYSIS: 2,
+  ACTIONS_TO_BE_ADDED: 3,
+  ANALYSIS_DUE_TODAY: 4,
+  ANALYSIS_OVERDUE: 5,
+  ANALYSIS_COMPLETED_ACTIONS_NEED: 6,
+  ANALYSIS_COMPLETED_ACTIONS_IN_PLACE: 7,
+  ACTIONS_IN_PLACE: 8,
+  ACTIONS_DUE_TODAY: 9,
+  ACTIONS_OVERDUE: 10,
+  OPEN_ACTIONS_COMPLETED: 11,
+  ACTIONS_COMPLETED_WAITING_VERIFY: 12,
+  VERIFY_DUE_TODAY: 13,
+  VERIFY_PAST_DUE: 14,
+  ACTIONS_AWAITING_UPDATE: 15,
+  ACTIONS_UPDATE_DUE_TODAY: 16,
+  ACTIONS_UPDATE_PAST_DUE: 17,
+  ACTIONS_FAILED_VERIFICATION: 18,
+  CLOSED_ACTIONS_COMPLETED: 19,
+  ACTIONS_VERIFIED_STANDARDS_REVIEWED: 20,
+  DELETED: 21,
 };
 
 export const ProblemsStatuses = {
-  1: 'Open - just reported',
-  2: 'Open - just reported, awaiting analysis',
-  3: 'Open - just reported, action(s) to be added',
-  4: 'Open - analysis due today',
-  5: 'Open - analysis overdue',
-  6: 'Open - analysis completed, action(s) need to be added',
-  7: 'Open - analysis completed, action(s) in place',
-  8: 'Open - action(s) due today',
-  9: 'Open - action(s) overdue',
-  10: 'Open - action(s) completed',
-  11: 'Open - action(s) completed, awaiting verification',
-  12: 'Open - verification due today',
-  13: 'Open - verification past due',
-  14: 'Open - action(s) verified as effective, awaiting update of standard(s)',
-  15: 'Open - action(s) verified as effective, update of standard(s) due today',
-  16: 'Open - action(s) verified as effective, update of standard(s) past due',
-  17: 'Open - action(s) failed verification',
-  18: 'Closed - action(s) completed',
-  19: 'Closed - action(s) verified, standard(s) reviewed',
-  20: 'Deleted'
+  [ProblemIndexes.REPORTED]: 'Open - just reported',
+  [ProblemIndexes.AWAITING_ANALYSIS]: 'Open - just reported, awaiting analysis',
+  [ProblemIndexes.ACTIONS_TO_BE_ADDED]: 'Open - just reported, action(s) to be added',
+  [ProblemIndexes.ANALYSIS_DUE_TODAY]: 'Open - analysis due today',
+  [ProblemIndexes.ANALYSIS_OVERDUE]: 'Open - analysis overdue',
+  [ProblemIndexes.ANALYSIS_COMPLETED_ACTIONS_NEED]: 'Open - analysis completed, action(s) need to be added',
+  [ProblemIndexes.ANALYSIS_COMPLETED_ACTIONS_IN_PLACE]: 'Open - analysis completed, action(s) in place',
+  [ProblemIndexes.ACTIONS_IN_PLACE]: 'Open - action(s) in place',
+  [ProblemIndexes.ACTIONS_DUE_TODAY]: 'Open - action(s) due today',
+  [ProblemIndexes.ACTIONS_OVERDUE]: 'Open - action(s) overdue',
+  [ProblemIndexes.OPEN_ACTIONS_COMPLETED]: 'Open - action(s) completed',
+  [ProblemIndexes.ACTIONS_COMPLETED_WAITING_VERIFY]: 'Open - action(s) completed, awaiting verification',
+  [ProblemIndexes.VERIFY_DUE_TODAY]: 'Open - verification due today',
+  [ProblemIndexes.VERIFY_PAST_DUE]: 'Open - verification past due',
+  [ProblemIndexes.ACTIONS_AWAITING_UPDATE]: 'Open - action(s) verified as effective, awaiting update of standard(s)',
+  [ProblemIndexes.ACTIONS_UPDATE_DUE_TODAY]: 'Open - action(s) verified as effective, update of standard(s) due today',
+  [ProblemIndexes.ACTIONS_UPDATE_PAST_DUE]: 'Open - action(s) verified as effective, update of standard(s) past due',
+  [ProblemIndexes.ACTIONS_FAILED_VERIFICATION]: 'Open - action(s) failed verification',
+  [ProblemIndexes.CLOSED_ACTIONS_COMPLETED]: 'Closed - action(s) completed',
+  [ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED]: 'Closed - action(s) verified, standard(s) reviewed',
+  [ProblemIndexes.DELETED]: 'Deleted',
 };
 
 export const ProblemTypes = {
   NON_CONFORMITY: 'non-conformity',
-  RISK: 'risk'
+  RISK: 'risk',
 };
 
 export const DocumentTypes = {
   STANDARD: 'standard',
   ...ProblemTypes,
-  ...ActionTypes
+  ...ActionTypes,
+};
+
+export const AllDocumentTypes = {
+  ...DocumentTypes,
+  DISCUSSION: 'discussion',
 };
 
 export const ReviewStatuses = {
   0: 'Overdue',
   1: 'Awaiting review',
-  2: 'Up-to-date'
+  2: 'Up-to-date',
 };
 
 export const RCAMaxCauses = 5;
 
 export const RiskEvaluationDecisions = {
-  'tolerate': 'Tolerate',
-  'treat': 'Treat',
-  'transfer': 'Transfer',
-  'terminate': 'Terminate'
+  tolerate: 'Tolerate',
+  treat: 'Treat',
+  transfer: 'Transfer',
+  terminate: 'Terminate',
 };
 
 export const RiskEvaluationPriorities = {
-  'low': 'Low',
-  'medium': 'Medium',
-  'high': 'High'
+  low: 'Low',
+  medium: 'Medium',
+  high: 'High',
 };
 
 export const riskScoreTypes = {
   inherent: {
     id: 'inherent',
     label: 'Inherent risk',
-    adj: 'Inherent'
+    adj: 'Inherent',
   },
   residual: {
     id: 'residual',
     label: 'Residual risk',
-    adj: 'Residual'
-  }
+    adj: 'Residual',
+  },
+};
+
+export const SourceTypes = {
+  ATTACHMENT: 'attachment',
+  URL: 'url',
+  VIDEO: 'video',
 };
 
 export const StandardStatuses = {
-  'issued': 'Issued',
-  'draft': 'Draft'
+  issued: 'Issued',
+  draft: 'Draft',
 };
 
 export const StringLimits = {
   abbreviation: {
     min: 1,
-    max: 4
+    max: 4,
   },
   title: {
     min: 1,
-    max: 80
-  }
+    max: 80,
+  },
 };
 
 export const SystemName = 'Plio';
 
 export const TimeUnits = {
   DAYS: 'days',
-  WEEKS: 'weeks'
+  WEEKS: 'weeks',
 };
 
 export const UserMembership = {
   ORG_OWNER: 'owner',
-  ORG_MEMBER: 'member'
+  ORG_MEMBER: 'member',
 };
 
 export const UserRoles = {
@@ -278,7 +368,7 @@ export const UserRoles = {
   INVITE_USERS: 'invite-users',
   DELETE_USERS: 'delete-users',
   EDIT_USER_ROLES: 'edit-user-roles',
-  CHANGE_ORG_SETTINGS: 'change-org-settings'
+  CHANGE_ORG_SETTINGS: 'change-org-settings',
 };
 
 export const UserRolesNames = {
@@ -287,7 +377,7 @@ export const UserRolesNames = {
   [UserRoles.INVITE_USERS]: 'Invite users',
   [UserRoles.DELETE_USERS]: 'Delete users',
   [UserRoles.EDIT_USER_ROLES]: 'Edit user superpowers',
-  [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings'
+  [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings',
 };
 
 export const WorkItemsStore = {
@@ -295,23 +385,23 @@ export const WorkItemsStore = {
     COMPLETE_ACTION: 'complete action',
     VERIFY_ACTION: 'verify action',
     COMPLETE_ANALYSIS: 'complete analysis',
-    COMPLETE_UPDATE_OF_DOCUMENTS: 'complete update of documents'
+    COMPLETE_UPDATE_OF_DOCUMENTS: 'complete update of documents',
   },
   LINKED_TYPES: {
     ...ActionTypes,
-    ...ProblemTypes
+    ...ProblemTypes,
   },
   STATUSES: {
     0: 'in progress',
     1: 'due today',
     2: 'overdue',
-    3: 'completed'
-  }
+    3: 'completed',
+  },
 };
 
 export const WorkflowTypes = {
   THREE_STEP: '3-step',
-  SIX_STEP: '6-step'
+  SIX_STEP: '6-step',
 };
 
 export const OrgOwnerRoles = [
@@ -320,18 +410,18 @@ export const OrgOwnerRoles = [
   UserRoles.INVITE_USERS,
   UserRoles.DELETE_USERS,
   UserRoles.EDIT_USER_ROLES,
-  UserRoles.CHANGE_ORG_SETTINGS
+  UserRoles.CHANGE_ORG_SETTINGS,
 ];
 
 export const OrgMemberRoles = [
   UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
-  UserRoles.VIEW_TEAM_ACTIONS
+  UserRoles.VIEW_TEAM_ACTIONS,
 ];
 
 export const OrgCurrencies = {
   EUR: 'EUR',
   GBP: 'GBP',
-  USD: 'USD'
+  USD: 'USD',
 };
 
 const getDefaultGuideline = (type, problemType) => (
@@ -345,97 +435,142 @@ export const OrganizationDefaults = {
       workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 1,
-        timeUnit: TimeUnits.DAYS
-      }
+        timeUnit: TimeUnits.DAYS,
+      },
     },
     majorProblem: {
       workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 2,
-        timeUnit: TimeUnits.DAYS
-      }
+        timeUnit: TimeUnits.DAYS,
+      },
     },
     criticalProblem: {
       workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 3,
-        timeUnit: TimeUnits.DAYS
-      }
-    }
+        timeUnit: TimeUnits.DAYS,
+      },
+    },
   },
   reminders: {
     minorNc: {
       start: {
         timeValue: 1,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
-      interval : {
+      interval: {
         timeValue: 1,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       until: {
         timeValue: 2,
-        timeUnit: TimeUnits.DAYS
-      }
+        timeUnit: TimeUnits.DAYS,
+      },
     },
     majorNc: {
       start: {
         timeValue: 2,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       interval: {
         timeValue: 2,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       until: {
         timeValue: 4,
-        timeUnit: TimeUnits.DAYS
-      }
+        timeUnit: TimeUnits.DAYS,
+      },
     },
     criticalNc: {
       start: {
         timeValue: 3,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       interval: {
         timeValue: 3,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       until: {
         timeValue: 6,
-        timeUnit: TimeUnits.DAYS
-      }
+        timeUnit: TimeUnits.DAYS,
+      },
     },
     improvementPlan: {
       start: {
         timeValue: 1,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       interval: {
         timeValue: 1,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       until: {
         timeValue: 2,
-        timeUnit: TimeUnits.DAYS
-      }
-    }
+        timeUnit: TimeUnits.DAYS,
+      },
+    },
   },
   ncGuidelines: {
     minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.NON_CONFORMITY),
     major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.NON_CONFORMITY),
-    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.NON_CONFORMITY)
+    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.NON_CONFORMITY),
   },
   rkGuidelines: {
     minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.RISK),
     major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.RISK),
-    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.RISK)
+    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.RISK),
   },
-  rkScoringGuidelines: defaultRiskScoringGuideline
+  rkScoringGuidelines: defaultRiskScoringGuideline,
 };
 
+export const StandardTitles = [
+  'Standards',
+  'Compliance standards',
+  'Compliance manual',
+  'Quality standards',
+  'Quality manual',
+];
+
+export const RiskTitles = [
+  'Risk register',
+  'Risk records',
+  'Risks',
+];
+
+export const NonConformitiesTitles = [
+  'Non-conformities',
+  'Exceptions',
+];
+
+export const WorkInboxTitles = [
+  'Work inbox',
+  'Work items',
+  'Work',
+];
 
 export const EmailsForPlioReporting = [
   'james.ives@pliohub.com',
   'steve.ives@pliohub.com',
 ];
+
+export const FILE_STATUS_MAP = {
+  UPLOADING: 'uploading',
+  UPLOADED: 'uploaded',
+  TERMINATED: 'terminated',
+  FAILED: 'failed',
+  IN_PROGRESS: 'in-progress',
+  COMPLETED: 'completed',
+};
+
+export const CustomerTypes = {
+  PAYING_SUBSCRIBER: 1,
+  FREE_TRIAL: 2,
+  TEST_ACCOUNT: 3,
+};
+
+export const CustomerTypesNames = {
+  [CustomerTypes.PAYING_SUBSCRIBER]: 'Paying subscriber',
+  [CustomerTypes.FREE_TRIAL]: 'Free trial',
+  [CustomerTypes.TEST_ACCOUNT]: 'Test account',
+};

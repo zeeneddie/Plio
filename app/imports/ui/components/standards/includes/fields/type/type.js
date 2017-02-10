@@ -1,18 +1,16 @@
 import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
 import { ViewModel } from 'meteor/manuel:viewmodel';
-import get from 'lodash.get';
+import cx from 'classnames';
 
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
-import { DefaultStandardTypes } from '/imports/share/constants.js';
+import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
 
 Template.ESType.viewmodel({
   share: 'standard',
   mixin: ['organization', 'collapsing', 'standard'],
   typeId: '',
-
   autorun() {
-
     // to fix bug wich randomly calls method
     if (this.typeId() !== this.templateInstance.data.typeId) {
       Tracker.nonreactive(() => this.update());
@@ -26,9 +24,13 @@ Template.ESType.viewmodel({
   },
   types() {
     const organizationId = this.organizationId();
-    const types = StandardTypes.find({ organizationId }).fetch();
+    const types = StandardTypes.find({ organizationId }).fetch().map(item => ({
+      ...item,
+      title: cx(item.title, item.abbreviation && `(${item.abbreviation})`),
+      titlePrefix: item.title,
+    }));
 
-    return types;
+    return sortArrayByTitlePrefix(types);
   },
   update() {
     if (!this._id) return;
@@ -41,7 +43,6 @@ Template.ESType.viewmodel({
     }
 
     this.parent().update({ typeId }, (err) => {
-      Tracker.flush();
       this.expandCollapsed(this.standardId());
     });
   },

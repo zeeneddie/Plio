@@ -2,22 +2,16 @@ import curry from 'lodash.curry';
 import get from 'lodash.get';
 import property from 'lodash.property';
 import invoke from 'lodash.invoke';
-import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { ViewModel } from 'meteor/manuel:viewmodel';
-import { shallowEqual } from 'recompose';
+import { shallowEqual, mapProps } from 'recompose';
+import { $ } from 'meteor/jquery';
 
-import {
-  ActionsListProjection,
-  NonConformitiesListProjection,
-  RisksListProjection,
-} from '/imports/share/constants.js';
 import { Actions } from '/imports/share/collections/actions.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Risks } from '/imports/share/collections/risks.js';
-import { getUserOrganizations } from './organizations/utils';
-import { isOrgMemberBySelector } from './checkers';
+import { renderTemplate, getTitlePrefix } from '/imports/share/helpers';
 
 export const { compose } = _;
 
@@ -48,8 +42,8 @@ export const extractIds = (collection = []) => collection.map(property('_id'));
 
 export const not = expression => !expression;
 
-export const mapByIndex = (value = {}, index = 0, arr = []) =>
-  Object.assign([], arr, { [index]: { ...arr[index], ...value } });
+export const mapByIndex = (obj = {}, index = 0, arr = []) =>
+  Object.assign([], arr, { [index]: { ...arr[index], ...obj } });
 
 export const mapValues = curry((mapper, obj) =>
   flattenObjects(Object.keys(obj).map(key => ({ [key]: mapper(obj[key], key, obj) }))));
@@ -114,7 +108,13 @@ export const propSections = property('sections');
 
 export const lengthSections = compose(length, propSections);
 
+export const propTypes = property('types');
+
+export const lengthTypes = compose(length, propTypes);
+
 export const propIsDeleted = property('isDeleted');
+
+export const notDeleted = compose(not, propIsDeleted);
 
 export const flattenMapItems = flattenMap(propItems);
 
@@ -159,7 +159,7 @@ export const pickFromCollections = pickFrom('collections');
 
 export const omitC = curry((keys, obj) => _.omit(obj, ...keys));
 
-export const getC = curry((path, obj) => get(obj, path));
+export const getC = curry((path, obj, defaultValue) => get(obj, path, defaultValue), 2);
 
 export const getId = getC('_id');
 
@@ -170,6 +170,8 @@ export const notEquals = compose(not, equals);
 export const propEq = curry((path, assumption, obj) => equals(get(obj, path), assumption));
 
 export const propEqId = propEq('_id');
+
+export const findIndexById = curry((_id, array) => array.findIndex(propEqId(_id)));
 
 export const T = () => true;
 
@@ -201,6 +203,32 @@ export const compareProps = obj => compose(equals(obj), pickC(Object.keys(obj)))
 
 export const includes = curry((value, array) => Object.assign([], array).includes(value));
 
+export const identity = _.identity;
+
+/*
+  compose(
+    join(' '),
+    chain(getFirstName, getLastName)
+  )(user);
+  => 'FirstName LastName';
+*/
+export const join = curry((separator, array) => Object.assign([], array).join(separator));
+
+/*
+  const gt10 = n => n > 10;
+  either(gt10, identity)(2);
+  => 2;
+*/
+export const either = (...fns) => (...args) => {
+  let result;
+  for (let i = 0; i < fns.length; i++) {
+    result = fns[i](...args);
+    if (!result) continue;
+    else break;
+  }
+  return result;
+};
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {
@@ -218,8 +246,9 @@ export const showError = (errorMsg) => {
 
 // 1, 1.2, 3, 10.3, a, b, c
 export const sortArrayByTitlePrefix = (arr) => [...arr].sort((a, b) => {
-  const at = a.titlePrefix;
-  const bt = b.titlePrefix;
+  const at = getTitlePrefix(`${a.titlePrefix}`.toLowerCase());
+  const bt = getTitlePrefix(`${b.titlePrefix}`.toLowerCase());
+
   if (typeof at === 'number' && typeof bt !== 'number') {
     return -1;
   }
@@ -236,46 +265,6 @@ export const sortArrayByTitlePrefix = (arr) => [...arr].sort((a, b) => {
 });
 
 export const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));
-
-export const getPublishCompositeOrganizationUsersObject = (userId, selector) => ({
-  find() {
-    return getUserOrganizations(userId, selector);
-  },
-  children: [
-    {
-      find({ users = [] }) {
-        const userIds = users.map(property('userId'));
-        const query = { _id: { $in: userIds } };
-        const options = { profile: 1 };
-
-        return Meteor.users.find(query, options);
-      },
-    },
-  ],
-});
-
-export const getPublishCompositeOrganizationUsers = (fn) =>
-  function(serialNumber, isDeleted = { $in: [null, false] }) {
-    check(serialNumber, Number);
-    check(isDeleted, Match.OneOf(Boolean, {
-      $in: Array
-    }));
-
-    const userId = this.userId;
-
-    if (!userId || !isOrgMemberBySelector(userId, { serialNumber })) {
-      return this.ready();
-    }
-
-    const pubObj = getPublishCompositeOrganizationUsersObject(userId, { serialNumber });
-
-    return Object.assign({}, pubObj, {
-      children: [
-        ...pubObj.children,
-        ...(() => _.isFunction(fn) && fn.call(this, userId, serialNumber, isDeleted))(),
-      ],
-    });
-  };
 
 export const explainMongoQuery = (
   collection,
@@ -298,7 +287,7 @@ export const explainMongoQuery = (
 };
 
 export const makeQueryNonDeleted = query => ({ ...query, isDeleted: { $in: [null, false] } });
-export const makeOptionsFields = fields => fields ? ({ fields }) : ({});
+export const makeOptionsFields = fields => (fields ? ({ fields }) : ({}));
 export const getCursorNonDeleted = curry((query, fields, collection) =>
   collection.find(makeQueryNonDeleted(query), makeOptionsFields(fields)));
 
@@ -308,11 +297,11 @@ export const toObjFind = value => ({ find: value });
 export const getRequiredFieldsByCollection = (collection) => {
   switch (collection) {
     case Actions:
-      return ActionsListProjection;
+      return Actions.publicFields;
     case NonConformities:
-      return NonConformitiesListProjection;
+      return NonConformities.publicFields;
     case Risks:
-      return RisksListProjection;
+      return Risks.publicFields;
     default:
       return {};
   }
@@ -385,35 +374,35 @@ export const getProblemStatusColor = (status) => {
     case 6:
     case 7:
     case 8:
-    case 10:
+    case 9:
     case 11:
     case 12:
-    case 14:
+    case 13:
     case 15:
+    case 16:
       return 'amber';
     case 5:
-    case 9:
-    case 13:
-    case 16:
+    case 10:
+    case 14:
     case 17:
-      return 'red';
     case 18:
+      return 'red';
     case 19:
+    case 20:
       return 'green';
     default:
       return '';
   }
 };
 
-export const getSortedItems = (items, compareFn) => {
-  return Array.from(items || []).sort(compareFn);
-};
+export const getSortedItems = (items, compareFn) =>
+  Array.from(items || []).sort(compareFn);
 
 export const compareRisksByScore = (risk1, risk2) => {
   const score1 = risk1.getScore();
   const score2 = risk2.getScore();
-  const { value:scoreVal1 } = score1 || {};
-  const { value:scoreVal2 } = score2 || {};
+  const { value: scoreVal1 } = score1 || {};
+  const { value: scoreVal2 } = score2 || {};
 
   if ((score1 && score2) && (scoreVal1 !== scoreVal2)) {
     return scoreVal2 - scoreVal1;
@@ -449,9 +438,88 @@ export const compareStatusesByPriority = (() => {
   };
 })();
 
+export const getSelectedOrgSerialNumber = () => (
+  localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`)
+);
+
 export const getUserJoinedAt = (organization = {}, userId) => {
   const currentUserInOrg = [...organization.users].find(propEq('userId', userId));
   const joinedAt = getC('joinedAt', currentUserInOrg);
 
   return joinedAt;
 };
+
+export const looksLikeAPromise = obj => !!(
+  obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function'
+);
+
+/*
+  Example:
+  compileTemplateObject({
+    title: 'Hello {{title}}',
+    type: 'some {{type}}',
+  }, {
+    title: 'World',
+    type: 'cool stuff',
+  });
+  -> { title: 'Hello World', type: 'some cool stuff' };
+*/
+export const compileTemplateObject = (params, paramMap) => {
+  const regexString = Object.keys(paramMap).reduce((prev, cur) => `${prev}|{{${paramMap[cur]}}}`);
+  const regex = new RegExp(regexString, 'g');
+
+  return Object.keys(params).reduce((prev, key) => {
+    let value = params[key];
+
+    if (typeof value === 'string' && value.search(regex)) {
+      value = renderTemplate(value, paramMap);
+    }
+
+    return { ...prev, [key]: value };
+  }, {});
+};
+
+export const createSearchRegex = (val, isPrecise) => {
+  let r;
+  let value = `${val}`;
+
+  try {
+    if (isPrecise) {
+      value = value.replace(/"/g, '');
+      r = new RegExp(`.*(${value}).*`, 'i');
+    } else {
+      r = value.split(' ')
+          .filter(word => !!word)
+          .map(word => `(?=.*\\b.*${word}.*\\b)`)
+          .join('');
+
+      r = new RegExp(`^${r}.*$`, 'i');
+    }
+  } catch (err) { /* ignore errors */ }
+
+  return r;
+};
+
+/*
+  Example:
+  searchByRegex(
+    ['name', 'sequentialId'],
+    createSearchRegex('Hello World'),
+    [{ name: '123' }, { name: 'Hello World' }]
+  );
+  => [{ name: 'Hello World' }];
+*/
+export const searchByRegex = curry((regex, transformOrArrayOfProps, array) =>
+  array.filter((item) => {
+    if (typeof transformOrArrayOfProps === 'function') {
+      const result = transformOrArrayOfProps(item);
+      return result.filter(a => typeof a === 'string' && a.search(regex) >= 0).length;
+    }
+
+    if (!_.isArray(transformOrArrayOfProps)) return false;
+
+    return transformOrArrayOfProps.filter(prop =>
+      typeof item[prop] === 'string' && item[prop].search(regex) >= 0).length;
+  }));
+
+export const omitProps = compose(mapProps, omitC);

@@ -8,10 +8,9 @@ import { StandardTypes } from '/imports/share/collections/standards-types';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { RiskTypes } from '/imports/share/collections/risk-types';
 import { getUserOrganizations } from '../utils';
-import { StandardsBookSectionsListProjection, StandardTypesListProjection } from '../../constants';
+import { isPlioUser, isOrgMember } from '../../checkers';
 import { makeOptionsFields } from '../../helpers';
 import { UserMembership } from '/imports/share/constants';
-import { isPlioUser, isOrgMember } from '../../checkers';
 
 
 Meteor.publish('invitationInfo', (invitationId) => {
@@ -52,8 +51,14 @@ Meteor.publish('currentUserOrganizations', function() {
     return getUserOrganizations(this.userId, {}, {
       fields: {
         name: 1,
-        serialNumber: 1
-      }
+        serialNumber: 1,
+        'users.userId': 1,
+        'users.role': 1,
+        'users.isRemoved': 1,
+        'users.removedAt': 1,
+        'users.removedBy': 1,
+        'users.sendDailyRecap': 1,
+      },
     });
   } else {
     return this.ready();
@@ -69,8 +74,29 @@ Meteor.publish('currentUserOrganizationById', function(_id) {
 });
 
 Meteor.publish('currentUserOrganizationBySerialNumber', function(serialNumber) {
+  const fields = {
+    _id: 1,
+    name: 1,
+    serialNumber: 1,
+    users: 1,
+    timezone: 1,
+    currency: 1,
+    workflowDefaults: 1,
+    reminders: 1,
+    ncGuidelines: 1,
+    rkGuidelines: 1,
+    rkScoringGuidelines: 1,
+    homeScreenTitles: 1,
+    isAdminOrg: 1,
+    createdAt: 1,
+    createdBy: 1,
+    updatedAt: 1,
+    updatedBy: 1,
+    lastAccessedDate: 1,
+  };
+
   if (this.userId) {
-    return getUserOrganizations(this.userId, { serialNumber });
+    return getUserOrganizations(this.userId, { serialNumber }, { fields });
   } else {
     return this.ready();
   }
@@ -110,8 +136,11 @@ Meteor.publish('organizationDeps', function(organizationId) {
 
   const query = { organizationId };
 
-  const standardsBookSections = StandardsBookSections.find(query, makeOptionsFields(StandardsBookSectionsListProjection));
-  const standardsTypes = StandardTypes.find(query, makeOptionsFields(StandardTypesListProjection));
+  const standardsBookSections = StandardsBookSections.find(
+    query,
+    makeOptionsFields(StandardsBookSections.publicFields)
+  );
+  const standardsTypes = StandardTypes.find(query, makeOptionsFields(StandardTypes.publicFields));
   const riskTypes = RiskTypes.find(query);
   const users = Meteor.users.find({ _id: { $in: userIds } });
 
@@ -133,6 +162,7 @@ Meteor.publishComposite('organizationsInfo', {
           name: 1,
           users: 1,
           createdAt: 1,
+          lastAccessedDate: 1,
         },
       });
     }
@@ -153,4 +183,39 @@ Meteor.publishComposite('organizationsInfo', {
           .find({ _id: owner.userId });
       }
   }],
+});
+
+Meteor.publishComposite('customersLayout', {
+  find() {
+    if (!this.userId || !isPlioUser(this.userId)) {
+      return this.ready();
+    }
+
+    return Organizations.find({}, {
+      fields: Organizations.listFields,
+    });
+  },
+  children: [{
+    find(organization) {
+      return Meteor.users.find({
+        _id: organization.ownerId(),
+      }, {
+        fields: {
+          'emails.address': 1,
+          'profile.firstName': 1,
+          'profile.lastName': 1,
+        },
+      });
+    },
+  }],
+});
+
+Meteor.publish('customerCard', function getCustomerData(orgId) {
+  if (!this.userId || !isPlioUser(this.userId)) {
+    return this.ready();
+  }
+
+  return Organizations.find({ _id: orgId }, {
+    fields: Organizations.cardFields,
+  });
 });

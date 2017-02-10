@@ -1,6 +1,7 @@
 import { Roles } from 'meteor/alanning:roles';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import curry from 'lodash.curry';
+import { _ } from 'meteor/underscore';
 
 import { AnalysisStatuses, UserMembership, UserRoles } from '/imports/share/constants.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
@@ -8,7 +9,7 @@ import {
   NOT_AN_ORG_MEMBER,
   DOC_NOT_FOUND,
   ONLY_ORG_OWNER_CAN_DELETE,
-  CANNOT_RESTORE_NOT_DELETED
+  CANNOT_RESTORE_NOT_DELETED,
 } from './errors.js';
 import { chain, checkAndThrow, injectCurry, getUserJoinedAt } from './helpers.js';
 import { MOBILE_BREAKPOINT } from '/imports/api/constants';
@@ -101,12 +102,12 @@ export const isOrgOwner = (userId, organizationId) => {
 export const isPlioUser = (userId) => {
   const adminOrg = Organizations.findOne({ isAdminOrg: true });
 
-  if(adminOrg === undefined) {
+  if (adminOrg === undefined) {
     return false;
   }
 
   return _.find(adminOrg.users, user => user.userId === userId) !== undefined;
-}
+};
 
 export const isPlioAdmin = (userId) => {
   if (!SimpleSchema.RegEx.Id.test(userId)) {
@@ -125,7 +126,23 @@ export const isPlioAdmin = (userId) => {
       }
     }
   });
-}
+};
+
+export const canChangeHelpDocs = (userId) => {
+  const { _id:adminOrgId } = Organizations.findOne({
+    isAdminOrg: true,
+    users: {
+      $elemMatch: {
+        userId,
+        isRemoved: false,
+        removedBy: { $exists: false },
+        removedAt: { $exists: false }
+      }
+    }
+  }) || {};
+
+  return !!adminOrgId && canChangeStandards(userId, adminOrgId);
+};
 
 export const isOrgMemberBySelector = (userId, selector) => {
   return !!Organizations.findOne({
@@ -189,6 +206,9 @@ export const checkOrgMembership = curry((userId, organizationId) => {
   return checkAndThrow(!isOrgMember(userId, organizationId), NOT_AN_ORG_MEMBER);
 });
 
+export const checkOrgMembershipBySelector = curry((userId, selector) =>
+  checkAndThrow(!isOrgMemberBySelector(userId, selector), NOT_AN_ORG_MEMBER));
+
 export const checkOrgMembershipByDoc = (collection, query, userId) => {
   const doc = Object.assign({}, collection.findOne(query));
 
@@ -205,9 +225,8 @@ export const checkDocExistance = (collection, query) => {
   return doc;
 };
 
-export const checkDocAndMembership = (collection, _id, userId) => {
-  return chain(checkDocExistance, checkOrgMembershipByDoc)(collection, _id, userId);
-};
+export const checkDocAndMembership = (collection, _id, userId) =>
+  chain(checkDocExistance, checkOrgMembershipByDoc)(collection, _id, userId);
 
 export const checkDocAndMembershipAndMore = (collection, _id, userId) => {
   const [doc] = checkDocAndMembership(collection, _id, userId);

@@ -15,18 +15,18 @@ export default class UserNotificationsSender {
 
   passwordReset() {
     const emailSubject = `Password reset`;
-    const secondaryText = `Your password was successfully reset`;
+    const title = `Your password was successfully reset.`;
 
     const templateData = {
-      title: emailSubject,
-      secondaryText
+      title,
     };
 
     new NotificationSender({
       recipients: this._userId,
-      templateName: 'minimalisticEmail',
+      templateName: 'personalEmail',
       emailSubject,
-      templateData
+      templateData,
+      options: { isImportant: true },
     }).sendEmail();
   }
 

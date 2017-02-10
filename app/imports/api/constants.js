@@ -1,3 +1,8 @@
+import { CollectionNames } from '/imports/share/constants';
+
+const mirrorKeys = (obj = {}) => Object.keys(obj)
+  .reduce((prev, cur) => ({ ...prev, [cur]: cur }), {});
+
 export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
 export const ALERT_AUTOHIDE_TIME = 1500;
 
@@ -8,38 +13,38 @@ export const DocumentTitles = {
 };
 
 export const NonConformityFilters = {
-  1: 'magnitude',
-  2: 'status',
-  3: 'department',
-  4: 'deleted',
+  1: { title: 'NCs', name: 'magnitude', prepend: 'by' },
+  2: { title: 'NCs', name: 'status', prepend: 'by' },
+  3: { title: 'NCs', name: 'department', prepend: 'by' },
+  4: { title: 'NCs', name: 'deleted' },
 };
 
 export const RiskFilters = {
-  1: 'type',
-  2: 'status',
-  3: 'department',
-  4: 'deleted',
+  1: { title: 'Risks', name: 'type', prepend: 'by' },
+  2: { title: 'Risks', name: 'status', prepend: 'by' },
+  3: { title: 'Risks', name: 'department', prepend: 'by' },
+  4: { title: 'Risks', name: 'deleted' },
 };
 
 export const StandardFilters = {
-  1: { name: 'section', prepend: 'by' },
-  2: { name: 'type', prepend: 'by' },
-  3: { name: 'deleted', prepend: '' },
+  1: { title: 'Standards', name: 'section', prepend: 'by' },
+  2: { title: 'Standards', name: 'type', prepend: 'by' },
+  3: { title: 'Standards', name: 'deleted', prepend: '' },
+};
+
+export const WorkInboxFilters = {
+  1: { title: 'Work', name: 'my current', prepend: '' },
+  2: { title: 'Work', name: 'team current', prepend: '' },
+  3: { title: 'Work', name: 'my completed', prepend: '' },
+  4: { title: 'Work', name: 'team completed', prepend: '' },
+  5: { name: 'My deleted actions' },
+  6: { name: 'Team deleted actions' },
 };
 
 export const STANDARD_FILTER_MAP = {
   SECTION: 1,
   TYPE: 2,
   DELETED: 3,
-};
-
-export const WorkInboxFilters = {
-  1: 'my current',
-  2: 'team current',
-  3: 'my completed',
-  4: 'team completed',
-  5: 'my deleted',
-  6: 'team deleted',
 };
 
 export const UncategorizedTypeSection = {
@@ -209,4 +214,27 @@ export const MarginMap = {
   bottom: 'margin-bottom',
 };
 
+export const UNIQUE_FIELD_MONGO_ERROR_CODE = 11000;
 export const MOBILE_BREAKPOINT = 768;
+
+export const FILE_TYPE_MAP = {
+  URL: 'url',
+  ATTACHMENT: 'attachment',
+  VIDEO: 'video',
+};
+
+export const ORDER = {
+  ASC: 'ACS',
+  DESC: 'DECS',
+};
+
+export const COLLECTION_NAME_MAP = mirrorKeys(CollectionNames);
+
+export const KeyMap = {
+  tab: 9,
+  enter: 13,
+  left: 37,
+  up: 38,
+  right: 39,
+  down: 40,
+};

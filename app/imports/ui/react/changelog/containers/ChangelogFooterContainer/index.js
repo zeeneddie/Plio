@@ -9,7 +9,7 @@ import {
   setLoadingLogsCount,
   setLogsCount,
   setShowAll,
-} from '/client/redux/actions/changelogActions';
+} from '/imports/client/store/actions/changelogActions';
 import { pickC, shallowCompare } from '/imports/api/helpers';
 import { lastLogsLimit } from '../../constants';
 import ChangelogFooter from '../../components/ChangelogFooter';
@@ -20,7 +20,7 @@ const onPropsChange = (props, onData) => {
   const { documentId, collection, dispatch } = props;
 
   if (!documentId) {
-    onData(null, props);
+    onData(null, {});
   } else {
     const counterName = `doc-logs-count-${documentId}`;
 
@@ -40,7 +40,7 @@ const onPropsChange = (props, onData) => {
       ]));
     }
 
-    onData(null, props);
+    onData(null, {});
   }
 
   return () => typeof subscription === 'function' && subscription.stop();

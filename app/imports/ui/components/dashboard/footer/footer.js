@@ -1,3 +1,4 @@
+import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Template } from 'meteor/templating';
 import { Organizations } from '/imports/share/collections/organizations';
 import { Roles } from 'meteor/alanning:roles';

@@ -1,7 +1,7 @@
-import { WorkflowTypes } from '/imports/share/constants.js';
-import { Actions } from '/imports/share/collections/actions.js';
-import { isDueToday, isOverdue } from '/imports/share/helpers.js';
-import Workflow from './Workflow.js';
+import { WorkflowTypes } from '/imports/share/constants';
+import { Actions } from '/imports/share/collections/actions';
+import { isDueToday, isOverdue } from '/imports/share/helpers';
+import Workflow from './Workflow';
 
 
 export default class ProblemWorkflow extends Workflow {
@@ -13,8 +13,8 @@ export default class ProblemWorkflow extends Workflow {
       'linkedTo.documentId': this._id,
       isDeleted: false,
       deletedAt: { $exists: false },
-      deletedBy: { $exists: false }
-    }).fetch();
+      deletedBy: { $exists: false },
+    }).fetch() || [];
 
     this._completedActionsLength = this._getCompletedActionsLength();
 
@@ -26,11 +26,11 @@ export default class ProblemWorkflow extends Workflow {
   }
 
   _getVerifiedActionsLength() {
-    return _(this._actions).filter(action => action.verifiedAsEffective()).length;
+    return this._actions.filter(action => action.verifiedAsEffective()).length;
   }
 
   _getCompletedActionsLength() {
-    return _(this._actions).filter(action => action.completed()).length;
+    return this._actions.filter(action => action.completed()).length;
   }
 
   _standardsUpdated() {
@@ -56,7 +56,7 @@ export default class ProblemWorkflow extends Workflow {
   }
 
   _getThreeStepStatus() {
-    // 3: Open - just reported, awaiting action
+    // 3: Open - just reported, action(s) to be added
     return this._getDeletedStatus() || this._getActionStatus() || 3;
   }
 
@@ -71,7 +71,7 @@ export default class ProblemWorkflow extends Workflow {
 
   _getDeletedStatus() {
     if (this._doc.deleted()) {
-      return 20; // Deleted
+      return 21; // Deleted
     }
   }
 
@@ -83,7 +83,7 @@ export default class ProblemWorkflow extends Workflow {
     }
 
     if (this._standardsUpdated()) {
-      return 19; // Closed - action(s) verified, standard(s) reviewed
+      return 20; // Closed - action(s) verified, standard(s) reviewed
     }
 
     const { updateOfStandards } = this._doc || {};
@@ -91,11 +91,11 @@ export default class ProblemWorkflow extends Workflow {
     const timezone = this._timezone;
 
     if (isOverdue(targetDate, timezone)) {
-      return 16; // Open - action(s) verified as effective, update of standard(s) past due
+      return 17; // Open - action(s) verified as effective, update of standard(s) past due
     }
 
     if (isDueToday(targetDate, timezone)) {
-      return 15; // Open - action(s) verified as effective, update of standard(s) due today
+      return 16; // Open - action(s) verified as effective, update of standard(s) due today
     }
   }
 
@@ -121,39 +121,37 @@ export default class ProblemWorkflow extends Workflow {
 
     // check if all actions are verified
     if (this._allActionsVerifiedAsEffective()) {
-      return 14; // Open - action(s) verified as effective, awaiting update of standard(s)
+      return 15; // Open - action(s) verified as effective, awaiting update of standard(s)
     }
 
     const actions = this._actions;
     const timezone = this._timezone;
 
-    const unverifiedActions = _(actions).filter(action => !action.verified());
+    const unverifiedActions = actions.filter(action => !action.verified());
 
     // check if there is overduded verification
-    const overduded = _(unverifiedActions).find((action) => {
-      return isOverdue(action.verificationTargetDate, timezone);
-    });
+    const overduded = unverifiedActions.find((action) => (
+      isOverdue(action.verificationTargetDate, timezone)
+    ));
 
     if (overduded) {
-      return 13; // Open - verification past due
+      return 14; // Open - verification past due
     }
 
     // check if there is verification for today
-    const dueToday = _(unverifiedActions).find((action) => {
-      return isDueToday(action.verificationTargetDate, timezone);
-    });
+    const dueToday = unverifiedActions.find((action) => (
+      isDueToday(action.verificationTargetDate, timezone)
+    ));
 
     if (dueToday) {
-      return 12; // Open - verification due today
+      return 13; // Open - verification due today
     }
 
     // check if there is failed verification
-    const failed = _(actions).find((action) => {
-      return action.failedVerification();
-    });
+    const failed = actions.find(action => action.failedVerification());
 
     if (failed) {
-      return 17; // Open - action(s) failed verification
+      return 18; // Open - action(s) failed verification
     }
   }
 
@@ -168,40 +166,45 @@ export default class ProblemWorkflow extends Workflow {
     // check if all actions are completed
     if (this._allActionsCompleted()) {
       return {
-        [WorkflowTypes.THREE_STEP]: 18, // Closed - action(s) completed
-        [WorkflowTypes.SIX_STEP]: 11 // Open - action(s) completed, awaiting verification
+        [WorkflowTypes.THREE_STEP]: 19, // Closed - action(s) completed
+        [WorkflowTypes.SIX_STEP]: 12, // Open - action(s) completed, awaiting verification
       }[workflowType];
     }
 
     const actions = this._actions;
     const timezone = this._timezone;
 
-    const uncompletedActions = _(actions).filter(action => !action.completed());
+    const uncompletedActions = actions.filter(action => !action.completed());
 
     // check if there is overduded action
-    const overduded = _(uncompletedActions).find((action) => {
-      return isOverdue(action.completionTargetDate, timezone);
-    });
+    const overduded = uncompletedActions.find((action) => (
+      isOverdue(action.completionTargetDate, timezone)
+    ));
 
     if (overduded) {
-      return 9; // Open - action(s) overdue
+      return 10; // Open - action(s) overdue
     }
 
     // check if there is an action that must completed today
-    const dueToday = _(uncompletedActions).find((action) => {
-      return isDueToday(action.completionTargetDate, timezone);
-    });
+    const dueToday = uncompletedActions.find((action) => (
+      isDueToday(action.completionTargetDate, timezone)
+    ));
 
     if (dueToday) {
-      return 8; // Open - action(s) due today
+      return 9; // Open - action(s) due today
     }
 
     // check if there is at least one completed action
     if (this._completedActionsLength >= 1) {
       return {
-        [WorkflowTypes.THREE_STEP]: 10, // Open - action(s) completed
-        [WorkflowTypes.SIX_STEP]: 11 // Open - action(s) completed, awaiting verification
+        [WorkflowTypes.THREE_STEP]: 11, // Open - action(s) completed
+        [WorkflowTypes.SIX_STEP]: 12, // Open - action(s) completed, awaiting verification
       }[workflowType];
+    }
+
+    if ((workflowType === WorkflowTypes.THREE_STEP)
+          && actions.length) {
+      return 8; // Open - action(s) in place
     }
   }
 
@@ -211,7 +214,7 @@ export default class ProblemWorkflow extends Workflow {
         return 7; // Open - analysis completed, action(s) in place
       }
 
-      return 6; // Open - analysis completed, action needed
+      return 6; // Open - analysis completed, action(s) need to be added
     }
 
     const { analysis } = this._doc || {};

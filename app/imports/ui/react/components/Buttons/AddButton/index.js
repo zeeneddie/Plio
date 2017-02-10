@@ -1,14 +1,14 @@
 import React, { PropTypes } from 'react';
 
 import Button from '../Button';
-import Icon from '../../Icon';
+import Icon from '../../Icons/Icon';
 
 const AddButton = ({ onClick, children }) => (
   <Button
-    type="primary"
+    color="primary"
     onClick={onClick}
   >
-    <Icon names="plus" className="margin-right" />
+    <Icon name="plus" className="margin-right" />
     {children}
   </Button>
 );

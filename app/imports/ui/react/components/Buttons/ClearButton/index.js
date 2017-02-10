@@ -1,19 +1,20 @@
 import React, { PropTypes } from 'react';
 
 import Button from '../Button';
-import Icon from '../../Icon';
+import Icon from '../../Icons/Icon';
+import IconLoading from '../../Icons/IconLoading';
 
-const ClearButton = ({ onClick, animating }) => (
+const ClearButton = ({ animating, ...other }) => (
   <Button
-    type="link"
+    color="link"
     className="clear-field"
     tabIndex="-1"
-    onClick={onClick}
+    {...other}
   >
     {animating ? (
-      <Icon names="spinner pulse fw" margin="bottom" />
+      <IconLoading margin="bottom" />
     ) : (
-      <Icon names="times-circle" />
+      <Icon name="times-circle" />
     )}
   </Button>
 );

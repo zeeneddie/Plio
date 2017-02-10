@@ -1,22 +1,25 @@
-import React from 'react';
-import cx from 'classnames';
+import React, { PropTypes } from 'react';
 import { $ } from 'meteor/jquery';
-import { pure } from 'recompose';
 import { _ } from 'meteor/underscore';
+import cx from 'classnames';
 
-import propTypes from './propTypes';
-
-@pure
 export default class Collapse extends React.Component {
   static get propTypes() {
-    return propTypes;
+    return {
+      collapsed: PropTypes.bool.isRequired,
+      children: PropTypes.node,
+      onCollapseShow: PropTypes.func,
+      onCollapseShown: PropTypes.func,
+      onCollapseHide: PropTypes.func,
+      onCollapseHidden: PropTypes.func,
+      className: PropTypes.string,
+    };
   }
 
   constructor(props) {
     super(props);
 
     this.toggleCollapse = _.throttle(this.toggleCollapse, 400).bind(this);
-    this.onToggleCollapse = _.throttle(props.onToggleCollapse, 400).bind(this);
     this.onCollapseShow = props.onCollapseShow && props.onCollapseShow.bind(this);
     this.onCollapseShown = props.onCollapseShown && props.onCollapseShown.bind(this);
     this.onCollapseHide = props.onCollapseHide && props.onCollapseHide.bind(this);
@@ -52,31 +55,12 @@ export default class Collapse extends React.Component {
   }
 
   render() {
-    const {
-      collapsed,
-      children,
-      classNames: {
-        head = 'list-group-item list-group-subheading list-group-toggle pointer',
-        body = 'list-group-collapse collapse',
-        wrapper = '',
-      } = {},
-    } = this.props;
-
     return (
-      <div className={wrapper}>
-        <a
-          onClick={this.onToggleCollapse}
-          className={cx(head, { collapsed })}
-        >
-          {children[0]}
-        </a>
-
-        <div
-          ref={node => (this.collapse = node)}
-          className={body}
-        >
-          {children[1]}
-        </div>
+      <div
+        ref={node => (this.collapse = node)}
+        className={cx('collapse', this.props.className)}
+      >
+        {this.props.children}
       </div>
     );
   }

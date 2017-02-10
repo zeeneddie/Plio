@@ -1,18 +1,25 @@
 <template name="UserDirectory_Card_Read">
-  <div class="content-cards-inner flex scroll" {{b "class: { content: !user }"}}>
+  <div class="content-cards-inner flex scroll">
     {{#if user}}
-      <div class="card">
-        <div class="card-block card-heading clearfix">
-          <div class="card-heading-buttons pull-xs-right">
-            <a class="btn btn-primary" data-toggle="modal"
-                data-target="#user-edit-modal" {{b "click: openEditUserModal"}}>
-              Edit
-            </a>
+      {{#if noSearchResults}}
+        {{#CardHeading}}
+          <h5>Your search did not match any users</h5>
+        {{/CardHeading}}
+      {{else}}
+        <div class="card">
+          <div class="card-block card-heading clearfix">
+            <div class="card-heading-buttons pull-xs-right">
+              <a class="btn btn-primary" data-toggle="modal"
+                  data-target="#user-edit-modal" {{b "click: openEditUserModal"}}>
+                Edit
+              </a>
+            </div>
+            <h3 class="card-title">User details</h3>
           </div>
-          <h3 class="card-title">User details</h3>
+          {{> UserDirectory_Card_Read_Inner user=user}}
+          <div class="card-footer"></div>
         </div>
-        {{> UserDirectory_Card_Read_Inner user=user}}
-      </div>
+      {{/if}}
     {{else}}
       {{> PreloaderPage}}
     {{/if}}

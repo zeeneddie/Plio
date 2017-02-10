@@ -3,6 +3,10 @@
   box-shadow: 0 1px 1px rgba(0,0,0,.05);
   margin-bottom: 82px;
 
+  &-divider {
+    border-top: 1px solid #ddd;
+  }
+
   .modal & {
     margin-bottom: 20px;
   }
@@ -74,6 +78,14 @@
       &.pull-xs-left {
         left: 10px;
 
+        .dropdown {
+          float: left;
+          clear: left;
+
+          .btn {
+            color: #373a3c;
+          }
+        }
         .btn {
           margin-right: 10px;
 
@@ -87,6 +99,14 @@
       &.pull-xs-right {
         right: 10px;
 
+        .dropdown {
+          float: right;
+          clear: right;
+
+          .btn {
+            color: #373a3c;
+          }
+        }
         .btn {
           margin-left: 10px;
         }
@@ -95,8 +115,7 @@
 
     .card-title {
       max-width: calc(100% - 151px);
-      white-space: nowrap;
-      overflow: hidden;
+      overflow: visible;
       text-overflow: ellipsis;
     }
   }
@@ -141,10 +160,6 @@
     }
   }
 
-  &-footer {
-    border-radius: 0 0 4px 4px;
-  }
-
   @media (max-width: 767px) {
     .card-content {
       min-height: inherit;
@@ -152,8 +167,11 @@
   }
 }
 
-
-
+.card:not(.dashboard-item) .card-footer {
+  border-radius: 0 0 4px 4px;
+  background: #f5f5f5;
+  border-top: 0;
+}
 
 .content-cards {
   @include flex(1);
@@ -395,4 +413,9 @@
       visibility: hidden;
     }
   }
+}
+
+.card-footer {
+  background: transparent;
+  min-height: 65px;
 }

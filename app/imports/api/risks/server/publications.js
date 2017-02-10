@@ -6,48 +6,47 @@ import { Risks } from '/imports/share/collections/risks';
 import { Standards } from '/imports/share/collections/standards';
 import { RiskTypes } from '/imports/share/collections/risk-types';
 import { isOrgMember } from '../../checkers';
-import { Files } from '/imports/share/collections/files';
 import { Departments } from '/imports/share/collections/departments';
-import { RisksListProjection, DepartmentsListProjection } from '/imports/api/constants';
+import { NonConformities } from '/imports/share/collections/non-conformities';
 import Counter from '../../counter/server';
 import {
-  getPublishCompositeOrganizationUsers,
-  toObjFind,
   makeOptionsFields,
-  getCursorNonDeleted
+  getCursorNonDeleted,
 } from '../../helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
-import { getStandardsCursorByIds } from '../../standards/utils';
-import { getLessonsCursorByDocumentId } from '../../lessons/utils';
-import { getActionsCursorByLinkedDoc, getActionsWithLimitedFields } from '../../actions/utils';
-import { createProblemsTree, getProblemsWithLimitedFields } from '../../problems/utils';
+import { getActionsWithLimitedFields } from '../../actions/utils';
+import { getProblemsWithLimitedFields } from '../../problems/utils';
 import { ActionTypes } from '/imports/share/constants';
 import { getRiskFiles, createRiskCardPublicationTree } from '../utils';
+import { getPublishCompositeOrganizationUsers } from '/imports/server/helpers/pub-helpers';
 
 const getRisksLayoutPub = (userId, serialNumber, isDeleted) => [
   {
-    find({ _id:organizationId }) {
+    find({ _id: organizationId }) {
       return RiskTypes.find({ organizationId });
-    }
+    },
   },
   {
-    find({ _id:organizationId }) {
+    find({ _id: organizationId }) {
       const query = { organizationId, isDeleted };
-      const options = { fields: RisksListProjection };
+      const options = { fields: Risks.publicFields };
 
       return Risks.find(query, options);
     },
     children: [
       {
-        find: getDepartmentsCursorByIds
-      }
-    ]
-  }
+        find: getDepartmentsCursorByIds,
+      },
+    ],
+  },
 ];
 
 Meteor.publishComposite('risksLayout', getPublishCompositeOrganizationUsers(getRisksLayoutPub));
 
-Meteor.publishComposite('risksList', function(organizationId, isDeleted = { $in: [null, false] }) {
+Meteor.publishComposite('risksList', function (
+  organizationId,
+  isDeleted = { $in: [null, false] },
+) {
   return {
     find() {
       const userId = this.userId;
@@ -56,13 +55,13 @@ Meteor.publishComposite('risksList', function(organizationId, isDeleted = { $in:
       }
 
       return Risks.find({ organizationId, isDeleted }, {
-        fields: RisksListProjection
+        fields: Risks.publicFields,
       });
-    }
-  }
+    },
+  };
 });
 
-Meteor.publishComposite('riskCard', function({ _id, organizationId }) {
+Meteor.publishComposite('riskCard', function ({ _id, organizationId }) {
   check(_id, String);
   check(organizationId, String);
 
@@ -75,7 +74,7 @@ Meteor.publishComposite('riskCard', function({ _id, organizationId }) {
   return createRiskCardPublicationTree(() => ({ _id, organizationId }));
 });
 
-Meteor.publish('risksDeps', function(organizationId) {
+Meteor.publish('risksDeps', function (organizationId) {
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -87,18 +86,21 @@ Meteor.publish('risksDeps', function(organizationId) {
     type: {
       $in: [
         ActionTypes.CORRECTIVE_ACTION,
-        ActionTypes.PREVENTATIVE_ACTION
-      ]
-    }
+        ActionTypes.PREVENTATIVE_ACTION,
+      ],
+    },
   };
 
   const standardsFields = {
     title: 1,
     status: 1,
-    organizationId: 1
+    organizationId: 1,
   };
 
-  const departments = Departments.find({ organizationId }, makeOptionsFields(DepartmentsListProjection));
+  const departments = Departments.find(
+    { organizationId },
+    makeOptionsFields(Departments.publicFields),
+  );
   const actions = getActionsWithLimitedFields(actionsQuery);
   const NCs = getProblemsWithLimitedFields({ organizationId }, NonConformities);
   const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
@@ -107,11 +109,14 @@ Meteor.publish('risksDeps', function(organizationId) {
     departments,
     actions,
     NCs,
-    standards
-  ]
+    standards,
+  ];
 });
 
-Meteor.publishComposite('risksByStandardId', function(standardId, isDeleted = { $in: [null, false] }) {
+Meteor.publishComposite('risksByStandardId', function (
+  standardId,
+  isDeleted = { $in: [null, false] },
+) {
   return {
     find() {
       const userId = this.userId;
@@ -126,18 +131,18 @@ Meteor.publishComposite('risksByStandardId', function(standardId, isDeleted = { 
     },
     children: [
       {
-        find: getRiskFiles
-      }
-    ]
-  }
+        find: getRiskFiles,
+      },
+    ],
+  };
 });
 
-Meteor.publishComposite('risksByIds', function(ids = []) {
+Meteor.publishComposite('risksByIds', function (ids = []) {
   return {
     find() {
       let query = {
         _id: { $in: ids },
-        isDeleted: { $in: [null, false] }
+        isDeleted: { $in: [null, false] },
       };
 
       const userId = this.userId;
@@ -154,12 +159,12 @@ Meteor.publishComposite('risksByIds', function(ids = []) {
     children: [{
       find(risk) {
         return getRiskFiles(risk);
-      }
-    }]
-  }
+      },
+    }],
+  };
 });
 
-Meteor.publish('risksCount', function(counterName, organizationId) {
+Meteor.publish('risksCount', function (counterName, organizationId) {
   const userId = this.userId;
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -167,11 +172,11 @@ Meteor.publish('risksCount', function(counterName, organizationId) {
 
   return new Counter(counterName, Risks.find({
     organizationId,
-    isDeleted: { $in: [false, null] }
+    isDeleted: { $in: [false, null] },
   }));
 });
 
-Meteor.publish('risksNotViewedCount', function(counterName, organizationId) {
+Meteor.publish('risksNotViewedCount', function (counterName, organizationId) {
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -179,12 +184,12 @@ Meteor.publish('risksNotViewedCount', function(counterName, organizationId) {
   }
 
   const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
-    organizationId, userId
+    organizationId, userId,
   });
   const query = {
     organizationId,
     viewedBy: { $ne: userId },
-    isDeleted: { $in: [false, null] }
+    isDeleted: { $in: [false, null] },
   };
 
   if (currentOrgUserJoinedAt) {

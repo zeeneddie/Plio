@@ -1,44 +1,54 @@
 import React, { PropTypes } from 'react';
-import { compose, withState, lifecycle } from 'recompose';
+import { compose, withState, lifecycle, branch, renameProp } from 'recompose';
 import property from 'lodash.property';
-import { _ } from 'meteor/underscore';
+import { Input } from 'reactstrap';
+
+import { omitProps } from '/imports/api/helpers';
 
 const enhance = compose(
-  withState('internalValue', 'setInternalValue', property('value')),
-  lifecycle({
-    componentWillReceiveProps(nextProps) {
-      if (this.props.value !== nextProps.value) {
-        nextProps.setInternalValue(nextProps.value);
-      }
-    },
-  }),
+  branch(
+    property('isControlled'),
+    renameProp('value', 'internalValue'),
+    compose(
+      withState('internalValue', 'setInternalValue', property('value')),
+      lifecycle({
+        componentWillReceiveProps(nextProps) {
+          if (this.props.value !== nextProps.value) {
+            nextProps.setInternalValue(nextProps.value);
+          }
+        },
+      }),
+    ),
+  ),
+  omitProps(['value', 'isControlled']),
 );
 
 const TextInput = enhance(({
-  value,
   internalValue,
   onChange,
   setInternalValue,
-  reference = () => null,
+  getRef,
   ...other,
 }) => (
-  <input
-    type="text"
+  <Input
     value={internalValue}
     onChange={(e) => {
-      setInternalValue(_.identity(e.target.value));
-      
+      if (typeof setInternalValue === 'function') {
+        setInternalValue(e.target.value);
+      }
+
       return typeof onChange === 'function' && onChange(e);
     }}
-    ref={reference}
+    ref={getRef}
     {...other}
   />
 ));
 
 TextInput.propTypes = {
+  isControlled: PropTypes.bool,
   value: PropTypes.string,
   onChange: PropTypes.func,
-  reference: PropTypes.func,
+  getRef: PropTypes.func,
 };
 
 export default TextInput;

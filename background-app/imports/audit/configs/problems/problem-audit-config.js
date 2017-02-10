@@ -1,34 +1,33 @@
-import { ProblemMagnitudes, ProblemsStatuses } from '/imports/share/constants.js';
-import { Standards } from '/imports/share/collections/standards.js';
-import { getUserFullNameOrEmail, getPrettyOrgDate, getUserId } from '../../utils/helpers.js';
-import StandardAuditConfig from '../standards/standard-audit-config.js';
+import { _ } from 'meteor/underscore';
+import { getProblemName } from '/imports/helpers/description';
+import onCreated from './on-created';
+import onRemoved from './on-removed';
 
-import onCreated from './on-created.js';
-import onRemoved from './on-removed.js';
+import analysisCompletedAt from './fields/analysis.completedAt';
+import analysisCompletedBy from './fields/analysis.completedBy';
+import analysisCompletionComments from './fields/analysis.completionComments';
+import analysisExecutor from './fields/analysis.executor';
+import analysisStatus from './fields/analysis.status';
+import analysisTargetDate from './fields/analysis.targetDate';
+import departmentsIds from './fields/departmentsIds';
+import description from './fields/description';
+import fileIds from './fields/fileIds';
+import identifiedAt from './fields/identifiedAt';
+import identifiedBy from './fields/identifiedBy';
+import isDeleted from './fields/isDeleted';
+import magnitude from './fields/magnitude';
+import notify from './fields/notify';
+import standardsIds from './fields/standardsIds';
+import status from './fields/status';
+import title from './fields/title';
+import updateOfStandardsCompletedAt from './fields/updateOfStandards.completedAt';
+import updateOfStandardsCompletedBy from './fields/updateOfStandards.completedBy';
+import updateOfStandardsCompletionComments from './fields/updateOfStandards.completionComments';
+import updateOfStandardsExecutor from './fields/updateOfStandards.executor';
+import updateOfStandardsStatus from './fields/updateOfStandards.status';
+import updateOfStandardsTargetDate from './fields/updateOfStandards.targetDate';
 
-import analysisCompletedAt from './fields/analysis.completedAt.js';
-import analysisCompletedBy from './fields/analysis.completedBy.js';
-import analysisCompletionComments from './fields/analysis.completionComments.js';
-import analysisExecutor from './fields/analysis.executor.js';
-import analysisStatus from './fields/analysis.status.js';
-import analysisTargetDate from './fields/analysis.targetDate.js';
-import departmentsIds from './fields/departmentsIds.js';
-import description from './fields/description.js';
-import fileIds from './fields/fileIds.js';
-import identifiedAt from './fields/identifiedAt.js';
-import identifiedBy from './fields/identifiedBy.js';
-import isDeleted from './fields/isDeleted.js';
-import magnitude from './fields/magnitude.js';
-import notify from './fields/notify.js';
-import standardsIds from './fields/standardsIds.js';
-import status from './fields/status.js';
-import title from './fields/title.js';
-import updateOfStandardsCompletedAt from './fields/updateOfStandards.completedAt.js';
-import updateOfStandardsCompletedBy from './fields/updateOfStandards.completedBy.js';
-import updateOfStandardsCompletionComments from './fields/updateOfStandards.completionComments.js';
-import updateOfStandardsExecutor from './fields/updateOfStandards.executor.js';
-import updateOfStandardsStatus from './fields/updateOfStandards.status.js';
-import updateOfStandardsTargetDate from './fields/updateOfStandards.targetDate.js';
+import { propId, propOrganizationId, propNotify, propIdentifiedBy } from '/imports/helpers/props';
 
 
 export default ProblemAuditConfig = {
@@ -58,21 +57,19 @@ export default ProblemAuditConfig = {
     updateOfStandardsCompletionComments,
     updateOfStandardsExecutor,
     updateOfStandardsStatus,
-    updateOfStandardsTargetDate
+    updateOfStandardsTargetDate,
   ],
 
   onRemoved,
 
-  docId({ _id }) {
-    return _id;
-  },
+  docId: propId,
 
-  docName({ sequentialId, title }) {
-    return `${sequentialId} "${title}"`;
-  },
+  docName: getProblemName,
 
-  docOrgId({ organizationId }) {
-    return organizationId;
-  }
+  docOrgId: propOrganizationId,
+
+  docNotifyList: propNotify,
+
+  docOwner: propIdentifiedBy,
 
 };

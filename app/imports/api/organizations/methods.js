@@ -1,27 +1,24 @@
 import { Meteor } from 'meteor/meteor';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { Roles } from 'meteor/alanning:roles';
 
 import OrganizationService from './organization-service';
-import { Organizations } from '/imports/share/collections/organizations';
 import InvitationService from './invitation-service';
 
 import {
-  OrganizationEditableFields,
   OrganizationCurrencySchema,
-  UserSettingsSchema
+  UserSettingsSchema,
+  CustomerTypeSchema,
 } from '/imports/share/schemas/organization-schema';
 import {
-  WorkflowTypes, NCTypes, UserRoles,
-  UserMembership, ProblemMagnitudes, RKTypes, InvitationStatuses
+  WorkflowTypes, ProblemMagnitudes, InvitationStatuses,
 } from '/imports/share/constants';
 import {
   IdSchema, TimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
-  UserIdSchema, TimezoneSchema
+  UserIdSchema, TimezoneSchema,
 } from '/imports/share/schemas/schemas';
-import Method, { CheckedMethod } from '../method.js';
+import Method from '../method.js';
 import { chain } from '/imports/api/helpers.js';
 import {
   checkOrgMembership,
@@ -36,9 +33,11 @@ import {
   ORG_OnTransferChecker,
   ORG_EnsureCanDelete,
   ORG_EnsureCanBeDeleted,
-  USR_EnsureIsPlioAdmin
+  USR_EnsureIsPlioAdmin,
+  USR_EnsureIsPlioUser,
 } from '../checkers.js';
 import { USR_EnsurePasswordIsValid } from '/imports/api/users/checkers';
+import { ensureCanUnsubscribeFromDailyRecap } from './checkers';
 
 
 const nameSchema = new SimpleSchema({
@@ -556,4 +555,100 @@ export const deleteCustomerOrganization = new Method({
 
     return OrganizationService.deleteOrganization({ organizationId });
   }
+});
+
+export const changeCustomerType = new Method({
+  name: 'Organizations.changeCustomerType',
+
+  validate: new SimpleSchema([
+    OrganizationIdSchema,
+    CustomerTypeSchema,
+  ]).validator(),
+
+  check(checker) {
+    return checker(() => USR_EnsureIsPlioUser(this.userId));
+  },
+
+  run(args) {
+    return OrganizationService.changeCustomerType(args);
+  },
+});
+
+export const changeTitle = new Method({
+  name: 'Organizations.changeTitle',
+
+  validate: new SimpleSchema([
+    OrganizationIdSchema,
+    {
+      fieldName: {
+        type: String,
+      },
+      fieldValue: {
+        type: String,
+      },
+    },
+  ]).validator(),
+
+  check(checker) {
+    if (this.isSimulation) {
+      return undefined;
+    }
+
+    return checker(({ organizationId }) => ORG_EnsureCanChange(this.userId, organizationId));
+  },
+
+  run(args) {
+    if (this.isSimulation) {
+      return undefined;
+    }
+
+    return OrganizationService.setTitleValue(args);
+  },
+});
+
+export const unsubscribeFromDailyRecap = new Method({
+  name: 'Organizations.unsubscribeFromDailyRecap',
+
+  validate: new SimpleSchema({
+    orgSerialNumber: {
+      type: Number,
+    },
+  }).validator(),
+
+  check(checker) {
+    if (this.isSimulation) return undefined;
+
+    return checker(({ orgSerialNumber }) =>
+      ensureCanUnsubscribeFromDailyRecap({ orgSerialNumber, userId: this.userId }));
+  },
+
+  run({ orgSerialNumber }) {
+    if (this.isSimulation) return undefined;
+
+    return OrganizationService.unsubscribeFromDailyRecap({ orgSerialNumber, userId: this.userId });
+  },
+});
+
+export const updateLastAccessedDate = new Method({
+  name: 'Organizations.updateLastAccessedDate',
+
+  validate: new SimpleSchema([
+    OrganizationIdSchema
+  ]).validator(),
+
+  check(checker) {
+    if (this.isSimulation) {
+      return undefined;
+    }
+
+    return checker(({ organizationId }) => checkOrgMembership(this.userId, organizationId));
+  },
+
+  run({ organizationId }) {
+    if (this.isSimulation) {
+      return undefined;
+    }
+
+    return OrganizationService.updateLastAccessedDate({ organizationId });
+  },
 });

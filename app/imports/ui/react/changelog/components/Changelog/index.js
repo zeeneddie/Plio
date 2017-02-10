@@ -1,13 +1,13 @@
 import React from 'react';
 
-import Collapse from '../../../components/Collapse';
+import CollapseBlock from '../../../components/CollapseBlock';
 import ChangelogHeaderContainer from '../../containers/ChangelogHeaderContainer';
 import ChangelogContentContainer from '../../containers/ChangelogContentContainer';
 import ChangelogFooterContainer from '../../containers/ChangelogFooterContainer';
 import propTypes from './propTypes';
 
 const Changelog = (props) => (
-  <Collapse
+  <CollapseBlock
     classNames={{ head: '', body: 'card-changelog collapse' }}
     collapsed={props.isChangelogCollapsed}
     onToggleCollapse={props.onToggleCollapse}
@@ -27,7 +27,7 @@ const Changelog = (props) => (
         onViewAllClick={props.onViewAllClick}
       />
     </div>
-  </Collapse>
+  </CollapseBlock>
 );
 
 Changelog.propTypes = propTypes;

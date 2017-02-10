@@ -1,6 +1,7 @@
+import { _ } from 'meteor/underscore';
 import deepDiff from 'deep-diff';
 
-import { ChangesKinds } from './changes-kinds.js';
+import { ChangesKinds } from './changes-kinds';
 
 
 export default DocumentDiffer = {
@@ -10,12 +11,12 @@ export default DocumentDiffer = {
 
     const {
       ITEM_ADDED, ITEM_REMOVED,
-      FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED
+      FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED,
     } = ChangesKinds;
 
-    const getFieldName = (path) => {
-      return _(path).map(field => _(field).isNumber() ? '$': field).join('.');
-    };
+    const getFieldName = (path) => (
+      path.map(field => _.isNumber(field) ? '$': field).join('.')
+    );
 
     const getValue = (obj, path) => {
       let val = obj;
@@ -30,18 +31,20 @@ export default DocumentDiffer = {
 
     const rawDiffs = deepDiff.diff(oldDocument, newDocument);
 
-    const rawArrayDiffs = _(rawDiffs).filter(diff => diff.kind === 'A');
-    const rawFieldDiffs = _(rawDiffs).filter(diff => diff.kind !== 'A');
+    const rawArrayDiffs = rawDiffs.filter(diff => diff.kind === 'A');
+    const rawFieldDiffs = rawDiffs.filter(diff => diff.kind !== 'A');
 
     const processedArrayFields = [];
 
-    _(rawArrayDiffs).each((rawDiff) => {
-      const { kind, path, item: { kind:itemKind } = {} } = rawDiff;
+    rawArrayDiffs.forEach((rawDiff) => {
+      const { path, item: { kind: itemKind } = {} } = rawDiff;
 
       const oldArray = getValue(oldDocument, path);
       const newArray = getValue(newDocument, path);
 
-      let arr1, arr2, changeKind;
+      let arr1;
+      let arr2;
+      let changeKind;
       if (itemKind === 'N') {
         arr1 = newArray;
         arr2 = oldArray;
@@ -52,8 +55,8 @@ export default DocumentDiffer = {
         changeKind = ITEM_REMOVED;
       }
 
-      const item = _(arr1).find(arr1Item => (
-        _(arr2).find(arr2Item => _(arr2Item).isEqual(arr1Item)) === undefined
+      const item = arr1.find(arr1Item => (
+        arr2.find(arr2Item => _.isEqual(arr2Item, arr1Item)) === undefined
       ));
 
       const field = getFieldName(path);
@@ -62,14 +65,14 @@ export default DocumentDiffer = {
         kind: changeKind,
         field,
         item,
-        path
+        path,
       });
 
       processedArrayFields.push(new RegExp(`^${field}\\.\\$`));
     });
 
-    _(rawFieldDiffs).each((rawDiff) => {
-      const { kind, path, lhs:oldValue, rhs:newValue } = rawDiff;
+    rawFieldDiffs.forEach((rawDiff) => {
+      const { kind, path, lhs: oldValue, rhs: newValue } = rawDiff;
 
       const field = getFieldName(path);
 
@@ -81,7 +84,7 @@ export default DocumentDiffer = {
       const changesKinds = {
         N: FIELD_ADDED,
         E: FIELD_CHANGED,
-        D: FIELD_REMOVED
+        D: FIELD_REMOVED,
       };
 
       diffs.push({
@@ -89,11 +92,11 @@ export default DocumentDiffer = {
         field,
         oldValue,
         newValue,
-        path
+        path,
       });
     });
 
     return diffs;
-  }
+  },
 
-}
+};

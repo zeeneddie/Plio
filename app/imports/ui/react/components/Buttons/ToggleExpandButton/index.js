@@ -4,7 +4,7 @@ import Button from '../Button';
 
 const ToggleExpandButton = ({ onClick, children }) => (
   <Button
-    type="secondary"
+    color="secondary"
     className="toggle-expand-btn"
     onClick={onClick}
   >

@@ -1,16 +1,17 @@
 import React, { PropTypes } from 'react';
+import { Input } from 'reactstrap';
 
 import Button from '../Buttons/Button';
-import Icon from '../Icon';
+import Icon from '../Icons/Icon';
 
 const FileUploader = ({ value, onChange }) => (
-  <Button type="secondary" className="btn-file">
-    <Icon names="paperclip" size="3" />
-    <input
+  <Button color="secondary file" component="div">
+    <Icon name="paperclip" />
+    <Input
+      multiple
       type="file"
-      multiple="multiple"
-      value={value}
       onChange={e => onChange(e.target.files)}
+      {...{ value }}
     />
   </Button>
 );

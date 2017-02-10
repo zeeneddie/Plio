@@ -28,17 +28,25 @@ Template.NC_List.viewmodel({
     const NCId = this.NCId();
     const { result:contains, first:defaultDoc } = this._findNCForFilter(NCId);
 
-    if (!contains) {
-      if (defaultDoc) {
+    if (contains) {
+      return;
+    }
+
+    if (!defaultDoc) {
+      Meteor.setTimeout(() => {
+        this.goToNCs();
+      }, 0);
+    } else {
+      const allNCs = this._getNCsByQuery({
+        isDeleted: { $in: [true, false] },
+      }).fetch();
+
+      if (!NCId || (NCId && findById(NCId, allNCs))) {
         const { _id } = defaultDoc;
 
         Meteor.setTimeout(() => {
           this.goToNC(_id);
           this.expandCollapsed(_id);
-        }, 0);
-      } else {
-        Meteor.setTimeout(() => {
-          this.goToNCs();
         }, 0);
       }
     }
@@ -104,6 +112,13 @@ Template.NC_List.viewmodel({
   },
   onSearchInputValue() {
     return value => extractIds(this._findNCForFilter().array);
+  },
+  onAfterSearch() {
+    return (searchText, searchResult) => {
+      if (searchText && searchResult.length) {
+        this.goToNC(searchResult[0]);
+      }
+    };
   },
   _getTotalUnreadMessages(ncs) {
     const NCIds = extractIds(ncs);

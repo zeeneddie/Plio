@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "lint-app": "./node_modules/.bin/eslint app",
-    "lint-background-app": "./node_modules/.bin/eslint background"
+    "lint-background-app": "./node_modules/.bin/eslint background-app"
   },
   "devDependencies": {
     "eslint": "^2.13.1",

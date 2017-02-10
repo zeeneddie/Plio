@@ -1,24 +1,41 @@
 <template name="WorkInbox_Card_Read_Wrapper">
   {{#if isRendered}}
-    {{#if workItemId}}
-      {{#if isDocType LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
-        {{> WorkInbox_QAPanel_Read doc=workItem}}
-        {{> Actions_Card_Read (cardArgs)}}
-      {{/if}}
+    {{#if workItem}}
+      {{#if noSearchResults}}
+        <div class="content-cards-inner flex scroll">
+          {{#CardHeading}}
+            <h5>Your search did not match any work items</h5>
+          {{/CardHeading}}
+        </div>
+      {{else}}
+        {{#if isDocType LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
+          {{#unless workItem.isDeleted}}
+            {{> WorkInbox_QAPanel_Read doc=workItem}}
+          {{/unless}}
 
-      {{#if isDocType LINKED_TYPES.NON_CONFORMITY}}
-        {{> WorkInbox_QAPanel_Read doc=workItem}}
-        {{> NC_Card_Read (cardArgs)}}
-      {{/if}}
+          {{> Actions_Card_Read (cardArgs)}}
+        {{/if}}
 
-      {{#if isDocType LINKED_TYPES.RISK}}
-        {{> WorkInbox_QAPanel_Read doc=workItem}}
-        {{> Risks_Card_Read (cardArgs)}}
+        {{#if isDocType LINKED_TYPES.NON_CONFORMITY}}
+          {{> WorkInbox_QAPanel_Read doc=workItem}}
+          {{> NC_Card_Read (cardArgs)}}
+        {{/if}}
+
+        {{#if isDocType LINKED_TYPES.RISK}}
+          {{> WorkInbox_QAPanel_Read doc=workItem}}
+          {{> Risks_Card_Read (cardArgs)}}
+        {{/if}}
+
+        {{#if (some (isActiveWorkInboxFilter 5) (isActiveWorkInboxFilter 6))}}
+          {{> Actions_Card_Read isReady=isReady _id=workItemId showCard=true}}
+        {{/if}}
       {{/if}}
     {{else}}
       <div class="content-cards-inner flex scroll">
-        <div class="card">
-          <div class="card-block card-heading">
+        {{#CardHeading}}
+          {{#if workItemId}}
+            <h5>This work item no longer exists in Plio</h5>
+          {{else}}
             {{#if (some (isActiveWorkInboxFilter 1) (isActiveWorkInboxFilter 2))}}
               <h5>There are no current work items</h5>
             {{/if}}
@@ -28,10 +45,10 @@
             {{/if}}
 
             {{#if (some (isActiveWorkInboxFilter 5) (isActiveWorkInboxFilter 6))}}
-              <h5>There are no deleted work items</h5>
+              <h5>There are no deleted actions</h5>
             {{/if}}
-          </div>
-        </div>
+          {{/if}}
+        {{/CardHeading}}
       </div>
     {{/if}}
   {{/if}}

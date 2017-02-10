@@ -1,7 +1,7 @@
 import React from 'react';
 import { _ } from 'meteor/underscore';
 
-import FieldRead from '../components/FieldRead';
+import Field from '../fields/read/components/Field';
 import { flattenObjects } from '/imports/api/helpers';
 import { lowercase, capitalize } from '/imports/share/helpers';
 
@@ -11,14 +11,14 @@ const createKey = (label) => {
 };
 
 const mapFields = fields => fields.map(({ label, text, wrap }) => {
-  const field = <FieldRead label={label}><span>{text}</span></FieldRead>;
-  return text ? ({
+  const field = <Field label={label}><span>{text}</span></Field>;
+  return !!text && ({
     [createKey(label)]: wrap ? (
       <div className={wrap}>
         {field}
       </div>
     ) : field,
-  }) : null;
+  });
 });
 
 export default fields => flattenObjects(mapFields(fields));

@@ -82,36 +82,33 @@ Template.Subcards_NonConformities_Edit.viewmodel({
     } else {
       const { title } = viewmodel.getData();
 
-      swal(
-        {
-          title: 'Are you sure?',
-          text: `The non-conformity "${title}" will be removed.`,
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Remove',
-          closeOnConfirm: false
-        },
-        () => {
-          const cb = (err) => {
-            if (err) {
-              swal.close();
-              return;
-            }
+      swal({
+        title: 'Are you sure?',
+        text: `The non-conformity "${title}" will be removed.`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Remove',
+        closeOnConfirm: false
+      }, () => {
+        const cb = (err) => {
+          if (err) {
+            swal.close();
+            return;
+          }
 
-            viewmodel.destroy();
+          viewmodel.destroy();
 
-            swal({
-              title: 'Removed!',
-              text: `The non-conformity "${title}" was removed successfully.`,
-              type: 'success',
-              timer: ALERT_AUTOHIDE_TIME,
-              showConfirmButton: false,
-            });
-          };
+          swal({
+            title: 'Removed!',
+            text: `The non-conformity "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
+        };
 
-          this.modal().callMethod(remove, { _id }, cb);
-        }
-      );
+        this.modal().callMethod(remove, { _id }, cb);
+      });
     }
   }
 });

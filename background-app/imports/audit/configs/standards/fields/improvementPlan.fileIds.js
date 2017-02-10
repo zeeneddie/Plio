@@ -1,40 +1,17 @@
-import { Files } from '/imports/share/collections/files.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { getReceivers } from '../helpers';
+import IPFileIds from '../../common/fields/improvementPlan.fileIds';
 
 
 export default {
   field: 'improvementPlan.fileIds',
   logs: [
-    {
-      message: {
-        [ChangesKinds.ITEM_ADDED]: 'Improvement plan file "{{name}}" added',
-        [ChangesKinds.ITEM_REMOVED]: 'Improvement plan file removed'
-      }
-    }
+    IPFileIds.logs.default,
   ],
   notifications: [
-    {
-      text: {
-        [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} added file "{{name}}" to improvement plan of {{{docDesc}}} {{{docName}}}',
-        [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed file from improvement plan of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+    IPFileIds.notifications.default,
   ],
-  data({ diffs, newDoc, user }) {
-    const _id = diffs['improvementPlan.fileIds'].item;
-    const file = () => Files.findOne({ _id }) || {};
-    const auditConfig = this;
-
-    return {
-      name: () => file().name,
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user)
-    };
+  data: IPFileIds.data,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
-  receivers: getReceivers
 };

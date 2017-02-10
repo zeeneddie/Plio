@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '/imports/share/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -9,43 +9,40 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'To be completed by set to {{newValue}}',
+          'To be completed by set to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'To be completed by changed from {{oldValue}} to {{newValue}}',
+          'To be completed by changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'To be completed by removed'
-      }
-    }
+          'To be completed by removed',
+      },
+    },
   ],
   notifications: [
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set to be completed by of {{{docDesc}}} {{{docName}}} to {{newValue}}',
+          '{{{userName}}} set to be completed by of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed to be completed by of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
+          '{{{userName}}} changed to be completed by of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed to be completed by of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{{userName}}} removed to be completed by of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { toBeCompletedBy }, newDoc, user }) {
+  data({ diffs: { toBeCompletedBy } }) {
     const { newValue, oldValue } = toBeCompletedBy;
-    const auditConfig = this;
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
+      oldValue: () => getUserFullNameOrEmail(oldValue),
     };
   },
   receivers({ diffs: { toBeCompletedBy }, newDoc, user }) {
     const receivers = getReceivers(newDoc, user);
     const index = receivers.indexOf(toBeCompletedBy.newValue);
-    (index > -1) && receivers.splice(index, 1);
 
-    return receivers;
-  }
+    return index > -1
+      ? receivers.slice(0, index).concat(receivers.slice(index + 1))
+      : receivers;
+  },
 };

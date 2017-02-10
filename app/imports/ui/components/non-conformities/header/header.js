@@ -1,20 +1,28 @@
+/* eslint-disable new-cap */
+
 import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
+import { Meteor } from 'meteor/meteor';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 import invoke from 'lodash.invoke';
 
 import { NonConformityFilters } from '/imports/api/constants.js';
 import { isMobileRes } from '/imports/api/checkers.js';
+import HeaderMenu from '/imports/ui/react/non-comformities/components/HeaderMenu';
 
 Template.NC_Header.viewmodel({
   mixin: ['nonconformity', 'organization', 'router'],
   headerArgs() {
     return {
       idToExpand: this.NCId(),
-      header: 'NCs',
-      prependWith: 'by',
-      prependIndexes: [0, 1, 2],
       filters: NonConformityFilters,
       onSelectFilter: this.onSelectFilter.bind(this),
-      isActiveFilter: this.isActiveNCFilter.bind(this)
+      isActiveFilter: this.isActiveNCFilter.bind(this),
+      getOptionsMenu() {
+        return {
+          component: HeaderMenu,
+        };
+      },
     };
   },
   NC() {
@@ -27,11 +35,11 @@ Template.NC_Header.viewmodel({
       Meteor.defer(() => {
         const list = Object.assign({}, ViewModel.findOne('NC_List'));
 
-        !!list && invoke(list, 'handleRoute');
+        return !!list && invoke(list, 'handleRoute');
       });
     });
   },
-  onNavigate(e) {
+  onNavigate() {
     const mobileWidth = isMobileRes();
     const goToDashboard = () => this.goToDashboard(this.organizationSerialNumber());
 

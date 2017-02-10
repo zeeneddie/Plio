@@ -8,6 +8,7 @@ import { Risks } from '/imports/share/collections/risks';
 import { Actions } from '/imports/share/collections/actions';
 import { WorkItems } from '/imports/share/collections/work-items';
 import { LessonsLearned } from '/imports/share/collections/lessons';
+import { Standards } from '/imports/share/collections/standards';
 import {
   setDepartments,
   setFiles,
@@ -16,9 +17,11 @@ import {
   setActions,
   setWorkItems,
   setLessons,
-} from '/client/redux/actions/collectionsActions';
+  setStandards,
+} from '/imports/client/store/actions/collectionsActions';
+import { setDepsReady } from '/imports/client/store/actions/standardsActions';
 
-export default function loadDeps({ dispatch, organizationId }, onData) {
+export default function loadDeps({ dispatch, organizationId, initializing }, onData) {
   const subscription = BackgroundSubs.subscribe('standardsDeps', organizationId);
 
   if (subscription.ready()) {
@@ -29,9 +32,9 @@ export default function loadDeps({ dispatch, organizationId }, onData) {
     const ncs = NonConformities.find(query, pOptions).fetch();
     const risks = Risks.find(query, pOptions).fetch();
     const actions = Actions.find(query, pOptions).fetch();
-    const workItems = WorkItems.find(query, pOptions).fetch();
     const lessons = LessonsLearned.find(query, pOptions).fetch();
-    const reduxActions = [
+    const workItems = WorkItems.find(query).fetch();
+    let reduxActions = [
       setDepartments(departments),
       setFiles(files),
       setNCs(ncs),
@@ -39,7 +42,16 @@ export default function loadDeps({ dispatch, organizationId }, onData) {
       setActions(actions),
       setWorkItems(workItems),
       setLessons(lessons),
+      setDepsReady(true),
     ];
+
+    if (initializing) {
+      // set standards only when initializing because
+      // later observers will be running
+      const standards = Standards.find(query, { sort: { title: 1 } }).fetch();
+
+      reduxActions = reduxActions.concat(setStandards(standards));
+    }
 
     dispatch(batchActions(reduxActions));
   }

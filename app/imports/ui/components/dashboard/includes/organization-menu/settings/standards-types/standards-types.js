@@ -4,6 +4,7 @@ import invoke from 'lodash.invoke';
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { insert, update, remove } from '/imports/api/standards-types/methods.js';
 import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.OrgSettings_StandardTypes.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
@@ -15,7 +16,7 @@ Template.OrgSettings_StandardTypes.viewmodel({
     return invoke(this.standardsTypes(), 'count');
   },
   helpText: OrganizationSettingsHelp.standardTypes,
-  
+
   placeholder: 'Standard type',
   onChangeCb() {
     return this.onChange.bind(this);
@@ -60,13 +61,21 @@ Template.OrgSettings_StandardTypes.viewmodel({
 
       this.modal().callMethod(remove, { _id, organizationId }, (err) => {
         if (err) {
-          swal('Oops... Something went wrong!', err.reason, 'error');
+          swal({
+            title: 'Oops... Something went wrong!',
+            text: err.reason,
+            type: 'error',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         } else {
-          swal(
-            'Removed!',
-            `Standard type "${title}" was removed successfully.`,
-            'success'
-          );
+          swal({
+            title: 'Removed!',
+            text: `Standard type "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         }
       });
     });

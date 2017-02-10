@@ -261,6 +261,14 @@ export default OrganizationService = {
     });
   },
 
+  setTitleValue({ organizationId, fieldName, fieldValue }) {
+    return this.collection.update({
+      _id: organizationId,
+    }, {
+      $set: { [`homeScreenTitles.${fieldName}`]: fieldValue },
+    });
+  },
+
   deleteOrganization({ organizationId }) {
     const organization = this.collection.findOne({ _id: organizationId }, {
       fields: { 'users.userId': 1 }
@@ -294,5 +302,45 @@ export default OrganizationService = {
     _(collections).each(coll => coll.direct.remove({ organizationId }));
 
     return this.collection.remove({ _id: organizationId });
-  }
+  },
+
+  changeCustomerType({ organizationId, customerType }) {
+    const query = { _id: organizationId };
+    const modifier = {
+      $set: {
+        customerType,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
+
+  unsubscribeFromDailyRecap({ orgSerialNumber, userId }) {
+    const query = {
+      serialNumber: orgSerialNumber,
+      users: {
+        $elemMatch: {
+          userId,
+          sendDailyRecap: true,
+        },
+      },
+    };
+    const modifier = {
+      $set: {
+        'users.$.sendDailyRecap': false,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
+
+  updateLastAccessedDate({ organizationId }) {
+    return this.collection.update({
+      _id: organizationId
+    }, {
+      $set: {
+        lastAccessedDate: new Date
+      }
+    });
+  },
 };

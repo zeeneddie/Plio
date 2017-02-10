@@ -42,16 +42,16 @@ export default class OrgNotificationsSender {
 
   transferCreated(newOwnerId, transferId, inviterId) {
     const emailSubject = `You have been invited to become an owner of the ${this._orgName} organization`;
-    const secondaryText = `If you agree to be an organization owner, click on "Confirm" button`;
+    const secondaryText = `If you agree to be an organization owner, click on "Accept the invitation" link.`;
 
     const url = Meteor.absoluteUrl(`transfer-organization/${transferId}`);
 
     const templateData = {
       organizationName: this._orgName,
-      title: emailSubject,
+      title: `${emailSubject}.`,
       secondaryText,
       button: {
-        label: 'Confirm',
+        label: 'Accept the invitation',
         url
       }
     };
@@ -66,8 +66,9 @@ export default class OrgNotificationsSender {
       recipients: newOwnerId,
       emailSubject,
       templateData,
-      templateName: 'minimalisticEmail',
-      notificationData: { title, body, url }
+      templateName: 'personalEmail',
+      notificationData: { title, body, url },
+      options: { isImportant: true },
     }).sendAll();
   }
 
@@ -76,25 +77,25 @@ export default class OrgNotificationsSender {
     const newOwnerName = newOwner.fullNameOrEmail();
 
     const emailSubject = `Organization transferred`;
-    const secondaryText = `${newOwnerName} accepted the invitation to become an owner of ${this._orgName} organization`;
+    const title = `${newOwnerName} accepted the invitation to become an owner of ${this._orgName} organization.`;
 
     const templateData = {
       organizationName: this._orgName,
-      title: emailSubject,
-      secondaryText
+      title,
     };
 
     const notificationData = {
       title: emailSubject,
-      body: secondaryText
+      body: title
     };
 
     new NotificationSender({
       recipients: inviterId,
-      templateName: 'minimalisticEmail',
+      templateName: 'personalEmail',
       emailSubject,
       templateData,
-      notificationData
+      notificationData,
+      options: { isImportant: true },
     }).sendAll();
   }
 
@@ -107,25 +108,25 @@ export default class OrgNotificationsSender {
     const inviterName = inviter.fullNameOrEmail();
 
     const emailSubject = `New user invited to the organization`;
-    const secondaryText = `${inviterName} invited user "${email}" to ${this._orgName} organization`;
+    const title = `${inviterName} invited user "${email}" to ${this._orgName} organization.`;
 
     const templateData = {
       organizationName: this._orgName,
-      title: emailSubject,
-      secondaryText
+      title,
     };
 
     const notificationData = {
       title: emailSubject,
-      body: secondaryText
+      body: title,
     };
 
     new NotificationSender({
       recipients: this._orgOwnerId,
-      templateName: 'minimalisticEmail',
+      templateName: 'personalEmail',
       emailSubject,
       templateData,
-      notificationData
+      notificationData,
+      options: { isImportant: true },
     }).sendAll();
   }
 
@@ -137,25 +138,25 @@ export default class OrgNotificationsSender {
     recipients = Array.from(recipients);
 
     const emailSubject = `New user accepted invitation to the organization`;
-    const secondaryText = `${userName} accepted invitation to the ${this._orgName} organization`;
+    const title = `${userName} accepted invitation to the ${this._orgName} organization.`;
 
     const templateData = {
       organizationName: this._orgName,
-      title: emailSubject,
-      secondaryText
+      title,
     };
 
     const notificationData = {
       title: emailSubject,
-      body: secondaryText
+      body: title,
     };
 
     new NotificationSender({
       recipients,
-      templateName: 'minimalisticEmail',
+      templateName: 'personalEmail',
       emailSubject,
       templateData,
-      notificationData
+      notificationData,
+      options: { isImportant: true },
     }).sendAll();
   }
 
@@ -171,25 +172,25 @@ export default class OrgNotificationsSender {
     const executorName = executor.fullNameOrEmail();
 
     const emailSubject = `User removed from the organization`;
-    const secondaryText = `${executorName} removed ${userName} from the ${this._orgName} organization`;
+    const title = `${executorName} removed ${userName} from the ${this._orgName} organization.`;
 
     const templateData = {
       organizationName: this._orgName,
-      title: emailSubject,
-      secondaryText
+      title,
     };
 
     const notificationData = {
       title: emailSubject,
-      body: secondaryText
+      body: title,
     };
 
     new NotificationSender({
       recipients: this._orgOwnerId,
-      templateName: 'minimalisticEmail',
+      templateName: 'personalEmail',
       emailSubject,
       templateData,
-      notificationData
+      notificationData,
+      options: { isImportant: true },
     }).sendAll();
   }
 }

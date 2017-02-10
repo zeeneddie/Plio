@@ -5,12 +5,14 @@ import propTypes from './propTypes';
 
 const ChangelogHeader = (props) => (
   <div
-    className={cx({
-      'card-footer': true,
-      'card-changelog-toggle': true,
-      collapsed: props.isChangelogCollapsed,
-      waiting: props.isLoadingLastHumanLog || props.isLoadingLastLogs,
-    })}
+    className={cx(
+      'card-footer',
+      'card-changelog-toggle',
+      {
+        collapsed: props.isChangelogCollapsed,
+        waiting: props.isLoadingLastHumanLog || props.isLoadingLastLogs,
+      }
+    )}
   >
     <div className="row">
       <div className="col-xs-6">

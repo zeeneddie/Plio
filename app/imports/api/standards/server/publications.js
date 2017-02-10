@@ -1,102 +1,93 @@
 import { Meteor } from 'meteor/meteor';
-import curry from 'lodash.curry';
 
-import { getJoinUserToOrganizationDate, getUserOrganizations } from '/imports/api/organizations/utils';
-import { Organizations } from '/imports/share/collections/organizations';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils';
 import { Standards } from '/imports/share/collections/standards';
-import { isOrgMember, isOrgMemberBySelector } from '../../checkers';
+import { isOrgMember } from '../../checkers';
 import { Files } from '/imports/share/collections/files';
 import { LessonsLearned } from '/imports/share/collections/lessons';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
-import { Actions } from '/imports/share/collections/actions';
-import { WorkItems } from '/imports/share/collections/work-items';
 import { Departments } from '/imports/share/collections/departments';
 import Counter from '../../counter/server';
-import {
-  StandardsListProjection,
-  ActionsListProjection,
-  NonConformitiesListProjection,
-  RisksListProjection,
-  WorkItemsListProjection,
-  StandardsBookSectionsListProjection,
-  StandardTypesListProjection,
-  DepartmentsListProjection,
-} from '/imports/api/constants';
 import { ActionTypes } from '/imports/share/constants';
 import get from 'lodash.get';
-import property from 'lodash.property';
-import { check, Match } from 'meteor/check';
+import { check } from 'meteor/check';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
 import { RiskTypes } from '/imports/share/collections/risk-types.js';
 import {
-  getPublishCompositeOrganizationUsers,
   makeOptionsFields,
   getCursorNonDeleted,
-  toObjFind
+  toObjFind,
 } from '../../helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
-import { getActionsCursorByLinkedDoc, getActionsWithLimitedFields } from '../../actions/utils';
-import { getWorkItemsCursorByIdsWithLimitedFields } from '../../work-items/utils';
+import { getActionsWithLimitedFields } from '../../actions/utils';
 import {
   getProblemsByStandardIds,
   createProblemsTree,
-  getProblemsWithLimitedFields
 } from '../../problems/utils';
+import { getPublishCompositeOrganizationUsers } from '/imports/server/helpers/pub-helpers';
 
 const getStandardFiles = (standard) => {
   const fileIds = standard.improvementPlan && standard.improvementPlan.fileIds || [];
   const source1FileId = get(standard, 'source1.fileId');
   const source2FileId = get(standard, 'source2.fileId');
-  source1FileId && fileIds.push(source1FileId);
-  source2FileId && fileIds.push(source2FileId);
+  if (source1FileId) fileIds.push(source1FileId);
+  if (source2FileId) fileIds.push(source2FileId);
 
   return Files.find({ _id: { $in: fileIds } });
 };
 
-const getStandardsLayoutPub = function(userId, serialNumber, isDeleted) {
+const getStandardsLayoutPub = function (userId, serialNumber, isDeleted) {
   const standardsFields = {
     title: 1,
     sectionId: 1,
     typeId: 1,
     organizationId: 1,
+    isDeleted: 1,
+    uniqueNumber: 1,
     ...(() => _.isObject(isDeleted)
       ? null
-      : { isDeleted: 1, deletedAt: 1, deletedBy: 1 }
-    )()
+      : { deletedAt: 1, deletedBy: 1 }
+    )(),
   };
 
   const pubs = [
     {
-      find({ _id:organizationId }) {
+      find({ _id: organizationId }) {
         return StandardsBookSections.find({ organizationId }, {
-          fields: StandardsBookSectionsListProjection
+          fields: StandardsBookSections.publicFields,
         });
-      }
+      },
     },
     {
-      find({ _id:organizationId }) {
+      find({ _id: organizationId }) {
         return StandardTypes.find({ organizationId }, {
-          fields: StandardTypesListProjection
+          fields: StandardTypes.publicFields,
         });
-      }
+      },
     },
     {
-      find({ _id:organizationId }) {
+      find({ _id: organizationId }) {
         return Standards.find({ organizationId, isDeleted }, {
-          fields: standardsFields
+          fields: standardsFields,
         });
-      }
-    }
+      },
+    },
   ];
 
   return pubs;
 };
 
-Meteor.publishComposite('standardsLayout', getPublishCompositeOrganizationUsers(getStandardsLayoutPub));
+Meteor.publishComposite(
+  'standardsLayout',
+  getPublishCompositeOrganizationUsers(getStandardsLayoutPub),
+);
 
-Meteor.publishComposite('standardsList', function(organizationId, isDeleted = { $in: [null, false] }) {
+Meteor.publishComposite('standardsList', function (
+  organizationId,
+  isDeleted = { $in: [null, false] },
+) {
   return {
     find() {
       const userId = this.userId;
@@ -107,13 +98,13 @@ Meteor.publishComposite('standardsList', function(organizationId, isDeleted = { 
 
       return Standards.find({
         organizationId,
-        isDeleted
-      }, { fields: StandardsListProjection });
-    }
-  }
+        isDeleted,
+      }, { fields: Standards.publicFields });
+    },
+  };
 });
 
-Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
+Meteor.publishComposite('standardCard', function ({ _id, organizationId }) {
   check(_id, String);
   check(organizationId, String);
 
@@ -127,28 +118,28 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
     find() {
       return Standards.find({
         _id,
-        organizationId
+        organizationId,
       });
     },
     children: [
       getDepartmentsCursorByIds,
       getStandardFiles,
-      ({ _id }) => LessonsLearned.find({ documentId: _id })
+      ({ _id: documentId }) => LessonsLearned.find({ documentId }),
     ].map(toObjFind)
      .concat(createProblemsTree(getProblemsByStandardIds(NonConformities)))
-     .concat(createProblemsTree(getProblemsByStandardIds(Risks)))
-  }
+     .concat(createProblemsTree(getProblemsByStandardIds(Risks))),
+  };
 });
 
-Meteor.publish('standardsDeps', function(organizationId) {
+Meteor.publish('standardsDeps', function (organizationId) {
   const actionsQuery = {
     organizationId,
     type: {
       $in: [
         ActionTypes.CORRECTIVE_ACTION,
-        ActionTypes.PREVENTATIVE_ACTION
-      ]
-    }
+        ActionTypes.PREVENTATIVE_ACTION,
+      ],
+    },
   };
   const standardsFields = {
     status: 1,
@@ -160,7 +151,10 @@ Meteor.publish('standardsDeps', function(organizationId) {
   };
 
   const actions = getActionsWithLimitedFields(actionsQuery);
-  const departments = Departments.find({ organizationId }, makeOptionsFields(DepartmentsListProjection));
+  const departments = Departments.find(
+    { organizationId },
+    makeOptionsFields(Departments.publicFields)
+  );
   const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
   const riskTypes = RiskTypes.find({ organizationId });
 
@@ -168,7 +162,7 @@ Meteor.publish('standardsDeps', function(organizationId) {
     actions,
     departments,
     standards,
-    riskTypes
+    riskTypes,
   ];
 });
 
@@ -181,11 +175,11 @@ Meteor.publish('standardsCount', function (counterName, organizationId) {
 
   return new Counter(counterName, Standards.find({
     organizationId,
-    isDeleted: { $in: [false, null] }
+    isDeleted: { $in: [false, null] },
   }));
 });
 
-Meteor.publish('standardsNotViewedCount', function(counterName, organizationId) {
+Meteor.publish('standardsNotViewedCount', function (counterName, organizationId) {
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -193,12 +187,12 @@ Meteor.publish('standardsNotViewedCount', function(counterName, organizationId) 
   }
 
   const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
-    organizationId, userId
+    organizationId, userId,
   });
   const query = {
     organizationId,
     viewedBy: { $ne: userId },
-    isDeleted: { $in: [false, null] }
+    isDeleted: { $in: [false, null] },
   };
 
   if (currentOrgUserJoinedAt) {

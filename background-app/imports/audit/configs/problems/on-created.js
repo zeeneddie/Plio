@@ -1,64 +1,50 @@
-import { Standards } from '/imports/share/collections/standards.js';
-import { getUserFullNameOrEmail, getUserId } from '../../utils/helpers.js';
-import StandardAuditConfig from '../standards/standard-audit-config.js';
+import { _ } from 'meteor/underscore';
 
+import { Standards } from '/imports/share/collections/standards';
+import { getUserId } from '../../utils/helpers';
+import StandardAuditConfig from '../standards/standard-audit-config';
+import onCreated from '../common/on-created';
 
 export default {
   logs: [
-    {
-      message: 'Document created',
-    },
+    onCreated.logs.default,
     {
       message: '{{{docName}}} was linked to this document',
-      data({ newDoc }) {
-        return _(newDoc.standardsIds.length).times(() => {
-          return { docName: this.docName(newDoc) };
-        });
+      data({ newDoc, auditConfig }) {
+        return _(newDoc.standardsIds.length).times(() => ({
+          docName: auditConfig.docName(newDoc),
+        }));
       },
       logData({ newDoc: { standardsIds } }) {
-        return _(standardsIds).map((standardId) => {
-          return {
-            collection: StandardAuditConfig.collectionName,
-            documentId: standardId
-          };
-        });
-      }
-    }
+        return _(standardsIds).map((standardId) => ({
+          collection: StandardAuditConfig.collectionName,
+          documentId: standardId,
+        }));
+      },
+    },
   ],
   notifications: [
     {
-      text: '{{userName}} created {{{docDesc}}} {{{docName}}} for {{{standardDesc}}} {{{standardName}}}',
-      data({ newDoc, user }) {
-        const auditConfig = this;
-        const docDesc = auditConfig.docDescription(newDoc);
-        const docName = auditConfig.docName(newDoc);
-        const userName = getUserFullNameOrEmail(user);
-
+      text: '{{{userName}}} created {{{docDesc}}} {{{docName}}} for {{{standardDesc}}} {{{standardName}}}',
+      data({ newDoc }) {
         const standards = Standards.find({ _id: { $in: newDoc.standardsIds } });
 
-        return standards.map((standard) => {
-          return {
-            standardDesc: StandardAuditConfig.docDescription(standard),
-            standardName: StandardAuditConfig.docName(standard),
-            docDesc,
-            docName,
-            userName
-          };
-        });
+        return standards.map((standard) => ({
+          standardDesc: StandardAuditConfig.docDescription(standard),
+          standardName: StandardAuditConfig.docName(standard),
+        }));
       },
       receivers({ newDoc, user }) {
         const userId = getUserId(user);
         const standards = Standards.find({ _id: { $in: newDoc.standardsIds } });
 
-        return standards.map(({ owner }) => {
-          return (owner !== userId) ? [owner] : [];
-        });
-      }
-    }
+        return standards.map(({ owner }) => (
+          (owner !== userId) ? [owner] : []
+        ));
+      },
+    },
   ],
-  triggers: [
-    function({ newDoc: { _id } }) {
-      new this.workflowConstructor(_id).refreshStatus();
-    }
-  ]
+  trigger({ newDoc: { _id }, auditConfig }) {
+    new auditConfig.workflowConstructor(_id).refreshStatus();
+  },
 };

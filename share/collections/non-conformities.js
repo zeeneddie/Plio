@@ -3,6 +3,7 @@ import { Mongo } from 'meteor/mongo';
 import { NonConformitiesSchema } from '../schemas/non-conformities-schema.js';
 import { CollectionNames } from '../constants.js';
 import { WorkItems } from './work-items.js';
+import { Standards } from './standards';
 
 
 const NonConformities = new Mongo.Collection(CollectionNames.NCS);
@@ -27,8 +28,26 @@ NonConformities.helpers({
   },
   getWorkItems() {
     return WorkItems.find({ 'linkedDoc._id': this._id }).fetch();
-  }
+  },
 });
+
+NonConformities.publicFields = {
+  organizationId: 1,
+  serialNumber: 1,
+  sequentialId: 1,
+  title: 1,
+  cost: 1,
+  ref: 1,
+  createdAt: 1,
+  identifiedAt: 1,
+  magnitude: 1,
+  status: 1,
+  departmentsIds: 1,
+  viewedBy: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1,
+};
 
 
 export { NonConformities };

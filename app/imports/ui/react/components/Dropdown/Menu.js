@@ -5,6 +5,8 @@ import { mapProps } from 'recompose';
 const enhance = mapProps(props => ({
   ...props,
   children: React.Children.map(props.children, (child, index) => {
+    if (child.type !== Item) return child;
+
     const isActive = props.activeItemIndex === index;
 
     return React.cloneElement(child, {

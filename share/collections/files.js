@@ -16,7 +16,7 @@ Files.helpers({
   },
   extension() {
     return this.name().split('.').pop().toLowerCase();
-  }
+  },
 });
 
 export { Files };

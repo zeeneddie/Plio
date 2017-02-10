@@ -1,14 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
-import { UserPresence } from 'meteor/konecty:user-presence';
-import { Roles } from 'meteor/alanning:roles';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
-import { UserRoles } from '/imports/share/constants.js';
 import { isMobileRes } from '/imports/api/checkers.js';
 import { flattenObjects } from '/imports/api/helpers.js';
 import { MyPreferencesHelp } from '/imports/api/help-messages.js';
+import { userLogout } from '/imports/client/store/actions/globalActions';
 
 const STATUSES = [
   {
@@ -30,7 +28,7 @@ const STATUSES = [
 
 Template.UserMenu.viewmodel({
   share: 'window',
-  mixin: ['user', 'modal', 'organization', 'roles', 'mobile'],
+  mixin: ['user', 'modal', 'organization', 'roles', 'mobile', 'store'],
   linkArgs() {
     const className = 'dropdown-item';
     const orgSerialNumber = this.organizationSerialNumber();
@@ -138,7 +136,10 @@ Template.UserMenu.viewmodel({
   logout(e) {
     e.preventDefault();
 
-    Meteor.logout(() => FlowRouter.go('signIn'));
+    Meteor.logout(() => {
+      this.dispatch(userLogout);
+      FlowRouter.go('signIn');
+    });
   },
   openUserPreferences(e) {
     e.preventDefault();

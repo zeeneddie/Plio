@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 // import { Migrations } from 'meteor/percolate:migrations';
 //
 // import { NonConformities } from '/imports/share/collections/non-conformities.js';
@@ -35,7 +37,12 @@ import { Discussions } from '/imports/share/collections/discussions.js';
 import DiscussionsService from '/imports/api/discussions/discussions-service.js';
 import { Risks } from '/imports/share/collections/risks.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { DocumentTypes, CollectionNames, SystemName } from '/imports/share/constants';
+import {
+  DocumentTypes,
+  CollectionNames,
+  SystemName,
+  CustomerTypes,
+} from '/imports/share/constants';
 
 Migrations.add({
   version: 1,
@@ -51,7 +58,7 @@ Migrations.add({
           executor: SystemName,
           collection: CollectionNames.ORGANIZATIONS,
           documentId: org._id,
-          message: 'Organization created'
+          message: 'Organization created',
         });
       }
     });
@@ -90,6 +97,88 @@ Migrations.add({
     });
   },
   down() { },
+});
+
+Migrations.add({
+  version: 3,
+  name: 'Add default screen titles to organizations',
+  up() {
+    Organizations.update(
+      { homeScreenTitles: null },
+      {
+        $set: {
+          homeScreenTitles: {
+            standards: 'Standards',
+            risks: 'Risk register',
+            nonConformities: 'Non-conformities',
+            workInbox: 'Work inbox',
+          },
+        },
+      },
+      { multi: true },
+    );
+
+    console.log('Default screen titles was be added to all organization');
+  },
+  down() {
+    Organizations.update({}, { $unset: { homeScreenTitles: '' } }, { multi: true });
+
+    console.log('Default screen titles was be removed from all organization');
+  },
+});
+
+Migrations.add({
+  version: 4,
+  name: 'Add default customer type to organizations without it',
+  up() {
+    const query = { customerType: null };
+    const modifier = {
+      $set: {
+        customerType: CustomerTypes.FREE_TRIAL,
+      },
+    };
+    const options = { multi: true };
+
+    Organizations.update(query, modifier, options);
+
+    console.log('Default customer type was added to all organizations that did not have it');
+  },
+  down() {
+    const query = {};
+    const modifier = { $unset: { customerType: '' } };
+    const options = { multi: true };
+
+    Organizations.update(query, modifier, options);
+
+    console.log('Customer type was removed from all organizations');
+  },
+});
+
+Migrations.add({
+  version: 5,
+  name: 'Adds default value for \'areEmailNotificationsEnabled\' to user preferences',
+  up() {
+    const query = { 'preferences.areEmailNotificationsEnabled': null };
+    const modifier = {
+      $set: {
+        'preferences.areEmailNotificationsEnabled': true,
+      },
+    };
+    const options = { multi: true };
+
+    Meteor.users.update(query, modifier, options);
+
+    console.log(
+      'Default value for \'areEmailNotificationsEnabled\' was set for all users without it'
+    );
+  },
+  down() {
+    const query = {};
+    const modifier = { $unset: { 'preferences.areEmailNotificationsEnabled': '' } };
+    const options = { multi: true };
+
+    Meteor.users.update(query, modifier, options);
+  },
 });
 
 Meteor.startup(() => {

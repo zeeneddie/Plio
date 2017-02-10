@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import StandardsService from './standards-service.js';
@@ -7,19 +6,16 @@ import { Standards } from '/imports/share/collections/standards.js';
 import StandardsNotificationsSender from './standards-notifications-sender.js';
 import {
   IdSchema,
-  OrganizationIdSchema,
   optionsSchema,
   StandardIdSchema,
-  UserIdSchema
+  UserIdSchema,
 } from '/imports/share/schemas/schemas.js';
-import { UserRoles } from '/imports/share/constants.js';
 import {
-  canChangeStandards,
   checkOrgMembership,
   onRemoveChecker,
   onRestoreChecker,
   S_EnsureCanChange,
-  S_EnsureCanChangeChecker
+  S_EnsureCanChangeChecker,
 } from '../checkers.js';
 import { chain, chainCheckers, inject } from '/imports/api/helpers.js';
 import Method, { CheckedMethod } from '../method.js';
@@ -35,21 +31,21 @@ export const insert = new Method({
     chain(checkOrgMembership, S_EnsureCanChange)(this.userId, organizationId);
 
     return StandardsService.insert({ organizationId, ...args });
-  }
+  },
 });
 
 export const update = new CheckedMethod({
   name: 'Standards.update',
 
   validate: new SimpleSchema([
-    IdSchema, StandardsUpdateSchema, optionsSchema
+    IdSchema, StandardsUpdateSchema, optionsSchema,
   ]).validator(),
 
   check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
 
   run({ ...args }) {
     return StandardsService.update({ ...args });
-  }
+  },
 });
 
 export const updateViewedBy = new CheckedMethod({
@@ -61,7 +57,7 @@ export const updateViewedBy = new CheckedMethod({
 
   run({ _id }) {
     return StandardsService.updateViewedBy({ _id, userId: this.userId });
-  }
+  },
 });
 
 export const remove = new CheckedMethod({
@@ -73,7 +69,7 @@ export const remove = new CheckedMethod({
 
   run({ _id }) {
     return StandardsService.remove({ _id, deletedBy: this.userId });
-  }
+  },
 });
 
 export const restore = new CheckedMethod({
@@ -85,7 +81,7 @@ export const restore = new CheckedMethod({
 
   run({ _id }) {
     return StandardsService.restore({ _id });
-  }
+  },
 });
 
 export const addedToNotifyList = new Method({
@@ -93,18 +89,36 @@ export const addedToNotifyList = new Method({
 
   validate: new SimpleSchema([
     StandardIdSchema,
-    UserIdSchema
+    UserIdSchema,
   ]).validator(),
 
   check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
 
   run({ standardId, userId }) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     if (userId !== this.userId) {
       return new StandardsNotificationsSender(standardId).addedToNotifyList(userId);
     }
-  }
+
+    return undefined;
+  },
+});
+
+export const removedFromNotifyList = new Method({
+  name: 'Standards.removedFromNotifyList',
+
+  validate: new SimpleSchema([
+    StandardIdSchema,
+  ]).validator(),
+
+  check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
+
+  run({ standardId }) {
+    if (this.isSimulation) return undefined;
+
+    return new StandardsNotificationsSender(standardId).removedFromNotifyList(this.userId);
+  },
 });

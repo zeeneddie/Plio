@@ -26,16 +26,24 @@ Template.Risks_List.viewmodel({
     const riskId = this.riskId();
     const { result:contains, first:defaultDoc } = this._findRiskForFilter(riskId);
 
-    if (!contains) {
-      if (defaultDoc) {
+    if (contains) {
+      return;
+    }
+
+    if (!defaultDoc) {
+      Meteor.setTimeout(() => this.goToRisks(), 0);
+    } else {
+      const allRisks = this._getRisksByQuery({
+        isDeleted: { $in: [true, false] },
+      }).fetch();
+
+      if (!riskId || (riskId && findById(riskId, allRisks))) {
         const { _id } = defaultDoc;
 
         Meteor.setTimeout(() => {
           this.goToRisk(_id);
           this.expandCollapsed(_id);
         }, 0);
-      } else {
-        Meteor.setTimeout(() => this.goToRisks(), 0);
       }
     }
   },
@@ -53,15 +61,15 @@ Template.Risks_List.viewmodel({
 
     switch(this.activeRiskFilterId()) {
       case 1:
-        const types = this.types();
+        const types = this.risksByTypes();
         return resulstsFromItems(types);
         break;
       case 2:
-        const statuses = this.statuses();
+        const statuses = this.risksByStatuses();
         return resulstsFromItems(statuses);
         break;
       case 3:
-        const departments = this.departments();
+        const departments = this.risksByDepartments();
         return resulstsFromItems(departments);
         break;
       case 4:
@@ -146,6 +154,13 @@ Template.Risks_List.viewmodel({
   },
   onSearchInputValue() {
     return value => extractIds(this._findRiskForFilter().array);
+  },
+  onAfterSearch() {
+    return (searchText, searchResult) => {
+      if (searchText && searchResult.length) {
+        this.goToRisk(searchResult[0]);
+      }
+    };
   },
   _getTotalUnreadMessages(risks) {
     const riskIds = extractIds(risks);

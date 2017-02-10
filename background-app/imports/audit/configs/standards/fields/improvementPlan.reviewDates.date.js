@@ -1,40 +1,17 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceiversForIPReviewDate } from '../helpers';
+import { getReceivers } from '../helpers';
+import IPReviewDate from '../../common/fields/improvementPlan.reviewDates.date';
 
 
 export default {
   field: 'improvementPlan.reviewDates.$.date',
   logs: [
-    {
-      message: {
-        [ChangesKinds.FIELD_CHANGED]:
-          'Improvement plan review date changed from "{{oldValue}}" to "{{newValue}}"'
-      }
-    }
+    IPReviewDate.logs.default,
   ],
   notifications: [
-    {
-      text: {
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed improvement plan\'s review date for {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"'
-      }
-    }
+    IPReviewDate.notifications.default,
   ],
-  data({ diffs, newDoc, user }) {
-    const { newValue, oldValue } = diffs['improvementPlan.reviewDates.$.date'];
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
-
-    return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
-      newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
-    };
-  },
+  data: IPReviewDate.data,
   receivers({ newDoc, user }) {
-    return getReceiversForIPReviewDate({ newDoc, user });
-  }
+    return getReceivers(newDoc, user);
+  },
 };

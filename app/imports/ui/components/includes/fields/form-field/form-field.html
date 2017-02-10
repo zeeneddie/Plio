@@ -10,19 +10,23 @@
     </label>
     <div class="col-xs-12 col-sm-{{sm}}">
       {{> Template.contentBlock}}
-      {{#if helpText}}
-        <div class="collapse guidance-panel" {{b "ref: collapse"}}>
-          <div class="card-block">
-            <div>{{helpText}}</div>
-            <div class="btn-group">
-              <a class="btn btn-link guidance-panel-close pointer"
+    </div>
+    {{#if helpText}}
+      <div class="row">
+        <div class="col-sm-8 field-help-message pull-sm-right pull-xs-right">
+          <div class="collapse guidance-panel" {{b "ref: collapse"}}>
+            <div class="card-block">
+              <div>{{helpText}}</div>
+              <div class="btn-group">
+                <a class="btn btn-link guidance-panel-close pointer"
                   {{b "click: closeHelpPanel"}}>
-                Close
-              </a>
+                  Close
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      {{/if}}
-    </div>
+      </div>
+    {{/if}}
   </div>
 </template>

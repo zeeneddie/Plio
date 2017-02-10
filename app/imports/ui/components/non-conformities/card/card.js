@@ -9,11 +9,12 @@ import { restore, remove } from '/imports/api/non-conformities/methods.js';
 import { NonConformitiesHelp } from '/imports/api/help-messages.js';
 
 Template.NC_Card_Read.viewmodel({
+  share: 'search',
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'workInbox'],
   isReadOnly: false,
   isReady: false,
   showCard() {
-    return this.NCs().length;
+    return this.NCs().length && !this.noSearchResults();
   },
   ActionTypes() {
     return ActionTypes;
@@ -76,5 +77,8 @@ Template.NC_Card_Read.viewmodel({
     if (!isDeleted) return;
 
     remove.call({ _id }, cb);
-  }
+  },
+  noSearchResults() {
+    return this.searchText() && !this.searchResult().array().length;
+  },
 });

@@ -2,7 +2,12 @@ import { Template } from 'meteor/templating';
 import { SHA256 } from 'meteor/sha';
 
 import { Organizations } from '/imports/share/collections/organizations';
-
+import {
+  ORG_DELETE as ORG_DELETE_SWAL_PARAMS,
+  ORG_DELETE_PASSWORD as ORG_DELETE_SWAL_PASSWORD_PARAMS,
+} from '/imports/api/swal-params';
+import { compileTemplateObject } from '/imports/api/helpers';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.OrgDeletion.viewmodel({
   mixin: 'modal',
@@ -22,37 +27,15 @@ Template.OrgDeletion.viewmodel({
     this._showDeleteOrgWarning();
   },
   _showDeleteOrgWarning() {
-    const swalWarningParams = {
-      title: 'Are you sure?',
-      text: 'Deleting a Plio organization will delete all records linked to that organization. ' +
-        'Deleting is an irreversible action and you will not be able to recover this data afterwards. ' +
-        'Do you still want to go ahead and delete?',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Delete',
-      closeOnConfirm: false,
-      confirmButtonClass: 'btn-md btn-danger'
-    };
-
-    swal(swalWarningParams, () => {
+    swal(ORG_DELETE_SWAL_PARAMS, () => {
       this._showDeleteOrgPasswordInput();
     });
   },
   _showDeleteOrgPasswordInput() {
-    const { name:orgName } = this.organization() || {};
+    const { name: orgName } = this.organization() || {};
+    const params = compileTemplateObject(ORG_DELETE_SWAL_PASSWORD_PARAMS, { orgName });
 
-    const swalInputParams = {
-      title: `Confirm deletion of ${orgName} organization`,
-      text: 'Enter your password:',
-      type: 'input',
-      inputType: 'password',
-      showCancelButton: true,
-      confirmButtonText: 'Confirm',
-      closeOnConfirm: false,
-      showLoaderOnConfirm: true
-    };
-
-    swal(swalInputParams, (password) => {
+    swal(params, (password) => {
       if (!password) {
         swal.showInputError('Password can not be empty');
         return false;
@@ -62,7 +45,7 @@ Template.OrgDeletion.viewmodel({
     });
   },
   _deleteOrganization(password) {
-    const { name:orgName } = this.organization() || {};
+    const { name: orgName } = this.organization() || {};
     const organizationId = this.organizationId();
     password = SHA256(password);
 
@@ -71,9 +54,21 @@ Template.OrgDeletion.viewmodel({
       password
     }, (err, res) => {
       if (err) {
-        swal('Oops... Something went wrong!', err.reason || err, 'error');
+        swal({
+          title: 'Oops... Something went wrong!',
+          text: err.reason || err,
+          type: 'error',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
+        });
       } else {
-        swal('Success', `Organization ${orgName} has been deleted`, 'success');
+        swal({
+          title: 'Success',
+          text: `Organization ${orgName} has been deleted`,
+          type: 'success',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
+        });
       }
 
       this.afterDelete && this.afterDelete(err, res, organizationId);

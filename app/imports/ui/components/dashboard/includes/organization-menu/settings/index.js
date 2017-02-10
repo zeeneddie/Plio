@@ -1,4 +1,3 @@
-import './customers';
 import './departments';
 import './danger-zone';
 import './org-currency';
@@ -16,3 +15,4 @@ import './main.js';
 import './settings.html';
 import './settings.js';
 import './risk-types';
+import './homescreen-title';

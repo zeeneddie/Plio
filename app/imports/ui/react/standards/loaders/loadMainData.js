@@ -7,7 +7,7 @@ import {
   setStandardBookSections,
   setStandardTypes,
   setStandards,
-} from '/client/redux/actions/collectionsActions';
+} from '/imports/client/store/actions/collectionsActions';
 
 export default function loadMainData({ dispatch, organizationId }, onData) {
   const query = { organizationId };
@@ -15,6 +15,7 @@ export default function loadMainData({ dispatch, organizationId }, onData) {
   const sections = StandardsBookSections.find(query, options).fetch();
   const types = StandardTypes.find(query, options).fetch();
   const standards = Standards.find(query, options).fetch();
+
   const actions = [
     setStandardBookSections(sections),
     setStandardTypes(types),

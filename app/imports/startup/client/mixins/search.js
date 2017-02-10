@@ -1,4 +1,7 @@
 import invoke from 'lodash.invoke';
+import { _ } from 'meteor/underscore';
+
+import { createSearchRegex } from '/imports/api/helpers';
 
 export default {
   searchResultsNumber: 0,
@@ -7,30 +10,15 @@ export default {
     return this.searchQuery(invoke(this, prop), fields);
   },
 
-  searchQuery(input, fields, precise = false) {
+  searchQuery(input, fields, isPrecise = false) {
     const searchObject = {};
-    let value = `${input}`.trim();
+    const value = `${input}`.trim();
 
     if (value) {
-      let r;
-
-      try {
-        if (precise) {
-          value = value.replace(/"/g, '');
-          r = new RegExp(`.*(${value}).*`, 'i');
-        } else {
-          r = value.split(' ')
-              .filter(word => !!word)
-              .map(word => `(?=.*\\b.*${word}.*\\b)`)
-              .join('');
-
-          r = new RegExp(`^${r}.*$`, 'i');
-        }
-      } catch (err) {
-      } // ignore errors
+      const r = createSearchRegex(value, isPrecise);
 
       if (_.isArray(fields)) {
-        fields = _.map(fields, (field) => {
+        const mappedFields = _.map(fields, (field) => {
           const obj = {};
 
           obj[field.name] = field.subField
@@ -39,7 +27,7 @@ export default {
 
           return obj;
         });
-        searchObject.$or = fields;
+        searchObject.$or = mappedFields;
       } else {
         searchObject[fields] = r;
       }

@@ -1,4 +1,4 @@
-import { Notifications } from '/imports/share/collections/notifications.js';
+import { Notifications } from '/imports/share/collections/notifications';
 
 export default {
   collection: Notifications,
@@ -30,5 +30,16 @@ export default {
 
   remove({ _id }) {
     return this.collection.remove({ _id });
-  }
+  },
+
+  unsubscribe({ documentId, documentType, userId }, { collection }) {
+    const query = { _id: documentId };
+    const modifier = {
+      $pull: {
+        notify: userId,
+      },
+    };
+
+    return collection.update(query, modifier);
+  },
 };

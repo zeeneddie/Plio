@@ -1,5 +1,5 @@
-import { Risks } from '/imports/share/collections/risks.js';
-import ProblemWorkflow from './ProblemWorkflow.js';
+import { Risks } from '/imports/share/collections/risks';
+import ProblemWorkflow from './ProblemWorkflow';
 
 
 export default class RiskWorkflow extends ProblemWorkflow {

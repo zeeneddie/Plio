@@ -37,3 +37,7 @@ import '../../api/mammoth';
 import '../../api/work-items';
 
 import '../../api/files';
+
+import '../../api/help-docs';
+
+import '../../api/data-export';
