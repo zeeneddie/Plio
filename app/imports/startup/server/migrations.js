@@ -191,22 +191,27 @@ Migrations.add({
     });
 
     organizations.forEach((org) => {
-      Organizations.update({
-        _id: org._id,
-      }, {
+      const reviewerId = org.createdBy;
+      const annualDate = org.createdAt;
+      const query = { _id: org._id };
+      const modifier = {
         $set: {
           review: {
             risks: {
-              annualDate: org.createdAt,
+              reviewerId,
+              annualDate,
               ...OrganizationDefaults.review.risks,
             },
             standards: {
-              annualDate: org.createdAt,
+              reviewerId,
+              annualDate,
               ...OrganizationDefaults.review.standards,
             },
           },
         },
-      });
+      };
+
+      Organizations.update(query, modifier);
     });
 
     console.log('Review settings were added to organizations');

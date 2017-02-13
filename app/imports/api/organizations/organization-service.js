@@ -3,10 +3,10 @@ import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
 import { _ } from 'meteor/underscore';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
-import StandardsBookSectionService from '../standards-book-sections/standards-book-section-service.js';
-import StandardsTypeService from '../standards-types/standards-type-service.js';
-import RisksTypeService from '../risk-types/risk-types-service.js';
+import { Organizations } from '/imports/share/collections/organizations';
+import StandardsBookSectionService from '../standards-book-sections/standards-book-section-service';
+import StandardsTypeService from '../standards-types/standards-type-service';
+import RisksTypeService from '../risk-types/risk-types-service';
 import {
   DefaultStandardSections,
   DefaultStandardTypes,
@@ -16,9 +16,9 @@ import {
   OrgMemberRoles,
   UserMembership,
   UserRoles,
-} from '/imports/share/constants.js';
-import { generateSerialNumber } from '/imports/share/helpers.js';
-import OrgNotificationsSender from './org-notifications-sender.js';
+} from '/imports/share/constants';
+import { generateSerialNumber } from '/imports/share/helpers';
+import OrgNotificationsSender from './org-notifications-sender';
 import { Actions } from '/imports/share/collections/actions';
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { Departments } from '/imports/share/collections/departments';
@@ -138,6 +138,17 @@ export default OrganizationService = {
         [`reminders.${type}.${reminderType}`]: { timeValue, timeUnit },
       },
     });
+  },
+
+  setReviewReviewerId({ _id, documentKey, reviewerId }) {
+    const query = { _id };
+    const modifier = {
+      $set: {
+        [`review.${documentKey}.reviewerId`]: reviewerId,
+      },
+    };
+
+    return this.collection.update(query, modifier);
   },
 
   setReviewFrequency({ _id, documentKey, frequency }) {

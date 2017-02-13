@@ -3,7 +3,9 @@ import {
   setReviewAnnualDate,
   setReviewReminderTimeValue,
   setReviewReminderTimeUnit,
+  setReviewReviewerId,
 } from '/imports/api/organizations/methods';
+import { handleMethodResult } from '/imports/api/helpers';
 
 export const onFrequencyChanged = ({ organization }) => (fieldName, fieldValue) => {
   const [documentKey] = fieldName.split('.');
@@ -15,7 +17,7 @@ export const onFrequencyChanged = ({ organization }) => (fieldName, fieldValue) 
       timeUnit: fieldValue.timeUnit,
     },
     documentKey,
-  });
+  }, handleMethodResult);
 };
 
 export const onAnnualDateChanged = ({ organization }) => (fieldName, fieldValue) => {
@@ -25,7 +27,7 @@ export const onAnnualDateChanged = ({ organization }) => (fieldName, fieldValue)
     _id: organization._id,
     annualDate: fieldValue,
     documentKey,
-  });
+  }, handleMethodResult);
 };
 
 export const onReminderChanged = ({ organization }) => (fieldName, fieldValue) => {
@@ -46,5 +48,16 @@ export const onReminderChanged = ({ organization }) => (fieldName, fieldValue) =
     args = { timeUnit: fieldValue };
   }
 
-  method.call(Object.assign({}, commonArgs, args));
+  method.call(Object.assign({}, commonArgs, args), handleMethodResult);
+};
+
+export const onReviewerChanged = ({ organization }) => (fieldName, fieldValue, callback) => {
+  const [documentKey] = fieldName.split('.');
+  const methodProps = {
+    documentKey,
+    reviewerId: fieldValue,
+    _id: organization._id,
+  };
+
+  setReviewReviewerId.call(methodProps, handleMethodResult(callback));
 };

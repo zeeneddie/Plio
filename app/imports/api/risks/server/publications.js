@@ -8,7 +8,10 @@ import { RiskTypes } from '/imports/share/collections/risk-types';
 import { isOrgMember } from '../../checkers';
 import { Departments } from '/imports/share/collections/departments';
 import { Reviews } from '/imports/share/collections/reviews';
+<<<<<<< HEAD
 import { RisksListProjection, DepartmentsListProjection } from '/imports/api/constants';
+=======
+>>>>>>> 19dc9412803275a25fbd3ce4b134ce78f8dcd531
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import Counter from '../../counter/server';
 import {

@@ -5,23 +5,25 @@ import {
   OrgCurrencies, WorkflowTypes, UserMembership,
   StandardTitles, RiskTitles, NonConformitiesTitles,
   WorkInboxTitles, CustomerTypes, PossibleReviewFrequencies,
+  HomeScreenTitlesTypes,
 } from '../constants';
 import {
   BaseEntitySchema, ReminderTimePeriodSchema,
   TimezoneSchema, TimePeriodSchema,
+  idSchemaDoc,
 } from './schemas';
 
 export const HomeTitlesSchema = new SimpleSchema({
-  standards: {
+  [HomeScreenTitlesTypes.STANDARDS]: {
     type: String,
   },
-  risks: {
+  [HomeScreenTitlesTypes.RISKS]: {
     type: String,
   },
-  nonConformities: {
+  [HomeScreenTitlesTypes.NON_CONFORMITIES]: {
     type: String,
   },
-  workInbox: {
+  [HomeScreenTitlesTypes.WORK_INBOX]: {
     type: String,
   },
 });
@@ -163,6 +165,20 @@ const rkGuidelinesSchema = new SimpleSchema({
   },
 });
 
+export const reviewReviewerIdSchema = new SimpleSchema({
+  reviewerId: {
+    type: idSchemaDoc,
+    autoValue() {
+      if (this.isInsert && !this.isSet) {
+        const createdBy = this.field('createdBy');
+        if (createdBy.isSet) {
+          return createdBy.value;
+        }
+      }
+    },
+  },
+});
+
 export const reviewFrequencySchema = new SimpleSchema({
   frequency: {
     type: TimePeriodSchema,
@@ -191,6 +207,7 @@ export const reviewAnnualDateSchema = new SimpleSchema({
 });
 
 export const reviewConfigSchema = new SimpleSchema([
+  reviewReviewerIdSchema,
   reviewFrequencySchema,
   reviewAnnualDateSchema,
   {
@@ -274,10 +291,10 @@ const OrganizationSchema = new SimpleSchema([
     homeScreenTitles: {
       type: HomeTitlesSchema,
       defaultValue: {
-        standards: _.first(StandardTitles),
-        risks: _.first(RiskTitles),
-        nonConformities: _.first(NonConformitiesTitles),
-        workInbox: _.first(WorkInboxTitles),
+        [HomeScreenTitlesTypes.STANDARDS]: _.first(StandardTitles),
+        [HomeScreenTitlesTypes.RISKS]: _.first(RiskTitles),
+        [HomeScreenTitlesTypes.NON_CONFORMITIES]: _.first(NonConformitiesTitles),
+        [HomeScreenTitlesTypes.WORK_INBOX]: _.first(WorkInboxTitles),
       },
     },
     serialNumber: {
@@ -296,7 +313,7 @@ const OrganizationSchema = new SimpleSchema([
     lastAccessedDate: {
       type: Date,
       defaultValue: new Date,
-    }
+    },
   },
 ]);
 
