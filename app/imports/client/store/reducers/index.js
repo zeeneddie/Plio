@@ -16,6 +16,7 @@ import mobile from './mobileReducer';
 import counters from './countersReducer';
 import helpDocs from './helpDocsReducer';
 import modal from './modalReducer';
+import dataImport from './dataImportReducer';
 
 const appReducer = combineReducers({
   discussion,
@@ -31,6 +32,7 @@ const appReducer = combineReducers({
   global,
   helpDocs,
   modal,
+  dataImport,
 });
 
 const rootReducer = (state, action) => {

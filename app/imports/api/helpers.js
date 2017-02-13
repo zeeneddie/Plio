@@ -7,7 +7,6 @@ import { _ } from 'meteor/underscore';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { shallowEqual } from 'recompose';
 import { $ } from 'meteor/jquery';
-import moment from 'moment';
 
 import { Actions } from '/imports/share/collections/actions.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
