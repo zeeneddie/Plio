@@ -78,13 +78,6 @@ export const getCollectionNameByDocType = (docType) => ({
   [DocumentTypes.RISK]: CollectionNames.RISKS,
 })[docType];
 
-<<<<<<< HEAD
-export const getFormattedDate = (date, stringFormat) => {
-  let format = stringFormat;
-  if (typeof format !== 'string') format = 'DD MMM YYYY';
-  return moment(date).format(format);
-};
-=======
 export const getDocTypePlural = (docType) => ({
   [DocumentTypes.STANDARD]: DocumentTypesPlural.STANDARDS,
   [DocumentTypes.RISK]: DocumentTypesPlural.RISKS,
@@ -92,7 +85,6 @@ export const getDocTypePlural = (docType) => ({
 })[docType];
 
 export const getFormattedDate = (date, stringFormat) => moment(date).format(stringFormat);
->>>>>>> 19dc9412803275a25fbd3ce4b134ce78f8dcd531
 
 export const getLinkedDoc = (documentId, documentType) => {
   const collection = getCollectionByDocType(documentType);
