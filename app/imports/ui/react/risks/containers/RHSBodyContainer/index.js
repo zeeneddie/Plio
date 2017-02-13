@@ -47,7 +47,6 @@ const propsMapper = ({
   standardsByIds,
   ...props
 }) => {
-  const p1 = performance.now();
   const pickUsers = pickDocuments(['_id', 'profile', 'emails'], usersByIds);
   const predicate = every([
     notDeleted,
