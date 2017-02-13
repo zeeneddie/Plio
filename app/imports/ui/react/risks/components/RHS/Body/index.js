@@ -120,7 +120,7 @@ const Body = ({
       </Block>
     )}
 
-    {analysis.status !== 0 && (updateOfStandards.executor || updateOfStandards.targetDate) && (
+    {analysis.status === 1 && (updateOfStandards.executor || updateOfStandards.targetDate) && (
       <Block>
         <span>{AnalysisTitles.updateOfRiskRecord}</span>
         <Analysis {...updateOfStandards} />
