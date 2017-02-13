@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 
 import RisksListItem from '../../components/RisksListItem';
+import { getFormattedDate } from '/imports/share/helpers';
 import { getFullNameOrEmail } from '/imports/api/users/helpers';
-import _date_ from '/imports/startup/client/mixins/date';
 import { setUrlItemId } from '/imports/client/store/actions/globalActions';
 import { updateViewedBy } from '/imports/api/risks/methods';
 import withUpdateViewedBy from '../../../helpers/withUpdateViewedBy';
@@ -16,7 +16,7 @@ import { getClassByScore, getPrimaryScore } from '/imports/api/risks/helpers';
 import { getClassByStatus } from '/imports/api/problems/helpers';
 
 export default compose(
-  shouldUpdate((props, nextProps) => Boolean(
+  shouldUpdate((props, nextProps) => !!(
     props.orgSerialNumber !== nextProps.orgSerialNumber ||
     props.userId !== nextProps.userId ||
     (props._id !== props.urlItemId && props._id === nextProps.urlItemId) ||
@@ -41,7 +41,7 @@ export default compose(
       'primaryScore',
     ]);
     const pickKeysDeleted = pickC(['deletedAt', 'deletedBy']);
-    return Boolean(
+    return !!(
       (props._id !== props.urlItemId && props._id === nextProps.urlItemId) ||
       (props._id === props.urlItemId && props._id !== nextProps.urlItemId) ||
       notEquals(pickKeys(props), pickKeys(nextProps)) ||
@@ -70,9 +70,9 @@ export default compose(
       return getPath('risk')(params, queryParams);
     })();
     const isNew = isNewDoc(props.organization, props.userId, props);
-    const createdAtText = _date_.renderDate(props.createdAt);
+    const createdAtText = getFormattedDate(props.createdAt);
     const deletedByText = getFullNameOrEmail(props.deletedBy);
-    const deletedAtText = _date_.renderDate(props.deletedAt);
+    const deletedAtText = getFormattedDate(props.deletedAt);
     const isActive = props.urlItemId === props._id;
     const sequentialId = {
       className: props.filter === RiskFilterIndexes.STATUS

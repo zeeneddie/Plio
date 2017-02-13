@@ -113,14 +113,14 @@ const Body = ({
       {!!departments.length && (<Departments {...{ departments }} />)}
     </ListGroup>
 
-    {!_.isEmpty(analysis) && (
+    {(analysis.executor || analysis.targetDate) && (
       <Block>
         <span>{AnalysisTitles.riskAnalysis}</span>
         <Analysis {...analysis} />
       </Block>
     )}
 
-    {!_.isEmpty(updateOfStandards) && (
+    {analysis.status !== 0 && (updateOfStandards.executor || updateOfStandards.targetDate) && (
       <Block>
         <span>{AnalysisTitles.updateOfRiskRecord}</span>
         <Analysis {...updateOfStandards} />
