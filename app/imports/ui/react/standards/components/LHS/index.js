@@ -1,49 +1,81 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { ListGroup } from 'reactstrap';
 
-import propTypes from './propTypes';
+import { DocumentTypes } from '/imports/share/constants';
 import LHSContainer from '../../../containers/LHSContainer';
 import SectionListContainer from '../../containers/SectionListContainer';
 import TypeListContainer from '../../containers/TypeListContainer';
 import DeletedStandardListContainer from '../../containers/DeletedStandardListContainer';
+import ModalHandle from '../../../components/ModalHandle';
+import ModalBulkImport from '../../../components/ModalBulkImport';
+import AddButton from '../../../components/Buttons/AddButton';
 
-const StandardsLHS = (props) => {
+const propTypes = {
+  filter: PropTypes.number,
+  standards: PropTypes.arrayOf(PropTypes.object),
+  onToggleCollapse: PropTypes.func,
+  animating: PropTypes.bool,
+  searchText: PropTypes.string,
+  searchResultsText: PropTypes.string,
+  onSearchTextChange: PropTypes.func,
+  onClear: PropTypes.func,
+  onModalOpen: PropTypes.func,
+};
+
+const StandardsLHS = ({
+  filter,
+  standards,
+  onToggleCollapse,
+  animating,
+  searchText,
+  searchResultsText,
+  onSearchTextChange,
+  onClear,
+  onModalOpen,
+}) => {
   let content;
+  let AddButtonComponent = undefined;
 
-  switch (props.filter) {
+  standards = []; // TEMP
+
+  if (!standards.length) {
+    const openByClickOn = (
+      <AddButton>Add</AddButton>
+    );
+
+    AddButtonComponent = () => (
+      <ModalHandle closeOnEsc closeOnOutsideClick title="Add" {...{ openByClickOn }}>
+        <ModalBulkImport documentType={DocumentTypes.STANDARD} />
+      </ModalHandle>
+    );
+  }
+
+  switch (filter) {
     case 1:
     default:
       content = (
-        <SectionListContainer
-          standards={props.standards}
-          onToggleCollapse={props.onToggleCollapse}
-        />
+        <SectionListContainer {...{ standards, onToggleCollapse }} />
       );
       break;
     case 2:
       content = (
-        <TypeListContainer
-          standards={props.standards}
-          onToggleCollapse={props.onToggleCollapse}
-        />
+        <TypeListContainer {...{ standards, onToggleCollapse }} />
       );
       break;
     case 3:
       content = (
-        <div className="list-group">
-          <DeletedStandardListContainer standards={props.standards} />
-        </div>
+        <ListGroup>
+          <DeletedStandardListContainer {...{ standards }} />
+        </ListGroup>
       );
       break;
   }
 
   return (
     <LHSContainer
-      animating={props.animating}
-      searchText={props.searchText}
-      searchResultsText={props.searchResultsText}
-      onChange={props.onSearchTextChange}
-      onClear={props.onClear}
-      onModalButtonClick={props.onModalOpen}
+      {...{ animating, searchText, searchResultsText, onClear, AddButtonComponent }}
+      onChange={onSearchTextChange}
+      onModalButtonClick={onModalOpen}
     >
       {content}
     </LHSContainer>

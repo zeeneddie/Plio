@@ -8,7 +8,7 @@ const ModalHandle = ({
   closeOnOutsideClick = false,
   openByClickOn,
   children,
-  ...props,
+  ...props
 }) => (
   <Portal {...{ closeOnEsc, closeOnOutsideClick, openByClickOn }}>
     <ModalWindowContainer {...props}>

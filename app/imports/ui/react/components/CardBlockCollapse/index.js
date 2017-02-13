@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { CardTitle } from 'reactstrap';
+import cx from 'classnames';
 
 import withStateCollapsed from '../../helpers/withStateCollapsed';
 import CollapseBlock from '../CollapseBlock';
@@ -12,6 +13,11 @@ const CardBlockCollapse = withStateCollapsed(true)(({
   rightText,
   loading,
   children,
+  props: {
+    collapseBlock: { tag = 'div', ...collapseBlock } = {},
+    leftText: { className: lTextCx, ...lTextProps } = {},
+    rightText: { className: rTextCx, ...rTextProps } = {},
+  } = {},
 }) => {
   let rightContent = null;
   const classNames = {
@@ -24,12 +30,16 @@ const CardBlockCollapse = withStateCollapsed(true)(({
   else if (rightText) rightContent = <span className="text-muted">{rightText}</span>;
 
   return (
-    <CollapseBlock {...{ classNames, collapsed, onToggleCollapse }} tag="div">
+    <CollapseBlock {...{ tag, classNames, collapsed, onToggleCollapse, ...collapseBlock }}>
       <div>
-        <CardTitle className="pull-xs-left">{leftText}</CardTitle>
-        <CardTitle className="pull-xs-right">
-          {rightContent}
+        <CardTitle className={cx('pull-xs-left', lTextCx)} {...lTextProps}>
+          {leftText}
         </CardTitle>
+        {rightContent && (
+          <CardTitle className={cx('pull-xs-right', rTextCx)} {...rTextProps}>
+            {rightContent}
+          </CardTitle>
+        )}
       </div>
       {children}
     </CollapseBlock>
