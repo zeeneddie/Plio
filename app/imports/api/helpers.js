@@ -214,6 +214,8 @@ export const identity = _.identity;
 */
 export const join = curry((separator, array) => Object.assign([], array).join(separator));
 
+export const trim = str => `${str}`.trim();
+
 /*
   const gt10 = n => n > 10;
   either(gt10, identity)(2);
@@ -228,6 +230,18 @@ export const either = (...fns) => (...args) => {
   }
   return result;
 };
+
+export const empty = (a) => {
+  if (typeof a === 'string') return '';
+  else if (typeof a === 'function') return () => null;
+  else if (Array.isArray(a)) return [];
+  else if (a !== null && typeof a === 'object') return {};
+  return a;
+};
+
+export const filterC = curry((f, array) => Object.assign([], array).filter(f));
+
+export const mapC = curry((transformer, array) => Object.assign([], array).map(transformer));
 
 export const handleMethodResult = (cb) => {
   return (err, res) => {

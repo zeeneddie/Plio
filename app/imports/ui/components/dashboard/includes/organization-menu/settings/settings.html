@@ -53,6 +53,10 @@
         guidelines=rkScoringGuidelines
         organizationId=organizationId}}
 
+    <div class="card-divider">
+      {{> React component=reviewContainer}}
+    </div>
+
     {{#if showDangerZone}}
       {{> OrgSettings_DangerZone
           organizationId=organizationId}}

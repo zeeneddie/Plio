@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import { _ } from 'meteor/underscore';
-import { compose, withContext, withState, defaultProps } from 'recompose';
+import { compose, withContext, withState, defaultProps, lifecycle } from 'recompose';
 import serialize from 'form-serialize';
+import get from 'lodash.get';
 import set from 'lodash.set';
 
 import FormGroup from './FormGroup';
@@ -10,24 +11,36 @@ import SubForm from './SubForm';
 
 const enhance = compose(
   defaultProps({ autosave: false }),
-  withState('formData', 'setFormData', {}),
+  withState('formData', 'setFormData', props => props.initialFormData || {}),
+  lifecycle({
+    componentWillReceiveProps(nextProps) {
+      // update form data if document was changed in Minimongo
+      const shoudSetNewFormData = _.every([
+        !_.isEqual(nextProps.initialFormData, this.props.formData),
+        !_.isEqual(nextProps.initialFormData, this.props.initialFormData),
+      ]);
+
+      if (shoudSetNewFormData) {
+        this.props.setFormData(nextProps.initialFormData);
+      }
+    },
+  }),
   withContext(
     {
       changeField: PropTypes.func,
       getField: PropTypes.func,
     },
     (props) => ({
-      changeField(fieldName, newFieldValue) {
-        if (!props.autosave) return;
-
-        const newFormData = set(props.formData, fieldName, newFieldValue);
-
+      changeField(fieldName, newFieldValue, shouldSave = true, ...other) {
+        const newFormData = set({ ...props.formData }, fieldName, newFieldValue);
         props.setFormData(newFormData);
 
-        _.isFunction(props.onFormChange) && props.onFormChange(fieldName, newFieldValue);
+        if (shouldSave && props.autosave && _.isFunction(props.onFormChange)) {
+          props.onFormChange(fieldName, newFieldValue, ...other);
+        }
       },
       getField(fieldName) {
-        return props.formData[fieldName];
+        return get(props.formData, fieldName);
       },
     }),
   )

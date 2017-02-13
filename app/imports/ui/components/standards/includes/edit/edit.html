@@ -66,8 +66,14 @@
           documentId=standard._id
           documentType="standard"
           linkedTo=standard.title}}
+
+      {{> Subcards_Reviews_Edit
+          documentId=standard._id
+          documentType="standard"}}
       <div class="card-block text-xs-center">
-        <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
+        <button type="button" class="btn btn-secondary" {{b "click: remove"}}>
+          Delete
+        </button>
       </div>
     </div>
   </div>

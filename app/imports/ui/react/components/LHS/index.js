@@ -38,10 +38,9 @@ const LHS = ({
             isFocused={isFocused}
           >
             <TextInput
+              {...{ onChange, onBlur, onFocus }}
+              uncontrolled
               value={searchText}
-              onChange={onChange}
-              onBlur={onBlur}
-              onFocus={onFocus}
               disabled={animating}
               getRef={input => (searchInput = input)}
               className="form-control"

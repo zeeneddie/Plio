@@ -1,8 +1,13 @@
 import { Meteor } from 'meteor/meteor';
 
 import { Organizations } from '/imports/share/collections/organizations';
-import { ProblemTypes } from '/imports/share/constants';
+import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 
+const getPathPrefixByDocType = (docType) => ({
+  [DocumentTypes.STANDARD]: 'standards',
+  [DocumentTypes.RISK]: 'risks',
+  [DocumentTypes.NON_CONFORMITY]: 'non-conformities',
+})[docType];
 
 export const getAbsoluteUrl = path => (
   Meteor.absoluteUrl(path, {
@@ -20,7 +25,7 @@ export const getDocUrl = ({ serialNumber, documentId, prefix }) => (
 
 export const getNCUrl = (serialNumber, documentId) => (
   getDocUrl({
-    prefix: 'non-conformities',
+    prefix: getPathPrefixByDocType(DocumentTypes.NON_CONFORMITY),
     serialNumber,
     documentId,
   })
@@ -28,7 +33,7 @@ export const getNCUrl = (serialNumber, documentId) => (
 
 export const getRiskUrl = (serialNumber, documentId) => (
   getDocUrl({
-    prefix: 'risks',
+    prefix: getPathPrefixByDocType(DocumentTypes.RISK),
     serialNumber,
     documentId,
   })
@@ -36,7 +41,7 @@ export const getRiskUrl = (serialNumber, documentId) => (
 
 export const getStandardUrl = (serialNumber, documentId) => (
   getDocUrl({
-    prefix: 'standards',
+    prefix: getPathPrefixByDocType(DocumentTypes.STANDARD),
     serialNumber,
     documentId,
   })
@@ -64,5 +69,12 @@ export const getDocUrlByOrganizationId = prefix => ({ _id, organizationId }) => 
 };
 
 export const getDocUnsubscribePath = path => (path ? `${path}/unsubscribe` : '');
+
+export const getCollectionUrlByDocType = (docType, serialNumber) => {
+  const prefix = getPathPrefixByDocType(docType);
+  const url = getAbsoluteUrl(`${serialNumber}/${prefix}`);
+
+  return url;
+};
 
 export const removeQueryParams = str => `${str}`.split('?')[0];

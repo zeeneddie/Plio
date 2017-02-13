@@ -9,12 +9,15 @@ import {
   OrganizationCurrencySchema,
   UserSettingsSchema,
   CustomerTypeSchema,
+  reviewFrequencySchema,
+  reviewAnnualDateSchema,
+  reviewReviewerIdSchema,
 } from '/imports/share/schemas/organization-schema';
 import {
-  WorkflowTypes, ProblemMagnitudes, InvitationStatuses,
+  WorkflowTypes, ProblemMagnitudes, InvitationStatuses, DocumentTypesPlural,
 } from '/imports/share/constants';
 import {
-  IdSchema, TimePeriodSchema,
+  IdSchema, ReminderTimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
   UserIdSchema, TimezoneSchema,
 } from '/imports/share/schemas/schemas';
@@ -162,7 +165,7 @@ export const setWorkflowDefaults = new Method({
         optional: true
       },
       stepTime: {
-        type: TimePeriodSchema,
+        type: ReminderTimePeriodSchema,
         optional: true
       }
     }
@@ -177,22 +180,26 @@ export const setWorkflowDefaults = new Method({
   }
 });
 
+const reminderTypeSchema = new SimpleSchema({
+  reminderType: {
+    type: String,
+    allowedValues: ['start', 'interval', 'until'],
+  },
+});
+
 export const setReminder = new Method({
   name: 'Organizations.setReminder',
 
   validate: new SimpleSchema([
     IdSchema,
-    TimePeriodSchema,
+    ReminderTimePeriodSchema,
+    reminderTypeSchema,
     {
       type: {
         type: String,
-        allowedValues: ['minorNc', 'majorNc', 'criticalNc', 'improvementPlan']
+        allowedValues: ['minorNc', 'majorNc', 'criticalNc', 'improvementPlan'],
       },
-      reminderType: {
-        type: String,
-        allowedValues: ['start', 'interval', 'until']
-      }
-    }
+    },
   ]).validator(),
 
   check(checker) {
@@ -258,7 +265,110 @@ export const setRKScoringGuidelines = new Method({
 
   run({ _id, rkScoringGuidelines }) {
     return OrganizationService.setRKScoringGuidelines({ _id, rkScoringGuidelines });
-  }
+  },
+});
+
+const reviewDocumentKeySchema = new SimpleSchema({
+  documentKey: {
+    type: String,
+    allowedValues: [DocumentTypesPlural.STANDARDS, DocumentTypesPlural.RISKS],
+  },
+});
+
+export const setReviewReviewerId = new Method({
+  name: 'Organizations.setReviewReviewerId',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    reviewDocumentKeySchema,
+    reviewReviewerIdSchema,
+  ]).validator(),
+
+  check(checker) {
+    return checker(ensureCanChange.bind(this));
+  },
+
+  run(args) {
+    return OrganizationService.setReviewReviewerId(args);
+  },
+});
+
+export const setReviewFrequency = new Method({
+  name: 'Organizations.setReviewFrequency',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    reviewDocumentKeySchema,
+    reviewFrequencySchema,
+  ]).validator(),
+
+  check(checker) {
+    return checker(ensureCanChange.bind(this));
+  },
+
+  run(args) {
+    return OrganizationService.setReviewFrequency(args);
+  },
+});
+
+export const setReviewAnnualDate = new Method({
+  name: 'Organizations.setReviewAnnualDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    reviewDocumentKeySchema,
+    reviewAnnualDateSchema,
+  ]).validator(),
+
+  check(checker) {
+    return checker(ensureCanChange.bind(this));
+  },
+
+  run(args) {
+    return OrganizationService.setReviewAnnualDate(args);
+  },
+});
+
+export const setReviewReminderTimeValue = new Method({
+  name: 'Organizations.setReviewReminderTimeValue',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    reviewDocumentKeySchema,
+    reminderTypeSchema,
+    {
+      timeValue: ReminderTimePeriodSchema.schema('timeValue'),
+    },
+  ]).validator(),
+
+  check(checker) {
+    return checker(ensureCanChange.bind(this));
+  },
+
+  run(args) {
+    return OrganizationService.setReviewReminderTimeValue(args);
+  },
+});
+
+export const setReviewReminderTimeUnit = new Method({
+  name: 'Organizations.setReviewReminderTimeUnit',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    reviewDocumentKeySchema,
+    reminderTypeSchema,
+    {
+      timeUnit: ReminderTimePeriodSchema.schema('timeUnit'),
+    },
+  ]).validator(),
+
+  check(checker) {
+    return checker(ensureCanChange.bind(this));
+  },
+
+  run(args) {
+    return OrganizationService.setReviewReminderTimeUnit(args);
+  },
 });
 
 export const inviteUserByEmail = new Method({

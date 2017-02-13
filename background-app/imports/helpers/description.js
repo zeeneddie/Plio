@@ -1,4 +1,11 @@
-import { ActionTypes, ProblemTypes } from '/imports/share/constants';
+import get from 'lodash.get';
+
+import {
+  ActionTypes,
+  ProblemTypes,
+  HomeScreenTitlesTypes,
+  DocumentTypes,
+} from '/imports/share/constants';
 
 // actions
 export const getCADesc = () => 'corrective action';

@@ -42,6 +42,7 @@ import {
   CollectionNames,
   SystemName,
   CustomerTypes,
+  OrganizationDefaults,
 } from '/imports/share/constants';
 
 Migrations.add({
@@ -178,6 +179,51 @@ Migrations.add({
     const options = { multi: true };
 
     Meteor.users.update(query, modifier, options);
+  },
+});
+
+Migrations.add({
+  version: 6,
+  name: 'Add review settings to organizations',
+  up() {
+    const organizations = Organizations.find({
+      review: { $exists: false },
+    });
+
+    organizations.forEach((org) => {
+      const reviewerId = org.createdBy;
+      const annualDate = org.createdAt;
+      const query = { _id: org._id };
+      const modifier = {
+        $set: {
+          review: {
+            risks: {
+              reviewerId,
+              annualDate,
+              ...OrganizationDefaults.review.risks,
+            },
+            standards: {
+              reviewerId,
+              annualDate,
+              ...OrganizationDefaults.review.standards,
+            },
+          },
+        },
+      };
+
+      Organizations.update(query, modifier);
+    });
+
+    console.log('Review settings were added to organizations');
+  },
+  down() {
+    Organizations.update({}, {
+      $unset: { review: '' },
+    }, {
+      multi: true,
+    });
+
+    console.log('Review settings were removed from organizations');
   },
 });
 

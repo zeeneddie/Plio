@@ -11,12 +11,15 @@ const enhance = compose(
     showAlert: ({ id, value, onSelect }) => (e) => {
       if (!value) return;
 
+      e.preventDefault();
+      e.stopPropagation();
+
       const addNewItem = () => {
         const newItem = { text: value, value: createWorkspaceTitleValue(id, value) };
         const showSuccessAlert = () =>
           swal.success('Added!', `Title "${value}" was added successfully.`);
 
-        onSelect(e, newItem, err => !err && showSuccessAlert());
+        onSelect(null, newItem, err => !err && showSuccessAlert());
       };
 
       swal({

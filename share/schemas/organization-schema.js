@@ -4,21 +4,26 @@ import { _ } from 'meteor/underscore';
 import {
   OrgCurrencies, WorkflowTypes, UserMembership,
   StandardTitles, RiskTitles, NonConformitiesTitles,
-  WorkInboxTitles, CustomerTypes
-} from '../constants.js';
-import { BaseEntitySchema, TimePeriodSchema, TimezoneSchema } from './schemas.js';
+  WorkInboxTitles, CustomerTypes, PossibleReviewFrequencies,
+  HomeScreenTitlesTypes,
+} from '../constants';
+import {
+  BaseEntitySchema, ReminderTimePeriodSchema,
+  TimezoneSchema, TimePeriodSchema,
+  idSchemaDoc,
+} from './schemas';
 
 export const HomeTitlesSchema = new SimpleSchema({
-  standards: {
+  [HomeScreenTitlesTypes.STANDARDS]: {
     type: String,
   },
-  risks: {
+  [HomeScreenTitlesTypes.RISKS]: {
     type: String,
   },
-  nonConformities: {
+  [HomeScreenTitlesTypes.NON_CONFORMITIES]: {
     type: String,
   },
-  workInbox: {
+  [HomeScreenTitlesTypes.WORK_INBOX]: {
     type: String,
   },
 });
@@ -79,7 +84,7 @@ const problemWorkflowSchema = new SimpleSchema({
     allowedValues: _.values(WorkflowTypes),
   },
   stepTime: {
-    type: TimePeriodSchema,
+    type: ReminderTimePeriodSchema,
   },
 });
 
@@ -97,13 +102,13 @@ const workflowDefaultsSchema = new SimpleSchema({
 
 const reminderSchema = new SimpleSchema({
   start: {
-    type: TimePeriodSchema,
+    type: ReminderTimePeriodSchema,
   },
   interval: {
-    type: TimePeriodSchema,
+    type: ReminderTimePeriodSchema,
   },
   until: {
-    type: TimePeriodSchema,
+    type: ReminderTimePeriodSchema,
   },
 });
 
@@ -160,6 +165,67 @@ const rkGuidelinesSchema = new SimpleSchema({
   },
 });
 
+export const reviewReviewerIdSchema = new SimpleSchema({
+  reviewerId: {
+    type: idSchemaDoc,
+    autoValue() {
+      if (this.isInsert && !this.isSet) {
+        const createdBy = this.field('createdBy');
+        if (createdBy.isSet) {
+          return createdBy.value;
+        }
+      }
+    },
+  },
+});
+
+export const reviewFrequencySchema = new SimpleSchema({
+  frequency: {
+    type: TimePeriodSchema,
+    custom() {
+      const isValid = PossibleReviewFrequencies.find(freqDef => (
+        _.isEqual(freqDef, this.value)
+      ));
+
+      return isValid ? true : 'notAllowed';
+    },
+  },
+});
+
+export const reviewAnnualDateSchema = new SimpleSchema({
+  annualDate: {
+    type: Date,
+    autoValue() {
+      if (this.isInsert && !this.isSet) {
+        const createdAt = this.field('createdAt');
+        if (createdAt.isSet) {
+          return createdAt.value;
+        }
+      }
+    },
+  },
+});
+
+export const reviewConfigSchema = new SimpleSchema([
+  reviewReviewerIdSchema,
+  reviewFrequencySchema,
+  reviewAnnualDateSchema,
+  {
+    reminders: {
+      type: reminderSchema,
+    },
+  },
+]);
+
+const reviewSchema = new SimpleSchema({
+  risks: {
+    type: reviewConfigSchema,
+  },
+  standards: {
+    type: reviewConfigSchema,
+  },
+});
+
 const OrganizationEditableFields = {
   name: {
     type: String,
@@ -185,6 +251,10 @@ const OrganizationEditableFields = {
   rkScoringGuidelines: {
     type: String,
     label: 'Risk scoring guidelines text',
+    optional: true,
+  },
+  review: {
+    type: reviewSchema,
     optional: true,
   },
   ...OrganizationCurrencySchema,
@@ -221,10 +291,10 @@ const OrganizationSchema = new SimpleSchema([
     homeScreenTitles: {
       type: HomeTitlesSchema,
       defaultValue: {
-        standards: _.first(StandardTitles),
-        risks: _.first(RiskTitles),
-        nonConformities: _.first(NonConformitiesTitles),
-        workInbox: _.first(WorkInboxTitles),
+        [HomeScreenTitlesTypes.STANDARDS]: _.first(StandardTitles),
+        [HomeScreenTitlesTypes.RISKS]: _.first(RiskTitles),
+        [HomeScreenTitlesTypes.NON_CONFORMITIES]: _.first(NonConformitiesTitles),
+        [HomeScreenTitlesTypes.WORK_INBOX]: _.first(WorkInboxTitles),
       },
     },
     serialNumber: {
@@ -243,7 +313,7 @@ const OrganizationSchema = new SimpleSchema([
     lastAccessedDate: {
       type: Date,
       defaultValue: new Date,
-    }
+    },
   },
 ]);
 

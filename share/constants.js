@@ -83,6 +83,7 @@ export const CollectionNames = {
   NOTIFICATIONS: 'Notifications',
   OCCURRENCES: 'Occurrences',
   ORGANIZATIONS: 'Organizations',
+  REVIEWS: 'Reviews',
   RISK_TYPES: 'RiskTypes',
   RISKS: 'Risks',
   STANDARD_TYPES: 'StandardTypes',
@@ -289,6 +290,12 @@ export const DocumentTypes = {
   ...ActionTypes,
 };
 
+export const DocumentTypesPlural = {
+  STANDARDS: 'standards',
+  NON_CONFORMITIES: 'non-conformities',
+  RISKS: 'risks',
+};
+
 export const AllDocumentTypes = {
   ...DocumentTypes,
   DISCUSSION: 'discussion',
@@ -352,9 +359,14 @@ export const StringLimits = {
 
 export const SystemName = 'Plio';
 
-export const TimeUnits = {
+export const ReminderTimeUnits = {
   DAYS: 'days',
   WEEKS: 'weeks',
+};
+
+export const TimeUnits = {
+  ...ReminderTimeUnits,
+  MONTHS: 'months',
 };
 
 export const UserMembership = {
@@ -522,6 +534,48 @@ export const OrganizationDefaults = {
     critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.RISK),
   },
   rkScoringGuidelines: defaultRiskScoringGuideline,
+  review: {
+    risks: {
+      frequency: {
+        timeValue: 12,
+        timeUnit: TimeUnits.MONTHS,
+      },
+      reminders: {
+        start: {
+          timeValue: 2,
+          timeUnit: TimeUnits.WEEKS,
+        },
+        interval: {
+          timeValue: 1,
+          timeUnit: TimeUnits.WEEKS,
+        },
+        until: {
+          timeValue: 4,
+          timeUnit: TimeUnits.WEEKS,
+        },
+      },
+    },
+    standards: {
+      frequency: {
+        timeValue: 12,
+        timeUnit: TimeUnits.MONTHS,
+      },
+      reminders: {
+        start: {
+          timeValue: 2,
+          timeUnit: TimeUnits.WEEKS,
+        },
+        interval: {
+          timeValue: 1,
+          timeUnit: TimeUnits.WEEKS,
+        },
+        until: {
+          timeValue: 4,
+          timeUnit: TimeUnits.WEEKS,
+        },
+      },
+    },
+  },
 };
 
 export const StandardTitles = [
@@ -549,6 +603,13 @@ export const WorkInboxTitles = [
   'Work',
 ];
 
+export const HomeScreenTitlesTypes = {
+  STANDARDS: 'standards',
+  RISKS: 'risks',
+  NON_CONFORMITIES: 'nonConformities',
+  WORK_INBOX: 'workInbox',
+};
+
 export const EmailsForPlioReporting = [
   'james.ives@pliohub.com',
   'steve.ives@pliohub.com',
@@ -574,3 +635,18 @@ export const CustomerTypesNames = {
   [CustomerTypes.FREE_TRIAL]: 'Free trial',
   [CustomerTypes.TEST_ACCOUNT]: 'Test account',
 };
+
+export const PossibleReviewFrequencies = [
+  {
+    timeValue: 6,
+    timeUnit: TimeUnits.MONTHS,
+  },
+  {
+    timeValue: 12,
+    timeUnit: TimeUnits.MONTHS,
+  },
+  {
+    timeValue: 24,
+    timeUnit: TimeUnits.MONTHS,
+  },
+];

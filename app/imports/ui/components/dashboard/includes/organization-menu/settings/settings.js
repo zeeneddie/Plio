@@ -11,6 +11,8 @@ import { setNCGuideline, setRKGuideline } from '/imports/api/organizations/metho
 
 import HomeTitlesSubcardContainer
   from '/imports/ui/react/organization-settings/containers/HomeTitlesSubcardContainer';
+import ReviewContainer
+  from '/imports/ui/react/organization-settings/containers/ReviewContainer';
 
 Template.OrgSettings.viewmodel({
   mixin: 'organization',
@@ -75,5 +77,8 @@ Template.OrgSettings.viewmodel({
   },
   showDangerZone() {
     return isOrgOwner(Meteor.userId(), this.organizationId());
-  }
+  },
+  reviewContainer() {
+    return ReviewContainer;
+  },
 });
