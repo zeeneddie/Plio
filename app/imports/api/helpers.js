@@ -284,6 +284,9 @@ export const pickDocuments = curry((fields, collection, ids) => {
   return reduceC(reducer, [], ids);
 });
 
+export const combineObjects = (fns) => obj =>
+  Object.assign([], fns).reduce((prev, cur) => ({ ...prev, ...cur(obj) }), {});
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {
