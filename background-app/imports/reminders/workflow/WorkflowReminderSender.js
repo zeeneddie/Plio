@@ -219,6 +219,7 @@ export default class WorkflowReminderSender {
 
     const createReminders = (collection, docType) => {
       const query = {
+        organizationId: this._organizationId,
         isDeleted: false,
         deletedAt: { $exists: false },
         deletedBy: { $exists: false },

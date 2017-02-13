@@ -6,7 +6,6 @@ import { Dropdown } from 'reactstrap';
 import { searchByRegex, createSearchRegex, propEq, omitC } from '/imports/api/helpers';
 import Input from './Input';
 import Menu from './Menu';
-import MenuItem from './MenuItem';
 import { MENTION_REGEX } from '/imports/share/mentions';
 
 const propTypes = {
@@ -36,13 +35,14 @@ class Mention extends React.Component {
 
   onInputChange(e) {
     const value = e.target.value;
+    const prevValue = this.props.value;
 
     this.props.setValue(value);
 
-    this.handleInputChange(value);
+    this.handleInputChange(value, prevValue);
   }
 
-  handleInputChange(value) {
+  handleInputChange(value, prevValue) {
     const match = value.match(MENTION_REGEX) || [];
     const lastMatch = `${_.last(match)}`;
     const searchRegex = createSearchRegex(lastMatch.replace(/@/gi, ''));
@@ -54,7 +54,9 @@ class Mention extends React.Component {
       this.setState({ isOpen: false });
     }
 
-    this.setState({ users, match });
+    const callback = () => (users.length === 0 || value !== prevValue) && this.input.focus();
+
+    this.setState({ users, match }, callback);
   }
 
   handleUserSelect(e, selectedUser) {
@@ -71,12 +73,14 @@ class Mention extends React.Component {
 
     this.props.setValue(value);
 
-    return this.setState({ match, isOpen: false }, () => {
+    const callback = () => {
       if (this.input) {
         this.input.focus();
         this.input.scrollLeft = this.input.scrollWidth;
       }
-    });
+    };
+
+    return this.setState({ match, isOpen: false }, callback);
   }
 
   toggle() {
@@ -117,6 +121,5 @@ Mention.propTypes = propTypes;
 
 Mention.Input = Input;
 Mention.Menu = Menu;
-Mention.MenuItem = MenuItem;
 
 export default Mention;

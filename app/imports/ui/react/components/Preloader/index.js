@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { mapProps } from 'recompose';
 
-import { getSizeClassName } from './constants.js';
-import { transsoc } from '/imports/api/helpers.js';
+import Icon from '../Icons/Icon';
+import { getSizeClassName } from './constants';
+import { transsoc } from '/imports/api/helpers';
 
-const Preloader = (props) => (
+const enhance = mapProps(transsoc({ className: getSizeClassName }));
+
+const Preloader = enhance(({ size, ...other }) => (
   <span>
-    <i className={`margin-bottom fa fa-circle-o-notch fa-spin fa-fw ${props.className}`}></i>
+    <Icon name="circle-o-notch spin fw" margin="bottom" {...{ ...other, size }} />
     <br />
   </span>
-);
+));
 
-export default mapProps(transsoc({
-  className: getSizeClassName
-}))(Preloader);
+Preloader.propTypes = {
+  className: PropTypes.string,
+};
+
+export default Preloader;

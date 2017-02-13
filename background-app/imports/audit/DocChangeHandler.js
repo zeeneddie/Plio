@@ -460,9 +460,7 @@ export default class DocChangeHandler {
     }) => {
       const options = { recipients: user._id, templateData, ...args };
 
-      if (unsubscribeUrl
-          && _.isArray(this._docNotifyList)
-          && this._docNotifyList.indexOf(user._id) > -1) {
+      if (unsubscribeUrl) {
         Object.assign(options.templateData, { unsubscribeUrl });
       }
 

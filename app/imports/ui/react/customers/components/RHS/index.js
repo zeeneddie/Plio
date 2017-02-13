@@ -1,18 +1,18 @@
 /* eslint-disable react/jsx-pascal-case */
 
 import React, { PropTypes } from 'react';
-import cx from 'classnames';
 
 import RHS from '../../../components/RHS';
 import NotFound from './NotFound';
 import NotExist from './NotExist';
 import Body from './Body';
+import BodyContainer from '../../containers/BodyContainer';
 import ModalHandle from '../../../components/ModalHandle';
 import Button from '../../../components/Buttons/Button';
 import ModalEdit from '../ModalEdit';
 
 const CustomersRHS = ({ isReady, organization }) => (
-  <RHS>
+  <RHS flex>
     <RHS.Card className="standard-details">
       <RHS.Header
         title="Organization"
@@ -29,7 +29,7 @@ const CustomersRHS = ({ isReady, organization }) => (
       </RHS.Header>
 
       <RHS.ContentList isReady={isReady}>
-        <Body {...organization} />
+        <BodyContainer {...organization} />
         <div className="card-footer"></div>
       </RHS.ContentList>
     </RHS.Card>

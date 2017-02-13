@@ -52,7 +52,7 @@ export default {
         const {
           doc,
           config,
-          discussion: { participants = [] } = {},
+          discussion: { participants = [], mutedBy = [] } = {},
         } = getDocAndConfigByDiscussionId(discussionId);
         const owner = config.docOwner && config.docOwner(doc);
 
@@ -60,7 +60,7 @@ export default {
 
         participants.forEach(receivers.add.bind(receivers));
 
-        receivers.delete(userId);
+        [...mutedBy, userId].forEach(receivers.delete.bind(receivers));
 
         return Array.from(receivers);
       },
@@ -77,7 +77,7 @@ export default {
           },
         };
       },
-      receivers({ newDoc: { text, type }, organization, user }) {
+      receivers({ newDoc: { text, type, discussionId }, organization, user }) {
         if (type !== 'text') return [];
         const userId = getUserId(user);
         const data = getMentionDataWithUsers(getMentionData(text));
@@ -93,6 +93,10 @@ export default {
           return receivers.add(mention.user._id);
         };
         const receivers = data.reduce(reducer, new Set());
+
+        const { mutedBy = [] } = { ...Discussions.findOne({ _id: discussionId }) };
+        
+        mutedBy.forEach(receivers.delete.bind(receivers));
 
         return Array.from(receivers);
       },

@@ -6,7 +6,7 @@ import { Notifications } from '/imports/share/collections/notifications';
 import { RequiredSchema } from '/imports/share/schemas/notifications-schema';
 import { IdSchema, DocumentIdSchema, DocumentTypeSchema } from '/imports/share/schemas/schemas';
 import Method from '../method';
-import { checkDocExistance } from '../checkers';
+import { checkDocExistance, checkOrgMembership } from '../checkers';
 import { getCollectionByDocType } from '/imports/share/helpers';
 import { INVALID_DOC_TYPE } from '../errors';
 import { DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED } from './errors';
@@ -50,9 +50,13 @@ export const unsubscribe = new Method({
 
       checkAndThrow(!collection, INVALID_DOC_TYPE);
 
-      const doc = collection.findOne({ _id: documentId, notify: this.userId });
+      const query = { _id: documentId, notify: this.userId };
+
+      const doc = collection.findOne(query);
 
       checkAndThrow(!doc, DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED);
+
+      checkOrgMembership(this.userId, doc.organizationId);
 
       return { collection };
     });

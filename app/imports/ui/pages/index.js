@@ -18,8 +18,6 @@ import './transfer-organization-page.html';
 import './transfer-organization-page.js';
 import './non-conformities-page.html';
 import './non-conformities-page.js';
-import './actions-page.html';
-import './actions-page.js';
 import './work-inbox-page.html';
 import './work-inbox-page.js';
 import './maintenance-page.html';

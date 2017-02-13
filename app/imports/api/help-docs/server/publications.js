@@ -5,10 +5,6 @@ import get from 'lodash.get';
 import { Files } from '/imports/share/collections/files';
 import { HelpDocs } from '/imports/share/collections/help-docs';
 import { HelpSections } from '/imports/share/collections/help-sections';
-import {
-  HelpDocsListProjection,
-  HelpSectionProjection,
-} from '/imports/api/constants';
 import { getUserOrganizations } from '../../organizations/utils';
 
 
@@ -20,12 +16,12 @@ Meteor.publishComposite('helpDocsLayout', function getHelpDocsLayoutData() {
   return [
     {
       find() {
-        return HelpDocs.find({}, { fields: HelpDocsListProjection });
+        return HelpDocs.find({}, { fields: HelpDocs.publicFields });
       },
     },
     {
       find() {
-        return HelpSections.find({}, { fields: HelpSectionProjection });
+        return HelpSections.find({}, { fields: HelpSections.publicFields });
       },
     },
     {

@@ -1,15 +1,18 @@
 import property from 'lodash.property';
+import { _ } from 'meteor/underscore';
 
 import { CollectionNames } from '/imports/share/constants';
 import { Discussions } from '/imports/share/collections/discussions';
 import { Messages } from '/imports/share/collections/messages';
 import { getLinkedDocAuditConfig } from '../../utils/helpers';
 import { propId, propOrganizationId } from '/imports/helpers/props';
+import { getDocUnsubscribePath, removeQueryParams } from '/imports/helpers/url';
+
 
 import onCreated from './on-created';
 
 
-export default MessageAuditConfig = {
+const MessageAuditConfig = {
 
   collection: Messages,
 
@@ -45,3 +48,11 @@ export default MessageAuditConfig = {
   },
 
 };
+
+MessageAuditConfig.docUnsubscribeUrl = _.compose(
+  getDocUnsubscribePath,
+  removeQueryParams,
+  MessageAuditConfig.docUrl
+);
+
+export default MessageAuditConfig;

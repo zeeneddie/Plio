@@ -1,33 +1,35 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps, withState } from 'recompose';
-import { Meteor } from 'meteor/meteor';
-import property from 'lodash.property';
 
-import { Organizations } from '/imports/share/collections/organizations';
 import { submit } from './handlers';
 import MessagesForm from '../../components/MessagesForm';
+import { getId } from '/imports/api/helpers';
+import {
+  isCompletedRegistration,
+  getFullName,
+  getAvatar,
+  getEmail,
+} from '/imports/api/users/helpers';
 
 export default compose(
-  connect(),
-  withState('value', 'setValue', ''),
-  withProps(({ doc, organizationId }) => {
-    const organization = { ...Organizations.findOne({ _id: organizationId }) };
-    const query = { $and: [
-      { _id: { $ne: Meteor.userId() } },
-      { _id: { $in: [...organization.users.map(property('userId'))] } },
-    ] };
-    const users = Meteor.users.find(query).map((user) => ({
-      text: user.fullNameOrEmail(),
-      value: user._id,
-      email: user.emails[0].address,
-      avatar: user.avatar(),
-    }));
+  connect((state, { organizationId }) => ({
+    users: state.collections.usersByOrgIds[organizationId],
+  })),
+  withProps(({ doc, users }) => {
+    const mapper = (user) => ({
+      value: getId(user),
+      text: getFullName(user),
+      email: getEmail(user),
+      avatar: getAvatar(user),
+    });
+    const usersMapped = users.filter(isCompletedRegistration).map(mapper);
 
     return {
-      users,
+      users: usersMapped,
       disabled: !doc || doc.isDeleted,
     };
   }),
+  withState('value', 'setValue', ''),
   withHandlers({
     onSubmit: submit,
   }),

@@ -290,6 +290,11 @@ export const DocumentTypes = {
   ...ActionTypes,
 };
 
+export const AllDocumentTypes = {
+  ...DocumentTypes,
+  DISCUSSION: 'discussion',
+};
+
 export const ReviewStatuses = {
   0: 'Overdue',
   1: 'Awaiting review',

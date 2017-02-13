@@ -10,7 +10,10 @@ Template.Problems_ListWrapper.viewmodel({
   statusesData: ProblemsStatuses,
   listArgs() {
     return {
-      ...inspire(['statuses', 'departments', 'deleted', '_getSearchQuery', '_getSearchOptions'], this)
+      ...inspire([
+        'statuses', 'departments', 'deleted',
+        '_getSearchQuery', '_getSearchOptions',
+      ], this),
     };
   },
   _getMainQuery() {
@@ -18,13 +21,13 @@ Template.Problems_ListWrapper.viewmodel({
       ...this._getSearchQuery(),
       organizationId: this.organizationId(),
       isDeleted: {
-        $in: [null, false]
-      }
+        $in: [null, false],
+      },
     };
   },
   _getSearchQuery() {
     const fields = [{ name: 'title' }, { name: 'sequentialId' }];
-    
+
     return this.searchObject('searchText', fields, this.isPrecise());
   },
   _getSearchOptions(defaults = { sort: { createdAt: -1 } }) {
@@ -50,7 +53,7 @@ Template.Problems_ListWrapper.viewmodel({
     const mapper = (department) => {
       const query = {
         ...mainQuery,
-        departmentsIds: department._id
+        departmentsIds: department._id,
       };
       const items = this.collection().find(query, this._getSearchOptions()).fetch();
 
@@ -76,7 +79,7 @@ Template.Problems_ListWrapper.viewmodel({
         organizationId,
         items,
         _id: 'NonConformities.departments.uncategorized',
-        name: 'Uncategorized'
+        name: 'Uncategorized',
       };
     })());
 
@@ -88,6 +91,7 @@ Template.Problems_ListWrapper.viewmodel({
   deleted() {
     const query = { ...this._getMainQuery(), isDeleted: true };
     const options = this._getSearchOptions({ sort: { deletedAt: -1 } });
+
     return this.collection().find(query, options).fetch();
-  }
+  },
 });

@@ -1,4 +1,4 @@
-import { Notifications } from '/imports/share/collections/notifications.js';
+import { Notifications } from '/imports/share/collections/notifications';
 
 export default {
   collection: Notifications,
@@ -39,6 +39,7 @@ export default {
         notify: userId,
       },
     };
+
     return collection.update(query, modifier);
   },
 };

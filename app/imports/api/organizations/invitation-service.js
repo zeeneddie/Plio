@@ -105,22 +105,28 @@ class InvitationSender {
       avatar: {
         alt: `${sender.profile.firstName} ${sender.profile.lastName}`,
         title: `${sender.profile.firstName} ${sender.profile.lastName}`,
-        url: sender.profile.avatar
+        url: sender.profile.avatar,
       },
       secondaryText: this._welcomeMessage,
       button: {
         label: 'Visit this organization on Plio',
-        url: NotificationSender.getAbsoluteUrl(`${this._organization.serialNumber}`)
-      }
+        url: NotificationSender.getAbsoluteUrl(`${this._organization.serialNumber}`),
+      },
     }, basicNotificationData);
 
-    new NotificationSender({ recipients: userIdToInvite, emailSubject, templateData, templateName: 'personalEmail' })
+    new NotificationSender({
+      recipients: userIdToInvite,
+      emailSubject,
+      templateData,
+      templateName: 'personalEmail',
+      options: { isImportant: true },
+    })
       .sendEmail();
   }
 
   _sendNewUserInvite(userIdToInvite, emailSubject, basicNotificationData) {
-    let sender = Meteor.user();
-    let invitationExpirationInHours = InvitationSender.getInvitationExpirationTime();
+    const sender = Meteor.user();
+    const invitationExpirationInHours = InvitationSender.getInvitationExpirationTime();
     const receiver = Meteor.users.findOne({ _id: userIdToInvite });
     const invitationId = receiver && receiver.invitationId || this._invitationId;
 
@@ -140,7 +146,13 @@ class InvitationSender {
       footerText: `This invitation expires on ${moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')}.`
     }, basicNotificationData);
 
-    new NotificationSender({ recipients: userIdToInvite, emailSubject, templateName: 'personalEmail', templateData })
+    new NotificationSender({
+      recipients: userIdToInvite,
+      emailSubject,
+      templateName: 'personalEmail',
+      templateData,
+      options: { isImportant: true },
+    })
       .sendEmail();
   }
 
