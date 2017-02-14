@@ -4,10 +4,11 @@ import { SHA256 } from 'meteor/sha';
 import { Organizations } from '/imports/share/collections/organizations';
 import {
   ORG_DELETE as ORG_DELETE_SWAL_PARAMS,
-  ORG_DELETE_PASSWORD as ORG_DELETE_SWAL_PASSWORD_PARAMS,
 } from '/imports/api/swal-params';
-import { compileTemplateObject } from '/imports/api/helpers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import swal from '/imports/ui/utils/swal';
+import store from '/imports/client/store';
+import { organizationChanged } from '/imports/client/store/actions/organizationsActions';
 
 Template.OrgDeletion.viewmodel({
   mixin: 'modal',
@@ -32,17 +33,20 @@ Template.OrgDeletion.viewmodel({
     });
   },
   _showDeleteOrgPasswordInput() {
-    const { name: orgName } = this.organization() || {};
-    const params = compileTemplateObject(ORG_DELETE_SWAL_PASSWORD_PARAMS, { orgName });
-
-    swal(params, (password) => {
+    const { name } = this.organization() || {};
+    const params = {
+      title: `Confirm deletion of "${name}" organization`,
+    };
+    const cb = (password) => {
       if (!password) {
         swal.showInputError('Password can not be empty');
         return false;
       }
 
-      this._deleteOrganization(password);
-    });
+      return this._deleteOrganization(password);
+    };
+
+    swal.showPasswordForm(params, cb);
   },
   _deleteOrganization(password) {
     const { name: orgName } = this.organization() || {};

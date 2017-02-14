@@ -41,7 +41,7 @@ const LHS = ({
     <AddButton onClick={onModalButtonClick}>
       Add
     </AddButton>
-  ),
+  ) || null,
 }) => {
   let searchInput;
 

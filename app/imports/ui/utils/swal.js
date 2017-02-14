@@ -9,7 +9,7 @@ const sweetAlert = ({
   showCancelButton = true,
   confirmButtonText = '',
   closeOnConfirm = false,
-  ...other,
+  ...other
 }, cb) => swal({
   title,
   text,
@@ -35,5 +35,23 @@ sweetAlert.success = (title, body) => swal({
   timer: ALERT_AUTOHIDE_TIME,
   showConfirmButton: false,
 });
+
+swal.showPasswordForm = ({
+  text = 'Enter your password:',
+  showCancelButton = true,
+  confirmButtonText = 'Confirm',
+  closeOnConfirm = false,
+  showLoaderOnConfirm = true,
+  ...other
+}, ...rest) => swal({
+  text,
+  showCancelButton,
+  confirmButtonText,
+  closeOnConfirm,
+  showLoaderOnConfirm,
+  type: 'input',
+  inputType: 'password',
+  ...other,
+}, ...rest);
 
 export default Object.assign(sweetAlert, swal);

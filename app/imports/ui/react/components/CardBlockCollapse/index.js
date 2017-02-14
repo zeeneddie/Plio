@@ -36,7 +36,7 @@ const CardBlockCollapse = enhance(({
     body: 'card-block-collapse collapse',
   };
 
-  if (loading) rightContent = <IconLoading margin="bottom" />;
+  if (loading) rightContent = <IconLoading />;
 
   else if (rightText) rightContent = <span className="text-muted">{rightText}</span>;
 

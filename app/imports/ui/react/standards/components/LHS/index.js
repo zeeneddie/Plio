@@ -7,7 +7,7 @@ import SectionListContainer from '../../containers/SectionListContainer';
 import TypeListContainer from '../../containers/TypeListContainer';
 import DeletedStandardListContainer from '../../containers/DeletedStandardListContainer';
 import ModalHandle from '../../../components/ModalHandle';
-import ModalDataImportContainer from '../../../containers/ModalDataImportContainer';
+import DataImportContainer from '../../../data-import/containers/DataImportContainer';
 import AddButton from '../../../components/Buttons/AddButton';
 
 const propTypes = {
@@ -45,7 +45,7 @@ const StandardsLHS = ({
 
     AddButtonComponent = () => (
       <ModalHandle closeOnEsc closeOnOutsideClick title="Add" {...{ openByClickOn }}>
-        <ModalDataImportContainer documentType={DocumentTypes.STANDARD} />
+        <DataImportContainer documentType={DocumentTypes.STANDARD} />
       </ModalHandle>
     );
   }

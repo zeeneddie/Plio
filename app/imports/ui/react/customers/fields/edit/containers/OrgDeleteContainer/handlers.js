@@ -4,8 +4,7 @@ import store from '/imports/client/store';
 import { callMethod, setErrorText, close } from '/imports/client/store/actions/modalActions';
 import { deleteCustomerOrganization } from '/imports/api/organizations/methods';
 import swal from '/imports/ui/utils/swal';
-import { ORG_DELETE, ORG_DELETE_PASSWORD } from '/imports/api/swal-params';
-import { compileTemplateObject } from '/imports/api/helpers';
+import { ORG_DELETE } from '/imports/api/swal-params';
 
 
 export const onOrgDelete = ({
@@ -27,8 +26,9 @@ export const onOrgDelete = ({
       });
   };
 
-  const showPasswordInput = () =>
-    swal(compileTemplateObject(ORG_DELETE_PASSWORD, { orgName }), deleteOrg);
+  const showPasswordInput = () => swal.showPasswordForm({
+    title: `Confirm deletion of "${orgName}" organization`,
+  }, deleteOrg);
 
   return swal(ORG_DELETE, showPasswordInput);
 };

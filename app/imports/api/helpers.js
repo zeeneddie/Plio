@@ -469,20 +469,20 @@ export const looksLikeAPromise = obj => !!(
   });
   -> { title: 'Hello World', type: 'some cool stuff' };
 */
-export const compileTemplateObject = (params, paramMap) => {
-  const regexString = Object.keys(paramMap).reduce((prev, cur) => `${prev}|{{${paramMap[cur]}}}`);
-  const regex = new RegExp(regexString, 'g');
-
-  return Object.keys(params).reduce((prev, key) => {
-    let value = params[key];
-
-    if (typeof value === 'string' && value.search(regex)) {
-      value = renderTemplate(value, paramMap);
-    }
-
-    return { ...prev, [key]: value };
-  }, {});
-};
+// export const compileTemplateObject = (params, paramMap) => {
+//   const regexString = Object.keys(paramMap).reduce((prev, cur) => `${prev}|{{${paramMap[cur]}}}`);
+//   const regex = new RegExp(regexString, 'g');
+//
+//   return Object.keys(params).reduce((prev, key) => {
+//     let value = params[key];
+//
+//     if (typeof value === 'string' && value.search(regex)) {
+//       value = renderTemplate(value, paramMap);
+//     }
+//
+//     return { ...prev, [key]: value };
+//   }, {});
+// };
 
 export const createSearchRegex = (val, isPrecise) => {
   let r;
