@@ -14,7 +14,8 @@ import {
   OrgOwnerRoles,
   OrgMemberRoles,
   UserMembership,
-  UserRoles
+  UserRoles,
+  DocumentTypes,
 } from '/imports/share/constants.js';
 import { generateSerialNumber, getCollectionByDocType } from '/imports/share/helpers.js';
 import OrgNotificationsSender from './org-notifications-sender.js';
@@ -345,9 +346,63 @@ export default OrganizationService = {
   },
 
   importDocuments({ to, from, userId, documentType }) {
+    const getFieldsByDocType = (fields) => {
+      switch (documentType) {
+        case DocumentTypes.STANDARD:
+          return Object.assign({}, fields, {
+            uniqueNumber: 1,
+            sectionId: 1,
+            issueNumber: 1,
+            nestingLevel: 1,
+            source1: 1,
+            source2: 1,
+          });
+        case DocumentTypes.RISK:
+          return Object.assign({}, fields, {
+            analysis: 1,
+            updateOfStandards: 1,
+            review: 1,
+            statusComment: 1,
+            scores: 1,
+            riskEvaluation: 1,
+            serialNumber: 1,
+            sequentialId: 1,
+            workflowType: 1,
+            identifiedBy: 1,
+            identifiedAt: 1,
+            magnitude: 1,
+            standardsIds: 1,
+          });
+        default:
+          return fields;
+      }
+    };
     const collection = getCollectionByDocType(documentType);
-    const query = { _id: to };
-    const options = { sort: { title: 1 } };
-    const documents = collection.find(query, options).fetch();
+    const query = { organizationId: from, isDeleted: false };
+    const common = {
+      typeId: 1,
+      title: 1,
+      description: 1,
+      isDeleted: 1,
+      status: 1,
+      createdAt: 1,
+      createdBy: 1,
+      improvementPlan: 1,
+      lessons: 1,
+    };
+    const fields = getFieldsByDocType(common);
+    const options = {
+      fields,
+      sort: { title: 1 },
+    };
+    const cursor = collection.find(query, options);
+    const iterator = (iteratee) => {
+      collection.insert({
+        ...iteratee,
+        organizationId: to,
+      });
+    };
+
+    cursor.forEach(iterator);
   },
 };

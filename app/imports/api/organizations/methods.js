@@ -667,14 +667,16 @@ export const importDocuments = new Method({
   }).validator(),
 
   check(checker) {
+    if (this.isSimulation) return undefined;
+
     return checker(
-      ({ password }) => USR_EnsurePasswordIsValid(this.userId, password),
-      // compose(USR_EnsurePasswordIsValid(this.userId), property('password')),
+      compose(USR_EnsurePasswordIsValid(this.userId), property('password')),
     );
   },
 
   run(props) {
-    console.log('!!')
+    if (this.isSimulation) return undefined;
+
     return OrganizationService.importDocuments({ ...props, userId: this.userId });
   },
 });
