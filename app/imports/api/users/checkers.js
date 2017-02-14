@@ -43,8 +43,6 @@ export const USR_EnsurePasswordIsValid = curry((userId, password) => {
     return false;
   }
 
-  console.log(userId, password);
-
   const user = Meteor.users.findOne({ _id: userId });
   checkAndThrow(!user, USR_NOT_EXIST);
 

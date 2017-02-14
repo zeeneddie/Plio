@@ -8,6 +8,7 @@ import {
   setFilteredStandards,
 } from '/imports/client/store/actions/standardsActions';
 import { onSearchTextClear, onSearch } from '/imports/ui/react/share/LHS/handlers';
+import { close } from '/imports/client/store/actions/modalActions';
 
 const getItems = ({ standards }, search) =>
   extractIds(search(['title', 'description', 'status'], standards));
@@ -19,8 +20,12 @@ export const onSearchTextChange =
 
 export const onClear = onSearchTextClear(onSearchTextChange);
 
-export const onModalOpen = () => () => _modal_.modal.open({
-  _title: 'Standard',
-  template: 'CreateStandard',
-  variation: 'save',
-});
+export const onModalOpen = ({ dispatch }) => () => {
+  dispatch(close);
+
+  _modal_.modal.open({
+    _title: 'Standard',
+    template: 'CreateStandard',
+    variation: 'save',
+  });
+};

@@ -9,6 +9,7 @@ import DeletedStandardListContainer from '../../containers/DeletedStandardListCo
 import ModalHandle from '../../../components/ModalHandle';
 import DataImportContainer from '../../../data-import/containers/DataImportContainer';
 import AddButton from '../../../components/Buttons/AddButton';
+import Field from '../../../fields/read/components/Field';
 
 const propTypes = {
   filter: PropTypes.number,
@@ -36,8 +37,6 @@ const StandardsLHS = ({
   let content;
   let AddButtonComponent = undefined;
 
-  standards = []; // TEMP
-
   if (!standards.length) {
     const openByClickOn = (
       <AddButton>Add</AddButton>
@@ -45,7 +44,11 @@ const StandardsLHS = ({
 
     AddButtonComponent = () => (
       <ModalHandle title="Add" {...{ openByClickOn }}>
-        <DataImportContainer documentType={DocumentTypes.STANDARD} />
+        <DataImportContainer documentType={DocumentTypes.STANDARD}>
+          <Field tag="button" onClick={onModalOpen}>
+            Add a first standard document
+          </Field>
+        </DataImportContainer>
       </ModalHandle>
     );
   }

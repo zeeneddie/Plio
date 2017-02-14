@@ -61,8 +61,8 @@ export const onOrgClick = ({ dispatch, documentType, organizationId }) => ({ _id
     const methodProps = {
       documentType,
       password,
-      to: _id,
-      from: organizationId,
+      to: organizationId,
+      from: _id,
     };
     const action = callMethod(importDocuments, methodProps);
 

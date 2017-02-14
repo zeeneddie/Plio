@@ -2,10 +2,10 @@ import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
-import StandardsBookSectionService from '../standards-book-sections/standards-book-section-service.js';
-import StandardsTypeService from '../standards-types/standards-type-service.js';
-import RisksTypeService from '../risk-types/risk-types-service.js';
+import { Organizations } from '/imports/share/collections/organizations';
+import StandardsBookSectionService from '../standards-book-sections/standards-book-section-service';
+import StandardsTypeService from '../standards-types/standards-type-service';
+import RisksTypeService from '../risk-types/risk-types-service';
 import {
   DefaultStandardSections,
   DefaultStandardTypes,
@@ -16,9 +16,11 @@ import {
   UserMembership,
   UserRoles,
   DocumentTypes,
-} from '/imports/share/constants.js';
-import { generateSerialNumber, getCollectionByDocType } from '/imports/share/helpers.js';
-import OrgNotificationsSender from './org-notifications-sender.js';
+  SystemName,
+} from '/imports/share/constants';
+import { generateSerialNumber, getCollectionByDocType } from '/imports/share/helpers';
+import { assoc, omitC, compose } from '/imports/api/helpers';
+import OrgNotificationsSender from './org-notifications-sender';
 import { Actions } from '/imports/share/collections/actions';
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { Departments } from '/imports/share/collections/departments';
@@ -36,7 +38,7 @@ import { Standards } from '/imports/share/collections/standards';
 import { WorkItems } from '/imports/share/collections/work-items';
 
 
-export default OrganizationService = {
+const OrganizationService = {
   collection: Organizations,
 
   insert({ name, timezone, currency, ownerId }) {
@@ -350,8 +352,8 @@ export default OrganizationService = {
       switch (documentType) {
         case DocumentTypes.STANDARD:
           return Object.assign({}, fields, {
-            uniqueNumber: 1,
             sectionId: 1,
+            uniqueNumber: 1,
             issueNumber: 1,
             nestingLevel: 1,
             source1: 1,
@@ -364,7 +366,6 @@ export default OrganizationService = {
             review: 1,
             statusComment: 1,
             scores: 1,
-            riskEvaluation: 1,
             serialNumber: 1,
             sequentialId: 1,
             workflowType: 1,
@@ -377,6 +378,38 @@ export default OrganizationService = {
           return fields;
       }
     };
+
+    const getPathsByDocType = (paths) => {
+      switch (documentType) {
+        case DocumentTypes.STANDARD:
+          return paths.concat(['owner']);
+        case DocumentTypes.RISK:
+          return paths.concat([
+            'identifiedBy',
+            'analysis.executor',
+            'analysis.completedBy',
+            'updateOfStandards.executor',
+            'updateOfStandards.completedBy',
+            'review.reviewedBy',
+          ]);
+        default:
+          return paths;
+      }
+    };
+
+    const mapFieldsByDocType = (doc) => {
+      const newDoc = Object.assign({}, omitC(['_id', 'titlePrefix'], doc), {
+        organizationId: to,
+        createdBy: SystemName,
+      });
+      // assign current user's id to object's paths
+      const reducer = (prev, path) => assoc(path, userId, prev);
+      const commonPaths = [];
+      const paths = getPathsByDocType(commonPaths);
+      const result = paths.reduce(reducer, newDoc);
+      return result;
+    };
+
     const collection = getCollectionByDocType(documentType);
     const query = { organizationId: from, isDeleted: false };
     const common = {
@@ -386,9 +419,6 @@ export default OrganizationService = {
       isDeleted: 1,
       status: 1,
       createdAt: 1,
-      createdBy: 1,
-      improvementPlan: 1,
-      lessons: 1,
     };
     const fields = getFieldsByDocType(common);
     const options = {
@@ -396,13 +426,10 @@ export default OrganizationService = {
       sort: { title: 1 },
     };
     const cursor = collection.find(query, options);
-    const iterator = (iteratee) => {
-      collection.insert({
-        ...iteratee,
-        organizationId: to,
-      });
-    };
+    const iterator = compose(console.log, collection.insert.bind(collection), mapFieldsByDocType);
 
     cursor.forEach(iterator);
   },
 };
+
+export default OrganizationService;

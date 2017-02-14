@@ -2,6 +2,7 @@ import curry from 'lodash.curry';
 import get from 'lodash.get';
 import property from 'lodash.property';
 import invoke from 'lodash.invoke';
+import set from 'lodash.set';
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { ViewModel } from 'meteor/manuel:viewmodel';
@@ -11,7 +12,7 @@ import { $ } from 'meteor/jquery';
 import { Actions } from '/imports/share/collections/actions.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Risks } from '/imports/share/collections/risks.js';
-import { renderTemplate, getTitlePrefix } from '/imports/share/helpers';
+import { getTitlePrefix } from '/imports/share/helpers';
 
 export const { compose } = _;
 
@@ -132,7 +133,7 @@ export const flattenMapItems = flattenMap(propItems);
 
 export const flattenMapStandards = flattenMap(propStandards);
 
-export const assoc = curry((prop, val, obj) => Object.assign({}, obj, { [prop]: val }));
+export const assoc = curry((path, val, obj) => set(Object.assign({}, obj), path, val));
 
 export const invokeC = curry((path, obj, ...args) => invoke(obj, path, ...args));
 
