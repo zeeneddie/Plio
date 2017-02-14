@@ -44,7 +44,7 @@ const StandardsLHS = ({
     );
 
     AddButtonComponent = () => (
-      <ModalHandle closeOnEsc closeOnOutsideClick title="Add" {...{ openByClickOn }}>
+      <ModalHandle title="Add" {...{ openByClickOn }}>
         <DataImportContainer documentType={DocumentTypes.STANDARD} />
       </ModalHandle>
     );

@@ -9,7 +9,7 @@ import DataImport from '../../components/DataImport';
 
 const enhance = compose(
   connect(combineObjects([
-    pickDeep(['global.userId']),
+    pickDeep(['global.userId', 'organizations.organizationId']),
     pickFrom('dataImport', ['isLoading', 'isLoaded', 'ownOrganizations', 'areOrgsCollapsed']),
   ])),
   renameProps({

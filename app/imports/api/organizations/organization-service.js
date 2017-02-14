@@ -16,7 +16,7 @@ import {
   UserMembership,
   UserRoles
 } from '/imports/share/constants.js';
-import { generateSerialNumber } from '/imports/share/helpers.js';
+import { generateSerialNumber, getCollectionByDocType } from '/imports/share/helpers.js';
 import OrgNotificationsSender from './org-notifications-sender.js';
 import { Actions } from '/imports/share/collections/actions';
 import { AuditLogs } from '/imports/share/collections/audit-logs';
@@ -335,12 +335,19 @@ export default OrganizationService = {
   },
 
   updateLastAccessedDate({ organizationId }) {
-    return this.collection.update({
-      _id: organizationId
-    }, {
+    const query = { _id: organizationId };
+    const modifier = {
       $set: {
-        lastAccessedDate: new Date
-      }
-    });
+        lastAccessedDate: new Date,
+      },
+    };
+    return this.collection.update(query, modifier);
+  },
+
+  importDocuments({ to, from, userId, documentType }) {
+    const collection = getCollectionByDocType(documentType);
+    const query = { _id: to };
+    const options = { sort: { title: 1 } };
+    const documents = collection.find(query, options).fetch();
   },
 };

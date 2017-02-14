@@ -1,6 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import curry from 'lodash.curry';
 import get from 'lodash.get';
 
@@ -10,11 +9,9 @@ import {
   USR_CANNOT_CHANGE_ORG_OWNER_ROLES,
   USR_NOT_EXIST,
   USR_INCORRECT_PASSWORD,
-  ACCESS_DENIED
+  ACCESS_DENIED,
  } from '../errors.js';
-import { UserMembership } from '/imports/share/constants';
-import { Organizations } from '/imports/share/collections/organizations';
-import { checkAndThrow, withUserId } from '/imports/api/helpers.js';
+import { checkAndThrow } from '/imports/api/helpers.js';
 import { canChangeRoles, isOrgOwner, isPlioAdmin, isPlioUser } from '../checkers.js';
 
 export const USR_EnsureUpdatingHimselfChecker = curry(({ userId }, doc) => {
@@ -41,10 +38,12 @@ export const USR_EnsureIsNotOrgOwnerChecker = (doc) => {
   return doc;
 };
 
-export const USR_EnsurePasswordIsValid = (userId, password) => {
+export const USR_EnsurePasswordIsValid = curry((userId, password) => {
   if (!Meteor.isServer) {
     return false;
   }
+
+  console.log(userId, password);
 
   const user = Meteor.users.findOne({ _id: userId });
   checkAndThrow(!user, USR_NOT_EXIST);
@@ -54,11 +53,11 @@ export const USR_EnsurePasswordIsValid = (userId, password) => {
 
   const checkPasswordResult = Accounts._checkPassword(user, {
     digest: password,
-    algorithm: 'sha-256'
+    algorithm: 'sha-256',
   });
 
   checkAndThrow(!!checkPasswordResult.error, USR_INCORRECT_PASSWORD);
-};
+});
 
 export const USR_EnsureIsPlioAdmin = (userId) => {
   checkAndThrow(!isPlioAdmin(userId), ACCESS_DENIED);
