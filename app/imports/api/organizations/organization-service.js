@@ -19,7 +19,7 @@ import {
   SystemName,
 } from '/imports/share/constants';
 import { generateSerialNumber, getCollectionByDocType } from '/imports/share/helpers';
-import { assoc, omitC, compose } from '/imports/api/helpers';
+import { assoc, omitC, compose, chain, reduceC, getC, cond } from '/imports/api/helpers';
 import OrgNotificationsSender from './org-notifications-sender';
 import { Actions } from '/imports/share/collections/actions';
 import { AuditLogs } from '/imports/share/collections/audit-logs';
@@ -361,18 +361,12 @@ const OrganizationService = {
           });
         case DocumentTypes.RISK:
           return Object.assign({}, fields, {
-            analysis: 1,
-            updateOfStandards: 1,
-            review: 1,
             statusComment: 1,
-            scores: 1,
             serialNumber: 1,
             sequentialId: 1,
             workflowType: 1,
-            identifiedBy: 1,
             identifiedAt: 1,
             magnitude: 1,
-            standardsIds: 1,
           });
         default:
           return fields;
@@ -382,16 +376,9 @@ const OrganizationService = {
     const getPathsByDocType = (paths) => {
       switch (documentType) {
         case DocumentTypes.STANDARD:
-          return paths.concat(['owner']);
+          return Object.assign({}, paths, ({ owner: userId }));
         case DocumentTypes.RISK:
-          return paths.concat([
-            'identifiedBy',
-            'analysis.executor',
-            'analysis.completedBy',
-            'updateOfStandards.executor',
-            'updateOfStandards.completedBy',
-            'review.reviewedBy',
-          ]);
+          return Object.assign({}, paths, ({ identifiedBy: userId }));
         default:
           return paths;
       }
@@ -403,11 +390,57 @@ const OrganizationService = {
         createdBy: SystemName,
       });
       // assign current user's id to object's paths
-      const reducer = (prev, path) => assoc(path, userId, prev);
-      const commonPaths = [];
-      const paths = getPathsByDocType(commonPaths);
-      const result = paths.reduce(reducer, newDoc);
+      const paths = getPathsByDocType();
+      const reducer = acc => (prev, key) => assoc(key, acc[key], prev);
+      const result = Object.keys(paths).reduce(reducer(paths), newDoc);
+
       return result;
+    };
+
+    const mapFileFields = compose(omitC(['_id']), assoc('organizationId', to));
+    const copyFile = (_id) => {
+      const query = { _id };
+      const options = {
+        fields: {
+          name: 1,
+          extension: 1,
+          progress: 1,
+          url: 1,
+          status: 1,
+        },
+      };
+      const file = Files.findOne(query, options);
+
+      if (!file) return null;
+
+      const insertFile = compose(Files.insert.bind(Files), mapFileFields);
+
+      return insertFile(file);
+    };
+
+    const copyStandardDeps = (doc) => {
+      const { source1, source2 } = doc;
+      const reducer = (prev, file, i) => compose(
+        cond(
+          Boolean,
+          fileId => assoc(`source${i + 1}.fileId`, fileId, prev),
+          () => prev,
+        ),
+        copyFile,
+        getC('fileId'),
+      )(file);
+      const result = reduceC(reducer, { ...doc }, [source1, source2]);
+
+      return result;
+    };
+
+    const copyDeps = (doc = {}) => {
+      switch (documentType) {
+        case DocumentTypes.STANDARD:
+          return copyStandardDeps(doc);
+        default:
+          return doc;
+      }
     };
 
     const collection = getCollectionByDocType(documentType);
@@ -418,7 +451,6 @@ const OrganizationService = {
       description: 1,
       isDeleted: 1,
       status: 1,
-      createdAt: 1,
     };
     const fields = getFieldsByDocType(common);
     const options = {
@@ -426,7 +458,7 @@ const OrganizationService = {
       sort: { title: 1 },
     };
     const cursor = collection.find(query, options);
-    const iterator = compose(console.log, collection.insert.bind(collection), mapFieldsByDocType);
+    const iterator = compose(collection.insert.bind(collection), mapFieldsByDocType, copyDeps);
 
     cursor.forEach(iterator);
   },

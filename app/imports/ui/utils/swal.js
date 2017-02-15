@@ -28,12 +28,19 @@ sweetAlert.error = err => swal({
   showConfirmButton: false,
 });
 
-sweetAlert.success = (title, body) => swal({
+sweetAlert.success = (title, body, {
+  showConfirmButton = false,
+  showCancelButton = false,
+  timer = ALERT_AUTOHIDE_TIME,
+  ...other
+} = {}) => swal({
   title,
+  timer,
+  showConfirmButton,
+  showCancelButton,
   text: body,
   type: 'success',
-  timer: ALERT_AUTOHIDE_TIME,
-  showConfirmButton: false,
+  ...other,
 });
 
 swal.showPasswordForm = ({

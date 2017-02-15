@@ -288,6 +288,15 @@ export const pickDocuments = curry((fields, collection, ids) => {
 export const combineObjects = (fns) => obj =>
   Object.assign([], fns).reduce((prev, cur) => ({ ...prev, ...cur(obj) }), {});
 
+// Works like recompose's branch but for functions
+export const cond = (predicate, left, right) => (...args) => {
+  const _right = typeof right !== 'function' && identity || right;
+
+  if (predicate(...args)) return left(...args);
+
+  return _right(...args);
+};
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {
