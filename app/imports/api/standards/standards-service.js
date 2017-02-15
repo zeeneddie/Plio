@@ -57,8 +57,13 @@ export default {
     Risks.find(query).forEach((risk) => {
       RiskService.unlinkStandard({
         _id: risk._id,
-        standardId: _id
+        standardId: _id,
       });
     });
-  }
+  },
+
+  getCount({ organizationId }) {
+    const query = { organizationId, isDeleted: false };
+    return this.collection.find(query).count();
+  },
 };

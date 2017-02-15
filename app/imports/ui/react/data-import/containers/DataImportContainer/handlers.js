@@ -1,5 +1,6 @@
 import { batchActions } from 'redux-batched-actions';
 import { SHA256 } from 'meteor/sha';
+import pluralize from 'pluralize';
 
 import { OrgSubs } from '/imports/startup/client/subsmanagers';
 import { createOrgQueryWhereUserIsOwner } from '/imports/api/queries';
@@ -50,7 +51,12 @@ export const onToggleCollapse = ({
   else dispatch(setOrgsCollapsed(!collapsed));
 };
 
-export const onOrgClick = ({ dispatch, documentType, organizationId }) => ({ _id, name }) => {
+export const onOrgClick = ({
+  dispatch,
+  documentType,
+  organizationId,
+  getCount,
+}) => ({ _id: from, name }) => {
   const onConfirm = (pwd) => {
     if (!pwd) {
       swal.close();
@@ -61,8 +67,8 @@ export const onOrgClick = ({ dispatch, documentType, organizationId }) => ({ _id
     const methodProps = {
       documentType,
       password,
+      from,
       to: organizationId,
-      from: _id,
     };
     const action = callMethod(importDocuments, methodProps);
 
@@ -79,9 +85,17 @@ export const onOrgClick = ({ dispatch, documentType, organizationId }) => ({ _id
     title: `Confirm data import from "${name}" organization`,
   }, onConfirm);
 
-  // TODO: show the actual number of documents
-  swal({
-    text: `Do you want to import ${50} ${documentType} documents from "${name}" organization?`,
+  const showAlert = (_, count = '') => swal({
+    text: `
+      Do you want to import ${count} ${documentType} ${pluralize('documents', count)}
+      from "${name}" organization?
+    `,
     confirmButtonText: 'Yes',
   }, showPwdForm);
+
+  showAlert();
+
+  if (getCount && typeof getCount.call === 'function') {
+    getCount.call({ organizationId: from }, showAlert);
+  }
 };

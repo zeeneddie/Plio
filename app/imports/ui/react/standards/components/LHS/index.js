@@ -10,6 +10,7 @@ import ModalHandle from '../../../components/ModalHandle';
 import DataImportContainer from '../../../data-import/containers/DataImportContainer';
 import AddButton from '../../../components/Buttons/AddButton';
 import Field from '../../../fields/read/components/Field';
+import { getCount } from '/imports/api/standards/methods';
 
 const propTypes = {
   filter: PropTypes.number,
@@ -44,7 +45,7 @@ const StandardsLHS = ({
 
     AddButtonComponent = () => (
       <ModalHandle title="Add" {...{ openByClickOn }}>
-        <DataImportContainer documentType={DocumentTypes.STANDARD}>
+        <DataImportContainer documentType={DocumentTypes.STANDARD} {...{ getCount }}>
           <Field tag="button" onClick={onModalOpen}>
             Add a first standard document
           </Field>
