@@ -81,7 +81,7 @@ export const canChangeRoles = (userId, organizationId) => {
     UserRoles.EDIT_USER_ROLES,
     organizationId
   );
-}
+};
 
 export const isOrgOwner = (userId, organizationId) => {
   if (!userIdOrgIdTester(userId, organizationId)) return false;

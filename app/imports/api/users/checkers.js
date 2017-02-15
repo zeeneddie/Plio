@@ -22,10 +22,14 @@ export const USR_EnsureUpdatingHimselfChecker = curry(({ userId }, doc) => {
   return doc;
 });
 
-export const USR_EnsureCanChangeRolesChecker = curry(({ userId }, doc) => {
-  const predicate = canChangeRoles(userId, doc.organizationId);
+export const ensureCanChangeRoles = curry((userId, organizationId) => {
+  const predicate = canChangeRoles(userId, organizationId);
 
-  checkAndThrow(!predicate, USR_CANNOT_CHANGE_ROLES);
+  return checkAndThrow(!predicate, USR_CANNOT_CHANGE_ROLES);
+});
+
+export const USR_EnsureCanChangeRolesChecker = curry(({ userId }, doc) => {
+  ensureCanChangeRoles(userId, doc.organizationId);
 
   return doc;
 });

@@ -36,6 +36,8 @@ export const checkAndThrow = (predicate, error = '') => {
   return true;
 };
 
+export const checkAndThrowC = curry((error, predicate) => checkAndThrow(predicate, error));
+
 export const flattenObjects = (collection = []) =>
   collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
 

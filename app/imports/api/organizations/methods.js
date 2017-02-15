@@ -39,7 +39,7 @@ import {
   USR_EnsureIsPlioAdmin,
   USR_EnsureIsPlioUser,
 } from '../checkers.js';
-import { USR_EnsurePasswordIsValid } from '/imports/api/users/checkers';
+import { USR_EnsurePasswordIsValid, ensureCanChangeRoles } from '/imports/api/users/checkers';
 import { ensureCanUnsubscribeFromDailyRecap } from './checkers';
 
 
@@ -668,10 +668,13 @@ export const importDocuments = new Method({
 
   check(checker) {
     if (this.isSimulation) return undefined;
+    const checkIfCanChangeRoles = ensureCanChangeRoles(this.userId);
 
-    return checker(
+    return checker(chain(
+      compose(checkIfCanChangeRoles, property('to')),
+      compose(checkIfCanChangeRoles, property('from')),
       compose(USR_EnsurePasswordIsValid(this.userId), property('password')),
-    );
+    ));
   },
 
   run(props) {
