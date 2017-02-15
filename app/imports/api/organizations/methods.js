@@ -661,7 +661,7 @@ export const importDocuments = new Method({
     from: idSchemaDoc,
     documentType: {
       type: String,
-      allowedValues: [DocumentTypes.STANDARD, DocumentTypes.RISK],
+      allowedValues: [DocumentTypes.STANDARD/* , DocumentTypes.RISK */],
     },
     password: pwdSchemaObj,
   }).validator(),
