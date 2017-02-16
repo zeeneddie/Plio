@@ -21,9 +21,10 @@ const propTypes = {
   onSearchTextChange: PropTypes.func,
   onClear: PropTypes.func,
   onModalOpen: PropTypes.func,
-  shouldShowDataImportModal: PropTypes.bool,
+  isDataImportModalOpened: PropTypes.bool,
   getDocsCount: PropTypes.func,
   onDataImportSuccess: PropTypes.func,
+  onDataImportModalClose: PropTypes.func,
 };
 
 const StandardsLHS = ({
@@ -36,32 +37,12 @@ const StandardsLHS = ({
   onSearchTextChange,
   onClear,
   onModalOpen,
-  shouldShowDataImportModal,
+  isDataImportModalOpened,
   getDocsCount,
   onDataImportSuccess,
+  onDataImportModalClose,
 }) => {
   let content;
-  let AddButtonComponent = undefined;
-
-  if (shouldShowDataImportModal) {
-    const openByClickOn = (
-      <AddButton>Add</AddButton>
-    );
-
-    AddButtonComponent = () => (
-      <ModalHandle title="Add" {...{ openByClickOn }}>
-        <DataImportContainer
-          {...{ getDocsCount }}
-          documentType={DocumentTypes.STANDARD}
-          onSuccess={onDataImportSuccess}
-        >
-          <Field tag="button" onClick={onModalOpen}>
-            Add a first standard document
-          </Field>
-        </DataImportContainer>
-      </ModalHandle>
-    );
-  }
 
   switch (filter) {
     case 1:
@@ -86,11 +67,27 @@ const StandardsLHS = ({
 
   return (
     <LHSContainer
-      {...{ animating, searchText, searchResultsText, onClear, AddButtonComponent }}
+      {...{ animating, searchText, searchResultsText, onClear }}
       onChange={onSearchTextChange}
       onModalButtonClick={onModalOpen}
     >
       {content}
+
+      <ModalHandle
+        title="Add"
+        isOpened={isDataImportModalOpened}
+        onModalClose={onDataImportModalClose}
+      >
+        <DataImportContainer
+          {...{ getDocsCount }}
+          documentType={DocumentTypes.STANDARD}
+          onSuccess={onDataImportSuccess}
+        >
+          <Field tag="button" onClick={onModalOpen}>
+            Add a first standard document
+          </Field>
+        </DataImportContainer>
+      </ModalHandle>
     </LHSContainer>
   );
 };

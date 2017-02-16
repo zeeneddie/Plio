@@ -3,17 +3,23 @@ import { setIsCardReady } from '/imports/client/store/actions/globalActions';
 import { updateStandard } from '/imports/client/store/actions/collectionsActions';
 import { getState } from '/imports/client/store';
 import { Standards } from '/imports/share/collections/standards';
+import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 
 export default function loadCardData({
   dispatch,
   organizationId,
   urlItemId,
+  filter,
 }, onData) {
   let subscription;
   let isCardReady = true;
 
   if (urlItemId) {
-    const subArgs = { organizationId, _id: urlItemId };
+    const subArgs = {
+      organizationId,
+      _id: urlItemId,
+      isDeleted: filter === STANDARD_FILTER_MAP.DELETED,
+    };
     // get initializing state before subscription ready because it will be false always otherwise
     const initializing = getState('standards.initializing');
 

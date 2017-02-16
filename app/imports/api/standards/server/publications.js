@@ -104,9 +104,14 @@ Meteor.publishComposite('standardsList', function (
   };
 });
 
-Meteor.publishComposite('standardCard', function ({ _id, organizationId }) {
+Meteor.publishComposite('standardCard', function publishStandardCard({
+  _id,
+  organizationId,
+  isDeleted,
+}) {
   check(_id, String);
   check(organizationId, String);
+  check(isDeleted, Boolean);
 
   const userId = this.userId;
 
@@ -116,10 +121,11 @@ Meteor.publishComposite('standardCard', function ({ _id, organizationId }) {
 
   return {
     find() {
-      return Standards.find({
-        _id,
-        organizationId,
-      });
+      const query = { _id, organizationId };
+
+      if (typeof isDeleted !== undefined && isDeleted !== null) Object.assign(query, { isDeleted });
+
+      return Standards.find(query);
     },
     children: [
       getDepartmentsCursorByIds,
