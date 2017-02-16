@@ -137,7 +137,22 @@ export const flattenMapStandards = flattenMap(propStandards);
 
 export const assoc = curry((path, val, obj) => set(Object.assign({}, obj), path, val));
 
-export const invokeC = curry((path, obj, ...args) => invoke(obj, path, ...args));
+// Works like ramda's invoker
+// Number → String → (a → b → … → n → Object → *)
+// var sliceFrom = invoker(1, 'slice');
+// sliceFrom(6, 'abcdefghijklm'); //=> 'ghijklm'
+// var sliceFrom6 = invoker(2, 'slice')(6);
+// sliceFrom6(8, 'abcdefghijklm'); //=> 'gh'
+// invoker(0, 'bark')({ bark: () => 'woof-woof' }) // => 'woof-woof'
+export const invoker = curry((arity, method) => curry((...args) => {
+  const target = args[arity];
+
+  if (target != null && typeof target[method] === 'function') {
+    return target[method].apply(target, Array.prototype.slice.call(args, 0, arity));
+  }
+
+  throw new TypeError(`${target} does not have a method named "${method}"`);
+}, arity + 1));
 
 // useful with recompose's withProps:
 // const transformer = transsoc({
