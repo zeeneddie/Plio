@@ -22,6 +22,7 @@ const propTypes = {
   onSearchTextChange: PropTypes.func,
   onClear: PropTypes.func,
   onModalOpen: PropTypes.func,
+  shouldShowDataImportModal: PropTypes.bool,
 };
 
 const StandardsLHS = ({
@@ -34,14 +35,17 @@ const StandardsLHS = ({
   onSearchTextChange,
   onClear,
   onModalOpen,
+  shouldShowDataImportModal,
 }) => {
   let content;
   let AddButtonComponent = undefined;
 
-  if (!standards.length) {
+  if (shouldShowDataImportModal) {
     const openByClickOn = (
       <AddButton>Add</AddButton>
     );
+
+    // TODO: show data import modal only if the user has 'change roles' role
 
     AddButtonComponent = () => (
       <ModalHandle title="Add" {...{ openByClickOn }}>

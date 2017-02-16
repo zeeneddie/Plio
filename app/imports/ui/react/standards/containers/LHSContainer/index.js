@@ -11,54 +11,42 @@ import {
 import { getStandardsByFilter } from '../../helpers';
 import {
   sortArrayByTitlePrefix,
-  pickC,
-  notEquals,
   getSearchMatchText,
+  combineObjects,
+  pickFrom,
+  equals,
+  pickC,
+  filterC,
+  includes,
 } from '/imports/api/helpers';
 import { onToggleCollapse } from '/imports/ui/react/share/LHS/handlers';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
+import { canChangeRoles } from '/imports/api/checkers';
 
-const mapStateToProps = ({
-  standards: { standardsFiltered },
-  collections: { standards },
-  global: {
-    searchText,
-    filter,
-    animating,
-    urlItemId,
-  },
-}) => ({
-  standardsFiltered,
-  searchText,
-  filter,
-  animating,
-  urlItemId,
-  standards,
-});
+const mapStateToProps = combineObjects([
+  pickFrom('standards', ['standardsFiltered']),
+  pickFrom('collections', ['standards', 'standardsByIds']),
+  pickFrom('global', ['searchText', 'filter', 'animating', 'urlItemId', 'userId']),
+  pickFrom('organizations', ['organizationId']),
+]);
+
+const pickComparableProps = pickC(['_id', 'sectionId', 'typeId', 'isDeleted']);
 
 export default compose(
   connect(mapStateToProps),
-  withHandlers({
-    onSearchTextChange: props => e => onSearchTextChange(props, e.target),
-  }),
-  mapProps(props => ({
-    ...props,
-    standards: props.standards.map(pickC([
-      '_id',
-      'sectionId',
-      'typeId',
-      'titlePrefix',
-      'isDeleted',
-      'deletedBy',
-      'deletedAt',
-    ])),
-  })),
   shouldUpdate((props, nextProps) => !!(
     props.searchText !== nextProps.searchText ||
     props.filter !== nextProps.filter ||
     props.animating !== nextProps.animating ||
-    notEquals(props.standards, nextProps.standards)
+    props.standards.length !== nextProps.standards.length ||
+    !equals(
+      pickComparableProps(props.standardsByIds[props.urlItemId]),
+      pickComparableProps(nextProps.standardsByIds[nextProps.urlItemId])
+    )
   )),
+  withHandlers({
+    onSearchTextChange: props => e => onSearchTextChange(props, e.target),
+  }),
   withHandlers({
     onToggleCollapse,
     onClear,
@@ -66,7 +54,7 @@ export default compose(
   }),
   mapProps((props) => {
     let standards = props.searchText
-      ? props.standards.filter(standard => props.standardsFiltered.includes(standard._id))
+      ? filterC(std => includes(std._id, props.standardsFiltered), props.standards)
       : props.standards;
     standards = getStandardsByFilter({ standards, filter: props.filter });
 
@@ -75,10 +63,14 @@ export default compose(
 
     const searchResultsText = getSearchMatchText(props.searchText, standards.length);
 
+    const shouldShowDataImportModal = !standards.length &&
+      canChangeRoles(props.userId, props.organizationId);
+
     return {
       ...props,
       standards,
       searchResultsText,
+      shouldShowDataImportModal,
     };
   }),
 )(StandardsLHS);
