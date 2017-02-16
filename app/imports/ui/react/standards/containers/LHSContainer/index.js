@@ -7,6 +7,8 @@ import {
   onSearchTextChange,
   onClear,
   onModalOpen,
+  onDataImportSuccess,
+  getDocsCount,
 } from './handlers';
 import { getStandardsByFilter } from '../../helpers';
 import {
@@ -22,7 +24,6 @@ import {
 import { onToggleCollapse } from '/imports/ui/react/share/LHS/handlers';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import { canChangeRoles } from '/imports/api/checkers';
-import { getCount } from '/imports/api/standards/methods';
 
 const mapStateToProps = combineObjects([
   pickFrom('standards', ['standardsFiltered']),
@@ -52,7 +53,8 @@ export default compose(
     onToggleCollapse,
     onClear,
     onModalOpen,
-    getDocsCount: () => ({ organizationId }, cb) => getCount.call({ organizationId }, cb),
+    getDocsCount,
+    onDataImportSuccess,
   }),
   mapProps((props) => {
     let standards = props.searchText

@@ -1,7 +1,6 @@
 import { batchActions } from 'redux-batched-actions';
 import { SHA256 } from 'meteor/sha';
 import pluralize from 'pluralize';
-import { _ } from 'meteor/underscore';
 
 import { OrgSubs } from '/imports/startup/client/subsmanagers';
 import { createOrgQueryWhereUserIsOwner } from '/imports/api/queries';
@@ -15,8 +14,7 @@ import {
 import { callMethod, setErrorText, close } from '/imports/client/store/actions/modalActions';
 import swal from '/imports/ui/utils/swal';
 import { importDocuments } from '/imports/api/organizations/methods';
-import { goTo } from '/imports/ui/utils/router';
-import { expandCollapsedStandard } from '/imports/ui/react/standards/helpers';
+
 
 export const onToggleCollapse = ({
   dispatch,
@@ -59,22 +57,17 @@ export const onOrgClick = ({
   documentType,
   organizationId,
   getDocsCount,
+  onSuccess,
 }) => ({ _id: from, name }) => {
   const onConfirm = (pwd) => {
-    const onSuccess = (ids) => {
+    const _onSuccess = (res) => {
       dispatch(close);
 
       swal.success(
         'Success',
         `Data import from ${name} organization has been successfully completed`
       );
-
-      if (ids) {
-        const id = _.first(ids);
-        goTo('standard')({ urlItemId: id });
-
-        setTimeout(() => expandCollapsedStandard(id), 1000);
-      }
+      if (typeof onSuccess === 'function') onSuccess(res);
     };
 
     if (!pwd) {
@@ -91,7 +84,7 @@ export const onOrgClick = ({
     };
     const action = callMethod(importDocuments, methodProps);
 
-    return dispatch(action).then(onSuccess);
+    return dispatch(action).then(_onSuccess);
   };
 
   const showPwdForm = () => swal.showPasswordForm({
@@ -109,6 +102,6 @@ export const onOrgClick = ({
   showAlert();
 
   if (typeof getDocsCount === 'function') {
-    getDocsCount({ organizationId: from }, showAlert);
+    getDocsCount({ organizationId: from, isDeleted: false }, showAlert);
   }
 };

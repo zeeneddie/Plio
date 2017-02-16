@@ -128,7 +128,19 @@ export const removedFromNotifyList = new Method({
 export const getCount = new Method({
   name: 'standards.getCount',
 
-  validate: new SimpleSchema(OrganizationIdSchema).validator(),
+  validate: new SimpleSchema([
+    OrganizationIdSchema,
+    {
+      isDeleted: {
+        type: Boolean,
+        optional: true,
+      },
+      limit: {
+        type: Number,
+        optional: true,
+      },
+    },
+  ]).validator(),
 
   check(checker) {
     if (this.isSimulation) return undefined;
@@ -138,9 +150,9 @@ export const getCount = new Method({
     );
   },
 
-  run({ organizationId }) {
+  run(props) {
     if (this.isSimulation) return undefined;
 
-    return StandardsService.getCount({ organizationId });
+    return StandardsService.getCount(props);
   },
 });

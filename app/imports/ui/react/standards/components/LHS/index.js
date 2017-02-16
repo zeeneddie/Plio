@@ -23,6 +23,7 @@ const propTypes = {
   onModalOpen: PropTypes.func,
   shouldShowDataImportModal: PropTypes.bool,
   getDocsCount: PropTypes.func,
+  onDataImportSuccess: PropTypes.func,
 };
 
 const StandardsLHS = ({
@@ -37,6 +38,7 @@ const StandardsLHS = ({
   onModalOpen,
   shouldShowDataImportModal,
   getDocsCount,
+  onDataImportSuccess,
 }) => {
   let content;
   let AddButtonComponent = undefined;
@@ -48,7 +50,11 @@ const StandardsLHS = ({
 
     AddButtonComponent = () => (
       <ModalHandle title="Add" {...{ openByClickOn }}>
-        <DataImportContainer documentType={DocumentTypes.STANDARD} {...{ getDocsCount }}>
+        <DataImportContainer
+          {...{ getDocsCount }}
+          documentType={DocumentTypes.STANDARD}
+          onSuccess={onDataImportSuccess}
+        >
           <Field tag="button" onClick={onModalOpen}>
             Add a first standard document
           </Field>

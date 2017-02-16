@@ -7,10 +7,9 @@ import { compareProps, equals, compose, not, omitC, propEq } from '/imports/api/
  * @returns unique array of items
  */
 export const addCollapsed = (collapsed, payload) => {
-  console.log(payload);
   if (!payload.key) {
     if (process.env.NODE_ENV !== 'production') {
-      throw new Error('missing "key" prop in payload');
+      throw new TypeError('missing "key" prop in payload');
     }
     return collapsed;
   }

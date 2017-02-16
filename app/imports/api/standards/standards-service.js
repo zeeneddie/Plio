@@ -62,8 +62,18 @@ export default {
     });
   },
 
-  getCount({ organizationId }) {
-    const query = { organizationId, isDeleted: false };
-    return this.collection.find(query).count();
+  getCount({ organizationId, isDeleted, limit }) {
+    const query = { organizationId };
+    const options = {};
+
+    if (typeof isDeleted !== 'undefined' && isDeleted !== null) {
+      Object.assign(query, { isDeleted });
+    }
+
+    if (typeof limit !== 'undefined' && limit !== null) {
+      Object.assign(options, { limit });
+    }
+
+    return this.collection.find(query, options).count();
   },
 };

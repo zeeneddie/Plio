@@ -29,6 +29,7 @@ ModalDataImport.propTypes = {
   onOrgClick: PropTypes.func,
   onFirstDocAdd: PropTypes.func,
   getDocsCount: PropTypes.func,
+  onSuccess: PropTypes.func,
   children: PropTypes.node,
 };
 
