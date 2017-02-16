@@ -17,12 +17,13 @@ import {
   openStandardByFilter,
   getSelectedStandardDeletedState,
   createUncategorizedSection,
+  getStandardsByFilter,
 } from '../../helpers';
 import { CollectionNames } from '/imports/share/constants';
 
 const redirectAndOpen = (props) => setTimeout(() => {
   const { urlItemId, filter, collapsed } = getState('global');
-  const standardsByIds = getState('collections.standardsByIds');
+  const { standardsByIds, standards } = getState('collections');
   const {
     containedIn,
     defaultContainedIn,
@@ -49,9 +50,11 @@ const redirectAndOpen = (props) => setTimeout(() => {
     filter: STANDARD_FILTER_MAP.SECTION,
   });
 
+  const visibleStds = getStandardsByFilter({ standards, filter });
+
   // if standard does not exist, do not redirect.
   // show message that standard does not exist instead.
-  if (urlItemId && !standardsByIds[urlItemId]) {
+  if (!visibleStds.length || (urlItemId && !standardsByIds[urlItemId])) {
     return;
   }
 

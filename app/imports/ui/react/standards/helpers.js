@@ -138,10 +138,21 @@ export const openStandardByFilter = ({
 };
 
 export const expandCollapsedStandard = (_id) => {
-  const { collections: { standardsByIds }, global: { filter } } = getState();
+  const {
+    global: { filter },
+    collections: {
+      standardsByIds,
+      standardBookSectionsByIds,
+      standardTypesByIds,
+    },
+  } = getState();
   const standard = { ...standardsByIds[_id] };
-  const sectionItem = createSectionItem(standard.sectionId);
-  const typeItem = createStandardTypeItem(standard.typeId);
+  const sectionId = standardBookSectionsByIds[standard.sectionId]
+    ? standard.sectionId
+    : SECTION_UNCATEGORIZED;
+  const typeId = standardTypesByIds[standard.typeId] ? standard.typeId : TYPE_UNCATEGORIZED;
+  const sectionItem = createSectionItem(sectionId);
+  const typeItem = createStandardTypeItem(typeId);
   let action;
 
   switch (filter) {

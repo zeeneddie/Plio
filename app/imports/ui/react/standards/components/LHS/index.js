@@ -10,7 +10,6 @@ import ModalHandle from '../../../components/ModalHandle';
 import DataImportContainer from '../../../data-import/containers/DataImportContainer';
 import AddButton from '../../../components/Buttons/AddButton';
 import Field from '../../../fields/read/components/Field';
-import { getCount } from '/imports/api/standards/methods';
 
 const propTypes = {
   filter: PropTypes.number,
@@ -23,6 +22,7 @@ const propTypes = {
   onClear: PropTypes.func,
   onModalOpen: PropTypes.func,
   shouldShowDataImportModal: PropTypes.bool,
+  getDocsCount: PropTypes.func,
 };
 
 const StandardsLHS = ({
@@ -36,6 +36,7 @@ const StandardsLHS = ({
   onClear,
   onModalOpen,
   shouldShowDataImportModal,
+  getDocsCount,
 }) => {
   let content;
   let AddButtonComponent = undefined;
@@ -45,11 +46,9 @@ const StandardsLHS = ({
       <AddButton>Add</AddButton>
     );
 
-    // TODO: show data import modal only if the user has 'change roles' role
-
     AddButtonComponent = () => (
       <ModalHandle title="Add" {...{ openByClickOn }}>
-        <DataImportContainer documentType={DocumentTypes.STANDARD} {...{ getCount }}>
+        <DataImportContainer documentType={DocumentTypes.STANDARD} {...{ getDocsCount }}>
           <Field tag="button" onClick={onModalOpen}>
             Add a first standard document
           </Field>

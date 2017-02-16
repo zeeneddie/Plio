@@ -1,6 +1,7 @@
 import { batchActions } from 'redux-batched-actions';
 import { SHA256 } from 'meteor/sha';
 import pluralize from 'pluralize';
+import { _ } from 'meteor/underscore';
 
 import { OrgSubs } from '/imports/startup/client/subsmanagers';
 import { createOrgQueryWhereUserIsOwner } from '/imports/api/queries';
@@ -14,6 +15,8 @@ import {
 import { callMethod, setErrorText, close } from '/imports/client/store/actions/modalActions';
 import swal from '/imports/ui/utils/swal';
 import { importDocuments } from '/imports/api/organizations/methods';
+import { goTo } from '/imports/ui/utils/router';
+import { expandCollapsedStandard } from '/imports/ui/react/standards/helpers';
 
 export const onToggleCollapse = ({
   dispatch,
@@ -34,10 +37,10 @@ export const onToggleCollapse = ({
       const options = { sort: { serialNumber: 1 } };
       const organizations = Organizations.find(query, options).fetch();
       const actions = [
-        setOrgsCollapsed(false),
+        setOwnOrgs(organizations),
         setOrgsLoaded(true),
         setOrgsLoading(false),
-        setOwnOrgs(organizations),
+        setOrgsCollapsed(false),
       ];
 
       dispatch(batchActions(actions));
@@ -48,16 +51,32 @@ export const onToggleCollapse = ({
   // when the user first time clicks on the collapse load and fetch the data
   // otherwise just toggle the collapse
   if (collapsed && !isLoaded && !loading) loadFetchDataAndToggle();
-  else dispatch(setOrgsCollapsed(!collapsed));
+  else if (!loading && isLoaded) dispatch(setOrgsCollapsed(!collapsed));
 };
 
 export const onOrgClick = ({
   dispatch,
   documentType,
   organizationId,
-  getCount,
+  getDocsCount,
 }) => ({ _id: from, name }) => {
   const onConfirm = (pwd) => {
+    const onSuccess = (ids) => {
+      dispatch(close);
+
+      swal.success(
+        'Success',
+        `Data import from ${name} organization has been successfully completed`
+      );
+
+      if (ids) {
+        const id = _.first(ids);
+        goTo('standard')({ urlItemId: id });
+
+        setTimeout(() => expandCollapsedStandard(id), 1000);
+      }
+    };
+
     if (!pwd) {
       swal.close();
       return dispatch(setErrorText('Password can not be empty'));
@@ -72,20 +91,14 @@ export const onOrgClick = ({
     };
     const action = callMethod(importDocuments, methodProps);
 
-    return dispatch(action).then(() => {
-      dispatch(close);
-      swal.success(
-        'Success',
-        `Data import from ${name} organization has been successfully completed`
-      );
-    });
+    return dispatch(action).then(onSuccess);
   };
 
   const showPwdForm = () => swal.showPasswordForm({
     title: `Confirm data import from "${name}" organization`,
   }, onConfirm);
 
-  const showAlert = (_, count = '') => swal({
+  const showAlert = (__, count = '') => swal({
     text: `
       Do you want to import ${count} ${documentType} ${pluralize('documents', count)}
       from "${name}" organization?
@@ -95,7 +108,7 @@ export const onOrgClick = ({
 
   showAlert();
 
-  if (getCount && typeof getCount.call === 'function') {
-    getCount.call({ organizationId: from }, showAlert);
+  if (typeof getDocsCount === 'function') {
+    getDocsCount({ organizationId: from }, showAlert);
   }
 };

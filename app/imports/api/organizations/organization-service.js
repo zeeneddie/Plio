@@ -19,7 +19,7 @@ import {
   SystemName,
 } from '/imports/share/constants';
 import { generateSerialNumber, getCollectionByDocType } from '/imports/share/helpers';
-import { assoc, omitC, compose, chain, reduceC, getC, cond } from '/imports/api/helpers';
+import { assoc, omitC, compose, reduceC, getC, cond } from '/imports/api/helpers';
 import OrgNotificationsSender from './org-notifications-sender';
 import { Actions } from '/imports/share/collections/actions';
 import { AuditLogs } from '/imports/share/collections/audit-logs';
@@ -460,7 +460,7 @@ const OrganizationService = {
     const cursor = collection.find(query, options);
     const iterator = compose(collection.insert.bind(collection), mapFieldsByDocType, copyDeps);
 
-    cursor.forEach(iterator);
+    return cursor.map(iterator);
   },
 };
 
