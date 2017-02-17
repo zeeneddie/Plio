@@ -385,14 +385,16 @@ const OrganizationService = {
     };
 
     const mapFieldsByDocType = (doc) => {
-      const newDoc = Object.assign({}, omitC(['_id', 'titlePrefix'], doc), {
+      // assign current user's id to object's paths
+      const entity = getPathsByDocType({
+        _id: Random.id(),
         organizationId: to,
         createdBy: SystemName,
+        createdAt: new Date,
+        departmentsIds: [],
+        notify: [userId],
       });
-      // assign current user's id to object's paths
-      const paths = getPathsByDocType();
-      const reducer = acc => (prev, key) => assoc(key, acc[key], prev);
-      const result = Object.keys(paths).reduce(reducer(paths), newDoc);
+      const result = Object.assign({}, omitC(['_id', 'titlePrefix'], doc), entity);
 
       return result;
     };
@@ -458,9 +460,18 @@ const OrganizationService = {
       sort: { title: 1 },
     };
     const cursor = collection.find(query, options);
-    const iterator = compose(collection.insert.bind(collection), mapFieldsByDocType, copyDeps);
+    const iterator = (bulk) => compose(
+      doc => bulk.insert(doc),
+      mapFieldsByDocType,
+      copyDeps
+    );
+    const bulk = collection.rawCollection().initializeUnorderedBulkOp();
 
-    return cursor.map(iterator);
+    cursor.forEach(iterator(bulk));
+
+    const res = Meteor.wrapAsync(bulk.execute.bind(bulk))({ w: 1, wTimeout: 5000 });
+
+    return res && res.getInsertedIds();
   },
 };
 

@@ -169,6 +169,6 @@ export const ensureCanUnsubscribeFromDailyRecap = ({ orgSerialNumber: serialNumb
 export const ensureThereIsNoDocuments = curry((err, docType, organizationId) => compose(
   checkAndThrowC(err),
   invoker(0, 'count'),
-  invoker(1, 'find')({ organizationId }),
+  invoker(1, 'find')({ organizationId, isDeleted: false }),
   getCollectionByDocType
 )(docType));

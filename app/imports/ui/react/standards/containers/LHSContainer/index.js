@@ -10,6 +10,7 @@ import {
   onDataImportSuccess,
   getDocsCount,
   onDataImportModalClose,
+  openDocumentCreationModal,
 } from './handlers';
 import { getStandardsByFilter } from '../../helpers';
 import {
@@ -78,6 +79,7 @@ export default compose(
     getDocsCount,
     onDataImportSuccess,
     onDataImportModalClose,
+    openDocumentCreationModal,
     onSearchTextChange: props => e => onSearchTextChange(props, e.target),
   }),
 )(StandardsLHS);

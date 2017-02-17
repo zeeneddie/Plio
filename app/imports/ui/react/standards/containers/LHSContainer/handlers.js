@@ -1,6 +1,6 @@
 import { _ } from 'meteor/underscore';
 
-import { extractIds } from '/imports/api/helpers';
+import { extractIds, getId } from '/imports/api/helpers';
 import {
   expandCollapsedStandards,
   collapseExpandedStandards,
@@ -25,29 +25,38 @@ export const onSearchTextChange =
 
 export const onClear = onSearchTextClear(onSearchTextChange);
 
-export const onModalOpen = ({ dispatch, filteredStandards, userId, organizationId }) => () => {
+export const openDocumentCreationModal = ({ dispatch }) => () => {
   dispatch(close);
 
-  // TODO: request doc count from the server
-
-  // if (!filteredStandards.length) {
-    // request data => decide to open modal
-  // } else // open normal modal
-
-  // use only filtered standards because search can match no documents
-  if (!filteredStandards.length && canChangeRoles(userId, organizationId)) {
-    return dispatch(setModalOpenedState(true));
-  }
-
-  return _modal_.modal.open({
+  _modal_.modal.open({
     _title: 'Standard',
     template: 'CreateStandard',
     variation: 'save',
   });
 };
 
-export const onDataImportSuccess = () => (ids = []) => {
-  const id = _.first(ids);
+export const onModalOpen = (props) => (e) => {
+  const {
+    dispatch,
+    filteredStandards,
+    userId,
+    organizationId,
+  } = props;
+
+  dispatch(close);
+
+  // use only filtered standards because search can match no documents
+  if (!filteredStandards.length && canChangeRoles(userId, organizationId)) {
+    return dispatch(setModalOpenedState(true));
+  }
+
+  return openDocumentCreationModal(props)(e);
+};
+
+export const onDataImportSuccess = () => (res) => {
+  const id = getId(_.first(res));
+
+  if (!id) return;
 
   goTo('standard')({ urlItemId: id });
 

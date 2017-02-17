@@ -54,9 +54,9 @@ class ModalWindow extends React.Component {
 
     $(this.modalRef).modal('show');
     $(this.modalRef).on('hidden.bs.modal', (e) => {
-      if (typeof this.onModalClose === 'function') this.onModalClose(e);
-
       if (this._mounted) this.closePortal();
+
+      if (typeof this.onModalClose === 'function') this.onModalClose(e);
 
       return this;
     });

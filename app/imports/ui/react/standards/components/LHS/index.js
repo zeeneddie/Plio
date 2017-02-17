@@ -25,6 +25,7 @@ const propTypes = {
   getDocsCount: PropTypes.func,
   onDataImportSuccess: PropTypes.func,
   onDataImportModalClose: PropTypes.func,
+  openDocumentCreationModal: PropTypes.func,
 };
 
 const StandardsLHS = ({
@@ -41,6 +42,7 @@ const StandardsLHS = ({
   getDocsCount,
   onDataImportSuccess,
   onDataImportModalClose,
+  openDocumentCreationModal,
 }) => {
   let content;
 
@@ -83,7 +85,7 @@ const StandardsLHS = ({
           documentType={DocumentTypes.STANDARD}
           onSuccess={onDataImportSuccess}
         >
-          <Field tag="button" onClick={onModalOpen}>
+          <Field tag="button" onClick={openDocumentCreationModal}>
             Add a first standard document
           </Field>
         </DataImportContainer>
