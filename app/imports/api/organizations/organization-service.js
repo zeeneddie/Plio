@@ -348,6 +348,8 @@ const OrganizationService = {
   },
 
   importDocuments({ to, from, userId, documentType }) {
+    const files = [];
+
     const getFieldsByDocType = (fields) => {
       switch (documentType) {
         case DocumentTypes.STANDARD:
@@ -399,7 +401,6 @@ const OrganizationService = {
       return result;
     };
 
-    const mapFileFields = compose(omitC(['_id']), assoc('organizationId', to));
     const copyFile = (_id) => {
       const query = { _id };
       const options = {
@@ -415,9 +416,14 @@ const OrganizationService = {
 
       if (!file) return null;
 
-      const insertFile = compose(Files.insert.bind(Files), mapFileFields);
+      const newFile = Object.assign({}, file, {
+        _id: Random.id(),
+        organizationId: to,
+      });
 
-      return insertFile(file);
+      files.push(newFile);
+
+      return newFile._id;
     };
 
     const copyStandardDeps = (doc) => {
@@ -445,31 +451,45 @@ const OrganizationService = {
       }
     };
 
-    const collection = getCollectionByDocType(documentType);
-    const query = { organizationId: from, isDeleted: false };
-    const common = {
-      typeId: 1,
-      title: 1,
-      description: 1,
-      isDeleted: 1,
-      status: 1,
-    };
-    const fields = getFieldsByDocType(common);
-    const options = {
-      fields,
-      sort: { title: 1 },
-    };
-    const cursor = collection.find(query, options);
-    const iterator = (bulk) => compose(
-      doc => bulk.insert(doc),
-      mapFieldsByDocType,
-      copyDeps
-    );
-    const bulk = collection.rawCollection().initializeUnorderedBulkOp();
+    const bulkInsertFiles = () => {
+      const bulk = Files.rawCollection().initializeUnorderedBulkOp();
 
-    cursor.forEach(iterator(bulk));
+      files.forEach(bulk.insert.bind(bulk));
 
-    const res = Meteor.wrapAsync(bulk.execute.bind(bulk))({ w: 1, wTimeout: 5000 });
+      return Meteor.wrapAsync(bulk.execute.bind(bulk))();
+    };
+
+    const bulkInsertDocuments = () => {
+      const collection = getCollectionByDocType(documentType);
+      const query = { organizationId: from, isDeleted: false };
+      const common = {
+        typeId: 1,
+        title: 1,
+        description: 1,
+        isDeleted: 1,
+        status: 1,
+      };
+      const fields = getFieldsByDocType(common);
+      const options = {
+        fields,
+        sort: { title: 1 },
+      };
+      const cursor = collection.find(query, options);
+      const iterator = (bulk) => compose(
+        bulk.insert.bind(bulk),
+        mapFieldsByDocType,
+        copyDeps
+      );
+      const bulk = collection.rawCollection().initializeUnorderedBulkOp();
+  
+      cursor.forEach(iterator(bulk));
+
+      return Meteor.wrapAsync(bulk.execute.bind(bulk))({ w: 1, wTimeout: 5000 });
+    };
+
+    const res = bulkInsertDocuments();
+
+    bulkInsertFiles();
 
     return res && res.getInsertedIds();
   },
