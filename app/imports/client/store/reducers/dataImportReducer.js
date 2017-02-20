@@ -5,7 +5,6 @@ import {
   SET_DATA_IMPORT_ORGS_COLLAPSED,
   SET_DATA_IMPORT_MODAL_OPENED_STATE,
   SET_DATA_IMPORT_IN_PROGRESS,
-  SET_DATA_IMPORT_COMPLETED,
   SET_DATA_IMPORT_IDS,
 } from '../actions/types';
 
@@ -16,7 +15,6 @@ const initialState = {
   areOrgsCollapsed: true,
   isModalOpened: false,
   isInProgress: false,
-  isCompleted: false,
   importedIds: {},
 };
 
@@ -28,7 +26,6 @@ export default function reducer(state = initialState, action) {
     case SET_DATA_IMPORT_ORGS_COLLAPSED:
     case SET_DATA_IMPORT_MODAL_OPENED_STATE:
     case SET_DATA_IMPORT_IN_PROGRESS:
-    case SET_DATA_IMPORT_COMPLETED:
     case SET_DATA_IMPORT_IDS:
       return { ...state, ...action.payload };
     default:

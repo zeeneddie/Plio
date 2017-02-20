@@ -19,10 +19,10 @@ import { getState } from '/imports/client/store';
 import { propEq, getId } from '/imports/api/helpers';
 import { goTo } from '../../utils/router/actions';
 
-Standards.observeStandards = (dispatch, query, options) => {
-  Standards.observer = Standards.find(query, options).observeChanges({
+export const observeStandards = (dispatch, query, options) => {
+  const observer = Standards.find(query, options).observeChanges({
     added(_id, fields) {
-      if (Standards.observer) {
+      if (observer) {
         // do not add imported standards through observer
         // as they will be added through a single action
         const { importedIds = {} } = getState().dataImport;
@@ -54,15 +54,13 @@ Standards.observeStandards = (dispatch, query, options) => {
     },
   });
 
-  return Standards.observer;
+  return observer;
 };
 
-Standards.stopObservers = () => Standards.observer && Standards.observer.stop();
-
-StandardsBookSections.observeStandardBookSections = (dispatch, query, options) => {
-  StandardsBookSections.observer = StandardsBookSections.find(query, options).observeChanges({
+export const observeStandardBookSections = (dispatch, query, options) => {
+  const observer = StandardsBookSections.find(query, options).observeChanges({
     added(_id, fields) {
-      if (StandardsBookSections.observer) {
+      if (observer) {
         dispatch(addStandardBookSection({ _id, ...fields }));
       }
     },
@@ -74,16 +72,13 @@ StandardsBookSections.observeStandardBookSections = (dispatch, query, options) =
     },
   });
 
-  return StandardsBookSections.observer;
+  return observer;
 };
 
-StandardsBookSections.stopObservers = () =>
-  StandardsBookSections.observer && StandardsBookSections.observer.stop();
-
-StandardTypes.observeStandardTypes = (dispatch, query, options) => {
-  StandardTypes.observer = StandardTypes.find(query, options).observeChanges({
+export const observeStandardTypes = (dispatch, query, options) => {
+  const observer = StandardTypes.find(query, options).observeChanges({
     added(_id, fields) {
-      if (StandardTypes.observer) {
+      if (observer) {
         dispatch(addStandardType({ _id, ...fields }));
       }
     },
@@ -95,7 +90,5 @@ StandardTypes.observeStandardTypes = (dispatch, query, options) => {
     },
   });
 
-  return StandardTypes.observer;
+  return observer;
 };
-
-StandardTypes.stopObservers = () => StandardTypes.observer && StandardTypes.observer.stop();

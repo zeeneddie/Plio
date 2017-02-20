@@ -154,6 +154,10 @@ export const invoker = curry((arity, method) => curry((...args) => {
   throw new TypeError(`${target} does not have a method named "${method}"`);
 }, arity + 1));
 
+export const invokeStop = invoker(0, 'stop');
+
+export const invokeReady = invoker(0, 'ready');
+
 // useful with recompose's withProps:
 // const transformer = transsoc({
 //   'userAvatar': getUserAvatar,

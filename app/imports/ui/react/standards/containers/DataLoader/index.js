@@ -10,88 +10,26 @@ import {
   renameProp,
 } from 'recompose';
 import { connect } from 'react-redux';
-import { Meteor } from 'meteor/meteor';
 import property from 'lodash.property';
-import React from 'react';
-import { Tracker } from 'meteor/tracker';
 
 import StandardsLayout from '../../components/Layout';
-
-import { pickDeep, identity } from '/imports/api/helpers';
+import loadStandardsLayoutData from '../../loaders/loadLayoutData';
+import { pickDeep, identity, invokeStop } from '/imports/api/helpers';
 import { StandardFilters } from '/imports/api/constants';
 import onHandleFilterChange from '../../../handlers/onHandleFilterChange';
 import onHandleReturn from '../../../handlers/onHandleReturn';
 import loadInitialData from '../../../loaders/loadInitialData';
 import loadUsersData from '../../../loaders/loadUsersData';
 import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
-import loadLayoutData from '../../../loaders/loadLayoutData';
 import loadMainData from '../../loaders/loadMainData';
 import loadCardData from '../../loaders/loadCardData';
 import loadDeps from '../../loaders/loadDeps';
-import { Standards } from '/imports/share/collections/standards';
-import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
-import { StandardTypes } from '/imports/share/collections/standards-types';
-import '../../observers';
+import {
+  observeStandards,
+  observeStandardBookSections,
+  observeStandardTypes,
+} from '../../observers';
 import { setInitializing } from '/imports/client/store/actions/standardsActions';
-// const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
-//   const isDeleted = filter === 3
-//           ? true
-//           : { $in: [null, false] };
-//
-//   return DocumentLayoutSubs.subscribe('standardsLayout', orgSerialNumber, isDeleted);
-// });
-
-const getLayoutData = (props) => loadLayoutData(() => {
-  const isDeleted = props.filter === 3
-          ? true
-          : { $in: [null, false] };
-
-  return Meteor.subscribe('standardsLayout', props.orgSerialNumber, isDeleted);
-})(props, () => null);
-
-const loadStandardsLayoutData = (Component) => class extends React.Component {
-  componentWillMount() {
-    this._subscribe(this.props);
-  }
-
-  componentWillUnmount() {
-    this._unmounted = true;
-    this._unsubscribe();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.isInProgress && nextProps.isInProgress) {
-      this._unsubscribe();
-      nextProps.dispatch(setInitializing(true));
-    } else this._subscribe(nextProps, this.props);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return !!(
-      this.props.filter !== nextProps.filter ||
-      this.props.orgSerialNumber !== nextProps.orgSerialNumber ||
-      this.props.isInProgress !== nextProps.isInProgress
-    );
-  }
-
-  _subscribe(props) {
-    this._unsubscribe();
-
-    Tracker.nonreactive(() =>
-      Tracker.autorun(() => {
-        if (this._unmounted) return;
-        this.subscription = getLayoutData(props);
-      }));
-  }
-
-  _unsubscribe() {
-    if (this.subscription) this.subscription.stop();
-  }
-
-  render() {
-    return <Component {...this.props} {...this.state} />;
-  }
-};
 
 export default compose(
   connect(),
@@ -137,13 +75,12 @@ export default compose(
   lifecycle({
     componentWillReceiveProps({ areDepsReady, initializing, dispatch, organizationId }) {
       if (areDepsReady && initializing) {
-        console.log('os?');
         setTimeout(() => {
           const args = [dispatch, { organizationId }];
           this.observers = [
-            Standards.observeStandards(...args),
-            StandardsBookSections.observeStandardBookSections(...args),
-            StandardTypes.observeStandardTypes(...args),
+            observeStandards(...args),
+            observeStandardBookSections(...args),
+            observeStandardTypes(...args),
           ];
         }, 0);
 
@@ -151,7 +88,7 @@ export default compose(
       }
     },
     componentWillUnmount() {
-      return this.observers && this.observers.map(os => os.stop());
+      return this.observers && this.observers.map(invokeStop);
     },
   }),
   connect(state => ({
