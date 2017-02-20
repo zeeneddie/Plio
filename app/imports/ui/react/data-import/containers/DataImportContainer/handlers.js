@@ -10,11 +10,11 @@ import {
   setOrgsLoading,
   setOrgsLoaded,
   setOrgsCollapsed,
+  setDataImportInProgress,
 } from '/imports/client/store/actions/dataImportActions';
 import { callMethod, setErrorText, close } from '/imports/client/store/actions/modalActions';
 import swal from '/imports/ui/utils/swal';
 import { importDocuments } from '/imports/api/organizations/methods';
-
 
 export const onToggleCollapse = ({
   dispatch,
@@ -83,6 +83,8 @@ export const onOrgClick = ({
       to: organizationId,
     };
     const action = callMethod(importDocuments, methodProps);
+
+    dispatch(setDataImportInProgress(true));
 
     return dispatch(action).then(_onSuccess);
   };

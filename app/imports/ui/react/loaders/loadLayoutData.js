@@ -33,5 +33,7 @@ export default subscribe => function loadLayoutData({
     onData(null, { loading: true });
   }
 
+  return subscription;
+
   // return () => typeof subscription === 'function' && subscription.stop();
 };

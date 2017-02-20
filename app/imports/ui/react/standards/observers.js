@@ -19,10 +19,16 @@ import { getState } from '/imports/client/store';
 import { propEq, getId } from '/imports/api/helpers';
 import { goTo } from '../../utils/router/actions';
 
-export const observeStandards = (dispatch, query, options) => {
-  const handle = Standards.find(query, options).observeChanges({
+Standards.observeStandards = (dispatch, query, options) => {
+  Standards.observer = Standards.find(query, options).observeChanges({
     added(_id, fields) {
-      if (handle) {
+      if (Standards.observer) {
+        // do not add imported standards through observer
+        // as they will be added through a single action
+        const { importedIds = {} } = getState().dataImport;
+
+        if (importedIds[_id]) return;
+
         dispatch(addStandard({ _id, ...fields }));
         // expand the section and type that are holding a newly created standard
         expandCollapsedStandard(_id);
@@ -48,13 +54,15 @@ export const observeStandards = (dispatch, query, options) => {
     },
   });
 
-  return handle;
+  return Standards.observer;
 };
 
-export const observeStandardBookSections = (dispatch, query, options) => {
-  const handle = StandardsBookSections.find(query, options).observeChanges({
+Standards.stopObservers = () => Standards.observer && Standards.observer.stop();
+
+StandardsBookSections.observeStandardBookSections = (dispatch, query, options) => {
+  StandardsBookSections.observer = StandardsBookSections.find(query, options).observeChanges({
     added(_id, fields) {
-      if (handle) {
+      if (StandardsBookSections.observer) {
         dispatch(addStandardBookSection({ _id, ...fields }));
       }
     },
@@ -66,13 +74,16 @@ export const observeStandardBookSections = (dispatch, query, options) => {
     },
   });
 
-  return handle;
+  return StandardsBookSections.observer;
 };
 
-export const observeStandardTypes = (dispatch, query, options) => {
-  const handle = StandardTypes.find(query, options).observeChanges({
+StandardsBookSections.stopObservers = () =>
+  StandardsBookSections.observer && StandardsBookSections.observer.stop();
+
+StandardTypes.observeStandardTypes = (dispatch, query, options) => {
+  StandardTypes.observer = StandardTypes.find(query, options).observeChanges({
     added(_id, fields) {
-      if (handle) {
+      if (StandardTypes.observer) {
         dispatch(addStandardType({ _id, ...fields }));
       }
     },
@@ -84,5 +95,7 @@ export const observeStandardTypes = (dispatch, query, options) => {
     },
   });
 
-  return handle;
+  return StandardTypes.observer;
 };
+
+StandardTypes.stopObservers = () => StandardTypes.observer && StandardTypes.observer.stop();

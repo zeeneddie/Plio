@@ -481,7 +481,7 @@ const OrganizationService = {
         copyDeps
       );
       const bulk = collection.rawCollection().initializeUnorderedBulkOp();
-  
+
       cursor.forEach(iterator(bulk));
 
       return Meteor.wrapAsync(bulk.execute.bind(bulk))({ w: 1, wTimeout: 5000 });

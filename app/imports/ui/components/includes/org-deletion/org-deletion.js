@@ -7,8 +7,6 @@ import {
 } from '/imports/api/swal-params';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 import swal from '/imports/ui/utils/swal';
-import store from '/imports/client/store';
-import { organizationChanged } from '/imports/client/store/actions/organizationsActions';
 
 Template.OrgDeletion.viewmodel({
   mixin: 'modal',
@@ -58,24 +56,12 @@ Template.OrgDeletion.viewmodel({
       password
     }, (err, res) => {
       if (err) {
-        swal({
-          title: 'Oops... Something went wrong!',
-          text: err.reason || err,
-          type: 'error',
-          timer: ALERT_AUTOHIDE_TIME,
-          showConfirmButton: false,
-        });
+        swal.error(err);
       } else {
-        swal({
-          title: 'Success',
-          text: `Organization ${orgName} has been deleted`,
-          type: 'success',
-          timer: ALERT_AUTOHIDE_TIME,
-          showConfirmButton: false,
-        });
+        swal.success('Success', `Organization ${orgName} has been deleted`);
       }
 
       this.afterDelete && this.afterDelete(err, res, organizationId);
     });
-  }
+  },
 });

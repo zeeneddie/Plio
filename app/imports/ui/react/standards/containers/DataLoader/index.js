@@ -7,15 +7,17 @@ import {
   withHandlers,
   branch,
   renderComponent,
+  renameProp,
 } from 'recompose';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
-import { _ } from 'meteor/underscore';
+import property from 'lodash.property';
+import React from 'react';
+import { Tracker } from 'meteor/tracker';
 
-import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers';
 import StandardsLayout from '../../components/Layout';
 
-import { pickDeep } from '/imports/api/helpers';
+import { pickDeep, identity } from '/imports/api/helpers';
 import { StandardFilters } from '/imports/api/constants';
 import onHandleFilterChange from '../../../handlers/onHandleFilterChange';
 import onHandleReturn from '../../../handlers/onHandleReturn';
@@ -26,20 +28,70 @@ import loadLayoutData from '../../../loaders/loadLayoutData';
 import loadMainData from '../../loaders/loadMainData';
 import loadCardData from '../../loaders/loadCardData';
 import loadDeps from '../../loaders/loadDeps';
+import { Standards } from '/imports/share/collections/standards';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
+import { StandardTypes } from '/imports/share/collections/standards-types';
+import '../../observers';
 import { setInitializing } from '/imports/client/store/actions/standardsActions';
-import {
-  observeStandards,
-  observeStandardBookSections,
-  observeStandardTypes,
-} from '../../observers';
+// const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
+//   const isDeleted = filter === 3
+//           ? true
+//           : { $in: [null, false] };
+//
+//   return DocumentLayoutSubs.subscribe('standardsLayout', orgSerialNumber, isDeleted);
+// });
 
-const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
-  const isDeleted = filter === 3
+const getLayoutData = (props) => loadLayoutData(() => {
+  const isDeleted = props.filter === 3
           ? true
           : { $in: [null, false] };
 
-  return DocumentLayoutSubs.subscribe('standardsLayout', orgSerialNumber, isDeleted);
-});
+  return Meteor.subscribe('standardsLayout', props.orgSerialNumber, isDeleted);
+})(props, () => null);
+
+const loadStandardsLayoutData = (Component) => class extends React.Component {
+  componentWillMount() {
+    this._subscribe(this.props);
+  }
+
+  componentWillUnmount() {
+    this._unmounted = true;
+    this._unsubscribe();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.isInProgress && nextProps.isInProgress) {
+      this._unsubscribe();
+      nextProps.dispatch(setInitializing(true));
+    } else this._subscribe(nextProps, this.props);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return !!(
+      this.props.filter !== nextProps.filter ||
+      this.props.orgSerialNumber !== nextProps.orgSerialNumber ||
+      this.props.isInProgress !== nextProps.isInProgress
+    );
+  }
+
+  _subscribe(props) {
+    this._unsubscribe();
+
+    Tracker.nonreactive(() =>
+      Tracker.autorun(() => {
+        if (this._unmounted) return;
+        this.subscription = getLayoutData(props);
+      }));
+  }
+
+  _unsubscribe() {
+    if (this.subscription) this.subscription.stop();
+  }
+
+  render() {
+    return <Component {...this.props} {...this.state} />;
+  }
+};
 
 export default compose(
   connect(),
@@ -51,20 +103,15 @@ export default compose(
   connect(pickDeep([
     'global.filter',
     'organizations.orgSerialNumber',
+    'dataImport.isInProgress',
   ])),
-  composeWithTracker(
-    getLayoutData(),
-    null,
-    null,
-    {
-      shouldResubscribe: (props, nextProps) =>
-        props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
-    }
-  ),
+  loadStandardsLayoutData,
+  connect(pickDeep(['global.dataLoading'])),
+  renameProp('dataLoading', 'loading'),
   branch(
-    props => props.loading,
+    property('loading'),
     renderComponent(StandardsLayout),
-    _.identity
+    identity,
   ),
   composeWithTracker(loadUsersData),
   connect(pickDeep(['organizations.organizationId'])),
@@ -86,30 +133,25 @@ export default compose(
       props.organizationId !== nextProps.organizationId ||
       props.initializing !== nextProps.initializing,
   }),
-  connect(pickDeep(['global.dataLoading', 'standards.areDepsReady', 'standards.initializing'])),
+  connect(pickDeep(['standards.areDepsReady', 'standards.initializing'])),
   lifecycle({
-    componentWillReceiveProps(nextProps) {
-      if (!nextProps.dataLoading && nextProps.initializing && nextProps.areDepsReady) {
-        const { dispatch, organizationId } = nextProps;
-
-        Meteor.defer(() => {
+    componentWillReceiveProps({ areDepsReady, initializing, dispatch, organizationId }) {
+      if (areDepsReady && initializing) {
+        console.log('os?');
+        setTimeout(() => {
           const args = [dispatch, { organizationId }];
           this.observers = [
-            observeStandards(...args),
-            observeStandardBookSections(...args),
-            observeStandardTypes(...args),
+            Standards.observeStandards(...args),
+            StandardsBookSections.observeStandardBookSections(...args),
+            StandardTypes.observeStandardTypes(...args),
           ];
-        });
+        }, 0);
 
         dispatch(setInitializing(false));
       }
     },
     componentWillUnmount() {
-      const result = this.observers && this.observers.map(observer => observer && observer.stop());
-
-      this.props.dispatch(setInitializing(true));
-
-      return result;
+      return this.observers && this.observers.map(os => os.stop());
     },
   }),
   connect(state => ({

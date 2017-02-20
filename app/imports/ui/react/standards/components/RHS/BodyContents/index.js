@@ -3,6 +3,7 @@ import cx from 'classnames';
 import { Col } from 'reactstrap';
 
 import { getFullNameOrEmail } from '/imports/api/users/helpers';
+import { length } from '/imports/api/helpers';
 import createReadFields from '../../../../helpers/createReadFields';
 import DepartmentsContainer from '../../../../fields/read/containers/DepartmentsContainer';
 import Source from '../../../../fields/read/components/Source';
@@ -64,7 +65,7 @@ const BodyContents = ({
           {fields.owner}
         </div>
 
-        {!!departmentsIds.length && (
+        {!!length(departmentsIds) && (
           <DepartmentsContainer departmentsIds={departmentsIds} />
         )}
 
@@ -79,7 +80,7 @@ const BodyContents = ({
         ))}
       </div>
 
-      {!!notify.length && (<Notify users={notify} />)}
+      {!!length(notify) && (<Notify users={notify} />)}
 
       <ConnectedDocListContainer standardId={_id}>
         {improvementPlan && (

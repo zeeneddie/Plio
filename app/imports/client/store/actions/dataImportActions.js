@@ -4,6 +4,9 @@ import {
   SET_DATA_IMPORT_ORGS_LOADED,
   SET_DATA_IMPORT_ORGS_COLLAPSED,
   SET_DATA_IMPORT_MODAL_OPENED_STATE,
+  SET_DATA_IMPORT_IN_PROGRESS,
+  SET_DATA_IMPORT_COMPLETED,
+  SET_DATA_IMPORT_IDS,
 } from './types';
 
 export function setOwnOrgs(ownOrganizations) {
@@ -38,5 +41,26 @@ export function setModalOpenedState(isModalOpened) {
   return {
     type: SET_DATA_IMPORT_MODAL_OPENED_STATE,
     payload: { isModalOpened },
+  };
+}
+
+export function setDataImportInProgress(isInProgress) {
+  return {
+    type: SET_DATA_IMPORT_IN_PROGRESS,
+    payload: { isInProgress },
+  };
+}
+
+export function setDataImportCompleted(isDataImportCompleted) {
+  return {
+    type: SET_DATA_IMPORT_COMPLETED,
+    payload: { isDataImportCompleted },
+  };
+}
+
+export function setImportedIds(importedIds) {
+  return {
+    type: SET_DATA_IMPORT_IDS,
+    payload: { importedIds },
   };
 }

@@ -1,6 +1,7 @@
 import { _ } from 'meteor/underscore';
+import { batchActions } from 'redux-batched-actions';
 
-import { extractIds, getId } from '/imports/api/helpers';
+import { extractIds } from '/imports/api/helpers';
 import {
   expandCollapsedStandards,
   collapseExpandedStandards,
@@ -10,7 +11,11 @@ import _modal_ from '/imports/startup/client/mixins/modal';
 import { setFilteredStandards } from '/imports/client/store/actions/standardsActions';
 import { onSearchTextClear, onSearch } from '/imports/ui/react/share/LHS/handlers';
 import { close } from '/imports/client/store/actions/modalActions';
-import { setModalOpenedState } from '/imports/client/store/actions/dataImportActions';
+import {
+  setModalOpenedState,
+  setDataImportInProgress,
+  setImportedIds,
+} from '/imports/client/store/actions/dataImportActions';
 import { goTo } from '/imports/ui/utils/router';
 import { getCount } from '/imports/api/standards/methods';
 import { canChangeRoles } from '/imports/api/checkers';
@@ -53,14 +58,27 @@ export const onModalOpen = (props) => (e) => {
   return openDocumentCreationModal(props)(e);
 };
 
-export const onDataImportSuccess = () => (res) => {
-  const id = getId(_.first(res));
+export const onDataImportSuccess = ({ dispatch }) => (res) => {
+  if (!res || !res.length) return dispatch(setDataImportInProgress(false));
 
-  if (!id) return;
+  const reducer = (prev, { _id }) => Object.assign(prev, { [_id]: _id });
+  const ids = res.reduce(reducer, {});
+  const id = ids[Object.keys(ids)[0]];
+
+  if (!id) return false;
+
+  const actions = [
+    setDataImportInProgress(false),
+    setImportedIds(ids),
+  ];
+
+  dispatch(batchActions(actions));
 
   goTo('standard')({ urlItemId: id });
 
   expandCollapsedStandard(id);
+
+  return true;
 };
 
 export const getDocsCount = () => getCount.call.bind(getCount);
