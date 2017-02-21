@@ -26,6 +26,8 @@ import {
   assoc,
   mapC,
   concatC,
+  toDocId,
+  toDocIdAndType,
 } from '../../helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
 import { getActionsWithLimitedFields } from '../../actions/utils';
@@ -44,9 +46,6 @@ const getStandardFiles = (standard) => {
 
   return Files.find({ _id: { $in: fileIds } });
 };
-
-const toDocId = transsoc({ documentId: propId });
-const toDocIdAndType = documentType => compose(assoc('documentType', documentType), toDocId);
 
 const getStandardsLayoutPub = function (userId, serialNumber, isDeleted) {
   const standardsFields = {

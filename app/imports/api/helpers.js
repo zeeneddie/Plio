@@ -569,3 +569,6 @@ export const searchByRegex = curry((regex, transformOrArrayOfProps, array) =>
 
 export const getSearchMatchText = (searchText, count) =>
   (searchText && count ? `${count} matching results` : '');
+
+export const toDocId = transsoc({ documentId: propId });
+export const toDocIdAndType = documentType => compose(assoc('documentType', documentType), toDocId);
