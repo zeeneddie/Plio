@@ -7,11 +7,13 @@ import { setOrganizations } from '/imports/client/store/actions/collectionsActio
 import { getId, invokeStop, invokeReady } from '/imports/api/helpers';
 
 export default subscribe => function loadLayoutData({
-    dispatch, 
+    dispatch,
     orgSerialNumber,
     ...props
   }, onData) {
   const subscription = subscribe({ orgSerialNumber, ...props });
+
+  if (!subscription) return;
 
   if (invokeReady(subscription)) {
     const organization = Organizations.findOne({ serialNumber: orgSerialNumber });
@@ -33,5 +35,5 @@ export default subscribe => function loadLayoutData({
     onData(null, { loading: true });
   }
 
-  return () => typeof subscription === 'function' && invokeStop(subscription);
+  return () => subscription && invokeStop(subscription);
 };

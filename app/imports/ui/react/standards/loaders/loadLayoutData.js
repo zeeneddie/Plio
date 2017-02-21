@@ -4,8 +4,11 @@ import React, { PropTypes } from 'react';
 
 import loadLayoutData from '../../loaders/loadLayoutData';
 import { setInitializing } from '/imports/client/store/actions/standardsActions';
+import { invokeStop } from '/imports/api/helpers';
 
 const getLayoutData = (props) => loadLayoutData(() => {
+  if (!props.orgSerialNumber) return false;
+
   const isDeleted = props.filter === 3
           ? true
           : { $in: [null, false] };
@@ -18,6 +21,9 @@ const propTypes = {
   filter: PropTypes.number,
   orgSerialNumber: PropTypes.number,
 };
+
+// BUG: Create org => import standards => delete org => enter other org =>
+// observers are not running and the docx docs are not loading and rendering
 
 const loadStandardsLayoutData = (Component) => {
   class LoadStandardsLayoutData extends React.Component {
@@ -41,22 +47,22 @@ const loadStandardsLayoutData = (Component) => {
     }
 
     componentWillUnmount() {
-      this._unmounted = true;
       this._unsubscribe();
     }
 
     _subscribe(props) {
       this._unsubscribe();
 
-      Tracker.nonreactive(() =>
+      this.handler = Tracker.nonreactive(() =>
         Tracker.autorun(() => {
-          if (this._unmounted) return;
-          this.subCleanUp = getLayoutData(props);
+          this.cleanup = getLayoutData(props);
         }));
     }
 
     _unsubscribe() {
-      if (this.subCleanUp) this.subCleanUp();
+      if (typeof this.cleanup === 'function') this.cleanup();
+
+      if (this.handler) invokeStop(this.handler);
     }
 
     render() {

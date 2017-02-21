@@ -5,7 +5,6 @@ import { Organizations } from '/imports/share/collections/organizations';
 import {
   ORG_DELETE as ORG_DELETE_SWAL_PARAMS,
 } from '/imports/api/swal-params';
-import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 import swal from '/imports/ui/utils/swal';
 
 Template.OrgDeletion.viewmodel({
@@ -16,13 +15,13 @@ Template.OrgDeletion.viewmodel({
   afterDelete: null,
   organization() {
     return Organizations.findOne({
-      _id: this.organizationId()
+      _id: this.organizationId(),
     }, {
-      fields: { name: 1 }
+      fields: { name: 1 },
     });
   },
   onDeteteButtonClick(e) {
-    this.beforeDelete && this.beforeDelete();
+    if (this.beforeDelete) this.beforeDelete();
     this._showDeleteOrgWarning();
   },
   _showDeleteOrgWarning() {
@@ -46,14 +45,14 @@ Template.OrgDeletion.viewmodel({
 
     swal.showPasswordForm(params, cb);
   },
-  _deleteOrganization(password) {
+  _deleteOrganization(pwd) {
     const { name: orgName } = this.organization() || {};
     const organizationId = this.organizationId();
-    password = SHA256(password);
+    const password = SHA256(pwd); // eslint-disable-line new-cap
 
     this.deleteOrganization({
       organizationId,
-      password
+      password,
     }, (err, res) => {
       if (err) {
         swal.error(err);
@@ -61,7 +60,7 @@ Template.OrgDeletion.viewmodel({
         swal.success('Success', `Organization ${orgName} has been deleted`);
       }
 
-      this.afterDelete && this.afterDelete(err, res, organizationId);
+      if (this.afterDelete) this.afterDelete(err, res, organizationId);
     });
   },
 });

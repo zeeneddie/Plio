@@ -182,9 +182,10 @@ export const transsoc = curry((transformations, obj) => {
 export const pickC = curry((keys, obj) => _.pick(Object.assign({}, obj), ...keys));
 
 // pickDeep(['a.b.c'])({ a: { b: { c: 123 }}}) => { c: 123 }
-export const pickDeep = curry((paths, obj) =>
-  flattenObjects(paths.map(path =>
-    ({ [path.replace(/.*\./g, '')]: get(obj, path) }))));
+export const pickDeep = curry((paths, obj) => Object.assign([], paths).reduce((acc, path) => ({
+  ...acc,
+  [path.replace(/.*\./g, '')]: get(obj, path),
+}), {}));
 
 export const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
 

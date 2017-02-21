@@ -14,7 +14,7 @@ import property from 'lodash.property';
 
 import StandardsLayout from '../../components/Layout';
 import loadStandardsLayoutData from '../../loaders/loadLayoutData';
-import { pickDeep, identity, invokeStop } from '/imports/api/helpers';
+import { pickDeep, identity, invokeStop, combineObjects, pickFrom } from '/imports/api/helpers';
 import { StandardFilters } from '/imports/api/constants';
 import onHandleFilterChange from '../../../handlers/onHandleFilterChange';
 import onHandleReturn from '../../../handlers/onHandleReturn';
@@ -71,10 +71,19 @@ export default compose(
       props.organizationId !== nextProps.organizationId ||
       props.initializing !== nextProps.initializing,
   }),
-  connect(pickDeep(['standards.areDepsReady', 'standards.initializing'])),
+  connect(combineObjects([
+    pickFrom('standards', ['areDepsReady', 'initializing']),
+    pickDeep(['global.dataLoading']),
+  ])),
   lifecycle({
-    componentWillReceiveProps({ areDepsReady, initializing, dispatch, organizationId }) {
-      if (areDepsReady && initializing) {
+    componentWillReceiveProps({
+      dataLoading,
+      areDepsReady,
+      initializing,
+      dispatch,
+      organizationId,
+    }) {
+      if (!dataLoading && areDepsReady && initializing) {
         setTimeout(() => {
           const args = [dispatch, { organizationId }];
           this.observers = [

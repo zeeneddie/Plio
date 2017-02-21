@@ -312,8 +312,10 @@ FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId/discussion', {
 
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
-  triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action() {
+    BlazeLayout.reset();
+
     $(() => ReactDOM.unmountComponentAtNode(document.getElementById('app')));
 
     BlazeLayout.render('Dashboard_Layout', {
