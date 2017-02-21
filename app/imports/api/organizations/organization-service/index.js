@@ -3,9 +3,10 @@ import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
 
 import { Organizations } from '/imports/share/collections/organizations';
-import StandardsBookSectionService from '../standards-book-sections/standards-book-section-service';
-import StandardsTypeService from '../standards-types/standards-type-service';
-import RisksTypeService from '../risk-types/risk-types-service';
+import StandardsBookSectionService from
+  '../../standards-book-sections/standards-book-section-service';
+import StandardsTypeService from '../../standards-types/standards-type-service';
+import RisksTypeService from '../../risk-types/risk-types-service';
 import {
   DefaultStandardSections,
   DefaultStandardTypes,
@@ -15,12 +16,9 @@ import {
   OrgMemberRoles,
   UserMembership,
   UserRoles,
-  DocumentTypes,
-  SystemName,
 } from '/imports/share/constants';
-import { generateSerialNumber, getCollectionByDocType } from '/imports/share/helpers';
-import { assoc, omitC, compose, reduceC, getC, cond } from '/imports/api/helpers';
-import OrgNotificationsSender from './org-notifications-sender';
+import { generateSerialNumber } from '/imports/share/helpers';
+import OrgNotificationsSender from '../org-notifications-sender';
 import { Actions } from '/imports/share/collections/actions';
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { Departments } from '/imports/share/collections/departments';
@@ -36,9 +34,11 @@ import { StandardsBookSections } from '/imports/share/collections/standards-book
 import { StandardTypes } from '/imports/share/collections/standards-types';
 import { Standards } from '/imports/share/collections/standards';
 import { WorkItems } from '/imports/share/collections/work-items';
-
+import importDocuments from './importDocuments';
 
 const OrganizationService = {
+  importDocuments,
+
   collection: Organizations,
 
   insert({ name, timezone, currency, ownerId }) {
@@ -345,153 +345,6 @@ const OrganizationService = {
       },
     };
     return this.collection.update(query, modifier);
-  },
-
-  importDocuments({ to, from, userId, documentType }) {
-    const files = [];
-
-    const getFieldsByDocType = (fields) => {
-      switch (documentType) {
-        case DocumentTypes.STANDARD:
-          return Object.assign({}, fields, {
-            sectionId: 1,
-            uniqueNumber: 1,
-            issueNumber: 1,
-            nestingLevel: 1,
-            source1: 1,
-            source2: 1,
-          });
-        case DocumentTypes.RISK:
-          return Object.assign({}, fields, {
-            statusComment: 1,
-            serialNumber: 1,
-            sequentialId: 1,
-            workflowType: 1,
-            identifiedAt: 1,
-            magnitude: 1,
-          });
-        default:
-          return fields;
-      }
-    };
-
-    const getPathsByDocType = (paths) => {
-      switch (documentType) {
-        case DocumentTypes.STANDARD:
-          return Object.assign({}, paths, ({ owner: userId }));
-        case DocumentTypes.RISK:
-          return Object.assign({}, paths, ({ identifiedBy: userId }));
-        default:
-          return paths;
-      }
-    };
-
-    const mapFieldsByDocType = (doc) => {
-      // assign current user's id to object's paths
-      const entity = getPathsByDocType({
-        _id: Random.id(),
-        organizationId: to,
-        createdBy: SystemName,
-        createdAt: new Date,
-        departmentsIds: [],
-        notify: [userId],
-      });
-      const result = Object.assign({}, omitC(['_id', 'titlePrefix'], doc), entity);
-
-      return result;
-    };
-
-    const copyFile = (_id) => {
-      const query = { _id };
-      const options = {
-        fields: {
-          name: 1,
-          extension: 1,
-          progress: 1,
-          url: 1,
-          status: 1,
-        },
-      };
-      const file = Files.findOne(query, options);
-
-      if (!file) return null;
-
-      const newFile = Object.assign({}, file, {
-        _id: Random.id(),
-        organizationId: to,
-      });
-
-      files.push(newFile);
-
-      return newFile._id;
-    };
-
-    const copyStandardDeps = (doc) => {
-      const { source1, source2 } = doc;
-      const reducer = (prev, file, i) => compose(
-        cond(
-          Boolean,
-          fileId => assoc(`source${i + 1}.fileId`, fileId, prev),
-          () => prev,
-        ),
-        copyFile,
-        getC('fileId'),
-      )(file);
-      const result = reduceC(reducer, { ...doc }, [source1, source2]);
-
-      return result;
-    };
-
-    const copyDeps = (doc = {}) => {
-      switch (documentType) {
-        case DocumentTypes.STANDARD:
-          return copyStandardDeps(doc);
-        default:
-          return doc;
-      }
-    };
-
-    const bulkInsertFiles = () => {
-      const bulk = Files.rawCollection().initializeUnorderedBulkOp();
-
-      files.forEach(bulk.insert.bind(bulk));
-
-      return Meteor.wrapAsync(bulk.execute.bind(bulk))();
-    };
-
-    const bulkInsertDocuments = () => {
-      const collection = getCollectionByDocType(documentType);
-      const query = { organizationId: from, isDeleted: false };
-      const common = {
-        typeId: 1,
-        title: 1,
-        description: 1,
-        isDeleted: 1,
-        status: 1,
-      };
-      const fields = getFieldsByDocType(common);
-      const options = {
-        fields,
-        sort: { title: 1 },
-      };
-      const cursor = collection.find(query, options);
-      const iterator = (bulk) => compose(
-        bulk.insert.bind(bulk),
-        mapFieldsByDocType,
-        copyDeps
-      );
-      const bulk = collection.rawCollection().initializeUnorderedBulkOp();
-
-      cursor.forEach(iterator(bulk));
-
-      return Meteor.wrapAsync(bulk.execute.bind(bulk))({ w: 1, wTimeout: 5000 });
-    };
-
-    const res = bulkInsertDocuments();
-
-    bulkInsertFiles();
-
-    return res && res.getInsertedIds();
   },
 };
 
