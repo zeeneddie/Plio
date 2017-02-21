@@ -20,6 +20,12 @@ import {
   makeOptionsFields,
   getCursorNonDeleted,
   toObjFind,
+  compose,
+  transsoc,
+  propId,
+  assoc,
+  mapC,
+  concatC,
 } from '../../helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
 import { getActionsWithLimitedFields } from '../../actions/utils';
@@ -38,6 +44,9 @@ const getStandardFiles = (standard) => {
 
   return Files.find({ _id: { $in: fileIds } });
 };
+
+const toDocId = transsoc({ documentId: propId });
+const toDocIdAndType = documentType => compose(assoc('documentType', documentType), toDocId);
 
 const getStandardsLayoutPub = function (userId, serialNumber, isDeleted) {
   const standardsFields = {
@@ -120,22 +129,35 @@ Meteor.publishComposite('standardCard', function publishStandardCard({
     return this.ready();
   }
 
-  return {
-    find() {
-      const query = { _id, organizationId };
+  const find = () => {
+    const query = { _id, organizationId };
 
-      if (typeof isDeleted !== undefined && isDeleted !== null) Object.assign(query, { isDeleted });
+    if (typeof isDeleted !== undefined && isDeleted !== null) Object.assign(query, { isDeleted });
 
-      return Standards.find(query);
-    },
-    children: [
-      getDepartmentsCursorByIds,
-      getStandardFiles,
-      ({ _id: documentId }) => LessonsLearned.find({ documentId }),
-    ].map(toObjFind)
-     .concat(createProblemsTree(getProblemsByStandardIds(NonConformities)))
-     .concat(createProblemsTree(getProblemsByStandardIds(Risks))),
+    return Standards.find(query);
   };
+
+  const ptree = compose(
+    createProblemsTree,
+    getProblemsByStandardIds,
+  );
+
+  let children = [
+    getDepartmentsCursorByIds,
+    getStandardFiles,
+    compose(LessonsLearned.find.bind(LessonsLearned), toDocId),
+    compose(Reviews.find.bind(Reviews), toDocIdAndType(DocumentTypes.STANDARD)),
+  ];
+
+  children = compose(
+    concatC([
+      ptree(NonConformities),
+      ptree(Risks),
+    ]),
+    mapC(toObjFind),
+  )(children);
+
+  return { find, children };
 });
 
 Meteor.publish('standardsDeps', function (organizationId) {
@@ -164,14 +186,12 @@ Meteor.publish('standardsDeps', function (organizationId) {
   );
   const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
   const riskTypes = RiskTypes.find({ organizationId });
-  const reviews = Reviews.find({ organizationId, documentType: DocumentTypes.STANDARD });
 
   return [
     actions,
     departments,
     standards,
     riskTypes,
-    reviews,
   ];
 });
 

@@ -13,7 +13,7 @@ export default subscribe => function loadLayoutData({
   }, onData) {
   const subscription = subscribe({ orgSerialNumber, ...props });
 
-  if (!subscription) return;
+  if (!subscription) return false;
 
   if (invokeReady(subscription)) {
     const organization = Organizations.findOne({ serialNumber: orgSerialNumber });
@@ -35,5 +35,7 @@ export default subscribe => function loadLayoutData({
     onData(null, { loading: true });
   }
 
-  return () => subscription && invokeStop(subscription);
+  return () => subscription &&
+    typeof subscription.stop === 'function' &&
+    invokeStop(subscription);
 };
