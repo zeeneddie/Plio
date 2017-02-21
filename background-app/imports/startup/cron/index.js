@@ -1,5 +1,6 @@
-import './config.js';
-import './action-creation-reminder.js';
-import './daily-recap.js';
-import './workflow-reminders.js';
-import './workflow.js';
+import './config';
+import './action-creation-reminder';
+import './daily-recap';
+import './workflow-reminders';
+import './workflow';
+import './review-reminders';

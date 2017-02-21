@@ -8,7 +8,6 @@ import TypeListContainer from '../../containers/TypeListContainer';
 import DeletedStandardListContainer from '../../containers/DeletedStandardListContainer';
 import ModalHandle from '../../../components/ModalHandle';
 import DataImportContainer from '../../../data-import/containers/DataImportContainer';
-import AddButton from '../../../components/Buttons/AddButton';
 import Field from '../../../fields/read/components/Field';
 
 const propTypes = {

@@ -14,7 +14,7 @@ const FormInput = enhance(({
   children,
   onHandleBlur: onBlur,
   onHandleClear: onClear,
-  ...other,
+  ...other
 }) => {
   let textInput;
 

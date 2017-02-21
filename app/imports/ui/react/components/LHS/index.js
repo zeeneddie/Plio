@@ -22,7 +22,7 @@ const propTypes = {
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
-  AddButtonComponent: PropTypes.func,
+  renderAddButton: PropTypes.func,
   children: PropTypes.node,
 };
 
@@ -37,7 +37,7 @@ const LHS = ({
   onFocus,
   onBlur,
   onChange,
-  AddButtonComponent = () => onModalButtonClick && (
+  renderAddButton = () => onModalButtonClick && (
     <AddButton onClick={onModalButtonClick}>
       Add
     </AddButton>
@@ -62,6 +62,7 @@ const LHS = ({
           >
             <TextInput
               {...{ onChange, onBlur, onFocus }}
+              uncontrolled
               value={searchText}
               disabled={animating}
               getRef={input => (searchInput = input)}
@@ -73,7 +74,7 @@ const LHS = ({
             <Icon name="circle-o-notch spin" className="small-loader" />
           )}
         </div>
-        <AddButtonComponent {...{ animating, isFocused, searchText, searchResultsText }} />
+        {renderAddButton({ animating, isFocused, searchText, searchResultsText })}
       </div>
 
       <ListGroup className="list-group-accordion">

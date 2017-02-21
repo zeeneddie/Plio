@@ -2,7 +2,7 @@
   <legend>{{title}}</legend>
   <div class="form-group form-group-inline">
     <label class="form-control-label">Start reminding</label>
-    {{> TimePicker
+    {{> ReminderTimePicker
         timeValue=startValue
         timeUnit=startUnit
         cssClass="margin-right"
@@ -13,7 +13,7 @@
   </div>
   <div class="form-group form-group-inline">
     <label class="form-control-label">Then every</label>
-    {{> TimePicker
+    {{> ReminderTimePicker
         timeValue=intervalValue
         timeUnit=intervalUnit
         cssClass="margin-right"
@@ -21,7 +21,7 @@
         type=type
         reminderType="interval"}}
     <label class="form-control-label">until</label>
-    {{> TimePicker
+    {{> ReminderTimePicker
         timeValue=untilValue
         timeUnit=untilUnit
         cssClass="margin-right"

@@ -1,40 +1,33 @@
 import React, { PropTypes } from 'react';
 import { _ } from 'meteor/underscore';
 
-import { searchByRegex, createSearchRegex, getC, propEq } from '/imports/api/helpers';
+import {
+  searchByRegex,
+  createSearchRegex,
+  getC,
+  propEq,
+  invokeC,
+  omitC,
+} from '/imports/api/helpers';
 import SelectInputView from './view';
 
 const getValue = ({ items, selected }) => getC('text', items.find(propEq('value', selected))) || '';
 
-export default class SelectInput extends React.Component {
-  static get childContextTypes() {
-    return {
-      onSelect: PropTypes.func,
-    };
-  }
+const propTypes = {
+  uncontrolled: PropTypes.bool,
+  setValue: PropTypes.func,
+  ...omitC([
+    'onChange', 'onFocus', 'onBlur', 'toggle', 'isOpen',
+  ], SelectInputView.propTypes),
+};
 
-  static get propTypes() {
-    return {
-      selected: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      items: PropTypes.arrayOf(PropTypes.shape({
-        text: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.node]),
-        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        indent: PropTypes.bool,
-      })).isRequired,
-      onSelect: PropTypes.func.isRequired,
-      disabled: PropTypes.bool,
-      placeholder: PropTypes.string,
-      isControlled: PropTypes.bool,
-      value: PropTypes.string,
-      setValue: PropTypes.func,
-      children: PropTypes.node,
-    };
-  }
+const childContextTypes = { onSelect: propTypes.onSelect };
 
+class SelectInput extends React.Component {
   constructor(props) {
     super(props);
 
-    if (props.isControlled && (
+    if (!props.uncontrolled && (
       typeof props.value === 'undefined' || props.value === null || !props.setValue
     )) {
       throw new Error('Controlled select input should have "value" and "setValue" props');
@@ -45,14 +38,14 @@ export default class SelectInput extends React.Component {
       items: props.items || [],
     };
 
-    if (!props.isControlled) {
+    if (props.uncontrolled) {
       this.state = {
         ...this.state,
         value: getValue(props),
       };
     }
 
-    this.shouldCallOnBlur = true;
+    this._shouldFireClose = true;
 
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
@@ -60,6 +53,9 @@ export default class SelectInput extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onSelect = this.onSelect.bind(this);
     this.onInputChange = _.throttle(this.onInputChange, 300).bind(this);
+    this.triggerFocus = this.triggerFocus.bind(this);
+    this.triggerBlur = this.triggerBlur.bind(this);
+    this.onCaretMouseDown = this.onCaretMouseDown.bind(this);
   }
 
   getChildContext() {
@@ -69,45 +65,47 @@ export default class SelectInput extends React.Component {
   }
 
   componentWillMount() {
-    if (this.props.isControlled) {
+    if (!this.props.uncontrolled) {
       this.props.setValue(getValue(this.props));
     }
   }
 
-  onSelect(e, { text, ...other }, cb) {
+  onSelect(e, { text, value, ...other }, cb) {
+    if (this.props.disabled) return;
     // prevent "close" code to execute on select
     // it will fire otherwise because of onBlur event and will reset the value back
-    this.shouldCallOnBlur = false;
-
-    if (this.props.isControlled) {
-      this.props.setValue(text);
-    } else {
-      this.setState({ value: text });
-    }
+    invokeC('preventDefault', e);
+    invokeC('stopPropagation', e);
 
     const callback = (err, res) => {
-      let state = { isOpen: false };
-
-      if (err) state = { ...state, value: getValue(this.props) };
-
-      this.setState(state);
-
-      if (cb) cb(err, res);
+      this._shouldFireClose = true; // make sure 'close' fires
+      if (err) this.close(); // roll the old value back on error
+      if (typeof cb === 'function') cb(err, res);
     };
 
-    // we need a timeout there to prevent some flushy things to happen
-    // also provide a callback to reset the value if method thrown an error
-    setTimeout(() => {
-      this.props.onSelect(e, { text, ...other }, callback);
+    const handle = () => {
+      // prevent close to fire on blur so that the old value doesn't show up in input
+      this._shouldFireClose = false;
+      this.triggerBlur();
+      this.props.onSelect(e, { text, value, ...other }, callback);
+    };
 
-      this.shouldCallOnBlur = true;
-    }, 50);
+    const newState = { isOpen: false };
+
+    if (this.props.uncontrolled) {
+      Object.assign(newState, { value: text });
+      this.setState(newState, handle);
+    } else {
+      this.setState(newState, () => this.props.setValue(text, handle));
+    }
   }
 
   onChange(e) {
+    if (this.props.disabled) return;
+
     const value = e.target.value;
 
-    if (this.props.isControlled) {
+    if (!this.props.uncontrolled) {
       this.props.setValue(value);
     }
 
@@ -125,17 +123,35 @@ export default class SelectInput extends React.Component {
     this.setState({ items });
   }
 
+  onCaretMouseDown(e, isOpen) {
+    e.preventDefault();
+    e.stopPropagation();
+    return isOpen ? this.triggerBlur() : this.triggerFocus();
+  }
+
+  triggerFocus() {
+    invokeC('focus', this.input);
+  }
+
+  triggerBlur() {
+    invokeC('blur', this.input);
+  }
+
   open() {
+    if (this.props.disabled) return;
+
     const newState = { isOpen: true, items: this.props.items };
 
-    if (this.props.isControlled) this.props.setValue('');
+    if (!this.props.uncontrolled) this.props.setValue('');
     else Object.assign(newState, { value: '' });
 
     this.setState(newState);
   }
 
   close() {
-    if (this.shouldCallOnBlur) {
+    if (this.props.disabled) return;
+
+    if (this._shouldFireClose) {
       const newState = {
         isOpen: false,
         items: this.props.items,
@@ -143,13 +159,13 @@ export default class SelectInput extends React.Component {
 
       const value = getValue(this.props);
 
-      if (this.props.isControlled) this.props.setValue(value);
+      if (!this.props.uncontrolled) this.props.setValue(value);
       else Object.assign(newState, { value });
 
       this.setState(newState);
     }
 
-    this.shouldCallOnBlur = true;
+    this._shouldFireClose = true;
   }
 
   toggle() {
@@ -162,14 +178,22 @@ export default class SelectInput extends React.Component {
     return (
       <SelectInputView
         {...{ ...this.props, ...this.state }}
+        getRef={input => (this.input = input)}
         onFocus={this.open}
         onBlur={this.close}
         toggle={this.toggle}
         onChange={this.onChange}
         onSelect={this.onSelect}
+        onCaretMouseDown={this.onCaretMouseDown}
       >
         {this.props.children}
       </SelectInputView>
     );
   }
 }
+
+SelectInput.propTypes = propTypes;
+
+SelectInput.childContextTypes = childContextTypes;
+
+export default SelectInput;

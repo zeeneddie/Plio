@@ -41,3 +41,5 @@ import '../../api/files';
 import '../../api/help-docs';
 
 import '../../api/data-export';
+
+import '../../api/reviews';

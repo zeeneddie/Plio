@@ -1,0 +1,58 @@
+import React, { PropTypes } from 'react';
+import { $ } from 'meteor/jquery';
+import cx from 'classnames';
+
+import { getFormattedDate } from '/imports/share/helpers';
+
+export default class DatePicker extends React.Component {
+
+  static get propTypes() {
+    return {
+      className: React.PropTypes.string,
+      value: React.PropTypes.instanceOf(Date),
+      disabled: PropTypes.bool,
+      onChange: PropTypes.func,
+      placeholder: PropTypes.string,
+    };
+  }
+
+  static get defaultProps() {
+    return {
+      disabled: false,
+      placeholder: 'Select date',
+    };
+  }
+
+  componentDidMount() {
+    const datepicker = $(this.datepicker);
+
+    datepicker.datepicker({
+      todayHighlight: true,
+      format: 'MM, dd',
+      autoclose: true,
+    });
+
+    datepicker.on('changeDate', (e) => {
+      if (this.props.onChange) this.props.onChange(e);
+    });
+  }
+
+  _dateString() {
+    return this.props.value ? getFormattedDate(this.props.value, 'MMMM, DD') : '';
+  }
+
+  render() {
+    return (
+      <input
+        type="text"
+        className={cx('form-control', 'datepicker', this.props.className)}
+        readOnly="true"
+        placeholder={this.props.placeholder}
+        disabled={this.props.disabled}
+        value={this._dateString()}
+        ref={node => (this.datepicker = node)}
+      />
+    );
+  }
+
+}

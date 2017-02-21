@@ -7,8 +7,7 @@ import { omitProps } from '../../../helpers';
 
 const enhance = compose(
   branch(
-    property('isControlled'),
-    renameProp('value', 'internalValue'),
+    property('uncontrolled'),
     compose(
       withState('internalValue', 'setInternalValue', property('value')),
       lifecycle({
@@ -19,8 +18,9 @@ const enhance = compose(
         },
       }),
     ),
+    renameProp('value', 'internalValue'),
   ),
-  omitProps(['value', 'isControlled']),
+  omitProps(['value', 'uncontrolled']),
 );
 
 const TextInput = enhance(({
@@ -44,7 +44,7 @@ const TextInput = enhance(({
 ));
 
 TextInput.propTypes = {
-  isControlled: PropTypes.bool,
+  uncontrolled: PropTypes.bool,
   value: PropTypes.string,
   onChange: PropTypes.func,
   getRef: PropTypes.func,

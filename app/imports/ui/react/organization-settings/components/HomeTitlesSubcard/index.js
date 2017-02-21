@@ -60,9 +60,8 @@ const HomeTitlesSubcard = ({
       <HomeScreenTitle
         {...{ ...currentItem, key, items, onSelect }}
         id={key}
-        noHint
         selected={createWorkspaceTitleValue(key, selectedTitle)}
-        placeholder="Select a title..."
+        input={{ placeholder: 'Select a title...' }}
       />
     );
   });
