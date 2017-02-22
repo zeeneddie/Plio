@@ -11,7 +11,7 @@ import {
 import { connect } from 'react-redux';
 import { composeWithTracker, compose as kompose } from 'react-komposer';
 import { setInitializing } from '/imports/client/store/actions/risksActions';
-import { pickDeep } from '/imports/api/helpers';
+import { pickDeep, mapC, invokeStop, identity } from '/imports/api/helpers';
 import { RiskFilters, RiskFilterIndexes } from '/imports/api/constants';
 import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers';
 import RisksLayout from '../../components/RisksLayout';
@@ -58,7 +58,7 @@ const enhance = compose(
   branch(
     props => props.loading,
     renderComponent(RisksLayout),
-    _.identity
+    identity
   ),
   composeWithTracker(loadUsersData),
   connect(pickDeep(['organizations.organizationId'])),
@@ -98,7 +98,7 @@ const enhance = compose(
       }
     },
     componentWillUnmount() {
-      const result = this.observers && this.observers.map(observer => observer && observer.stop());
+      const result = this.observers && mapC(invokeStop, this.observers);
 
       this.props.dispatch(setInitializing(true));
 

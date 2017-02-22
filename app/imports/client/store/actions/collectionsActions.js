@@ -33,6 +33,7 @@ import {
   REMOVE_RISK_TYPE,
   SET_USERS,
   SET_USERS_BY_ORG_IDS,
+  SET_REVIEWS,
 } from './types';
 import { createAction } from './helpers';
 
@@ -138,6 +139,13 @@ export function setUsers(users) {
   return {
     type: SET_USERS,
     payload: { users },
+  };
+}
+
+export function setReviews(reviews) {
+  return {
+    type: SET_REVIEWS,
+    payload: { reviews },
   };
 }
 

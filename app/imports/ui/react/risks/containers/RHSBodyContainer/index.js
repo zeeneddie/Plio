@@ -4,7 +4,8 @@ import property from 'lodash.property';
 import set from 'lodash.set';
 
 import {
-  pickC,
+  combineObjects,
+  pickFrom,
   pickDocuments,
   mapC,
   transsoc,
@@ -15,20 +16,26 @@ import {
   find,
   filterC,
   getC,
+  assoc,
+  slice,
 } from '/imports/api/helpers';
 import { capitalize, getFormattedDate } from '/imports/share/helpers';
 import { getNameByScore, getClassByScore } from '/imports/api/risks/helpers';
-import { getLinkedActions, getLinkedLessons } from '/imports/ui/react/share/helpers/linked';
+import {
+  getLinkedActions,
+  getLinkedLessons,
+  getLinkedReviews,
+} from '/imports/ui/react/share/helpers/linked';
 import { DocumentTypes, ActionTypes } from '/imports/share/constants';
 import { splitActionsByType } from '/imports/api/actions/helpers';
 import { getPath } from '/imports/ui/utils/router';
 
 import BodyContents from '../../components/RHS/Body';
 
-const mapStateToProps = (state) => ({
-  ...pickC(['userId', 'urlItemId'], state.global),
-  ...pickC(['orgSerialNumber'], state.organizations),
-  ...pickC([
+const mapStateToProps = combineObjects([
+  pickFrom('global', ['userId', 'urlItemId']),
+  pickFrom('organizations', ['orgSerialNumber']),
+  pickFrom('collections', [
     'usersByIds',
     'departmentsByIds',
     'standardsByIds',
@@ -36,8 +43,9 @@ const mapStateToProps = (state) => ({
     'workItems',
     'lessons',
     'actions',
-  ], state.collections),
-});
+    'reviews',
+  ]),
+]);
 
 const propsMapper = ({
   risk,
@@ -61,6 +69,12 @@ const propsMapper = ({
   const correctiveActions = actionsByType[ActionTypes.CORRECTIVE_ACTION];
   const type = riskTypesByIds[risk.typeId];
   const lessons = getLinkedLessons(risk._id, DocumentTypes.RISK, props.lessons);
+  const reviews = compose(
+    // replace 'reviewedBy' with the actual user object instead of id
+    mapC(review => assoc('reviewedBy', pickUsers(getC('reviewedBy', review)), review)),
+    getLinkedReviews(risk._id, DocumentTypes.RISK), // get reviews linked to that risk
+    slice(0, 3), // get the last 3 reviews
+  )(props.reviews);
   const magnitude = risk.magnitude && capitalize(risk.magnitude);
   const scores = mapC(transsoc({
     scoreTypeId: compose(capitalize, property('scoreTypeId')),
@@ -102,6 +116,7 @@ const propsMapper = ({
     departments,
     standards,
     lessons,
+    reviews,
   };
 };
 

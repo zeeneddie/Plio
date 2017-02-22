@@ -16,6 +16,7 @@ import ScoringTable from '/imports/ui/react/components/ScoringTable';
 import Evaluation from '/imports/ui/react/components/Evaluation';
 import FileProvider from '/imports/ui/react/containers/providers/FileProvider';
 import Analysis from '/imports/ui/react/fields/read/components/Analysis';
+import Reviews from '/imports/ui/react/fields/read/components/Reviews';
 
 const propTypes = {
   title: PropTypes.string,
@@ -38,6 +39,7 @@ const propTypes = {
   fileIds: PropTypes.arrayOf(PropTypes.string),
   analysis: PropTypes.object,
   updateOfStandards: PropTypes.object,
+  reviews: PropTypes.arrayOf(PropTypes.object),
 };
 
 const Body = ({
@@ -61,6 +63,7 @@ const Body = ({
   fileIds,
   analysis,
   updateOfStandards,
+  reviews,
 }) => (
   <div>
     <ListGroup>
@@ -167,6 +170,13 @@ const Body = ({
             <FileProvider key={fileId} {...{ fileId }} />
           ))}
         </Field>
+      </Block>
+    )}
+
+    {!!reviews.length && (
+      <Block>
+        <span>Reviews</span>
+        <Reviews {...{ reviews }} />
       </Block>
     )}
   </div>

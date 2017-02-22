@@ -58,6 +58,4 @@ export default function loadDeps({ dispatch, organizationId, initializing }, onD
   }
 
   onData(null, {});
-
-  return () => typeof subscription === 'function' && subscription.stop();
 }

@@ -22,7 +22,8 @@ export const getRiskFiles = ({
 };
 
 export const createRiskCardPublicationTree = (getQuery) => {
-  const tree = createProblemsTree((...args) => Risks.find(getQuery(...args)));
+  const findRisks = compose(Risks.find.bind(Risks), getQuery);
+  const tree = createProblemsTree(findRisks);
   const cursorGetters = [
     getRiskFiles,
     getLessonsCursorByDocumentId,
