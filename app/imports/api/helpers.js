@@ -290,7 +290,7 @@ export const reduceC = curry((reducer, initialValue, array) =>
   Object.assign([], array).reduce(reducer, initialValue));
 // slice(0, 2)([1, 2, 3, 4, 5]) => [1, 2, 3]
 // slice (1, Infinity)([1, 2, 3, 4, 5]) => [2, 3, 4, 5]
-export const slice = curry((a, b, array) => Object.assign([], array).slice(a, b));
+export const slice = curry((a, b, c) => c.slice(a, b));
 
 // pickDocuments(
 //   ['_id', 'profile.firstName'],
