@@ -44,7 +44,18 @@ export const onToggleCollapse = ({
       dispatch(batchActions(actions));
     };
 
-    OrgSubs.subscribe('dataImportUserOwnOrganizations', onReady);
+    const onStop = (err) => {
+      const actions = [
+        setErrorText(err.reason || 'Internal server error'),
+        setOrgsLoading(false),
+        setOrgsCollapsed(true),
+        setOrgsLoaded(false),
+      ];
+
+      dispatch(batchActions(actions));
+    };
+
+    OrgSubs.subscribe('dataImportUserOwnOrganizations', { onReady, onStop });
   };
   // when the user first time clicks on the collapse load and fetch the data
   // otherwise just toggle the collapse
