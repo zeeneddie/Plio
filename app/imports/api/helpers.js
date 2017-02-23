@@ -213,6 +213,10 @@ export const propEqType = propEq('type');
 
 export const propEqKey = propEq('key');
 
+export const propEqDocId = propEq('documentId');
+
+export const propEqDocType = propEq('documentType');
+
 export const findIndexById = curry((_id, array) => array.findIndex(propEqId(_id)));
 
 export const T = () => true;
@@ -284,6 +288,9 @@ export const sortC = createArrayFn('sort');
 export const concatC = curry((arrays, array) => Object.assign([], array).concat(...arrays));
 export const reduceC = curry((reducer, initialValue, array) =>
   Object.assign([], array).reduce(reducer, initialValue));
+// slice(0, 2)([1, 2, 3, 4, 5]) => [1, 2, 3]
+// slice (1, Infinity)([1, 2, 3, 4, 5]) => [2, 3, 4, 5]
+export const slice = curry((a, b, c) => c.slice(a, b));
 
 // pickDocuments(
 //   ['_id', 'profile.firstName'],
@@ -571,4 +578,9 @@ export const getSearchMatchText = (searchText, count) =>
   (searchText && count ? `${count} matching results` : '');
 
 export const toDocId = transsoc({ documentId: propId });
+
 export const toDocIdAndType = documentType => compose(assoc('documentType', documentType), toDocId);
+
+// Returns a function that always returns the given value
+// always('Hello!')() => hello
+export const always = value => () => value;

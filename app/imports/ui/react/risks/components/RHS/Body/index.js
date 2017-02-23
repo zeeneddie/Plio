@@ -2,13 +2,13 @@ import React, { PropTypes } from 'react';
 import { Row, Col, ListGroup } from 'reactstrap';
 import { _ } from 'meteor/underscore';
 
-import { ProblemsStatuses } from '/imports/share/constants';
+import { ProblemsStatuses, DocumentTypes } from '/imports/share/constants';
 import { AnalysisTitles } from '/imports/api/constants';
+import { getFullName } from '/imports/api/users/helpers';
 import Label from '/imports/ui/react/components/Labels/Label';
 import LinkItemList from '/imports/ui/react/fields/read/components/LinkItemList';
 import ImprovementPlan from '/imports/ui/react/fields/read/components/ImprovementPlan';
 import Notify from '/imports/ui/react/fields/read/components/Notify';
-import { getFullName } from '/imports/api/users/helpers';
 import Field from '/imports/ui/react/fields/read/components/Field';
 import Block from '/imports/ui/react/fields/read/components/Block';
 import Departments from '/imports/ui/react/fields/read/components/Departments';
@@ -16,8 +16,10 @@ import ScoringTable from '/imports/ui/react/components/ScoringTable';
 import Evaluation from '/imports/ui/react/components/Evaluation';
 import FileProvider from '/imports/ui/react/containers/providers/FileProvider';
 import Analysis from '/imports/ui/react/fields/read/components/Analysis';
+import ReviewsContainer from '/imports/ui/react/fields/read/containers/ReviewsContainer';
 
 const propTypes = {
+  _id: PropTypes.string,
   title: PropTypes.string,
   sequentialId: PropTypes.string,
   status: PropTypes.number,
@@ -41,6 +43,7 @@ const propTypes = {
 };
 
 const Body = ({
+  _id,
   title,
   sequentialId,
   status,
@@ -169,6 +172,8 @@ const Body = ({
         </Field>
       </Block>
     )}
+
+    <ReviewsContainer documentId={_id} documentType={DocumentTypes.RISK} />
   </div>
 );
 

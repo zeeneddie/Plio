@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { Col } from 'reactstrap';
+import { Col, Row, ListGroup } from 'reactstrap';
 
 import { getFullNameOrEmail } from '/imports/api/users/helpers';
 import { length } from '/imports/api/helpers';
+import { DocumentTypes } from '/imports/share/constants';
 import createReadFields from '../../../../helpers/createReadFields';
 import DepartmentsContainer from '../../../../fields/read/containers/DepartmentsContainer';
 import Source from '../../../../fields/read/components/Source';
@@ -11,6 +12,7 @@ import Notify from '../../../../fields/read/components/Notify';
 import ImprovementPlan from '../../../../fields/read/components/ImprovementPlan';
 import FileProvider from '../../../../containers/providers/FileProvider';
 import ConnectedDocListContainer from '../../../fields/read/containers/ConnectedDocListContainer';
+import ReviewsContainer from '/imports/ui/react/fields/read/containers/ReviewsContainer';
 
 const propTypes = {
   _id: PropTypes.string,
@@ -52,18 +54,18 @@ const BodyContents = ({
 
   return (
     <div>
-      <div className="list-group">
+      <ListGroup>
         {fields.description}
 
-        <div className="row">
+        <Row>
           {fields.issueNumber}
           {fields.section}
-        </div>
+        </Row>
 
-        <div className="row">
+        <Row>
           {fields.type}
           {fields.owner}
-        </div>
+        </Row>
 
         {!!length(departmentsIds) && (
           <DepartmentsContainer departmentsIds={departmentsIds} />
@@ -78,7 +80,7 @@ const BodyContents = ({
             {...{ ...source, fileId: source.fileId || '' }}
           />
         ))}
-      </div>
+      </ListGroup>
 
       {!!length(notify) && (<Notify users={notify} />)}
 
@@ -90,6 +92,8 @@ const BodyContents = ({
           />
         )}
       </ConnectedDocListContainer>
+
+      <ReviewsContainer documentId={_id} documentType={DocumentTypes.STANDARD} />
     </div>
   );
 };

@@ -1,6 +1,14 @@
 import curry from 'lodash.curry';
 
-import { propEq, find, every, reduceC } from '/imports/api/helpers';
+import {
+  propEq,
+  find,
+  every,
+  reduceC,
+  propEqDocId,
+  propEqDocType,
+  identity,
+} from '/imports/api/helpers';
 import { getQueryParams } from '/imports/api/work-items/helpers';
 import { getPath } from '/imports/ui/utils/router';
 import { getClassByStatus as getActionClassByStatus } from '/imports/api/actions/helpers';
@@ -27,13 +35,21 @@ export const getLinkedActions = curry((predicate, { userId, workItems }, actions
     return prev.concat(result);
   }, [], actions));
 
-export const getLinkedLessons = curry((docId, docType, lessons) => reduceC((prev, lesson) => {
-  const pred = every([
-    propEq('documentId', docId),
-    propEq('documentType', docType),
-  ], lesson);
+const getLinkedByDocIdType = curry((mapper, docId, docType, array) => {
+  const pred = every([propEqDocId(docId), propEqDocType(docType)]);
 
-  if (pred) return prev.concat({ ...lesson, sequentialId: `LL${lesson.serialNumber}` });
+  const reducer = (acc, item) => {
+    if (pred(item)) return acc.concat(mapper(item));
 
-  return prev;
-}, [], lessons));
+    return acc;
+  };
+
+  return reduceC(reducer, [], array);
+});
+
+export const getLinkedLessons = getLinkedByDocIdType(lesson => ({
+  ...lesson,
+  sequentialId: `LL${lesson.serialNumber}`,
+}));
+
+export const getLinkedReviews = getLinkedByDocIdType(identity);

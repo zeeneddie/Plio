@@ -30,8 +30,9 @@ import {
   ADD_RISK,
   UPDATE_RISK,
   REMOVE_RISK,
+  SET_REVIEWS,
 } from '../actions/types';
-import { flattenObjects } from '/imports/api/helpers';
+import { reduceC } from '/imports/api/helpers';
 import { CollectionNames } from '/imports/share/constants';
 import { STORE_COLLECTION_NAMES } from '../lib/constants';
 import {
@@ -43,13 +44,22 @@ import {
   setUsersByOrgIds,
 } from '../lib/collectionsHelpers';
 
+const initialStateReducer = (acc, key) => {
+  const value = STORE_COLLECTION_NAMES[key];
+
+  if (!value) return acc;
+
+  const obj = { [value]: [], [getNormalizedDataKey(value)]: [] };
+
+  return Object.assign(acc, obj);
+};
+
 const initialState = {
   usersByOrgIds: [],
-  ...flattenObjects(Object.keys(STORE_COLLECTION_NAMES).map(key => {
-    const value = STORE_COLLECTION_NAMES[key];
-    return { [value]: [], [getNormalizedDataKey(value)]: [] };
-  })),
+  ...reduceC(initialStateReducer, {}, Object.keys(STORE_COLLECTION_NAMES)),
 };
+
+const getSCName = name => STORE_COLLECTION_NAMES[name];
 
 export default function reducer(state = initialState, action) {
   const set = setC(state, action);
@@ -73,37 +83,38 @@ export default function reducer(state = initialState, action) {
     case SET_HELP_DOCS:
     case SET_HELP_SECTIONS:
     case SET_USERS:
+    case SET_REVIEWS:
       return set(Object.keys(action.payload)[0]);
     case ADD_STANDARD:
-      return add(STORE_COLLECTION_NAMES[CollectionNames.STANDARDS]);
+      return add(getSCName(CollectionNames.STANDARDS));
     case UPDATE_STANDARD:
-      return update(STORE_COLLECTION_NAMES[CollectionNames.STANDARDS]);
+      return update(getSCName(CollectionNames.STANDARDS));
     case REMOVE_STANDARD:
-      return remove(STORE_COLLECTION_NAMES[CollectionNames.STANDARDS]);
+      return remove(getSCName(CollectionNames.STANDARDS));
     case ADD_STANDARD_BOOK_SECTION:
-      return add(STORE_COLLECTION_NAMES[CollectionNames.STANDARD_BOOK_SECTIONS]);
+      return add(getSCName(CollectionNames.STANDARD_BOOK_SECTIONS));
     case UPDATE_STANDARD_BOOK_SECTION:
-      return update(STORE_COLLECTION_NAMES[CollectionNames.STANDARD_BOOK_SECTIONS]);
+      return update(getSCName(CollectionNames.STANDARD_BOOK_SECTIONS));
     case REMOVE_STANDARD_BOOK_SECTION:
-      return remove(STORE_COLLECTION_NAMES[CollectionNames.STANDARD_BOOK_SECTIONS]);
+      return remove(getSCName(CollectionNames.STANDARD_BOOK_SECTIONS));
     case ADD_STANDARD_TYPE:
-      return add(STORE_COLLECTION_NAMES[CollectionNames.STANDARD_TYPES]);
+      return add(getSCName(CollectionNames.STANDARD_TYPES));
     case UPDATE_STANDARD_TYPE:
-      return update(STORE_COLLECTION_NAMES[CollectionNames.STANDARD_TYPES]);
+      return update(getSCName(CollectionNames.STANDARD_TYPES));
     case REMOVE_STANDARD_TYPE:
-      return remove(STORE_COLLECTION_NAMES[CollectionNames.STANDARD_TYPES]);
+      return remove(getSCName(CollectionNames.STANDARD_TYPES));
     case ADD_ORGANIZATION:
-      return add(STORE_COLLECTION_NAMES[CollectionNames.ORGANIZATIONS]);
+      return add(getSCName(CollectionNames.ORGANIZATIONS));
     case UPDATE_ORGANIZATION:
-      return update(STORE_COLLECTION_NAMES[CollectionNames.ORGANIZATIONS]);
+      return update(getSCName(CollectionNames.ORGANIZATIONS));
     case REMOVE_ORGANIZATION:
-      return remove(STORE_COLLECTION_NAMES[CollectionNames.ORGANIZATIONS]);
+      return remove(getSCName(CollectionNames.ORGANIZATIONS));
     case ADD_RISK:
-      return add(STORE_COLLECTION_NAMES[CollectionNames.RISKS]);
+      return add(getSCName(CollectionNames.RISKS));
     case UPDATE_RISK:
-      return update(STORE_COLLECTION_NAMES[CollectionNames.RISKS]);
+      return update(getSCName(CollectionNames.RISKS));
     case REMOVE_RISK:
-      return remove(STORE_COLLECTION_NAMES[CollectionNames.RISKS]);
+      return remove(getSCName(CollectionNames.RISKS));
     case SET_USERS_BY_ORG_IDS:
       return setUsersByOrgIds(state, action);
     default:

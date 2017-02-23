@@ -4,7 +4,8 @@ import property from 'lodash.property';
 import set from 'lodash.set';
 
 import {
-  pickC,
+  combineObjects,
+  pickFrom,
   pickDocuments,
   mapC,
   transsoc,
@@ -18,17 +19,20 @@ import {
 } from '/imports/api/helpers';
 import { capitalize, getFormattedDate } from '/imports/share/helpers';
 import { getNameByScore, getClassByScore } from '/imports/api/risks/helpers';
-import { getLinkedActions, getLinkedLessons } from '/imports/ui/react/share/helpers/linked';
+import {
+  getLinkedActions,
+  getLinkedLessons,
+} from '/imports/ui/react/share/helpers/linked';
 import { DocumentTypes, ActionTypes } from '/imports/share/constants';
 import { splitActionsByType } from '/imports/api/actions/helpers';
 import { getPath } from '/imports/ui/utils/router';
 
 import BodyContents from '../../components/RHS/Body';
 
-const mapStateToProps = (state) => ({
-  ...pickC(['userId', 'urlItemId'], state.global),
-  ...pickC(['orgSerialNumber'], state.organizations),
-  ...pickC([
+const mapStateToProps = combineObjects([
+  pickFrom('global', ['userId', 'urlItemId']),
+  pickFrom('organizations', ['orgSerialNumber']),
+  pickFrom('collections', [
     'usersByIds',
     'departmentsByIds',
     'standardsByIds',
@@ -36,8 +40,8 @@ const mapStateToProps = (state) => ({
     'workItems',
     'lessons',
     'actions',
-  ], state.collections),
-});
+  ]),
+]);
 
 const propsMapper = ({
   risk,
