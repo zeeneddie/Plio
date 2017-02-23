@@ -111,8 +111,13 @@ const copyDeps = curry((documentType, bulkFiles, to, from, doc) => {
 
 const initBulk = collection => collection.rawCollection().initializeUnorderedBulkOp();
 
-const executeBulks = (...bulks) => bulks.map(bulk =>
-  Meteor.wrapAsync(bulk.execute.bind(bulk))({ w: 1, wTimeout: 5000 }));
+const executeBulks = (...bulks) => bulks.reduce((acc, bulk) => {
+  if (!bulk || !bulk.length) return acc;
+
+  const result = Meteor.wrapAsync(bulk.execute.bind(bulk))({ w: 1, wTimeout: 5000 });
+
+  return acc.concat(result);
+}, []);
 
 const bulkInsertDocuments = (documentType, to, from, userId) => {
   const collection = getCollectionByDocType(documentType);
