@@ -1,9 +1,7 @@
 import { Template } from 'meteor/templating';
-import get from 'lodash.get';
+import { Meteor } from 'meteor/meteor';
 import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
 import {
-  insert,
   setName,
   setTimezone,
   setDefaultCurrency,
@@ -11,19 +9,22 @@ import {
   cancelOrganizationTransfer,
 } from '/imports/api/organizations/methods.js';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { getEmail } from '/imports/api/users/helpers';
 
 Template.OrgSettings_MainSettings.viewmodel({
   mixin: ['modal', 'organization', 'callWithFocusCheck', 'user', 'router', 'getChildrenData'],
   name: '',
   currency: '',
   timezone: '',
-  ownerId() { return Meteor.userId() },
+  ownerId() { return Meteor.userId(); },
   isEditable: false,
   nameFieldHelp: OrganizationSettingsHelp.organizationName,
   ownerFieldHelp: OrganizationSettingsHelp.organizationOwner,
   timezoneFieldHelp: OrganizationSettingsHelp.timeZone,
   currencyFieldHelp: OrganizationSettingsHelp.defaultCurrency,
-
+  ownerEmail() {
+    return getEmail(Meteor.users.findOne({ _id: this.ownerId() }));
+  },
   updateName({ e, name }) {
     if (!this.isEditable()) return;
 
@@ -33,14 +34,14 @@ Template.OrgSettings_MainSettings.viewmodel({
       this.modal().callMethod(setName, { _id, name });
     });
   },
-  updateTimezone({ e, timezone }) {
+  updateTimezone({ timezone }) {
     if (!this.isEditable()) return;
 
     const _id = this.organizationId();
 
     this.modal().callMethod(setTimezone, { _id, timezone });
   },
-  updateCurrency({e, currency }) {
+  updateCurrency({ currency }) {
     if (!this.isEditable()) return;
 
     const _id = this.organizationId();
@@ -50,7 +51,7 @@ Template.OrgSettings_MainSettings.viewmodel({
   transferOrg(newOwnerId) {
     if (!this.isEditable()) return;
 
-    const { _id:organizationId, name } = this.organization();
+    const { _id: organizationId, name } = this.organization();
     const newOwner = Meteor.users.findOne({ _id: newOwnerId });
     const newOwnerName = newOwner.fullNameOrEmail();
 
@@ -60,10 +61,10 @@ Template.OrgSettings_MainSettings.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Transfer',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       this.modal().callMethod(createOrganizationTransfer, {
-        organizationId, newOwnerId
+        organizationId, newOwnerId,
       }, (err) => {
         if (err) {
           swal({
@@ -88,7 +89,7 @@ Template.OrgSettings_MainSettings.viewmodel({
   cancelOrgTransfer() {
     if (!this.isEditable()) return;
 
-    const { _id:organizationId, name } = this.organization();
+    const { _id: organizationId, name } = this.organization();
 
     swal({
       title: 'Are you sure?',
@@ -96,10 +97,10 @@ Template.OrgSettings_MainSettings.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'OK',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       this.modal().callMethod(cancelOrganizationTransfer, {
-        organizationId
+        organizationId,
       }, (err) => {
         if (err) {
           swal({
@@ -123,5 +124,5 @@ Template.OrgSettings_MainSettings.viewmodel({
   },
   getData() {
     return this.getChildrenData();
-  }
+  },
 });

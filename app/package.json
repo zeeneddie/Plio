@@ -52,8 +52,6 @@
     "warning": "^3.0.0"
   },
   "devDependencies": {
-    "eslint-import-resolver-meteor": "^0.3.4",
-    "eslint-plugin-import": "^2.2.0",
     "redux-devtools-extension": "^1.0.0"
   }
 }

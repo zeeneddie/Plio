@@ -12,6 +12,7 @@ import Counter from '../../counter/server';
 import {
   makeOptionsFields,
   getCursorNonDeleted,
+  always,
 } from '../../helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
 import { getActionsWithLimitedFields } from '../../actions/utils';
@@ -71,7 +72,7 @@ Meteor.publishComposite('riskCard', function ({ _id, organizationId }) {
     return this.ready();
   }
 
-  return createRiskCardPublicationTree(() => ({ _id, organizationId }));
+  return createRiskCardPublicationTree(always({ _id, organizationId }));
 });
 
 Meteor.publish('risksDeps', function (organizationId) {

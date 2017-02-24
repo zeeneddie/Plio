@@ -1,4 +1,5 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { _ } from 'meteor/underscore';
 
 import { StandardStatuses, StringLimits } from '../constants.js';
 import {
@@ -6,11 +7,13 @@ import {
   DeletedSchema, ViewedBySchema,
   ImprovementPlanSchema, getNotifySchema,
   standardStatusSchema, issueNumberSchema,
+  ReviewSchema,
 } from './schemas.js';
 
 
 const optionalFields = new SimpleSchema([
   DeletedSchema,
+  ReviewSchema,
   ViewedBySchema,
   issueNumberSchema,
   getNotifySchema('owner'),
@@ -169,7 +172,7 @@ const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
   },
   improvementPlan: {
     type: ImprovementPlanSchema,
-    optional: true
+    optional: true,
   },
 }]);
 

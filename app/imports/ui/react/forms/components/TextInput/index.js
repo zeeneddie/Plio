@@ -3,12 +3,11 @@ import { compose, withState, lifecycle, branch, renameProp } from 'recompose';
 import property from 'lodash.property';
 import { Input } from 'reactstrap';
 
-import { omitProps } from '/imports/api/helpers';
+import { omitProps } from '../../../helpers';
 
 const enhance = compose(
   branch(
-    property('isControlled'),
-    renameProp('value', 'internalValue'),
+    property('uncontrolled'),
     compose(
       withState('internalValue', 'setInternalValue', property('value')),
       lifecycle({
@@ -19,8 +18,9 @@ const enhance = compose(
         },
       }),
     ),
+    renameProp('value', 'internalValue'),
   ),
-  omitProps(['value', 'isControlled']),
+  omitProps(['value', 'uncontrolled']),
 );
 
 const TextInput = enhance(({
@@ -28,7 +28,7 @@ const TextInput = enhance(({
   onChange,
   setInternalValue,
   getRef,
-  ...other,
+  ...other
 }) => (
   <Input
     value={internalValue}
@@ -39,13 +39,12 @@ const TextInput = enhance(({
 
       return typeof onChange === 'function' && onChange(e);
     }}
-    ref={getRef}
-    {...other}
+    {...{ ...other, getRef }}
   />
 ));
 
 TextInput.propTypes = {
-  isControlled: PropTypes.bool,
+  uncontrolled: PropTypes.bool,
   value: PropTypes.string,
   onChange: PropTypes.func,
   getRef: PropTypes.func,

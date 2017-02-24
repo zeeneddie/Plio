@@ -5,6 +5,7 @@ import { ORGANIZATION_CHANGED, USER_LOGOUT } from '../actions/types';
 
 import discussion from './discussionReducer';
 import standards from './standardsReducer';
+import risks from './risksReducer';
 import organizations from './organizationsReducer';
 import changelog from './changelogReducer';
 import customers from './customersReducer';
@@ -15,10 +16,12 @@ import mobile from './mobileReducer';
 import counters from './countersReducer';
 import helpDocs from './helpDocsReducer';
 import modal from './modalReducer';
+import dataImport from './dataImportReducer';
 
 const appReducer = combineReducers({
   discussion,
   standards,
+  risks,
   organizations,
   changelog,
   customers,
@@ -29,6 +32,7 @@ const appReducer = combineReducers({
   global,
   helpDocs,
   modal,
+  dataImport,
 });
 
 const rootReducer = (state, action) => {

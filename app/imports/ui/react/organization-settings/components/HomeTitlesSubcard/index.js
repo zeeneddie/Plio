@@ -38,7 +38,7 @@ const HelpPanelEnhanced = withStateCollapsed(true)(HelpPanel);
 const HomeTitlesSubcard = ({
   loading,
   onSelectTitle: onSelect,
-  organization: { homeScreenTitles: titles },
+  organization: { homeScreenTitles: titles = {} } = {},
 }) => {
   const fields = Object.keys(ITEM_MAP).map((key) => {
     // we need a key for a method and a value to know which title is selected
@@ -60,9 +60,8 @@ const HomeTitlesSubcard = ({
       <HomeScreenTitle
         {...{ ...currentItem, key, items, onSelect }}
         id={key}
-        noHint
         selected={createWorkspaceTitleValue(key, selectedTitle)}
-        placeholder="Select a title..."
+        input={{ placeholder: 'Select a title...' }}
       />
     );
   });

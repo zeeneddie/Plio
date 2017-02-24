@@ -29,3 +29,4 @@ import './messages-counter';
 import './sources-create';
 import './sources-edit';
 import './card-heading';
+import './reminder-time-picker';
