@@ -6,7 +6,7 @@ import {
   createSearchRegex,
   getC,
   propEq,
-  invokeC,
+  invoker,
   omitC,
 } from '/imports/api/helpers';
 import SelectInputView from './view';
@@ -74,8 +74,10 @@ class SelectInput extends React.Component {
     if (this.props.disabled) return;
     // prevent "close" code to execute on select
     // it will fire otherwise because of onBlur event and will reset the value back
-    invokeC('preventDefault', e);
-    invokeC('stopPropagation', e);
+    if (e) {
+      if (e.preventDefault) e.preventDefault();
+      if (e.stopPropagation) e.stopPropagation();
+    }
 
     const callback = (err, res) => {
       this._shouldFireClose = true; // make sure 'close' fires
@@ -130,11 +132,11 @@ class SelectInput extends React.Component {
   }
 
   triggerFocus() {
-    invokeC('focus', this.input);
+    invoker(0, 'focus')(this.input);
   }
 
   triggerBlur() {
-    invokeC('blur', this.input);
+    invoker(0, 'blur')(this.input);
   }
 
   open() {
