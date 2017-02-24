@@ -11,7 +11,7 @@ const StandardsRHSNotFound = ({ filter }) => {
       text = 'There are no deleted standards yet!';
       break;
     default:
-      text = 'There are no standards yet! Click on the "Add" button to create your first standard.';
+      text = 'There are no standards yet! Click on the "Add" button to add your first standard.';
   }
 
   return (
