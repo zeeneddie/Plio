@@ -10,12 +10,13 @@ const ModalDataImport = ({
   onOrgClick,
   List = OrganizationList,
   children,
+  leftText = 'Import from...',
   ...other
 }) => (
   <div className="relative">
     <ListGroup className="list-group-flush">
       {children}
-      <CardBlockCollapse leftText="Setup a bulk insert from other organization" {...other}>
+      <CardBlockCollapse {...{ leftText, ...other }}>
         <List {...{ documentType, onOrgClick, ...other }} />
       </CardBlockCollapse>
     </ListGroup>
@@ -30,6 +31,7 @@ ModalDataImport.propTypes = {
   onFirstDocAdd: PropTypes.func,
   getDocsCount: PropTypes.func,
   onSuccess: PropTypes.func,
+  leftText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   children: PropTypes.node,
 };
 
