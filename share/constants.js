@@ -64,6 +64,8 @@ export const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png',
 ];
 
+export const DefaultDateFormat = 'MMMM DD, YYYY';
+
 export const PlioS3Logos = {
   square: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png',
 };
