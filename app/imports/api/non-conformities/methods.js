@@ -1,9 +1,8 @@
-import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import NonConformitiesService from './non-conformities-service';
 import {
-  NonConformitiesUpdateSchema,
+  NonConformitiesSchema,
   RequiredSchema,
 } from '/imports/share/schemas/non-conformities-schema';
 import { NonConformities } from '/imports/share/collections/non-conformities';
@@ -13,10 +12,9 @@ import {
   CompleteActionSchema,
 } from '/imports/share/schemas/schemas';
 import Method, { CheckedMethod } from '../method';
-import { inject } from '/imports/api/helpers';
+import { inject, T } from '/imports/api/helpers';
 import {
   checkOrgMembership,
-  checkAnalysis,
   onRemoveChecker,
   onRestoreChecker,
   P_OnSetAnalysisExecutorChecker,
@@ -34,6 +32,7 @@ import {
   P_OnSetStandardsUpdateCompletedDateChecker,
   P_OnSetStandardsUpdateCommentsChecker
 } from '../checkers';
+import { getSchemaFrom } from '../schema-helpers';
 
 const injectNC = inject(NonConformities);
 
@@ -55,21 +54,37 @@ export const insert = new Method({
   },
 });
 
+const UpdateSchema = ((() => {
+  const lookup = [
+    'title',
+    'description',
+    'statusComment',
+    'standardsIds',
+    'departmentsIds',
+    'identifiedBy',
+    'identifiedAt',
+    'magnitude',
+    'cost',
+    'ref',
+    'notify',
+    'improvementPlan',
+  ];
+  const getExtra = key => (key.includes('$') ? {} : { optional: true });
+
+  return getSchemaFrom(NonConformitiesSchema, getExtra)(lookup);
+})());
+
 export const update = new CheckedMethod({
   name: 'NonConformities.update',
 
   validate: new SimpleSchema([
-    IdSchema, NonConformitiesUpdateSchema, optionsSchema,
+    IdSchema, UpdateSchema, optionsSchema,
   ]).validator(),
 
-  check(checker) {
-    const _checker = (...args) => (doc) => checkAnalysis(doc, args);
-
-    injectNC(checker)(_checker);
-  },
+  check: checker => injectNC(checker)(() => () => true),
 
   run({ ...args }) {
-    console.log('update!');
+    console.log(args);
     return NonConformitiesService.update({ ...args });
   },
 });

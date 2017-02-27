@@ -2,7 +2,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import property from 'lodash.property';
 
 import StandardsService from './standards-service';
-import { StandardsSchema, UpdateSchema } from '/imports/share/schemas/standards-schema';
+import { StandardsSchema } from '/imports/share/schemas/standards-schema';
 import { Standards } from '/imports/share/collections/standards';
 import StandardsNotificationsSender from './standards-notifications-sender';
 import {
@@ -21,6 +21,7 @@ import {
 } from '../checkers';
 import { chain, chainCheckers, inject, compose } from '/imports/api/helpers';
 import Method, { CheckedMethod } from '../method';
+import { getSchemaFrom } from '../schema-helpers';
 
 const injectSTD = inject(Standards);
 
@@ -35,6 +36,28 @@ export const insert = new Method({
     return StandardsService.insert({ organizationId, ...args });
   },
 });
+
+const UpdateSchema = ((() => {
+  const lookup = [
+    'improvementPlan',
+    'source1',
+    'source2',
+    'title',
+    'nestingLevel',
+    'description',
+    'sectionId',
+    'typeId',
+    'uniqueNumber',
+    'owner',
+    'issueNumber',
+    'status',
+    'departmentsIds',
+    'notify',
+  ];
+  const getExtra = key => (key.includes('$') ? {} : { optional: true });
+
+  return getSchemaFrom(StandardsSchema, getExtra)(lookup);
+})());
 
 export const update = new CheckedMethod({
   name: 'Standards.update',

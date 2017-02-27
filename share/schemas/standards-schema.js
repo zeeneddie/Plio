@@ -8,7 +8,6 @@ import {
   standardStatusSchema, issueNumberSchema,
   ReviewSchema,
 } from './schemas';
-import { getSchemaFrom } from './helpers';
 
 const SourceSchema = new SimpleSchema({
   fileId: {
@@ -115,28 +114,6 @@ const StandardsSchema = new SimpleSchema([
   },
 ]);
 
-const UpdateSchema = ((() => {
-  const lookup = [
-    'improvementPlan',
-    'source1',
-    'source2',
-    'title',
-    'nestingLevel',
-    'description',
-    'sectionId',
-    'typeId',
-    'uniqueNumber',
-    'owner',
-    'issueNumber',
-    'status',
-    'departmentsIds',
-    'notify',
-  ];
-  const getExtra = key => (key.includes('$') ? {} : { optional: true });
-
-  return getSchemaFrom(StandardsSchema, getExtra)(lookup);
-})());
-
 const invalidUrlMessage = 'The source file url link is not valid';
 
 StandardsSchema.messages({
@@ -150,4 +127,4 @@ StandardsSchema.messages({
   }],
 });
 
-export { StandardsSchema, UpdateSchema };
+export { StandardsSchema };

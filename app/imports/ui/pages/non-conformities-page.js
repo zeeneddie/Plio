@@ -1,13 +1,16 @@
 import { Template } from 'meteor/templating';
 
-import { extractIds } from '/imports/api/helpers.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { DiscussionSubs, DocumentCardSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers.js';
+import {
+  DiscussionSubs,
+  DocumentCardSubs,
+  BackgroundSubs,
+} from '/imports/startup/client/subsmanagers.js';
 import { Discussions } from '/imports/share/collections/discussions.js';
 
 
 Template.NC_Page.viewmodel({
-  mixin: ['discussions', 'mobile', 'nonconformity', 'organization', { 'counter': 'counter' }],
+  mixin: ['discussions', 'mobile', 'nonconformity', 'organization', { counter: 'counter' }],
   _subHandlers: [],
   isReady: false,
   isDiscussionReady: false,
@@ -16,17 +19,13 @@ Template.NC_Page.viewmodel({
     function() {
       const organizationId = this.organizationId();
       const NCId = this.NCId();
-      const discussionId = Object.assign({}, this.discussion())._id;
+      let _subHandlers = [BackgroundSubs.subscribe('nonConformitiesDeps', organizationId)];
 
       if (!organizationId || !NCId) return;
 
-      const _subHandlers = [
-        DocumentCardSubs.subscribe('nonConformityCard', { organizationId, _id: NCId }, {
-          onReady() {
-            BackgroundSubs.subscribe('nonConformitiesDeps', organizationId);
-          }
-        })
-      ];
+      _subHandlers = _subHandlers.concat([
+        DocumentCardSubs.subscribe('nonConformityCard', { organizationId, _id: NCId }),
+      ]);
 
       this._subHandlers(_subHandlers);
     },
@@ -36,13 +35,14 @@ Template.NC_Page.viewmodel({
       if (!docId) return;
 
       if (this.isDiscussionOpened()) {
-        const discussionHandle = DiscussionSubs.subscribe('discussionsByDocId', { docId, organizationId });
+        const subArgs = { docId, organizationId };
+        const discussionHandle = DiscussionSubs.subscribe('discussionsByDocId', subArgs);
         this.isDiscussionReady(discussionHandle.ready());
       }
     },
     function() {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
-    }
+    },
   ],
   classNames() {
     let left = 'content-list scroll';
@@ -64,11 +64,11 @@ Template.NC_Page.viewmodel({
   listArgs() {
     return {
       collection: NonConformities,
-      template: 'NC_List'
+      template: 'NC_List',
     };
   },
   messagesNotViewedCount() {
     const count = this.counter.get('nc-messages-not-viewed-count-' + this.NCId());
     return count;
-  }
+  },
 });
