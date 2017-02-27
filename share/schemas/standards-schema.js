@@ -1,9 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { _ } from 'meteor/underscore';
-import curry from 'lodash.curry';
 
-import { StandardStatuses, StringLimits } from '../constants';
-import { reduceC, cond, always, startsWith, flattenMap } from '/imports/api/helpers';
+import { StringLimits } from '../constants';
 import {
   BaseEntitySchema, OrganizationIdSchema,
   DeletedSchema, ViewedBySchema,
@@ -11,6 +8,7 @@ import {
   standardStatusSchema, issueNumberSchema,
   ReviewSchema,
 } from './schemas';
+import { getSchemaFrom } from './helpers';
 
 const SourceSchema = new SimpleSchema({
   fileId: {
@@ -33,7 +31,7 @@ const SourceSchema = new SimpleSchema({
   },
 });
 
-const optionalFields = new SimpleSchema([
+const OptionalSchema = new SimpleSchema([
   DeletedSchema,
   ReviewSchema,
   ViewedBySchema,
@@ -89,7 +87,7 @@ const optionalFields = new SimpleSchema([
 ]);
 
 const StandardsSchema = new SimpleSchema([
-  optionalFields,
+  OptionalSchema,
   BaseEntitySchema,
   OrganizationIdSchema,
   standardStatusSchema,
@@ -117,67 +115,11 @@ const StandardsSchema = new SimpleSchema([
   },
 ]);
 
-const StandardsUpdateSchema = new SimpleSchema({
-  title: {
-    type: String,
-    min: StringLimits.title.min,
-    max: StringLimits.title.max,
-    optional: true,
-  },
-  typeId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true,
-  },
-  sectionId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true,
-  },
-  nestingLevel: {
-    type: Number,
-    optional: true,
-  },
-  description: {
-    type: String,
-    optional: true,
-  },
-  owner: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true,
-  },
-  issueNumber: {
-    type: Number,
-    optional: true,
-  },
-  status: {
-    type: String,
-    optional: true,
-    allowedValues: _.keys(StandardStatuses),
-  },
-  improvementPlan: {
-    type: ImprovementPlanSchema,
-    optional: true,
-  },
-});
-
-const reduceKeys = curry((defaultValue, keys, field) => {
-  const reducer = (_keys, _key) => cond(
-    startsWith(field),
-    key => _keys.concat(key),
-    always(_keys),
-  )(_key);
-
-  return reduceC(reducer, defaultValue, keys);
-});
-
 const UpdateSchema = ((() => {
-  const reduceStdKeys = reduceKeys([], Object.keys(StandardsSchema._schema));
-  const keys = ['improvementPlan', 'source1', 'source2'].reduce((acc, key) =>
-    acc.concat(reduceStdKeys(key)), []);
-
-  const fields = [
+  const lookup = [
+    'improvementPlan',
+    'source1',
+    'source2',
     'title',
     'nestingLevel',
     'description',
@@ -188,33 +130,11 @@ const UpdateSchema = ((() => {
     'issueNumber',
     'status',
     'departmentsIds',
-    'departmentsIds.$',
-    'source1',
-    'source1.fileId',
-    'source1.type',
-    'source1.url',
-    'source1.htmlUrl',
-    'source2',
-    'source2.fileId',
-    'source2.type',
-    'source2.url',
-    'source2.htmlUrl',
     'notify',
-    'notify.$',
-    ...keys,
   ];
+  const getExtra = key => (key.includes('$') ? {} : { optional: true });
 
-  const reducer = (definition, field) => ({
-    ...definition,
-    [field]: {
-      ...StandardsSchema.schema(field),
-      optional: true,
-    },
-  });
-
-  const schemaDefinition = fields.reduce(reducer, {});
-
-  return new SimpleSchema(schemaDefinition);
+  return getSchemaFrom(StandardsSchema, getExtra)(lookup);
 })());
 
 const invalidUrlMessage = 'The source file url link is not valid';
