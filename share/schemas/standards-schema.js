@@ -1,15 +1,37 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { _ } from 'meteor/underscore';
+import curry from 'lodash.curry';
 
-import { StandardStatuses, StringLimits } from '../constants.js';
+import { StandardStatuses, StringLimits } from '../constants';
+import { reduceC, cond, always, startsWith, flattenMap } from '/imports/api/helpers';
 import {
   BaseEntitySchema, OrganizationIdSchema,
   DeletedSchema, ViewedBySchema,
   ImprovementPlanSchema, getNotifySchema,
   standardStatusSchema, issueNumberSchema,
   ReviewSchema,
-} from './schemas.js';
+} from './schemas';
 
+const SourceSchema = new SimpleSchema({
+  fileId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true,
+  },
+  type: {
+    type: String,
+  },
+  url: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url,
+    optional: true,
+  },
+  htmlUrl: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url,
+    optional: true,
+  },
+});
 
 const optionalFields = new SimpleSchema([
   DeletedSchema,
@@ -41,47 +63,11 @@ const optionalFields = new SimpleSchema([
       optional: true,
     },
     source1: {
-      type: Object,
-      optional: true,
-    },
-    'source1.fileId': {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true,
-    },
-    'source1.type': {
-      type: String,
-    },
-    'source1.url': {
-      type: String,
-      regEx: SimpleSchema.RegEx.Url,
-      optional: true,
-    },
-    'source1.htmlUrl': {
-      type: String,
-      regEx: SimpleSchema.RegEx.Url,
+      type: SourceSchema,
       optional: true,
     },
     source2: {
-      type: Object,
-      optional: true,
-    },
-    'source2.fileId': {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true,
-    },
-    'source2.type': {
-      type: String,
-    },
-    'source2.url': {
-      type: String,
-      regEx: SimpleSchema.RegEx.Url,
-      optional: true,
-    },
-    'source2.htmlUrl': {
-      type: String,
-      regEx: SimpleSchema.RegEx.Url,
+      type: SourceSchema,
       optional: true,
     },
     lessons: {
@@ -131,7 +117,7 @@ const StandardsSchema = new SimpleSchema([
   },
 ]);
 
-const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
+const StandardsUpdateSchema = new SimpleSchema({
   title: {
     type: String,
     min: StringLimits.title.min,
@@ -174,7 +160,62 @@ const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
     type: ImprovementPlanSchema,
     optional: true,
   },
-}]);
+});
+
+const reduceKeys = curry((defaultValue, keys, field) => {
+  const reducer = (_keys, _key) => cond(
+    startsWith(field),
+    key => _keys.concat(key),
+    always(_keys),
+  )(_key);
+
+  return reduceC(reducer, defaultValue, keys);
+});
+
+const UpdateSchema = ((() => {
+  const reduceStdKeys = reduceKeys([], Object.keys(StandardsSchema._schema));
+  const keys = ['improvementPlan', 'source1', 'source2'].reduce((acc, key) =>
+    acc.concat(reduceStdKeys(key)), []);
+
+  const fields = [
+    'title',
+    'nestingLevel',
+    'description',
+    'sectionId',
+    'typeId',
+    'uniqueNumber',
+    'owner',
+    'issueNumber',
+    'status',
+    'departmentsIds',
+    'departmentsIds.$',
+    'source1',
+    'source1.fileId',
+    'source1.type',
+    'source1.url',
+    'source1.htmlUrl',
+    'source2',
+    'source2.fileId',
+    'source2.type',
+    'source2.url',
+    'source2.htmlUrl',
+    'notify',
+    'notify.$',
+    ...keys,
+  ];
+
+  const reducer = (definition, field) => ({
+    ...definition,
+    [field]: {
+      ...StandardsSchema.schema(field),
+      optional: true,
+    },
+  });
+
+  const schemaDefinition = fields.reduce(reducer, {});
+
+  return new SimpleSchema(schemaDefinition);
+})());
 
 const invalidUrlMessage = 'The source file url link is not valid';
 
@@ -189,4 +230,4 @@ StandardsSchema.messages({
   }],
 });
 
-export { StandardsSchema, StandardsUpdateSchema };
+export { StandardsSchema, UpdateSchema };

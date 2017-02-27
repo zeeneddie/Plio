@@ -1,26 +1,26 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import property from 'lodash.property';
 
-import StandardsService from './standards-service.js';
-import { StandardsSchema, StandardsUpdateSchema } from '/imports/share/schemas/standards-schema.js';
-import { Standards } from '/imports/share/collections/standards.js';
-import StandardsNotificationsSender from './standards-notifications-sender.js';
+import StandardsService from './standards-service';
+import { StandardsSchema, UpdateSchema } from '/imports/share/schemas/standards-schema';
+import { Standards } from '/imports/share/collections/standards';
+import StandardsNotificationsSender from './standards-notifications-sender';
 import {
   IdSchema,
   optionsSchema,
   StandardIdSchema,
   UserIdSchema,
   OrganizationIdSchema,
-} from '/imports/share/schemas/schemas.js';
+} from '/imports/share/schemas/schemas';
 import {
   checkOrgMembership,
   onRemoveChecker,
   onRestoreChecker,
   S_EnsureCanChange,
   S_EnsureCanChangeChecker,
-} from '../checkers.js';
-import { chain, chainCheckers, inject, compose } from '/imports/api/helpers.js';
-import Method, { CheckedMethod } from '../method.js';
+} from '../checkers';
+import { chain, chainCheckers, inject, compose } from '/imports/api/helpers';
+import Method, { CheckedMethod } from '../method';
 
 const injectSTD = inject(Standards);
 
@@ -39,13 +39,12 @@ export const insert = new Method({
 export const update = new CheckedMethod({
   name: 'Standards.update',
 
-  validate: new SimpleSchema([
-    IdSchema, StandardsUpdateSchema, optionsSchema,
-  ]).validator(),
+  validate: new SimpleSchema([IdSchema, optionsSchema, UpdateSchema]).validator(),
 
   check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
 
   run({ ...args }) {
+    console.log('update!');
     return StandardsService.update({ ...args });
   },
 });

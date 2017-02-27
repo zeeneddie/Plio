@@ -1,8 +1,5 @@
 import { Template } from 'meteor/templating';
 
-import { addedToNotifyList } from '/imports/api/standards/methods.js';
-import { showError } from '/imports/api/helpers.js';
-
 Template.Subcards_Notify_Edit.viewmodel({
   mixin: ['search', 'user', 'members'],
   doc: '',
