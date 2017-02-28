@@ -64,7 +64,7 @@ export default {
 
   getCount({ organizationId, isDeleted, limit }) {
     const query = { organizationId };
-    const options = {};
+    const options = { fields: { _id: 1 } };
 
     if (typeof isDeleted !== 'undefined' && isDeleted !== null) {
       Object.assign(query, { isDeleted });

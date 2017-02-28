@@ -20,8 +20,8 @@ const sweetAlert = ({
   ...other,
 }, cb);
 
-sweetAlert.error = err => swal({
-  title: 'Oops... Something went wrong!',
+sweetAlert.error = (err, title = 'Oops... Something went wrong!') => swal({
+  title,
   text: err.reason || 'Internal server error',
   type: 'error',
   timer: ALERT_AUTOHIDE_TIME,

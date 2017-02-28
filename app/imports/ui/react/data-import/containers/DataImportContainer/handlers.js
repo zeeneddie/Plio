@@ -1,6 +1,8 @@
 import { batchActions } from 'redux-batched-actions';
 import { SHA256 } from 'meteor/sha';
 import pluralize from 'pluralize';
+import { Meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker';
 
 import { OrgSubs } from '/imports/startup/client/subsmanagers';
 import { createOrgQueryWhereUserIsOwner } from '/imports/api/queries';
@@ -43,19 +45,14 @@ export const onToggleCollapse = ({
 
       dispatch(batchActions(actions));
     };
+    const sub = OrgSubs.subscribe('dataImportUserOwnOrganizations');
 
-    const onStop = (err) => {
-      const actions = [
-        setErrorText(err.reason || 'Internal server error'),
-        setOrgsLoading(false),
-        setOrgsCollapsed(true),
-        setOrgsLoaded(false),
-      ];
-
-      dispatch(batchActions(actions));
-    };
-
-    OrgSubs.subscribe('dataImportUserOwnOrganizations', { onReady, onStop });
+    Tracker.autorun((comp) => {
+      if (sub.ready()) {
+        onReady();
+        comp.stop();
+      }
+    });
   };
   // when the user first time clicks on the collapse load and fetch the data
   // otherwise just toggle the collapse
@@ -104,17 +101,32 @@ export const onOrgClick = ({
     title: `Confirm data import from "${name}" organization`,
   }, onConfirm);
 
-  const showAlert = (__, count = '') => swal({
-    text: `
-      Do you want to import ${count} ${documentType} ${pluralize('documents', count)}
-      from "${name}" organization?
-    `,
-    confirmButtonText: 'Yes',
-  }, showPwdForm);
+  const showAlert = (__, count = '') => {
+    if (count) {
+      const text = `
+        Do you want to import ${count} ${documentType} ${pluralize('documents', count)}
+        from "${name}" organization?
+      `;
 
-  showAlert();
+      return swal({
+        text,
+        confirmButtonText: 'Yes',
+      }, showPwdForm);
+    }
+
+    const reason = `There are no ${documentType} documents in "${name}" organization`;
+
+    return swal.error({ reason });
+  };
+
+  swal({
+    text: 'Loading...',
+    showConfirmButton: false,
+    showCancelButton: false,
+  });
 
   if (typeof getDocsCount === 'function') {
-    getDocsCount({ organizationId: from, isDeleted: false }, showAlert);
+    Meteor.setTimeout(() =>
+      getDocsCount({ organizationId: from, isDeleted: false }, showAlert), 1000);
   }
 };

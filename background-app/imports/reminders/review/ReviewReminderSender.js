@@ -9,7 +9,7 @@ import { Risks } from '/imports/share/collections/risks';
 import { Standards } from '/imports/share/collections/standards';
 import ReviewWorkflow from '/imports/share/utils/ReviewWorkflow';
 import { reviewConfigSchema } from '/imports/share/schemas/organization-schema';
-import { DocumentTypes, SystemName } from '/imports/share/constants';
+import { DocumentTypes, SystemName, DefaultDateFormat } from '/imports/share/constants';
 import { capitalize, getDocTypePlural } from '/imports/share/helpers';
 import { getCollectionUrlByDocType } from '../../helpers/url';
 import { isDateScheduled, getPrettyTzDate } from '../../helpers/date';
@@ -106,7 +106,7 @@ export default class ReviewReminderSender {
 
     if (!receivers.length) return false;
 
-    const prettyAnnualDate = getPrettyTzDate(reviewConfig.annualDate, this._timezone);
+    const prettyAnnualDate = moment(reviewConfig.annualDate).format(DefaultDateFormat);
     const title = `${getDocTypePlural(docType)}`;
     const emailSubject = `The ${title} documents need a review`;
     const emailText = `

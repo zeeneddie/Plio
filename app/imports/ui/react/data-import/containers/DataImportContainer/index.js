@@ -1,9 +1,14 @@
 import { compose, withHandlers, renameProps, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
+import { batchActions } from 'redux-batched-actions';
 
 import { pickDeep, pickFrom, combineObjects } from '/imports/api/helpers';
 
-import { setOrgsCollapsed } from '/imports/client/store/actions/dataImportActions';
+import {
+  setOrgsCollapsed,
+  setOrgsLoading,
+  setOrgsLoaded,
+} from '/imports/client/store/actions/dataImportActions';
 import { onToggleCollapse, onOrgClick } from './handlers';
 import DataImport from '../../components/DataImport';
 
@@ -19,7 +24,12 @@ const enhance = compose(
   withHandlers({ onToggleCollapse, onOrgClick }),
   lifecycle({
     componentWillUnmount() {
-      this.props.dispatch(setOrgsCollapsed(true));
+      const actions = [
+        setOrgsCollapsed(true),
+        setOrgsLoading(false),
+        setOrgsLoaded(false),
+      ];
+      this.props.dispatch(batchActions(actions));
     },
   }),
 );
