@@ -67,6 +67,7 @@ export const update = new CheckedMethod({
   check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
 
   run({ ...args }) {
+    console.log(args);
     return StandardsService.update({ ...args });
   },
 });

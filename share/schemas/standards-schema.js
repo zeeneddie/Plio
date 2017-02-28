@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { StringLimits } from '../constants';
+import { StringLimits, SourceTypes } from '../constants';
 import {
   BaseEntitySchema, OrganizationIdSchema,
   DeletedSchema, ViewedBySchema,
@@ -17,15 +17,18 @@ const SourceSchema = new SimpleSchema({
   },
   type: {
     type: String,
+    allowedValues: Object.values(SourceTypes),
   },
   url: {
     type: String,
     regEx: SimpleSchema.RegEx.Url,
+    max: StringLimits.url.max,
     optional: true,
   },
   htmlUrl: {
     type: String,
     regEx: SimpleSchema.RegEx.Url,
+    max: StringLimits.url.max,
     optional: true,
   },
 });
@@ -40,6 +43,7 @@ const OptionalSchema = new SimpleSchema([
     description: {
       type: String,
       optional: true,
+      // max: ?
     },
     approved: {
       type: Boolean,
@@ -49,15 +53,12 @@ const OptionalSchema = new SimpleSchema([
       type: Date,
       optional: true,
     },
-    notes: {
-      type: String,
-      optional: true,
-    },
     departmentsIds: {
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       defaultValue: [],
       optional: true,
+      // maxCount: ?
     },
     source1: {
       type: SourceSchema,
@@ -71,6 +72,7 @@ const OptionalSchema = new SimpleSchema([
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       optional: true,
+      // maxCount: ?
     },
     improvementPlan: {
       type: ImprovementPlanSchema,
@@ -106,6 +108,7 @@ const StandardsSchema = new SimpleSchema([
     },
     nestingLevel: {
       type: Number,
+      max: 4,
     },
     owner: {
       type: String,

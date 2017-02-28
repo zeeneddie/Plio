@@ -357,6 +357,14 @@ export const StringLimits = {
     min: 1,
     max: 80,
   },
+  url: {
+    min: 1,
+    max: 2000,
+  },
+  comments: {
+    min: 1,
+    max: 140,
+  },
 };
 
 export const SystemName = 'Plio';

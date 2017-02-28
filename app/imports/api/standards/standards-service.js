@@ -1,8 +1,6 @@
 import { Standards } from '/imports/share/collections/standards.js';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
-import { LessonsLearned } from '/imports/share/collections/lessons.js';
-import { canChangeStandards } from '../checkers.js';
 import BaseEntityService from '../base-entity-service.js';
 import NonConformityService from '../non-conformities/non-conformities-service';
 import RiskService from '../risks/risks-service';
@@ -17,18 +15,11 @@ export default {
     return this.collection.insert(args);
   },
 
-  update({ _id, query = {}, options = {}, ...args }) {
-    if (!_.keys(query).length > 0) {
-      query = { _id };
-    }
-    if (!_.keys(options).length > 0) {
-      options['$set'] = args;
-    }
-
-    return this.collection.update(query, options);
+  update({ ...args }) {
+    return this._service.update({ ...args });
   },
 
-  updateViewedBy({ _id, userId:viewedBy }) {
+  updateViewedBy({ _id, userId: viewedBy }) {
     return this._service.updateViewedBy({ _id, viewedBy });
   },
 
