@@ -5,7 +5,7 @@ import { ActionTypes } from '/imports/share/constants.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
-import { restore, remove } from '/imports/api/non-conformities/methods.js';
+import { restore, remove } from '/imports/api/non-conformities/methods';
 import { NonConformitiesHelp } from '/imports/api/help-messages.js';
 
 Template.NC_Card_Read.viewmodel({

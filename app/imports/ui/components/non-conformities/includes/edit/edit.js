@@ -5,7 +5,7 @@ import invoke from 'lodash.invoke';
 import {
   update,
   remove
-} from '/imports/api/non-conformities/methods.js';
+} from '/imports/api/non-conformities/methods';
 import { getTzTargetDate } from '/imports/share/helpers.js';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 

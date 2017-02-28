@@ -33,13 +33,37 @@ const SourceSchema = new SimpleSchema({
   },
 });
 
-const OptionalSchema = new SimpleSchema([
+const StandardsSchema = new SimpleSchema([
+  BaseEntitySchema,
+  OrganizationIdSchema,
+  standardStatusSchema,
   DeletedSchema,
   ReviewSchema,
   ViewedBySchema,
   issueNumberSchema,
   getNotifySchema('owner'),
   {
+    title: {
+      type: String,
+      min: StringLimits.title.min,
+      max: StringLimits.title.max,
+    },
+    typeId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+    },
+    sectionId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+    },
+    nestingLevel: {
+      type: Number,
+      max: 4,
+    },
+    owner: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+    },
     description: {
       type: String,
       optional: true,
@@ -83,36 +107,6 @@ const OptionalSchema = new SimpleSchema([
       min: 1,
       max: 10000,
       optional: true,
-    },
-  },
-]);
-
-const StandardsSchema = new SimpleSchema([
-  OptionalSchema,
-  BaseEntitySchema,
-  OrganizationIdSchema,
-  standardStatusSchema,
-  {
-    title: {
-      type: String,
-      min: StringLimits.title.min,
-      max: StringLimits.title.max,
-    },
-    typeId: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-    },
-    sectionId: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-    },
-    nestingLevel: {
-      type: Number,
-      max: 4,
-    },
-    owner: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
     },
   },
 ]);

@@ -1,18 +1,14 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import NonConformitiesService from './non-conformities-service';
-import {
-  NonConformitiesSchema,
-  RequiredSchema,
-} from '/imports/share/schemas/non-conformities-schema';
+import NonConformitiesService from '../non-conformities-service';
+import { RequiredSchema } from '/imports/share/schemas/non-conformities-schema';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import {
   IdSchema,
-  optionsSchema,
   CompleteActionSchema,
 } from '/imports/share/schemas/schemas';
-import Method, { CheckedMethod } from '../method';
-import { inject, T } from '/imports/api/helpers';
+import Method, { CheckedMethod } from '../../method';
+import { inject } from '/imports/api/helpers';
 import {
   checkOrgMembership,
   onRemoveChecker,
@@ -31,8 +27,9 @@ import {
   P_OnSetStandardsUpdateCompletedByChecker,
   P_OnSetStandardsUpdateCompletedDateChecker,
   P_OnSetStandardsUpdateCommentsChecker
-} from '../checkers';
-import { getSchemaFrom } from '../schema-helpers';
+} from '../../checkers';
+
+export { default as update } from './update';
 
 const injectNC = inject(NonConformities);
 
@@ -51,41 +48,6 @@ export const insert = new Method({
     checkOrgMembership(this.userId, organizationId);
 
     return NonConformitiesService.insert({ organizationId, ...args });
-  },
-});
-
-const UpdateSchema = ((() => {
-  const lookup = [
-    'title',
-    'description',
-    'statusComment',
-    'standardsIds',
-    'departmentsIds',
-    'identifiedBy',
-    'identifiedAt',
-    'magnitude',
-    'cost',
-    'ref',
-    'notify',
-    'improvementPlan',
-  ];
-  const getExtra = key => (key.includes('$') ? {} : { optional: true });
-
-  return getSchemaFrom(NonConformitiesSchema, getExtra)(lookup);
-})());
-
-export const update = new CheckedMethod({
-  name: 'NonConformities.update',
-
-  validate: new SimpleSchema([
-    IdSchema, UpdateSchema, optionsSchema,
-  ]).validator(),
-
-  check: checker => injectNC(checker)(() => () => true),
-
-  run({ ...args }) {
-    console.log(args);
-    return NonConformitiesService.update({ ...args });
   },
 });
 

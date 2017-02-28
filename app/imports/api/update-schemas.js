@@ -1,12 +1,27 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { IdSchema } from '/imports/share/schemas/schemas';
+import { IdSchema, idSchemaDoc } from '/imports/share/schemas/schemas';
+
+const idSchemaDefOpt = { ...idSchemaDoc, optional: true };
+
+const fileIdsSchema = new SimpleSchema({ fileIds: idSchemaDefOpt });
+export const fileIds = new SimpleSchema({
+  $addToSet: {
+    optional: true,
+    type: fileIdsSchema,
+  },
+  $pull: {
+    optional: true,
+    type: fileIdsSchema,
+  },
+});
 
 export const improvementPlan = new SimpleSchema({
   $addToSet: {
     optional: true,
     type: new SimpleSchema({
       'improvementPlan.reviewDates': {
+        optional: true,
         type: new SimpleSchema([
           IdSchema,
           {
@@ -15,8 +30,8 @@ export const improvementPlan = new SimpleSchema({
             },
           },
         ]),
-        optional: true,
       },
+      'improvementPlan.fileIds': idSchemaDefOpt,
     }),
   },
   $pull: {
@@ -26,35 +41,24 @@ export const improvementPlan = new SimpleSchema({
         type: IdSchema,
         optional: true,
       },
+      'improvementPlan.fileIds': idSchemaDefOpt,
     }),
   },
 });
 
-const departmentsIdsSchema = new SimpleSchema({
-  departmentsIds: {
-    type: String,
-    optional: true,
-  },
-});
-
+const departmentIdsSchema = new SimpleSchema({ departmentsIds: idSchemaDefOpt });
 export const departmentsIds = new SimpleSchema({
   $addToSet: {
     optional: true,
-    type: departmentsIdsSchema,
+    type: departmentIdsSchema,
   },
   $pull: {
     optional: true,
-    type: departmentsIdsSchema,
+    type: departmentIdsSchema,
   },
 });
 
-const notifySchema = new SimpleSchema({
-  notify: {
-    optional: true,
-    type: String,
-  },
-});
-
+const notifySchema = new SimpleSchema({ notify: idSchemaDefOpt });
 export const notify = new SimpleSchema({
   $addToSet: {
     optional: true,
@@ -63,5 +67,18 @@ export const notify = new SimpleSchema({
   $pull: {
     optional: true,
     type: notifySchema,
+  },
+});
+
+const standardIdsSchema = new SimpleSchema({ standardsIds: idSchemaDefOpt });
+
+export const standardsIds = new SimpleSchema({
+  $addToSet: {
+    optional: true,
+    type: standardIdsSchema,
+  },
+  $pull: {
+    optional: true,
+    type: standardIdsSchema,
   },
 });
