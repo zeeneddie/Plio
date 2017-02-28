@@ -7,7 +7,6 @@ import { Standards } from '/imports/share/collections/standards';
 import StandardsNotificationsSender from './standards-notifications-sender';
 import {
   IdSchema,
-  optionsSchema,
   StandardIdSchema,
   UserIdSchema,
   OrganizationIdSchema,
@@ -37,40 +36,87 @@ export const insert = new Method({
   },
 });
 
-const UpdateSchema = ((() => {
-  const lookup = [
-    'improvementPlan',
-    'source1',
-    'source2',
-    'title',
-    'nestingLevel',
-    'description',
-    'sectionId',
-    'typeId',
-    'uniqueNumber',
-    'owner',
-    'issueNumber',
-    'status',
-    'departmentsIds',
-    'notify',
-  ];
-  const getExtra = key => (key.includes('$') ? {} : { optional: true });
+export const update = ((() => {
+  const UpdateSchema = ((() => {
+    const lookup = [
+      'improvementPlan',
+      'source1',
+      'source2',
+      'title',
+      'nestingLevel',
+      'description',
+      'sectionId',
+      'typeId',
+      'uniqueNumber',
+      'owner',
+      'issueNumber',
+      'status',
+      'departmentsIds',
+      'notify',
+    ];
+    const getExtra = key => (key.includes('$') ? {} : { optional: true });
 
-  return getSchemaFrom(StandardsSchema, getExtra)(lookup);
+    return getSchemaFrom(StandardsSchema, getExtra)(lookup);
+  })());
+
+  const allowedModifiers = ['$set', '$addToSet', '$pull'].reduce((acc, mod) => ({
+    ...acc,
+    [mod]: {
+      type: Object,
+      optional: true,
+      blackbox: true,
+    },
+  }), {});
+
+  const ModifierSchema = new SimpleSchema({
+    ...allowedModifiers,
+    $rename: {
+      type: Object,
+      optional: true,
+    },
+    '$rename.source2': {
+      type: String,
+      allowedValues: ['source1'],
+    },
+    $unset: {
+      type: Object,
+      optional: true,
+    },
+    '$unset.source1': {
+      type: String,
+      optional: true,
+    },
+    '$unset.source2': {
+      type: String,
+      optional: true,
+    },
+  });
+
+  const OptionsSchema = new SimpleSchema({
+    options: {
+      type: ModifierSchema,
+      optional: true,
+    },
+    query: {
+      type: Object,
+      optional: true,
+      blackbox: true,
+    },
+  });
+
+  return new CheckedMethod({
+    name: 'Standards.update',
+
+    validate: new SimpleSchema([IdSchema, OptionsSchema, UpdateSchema]).validator(),
+
+    check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
+
+    run({ ...args }) {
+      console.log(args);
+      return StandardsService.update({ ...args });
+    },
+  });
 })());
-
-export const update = new CheckedMethod({
-  name: 'Standards.update',
-
-  validate: new SimpleSchema([IdSchema, optionsSchema, UpdateSchema]).validator(),
-
-  check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
-
-  run({ ...args }) {
-    console.log(args);
-    return StandardsService.update({ ...args });
-  },
-});
 
 export const updateViewedBy = new CheckedMethod({
   name: 'Standards.updateViewedBy',
