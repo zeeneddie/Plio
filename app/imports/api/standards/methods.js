@@ -37,39 +37,71 @@ export const insert = new Method({
 });
 
 export const update = ((() => {
-  const UpdateSchema = ((() => {
-    const lookup = [
-      'improvementPlan',
-      'source1',
-      'source2',
-      'title',
-      'nestingLevel',
-      'description',
-      'sectionId',
-      'typeId',
-      'uniqueNumber',
-      'owner',
-      'issueNumber',
-      'status',
-      'departmentsIds',
-      'notify',
-    ];
-    const getExtra = key => (key.includes('$') ? {} : { optional: true });
-
-    return getSchemaFrom(StandardsSchema, getExtra)(lookup);
-  })());
-
-  const allowedModifiers = ['$set', '$addToSet', '$pull'].reduce((acc, mod) => ({
-    ...acc,
-    [mod]: {
-      type: Object,
-      optional: true,
-      blackbox: true,
-    },
-  }), {});
+  const lookup = [
+    'improvementPlan',
+    'source1',
+    'source2',
+    'title',
+    'nestingLevel',
+    'description',
+    'sectionId',
+    'typeId',
+    'uniqueNumber',
+    'owner',
+    'issueNumber',
+    'status',
+    'departmentsIds',
+    'notify',
+  ];
+  const getExtra = (key) => (key.includes('$') ? {} : { optional: true });
+  const UpdateSchema = getSchemaFrom(StandardsSchema, getExtra)(lookup);
 
   const ModifierSchema = new SimpleSchema({
-    ...allowedModifiers,
+    $set: {
+      type: UpdateSchema,
+      optional: true,
+    },
+    $addToSet: {
+      optional: true,
+      type: new SimpleSchema({
+        departmentsIds: {
+          type: String,
+          optional: true,
+        },
+        notify: {
+          type: String,
+          optional: true,
+        },
+        'improvementPlan.reviewDates': {
+          type: new SimpleSchema([
+            IdSchema,
+            {
+              date: {
+                type: Date,
+              },
+            },
+          ]),
+          optional: true,
+        },
+      }),
+    },
+    $pull: {
+      optional: true,
+      type: new SimpleSchema({
+        departmentsIds: {
+          type: String,
+          optional: true,
+        },
+        notify: {
+          type: String,
+          optional: true,
+        },
+        'improvementPlan.reviewDates': {
+          type: IdSchema,
+          optional: true,
+        },
+      }),
+    },
     $rename: {
       type: Object,
       optional: true,
