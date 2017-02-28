@@ -1,10 +1,10 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import property from 'lodash.property';
 
-import StandardsService from './standards-service';
+import StandardsService from '../standards-service';
 import { StandardsSchema } from '/imports/share/schemas/standards-schema';
 import { Standards } from '/imports/share/collections/standards';
-import StandardsNotificationsSender from './standards-notifications-sender';
+import StandardsNotificationsSender from '../standards-notifications-sender';
 import {
   IdSchema,
   StandardIdSchema,
@@ -17,10 +17,11 @@ import {
   onRestoreChecker,
   S_EnsureCanChange,
   S_EnsureCanChangeChecker,
-} from '../checkers';
+} from '../../checkers';
 import { chain, chainCheckers, inject, compose } from '/imports/api/helpers';
-import Method, { CheckedMethod } from '../method';
-import { getSchemaFrom } from '../schema-helpers';
+import Method, { CheckedMethod } from '../../method';
+
+export { default as update } from './update';
 
 const injectSTD = inject(Standards);
 
@@ -35,120 +36,6 @@ export const insert = new Method({
     return StandardsService.insert({ organizationId, ...args });
   },
 });
-
-export const update = ((() => {
-  const lookup = [
-    'improvementPlan',
-    'source1',
-    'source2',
-    'title',
-    'nestingLevel',
-    'description',
-    'sectionId',
-    'typeId',
-    'uniqueNumber',
-    'owner',
-    'issueNumber',
-    'status',
-    'departmentsIds',
-    'notify',
-  ];
-  const getExtra = (key) => (key.includes('$') ? {} : { optional: true });
-  const UpdateSchema = getSchemaFrom(StandardsSchema, getExtra)(lookup);
-
-  const ModifierSchema = new SimpleSchema({
-    $set: {
-      type: UpdateSchema,
-      optional: true,
-    },
-    $addToSet: {
-      optional: true,
-      type: new SimpleSchema({
-        departmentsIds: {
-          type: String,
-          optional: true,
-        },
-        notify: {
-          type: String,
-          optional: true,
-        },
-        'improvementPlan.reviewDates': {
-          type: new SimpleSchema([
-            IdSchema,
-            {
-              date: {
-                type: Date,
-              },
-            },
-          ]),
-          optional: true,
-        },
-      }),
-    },
-    $pull: {
-      optional: true,
-      type: new SimpleSchema({
-        departmentsIds: {
-          type: String,
-          optional: true,
-        },
-        notify: {
-          type: String,
-          optional: true,
-        },
-        'improvementPlan.reviewDates': {
-          type: IdSchema,
-          optional: true,
-        },
-      }),
-    },
-    $rename: {
-      type: Object,
-      optional: true,
-    },
-    '$rename.source2': {
-      type: String,
-      allowedValues: ['source1'],
-    },
-    $unset: {
-      type: Object,
-      optional: true,
-    },
-    '$unset.source1': {
-      type: String,
-      optional: true,
-    },
-    '$unset.source2': {
-      type: String,
-      optional: true,
-    },
-  });
-
-  const OptionsSchema = new SimpleSchema({
-    options: {
-      type: ModifierSchema,
-      optional: true,
-    },
-    query: {
-      type: Object,
-      optional: true,
-      blackbox: true,
-    },
-  });
-
-  return new CheckedMethod({
-    name: 'Standards.update',
-
-    validate: new SimpleSchema([IdSchema, OptionsSchema, UpdateSchema]).validator(),
-
-    check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
-
-    run({ ...args }) {
-      console.log(args);
-      return StandardsService.update({ ...args });
-    },
-  });
-})());
 
 export const updateViewedBy = new CheckedMethod({
   name: 'Standards.updateViewedBy',
