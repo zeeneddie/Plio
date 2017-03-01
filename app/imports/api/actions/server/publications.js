@@ -1,31 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
-import { Actions } from '/imports/share/collections/actions.js';
-import { isOrgMember } from '../../checkers.js';
-import Counter from '../../counter/server.js';
+import { Actions } from '/imports/share/collections/actions';
+import { isOrgMember } from '../../checkers';
+import Counter from '../../counter/server';
 import { getActionFiles, createActionCardPublicationTree } from '../utils';
 
-Meteor.publishComposite('actionsList', function (
-  organizationId,
-  isDeleted = { $in: [null, false] }
-) {
-  return {
-    find() {
-      const userId = this.userId;
-      if (!userId || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
-
-      return Actions.find({
-        organizationId,
-        isDeleted,
-      }, {
-        fields: Actions.publicFields,
-      });
-    },
-  };
-});
 
 Meteor.publishComposite('actionCard', function ({ _id, organizationId }) {
   check(_id, String);
@@ -41,11 +21,13 @@ Meteor.publishComposite('actionCard', function ({ _id, organizationId }) {
 });
 
 Meteor.publishComposite('actionsByIds', function (ids = []) {
+  check(ids, [String]);
+
   return {
     find() {
       let query = {
         _id: { $in: ids },
-        isDeleted: { $in: [null, false] },
+        isDeleted: false,
       };
 
       const { organizationId } = Object.assign({}, Actions.findOne(query));
@@ -68,6 +50,9 @@ Meteor.publishComposite('actionsByIds', function (ids = []) {
 });
 
 Meteor.publish('actionsCount', function (counterName, organizationId) {
+  check(counterName, String);
+  check(organizationId, String);
+
   const userId = this.userId;
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -75,12 +60,16 @@ Meteor.publish('actionsCount', function (counterName, organizationId) {
 
   return new Counter(counterName, Actions.find({
     organizationId,
-    isDeleted: { $in: [false, null] },
+    isDeleted: false,
   }));
 });
 
 Meteor.publish('actionsNotViewedCount', function (counterName, organizationId) {
+  check(counterName, String);
+  check(organizationId, String);
+
   const userId = this.userId;
+
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
@@ -88,6 +77,6 @@ Meteor.publish('actionsNotViewedCount', function (counterName, organizationId) {
   return new Counter(counterName, Actions.find({
     organizationId,
     viewedBy: { $ne: userId },
-    isDeleted: { $in: [false, null] },
+    isDeleted: false,
   }));
 });

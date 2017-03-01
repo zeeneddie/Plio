@@ -19,7 +19,7 @@ Meteor.publish('invitationInfo', (invitationId) => {
 
   if (!SimpleSchema.RegEx.Id.test(invitationId)) {
     sendInternalError('Incorrect invitation ID!');
-    return undefined;
+    return this.ready();
   }
 
   const invitedUserCursor = Meteor.users.find({
@@ -30,7 +30,7 @@ Meteor.publish('invitationInfo', (invitationId) => {
 
   if (invitedUserCursor.count() === 0) {
     sendInternalError('Invitation do not exist');
-    return undefined;
+    return this.ready();
   }
 
   const { _id: invitedUserId, invitationOrgId } = invitedUserCursor.fetch()[0];
@@ -47,7 +47,7 @@ Meteor.publish('invitationInfo', (invitationId) => {
   ];
 });
 
-Meteor.publish('currentUserOrganizations', function() {
+Meteor.publish('currentUserOrganizations', function () {
   if (this.userId) {
     return getUserOrganizations(this.userId, {}, {
       fields: {
@@ -61,20 +61,14 @@ Meteor.publish('currentUserOrganizations', function() {
         'users.sendDailyRecap': 1,
       },
     });
-  } else {
-    return this.ready();
   }
+
+  return this.ready();
 });
 
-Meteor.publish('currentUserOrganizationById', function(_id) {
-  if (this.userId) {
-    return getUserOrganizations(this.userId, { _id });
-  } else {
-    return this.ready();
-  }
-});
+Meteor.publish('currentUserOrganizationBySerialNumber', function (serialNumber) {
+  check(serialNumber, Number);
 
-Meteor.publish('currentUserOrganizationBySerialNumber', function(serialNumber) {
   const fields = {
     _id: 1,
     name: 1,
@@ -99,9 +93,9 @@ Meteor.publish('currentUserOrganizationBySerialNumber', function(serialNumber) {
 
   if (this.userId) {
     return getUserOrganizations(this.userId, { serialNumber }, { fields });
-  } else {
-    return this.ready();
   }
+
+  return this.ready();
 });
 
 Meteor.publish('dataImportUserOwnOrganizations', function publishDataImportUserOwnOrgs() {
@@ -120,7 +114,9 @@ Meteor.publish('dataImportUserOwnOrganizations', function publishDataImportUserO
   return Organizations.find(query, options);
 });
 
-Meteor.publish('transferredOrganization', function(transferId) {
+Meteor.publish('transferredOrganization', function (transferId) {
+  check(transferId, String);
+
   const userId = this.userId;
   const organizationCursor = Organizations.find({
     'transfer._id': transferId,
@@ -130,17 +126,24 @@ Meteor.publish('transferredOrganization', function(transferId) {
   if (userId && organization) {
     if (organization.transfer && organization.transfer.newOwnerId === userId) {
       return organizationCursor;
-    } else {
-      throw new Meteor.Error(403, 'Your account is not authorized for this action. Sign out and login as a proper user'); // 'Your account is not authorized for this action'
-      return this.ready();
     }
-  } else {
-    throw new Meteor.Error(404, 'An invitation to transfer the organization is not found');
+    const error = new Meteor.Error(
+      403,
+      'Your account is not authorized for this action. Sign out and login as a proper user'
+    );
+
+    this.error(error);
+
     return this.ready();
   }
+  const error = new Meteor.Error(404, 'An invitation to transfer the organization is not found');
+
+  this.error(error);
+
+  return this.ready();
 });
 
-Meteor.publish('organizationDeps', function(organizationId) {
+Meteor.publish('organizationDeps', function (organizationId) {
   check(organizationId, String);
 
   const userId = this.userId;
@@ -160,7 +163,10 @@ Meteor.publish('organizationDeps', function(organizationId) {
   );
   const standardsTypes = StandardTypes.find(query, makeOptionsFields(StandardTypes.publicFields));
   const riskTypes = RiskTypes.find(query);
-  const users = Meteor.users.find({ _id: { $in: userIds } });
+  const users = Meteor.users.find({ _id: { $in: userIds } }, {
+    ...Meteor.users.publicFields,
+    [`roles.${organizationId}`]: 1,
+  });
 
   return [
     standardsBookSections,
@@ -168,39 +174,6 @@ Meteor.publish('organizationDeps', function(organizationId) {
     riskTypes,
     users,
   ];
-});
-
-Meteor.publishComposite('organizationsInfo', {
-  find() {
-    const userId = this.userId;
-
-    if (userId && isPlioUser(userId)) {
-      return Organizations.find({}, {
-        fields: {
-          name: 1,
-          users: 1,
-          createdAt: 1,
-          lastAccessedDate: 1,
-        },
-      });
-    }
-
-    throw new Meteor.Error(403,
-      'Your account is not authorized for this action. Sign out and login as a proper user'
-    );
-  },
-
-  children: [{
-      find(organization) {
-        const owner = _.find(organization.users, ({ role }) => {
-          return role === UserMembership.ORG_OWNER;
-        });
-
-        return Meteor
-          .users
-          .find({ _id: owner.userId });
-      }
-  }],
 });
 
 Meteor.publishComposite('customersLayout', {
@@ -228,12 +201,14 @@ Meteor.publishComposite('customersLayout', {
   }],
 });
 
-Meteor.publish('customerCard', function getCustomerData(orgId) {
+Meteor.publish('customerCard', function getCustomerData(organizationId) {
+  check(organizationId, String);
+
   if (!this.userId || !isPlioUser(this.userId)) {
     return this.ready();
   }
 
-  return Organizations.find({ _id: orgId }, {
+  return Organizations.find({ _id: organizationId }, {
     fields: Organizations.cardFields,
   });
 });

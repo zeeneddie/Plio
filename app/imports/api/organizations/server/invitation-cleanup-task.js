@@ -1,41 +1,42 @@
 import moment from 'moment-timezone';
-
-import InvitationService from '../invitation-service';
+import { SyncedCron } from 'meteor/percolate:synced-cron';
+import { Meteor } from 'meteor/meteor';
 
 SyncedCron.add({
   name: 'Remove expired invitations and expired email verification tokens',
 
-  schedule: function (parser) {
+  schedule(parser) {
     return parser.text('every 1 minute');
   },
 
   job: function () {
-    let emailVerificationExpirationTimeInHours = 0.03;
-    let emailVerificationExpirationThresholdDate = moment().subtract(emailVerificationTimeInHours, 'hours').toDate();
+    const emailVerificationExpirationTimeInHours = 0.03;
+    const emailVerificationExpirationThresholdDate = moment()
+      .subtract(emailVerificationExpirationTimeInHours, 'hours')
+      .toDate();
 
-    //get all users with expired invitations
+    // get all users with expired invitations
     Meteor.users.find({
       invitationExpirationDate: {
-        $lt: new Date
-      }
-    }, { fields: { _id: 1 } }).forEach(userDoc => {
+        $lt: new Date,
+      },
+    }, { fields: { _id: 1 } }).forEach(userDoc => Meteor.users.remove({ _id: userDoc._id }));
 
-      //Because of meteor's protection remove each user by ID
-      Meteor.users.remove({ _id: userDoc._id });
-    });
-
-    //get all users with expired email verification tokens
+    // get all users with expired email verification tokens
     Meteor.users.find({
       'services.email.verificationTokens.when': {
-        $lt: emailVerificationExpirationThresholdDate
+        $lt: emailVerificationExpirationThresholdDate,
       },
-      'emails.verified': false
+      'emails.verified': false,
     }, { fields: { _id: 1 } }).forEach(userDoc => {
       Meteor.users.update({ _id: userDoc._id }, { $unset: { 'services.email': '' } });
     });
 
-    console.log('Expired invitations and expired email verification tokens removed at ', new Date());
-  }
+    console.log(
+      'Expired invitations and expired email verification tokens removed at ',
+      new Date()
+    );
+  },
 });
 
 SyncedCron.start();

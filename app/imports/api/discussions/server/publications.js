@@ -1,16 +1,20 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 
-import { Discussions } from '/imports/share/collections/discussions.js';
-import { isOrgMember } from '../../checkers.js';
+import { Discussions } from '/imports/share/collections/discussions';
+import { isOrgMember } from '../../checkers';
 
 Meteor.publish('discussionsByDocId', function ({ docId, organizationId }) {
+  check(docId, String);
+  check(organizationId, String);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
 
-  const query = { linkedTo: docId, organizationId };
+  const query = { organizationId, linkedTo: docId };
   const options = {
     fields: {
       _id: 1,
