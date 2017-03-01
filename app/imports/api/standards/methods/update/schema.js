@@ -57,16 +57,6 @@ export const ModifierSchema = new SimpleSchema([
   schemas.notify,
 ]);
 
-export const MongoSchema = new SimpleSchema({
-  options: {
-    type: ModifierSchema,
-    optional: true,
-  },
-  query: {
-    type: Object,
-    optional: true,
-    blackbox: true,
-  },
-});
+export const MongoSchema = schemas.getMongoUpdateSchema(ModifierSchema);
 
 export default new SimpleSchema([UpdateSchema, MongoSchema]);

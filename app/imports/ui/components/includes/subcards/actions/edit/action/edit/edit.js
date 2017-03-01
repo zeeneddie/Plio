@@ -9,7 +9,7 @@ import {
   verify,
   undoCompletion,
   undoVerification
-} from '/imports/api/actions/methods.js';
+} from '/imports/api/actions/methods';
 
 
 Template.Actions_EditSubcard.viewmodel({

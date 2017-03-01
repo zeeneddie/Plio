@@ -1,22 +1,18 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { RisksSchema } from '/imports/share/schemas/risks-schema';
+import { ActionSchema } from '/imports/share/schemas/action-schema';
 import * as schemas from '../../../update-schemas';
 
 const lookup = [
   'title',
   'description',
-  'statusComment',
-  'identifiedBy',
-  'identifiedAt',
-  'magnitude',
-  'type',
-  'improvementPlan',
-  'riskEvaluation',
+  'ownerId',
+  'planInPlace',
+  'notes',
 ];
 
-const UpdateSchema = schemas.getSchemaFrom(
-  RisksSchema,
+export const UpdateSchema = schemas.getSchemaFrom(
+  ActionSchema,
   schemas.withOptionalIfNotNested,
 )(lookup);
 
@@ -29,11 +25,7 @@ export const modifierSchemaDefinition = {
 
 export const ModifierSchema = new SimpleSchema([
   modifierSchemaDefinition,
-  schemas.improvementPlan,
-  schemas.departmentsIds,
   schemas.notify,
-  schemas.standardsIds,
-  schemas.fileIds,
 ]);
 
 export const MongoSchema = schemas.getMongoUpdateSchema(ModifierSchema);
