@@ -2,33 +2,17 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import RisksService from '../../risks-service';
 import { Risks } from '/imports/share/collections/risks';
-import { IdSchema, optionsSchema } from '/imports/share/schemas/schemas';
-import {
-  RisksUpdateSchema,
-} from '/imports/share/schemas/risks-schema';
+import { IdSchema } from '/imports/share/schemas/schemas';
 import { CheckedMethod } from '../../../method';
+import UpdateSchema from './schema';
+import { always, T } from '../../../helpers';
 
 export default new CheckedMethod({
   name: 'Risks.update',
 
-  validate: new SimpleSchema([
-    IdSchema,
-    RisksUpdateSchema,
-    optionsSchema,
-  ]).validator(),
+  validate: new SimpleSchema([IdSchema, UpdateSchema]).validator(),
 
-  check(checker) {
-    return true;
-    // const _checker = (...args) =>
-    //   (doc) => {
-    //     if (_.has(args, ['scoredBy', 'scoredAt']) && !doc.score) {
-    //       throw ACCESS_DENIED;
-    //     }
-    //     return checkAnalysis(doc, args);
-    //   };
-    //
-    // return checker(Risks)(_checker);
-  },
+  check: checker => checker(Risks)(always(T)),
 
   run({ ...args }) {
     console.log(args);

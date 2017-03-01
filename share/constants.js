@@ -365,6 +365,9 @@ export const StringLimits = {
     min: 1,
     max: 140,
   },
+  sequentialId: {
+    min: 3,
+  },
 };
 
 export const SystemName = 'Plio';

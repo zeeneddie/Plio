@@ -146,7 +146,6 @@ export const NonConformitiesListProjection = {
   isDeleted: 1,
   deletedAt: 1,
   deletedBy: 1,
-  magnitude: 1,
 };
 
 export const WorkItemsListProjection = {
@@ -202,17 +201,6 @@ export const riskScoreTypes = {
     id: 'residual',
     label: 'Residual risk',
     adj: 'Residual',
-  },
-};
-
-export const StringLimits = {
-  abbreviation: {
-    min: 1,
-    max: 4,
-  },
-  title: {
-    min: 1,
-    max: 80,
   },
 };
 

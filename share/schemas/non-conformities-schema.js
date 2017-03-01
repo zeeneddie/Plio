@@ -6,7 +6,7 @@ import {
   BaseProblemsOptionalSchema,
   FileIdsSchema,
 } from './schemas';
-import { ProblemsStatuses, RCAMaxCauses, WorkflowTypes } from '../constants';
+import { ProblemsStatuses, RCAMaxCauses, WorkflowTypes, StringLimits } from '../constants';
 
 const RequiredSchema = BaseProblemsRequiredSchema;
 
@@ -24,10 +24,25 @@ const RootCauseAnalysisSchema = new SimpleSchema([
     },
     'causes.$.text': {
       type: String,
+      // max: ?
     },
   },
   FileIdsSchema,
 ]);
+
+const RefSchema = new SimpleSchema({
+  text: {
+    type: String,
+    max: 20,
+    optional: true,
+  },
+  url: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url,
+    max: StringLimits.url.max,
+    optional: true,
+  },
+});
 
 const OptionalSchema = new SimpleSchema([
   BaseProblemsOptionalSchema,
@@ -37,18 +52,8 @@ const OptionalSchema = new SimpleSchema([
       optional: true,
     },
     ref: {
-      type: Object,
+      type: RefSchema,
       defaultValue: {},
-      optional: true,
-    },
-    'ref.text': {
-      type: String,
-      max: 20,
-      optional: true,
-    },
-    'ref.url': {
-      type: String,
-      regEx: SimpleSchema.RegEx.Url,
       optional: true,
     },
     rootCauseAnalysis: {
@@ -71,7 +76,7 @@ const NonConformitiesSchema = new SimpleSchema([
     },
     sequentialId: {
       type: String,
-      min: 3,
+      min: StringLimits.sequentialId.min,
     },
     status: {
       type: Number,
