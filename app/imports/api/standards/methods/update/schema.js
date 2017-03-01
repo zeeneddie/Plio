@@ -1,7 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { StandardsSchema } from '/imports/share/schemas/standards-schema';
-import { getSchemaFrom } from '../../../schema-helpers';
 import * as schemas from '../../../update-schemas';
 
 const lookup = [
@@ -19,9 +18,10 @@ const lookup = [
   'status',
 ];
 
-const getExtra = (key) => (key.includes('$') ? {} : { optional: true });
-
-export const UpdateSchema = getSchemaFrom(StandardsSchema, getExtra)(lookup);
+export const UpdateSchema = schemas.getSchemaFrom(
+  StandardsSchema,
+  schemas.withOptionalIfNotNested,
+)(lookup);
 
 export const modifierSchemaDefinition = {
   $set: {

@@ -14,7 +14,6 @@ export default new CheckedMethod({
   check: checker => checker(NonConformities)(() => () => true),
 
   run({ ...args }) {
-    console.log(args);
     return NonConformitiesService.update({ ...args });
   },
 });

@@ -1,7 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { NonConformitiesSchema } from '/imports/share/schemas/non-conformities-schema';
-import { getSchemaFrom } from '../../../schema-helpers';
 import * as schemas from '../../../update-schemas';
 
 const lookup = [
@@ -16,9 +15,10 @@ const lookup = [
   'improvementPlan',
   'rootCauseAnalysis',
 ];
-const getExtra = key => (key.includes('$') ? {} : { optional: true });
-
-const UpdateSchema = getSchemaFrom(NonConformitiesSchema, getExtra)(lookup);
+const UpdateSchema = schemas.getSchemaFrom(
+  NonConformitiesSchema,
+  schemas.withOptionalIfNotNested,
+)(lookup);
 
 const CauseSchema = new SimpleSchema({
   index: {
@@ -73,16 +73,6 @@ export const ModifierSchema = new SimpleSchema([
   schemas.fileIds,
 ]);
 
-export const MongoSchema = new SimpleSchema({
-  options: {
-    type: ModifierSchema,
-    optional: true,
-  },
-  query: {
-    type: Object,
-    optional: true,
-    blackbox: true,
-  },
-});
+export const MongoSchema = schemas.getMongoUpdateSchema(ModifierSchema);
 
 export default new SimpleSchema([UpdateSchema, MongoSchema]);

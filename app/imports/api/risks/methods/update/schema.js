@@ -1,7 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { RisksSchema } from '/imports/share/schemas/risks-schema';
-import { getSchemaFrom } from '../../../schema-helpers';
 import * as schemas from '../../../update-schemas';
 
 const lookup = [
@@ -15,9 +14,11 @@ const lookup = [
   'improvementPlan',
   'riskEvaluation',
 ];
-const getExtra = key => (key.includes('$') ? {} : { optional: true });
 
-const UpdateSchema = getSchemaFrom(RisksSchema, getExtra)(lookup);
+const UpdateSchema = schemas.getSchemaFrom(
+  RisksSchema,
+  schemas.withOptionalIfNotNested,
+)(lookup);
 
 export const modifierSchemaDefinition = {
   $set: {

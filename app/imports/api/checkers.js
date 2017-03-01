@@ -138,39 +138,6 @@ export const isOrgMember = (userId, organizationId) => {
   return isOrgMemberBySelector(userId, { _id: organizationId });
 };
 
-export const checkAnalysis = ({ analysis = {}, updateOfStandards = {}, ...rest }, args = {}) => {
-  const isCompleted = ({ status = '' }) => status.toString() === _.invert(AnalysisStatuses)['Completed'];
-  const findArg = _args => _find => _.keys(_args).find(key => key.includes(_find));
-  const findSubstring = (str = '', ...toFind) => toFind.find(s => str.includes(s));
-  const checkAnalysisAndThrow = (predicate) => {
-    if (!predicate) {
-      throw new Meteor.Error(403, 'Access denied');
-    }
-  };
-
-  const isAnalysisCompleted = isCompleted(analysis);
-  const isUpdateOfStandardsCompleted = isCompleted(updateOfStandards);
-
-  const find = findArg(args);
-
-  const isAnalysis = find('analysis');
-  const isUpdateOfStandards = find('updateOfStandards');
-
-  if (find('analysis.status') || find('updateOfStandards.status')) {
-    checkAnalysisAndThrow(analysis || analysis.executor || analysis.executor === this.userId);
-  }
-
-  if ( find('updateOfStandards') || (isAnalysis && findSubstring(isAnalysis, 'completedAt', 'completedBy')) ) {
-    checkAnalysisAndThrow(isAnalysisCompleted);
-  }
-
-  if (findSubstring(isUpdateOfStandards, 'completedAt', 'completedBy')) {
-    checkAnalysisAndThrow(isUpdateOfStandardsCompleted);
-  }
-
-  return { analysis, updateOfStandards, ...rest };
-};
-
 export const isViewed = (doc, userId) => {
   const { viewedBy = [] } = Object.assign({}, doc);
   return viewedBy.includes(userId);
