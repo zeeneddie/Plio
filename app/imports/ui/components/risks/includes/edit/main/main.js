@@ -16,7 +16,7 @@ import {
   setStandardsUpdateCompletedBy,
   setStandardsUpdateCompletedDate,
   setStandardsUpdateComments
-} from '/imports/api/risks/methods.js';
+} from '/imports/api/risks/methods';
 import { WorkflowTypes } from '/imports/share/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
 import { AnalysisTitles } from '/imports/api/constants.js';

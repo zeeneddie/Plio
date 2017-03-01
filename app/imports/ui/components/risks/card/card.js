@@ -5,7 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { ActionTypes } from '/imports/share/constants.js';
 import { UncategorizedTypeSection, AnalysisTitles } from '/imports/api/constants.js';
 import { RiskTypes } from '/imports/share/collections/risk-types.js';
-import { restore, remove } from '/imports/api/risks/methods.js';
+import { restore, remove } from '/imports/api/risks/methods';
 import { RisksHelp } from '/imports/api/help-messages.js';
 
 Template.Risks_Card_Read.viewmodel({
