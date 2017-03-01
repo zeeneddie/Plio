@@ -14,15 +14,53 @@ const lookup = [
   'cost',
   'ref',
   'improvementPlan',
+  'rootCauseAnalysis',
 ];
 const getExtra = key => (key.includes('$') ? {} : { optional: true });
 
 const UpdateSchema = getSchemaFrom(NonConformitiesSchema, getExtra)(lookup);
 
+const CauseSchema = new SimpleSchema({
+  index: {
+    type: Number,
+  },
+  text: {
+    type: String,
+  },
+});
+
 export const modifierSchemaDefinition = {
   $set: {
     type: UpdateSchema,
     optional: true,
+  },
+  $addToSet: {
+    optional: true,
+    type: new SimpleSchema({
+      rootCauseAnalysis: {
+        optional: true,
+        type: new SimpleSchema([schemas.fileIdsSchema, {
+          causes: {
+            type: CauseSchema,
+            optional: true,
+          },
+        }]),
+      },
+    }),
+  },
+  $pull: {
+    optional: true,
+    type: new SimpleSchema({
+      rootCauseAnalysis: {
+        optional: true,
+        type: new SimpleSchema([schemas.fileIdsSchema, {
+          causes: {
+            type: CauseSchema.pick(['index']),
+            optional: true,
+          },
+        }]),
+      },
+    }),
   },
 };
 

@@ -4,7 +4,7 @@ import { IdSchema, idSchemaDoc } from '/imports/share/schemas/schemas';
 
 const idSchemaDefOpt = { ...idSchemaDoc, optional: true };
 
-const fileIdsSchema = new SimpleSchema({ fileIds: idSchemaDefOpt });
+export const fileIdsSchema = new SimpleSchema({ fileIds: idSchemaDefOpt });
 export const fileIds = new SimpleSchema({
   $addToSet: {
     optional: true,
@@ -71,7 +71,6 @@ export const notify = new SimpleSchema({
 });
 
 const standardIdsSchema = new SimpleSchema({ standardsIds: idSchemaDefOpt });
-
 export const standardsIds = new SimpleSchema({
   $addToSet: {
     optional: true,
