@@ -9,9 +9,7 @@ import { invokeStop } from '/imports/api/helpers';
 const getLayoutData = (props) => loadLayoutData(() => {
   if (!props.orgSerialNumber) return false;
 
-  const isDeleted = props.filter === 3
-          ? true
-          : { $in: [null, false] };
+  const isDeleted = props.filter === 3;
 
   return Meteor.subscribe('standardsLayout', props.orgSerialNumber, isDeleted);
 })(props, () => null);
