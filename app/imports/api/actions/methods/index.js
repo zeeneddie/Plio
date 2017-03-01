@@ -19,7 +19,7 @@ import {
   ACT_OnUndoVerificationChecker,
   ACT_LinkedDocsChecker
 } from '../../checkers';
-import { inject } from '/imports/api/helpers';
+import { inject, always, T } from '/imports/api/helpers';
 import {
   ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED,
   ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED,
@@ -62,7 +62,7 @@ export const updateViewedBy = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => injectACT(checker),
+  check: checker => injectACT(checker)(always(T)),
 
   run({ _id }) {
     return ActionService.updateViewedBy({ _id, userId: this.userId });

@@ -1,34 +1,40 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import moment from 'moment-timezone';
+import { _ } from 'meteor/underscore';
 
 import {
   BaseEntitySchema,
   OrganizationIdSchema,
   FileIdsSchema,
   getNotifySchema,
-  ViewedBySchema
-} from './schemas.js';
-import { ActionTypes, ActionPlanOptions, ActionStatuses, ProblemTypes, StringLimits } from '../constants.js';
+  ViewedBySchema,
+} from './schemas';
+import {
+  ActionTypes,
+  ActionPlanOptions,
+  ActionStatuses,
+  ProblemTypes,
+  StringLimits,
+} from '../constants';
 
 
-const checkDate = function() {
+function checkDate() {
   const value = this.value;
-  if (!_.isDate(value)) {
-    return;
-  }
+
+  if (!_.isDate(value)) return false;
 
   return moment(value).isAfter(new Date()) ? 'badDate' : true;
-};
+}
 
 const linkedToSchema = new SimpleSchema({
   documentId: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    regEx: SimpleSchema.RegEx.Id,
   },
   documentType: {
     type: String,
-    allowedValues: _.values(ProblemTypes)
-  }
+    allowedValues: Object.values(ProblemTypes),
+  },
 });
 
 const RequiredSchema = new SimpleSchema([
@@ -37,36 +43,38 @@ const RequiredSchema = new SimpleSchema([
     title: {
       type: String,
       min: StringLimits.title.min,
-      max: StringLimits.title.max
+      max: StringLimits.title.max,
     },
     description: {
       type: String,
-      optional: true
+      optional: true,
+      // max: ?
     },
     type: {
       type: String,
-      allowedValues: _.values(ActionTypes)
+      allowedValues: Object.values(ActionTypes),
     },
     linkedTo: {
       type: [linkedToSchema],
-      optional: true
+      optional: true,
+      // maxCount: ?
     },
     ownerId: {
       type: String,
-      regEx: SimpleSchema.RegEx.Id
+      regEx: SimpleSchema.RegEx.Id,
     },
     planInPlace: {
       type: String,
-      allowedValues: _.values(ActionPlanOptions)
+      allowedValues: Object.values(ActionPlanOptions),
     },
     completionTargetDate: {
-      type: Date
+      type: Date,
     },
     toBeCompletedBy: {
       type: String,
-      regEx: SimpleSchema.RegEx.Id
-    }
-  }
+      regEx: SimpleSchema.RegEx.Id,
+    },
+  },
 ]);
 
 const ActionSchema = new SimpleSchema([
@@ -78,94 +86,97 @@ const ActionSchema = new SimpleSchema([
   {
     serialNumber: {
       type: Number,
-      min: 1
+      min: 1,
     },
     sequentialId: {
       type: String,
-      regEx: /^(?:CA|PA|RC)[1-9][0-9]*$/
+      regEx: /^(?:CA|PA|RC)[1-9][0-9]*$/,
+      min: StringLimits.sequentialId.min,
     },
     status: {
       type: Number,
-      allowedValues: _.keys(ActionStatuses).map(key => parseInt(key, 10)),
-      defaultValue: 1
+      allowedValues: Object.keys(ActionStatuses).map(key => parseInt(key, 10)),
+      defaultValue: 1,
     },
     isCompleted: {
       type: Boolean,
-      defaultValue: false
+      defaultValue: false,
     },
     completedAt: {
       type: Date,
       optional: true,
-      custom: checkDate
+      custom: checkDate,
     },
     completedBy: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
-      optional: true
+      optional: true,
     },
     completionComments: {
       type: String,
-      optional: true
+      optional: true,
+      max: StringLimits.comments.max,
     },
     completionAssignedBy: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
-      optional: true
+      optional: true,
     },
     isVerified: {
       type: Boolean,
-      defaultValue: false
+      defaultValue: false,
     },
     isVerifiedAsEffective: {
       type: Boolean,
-      defaultValue: false
+      defaultValue: false,
     },
     verificationTargetDate: {
       type: Date,
-      optional: true
+      optional: true,
     },
     toBeVerifiedBy: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
-      optional: true
+      optional: true,
     },
     verifiedAt: {
       type: Date,
       optional: true,
-      custom: checkDate
+      custom: checkDate,
     },
     verifiedBy: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
-      optional: true
+      optional: true,
     },
     verificationComments: {
       type: String,
-      optional: true
+      optional: true,
+      max: StringLimits.comments.max,
     },
     verificationAssignedBy: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
-      optional: true
+      optional: true,
     },
     isDeleted: {
       type: Boolean,
-      defaultValue: false
+      defaultValue: false,
     },
     deletedBy: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
-      optional: true
+      optional: true,
     },
     deletedAt: {
       type: Date,
-      optional: true
+      optional: true,
     },
     notes: {
       type: String,
-      optional: true
-    }
-  }
+      optional: true,
+    },
+  },
 ]);
 
 export { RequiredSchema, ActionSchema };

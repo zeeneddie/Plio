@@ -16,16 +16,9 @@ export const UpdateSchema = schemas.getSchemaFrom(
   schemas.withOptionalIfNotNested,
 )(lookup);
 
-export const modifierSchemaDefinition = {
-  $set: {
-    type: UpdateSchema,
-    optional: true,
-  },
-};
-
 export const ModifierSchema = new SimpleSchema([
-  modifierSchemaDefinition,
   schemas.notify,
+  schemas.fileIds,
 ]);
 
 export const MongoSchema = schemas.getMongoUpdateSchema(ModifierSchema);

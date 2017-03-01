@@ -15,7 +15,6 @@ const update = new CheckedMethod({
   validate: new SimpleSchema([IdSchema, UpdateSchema]).validator(),
 
   run({ ...args }) {
-    console.log(args);
     return ActionService.update({ ...args });
   },
 });

@@ -21,9 +21,6 @@ import {
   getCursorNonDeleted,
   toObjFind,
   compose,
-  transsoc,
-  propId,
-  assoc,
   mapC,
   concatC,
   toDocId,
@@ -160,6 +157,12 @@ Meteor.publishComposite('standardCard', function publishStandardCard({
 });
 
 Meteor.publish('standardsDeps', function (organizationId) {
+  check(organizationId, String);
+
+  const userId = this.userId();
+
+  if (!userId || !isOrgMember(userId, organizationId)) return this.ready();
+
   const actionsQuery = {
     organizationId,
     type: {
