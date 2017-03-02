@@ -41,8 +41,6 @@ import {
 } from '../../observers';
 import { setInitializing } from '/imports/client/store/actions/standardsActions';
 
-let observers = [];
-
 const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
   const isDeleted = filter === STANDARD_FILTER_MAP.DELETED;
 
@@ -115,34 +113,31 @@ export default compose(
     pickFrom('standards', ['areDepsReady', 'initializing']),
     pickDeep(['global.dataLoading']),
   ])),
-  branch(
-    every([
+  kompose((props, onData) => {
+    let observers = [];
+    const pred = every([
       compose(not, property('dataLoading')),
       property('areDepsReady'),
       property('initializing'),
-    ]),
-    lifecycle({
-      componentDidMount() {
-        const { dispatch, organizationId } = this.props;
-        const args = [dispatch, { organizationId }];
+    ]);
 
-        Meteor.defer(() => {
-          observers = [
-            observeStandards(...args),
-            observeStandardBookSections(...args),
-            observeStandardTypes(...args),
-          ];
-        });
+    if (pred(props) && !observers.length) {
+      const { dispatch, organizationId } = props;
+      const args = [dispatch, { organizationId }];
 
-        dispatch(setInitializing(false));
-      },
-    }),
-    lifecycle({
-      componentWillUnmount() {
-        if (observers.length) observers.map(invokeStop);
-      },
-    }),
-  ),
+      Meteor.defer(() => {
+        observers = [
+          observeStandards(...args),
+          observeStandardBookSections(...args),
+          observeStandardTypes(...args),
+        ];
+      });
+    }
+
+    onData(null, {});
+
+    return () => observers.length && observers.map(invokeStop);
+  }),
   connect(state => ({
     standard: state.collections.standardsByIds[state.global.urlItemId],
     ...pickDeep([

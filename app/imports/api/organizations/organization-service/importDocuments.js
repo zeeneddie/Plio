@@ -6,6 +6,7 @@ import { assoc, omitC, compose, reduceC, getC, cond } from '/imports/api/helpers
 import { DocumentTypes, SystemName } from '/imports/share/constants';
 import { getCollectionByDocType } from '/imports/share/helpers';
 import { Files } from '/imports/share/collections/files';
+import { Discussions } from '/imports/share/collections/discussions';
 
 const getFieldsByDocType = (documentType, fields) => {
   switch (documentType) {
@@ -32,6 +33,12 @@ const getFieldsByDocType = (documentType, fields) => {
   }
 };
 
+const getBaseEntity = () => ({
+  _id: Random.id(),
+  createdBy: SystemName,
+  createdAt: new Date(),
+});
+
 const getPathsByDocType = (documentType, userId, paths) => {
   switch (documentType) {
     case DocumentTypes.STANDARD:
@@ -46,10 +53,8 @@ const getPathsByDocType = (documentType, userId, paths) => {
 const mapFieldsByDocType = curry((documentType, organizationId, userId, doc) => {
   // assign current user's id to object's paths
   const entity = getPathsByDocType(documentType, userId, {
+    ...getBaseEntity(),
     organizationId,
-    _id: Random.id(),
-    createdBy: SystemName,
-    createdAt: new Date,
     departmentsIds: [],
     notify: [userId],
   });
@@ -84,7 +89,7 @@ const copyFile = curry((organizationId, bulk, _id) => {
   return newFile._id;
 });
 
-const copyStandardDeps = (bulkFiles, to, from, doc) => {
+const copyStandardSources = curry((bulkFiles, to, _, doc) => {
   const { source1, source2 } = doc;
   const reducer = (prev, file, i) => compose(
     cond(
@@ -98,12 +103,32 @@ const copyStandardDeps = (bulkFiles, to, from, doc) => {
   const result = reduceC(reducer, { ...doc }, [source1, source2]);
 
   return result;
-};
+});
 
-const copyDeps = curry((documentType, bulkFiles, to, from, doc) => {
+const copyDiscussion = curry((bulkDiscussions, documentType, to, _, doc) => {
+  const newDiscussion = {
+    documentType,
+    organizationId: to,
+    linkedTo: doc._id,
+    isPrimary: true,
+  };
+
+  Object.assign(newDiscussion, getBaseEntity());
+
+  bulkDiscussions.insert(newDiscussion);
+
+  return doc;
+});
+
+const copyStandardDeps = ([bulkFiles, bulkDiscussions], to, from, doc) => compose(
+  copyStandardSources(bulkFiles, to, from),
+  copyDiscussion(bulkDiscussions, DocumentTypes.STANDARD, to, from),
+)(doc);
+
+const copyDeps = curry((documentType, [bulkFiles, bulkDiscussions], to, from, doc) => {
   switch (documentType) {
     case DocumentTypes.STANDARD:
-      return copyStandardDeps(bulkFiles, to, from, doc);
+      return copyStandardDeps([bulkFiles, bulkDiscussions], to, from, doc);
     default:
       return doc;
   }
@@ -135,18 +160,18 @@ const bulkInsertDocuments = (documentType, to, from, userId) => {
     sort: { title: 1 },
   };
   const cursor = collection.find(query, options);
-  const iterator = (bulk, bulkFiles) => compose(
+  const iterator = (bulk, bulkFiles, bulkDiscussions) => compose(
     bulk.insert.bind(bulk),
+    copyDeps(documentType, [bulkFiles, bulkDiscussions], to, from),
     mapFieldsByDocType(documentType, to, userId),
-    copyDeps(documentType, bulkFiles, to, from)
   );
   const bulk = initBulk(collection);
-
   const bulkFiles = initBulk(Files);
+  const bulkDiscussions = initBulk(Discussions);
 
-  cursor.forEach(iterator(bulk, bulkFiles));
+  cursor.forEach(iterator(bulk, bulkFiles, bulkDiscussions));
 
-  return executeBulks(bulk, bulkFiles);
+  return executeBulks(bulk, bulkFiles, bulkDiscussions);
 };
 
 export default function importDocuments({ to, from, userId, documentType }) {
