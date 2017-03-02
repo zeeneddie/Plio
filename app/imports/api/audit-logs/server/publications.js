@@ -33,6 +33,7 @@ const checkSubsArgs = (userId, documentId, collectionName) => {
 };
 
 Meteor.publish('auditLogs', function (documentId, collectionName, skip = 0, limit = 10) {
+  console.log(documentId, collectionName, skip, limit);
   if (!checkSubsArgs(this.userId, documentId, collectionName)) {
     return this.ready();
   }

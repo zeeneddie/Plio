@@ -69,7 +69,8 @@ export default compose(
       {
         shouldResubscribe: (props, nextProps) => (
           props.orgSerialNumber !== nextProps.orgSerialNumber ||
-          props.filter !== nextProps.filter
+          ((props.filter === 1 || props.filter === 2) && nextProps.filter === 3) ||
+          (props.filter === 3 && (nextProps.filter === 1 || nextProps.filter === 2))
         ),
       },
     ),
