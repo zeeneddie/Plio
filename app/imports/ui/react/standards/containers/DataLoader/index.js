@@ -2,20 +2,29 @@ import { composeWithTracker, compose as kompose } from 'react-komposer';
 import {
   compose,
   lifecycle,
-  shouldUpdate,
   defaultProps,
   withHandlers,
   branch,
   renderComponent,
-  renameProp,
+  withProps,
+  onlyUpdateForKeys,
 } from 'recompose';
 import { connect } from 'react-redux';
 import property from 'lodash.property';
+import { Meteor } from 'meteor/meteor';
 
 import StandardsLayout from '../../components/Layout';
-import loadStandardsLayoutData from '../../loaders/loadLayoutData';
-import { pickDeep, identity, invokeStop, combineObjects, pickFrom } from '/imports/api/helpers';
-import { StandardFilters } from '/imports/api/constants';
+import {
+  pickDeep,
+  identity,
+  invokeStop,
+  combineObjects,
+  pickFrom,
+  every,
+  not,
+  always,
+} from '/imports/api/helpers';
+import { StandardFilters, STANDARD_FILTER_MAP } from '/imports/api/constants';
 import onHandleFilterChange from '../../../handlers/onHandleFilterChange';
 import onHandleReturn from '../../../handlers/onHandleReturn';
 import loadInitialData from '../../../loaders/loadInitialData';
@@ -24,12 +33,21 @@ import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
 import loadMainData from '../../loaders/loadMainData';
 import loadCardData from '../../loaders/loadCardData';
 import loadDeps from '../../loaders/loadDeps';
+import loadLayoutData from '../../../loaders/loadLayoutData';
 import {
   observeStandards,
   observeStandardBookSections,
   observeStandardTypes,
 } from '../../observers';
 import { setInitializing } from '/imports/client/store/actions/standardsActions';
+
+let observers = [];
+
+const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
+  const isDeleted = filter === STANDARD_FILTER_MAP.DELETED;
+
+  return Meteor.subscribe('standardsLayout', orgSerialNumber, isDeleted);
+});
 
 export default compose(
   connect(),
@@ -43,9 +61,21 @@ export default compose(
     'organizations.orgSerialNumber',
     'dataImport.isInProgress',
   ])),
-  loadStandardsLayoutData,
-  connect(pickDeep(['global.dataLoading'])),
-  renameProp('dataLoading', 'loading'),
+  branch(
+    property('isInProgress'),
+    withProps(always({ loading: true })),
+    composeWithTracker(
+      getLayoutData(),
+      null,
+      null,
+      {
+        shouldResubscribe: (props, nextProps) => (
+          props.orgSerialNumber !== nextProps.orgSerialNumber ||
+          props.filter !== nextProps.filter
+        ),
+      },
+    ),
+  ),
   branch(
     property('loading'),
     renderComponent(StandardsLayout),
@@ -55,51 +85,64 @@ export default compose(
   connect(pickDeep(['organizations.organizationId'])),
   lifecycle({
     componentWillMount() {
+      this.props.dispatch(setInitializing(true));
+
       loadMainData(this.props, () => null);
     },
   }),
   connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
-  composeWithTracker(loadCardData, null, null, {
-    shouldResubscribe: (props, nextProps) => !!(
-      props.organizationId !== nextProps.organizationId ||
-      props.urlItemId !== nextProps.urlItemId
-    ),
-  }),
+  branch(
+    property('organizationId'),
+    composeWithTracker(loadCardData, null, null, {
+      shouldResubscribe: (props, nextProps) => !!(
+        props.organizationId !== nextProps.organizationId ||
+        props.urlItemId !== nextProps.urlItemId
+      ),
+    }),
+    identity,
+  ),
   connect(pickDeep(['organizations.organizationId', 'standards.initializing'])),
-  composeWithTracker(loadDeps, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.organizationId !== nextProps.organizationId ||
-      props.initializing !== nextProps.initializing,
-  }),
+  branch(
+    property('organizationId'),
+    composeWithTracker(loadDeps, null, null, {
+      shouldResubscribe: (props, nextProps) =>
+        props.organizationId !== nextProps.organizationId ||
+        props.initializing !== nextProps.initializing,
+    }),
+    identity,
+  ),
   connect(combineObjects([
     pickFrom('standards', ['areDepsReady', 'initializing']),
     pickDeep(['global.dataLoading']),
   ])),
-  lifecycle({
-    componentWillReceiveProps({
-      dataLoading,
-      areDepsReady,
-      initializing,
-      dispatch,
-      organizationId,
-    }) {
-      if (!dataLoading && areDepsReady && initializing) {
-        setTimeout(() => {
-          const args = [dispatch, { organizationId }];
-          this.observers = [
+  branch(
+    every([
+      compose(not, property('dataLoading')),
+      property('areDepsReady'),
+      property('initializing'),
+    ]),
+    lifecycle({
+      componentDidMount() {
+        const { dispatch, organizationId } = this.props;
+        const args = [dispatch, { organizationId }];
+
+        Meteor.defer(() => {
+          observers = [
             observeStandards(...args),
             observeStandardBookSections(...args),
             observeStandardTypes(...args),
           ];
-        }, 0);
+        });
 
         dispatch(setInitializing(false));
-      }
-    },
-    componentWillUnmount() {
-      return this.observers && this.observers.map(invokeStop);
-    },
-  }),
+      },
+    }),
+    lifecycle({
+      componentWillUnmount() {
+        if (observers.length) observers.map(invokeStop);
+      },
+    }),
+  ),
   connect(state => ({
     standard: state.collections.standardsByIds[state.global.urlItemId],
     ...pickDeep([
@@ -110,13 +153,13 @@ export default compose(
       'global.filter',
     ])(state),
   })),
-  shouldUpdate((props, nextProps) => !!(
-    props.isDiscussionOpened !== nextProps.isDiscussionOpened ||
-    props.loading !== nextProps.loading ||
-    typeof props.organization !== typeof nextProps.organization ||
-    props.orgSerialNumber !== nextProps.orgSerialNumber ||
-    props.filter !== nextProps.filter
-  )),
+  onlyUpdateForKeys([
+    'isDiscussionOpened',
+    'loading',
+    'organization',
+    'orgSerialNumber',
+    'filter',
+  ]),
   connect(pickDeep(['window.width', 'mobile.showCard'])),
   withHandlers({
     onHandleFilterChange,

@@ -23,12 +23,6 @@ export const observeStandards = (dispatch, query, options) => {
   const observer = Standards.find(query, options).observeChanges({
     added(_id, fields) {
       if (observer) {
-        // do not add imported standards through observer
-        // as they will be added through a single action
-        const { importedIds = {} } = getState().dataImport;
-
-        if (importedIds[_id]) return;
-
         dispatch(addStandard({ _id, ...fields }));
         // expand the section and type that are holding a newly created standard
         expandCollapsedStandard(_id);
