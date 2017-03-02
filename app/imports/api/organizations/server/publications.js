@@ -10,7 +10,6 @@ import { RiskTypes } from '/imports/share/collections/risk-types';
 import { getUserOrganizations } from '../utils';
 import { isPlioUser, isOrgMember } from '../../checkers';
 import { makeOptionsFields } from '../../helpers';
-import { UserMembership } from '/imports/share/constants';
 import { createOrgQueryWhereUserIsOwner } from '../../queries';
 
 
