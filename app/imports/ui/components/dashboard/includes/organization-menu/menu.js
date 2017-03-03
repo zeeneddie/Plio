@@ -2,10 +2,11 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import moment from 'moment-timezone';
 
-import { isPlioUser } from '/imports/api/checkers.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { OrgCurrencies } from '/imports/share/constants.js';
-import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
+import { isPlioUser } from '/imports/api/checkers';
+import { Organizations } from '/imports/share/collections/organizations';
+import { OrgCurrencies } from '/imports/share/constants';
+import { OrganizationSettingsHelp } from '/imports/api/help-messages';
+import { createOrgQueryWhereUserIsMember } from '/imports/api/queries';
 
 
 Template.Organization_Menu.viewmodel({
@@ -16,17 +17,9 @@ Template.Organization_Menu.viewmodel({
   },
   organizations() {
     const userId = Meteor.userId();
+    const query = createOrgQueryWhereUserIsMember(userId);
 
-    return Organizations.find({
-      users: {
-        $elemMatch: {
-          userId,
-          isRemoved: false,
-          removedBy: { $exists: false },
-          removedAt: { $exists: false },
-        },
-      },
-    });
+    return Organizations.find(query);
   },
   haveCustomerAccess() {
     return isPlioUser(Meteor.userId());

@@ -6,7 +6,14 @@ import { getUsersCursorByIdsAndOrgId } from '/imports/server/helpers/pub-helpers
 import { isOrgMember } from '/imports/api/checkers';
 
 Meteor.publish(null, function publishCurrentUser() {
-  return Meteor.users.find({ _id: this.userId });
+  const query = { _id: this.userId };
+  const options = {
+    fields: {
+      ...Meteor.users.publicFields,
+      preferences: 1,
+    },
+  };
+  return Meteor.users.find(query, options);
 });
 
 Meteor.publish('organizationUsers', function publishOrganizationUsers(userIds, organizationId) {

@@ -163,8 +163,10 @@ Meteor.publish('organizationDeps', function (organizationId) {
   const standardsTypes = StandardTypes.find(query, makeOptionsFields(StandardTypes.publicFields));
   const riskTypes = RiskTypes.find(query);
   const users = Meteor.users.find({ _id: { $in: userIds } }, {
-    ...Meteor.users.publicFields,
-    [`roles.${organizationId}`]: 1,
+    fields: {
+      ...Meteor.users.publicFields,
+      [`roles.${organizationId}`]: 1,
+    },
   });
 
   return [

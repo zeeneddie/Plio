@@ -1,9 +1,9 @@
 import { Blaze } from 'meteor/blaze';
 import { Template } from 'meteor/templating';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { updateUserSettings } from '/imports/api/organizations/methods.js';
-
+import { Organizations } from '/imports/share/collections/organizations';
+import { updateUserSettings } from '/imports/api/organizations/methods';
+import { createOrgQueryWhereUserIsMember } from '/imports/api/queries';
 
 Template.UserPreferences_DailyRecap.viewmodel({
   mixin: ['modal', 'collapse'],
@@ -12,19 +12,12 @@ Template.UserPreferences_DailyRecap.viewmodel({
     return _(this.orgsData()).filter(doc => doc.sendDailyRecap).length;
   },
   orgsData() {
-    const userOrganizations = Organizations.find({
-      users: {
-        $elemMatch: {
-          userId: this.userId(),
-          isRemoved: false,
-          removedBy: { $exists: false },
-          removedAt: { $exists: false }
-        }
-      }
-    }, {
+    const query = createOrgQueryWhereUserIsMember(this.userId());
+    const options = {
       fields: { _id: 1, name: 1, users: 1 },
-      sort: { name: 1 }
-    });
+      sort: { name: 1 },
+    };
+    const userOrganizations = Organizations.find(query, options);
 
     return userOrganizations.map((org) => {
       const orgUserDoc = _(org.users).find((userDoc) => {
