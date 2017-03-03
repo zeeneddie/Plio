@@ -114,30 +114,43 @@ export default compose(
     pickFrom('standards', ['areDepsReady', 'initializing']),
     pickDeep(['global.dataLoading']),
   ])),
-  kompose((props, onData) => {
-    let observers = [];
-    const pred = every([
-      compose(not, property('dataLoading')),
-      property('areDepsReady'),
-      property('initializing'),
-    ]);
+  lifecycle({
+    componentWillMount() {
+      this._startObservers(this.props);
+    },
 
-    if (pred(props) && !observers.length) {
-      const { dispatch, organizationId } = props;
-      const args = [dispatch, { organizationId }];
+    componentWillReceiveProps(nextProps) {
+      this._startObservers(nextProps);
+    },
 
-      Meteor.defer(() => {
-        observers = [
-          observeStandards(...args),
-          observeStandardBookSections(...args),
-          observeStandardTypes(...args),
-        ];
-      });
-    }
+    componentWillUnmount() {
+      if (this.observers && this.observers.length) {
+        this.observers.map(invokeStop);
+      }
+    },
 
-    onData(null, {});
+    _startObservers(props) {
+      const pred = every([
+        compose(not, property('dataLoading')),
+        property('areDepsReady'),
+        property('initializing'),
+      ]);
 
-    return () => observers.length && observers.map(invokeStop);
+      if (pred(props) && (!this.observers || !this.observers.length)) {
+        const { dispatch, organizationId } = props;
+        const args = [dispatch, { organizationId }];
+
+        Meteor.defer(() => {
+          this.observers = [
+            observeStandards(...args),
+            observeStandardBookSections(...args),
+            observeStandardTypes(...args),
+          ];
+        });
+
+        props.dispatch(setInitializing(false));
+      }
+    },
   }),
   connect(state => ({
     standard: state.collections.standardsByIds[state.global.urlItemId],
