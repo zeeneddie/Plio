@@ -14,7 +14,7 @@ import { Organizations } from '/imports/share/collections/organizations';
 import {
   DSC_OnUpdateViewedByChecker,
   checkDocExistance,
-  checkOrgMembership
+  checkOrgMembership,
 } from '../checkers';
 import { DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED } from '../notifications/errors';
 
@@ -94,7 +94,7 @@ export const unsubscribe = new Method({
 export const toggleMute = new Method({
   name: 'Discussions.toggleMute',
 
-  validate: new SimpleSchema([IdSchema]).validator(),
+  validate: IdSchema.validator(),
 
   check(checker) {
     return checker(({ _id }) => {

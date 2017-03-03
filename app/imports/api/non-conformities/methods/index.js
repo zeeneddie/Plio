@@ -8,7 +8,7 @@ import {
   CompleteActionSchema,
 } from '/imports/share/schemas/schemas';
 import Method, { CheckedMethod } from '../../method';
-import { inject } from '/imports/api/helpers';
+import { inject, always, T } from '/imports/api/helpers';
 import {
   checkOrgMembership,
   onRemoveChecker,
@@ -299,7 +299,7 @@ export const updateViewedBy = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => injectNC(checker),
+  check: checker => injectNC(checker)(always(T)),
 
   run({ _id }) {
     return NonConformitiesService.updateViewedBy({ _id, viewedBy: this.userId });

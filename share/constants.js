@@ -663,3 +663,8 @@ export const PossibleReviewFrequencies = [
     timeUnit: TimeUnits.MONTHS,
   },
 ];
+
+export const MessageTypes = {
+  TEXT: 'text',
+  FILE: 'file',
+};

@@ -24,8 +24,8 @@ import {
   UserIdSchema, TimezoneSchema,
   pwdSchemaObj, idSchemaDoc,
 } from '/imports/share/schemas/schemas';
-import Method from '../method.js';
-import { chain, compose } from '/imports/api/helpers.js';
+import Method from '../method';
+import { chain, compose } from '/imports/api/helpers';
 import {
   checkOrgMembership,
   ORG_CheckExistance,
@@ -40,7 +40,7 @@ import {
   ORG_EnsureCanBeDeleted,
   USR_EnsureIsPlioAdmin,
   USR_EnsureIsPlioUser,
-} from '../checkers.js';
+} from '../checkers';
 import { USR_EnsurePasswordIsValid, ensureCanChangeRoles } from '/imports/api/users/checkers';
 import { ensureCanUnsubscribeFromDailyRecap, ensureThereIsNoDocuments } from './checkers';
 import { CANNOT_IMPORT_DOCS } from './errors';
@@ -51,8 +51,8 @@ const nameSchema = new SimpleSchema({ name: { type: String } });
 const problemGuidelineTypeSchema = new SimpleSchema({
   type: {
     type: String,
-    allowedValues: _.values(ProblemMagnitudes)
-  }
+    allowedValues: Object.values(ProblemMagnitudes),
+  },
 });
 
 const ensureCanChange = function ensureCanChange({ _id }) {
@@ -74,11 +74,11 @@ export const insert = new Method({
     const schema = new SimpleSchema([
       nameSchema,
       TimezoneSchema,
-      OrganizationCurrencySchema
+      OrganizationCurrencySchema,
     ]);
 
     schema.clean(doc, {
-      removeEmptyStrings: true
+      removeEmptyStrings: true,
     });
 
     return schema.validator()(doc);
@@ -94,10 +94,10 @@ export const insert = new Method({
         name,
         timezone,
         currency,
-        ownerId: this.userId
+        ownerId: this.userId,
       });
     }
-  }
+  },
 });
 
 export const setName = new Method({
@@ -105,7 +105,7 @@ export const setName = new Method({
 
   validate: new SimpleSchema([
     IdSchema,
-    nameSchema
+    nameSchema,
   ]).validator(),
 
   check(checker) {
@@ -114,7 +114,7 @@ export const setName = new Method({
 
   run({ _id, ...args }) {
     return OrganizationService.setName({ _id, ...args });
-  }
+  },
 });
 
 export const setTimezone = new Method({
@@ -122,7 +122,7 @@ export const setTimezone = new Method({
 
   validate: new SimpleSchema([
     IdSchema,
-    TimezoneSchema
+    TimezoneSchema,
   ]).validator(),
 
   check(checker) {
@@ -131,14 +131,14 @@ export const setTimezone = new Method({
 
   run({ ...args }) {
     return OrganizationService.setTimezone({ ...args });
-  }
+  },
 });
 
 export const setDefaultCurrency = new Method({
   name: 'Organizations.setDefaultCurrency',
 
   validate: new SimpleSchema([IdSchema, {
-    currency: { type: String }
+    currency: { type: String },
   }]).validator(),
 
   check(checker) {
@@ -147,7 +147,7 @@ export const setDefaultCurrency = new Method({
 
   run({ ...args }) {
     return OrganizationService.setDefaultCurrency({ ...args });
-  }
+  },
 });
 
 export const setWorkflowDefaults = new Method({
@@ -158,18 +158,18 @@ export const setWorkflowDefaults = new Method({
     {
       type: {
         type: String,
-        allowedValues: ['minorProblem', 'majorProblem', 'criticalProblem']
+        allowedValues: ['minorProblem', 'majorProblem', 'criticalProblem'],
       },
       workflowType: {
         type: String,
-        allowedValues: _.values(WorkflowTypes),
-        optional: true
+        allowedValues: Object.values(WorkflowTypes),
+        optional: true,
       },
       stepTime: {
         type: ReminderTimePeriodSchema,
-        optional: true
-      }
-    }
+        optional: true,
+      },
+    },
   ]).validator(),
 
   check(checker) {
@@ -178,7 +178,7 @@ export const setWorkflowDefaults = new Method({
 
   run({ ...args }) {
     return OrganizationService.setWorkflowDefaults({ ...args });
-  }
+  },
 });
 
 const reminderTypeSchema = new SimpleSchema({
@@ -209,7 +209,7 @@ export const setReminder = new Method({
 
   run({ ...args }) {
     return OrganizationService.setReminder({ ...args });
-  }
+  },
 });
 
 export const setNCGuideline = new Method({
@@ -219,8 +219,8 @@ export const setNCGuideline = new Method({
     IdSchema,
     problemGuidelineTypeSchema,
     {
-      text: { type: String }
-    }
+      text: { type: String },
+    },
   ]).validator(),
 
   check(checker) {
@@ -229,7 +229,7 @@ export const setNCGuideline = new Method({
 
   run({ ...args }) {
     return OrganizationService.setNCGuideline({ ...args });
-  }
+  },
 });
 
 export const setRKGuideline = new Method({
@@ -238,8 +238,8 @@ export const setRKGuideline = new Method({
   validate: new SimpleSchema([
     IdSchema, problemGuidelineTypeSchema,
     {
-      text: {type: String}
-    }
+      text: { type: String },
+    },
   ]).validator(),
 
   check(checker) {
@@ -248,7 +248,7 @@ export const setRKGuideline = new Method({
 
   run(doc) {
     return OrganizationService.setRKGuideline(doc);
-  }
+  },
 });
 
 export const setRKScoringGuidelines = new Method({
@@ -256,8 +256,8 @@ export const setRKScoringGuidelines = new Method({
 
   validate: new SimpleSchema([
     IdSchema, {
-      rkScoringGuidelines: { type: String }
-    }
+      rkScoringGuidelines: { type: String },
+    },
   ]).validator(),
 
   check(checker) {
@@ -380,12 +380,12 @@ export const inviteUserByEmail = new Method({
     {
       email: {
         type: String,
-        regEx: SimpleSchema.RegEx.Email
+        regEx: SimpleSchema.RegEx.Email,
       },
       welcomeMessage: {
-        type: String
-      }
-    }
+        type: String,
+      },
+    },
   ]).validator(),
 
   check(checker) {
@@ -400,7 +400,7 @@ export const inviteUserByEmail = new Method({
     InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
 
     return InvitationService.getInvitationExpirationTime();
-  }
+  },
 });
 
 export const acceptInvitation = new ValidatedMethod({
@@ -409,11 +409,11 @@ export const acceptInvitation = new ValidatedMethod({
   validate: new SimpleSchema({
     invitationId: {
       type: String,
-      regEx: SimpleSchema.RegEx.Id
+      regEx: SimpleSchema.RegEx.Id,
     },
     userData: {
-      type: NewUserDataSchema
-    }
+      type: NewUserDataSchema,
+    },
   }).validator(),
 
   run({ invitationId, userData }) {
@@ -421,9 +421,9 @@ export const acceptInvitation = new ValidatedMethod({
       return;
     }
 
-    //no permission checks are required
+    // no permission checks are required
     InvitationService.acceptInvitation(invitationId, userData);
-  }
+  },
 });
 
 
@@ -434,14 +434,14 @@ export const inviteMultipleUsersByEmail = new Method({
     OrganizationIdSchema,
     {
       emails: {
-        label: "Email address",
+        label: 'Email address',
         type: [String],
-        regEx: SimpleSchema.RegEx.Email
+        regEx: SimpleSchema.RegEx.Email,
       },
       welcomeMessage: {
-        type: String
-      }
-    }
+        type: String,
+      },
+    },
   ]).validator(),
 
   check(checker) {
@@ -453,13 +453,17 @@ export const inviteMultipleUsersByEmail = new Method({
       return;
     }
 
-    let invitedEmails = [];
-    let addedEmails = [];
-    let errors = [];
+    const invitedEmails = [];
+    const addedEmails = [];
+    const errors = [];
     emails.forEach(email => {
-      //aggregate service errors for each email
+      // aggregate service errors for each email
       try {
-        const invitationStatus = InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
+        const invitationStatus = InvitationService.inviteUserByEmail(
+          organizationId,
+          email,
+          welcomeMessage
+        );
         if (invitationStatus === InvitationStatuses.invited) {
           invitedEmails.push(email);
         } else if (invitationStatus === InvitationStatuses.added) {
@@ -474,18 +478,17 @@ export const inviteMultipleUsersByEmail = new Method({
     const generateErrorMessage = () => {
       if (errors.length > 0) {
         return `Failed to invite ${errors.length} user(s):\n${errors.join('.\n')}`;
-      } else {
-        return null;
       }
+      return null;
     };
 
     return {
       invitedEmails,
       addedEmails,
       error: generateErrorMessage(),
-      expirationTime: InvitationService.getInvitationExpirationTime()
+      expirationTime: InvitationService.getInvitationExpirationTime(),
     };
-  }
+  },
 });
 
 export const removeUser = new Method({
@@ -493,7 +496,7 @@ export const removeUser = new Method({
 
   validate: new SimpleSchema([
     OrganizationIdSchema,
-    UserIdSchema
+    UserIdSchema,
   ]).validator(),
 
   check(checker) {
@@ -504,9 +507,9 @@ export const removeUser = new Method({
     return OrganizationService.removeUser({
       organizationId,
       userId,
-      removedBy: this.userId
+      removedBy: this.userId,
     });
-  }
+  },
 });
 
 export const createOrganizationTransfer = new Method({
@@ -517,13 +520,14 @@ export const createOrganizationTransfer = new Method({
     {
       newOwnerId: {
         type: String,
-        regEx: SimpleSchema.RegEx.Id
-      }
-    }
+        regEx: SimpleSchema.RegEx.Id,
+      },
+    },
   ]).validator(),
 
   check(checker) {
-    const mapArgs = fn => ({ organizationId, newOwnerId }) => fn(newOwnerId, this.userId, organizationId);
+    const mapArgs = fn => ({ organizationId, newOwnerId }) =>
+      fn(newOwnerId, this.userId, organizationId);
 
     return checker(mapArgs(ORG_OnTransferCreateChecker));
   },
@@ -536,9 +540,9 @@ export const createOrganizationTransfer = new Method({
     return OrganizationService.createTransfer({
       organizationId,
       newOwnerId,
-      currOwnerId: this.userId
+      currOwnerId: this.userId,
     });
-  }
+  },
 });
 
 export const transferOrganization = new Method({
@@ -547,8 +551,8 @@ export const transferOrganization = new Method({
   validate: new SimpleSchema({
     transferId: {
       type: String,
-      regEx: SimpleSchema.RegEx.Id
-    }
+      regEx: SimpleSchema.RegEx.Id,
+    },
   }).validator(),
 
   check(checker) {
@@ -560,9 +564,9 @@ export const transferOrganization = new Method({
   run({ transferId }, organization) {
     return OrganizationService.transfer({
       transferId,
-      newOwnerId: this.userId
+      newOwnerId: this.userId,
     }, organization);
-  }
+  },
 });
 
 export const cancelOrganizationTransfer = new Method({
@@ -578,7 +582,7 @@ export const cancelOrganizationTransfer = new Method({
 
   run({ organizationId }) {
     return OrganizationService.cancelTransfer({ organizationId });
-  }
+  },
 });
 
 export const updateUserSettings = new Method({
@@ -586,16 +590,16 @@ export const updateUserSettings = new Method({
 
   validate: new SimpleSchema([
     OrganizationIdSchema,
-    UserSettingsSchema
+    UserSettingsSchema,
   ]).validator(),
 
   run({ organizationId, ...args }) {
     return OrganizationService.updateUserSettings({
       userId: this.userId,
       organizationId,
-      ...args
+      ...args,
     });
-  }
+  },
 });
 
 export const deleteOrganization = new Method({
@@ -607,9 +611,9 @@ export const deleteOrganization = new Method({
     {
       ownerPassword: {
         type: String,
-        regEx: /^[A-Fa-f0-9]{64}$/
-      }
-    }
+        regEx: /^[A-Fa-f0-9]{64}$/,
+      },
+    },
   ]).validator(),
 
   check(checker) {
@@ -630,7 +634,7 @@ export const deleteOrganization = new Method({
     }
 
     return OrganizationService.deleteOrganization({ organizationId });
-  }
+  },
 });
 
 export const deleteCustomerOrganization = new Method({

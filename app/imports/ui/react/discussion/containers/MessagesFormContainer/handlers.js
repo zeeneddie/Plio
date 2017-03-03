@@ -1,5 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
+import { MessageTypes } from '/imports/share/constants';
 import { reset, submit as submitMessage } from '/imports/client/store/actions/discussionActions';
 import { MESSAGES_COUNT_LIMIT_BEFORE_RESET, MESSAGES_PER_PAGE_LIMIT } from '../../constants';
 
@@ -39,6 +40,6 @@ export const submit = ({
     discussionId,
     organizationId,
     text: value,
-    type: 'text',
+    type: MessageTypes.TEXT,
   }, callback));
 };

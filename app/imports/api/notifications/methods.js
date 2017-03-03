@@ -1,9 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
 import NotificationsService from './notifications-service';
 import { Notifications } from '/imports/share/collections/notifications';
-import { RequiredSchema } from '/imports/share/schemas/notifications-schema';
 import { IdSchema, DocumentIdSchema, DocumentTypeSchema } from '/imports/share/schemas/schemas';
 import Method from '../method';
 import { checkDocExistance, checkOrgMembership } from '../checkers';
@@ -15,7 +13,7 @@ import { checkAndThrow } from '../helpers';
 export const updateViewedBy = new Method({
   name: 'Notifications.updateViewedBy',
 
-  validate() { IdSchema.validator(); },
+  validate: IdSchema.validator(),
 
   check(checker) {
     return checker(({ _id }) =>
@@ -24,16 +22,6 @@ export const updateViewedBy = new Method({
 
   run({ _id }) {
     return NotificationsService.updateViewedBy({ _id, userId: this.userId });
-  },
-});
-
-export const insert = new ValidatedMethod({
-  name: 'Notifications.insert',
-
-  validate: RequiredSchema.validator(),
-
-  run({ ...args }) {
-    return NotificationsService.insert({ ...args });
   },
 });
 

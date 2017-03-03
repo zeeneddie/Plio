@@ -1,15 +1,15 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import RiskTypesService from './risk-types-service.js';
-import { RiskTypesSchema, EditableFields } from '/imports/share/schemas/risk-types-schema.js';
-import { RiskTypes } from '/imports/share/collections/risk-types.js';
-import { IdSchema } from '/imports/share/schemas/schemas.js';
-import Method, { CheckedMethod } from '../method.js';
-import { inject } from '/imports/api/helpers.js';
+import RiskTypesService from './risk-types-service';
+import { RiskTypesSchema, EditableFields } from '/imports/share/schemas/risk-types-schema';
+import { RiskTypes } from '/imports/share/collections/risk-types';
+import { IdSchema } from '/imports/share/schemas/schemas';
+import Method, { CheckedMethod } from '../method';
+import { inject } from '/imports/api/helpers';
 import {
   ORG_EnsureCanChangeChecker,
-  ORG_EnsureCanChangeCheckerCurried
-} from '../checkers.js';
+  ORG_EnsureCanChangeCheckerCurried,
+} from '../checkers';
 
 const injectRT = inject(RiskTypes);
 

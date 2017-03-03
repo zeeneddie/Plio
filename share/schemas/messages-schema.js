@@ -1,31 +1,32 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { MessageTypes } from '../constants';
 
 import {
-	BaseEntitySchema, DiscussionIdSchema, FileIdSchema,
-	UserIdSchema, ViewedBySchema, OrganizationIdSchema
-} from './schemas.js';
+  BaseEntitySchema,
+  DiscussionIdSchema,
+  OrganizationIdSchema,
+} from './schemas';
 
 
 export const MessagesSchema = new SimpleSchema([
-	BaseEntitySchema,
-	DiscussionIdSchema,
-	ViewedBySchema,
-	OrganizationIdSchema,
-	{
-		text: {
-			type: String,
-			max: 140,
-			optional: true
-		},
-		fileId: {
-			type: String,
-		  regEx: SimpleSchema.RegEx.Id,
-			optional: true
-		},
+  BaseEntitySchema,
+  DiscussionIdSchema,
+  OrganizationIdSchema,
+  {
+    text: {
+      type: String,
+      max: 140,
+      optional: true,
+    },
+    fileId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+    },
 
-		// 'text' or 'file'
-		type: {
-			type: String
-		}
-	}
+    type: {
+      type: String,
+      allowedValues: Object.values(MessageTypes),
+    },
+  },
 ]);

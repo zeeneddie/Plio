@@ -30,7 +30,7 @@ import {
   P_OnSetStandardsUpdateCompletedDateChecker,
   P_OnSetStandardsUpdateCommentsChecker
 } from '../../checkers';
-import { inject } from '/imports/api/helpers';
+import { inject, always, T } from '/imports/api/helpers';
 
 export { default as update } from './update';
 
@@ -298,7 +298,7 @@ export const updateViewedBy = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => injectRK(checker),
+  check: checker => injectRK(checker)(always(T)),
 
   run({ _id }) {
     return RisksService.updateViewedBy({ _id, viewedBy: this.userId });
@@ -334,7 +334,7 @@ export const insertScore = new CheckedMethod({
 
   validate: new SimpleSchema([IdSchema, RiskScoreSchema]).validator(),
 
-  check: checker => injectRK(checker),
+  check: checker => injectRK(checker)(always(T)),
 
   run({ ...args }) {
     return RisksService['scores.insert']({ ...args });
@@ -350,7 +350,7 @@ export const removeScore = new CheckedMethod({
     },
   }]).validator(),
 
-  check: checker => injectRK(checker),
+  check: checker => injectRK(checker)(always(T)),
 
   run({ _id, score }) {
     return RisksService['scores.remove']({ _id, score });

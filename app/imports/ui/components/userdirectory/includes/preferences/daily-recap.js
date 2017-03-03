@@ -34,7 +34,7 @@ Template.UserPreferences_DailyRecap.viewmodel({
       return {
         orgId: org._id,
         orgName: org.name,
-        sendDailyRecap: orgUserDoc.sendDailyRecap
+        sendDailyRecap: orgUserDoc.sendDailyRecap,
       };
     });
   },
@@ -43,7 +43,7 @@ Template.UserPreferences_DailyRecap.viewmodel({
 
     this.modal().callMethod(updateUserSettings, {
       organizationId: orgId,
-      sendDailyRecap: !sendDailyRecap
+      sendDailyRecap: !sendDailyRecap,
     });
-  }
+  },
 });

@@ -1,30 +1,48 @@
-import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { ValidationError } from 'meteor/mdg:validation-error';
 
-import LessonsService from './lessons-service.js';
-import { LessonsSchema, RequiredSchema } from '/imports/share/schemas/lessons-schema.js';
-import { LessonsLearned } from '/imports/share/collections/lessons.js';
-import { IdSchema, DocumentIdSchema, DocumentTypeSchema } from '/imports/share/schemas/schemas.js';
-import Method, { CheckedMethod } from '../method.js';
+import LessonsService from './lessons-service';
+import { RequiredSchema } from '/imports/share/schemas/lessons-schema';
+import { LessonsLearned } from '/imports/share/collections/lessons';
+import {
+  IdSchema,
+  DocumentIdSchema,
+  DocumentTypeSchema,
+  OrganizationIdSchema,
+} from '/imports/share/schemas/schemas';
+import Method, { CheckedMethod } from '../method';
+import { inject, always, T } from '../helpers';
+import { checkDocAndMembership } from '../checkers';
+import { getCollectionByDocType } from '/imports/share/helpers';
 
-const organizationIdSchema = new SimpleSchema({
-  organizationId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  }
-});
-
-const inject = fn => fn(LessonsLearned);
+// TODO: check all fields for all documents (almost) with userId for org membership
+const injectLSN = inject(LessonsLearned);
 
 export const insert = new Method({
   name: 'Lessons.insert',
 
-  validate: new SimpleSchema([RequiredSchema, organizationIdSchema, DocumentIdSchema, DocumentTypeSchema]).validator(),
+  validate: new SimpleSchema([
+    RequiredSchema,
+    OrganizationIdSchema,
+    DocumentIdSchema,
+    DocumentTypeSchema,
+  ]).validator(),
+
+  check(checker) {
+    return checker(
+      ({ documentId, documentType }) => checkDocAndMembership(
+        getCollectionByDocType(documentType),
+        documentId,
+        this.userId,
+      )
+    );
+  },
 
   run({ ...args }) {
     return LessonsService.insert({ ...args });
-  }
+  },
 });
+
 
 export const update = new CheckedMethod({
   name: 'Lessons.update',
@@ -32,7 +50,7 @@ export const update = new CheckedMethod({
   validate(doc) {
     const validationContext = new SimpleSchema([
       IdSchema,
-      RequiredSchema
+      RequiredSchema,
     ]).newContext();
 
     for (let key in doc) {
@@ -44,11 +62,11 @@ export const update = new CheckedMethod({
     }
   },
 
-  check: checker => inject(checker),
+  check: checker => injectLSN(checker)(always(T)),
 
   run({ _id, ...args }) {
     return LessonsService.update({ _id, ...args });
-  }
+  },
 });
 
 export const updateViewedBy = new CheckedMethod({
@@ -56,11 +74,11 @@ export const updateViewedBy = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker),
+  check: checker => injectLSN(checker)(always(T)),
 
   run({ _id }) {
     return LessonsService.updateViewedBy({ _id, userId: this.userId });
-  }
+  },
 });
 
 export const remove = new CheckedMethod({
@@ -68,9 +86,9 @@ export const remove = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker),
+  check: checker => injectLSN(checker)(always(T)),
 
   run({ _id }) {
     return LessonsService.remove({ _id });
-  }
+  },
 });
