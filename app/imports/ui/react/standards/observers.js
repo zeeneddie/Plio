@@ -24,8 +24,11 @@ export const observeStandards = (dispatch, query, options) => {
     added(_id, fields) {
       if (observer) {
         dispatch(addStandard({ _id, ...fields }));
-        // expand the section and type that are holding a newly created standard
-        expandCollapsedStandard(_id);
+
+        if (fields.createdBy === getState('global.userId')) {
+          // expand the section and type that are holding a newly created standard
+          expandCollapsedStandard(_id);
+        }
       }
     },
     changed(_id, fields) {
