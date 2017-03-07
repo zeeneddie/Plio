@@ -72,7 +72,7 @@ export const STANDARD_FILTER_MAP = {
 export const UncategorizedTypeSection = {
   _id: 'uncategorized',
   title: 'Uncategorized',
-  abbreviation: 'UNC',
+  abbreviation: '',
 };
 
 export const TruncatedStringLengths = {
