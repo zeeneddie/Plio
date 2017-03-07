@@ -651,6 +651,14 @@ export const CustomerTypesNames = {
 
 export const PossibleReviewFrequencies = [
   {
+    timeValue: 3,
+    timeUnit: TimeUnits.DAYS,
+  },
+  {
+    timeValue: 1,
+    timeUnit: TimeUnits.WEEKS,
+  },
+  {
     timeValue: 6,
     timeUnit: TimeUnits.MONTHS,
   },
