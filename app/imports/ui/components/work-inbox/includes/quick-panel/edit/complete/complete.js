@@ -1,8 +1,8 @@
 import { Template } from 'meteor/templating';
 
-import { complete, verify } from '/imports/api/actions/methods.js';
-import { completeAnalysis as NCCompleteAnalysis, updateStandards as NCCompleteStandards } from '/imports/api/non-conformities/methods.js';
-import { completeAnalysis as RKCompleteAnalysis, updateStandards as RKCompleteStandards } from '/imports/api/risks/methods.js';
+import { complete, verify } from '/imports/api/actions/methods';
+import { completeAnalysis as NCCompleteAnalysis, updateStandards as NCCompleteStandards } from '/imports/api/non-conformities/methods';
+import { completeAnalysis as RKCompleteAnalysis, updateStandards as RKCompleteStandards } from '/imports/api/risks/methods';
 import { WorkItemsStore } from '/imports/share/constants.js';
 
 const { TYPES, LINKED_TYPES } = WorkItemsStore;

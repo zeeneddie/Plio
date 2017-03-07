@@ -3,7 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 
 import { Occurrences } from '/imports/share/collections/occurrences.js';
-import { updateViewedBy } from '/imports/api/non-conformities/methods.js';
+import { updateViewedBy } from '/imports/api/non-conformities/methods';
 
 Template.NC_Item.viewmodel({
   share: 'window',

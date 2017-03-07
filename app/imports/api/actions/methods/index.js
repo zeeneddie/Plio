@@ -1,13 +1,11 @@
-import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import curry from 'lodash.curry';
 
-import ActionService from './action-service.js';
-import { ActionSchema, RequiredSchema } from '/imports/share/schemas/action-schema.js';
-import { Actions } from '/imports/share/collections/actions.js';
-import { IdSchema, optionsSchema, StandardIdSchema, CompleteActionSchema } from '/imports/share/schemas/schemas.js';
-import { ProblemTypes } from '/imports/share/constants.js';
-import Method, { CheckedMethod } from '../method.js';
+import ActionService from '../action-service';
+import { RequiredSchema } from '/imports/share/schemas/action-schema';
+import { Actions } from '/imports/share/collections/actions';
+import { IdSchema, CompleteActionSchema } from '/imports/share/schemas/schemas';
+import { ProblemTypes } from '/imports/share/constants';
+import Method, { CheckedMethod } from '../../method';
 import {
   checkOrgMembership,
   onRemoveChecker,
@@ -20,16 +18,17 @@ import {
   ACT_OnVerifyChecker,
   ACT_OnUndoVerificationChecker,
   ACT_LinkedDocsChecker
-} from '../checkers.js';
-import { chain, checkAndThrow, inject } from '/imports/api/helpers.js';
+} from '../../checkers';
+import { inject, always, T } from '/imports/api/helpers';
 import {
   ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED,
   ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED,
   ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED,
   ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED,
-  ACT_NOT_LINKED
-} from '../errors.js';
+  ACT_NOT_LINKED,
+} from '../../errors';
 
+export { default as update } from './update';
 
 const injectACT = inject(Actions);
 
@@ -38,7 +37,7 @@ export const insert = new Method({
 
   validate(doc) {
     RequiredSchema.clean(doc, {
-      removeEmptyStrings: true
+      removeEmptyStrings: true,
     });
 
     return RequiredSchema.validator()(doc);
@@ -55,43 +54,7 @@ export const insert = new Method({
       completionAssignedBy: this.userId,
       ...args,
     });
-  }
-});
-
-export const update = new CheckedMethod({
-  name: 'Actions.update',
-
-  validate(doc) {
-    const schema = new SimpleSchema([
-      IdSchema, ActionSchema, optionsSchema
-    ]);
-
-    const validationContext = schema.newContext();
-
-    _.each(
-      _.filter(_.keys(doc), key => doc[key] === ''),
-      key => {
-        const fieldDef = schema.getDefinition(key);
-        if (fieldDef.optional !== true) {
-          doc[key] = undefined
-        }
-      }
-    );
-
-    for (let key in doc) {
-      if (!validationContext.validateOne(doc, key)) {
-        const errors = validationContext.invalidKeys();
-        const message = validationContext.keyErrorMessage(errors[0].name);
-        throw new ValidationError(errors, message);
-      }
-    }
   },
-
-  check: checker => injectACT(checker),
-
-  run({ _id, ...args }) {
-    return ActionService.update({ _id, ...args });
-  }
 });
 
 export const updateViewedBy = new CheckedMethod({
@@ -99,11 +62,11 @@ export const updateViewedBy = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => injectACT(checker),
+  check: checker => injectACT(checker)(always(T)),
 
   run({ _id }) {
     return ActionService.updateViewedBy({ _id, userId: this.userId });
-  }
+  },
 });
 
 export const setCompletionDate = new CheckedMethod({
@@ -112,17 +75,20 @@ export const setCompletionDate = new CheckedMethod({
   validate: new SimpleSchema([
     IdSchema,
     {
-      targetDate: { type: Date }
-    }
+      targetDate: { type: Date },
+    },
   ]).validator(),
 
   check(checker) {
-    return injectACT(checker)(() => action => action.completed(), ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED);
+    return injectACT(checker)(
+      () => action => action.completed(),
+      ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED,
+    );
   },
 
   run({ _id, ...args }) {
     return ActionService.setCompletionDate({ _id, ...args });
-  }
+  },
 });
 
 export const setCompletionExecutor = new CheckedMethod({
@@ -133,13 +99,16 @@ export const setCompletionExecutor = new CheckedMethod({
     {
       userId: {
         type: String,
-        regEx: SimpleSchema.RegEx.Id
-      }
-    }
+        regEx: SimpleSchema.RegEx.Id,
+      },
+    },
   ]).validator(),
 
   check(checker) {
-    return injectACT(checker)(() => action => action.completed(), ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED);
+    return injectACT(checker)(
+      () => action => action.completed(),
+      ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED
+    );
   },
 
   run({ _id, ...args }) {
@@ -148,7 +117,7 @@ export const setCompletionExecutor = new CheckedMethod({
       assignedBy: this.userId,
       ...args,
     });
-  }
+  },
 });
 
 export const setVerificationDate = new CheckedMethod({
@@ -157,17 +126,20 @@ export const setVerificationDate = new CheckedMethod({
   validate: new SimpleSchema([
     IdSchema,
     {
-      targetDate: { type: Date }
-    }
+      targetDate: { type: Date },
+    },
   ]).validator(),
 
   check(checker) {
-    return injectACT(checker)(() => action => action.verified(), ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED);
+    return injectACT(checker)(
+      () => action => action.verified(),
+      ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED
+    );
   },
 
   run({ _id, ...args }) {
     return ActionService.setVerificationDate({ _id, ...args });
-  }
+  },
 });
 
 export const setVerificationExecutor = new CheckedMethod({
@@ -178,13 +150,16 @@ export const setVerificationExecutor = new CheckedMethod({
     {
       userId: {
         type: String,
-        regEx: SimpleSchema.RegEx.Id
-      }
-    }
+        regEx: SimpleSchema.RegEx.Id,
+      },
+    },
   ]).validator(),
 
   check(checker) {
-    return injectACT(checker)(() => action => action.verified(), ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED)
+    return injectACT(checker)(
+      () => action => action.verified(),
+      ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED,
+    );
   },
 
   run({ _id, ...args }) {
@@ -193,7 +168,7 @@ export const setVerificationExecutor = new CheckedMethod({
       assignedBy: this.userId,
       ...args,
     });
-  }
+  },
 });
 
 export const linkDocument = new CheckedMethod({
@@ -204,20 +179,20 @@ export const linkDocument = new CheckedMethod({
     {
       documentId: {
         type: String,
-        regEx: SimpleSchema.RegEx.Id
+        regEx: SimpleSchema.RegEx.Id,
       },
       documentType: {
         type: String,
-        allowedValues: _.values(ProblemTypes)
-      }
-    }
+        allowedValues: Object.values(ProblemTypes),
+      },
+    },
   ]).validator(),
 
   check: checker => injectACT(checker)(ACT_OnLinkChecker),
 
   run(...args) {
     return ActionService.linkDocument(...args);
-  }
+  },
 });
 
 export const unlinkDocument = new CheckedMethod({
@@ -228,28 +203,25 @@ export const unlinkDocument = new CheckedMethod({
     {
       documentId: {
         type: String,
-        regEx: SimpleSchema.RegEx.Id
+        regEx: SimpleSchema.RegEx.Id,
       },
       documentType: {
         type: String,
-        allowedValues: _.values(ProblemTypes)
-      }
-    }
+        allowedValues: Object.values(ProblemTypes),
+      },
+    },
   ]).validator(),
 
   check(checker) {
-    const _checker = ({ documentId, documentType }) => {
-       return (action) => {
-         return !action.isLinkedToDocument(documentId, documentType);
-       };
-    };
+    const _checker = ({ documentId, documentType }) => (action) =>
+      !action.isLinkedToDocument(documentId, documentType);
 
     return injectACT(checker)(_checker, ACT_NOT_LINKED);
   },
 
   run({ _id, documentId, documentType }) {
     return ActionService.unlinkDocument({ _id, documentId, documentType });
-  }
+  },
 });
 
 export const complete = new CheckedMethod({
@@ -261,7 +233,7 @@ export const complete = new CheckedMethod({
 
   run({ _id, ...args }) {
     return ActionService.complete({ _id, ...args, userId: this.userId });
-  }
+  },
 });
 
 export const undoCompletion = new CheckedMethod({
@@ -273,7 +245,7 @@ export const undoCompletion = new CheckedMethod({
 
   run({ _id }) {
     return ActionService.undoCompletion({ _id, userId: this.userId });
-  }
+  },
 });
 
 export const verify = new CheckedMethod({
@@ -283,15 +255,15 @@ export const verify = new CheckedMethod({
     IdSchema,
     {
       success: { type: Boolean },
-      verificationComments: { type: String }
-    }
+      verificationComments: { type: String },
+    },
   ]).validator(),
 
   check: checker => injectACT(checker)(ACT_OnVerifyChecker),
 
   run({ _id, ...args }) {
     return ActionService.verify({ _id, userId: this.userId, ...args });
-  }
+  },
 });
 
 export const undoVerification = new CheckedMethod({
@@ -303,7 +275,7 @@ export const undoVerification = new CheckedMethod({
 
   run({ _id }, { action }) {
     return ActionService.undoVerification({ _id, userId: this.userId }, { action });
-  }
+  },
 });
 
 export const remove = new CheckedMethod({
@@ -315,7 +287,7 @@ export const remove = new CheckedMethod({
 
   run({ _id }) {
     return ActionService.remove({ _id, deletedBy: this.userId });
-  }
+  },
 });
 
 export const restore = new CheckedMethod({
@@ -327,5 +299,5 @@ export const restore = new CheckedMethod({
 
   run({ _id }) {
     return ActionService.restore({ _id });
-  }
+  },
 });

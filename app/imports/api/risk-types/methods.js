@@ -1,17 +1,15 @@
-import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import RiskTypesService from './risk-types-service.js';
-import { RiskTypesSchema, EditableFields } from '/imports/share/schemas/risk-types-schema.js';
-import { RiskTypes } from '/imports/share/collections/risk-types.js';
-import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas.js';
-import { UserRoles } from '/imports/share/constants';
-import Method, { CheckedMethod } from '../method.js';
-import { inject } from '/imports/api/helpers.js';
+import RiskTypesService from './risk-types-service';
+import { RiskTypesSchema, EditableFields } from '/imports/share/schemas/risk-types-schema';
+import { RiskTypes } from '/imports/share/collections/risk-types';
+import { IdSchema } from '/imports/share/schemas/schemas';
+import Method, { CheckedMethod } from '../method';
+import { inject } from '/imports/api/helpers';
 import {
   ORG_EnsureCanChangeChecker,
-  ORG_EnsureCanChangeCheckerCurried
-} from '../checkers.js';
+  ORG_EnsureCanChangeCheckerCurried,
+} from '../checkers';
 
 const injectRT = inject(RiskTypes);
 
@@ -28,7 +26,7 @@ export const insert = new Method({
 
   run({ ...args }) {
     return RiskTypesService.insert({ ...args });
-  }
+  },
 });
 
 export const update = new CheckedMethod({
@@ -40,7 +38,7 @@ export const update = new CheckedMethod({
 
   run({ ...args }) {
     return RiskTypesService.update({ ...args });
-  }
+  },
 });
 
 export const remove = new CheckedMethod({
@@ -52,5 +50,5 @@ export const remove = new CheckedMethod({
 
   run({ _id }) {
     return RiskTypesService.remove({ _id });
-  }
+  },
 });

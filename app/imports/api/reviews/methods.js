@@ -1,6 +1,5 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidationError } from 'meteor/mdg:validation-error';
-import { _ } from 'meteor/underscore';
 import property from 'lodash.property';
 
 import { RequiredSchema, ReviewSchema } from '/imports/share/schemas/review-schema';
@@ -9,8 +8,7 @@ import { IdSchema } from '/imports/share/schemas/schemas';
 import { exists, checkOrgMembership } from '../checkers';
 import Method from '../method';
 import ReviewService from './review-service';
-
-const { compose } = _;
+import { compose } from '../helpers';
 
 const checkReviewExistance = exists(Reviews);
 

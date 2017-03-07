@@ -357,6 +357,17 @@ export const StringLimits = {
     min: 1,
     max: 80,
   },
+  url: {
+    min: 1,
+    max: 2000,
+  },
+  comments: {
+    min: 1,
+    max: 140,
+  },
+  sequentialId: {
+    min: 3,
+  },
 };
 
 export const SystemName = 'Plio';
@@ -652,3 +663,8 @@ export const PossibleReviewFrequencies = [
     timeUnit: TimeUnits.MONTHS,
   },
 ];
+
+export const MessageTypes = {
+  TEXT: 'text',
+  FILE: 'file',
+};

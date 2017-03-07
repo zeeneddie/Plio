@@ -1,8 +1,9 @@
 import { Meteor } from 'meteor/meteor';
-import { Notifications } from '/imports/share/collections/notifications.js';
+import { Notifications } from '/imports/share/collections/notifications';
 
-Meteor.publish(null, function() {
+Meteor.publish(null, function () {
   const userId = this.userId;
+
   if (!userId) {
     return this.ready();
   }
@@ -11,9 +12,8 @@ Meteor.publish(null, function() {
     recipientIds: this.userId,
     viewedBy: { $ne: this.userId },
     createdAt: {
-
       // Subscribe only to notifications that were created >60 seconds ago
-      $gt: new Date(new Date().getTime() - 1000 * 60 * 1)
-    }
+      $gt: new Date(new Date().getTime() - 1000 * 60 * 1),
+    },
   });
 });

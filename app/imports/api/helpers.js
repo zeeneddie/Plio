@@ -334,6 +334,8 @@ export const empty = (a) => {
   return a;
 };
 
+export const startsWith = curry((search, str) => str.startsWith(search));
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {

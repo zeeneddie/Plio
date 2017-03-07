@@ -5,30 +5,30 @@ import {
   OrganizationIdSchema,
   DocumentIdSchema,
   DocumentTypeSchema,
-  ViewedBySchema
-} from './schemas.js';
+  ViewedBySchema,
+} from './schemas';
 
-import { StringLimits } from '/imports/share/constants.js';
+import { StringLimits } from '../constants';
 
 
 const RequiredSchema = new SimpleSchema({
   title: {
     type: String,
     min: StringLimits.title.min,
-    max: StringLimits.title.max
+    max: StringLimits.title.max,
   },
   date: {
-    type: Date
+    type: Date,
   },
   notes: {
     type: String,
-    min: 1
+    min: 1,
   },
   owner: {
     type: String,
     label: 'Created by',
-    regEx: SimpleSchema.RegEx.Id
-  }
+    regEx: SimpleSchema.RegEx.Id,
+  },
 });
 
 const LessonsSchema = new SimpleSchema([
@@ -40,9 +40,9 @@ const LessonsSchema = new SimpleSchema([
   ViewedBySchema,
   {
     serialNumber: {
-      type: Number
-    }
-  }
+      type: Number,
+    },
+  },
 ]);
 
 export { RequiredSchema, LessonsSchema };

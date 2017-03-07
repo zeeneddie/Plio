@@ -1,22 +1,25 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 
-import { AuditLogs } from '/imports/share/collections/audit-logs.js';
-import { CollectionNames, SystemName } from '/imports/share/constants.js';
-import { isOrgMember, canChangeOrgSettings } from '../../checkers.js';
-import { getCollectionByName } from '/imports/share/helpers.js';
-import Counter from '../../counter/server.js';
+import { AuditLogs } from '/imports/share/collections/audit-logs';
+import { CollectionNames, SystemName } from '/imports/share/constants';
+import { isOrgMember } from '../../checkers';
+import { getCollectionByName } from '/imports/share/helpers';
+import Counter from '../../counter/server';
 
 
-const checkSubsArgs = (userId, documentId, collection) => {
-  if (!userId) {
-    return false;
-  }
+const checkSubsArgs = (userId, documentId, collectionName) => {
+  check(userId, String);
+  check(documentId, String);
+  check(collectionName, String);
 
-  const docCollection = getCollectionByName(collection);
+  if (!userId) return false;
+
+  const docCollection = getCollectionByName(collectionName);
   const doc = docCollection && docCollection.findOne({ _id: documentId });
 
   let organizationId;
-  if (collection === CollectionNames.ORGANIZATIONS) {
+  if (collectionName === CollectionNames.ORGANIZATIONS) {
     organizationId = documentId;
   } else {
     organizationId = doc && doc.organizationId;
@@ -29,8 +32,8 @@ const checkSubsArgs = (userId, documentId, collection) => {
   return true;
 };
 
-Meteor.publish('auditLogs', function(documentId, collection, skip = 0, limit = 10) {
-  if (!checkSubsArgs(this.userId, documentId, collection)) {
+Meteor.publish('auditLogs', function (documentId, collectionName, skip = 0, limit = 10) {
+  if (!checkSubsArgs(this.userId, documentId, collectionName)) {
     return this.ready();
   }
 
@@ -43,24 +46,24 @@ Meteor.publish('auditLogs', function(documentId, collection, skip = 0, limit = 1
   });
 });
 
-Meteor.publish('auditLogsCount', function(counterName, documentId, collection) {
-  if (!checkSubsArgs(this.userId, documentId, collection)) {
+Meteor.publish('auditLogsCount', function (counterName, documentId, collectionName) {
+  if (!checkSubsArgs(this.userId, documentId, collectionName)) {
     return this.ready();
   }
 
   return new Counter(counterName, AuditLogs.find({ documentId }));
 });
 
-Meteor.publish('lastHumanLog', function(documentId, collection) {
-  if (!checkSubsArgs(this.userId, documentId, collection)) {
+Meteor.publish('lastHumanLog', function (documentId, collectionName) {
+  if (!checkSubsArgs(this.userId, documentId, collectionName)) {
     return this.ready();
   }
 
   return AuditLogs.find({
     documentId,
-    executor: { $ne: SystemName }
+    executor: { $ne: SystemName },
   }, {
     limit: 1,
-    sort: { date: -1 }
+    sort: { date: -1 },
   });
 });

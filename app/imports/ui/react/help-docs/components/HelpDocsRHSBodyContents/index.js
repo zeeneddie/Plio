@@ -8,7 +8,6 @@ import propTypes from './propTypes';
 const HelpDocsRHSBodyContents = (props) => {
   const { source, section, file, owner, issueNumber } = props;
 
-  const wrap = 'col-md-6';
   const render = field => (<Col sm="6">{field}</Col>);
   const fieldsData = [
     { label: 'Section', text: section ? section.title : '' },
@@ -16,7 +15,7 @@ const HelpDocsRHSBodyContents = (props) => {
   ];
 
   if (props.userHasChangeAccess) {
-    fieldsData.push({ label: 'Issue number', text: issueNumber, wrap });
+    fieldsData.push({ label: 'Issue number', text: issueNumber, render });
   }
 
   const fields = createReadFields(fieldsData);

@@ -8,9 +8,8 @@ Template.WorkInbox_Layout.viewmodel({
   autorun: [
     function() {
       const orgSerialNumber = this.organizationSerialNumber();
-      const isDeleted = { $in: [null, false, true] };
       const _subHandlers = [
-        DocumentLayoutSubs.subscribe('workInboxLayout', orgSerialNumber, isDeleted)
+        DocumentLayoutSubs.subscribe('workInboxLayout', orgSerialNumber),
       ];
 
       this._subHandlers(_subHandlers);

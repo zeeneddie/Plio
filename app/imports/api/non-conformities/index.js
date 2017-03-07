@@ -1,4 +1,4 @@
-import './server/publications.js';
-import './non-conformities-service.js';
-import './methods.js';
-import './hooks.js';
+import './server/publications';
+import './non-conformities-service';
+import './methods';
+import './hooks';

@@ -20,7 +20,7 @@ import {
   setStandardsUpdateCompletedBy,
   setStandardsUpdateCompletedDate,
   setStandardsUpdateComments
-} from '/imports/api/non-conformities/methods.js';
+} from '/imports/api/non-conformities/methods';
 
 Template.NC_Card_Edit_Main.viewmodel({
   mixin: ['organization', 'getChildrenData'],

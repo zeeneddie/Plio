@@ -1,4 +1,3 @@
-import { _ } from 'meteor/underscore';
 import { batchActions } from 'redux-batched-actions';
 
 import { extractIds } from '/imports/api/helpers';
@@ -8,7 +7,10 @@ import {
   expandCollapsedStandard,
 } from '../../helpers';
 import _modal_ from '/imports/startup/client/mixins/modal';
-import { setFilteredStandards } from '/imports/client/store/actions/standardsActions';
+import {
+  setFilteredStandards,
+  setInitializing,
+} from '/imports/client/store/actions/standardsActions';
 import { onSearchTextClear, onSearch } from '/imports/ui/react/share/LHS/handlers';
 import { close } from '/imports/client/store/actions/modalActions';
 import {
@@ -59,7 +61,12 @@ export const onModalOpen = (props) => (e) => {
 };
 
 export const onDataImportSuccess = ({ dispatch }) => (res) => {
-  if (!res || !res.length) return dispatch(setDataImportInProgress(false));
+  let actions = [
+    setDataImportInProgress(false),
+    setInitializing(true),
+  ];
+
+  if (!res || !res.length) return dispatch(batchActions(actions));
 
   const reducer = (prev, { _id }) => Object.assign(prev, { [_id]: _id });
   const ids = res.reduce(reducer, {});
@@ -67,10 +74,9 @@ export const onDataImportSuccess = ({ dispatch }) => (res) => {
 
   if (!id) return false;
 
-  const actions = [
-    setDataImportInProgress(false),
+  actions = actions.concat([
     setImportedIds(ids),
-  ];
+  ]);
 
   dispatch(batchActions(actions));
 

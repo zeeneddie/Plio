@@ -1,19 +1,22 @@
 import moment from 'moment-timezone';
-
-import InvitationService from '/imports/api/organizations/invitation-service';
+import { SyncedCron } from 'meteor/percolate:synced-cron';
+import { Meteor } from 'meteor/meteor';
 
 SyncedCron.add({
   name: 'Remove expired email verification tokens',
 
-  schedule: function (parser) {
+  schedule(parser) {
     return parser.text('every 1 day');
   },
 
-  job: function () {
-    let emailVerificationExpirationTimeInDays = Meteor.settings.public.emailVerificationExpirationTimeInDays || 3;
-    let emailVerificationThresholdDate = moment().subtract(emailVerificationExpirationTimeInDays, 'days').toDate();
+  job() {
+    const emailVerificationExpirationTimeInDays =
+      Meteor.settings.public.emailVerificationExpirationTimeInDays || 3;
+    const emailVerificationThresholdDate = moment()
+      .subtract(emailVerificationExpirationTimeInDays, 'days')
+      .toDate();
 
-    // In case if we'll need to remove users with wxpired tokens
+    // In case if we'll need to remove users with expired tokens
     // //get all users with expired invitations
     // Meteor.users.find({
     //   invitationExpirationDate: {
@@ -25,20 +28,24 @@ SyncedCron.add({
     //   Meteor.users.remove({ _id: userDoc._id });
     // });
 
-    //get all users with expired email verification tokens
+    // get all users with expired email verification tokens
     Meteor.users.find({
       'services.email.verificationTokens.when': {
-        $lt: emailVerificationThresholdDate
+        $lt: emailVerificationThresholdDate,
       },
-      'emails.verified': false
+      'emails.verified': false,
     }, { fields: { _id: 1 } }).forEach(userDoc => {
       Meteor.users.update(
         { _id: userDoc._id },
-        { $pull: { 'services.email.verificationTokens': { when: { $lt: emailVerificationThresholdDate  } } } },
-        { multi: true }
-      )
+        { multi: true },
+        {
+          $pull: {
+            'services.email.verificationTokens': { when: { $lt: emailVerificationThresholdDate } },
+          },
+        },
+      );
     });
 
     console.log('Expired email verification tokens removed at', new Date());
-  }
+  },
 });
