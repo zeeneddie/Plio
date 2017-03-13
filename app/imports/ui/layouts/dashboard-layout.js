@@ -1,21 +1,21 @@
 import { Template } from 'meteor/templating';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { OrgSubs } from '/imports/startup/client/subsmanagers.js';
-
+import { OrgSubs } from '/imports/startup/client/subsmanagers';
 
 Template.Dashboard_Layout.viewmodel({
   mixin: 'organization',
   isReady: false,
   _subHandlers: [],
   autorun: [
-    function() {
+    function () {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
     },
-    function() {
+    function () {
+      if (typeof this.organizationSerialNumber() !== 'number') return;
+
       this._subHandlers([
-        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', this.organizationSerialNumber())
+        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', this.organizationSerialNumber()),
       ]);
-    }
-  ]
+    },
+  ],
 });

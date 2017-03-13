@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 import get from 'lodash.get';
 
-import { update, remove, updateViewedBy } from '/imports/api/standards/methods.js';
+import { update, remove, updateViewedBy } from '/imports/api/standards/methods';
 import { isViewed } from '/imports/api/checkers.js';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 

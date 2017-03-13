@@ -1,4 +1,5 @@
 import { submit } from '/imports/client/store/actions/discussionActions';
+import { MessageTypes } from '/imports/share/constants';
 
 export const addFile = ({ dispatch, disabled, discussionId, organizationId }) =>
   (fileId, cb) => !disabled && (
@@ -6,6 +7,6 @@ export const addFile = ({ dispatch, disabled, discussionId, organizationId }) =>
       organizationId,
       discussionId,
       fileId,
-      type: 'file',
+      type: MessageTypes.FILE,
     }, cb))
   );

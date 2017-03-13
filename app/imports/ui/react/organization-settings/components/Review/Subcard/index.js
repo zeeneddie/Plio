@@ -10,7 +10,7 @@ const ReviewSubcard = ({
   onReminderChanged,
   onReviewerChanged,
   users = [],
-  organization: { review } = {},
+  organization: { review = {} } = {},
 }) => {
   const getProps = (documentKey, config) => ({
     config,

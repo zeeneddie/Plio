@@ -1,20 +1,18 @@
-import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { Departments } from '/imports/share/collections/departments.js';
+import { Departments } from '/imports/share/collections/departments';
 import { DepartmentSchema } from '/imports/share/schemas/department-schema';
-import DepartmentService from './department-service.js';
-import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas.js';
-import { chain } from '/imports/api/helpers.js';
+import DepartmentService from './department-service';
+import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas';
+import { chain, inject } from '/imports/api/helpers';
 import {
   ORG_EnsureCanChange,
   ORG_EnsureCanChangeChecker,
   checkOrgMembership
-} from '../checkers.js';
+} from '../checkers';
 import Method, { CheckedMethod } from '../method';
-import curry from 'lodash.curry';
 
-const inject = fn => fn(Departments);
+const injectDEP = inject(Departments);
 
 export const insert = new Method({
   name: 'Departments.insert',
@@ -22,15 +20,16 @@ export const insert = new Method({
   validate: DepartmentSchema.validator(),
 
   check(checker) {
-    const _checker = ({ organizationId }) => {
-      return chain(checkOrgMembership, ORG_EnsureCanChange)(this.userId, organizationId);
-    };
+    const _checker = ({ organizationId }) => chain(
+      checkOrgMembership,
+      ORG_EnsureCanChange,
+    )(this.userId, organizationId);
     return checker(_checker);
   },
 
   run({ ...args }) {
     return DepartmentService.insert({ ...args });
-  }
+  },
 });
 
 export const update = new CheckedMethod({
@@ -38,11 +37,11 @@ export const update = new CheckedMethod({
 
   validate: new SimpleSchema([IdSchema, DepartmentSchema]).validator(),
 
-  check: checker => inject(checker)(ORG_EnsureCanChangeChecker),
+  check: checker => injectDEP(checker)(ORG_EnsureCanChangeChecker),
 
   run(doc) {
     return DepartmentService.update(doc);
-  }
+  },
 });
 
 export const remove = new CheckedMethod({
@@ -50,9 +49,9 @@ export const remove = new CheckedMethod({
 
   validate: new SimpleSchema([IdSchema, OrganizationIdSchema]).validator(),
 
-  check: checker => inject(checker)(ORG_EnsureCanChangeChecker),
+  check: checker => injectDEP(checker)(ORG_EnsureCanChangeChecker),
 
   run(doc) {
     return DepartmentService.remove(doc);
-  }
+  },
 });

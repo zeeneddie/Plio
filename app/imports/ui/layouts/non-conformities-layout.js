@@ -8,9 +8,7 @@ Template.NC_Layout.viewmodel({
   autorun: [
     function() {
       const orgSerialNumber = this.organizationSerialNumber();
-      const isDeleted = this.isActiveNCFilter(4)
-        ? true
-        : { $in: [null, false] };
+      const isDeleted = this.isActiveNCFilter(4);
       const _subHandlers = [
         DocumentLayoutSubs.subscribe('nonConformitiesLayout', orgSerialNumber, isDeleted),
       ];

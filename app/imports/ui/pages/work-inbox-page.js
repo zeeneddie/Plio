@@ -1,10 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { DocumentCardSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers.js';
-import { getCollectionByDocType } from '/imports/share/helpers';
-import { DocumentTypes } from '/imports/share/constants';
-
 
 Template.WorkInbox_Page.viewmodel({
   mixin: ['organization', 'nonconformity', 'workInbox'],

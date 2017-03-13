@@ -85,7 +85,7 @@ const StandardsLHS = ({
           onSuccess={onDataImportSuccess}
         >
           <Field tag="button" onClick={openDocumentCreationModal}>
-            Add a first standard document
+            New standard
           </Field>
         </DataImportContainer>
       </ModalHandle>

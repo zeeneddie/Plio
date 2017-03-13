@@ -26,10 +26,12 @@ import { createActionCardPublicationTree } from '../../actions/utils';
 import { getProblemsWithLimitedFields } from '../../problems/utils';
 import { getPublishCompositeOrganizationUsers } from '/imports/server/helpers/pub-helpers';
 
-const getWorkInboxLayoutPub = (userId, serialNumber, isDeleted) => [
+const getWorkInboxLayoutPub = (userId, __, isDeleted) => [
   {
     find({ _id: organizationId }) {
-      const query = { organizationId, isDeleted };
+      const query = { organizationId };
+
+      if (typeof isDeleted === 'boolean') Object.assign(query, { isDeleted });
 
       return WorkItems.find(query, makeOptionsFields(WorkItems.publicFields));
     },
@@ -55,16 +57,6 @@ Meteor.publishComposite(
   'workInboxLayout',
   getPublishCompositeOrganizationUsers(getWorkInboxLayoutPub)
 );
-
-Meteor.publish('workItemsList', function (organizationId, isDeleted = { $in: [null, false] }) {
-  const userId = this.userId;
-  if (!userId || !isOrgMember(userId, organizationId)) {
-    return this.ready();
-  }
-  return WorkItems.find({ organizationId, isDeleted }, {
-    fields: WorkItems.publicFields,
-  });
-});
 
 Meteor.publishComposite('workItemCard', function ({ _id, organizationId }) {
   check(_id, String);
@@ -97,6 +89,9 @@ const createRelativeCardPublicationTree = (collection) => {
 };
 
 Meteor.publishComposite('workInboxCard', function ({ _id, organizationId }) {
+  check(_id, String);
+  check(organizationId, String);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -122,6 +117,12 @@ Meteor.publishComposite('workInboxCard', function ({ _id, organizationId }) {
 });
 
 Meteor.publish('workInboxDeps', function (organizationId) {
+  check(organizationId, String);
+
+  const userId = this.userId;
+
+  if (!userId || !isOrgMember(userId, organizationId)) return this.ready();
+
   const query = { organizationId };
   const standardsFields = {
     title: 1,
@@ -147,6 +148,9 @@ Meteor.publish('workInboxDeps', function (organizationId) {
 });
 
 Meteor.publish('workItemsOverdue', function (organizationId, limit) {
+  check(organizationId, String);
+  check(limit, Number);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -172,6 +176,9 @@ Meteor.publish('workItemsOverdue', function (organizationId, limit) {
 });
 
 Meteor.publish('workItemsCount', function (counterName, organizationId) {
+  check(counterName, String);
+  check(organizationId, String);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -180,7 +187,7 @@ Meteor.publish('workItemsCount', function (counterName, organizationId) {
 
   const query = {
     organizationId,
-    isDeleted: { $in: [false, null] },
+    isDeleted: false,
   };
   const cursor = WorkItems.find(query);
 
@@ -188,6 +195,9 @@ Meteor.publish('workItemsCount', function (counterName, organizationId) {
 });
 
 Meteor.publish('workItemsNotViewedCount', function (counterName, organizationId) {
+  check(counterName, String);
+  check(organizationId, String);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -201,7 +211,7 @@ Meteor.publish('workItemsNotViewedCount', function (counterName, organizationId)
     organizationId,
     viewedBy: { $ne: userId },
     isCompleted: false,
-    isDeleted: { $in: [false, null] },
+    isDeleted: false,
   };
 
   if (currentOrgUserJoinedAt) {
@@ -214,6 +224,9 @@ Meteor.publish('workItemsNotViewedCount', function (counterName, organizationId)
 });
 
 Meteor.publish('workItemsOverdueCount', function (counterName, organizationId) {
+  check(counterName, String);
+  check(organizationId, String);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -224,6 +237,6 @@ Meteor.publish('workItemsOverdueCount', function (counterName, organizationId) {
     organizationId,
     assigneeId: userId,
     status: 2,
-    isDeleted: { $in: [false, null] },
+    isDeleted: false,
   }));
 });

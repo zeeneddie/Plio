@@ -1,8 +1,8 @@
-import { CheckedMethod } from '../method.js';
-import WorkItemService from './work-item-service.js';
-import { WorkItems } from '/imports/share/collections/work-items.js';
-import { IdSchema } from '/imports/share/schemas/schemas.js';
-import { inject } from '/imports/api/helpers.js';
+import { CheckedMethod } from '../method';
+import WorkItemService from './work-item-service';
+import { WorkItems } from '/imports/share/collections/work-items';
+import { IdSchema } from '/imports/share/schemas/schemas';
+import { inject, always, T } from '/imports/api/helpers';
 
 const injectWI = inject(WorkItems);
 
@@ -11,7 +11,7 @@ export const updateViewedBy = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => injectWI(checker),
+  check: checker => injectWI(checker)(always(T)),
 
   run({ _id }) {
     return WorkItemService.updateViewedBy({ _id, viewedBy: this.userId });

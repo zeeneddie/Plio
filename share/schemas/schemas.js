@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 import {
   ReminderTimeUnits, DocumentTypes, AnalysisStatuses,
   ReviewStatuses, SystemName, StringLimits,
-  StandardStatuses, TimeUnits,
+  StandardStatuses, TimeUnits, ProblemMagnitudes,
 } from '../constants.js';
 
 
@@ -64,6 +64,7 @@ export const UrlSchema = new SimpleSchema({
   url: {
     type: String,
     regEx: SimpleSchema.RegEx.Url,
+    max: StringLimits.url.max,
   },
 });
 
@@ -213,6 +214,7 @@ export const FileIdsSchema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id,
     defaultValue: [],
     optional: true,
+    // maxCount: ?
   },
 });
 
@@ -221,6 +223,7 @@ export const ImprovementPlanSchema = new SimpleSchema([
     desiredOutcome: {
       type: String,
       optional: true,
+      // max: ?
     },
     targetDate: {
       type: Date,
@@ -230,6 +233,7 @@ export const ImprovementPlanSchema = new SimpleSchema([
       type: [Object],
       optional: true,
       defaultValue: [],
+      // maxCount ?
     },
     'reviewDates.$.date': {
       type: Date,
@@ -247,33 +251,33 @@ export const ImprovementPlanSchema = new SimpleSchema([
   FileIdsSchema,
 ]);
 
-export const getNotifySchema = (field) => {
-  return new SimpleSchema({
-    notify: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true,
-      autoValue() {
-        if (this.isInsert) {
-          const userIdField = this.field(field);
-          if (userIdField.isSet) {
-            return [userIdField.value];
-          } else {
-            this.unset();
-          }
+export const getNotifySchema = (field) => new SimpleSchema({
+  notify: {
+    type: [String],
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true,
+    // maxCount: ?
+    autoValue() {
+      if (this.isInsert) {
+        const userIdField = this.field(field);
+        if (userIdField.isSet) {
+          return [userIdField.value];
         }
-      },
+
+        this.unset();
+      }
     },
-  });
-};
+  },
+});
 
 export const ViewedBySchema = new SimpleSchema({
   viewedBy: {
     type: [String],
     regEx: SimpleSchema.RegEx.Id,
     optional: true,
+    // maxCount: ?
     autoValue() {
-      if (this.isInsert) {
+      if (this.isInsert && this.userId) {
         return [this.userId];
       }
     },
@@ -298,10 +302,7 @@ export const DeletedSchema = new SimpleSchema({
 });
 
 export const FileSchema = new SimpleSchema({
-  _id: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-  },
+  _id: idSchemaDoc,
   extension: {
     type: String,
     autoValue() {
@@ -314,9 +315,11 @@ export const FileSchema = new SimpleSchema({
     type: String,
     regEx: SimpleSchema.RegEx.Url,
     optional: true,
+    max: StringLimits.url.max,
   },
   name: {
     type: String,
+    max: StringLimits.title.max,
   },
 });
 
@@ -338,54 +341,54 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
     },
     magnitude: {
       type: String,
+      allowedValues: Object.values(ProblemMagnitudes),
     },
     standardsIds: {
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       minCount: 1,
+      // maxCount: ?
     },
   },
 ]);
 
 export const BaseProblemsOptionalSchema = ((() => {
-  const getRepeatingFields = (key) => {
-    return {
-      [`${key}.targetDate`]: {
-        type: Date,
-        optional: true,
-      },
-      [`${key}.executor`]: {
-        type: String,
-        regEx: SimpleSchema.RegEx.Id,
-        optional: true,
-      },
-      [`${key}.status`]: {
-        type: Number,
-        allowedValues: _.keys(AnalysisStatuses).map(status => parseInt(status, 10)),
-        defaultValue: 0,
-        optional: true,
-      },
-      [`${key}.completionComments`]: {
-        type: String,
-        optional: true,
-        max: 140,
-      },
-      [`${key}.completedAt`]: {
-        type: Date,
-        optional: true,
-      },
-      [`${key}.completedBy`]: {
-        type: String,
-        regEx: SimpleSchema.RegEx.Id,
-        optional: true,
-      },
-      [`${key}.assignedBy`]: {
-        type: String,
-        regEx: SimpleSchema.RegEx.Id,
-        optional: true,
-      },
-    };
-  };
+  const getRepeatingFields = (key) => ({
+    [`${key}.targetDate`]: {
+      type: Date,
+      optional: true,
+    },
+    [`${key}.executor`]: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+    },
+    [`${key}.status`]: {
+      type: Number,
+      allowedValues: _.keys(AnalysisStatuses).map(status => parseInt(status, 10)),
+      defaultValue: 0,
+      optional: true,
+    },
+    [`${key}.completionComments`]: {
+      type: String,
+      optional: true,
+      max: StringLimits.comments.max,
+    },
+    [`${key}.completedAt`]: {
+      type: Date,
+      optional: true,
+    },
+    [`${key}.completedBy`]: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+    },
+    [`${key}.assignedBy`]: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+    },
+  });
 
   const analysis = {
     analysis: {
@@ -422,6 +425,7 @@ export const BaseProblemsOptionalSchema = ((() => {
         regEx: SimpleSchema.RegEx.Id,
         defaultValue: [],
         optional: true,
+        // maxCount: ?
       },
       improvementPlan: {
         type: ImprovementPlanSchema,
@@ -468,7 +472,7 @@ export const ReviewSchema = ((() => {
     },
     comments: {
       type: String,
-      max: 140,
+      max: StringLimits.comments.max,
       optional: true,
     },
   });
@@ -488,7 +492,7 @@ export const CompleteActionSchema = new SimpleSchema([
     completionComments: {
       type: String,
       optional: true,
-      max: 140,
+      max: StringLimits.comments.max,
     },
   },
 ]);

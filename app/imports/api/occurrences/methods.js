@@ -1,18 +1,15 @@
-import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import property from 'lodash.property';
 import curry from 'lodash.curry';
 
-import OccurrencesService from './occurrences-service.js';
-import { RequiredSchema } from '/imports/share/schemas/occurrences-schema.js';
-import { Occurrences } from '/imports/share/collections/occurrences.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { IdSchema } from '/imports/share/schemas/schemas.js';
-import Method, { CheckedMethod } from '../method.js';
-import { chain, withUserId } from '/imports/api/helpers.js';
-import { exists, OCC_MembershipChecker } from '../checkers.js';
-
-const { compose } = _;
+import OccurrencesService from './occurrences-service';
+import { RequiredSchema } from '/imports/share/schemas/occurrences-schema';
+import { Occurrences } from '/imports/share/collections/occurrences';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { IdSchema } from '/imports/share/schemas/schemas';
+import Method from '../method';
+import { exists, OCC_MembershipChecker } from '../checkers';
+import { compose, chain, withUserId } from '../helpers';
 
 const checkOccurrenceExistance = exists(Occurrences);
 
@@ -38,7 +35,7 @@ export const updateViewedBy = new Method({
 
   run({ _id }) {
     return OccurrencesService.updateViewedBy({ _id, userId: this.userId });
-  }
+  },
 });
 
 export const insert = new Method({
@@ -58,7 +55,7 @@ export const insert = new Method({
 
   run({ ...args }) {
     return OccurrencesService.insert({ ...args });
-  }
+  },
 });
 
 export const update = new Method({
@@ -98,7 +95,7 @@ export const update = new Method({
 
   run({ ...args }) {
     return OccurrencesService.update({ ...args });
-  }
+  },
 });
 
 export const remove = new Method({
@@ -117,5 +114,5 @@ export const remove = new Method({
 
   run({ _id }) {
     return OccurrencesService.remove({ _id });
-  }
+  },
 });

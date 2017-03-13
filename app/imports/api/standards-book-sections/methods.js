@@ -1,18 +1,17 @@
-import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import StandardsBookSectionService from './standards-book-section-service.js';
+import StandardsBookSectionService from './standards-book-section-service';
 import {
-  StandardsBookSectionSchema
-} from '/imports/share/schemas/standards-book-section-schema.js';
-import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
-import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas.js';
-import Method, { CheckedMethod } from '../method.js';
-import { inject } from '/imports/api/helpers.js';
+  StandardsBookSectionSchema,
+} from '/imports/share/schemas/standards-book-section-schema';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
+import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas';
+import Method, { CheckedMethod } from '../method';
+import { inject } from '/imports/api/helpers';
 import {
   ORG_EnsureCanChangeChecker,
-  ORG_EnsureCanChangeCheckerCurried
-} from '../checkers.js';
+  ORG_EnsureCanChangeCheckerCurried,
+} from '../checkers';
 
 const injectSBS = inject(StandardsBookSections);
 
@@ -29,7 +28,7 @@ export const insert = new Method({
 
   run(doc) {
     return StandardsBookSectionService.insert(doc);
-  }
+  },
 });
 
 export const update = new CheckedMethod({
@@ -37,14 +36,14 @@ export const update = new CheckedMethod({
 
   validate: new SimpleSchema([
     IdSchema,
-    StandardsBookSectionSchema
+    StandardsBookSectionSchema,
   ]).validator(),
 
   check: checker => injectSBS(checker)(ORG_EnsureCanChangeChecker),
 
   run(doc) {
     return StandardsBookSectionService.update(doc);
-  }
+  },
 });
 
 export const remove = new CheckedMethod({
@@ -56,5 +55,5 @@ export const remove = new CheckedMethod({
 
   run(doc) {
     return StandardsBookSectionService.remove(doc);
-  }
+  },
 });

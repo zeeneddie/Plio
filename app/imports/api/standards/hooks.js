@@ -11,9 +11,9 @@ import get from 'lodash.get';
 Standards.after.insert((userId, { _id, organizationId }) => {
   DiscussionsService.insert({
     organizationId,
-    documentType: DocumentTypes.STANDARD,
     linkedTo: _id,
-    isPrimary: true
+    documentType: DocumentTypes.STANDARD,
+    isPrimary: true,
   });
 });
 

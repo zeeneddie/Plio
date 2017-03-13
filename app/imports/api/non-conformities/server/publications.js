@@ -27,7 +27,7 @@ import {
   getNCOtherFiles,
 } from '../../non-conformities/utils';
 
-const getNCLayoutPub = (userId, serialNumber, isDeleted) => [
+const getNCLayoutPub = (userId, serialNumber, isDeleted = false) => [
   {
     find({ _id: organizationId }) {
       const query = { organizationId, isDeleted };
@@ -47,24 +47,6 @@ Meteor.publishComposite(
   getPublishCompositeOrganizationUsers(getNCLayoutPub),
 );
 
-Meteor.publishComposite('nonConformitiesList', function (
-  organizationId,
-  isDeleted = { $in: [null, false] },
-) {
-  return {
-    find() {
-      const userId = this.userId;
-      if (!userId || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
-
-      return NonConformities.find({ organizationId, isDeleted }, {
-        fields: NonConformities.publicFields,
-      });
-    },
-  };
-});
-
 Meteor.publishComposite('nonConformityCard', function ({ _id, organizationId }) {
   check(_id, String);
   check(organizationId, String);
@@ -79,6 +61,8 @@ Meteor.publishComposite('nonConformityCard', function ({ _id, organizationId }) 
 });
 
 Meteor.publish('nonConformitiesDeps', function (organizationId) {
+  check(organizationId, String);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -119,29 +103,9 @@ Meteor.publish('nonConformitiesDeps', function (organizationId) {
   ];
 });
 
-Meteor.publishComposite('nonConformitiesByStandardId', function (
-  standardId,
-  isDeleted = { $in: [null, false] },
-) {
-  return {
-    find() {
-      const userId = this.userId;
-      const standard = Standards.findOne({ _id: standardId });
-      const { organizationId } = !!standard && standard;
-
-      if (!userId || !standard || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
-
-      return NonConformities.find({ standardsIds: standardId, isDeleted });
-    },
-    children: [{
-      find: getNCOtherFiles,
-    }],
-  };
-});
-
 Meteor.publishComposite('nonConformitiesByIds', function (ids = []) {
+  check(ids, [String]);
+
   return {
     find() {
       let query = {
@@ -167,6 +131,9 @@ Meteor.publishComposite('nonConformitiesByIds', function (ids = []) {
 });
 
 Meteor.publish('nonConformitiesCount', function (counterName, organizationId) {
+  check(counterName, String);
+  check(organizationId, String);
+
   const userId = this.userId;
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -179,6 +146,9 @@ Meteor.publish('nonConformitiesCount', function (counterName, organizationId) {
 });
 
 Meteor.publish('nonConformitiesNotViewedCount', function (counterName, organizationId) {
+  check(counterName, String);
+  check(organizationId, String);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {

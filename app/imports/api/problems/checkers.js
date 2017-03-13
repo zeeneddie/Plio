@@ -1,3 +1,5 @@
+import { _ } from 'meteor/underscore';
+
 import {
   ONLY_OWNER_CAN_CHANGE,
   P_CANNOT_SET_EXECUTOR_FOR_COMPLETED_ANALYSIS,
@@ -9,7 +11,6 @@ import {
   P_STANDARDS_CANNOT_BE_UPDATED,
   P_STANDARDS_ALREADY_UPDATED,
   P_ALL_ACTIONS_MUST_BE_VERIFIED,
-  P_STANDARDS_CANNOT_BE_UNDONE,
   P_STANDARDS_NOT_UPDATED,
   P_CANNOT_SET_EXECUTOR_FOR_COMPLETED_STANDARDS,
   P_CANNOT_SET_DATE_FOR_COMPLETED_STANDARDS,
@@ -19,21 +20,19 @@ import {
   P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_STANDARDS,
   P_CANNOT_SET_COMPLETED_BY_FOR_INCOMPLETE_ANALYSIS,
   P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_ANALYSIS,
-  P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_ANALYSIS
-} from '../errors.js';
-import { checkAndThrow } from '/imports/api/helpers.js';
-import { Actions } from '/imports/share/collections/actions.js';
-import { isOrgOwner } from '../checkers.js';
-
-const { compose } = _;
+  P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_ANALYSIS,
+} from '../errors';
+import { checkAndThrow } from '/imports/api/helpers';
+import { Actions } from '/imports/share/collections/actions';
+import { isOrgOwner } from '../checkers';
 
 export const P_IsAnalysisOwner = (userId, organizationId, {
   status,
   completedBy,
-  completedAt
+  completedAt,
 } = {}) => (status === 1) && completedBy && completedAt && _.some([
   isOrgOwner(userId, organizationId),
-  Object.is(userId, completedBy)
+  Object.is(userId, completedBy),
 ]);
 
 export const P_EnsureIsAnalysisOwner = (userId, organizationId, doc = {}) => {

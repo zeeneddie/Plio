@@ -1,8 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { _ } from 'meteor/underscore';
 
-import { PhoneTypes } from '../constants.js';
-import { TimezoneSchema } from './schemas.js';
+import { PhoneTypes, StringLimits } from '../constants';
+import { TimezoneSchema } from './schemas';
 
 
 const PhoneNumberSchema = new SimpleSchema({
@@ -16,18 +15,20 @@ const PhoneNumberSchema = new SimpleSchema({
   },
   type: {
     type: String,
-    allowedValues: _.values(PhoneTypes),
+    allowedValues: Object.values(PhoneTypes),
   },
 });
 
 const UserProfileSchema = new SimpleSchema({
   firstName: {
     type: String,
-    min: 1,
+    min: StringLimits.title.min,
+    max: StringLimits.title.max,
   },
   lastName: {
     type: String,
-    min: 1,
+    min: StringLimits.title.min,
+    max: StringLimits.title.max,
   },
   initials: {
     type: String,
@@ -38,6 +39,7 @@ const UserProfileSchema = new SimpleSchema({
   description: {
     type: String,
     optional: true,
+    max: StringLimits.comments.max,
   },
   avatar: {
     type: String,
@@ -45,6 +47,7 @@ const UserProfileSchema = new SimpleSchema({
   skype: {
     type: String,
     optional: true,
+    max: StringLimits.title.max,
   },
   country: {
     type: String,
@@ -148,10 +151,6 @@ const UserSchema = new SimpleSchema({
   invitationOrgId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    optional: true,
-  },
-  selectedOrganizationSerialNumber: {
-    type: Number,
     optional: true,
   },
   receiveEmailNotifications: {

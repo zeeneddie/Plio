@@ -1,6 +1,6 @@
-import './server/publications.js';
-import './action-service.js';
-import './checkers.js';
-import './errors.js';
-import './methods.js';
-import './hooks.js';
+import './server/publications';
+import './action-service';
+import './checkers';
+import './errors';
+import './methods';
+import './hooks';

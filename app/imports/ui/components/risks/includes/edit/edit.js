@@ -5,7 +5,7 @@ import {
   remove,
   insertScore,
   removeScore,
-} from '/imports/api/risks/methods.js';
+} from '/imports/api/risks/methods';
 import { AnalysisTitles, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.Risks_Card_Edit.viewmodel({

@@ -21,7 +21,7 @@ import { ActionTypes } from '/imports/share/constants';
 import { getRiskFiles, createRiskCardPublicationTree } from '../utils';
 import { getPublishCompositeOrganizationUsers } from '/imports/server/helpers/pub-helpers';
 
-const getRisksLayoutPub = (userId, serialNumber, isDeleted) => [
+const getRisksLayoutPub = (userId, serialNumber, isDeleted = false) => [
   {
     find({ _id: organizationId }) {
       return RiskTypes.find({ organizationId });
@@ -44,24 +44,6 @@ const getRisksLayoutPub = (userId, serialNumber, isDeleted) => [
 
 Meteor.publishComposite('risksLayout', getPublishCompositeOrganizationUsers(getRisksLayoutPub));
 
-Meteor.publishComposite('risksList', function (
-  organizationId,
-  isDeleted = { $in: [null, false] },
-) {
-  return {
-    find() {
-      const userId = this.userId;
-      if (!userId || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
-
-      return Risks.find({ organizationId, isDeleted }, {
-        fields: Risks.publicFields,
-      });
-    },
-  };
-});
-
 Meteor.publishComposite('riskCard', function ({ _id, organizationId }) {
   check(_id, String);
   check(organizationId, String);
@@ -76,6 +58,8 @@ Meteor.publishComposite('riskCard', function ({ _id, organizationId }) {
 });
 
 Meteor.publish('risksDeps', function (organizationId) {
+  check(organizationId, String);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -114,31 +98,9 @@ Meteor.publish('risksDeps', function (organizationId) {
   ];
 });
 
-Meteor.publishComposite('risksByStandardId', function (
-  standardId,
-  isDeleted = { $in: [null, false] },
-) {
-  return {
-    find() {
-      const userId = this.userId;
-      const standard = Standards.findOne({ _id: standardId });
-      const { organizationId } = !!standard && standard;
-
-      if (!userId || !standard || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
-
-      return Risks.find({ standardId, isDeleted });
-    },
-    children: [
-      {
-        find: getRiskFiles,
-      },
-    ],
-  };
-});
-
 Meteor.publishComposite('risksByIds', function (ids = []) {
+  check(ids, [String]);
+
   return {
     find() {
       let query = {
@@ -166,6 +128,9 @@ Meteor.publishComposite('risksByIds', function (ids = []) {
 });
 
 Meteor.publish('risksCount', function (counterName, organizationId) {
+  check(counterName, String);
+  check(organizationId, String);
+
   const userId = this.userId;
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -173,11 +138,14 @@ Meteor.publish('risksCount', function (counterName, organizationId) {
 
   return new Counter(counterName, Risks.find({
     organizationId,
-    isDeleted: { $in: [false, null] },
+    isDeleted: false,
   }));
 });
 
 Meteor.publish('risksNotViewedCount', function (counterName, organizationId) {
+  check(counterName, String);
+  check(organizationId, String);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
@@ -190,7 +158,7 @@ Meteor.publish('risksNotViewedCount', function (counterName, organizationId) {
   const query = {
     organizationId,
     viewedBy: { $ne: userId },
-    isDeleted: { $in: [false, null] },
+    isDeleted: false,
   };
 
   if (currentOrgUserJoinedAt) {
