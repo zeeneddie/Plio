@@ -3,6 +3,7 @@ import { _ } from 'meteor/underscore';
 import { Email } from 'meteor/email';
 
 import { Notifications } from '../collections/notifications.js';
+import { EmailsForPlioReporting } from '/imports/share/constants'
 import HandlebarsCache from './handlebars-cache.js';
 
 
@@ -133,8 +134,9 @@ export default class NotificationSender {
 
     if (!emails.length) return;
 
-    const bcc = [];
+    let bcc = [];
     if (isReportEnabled) {
+
       // Reporting of beta user activity
       bcc.push('steve.ives@pliohub.com', 'jamesalexanderives@gmail.com');
     }
