@@ -1,13 +1,12 @@
 import { Meteor } from 'meteor/meteor';
-import { Email } from 'meteor/email';
 import { HTTP } from 'meteor/http';
-import { EmailsForPlioReporting, PlioS3Logos } from '/imports/share/constants';
+import { PlioS3Logos } from '/imports/share/constants';
 import NotificationSender from '/imports/share/utils/NotificationSender';
 
-let prevIsCrashed = true;
+let prevIsCrashed = false;
 
 const BACKGROUND_APP_URL = Meteor.settings.backgroundApp.url;
-const CRASHED_MESSAGE = 'Background application was crashed with error:';
+const CRASHED_MESSAGE = 'Background application was crashed with';
 const RUNNING_MESSAGE = 'Background application is working now';
 
 SyncedCron.add({
@@ -25,19 +24,19 @@ SyncedCron.add({
 
       prevIsCrashed = isCrashed;
 
-      const ownerDetail = Meteor.users.findOne({ _id: this._orgOwnerId })
-      const { firstName, lastName } = ownerDetail.profile;
-
       const emailTitle = `Background application status: ${isCrashed ? 'CRASHED' : 'RUNNING'}`;
       const secondaryText = isCrashed
         ? [CRASHED_MESSAGE, err].join(' ')
         : RUNNING_MESSAGE;
 
       new NotificationSender({
-        recipients: EmailsForPlioReporting,
-        emailSubject,
+        recipients: ['steve.ives@pliohub.com', 'mike@jssolutionsdev.com'],
+        options: {
+          isImportant: true,
+        },
+        emailSubject: emailTitle,
         templateData: {
-          title: emailTitle,
+          title: secondaryText,
           avatar: {
             alt: 'Plio',
             url: PlioS3Logos.square,

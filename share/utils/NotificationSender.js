@@ -3,7 +3,6 @@ import { _ } from 'meteor/underscore';
 import { Email } from 'meteor/email';
 
 import { Notifications } from '../collections/notifications.js';
-import { EmailsForPlioReporting } from '/imports/share/constants'
 import HandlebarsCache from './handlebars-cache.js';
 
 
