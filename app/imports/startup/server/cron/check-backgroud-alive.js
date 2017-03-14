@@ -13,18 +13,20 @@ SyncedCron.add({
   name: 'Check alive background application',
 
   schedule(parser) {
-    return parser.text('every 5 minutes');
+    return parser.text('20 seconds');
   },
 
   job() {
+    console.log('Job started');
     HTTP.call('GET', BACKGROUND_APP_URL, (err, response) => {
       const isCrashed = Boolean(err || response && response.statusCode !== 200);
 
       if (prevIsCrashed === isCrashed) return;
 
       prevIsCrashed = isCrashed;
-
+      console.log('Background app status is ', isCrashed);
       const emailTitle = `Background application status: ${isCrashed ? 'CRASHED' : 'RUNNING'}`;
+      console.log(emailTitle);
       const secondaryText = isCrashed
         ? [CRASHED_MESSAGE, err].join(' ')
         : RUNNING_MESSAGE;

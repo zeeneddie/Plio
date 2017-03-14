@@ -6,6 +6,5 @@ deploy
 .idea
 .DS_Store
 mup.js
-settings-local.json
-settings-production.json
+settings*.json
 npm-debug.log

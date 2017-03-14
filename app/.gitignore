@@ -1,9 +1,7 @@
 .meteor/dev_bundle
 .meteor/local
 node_modules/
-settings-local.json
-settings-production.json
-settings-staging.json
+settings*.json
 npm-debug.log
 .jshintrc
 typings
