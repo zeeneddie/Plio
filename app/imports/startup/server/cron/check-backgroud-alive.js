@@ -24,7 +24,6 @@ SyncedCron.add({
 
       prevIsCrashed = isCrashed;
       const emailTitle = `Background application status: ${isCrashed ? 'CRASHED' : 'RUNNING'}`;
-      console.log(emailTitle);
       const secondaryText = isCrashed
         ? [CRASHED_MESSAGE, err].join(' ')
         : RUNNING_MESSAGE;
