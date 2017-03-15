@@ -6,22 +6,20 @@ import NotificationSender from '/imports/share/utils/NotificationSender';
 let prevIsCrashed = false;
 
 const BACKGROUND_APP_URL = Meteor.settings.backgroundApp.url;
-const CRASHED_MESSAGE = 'Background application was crashed with';
-const RUNNING_MESSAGE = 'Background application is working now';
+const CRASHED_MESSAGE = 'Background application crashed with';
+const RUNNING_MESSAGE = 'Background application is up again';
 
 SyncedCron.add({
   name: 'Check alive background application',
 
   schedule(parser) {
-    return parser.text('every 10 minute');
+    return parser.text('30 minutes');
   },
 
   job() {
     HTTP.call('GET', BACKGROUND_APP_URL, (err, response) => {
       const isCrashed = Boolean(err || response && response.statusCode !== 200);
 
-      console.log(`Background application status: ${isCrashed ? 'CRASHED' : 'RUNNING'} ${err} ${response}`);
-      console.log(`Previous background application status: ${prevIsCrashed ? 'CRASHED' : 'RUNNING'}`);
       if (prevIsCrashed === isCrashed) return;
 
       prevIsCrashed = isCrashed;
