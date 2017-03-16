@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { CardBlock } from 'reactstrap';
+import { CardBlock, Row, Col } from 'reactstrap';
 
 import CardBlockCollapse from '/imports/ui/react/components/CardBlockCollapse';
 import ReviewConfig from '../Config';
@@ -27,7 +27,7 @@ const ReviewSubcard = ({
       <CardBlock>
         <legend>Standards</legend>
         <ReviewConfig {...getProps('standards', review.standards)} />
-
+        <Row><Col>&nbsp;</Col></Row>
         <legend>Risks</legend>
         <ReviewConfig {...getProps('risks', review.risks)} />
       </CardBlock>

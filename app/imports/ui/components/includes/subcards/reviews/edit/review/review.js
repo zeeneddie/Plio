@@ -16,7 +16,7 @@ Template.Subcards_Review.viewmodel({
   },
   label: 'Review',
   reviewedAt: '',
-  reviewedBy: '',
+  reviewedBy: Meteor.userId,
   comments: '',
   scheduledDate: '',
   update({ ...args }, cb) {

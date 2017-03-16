@@ -10,7 +10,7 @@ const ReviewReminders = ({ fieldName }) => (
         type="start"
         fieldName={fieldName}
       />
-      <label className="form-control-label">before annual review date</label>
+      <label className="form-control-label">before review date</label>
     </div>
 
     <div className="form-group form-group-inline">
