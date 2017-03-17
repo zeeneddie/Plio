@@ -1,8 +1,8 @@
 import { Template } from 'meteor/templating';
 
 Template.Review_ReviewedAt.viewmodel({
-  label: 'Reviewed at',
-  placeholder: 'Reviewed at',
+  label: 'Actual review date',
+  placeholder: 'Actual review date',
   reviewedAt: '',
   defaultDate: false,
   enabled: true,

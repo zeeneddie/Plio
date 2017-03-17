@@ -19,6 +19,12 @@ Template.Subcards_Review.viewmodel({
   reviewedBy: '',
   comments: '',
   scheduledDate: '',
+  getReviewedBy() {
+    return this.reviewedBy() || Meteor.userId();
+  },
+  setReviewedBy(value) {
+    this.reviewedBy(value);
+  },
   update({ ...args }, cb) {
     if (_.keys(args).every(key => this.data()[key] === args[key])) return;
 
@@ -27,7 +33,12 @@ Template.Subcards_Review.viewmodel({
     this.parent().update(args, cb);
   },
   getData() {
-    const { reviewedAt, reviewedBy, comments } = this.data();
-    return { reviewedAt, reviewedBy, comments };
+    const { reviewedAt, comments } = this.data();
+
+    return {
+      reviewedAt,
+      comments,
+      reviewedBy: this.getReviewedBy(),
+    };
   },
 });

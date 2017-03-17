@@ -28,7 +28,7 @@ export default class DatePicker extends React.Component {
 
     datepicker.datepicker({
       todayHighlight: true,
-      format: 'MM, dd',
+      format: 'd M',
       autoclose: true,
     });
 
@@ -38,7 +38,7 @@ export default class DatePicker extends React.Component {
   }
 
   _dateString() {
-    return this.props.value ? getFormattedDate(this.props.value, 'MMMM, DD') : '';
+    return this.props.value ? getFormattedDate(this.props.value, 'DD MMM') : '';
   }
 
   render() {
