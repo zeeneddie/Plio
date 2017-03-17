@@ -9,9 +9,7 @@ Template.Review_ReviewedBy.viewmodel({
   onUpdate() {
     return (viewmodel) => {
       const { selected: reviewedBy } = viewmodel.getData();
-      this.parent().update({
-        reviewedBy: reviewedBy.length ? reviewedBy : undefined,
-      });
+      this.parent().setReviewedBy(reviewedBy);
     };
   },
 });
