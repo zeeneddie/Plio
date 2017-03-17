@@ -133,8 +133,9 @@ export default class NotificationSender {
 
     if (!emails.length) return;
 
-    const bcc = [];
+    let bcc = [];
     if (isReportEnabled) {
+
       // Reporting of beta user activity
       bcc.push('steve.ives@pliohub.com', 'jamesalexanderives@gmail.com');
     }
