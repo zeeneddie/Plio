@@ -4,7 +4,7 @@ import { _ } from 'meteor/underscore';
 
 import { ProblemsStatuses, DocumentTypes } from '/imports/share/constants';
 import { AnalysisTitles } from '/imports/api/constants';
-import { getFullName } from '/imports/api/users/helpers';
+import { getFullNameOrEmail } from '/imports/api/users/helpers';
 import Label from '/imports/ui/react/components/Labels/Label';
 import LinkItemList from '/imports/ui/react/fields/read/components/LinkItemList';
 import ImprovementPlan from '/imports/ui/react/fields/read/components/ImprovementPlan';
@@ -26,8 +26,8 @@ const propTypes = {
   description: PropTypes.string,
   notify: PropTypes.arrayOf(PropTypes.object),
   standards: PropTypes.arrayOf(PropTypes.object),
-  identifiedBy: PropTypes.object,
-  identifiedAt: PropTypes.string,
+  originatorId: PropTypes.object,
+  ownerId: PropTypes.object,
   magnitude: PropTypes.string,
   type: PropTypes.object,
   departments: PropTypes.arrayOf(PropTypes.object),
@@ -50,8 +50,8 @@ const Body = ({
   description,
   notify,
   standards,
-  identifiedBy,
-  identifiedAt,
+  originatorId,
+  ownerId,
   magnitude,
   type,
   departments,
@@ -83,21 +83,25 @@ const Body = ({
         </Field>
       )}
 
-      {!!standards.length && (
+      {standards && !!standards.length && (
         <LinkItemList label="Standard(s)" items={standards} />
       )}
 
       <Row>
-        <Col sm="6">
-          <Field label="Identified by">
-            {getFullName(identifiedBy)}
-          </Field>
-        </Col>
-        <Col sm="6">
-          <Field label="Date identified">
-            {identifiedAt}
-          </Field>
-        </Col>
+        {originatorId && (
+          <Col sm="6">
+            <Field label="Originator">
+              {getFullNameOrEmail(originatorId)}
+            </Field>
+          </Col>
+        )}
+        {ownerId && (
+          <Col sm="6">
+            <Field label="Owner">
+              {getFullNameOrEmail(ownerId)}
+            </Field>
+          </Col>
+        )}
       </Row>
 
       <Row>
@@ -113,7 +117,7 @@ const Body = ({
         </Col>
       </Row>
 
-      {!!departments.length && (<Departments {...{ departments }} />)}
+      {departments && !!departments.length && (<Departments {...{ departments }} />)}
     </ListGroup>
 
     {(analysis.executor || analysis.targetDate) && (
@@ -130,7 +134,7 @@ const Body = ({
       </Block>
     )}
 
-    {!!notify.length && (<Notify users={notify} />)}
+    {notify && !!notify.length && (<Notify users={notify} />)}
 
     {!_.isEmpty(riskEvaluation) && (
       <Block>

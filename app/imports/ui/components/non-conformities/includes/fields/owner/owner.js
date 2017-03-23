@@ -4,14 +4,17 @@ import { Meteor } from 'meteor/meteor';
 Template.NC_Owner_Edit.viewmodel({
   label: 'Owner',
   placeholder: 'Owner',
-  ownerId() {
-    return Meteor.userId();
+  _ownerId: '',
+  ownerId(id) {
+    if (id) return this._ownerId(id);
+
+    return this._ownerId() || Meteor.userId();
   },
   selectArgs() {
-    const { identifiedBy: value, placeholder } = this.data();
+    const { placeholder } = this.data();
 
     return {
-      value,
+      value: this.ownerId(),
       placeholder,
       onUpdate: (viewmodel) => {
         const { selected: ownerId } = viewmodel.getData();
@@ -25,7 +28,6 @@ Template.NC_Owner_Edit.viewmodel({
     };
   },
   getData() {
-    const { ownerId = Meteor.userId() } = this.data();
-    return { ownerId };
+    return { ownerId: this.ownerId() };
   },
 });

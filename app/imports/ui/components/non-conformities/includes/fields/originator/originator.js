@@ -4,14 +4,17 @@ import { Meteor } from 'meteor/meteor';
 Template.NC_Originator_Edit.viewmodel({
   label: 'Originator',
   placeholder: 'Originator',
-  originatorId() {
-    return Meteor.userId();
+  _originatorId: '',
+  originatorId(id) {
+    if (id) return this._originatorId(id);
+
+    return this._originatorId() || Meteor.userId();
   },
   selectArgs() {
-    const { identifiedBy: value, placeholder } = this.data();
+    const { placeholder } = this.data();
 
     return {
-      value,
+      value: this.originatorId(),
       placeholder,
       onUpdate: (viewmodel) => {
         const { selected: originatorId } = viewmodel.getData();
@@ -25,7 +28,6 @@ Template.NC_Originator_Edit.viewmodel({
     };
   },
   getData() {
-    const { originatorId = Meteor.userId() } = this.data();
-    return { originatorId };
+    return { originatorId: this.originatorId() };
   },
 });
