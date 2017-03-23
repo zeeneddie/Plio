@@ -332,13 +332,6 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
       min: StringLimits.title.min,
       max: StringLimits.title.max,
     },
-    identifiedBy: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-    },
-    identifiedAt: {
-      type: Date,
-    },
     magnitude: {
       type: String,
       allowedValues: Object.values(ProblemMagnitudes),
@@ -346,8 +339,15 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
     standardsIds: {
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
-      minCount: 1,
       // maxCount: ?
+    },
+    originatorId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+    },
+    ownerId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
     },
   },
 ]);
