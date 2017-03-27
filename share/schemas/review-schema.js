@@ -30,11 +30,7 @@ export const RequiredSchema = new SimpleSchema([
     reviewedBy: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
-      label: 'Review executor',
-    },
-    comments: {
-      type: String,
-      max: 140,
+      label: 'Reviewer name',
     },
   },
 ]);
@@ -44,8 +40,14 @@ export const ReviewSchema = new SimpleSchema([
   RequiredSchema,
   ViewedBySchema,
   {
+    comments: {
+      type: String,
+      max: 140,
+      optional: true,
+    },
     scheduledDate: {
       type: Date,
+      optional: true,
     },
   },
 ]);

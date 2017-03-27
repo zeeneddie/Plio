@@ -23,7 +23,7 @@ import {
   setCompletionExecutor,
   setVerificationDate,
   setVerificationExecutor,
-} from '/imports/api/actions/methods.js';
+} from '/imports/api/actions/methods';
 
 const getLinks = instance => inspire(['documentId', 'documentType'], instance);
 

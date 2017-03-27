@@ -1,67 +1,66 @@
 <template name="OrgSettings">
-    {{> OrgSettings_MainSettings
-        name=name
-        ownerId=ownerId
-        currency=currency
-        timezone=timezone
-        organizationId=organizationId
-        isEditable=true}}
+  {{> OrgSettings_MainSettings
+      name=name
+      ownerId=ownerId
+      currency=currency
+      timezone=timezone
+      organizationId=organizationId
+      isEditable=true}}
 
-    <div class="card-divider"></div>
-    <div>{{> React component=homeTitlesSubcard}}</div>
+  <div class="card-divider"></div>
+  <div>{{> React component=homeTitlesSubcard}}</div>
 
-    {{> OrgSettings_Departments
-        departments=departments
+  {{> OrgSettings_Departments
+      departments=departments
+      organizationId=organizationId}}
+
+  {{> OrgSettings_StandardTypes
+      standardsTypes=standardsTypes
+      organizationId=organizationId}}
+
+  {{> OrgSettings_StandardsBookSections
+      standardsBookSections=standardsBookSections
+      organizationId=organizationId}}
+
+  {{> OrgSettings_WorkflowDefaults
+      workflowDefaults=workflowDefaults
+      organizationId=organizationId}}
+
+  {{> OrgSettings_Reminders
+      reminders=reminders
+      organizationId=organizationId}}
+
+  {{> OrgSettings_ProblemGuidelines
+      label="Non-conformity guidelines"
+      documentType="non-conformity"
+      guidelines=NCGuidelines
+      organizationId=organizationId
+      method=setNCGuidelineMethod}}
+
+  {{> OrgSettings_RisksTypes
+      organizationId=organizationId
+      riskTypes=riskTypes}}
+
+  {{> OrgSettings_ProblemGuidelines
+      label="Risk guidelines"
+      documentType="risk"
+      guidelines=RKGuidelines
+      organizationId=organizationId
+      method=setRKGuidelineMethod}}
+
+  {{> OrgSettings_RKScoringGuidelines
+      label="Risk scoring guidelines"
+      guidelines=rkScoringGuidelines
+      organizationId=organizationId}}
+
+  <div class="card-divider">
+    {{> React component=reviewContainer}}
+  </div>
+
+  {{#if showDangerZone}}
+    {{> OrgSettings_DangerZone
         organizationId=organizationId}}
+  {{/if}}
 
-    {{> OrgSettings_StandardTypes
-        standardsTypes=standardsTypes
-        organizationId=organizationId}}
-
-    {{> OrgSettings_StandardsBookSections
-        standardsBookSections=standardsBookSections
-        organizationId=organizationId}}
-
-    {{> OrgSettings_WorkflowDefaults
-        workflowDefaults=workflowDefaults
-        organizationId=organizationId}}
-
-    {{> OrgSettings_Reminders
-        reminders=reminders
-        organizationId=organizationId}}
-
-    {{> OrgSettings_ProblemGuidelines
-        label="Non-conformity guidelines"
-        documentType="non-conformity"
-        guidelines=NCGuidelines
-        organizationId=organizationId
-        method=setNCGuidelineMethod}}
-
-    {{> OrgSettings_RisksTypes
-        organizationId=organizationId
-        riskTypes=riskTypes}}
-
-    {{> OrgSettings_ProblemGuidelines
-        label="Risk guidelines"
-        documentType="risk"
-        guidelines=RKGuidelines
-        organizationId=organizationId
-        method=setRKGuidelineMethod}}
-
-    {{> OrgSettings_RKScoringGuidelines
-        label="Risk scoring guidelines"
-        guidelines=rkScoringGuidelines
-        organizationId=organizationId}}
-
-    <div class="card-divider">
-      {{> React component=reviewContainer}}
-    </div>
-
-    {{#if showDangerZone}}
-      {{> OrgSettings_DangerZone
-          organizationId=organizationId}}
-    {{/if}}
-
-    {{> CardOrgChangelog organization=organization}}
-
+  {{> CardOrgChangelog organization=organization}}
 </template>

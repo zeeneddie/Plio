@@ -4,7 +4,7 @@ import get from 'lodash.get';
 
 import { WorkInboxHelp } from '/imports/api/help-messages.js';
 import { ActionPlanOptions } from '/imports/share/constants.js';
-import { restore, remove } from '/imports/api/actions/methods.js';
+import { restore, remove } from '/imports/api/actions/methods';
 
 Template.Actions_Card_Read.viewmodel({
   mixin: ['organization', 'workInbox', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],

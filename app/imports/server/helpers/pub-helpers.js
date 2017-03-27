@@ -40,9 +40,9 @@ export const getPublishCompositeOrganizationUsersObject = (userId, selector) => 
 });
 
 export const getPublishCompositeOrganizationUsers = (fn) =>
-  function publishCompositeOrganizationUsers(serialNumber, isDeleted = { $in: [null, false] }) {
+  function publishCompositeOrganizationUsers(serialNumber, isDeleted) {
     check(serialNumber, Number);
-    check(isDeleted, Match.OneOf(Boolean, { $in: Array })); // eslint-disable-line new-cap
+    check(isDeleted, Match.OneOf(Boolean, undefined)); // eslint-disable-line new-cap
 
     const userId = this.userId;
 

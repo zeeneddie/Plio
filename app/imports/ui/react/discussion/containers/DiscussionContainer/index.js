@@ -25,8 +25,6 @@ const discussionLoad = ({ dispatch, urlItemId, organizationId }, onData) => {
   }
 
   onData(null, {});
-
-  return () => typeof subscription === 'function' && subscription.stop();
 };
 
 export default compose(

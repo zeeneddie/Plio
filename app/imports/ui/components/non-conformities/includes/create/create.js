@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { insert } from '/imports/api/non-conformities/methods.js';
+import { insert } from '/imports/api/non-conformities/methods';
 import { setModalError, inspire } from '/imports/api/helpers.js';
 
 Template.NC_Create.viewmodel({

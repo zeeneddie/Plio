@@ -1,16 +1,14 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidationError } from 'meteor/mdg:validation-error';
-import { _ } from 'meteor/underscore';
 import property from 'lodash.property';
 
-import { RequiredSchema, ReviewSchema } from '/imports/share/schemas/review-schema';
+import { ReviewSchema } from '/imports/share/schemas/review-schema';
 import { Reviews } from '/imports/share/collections/reviews';
 import { IdSchema } from '/imports/share/schemas/schemas';
 import { exists, checkOrgMembership } from '../checkers';
 import Method from '../method';
 import ReviewService from './review-service';
-
-const { compose } = _;
+import { compose } from '../helpers';
 
 const checkReviewExistance = exists(Reviews);
 
@@ -37,11 +35,11 @@ export const insert = new Method({
   name: 'Reviews.insert',
 
   validate(doc) {
-    RequiredSchema.clean(doc, {
+    ReviewSchema.clean(doc, {
       removeEmptyStrings: true,
     });
 
-    return RequiredSchema.validator()(doc);
+    return ReviewSchema.validator()(doc);
   },
 
   check(checker) {

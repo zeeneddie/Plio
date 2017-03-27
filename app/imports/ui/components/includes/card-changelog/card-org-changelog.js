@@ -24,7 +24,7 @@ Template.CardOrgChangelog.viewmodel({
       CollectionNames.ORGANIZATIONS,
     );
 
-    tpl.subscribe('auditLogs', organizationId, { onReady });
+    tpl.subscribe('auditLogs', organizationId, CollectionNames.ORGANIZATIONS, { onReady });
   },
   subscribeForAllLogs(skip, onReady) {
     const organizationId = this.organizationId();
@@ -34,5 +34,5 @@ Template.CardOrgChangelog.viewmodel({
   },
   logsLength() {
     return this.get(`audit-logs-count-${this.organizationId()}`);
-  }
+  },
 });

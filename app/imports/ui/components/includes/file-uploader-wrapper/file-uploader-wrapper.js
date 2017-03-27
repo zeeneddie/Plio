@@ -16,7 +16,7 @@ Template.FileUploader_Wrapper.viewmodel({
   afterInsert(fileId, cb) {
     // if (this.files() && this.files().length) {
     const options = {
-      $push: {
+      $addToSet: {
         fileIds: fileId
       }
     };

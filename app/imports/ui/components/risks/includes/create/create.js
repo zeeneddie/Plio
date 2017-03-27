@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { insert } from '/imports/api/risks/methods.js';
+import { insert } from '/imports/api/risks/methods';
 import { setModalError, inspire } from '/imports/api/helpers.js';
 
 Template.Risks_Create.viewmodel({

@@ -3,7 +3,7 @@ import { Tracker } from 'meteor/tracker';
 import invoke from 'lodash.invoke';
 
 import { ActionPlanOptions } from '/imports/share/constants.js';
-import { insert } from '/imports/api/actions/methods.js';
+import { insert } from '/imports/api/actions/methods';
 import { Actions } from '/imports/share/collections/actions.js';
 import { getTzTargetDate, getWorkflowDefaultStepDate } from '/imports/share/helpers.js';
 import { setModalError, inspire } from '/imports/api/helpers.js';

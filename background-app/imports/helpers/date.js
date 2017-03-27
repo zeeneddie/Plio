@@ -2,15 +2,13 @@ import moment from 'moment-timezone';
 import pluralize from 'pluralize';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
+import { DefaultDateFormat } from '/imports/share/constants.js';
 
-
-const DEFAULT_DATE_FORMAT = 'MMMM DD, YYYY';
-
-export const getPrettyTzDate = (date, timezone = 'UTC', format = DEFAULT_DATE_FORMAT) => (
+export const getPrettyTzDate = (date, timezone = 'UTC', format = DefaultDateFormat) => (
   moment(date).tz(timezone).format(format)
 );
 
-export const getPrettyOrgDate = (date, organizationId, format = DEFAULT_DATE_FORMAT) => {
+export const getPrettyOrgDate = (date, organizationId, format = DefaultDateFormat) => {
   const { timezone } = Organizations.findOne({ _id: organizationId }) || {};
   return getPrettyTzDate(date, timezone, format);
 };

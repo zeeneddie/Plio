@@ -50,7 +50,7 @@ const LHSItem = ({
     >
       <div>
         <h4 className="list-group-item-heading pull-left">{lText}</h4>
-        {rContent}
+        <span className="pull-right">{rContent}</span>
       </div>
       <div className="list-group">
         {children}

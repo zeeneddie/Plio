@@ -8,14 +8,14 @@ import {
   ReviewSchema,
   ImprovementPlanSchema,
   FileIdsSchema,
-} from './schemas.js';
+} from './schemas';
 import {
   ProblemsStatuses,
   RiskEvaluationPriorities,
   RiskEvaluationDecisions,
   WorkflowTypes,
   StringLimits,
-} from '../constants.js';
+} from '../constants';
 
 
 const RequiredSchema = new SimpleSchema([
@@ -75,22 +75,22 @@ const riskEvaluation = {
   },
   'riskEvaluation.comments': {
     type: String,
-    max: 140,
+    max: StringLimits.comments.max,
     optional: true,
   },
   'riskEvaluation.prevLossExp': {
     type: String,
-    max: 140,
+    max: StringLimits.comments.max,
     optional: true,
   },
   'riskEvaluation.priority': {
     type: String,
-    allowedValues: _.keys(RiskEvaluationPriorities),
+    allowedValues: Object.keys(RiskEvaluationPriorities),
     optional: true,
   },
   'riskEvaluation.decision': {
     type: String,
-    allowedValues: _.keys(RiskEvaluationDecisions),
+    allowedValues: Object.keys(RiskEvaluationDecisions),
     optional: true,
   },
 };
@@ -120,58 +120,18 @@ const RisksSchema = new SimpleSchema([
     },
     sequentialId: {
       type: String,
-      min: 3,
+      min: StringLimits.sequentialId.min,
     },
     status: {
       type: Number,
-      allowedValues: _.keys(ProblemsStatuses).map(key => parseInt(key, 10)),
+      allowedValues: Object.keys(ProblemsStatuses).map(key => parseInt(key, 10)),
       defaultValue: 1,
     },
     workflowType: {
       type: String,
-      allowedValues: _.values(WorkflowTypes),
+      allowedValues: Object.values(WorkflowTypes),
     },
   },
 ]);
 
-const RisksUpdateSchema = new SimpleSchema([
-  OptionalSchema,
-  {
-    title: {
-      type: String,
-      min: StringLimits.title.min,
-      max: StringLimits.title.max,
-      optional: true
-    },
-    identifiedBy: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true
-    },
-    identifiedAt: {
-      type: Date,
-      optional: true
-    },
-    magnitude: {
-      type: String,
-      optional: true
-    },
-    typeId: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true
-    },
-    standardsIds: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id,
-      minCount: 1,
-      optional: true
-    },
-    improvementPlan: {
-      type: ImprovementPlanSchema,
-      optional: true
-    }
-  }
-]);
-
-export { RisksSchema, RisksUpdateSchema, RequiredSchema, OptionalSchema, RiskScoreSchema, RiskScoresSchema };
+export { RisksSchema, RequiredSchema, OptionalSchema, RiskScoreSchema, RiskScoresSchema };

@@ -16,7 +16,7 @@ import {
   setCompletionExecutor,
   setVerificationDate,
   setVerificationExecutor
-} from '/imports/api/actions/methods.js';
+} from '/imports/api/actions/methods';
 import { getTzTargetDate } from '/imports/share/helpers.js';
 
 Template.Actions_Edit.viewmodel({

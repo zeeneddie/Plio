@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { insert, update, remove } from '/imports/api/standards-types/methods.js';
 import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';

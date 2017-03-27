@@ -64,6 +64,8 @@ export const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png',
 ];
 
+export const DefaultDateFormat = 'MMMM DD, YYYY';
+
 export const PlioS3Logos = {
   square: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png',
 };
@@ -355,6 +357,17 @@ export const StringLimits = {
     min: 1,
     max: 80,
   },
+  url: {
+    min: 1,
+    max: 2000,
+  },
+  comments: {
+    min: 1,
+    max: 140,
+  },
+  sequentialId: {
+    min: 3,
+  },
 };
 
 export const SystemName = 'Plio';
@@ -613,6 +626,7 @@ export const HomeScreenTitlesTypes = {
 export const EmailsForPlioReporting = [
   'james.ives@pliohub.com',
   'steve.ives@pliohub.com',
+  'mike@jssolutionsdev.com',
 ];
 
 export const FILE_STATUS_MAP = {
@@ -638,6 +652,14 @@ export const CustomerTypesNames = {
 
 export const PossibleReviewFrequencies = [
   {
+    timeValue: 3,
+    timeUnit: TimeUnits.DAYS,
+  },
+  {
+    timeValue: 1,
+    timeUnit: TimeUnits.WEEKS,
+  },
+  {
     timeValue: 6,
     timeUnit: TimeUnits.MONTHS,
   },
@@ -650,3 +672,8 @@ export const PossibleReviewFrequencies = [
     timeUnit: TimeUnits.MONTHS,
   },
 ];
+
+export const MessageTypes = {
+  TEXT: 'text',
+  FILE: 'file',
+};

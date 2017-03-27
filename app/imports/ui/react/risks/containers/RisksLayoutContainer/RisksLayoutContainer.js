@@ -27,9 +27,7 @@ import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
 import { observeRisks, observeRiskTypes } from '../../observers';
 
 const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
-  const isDeleted = filter === RiskFilterIndexes.DELETED
-    ? true
-    : { $in: [null, false] };
+  const isDeleted = filter === RiskFilterIndexes.DELETED;
 
   return DocumentLayoutSubs.subscribe('risksLayout', orgSerialNumber, isDeleted);
 });
