@@ -84,6 +84,7 @@ Meteor.users.helpers({
 Meteor.users.publicFields = {
   _id: 1,
   'emails.address': 1,
+  'emails.verified': 1,
   'profile.address': 1,
   'profile.avatar': 1,
   'profile.country': 1,
