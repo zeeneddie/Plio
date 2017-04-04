@@ -18,30 +18,14 @@ import NotificationSender from '/imports/share/utils/NotificationSender';
 const REMINDER_EMAIL_TEMPLATE = 'defaultEmail';
 
 export default class ReviewReminderSender {
-  constructor(organizationId) {
-    this._organizationId = organizationId;
-  }
-
-  _prepare() {
-    const query = { _id: this._organizationId };
-    const organization = Organizations.findOne(query);
-    if (!organization) {
-      throw new Error('Organization does not exist');
-    }
-
+  constructor(organization, date = new Date()) {
     this._organization = organization;
     this._timezone = organization.timezone || 'UTC';
-
-    this._date = moment()
-      .tz(this._timezone)
-      .startOf('day')
-      .toDate();
-
+    this._date = moment(date).tz(this._timezone).startOf('day').toDate();
     this._reminders = [];
   }
 
   send() {
-    this._prepare();
 
     const { review } = this._organization;
 
@@ -50,7 +34,7 @@ export default class ReviewReminderSender {
     this._createReviewReminder(Risks, review.risks, DocumentTypes.RISK);
     this._createReviewReminder(Standards, review.standards, DocumentTypes.STANDARD);
 
-    this._sendReminders();
+    return this._sendReminders();
   }
 
   _checkReviewConfiguration(reviewConfig) {
@@ -72,33 +56,37 @@ export default class ReviewReminderSender {
     }
   }
 
-  _shouldSendReminder(collection, reviewConfig) {
-    const isScheduled = isDateScheduled(
+  _isDateScheduled(reviewConfig) {
+    return isDateScheduled(
       reviewConfig.reminders,
       reviewConfig.annualDate,
       this._timezone,
       this._date,
     );
-
-    if (!isScheduled) return false;
-
+  }
+  _isHasStatusAwaitingReview(collection, reviewConfig) {
     const isStatusAwaitingReview = (doc) => {
       const workflow = new ReviewWorkflow(doc, reviewConfig, this._timezone);
-
       return workflow && workflow.getStatus && workflow.getStatus() === 1;
     };
 
     const query = {
-      organizationId: this._organizationId,
+      organizationId: this._organization._id,
       isDeleted: false,
       deletedAt: { $exists: false },
       deletedBy: { $exists: false },
     };
     const options = { fields: { _id: 1, createdAt: 1 } };
     const docs = collection.find(query, options).fetch();
-    const result = docs.some(isStatusAwaitingReview);
+    return docs.some(isStatusAwaitingReview);
+  }
 
-    return result;
+  _shouldSendReminder(collection, reviewConfig) {
+    if (!this._isDateScheduled(reviewConfig)) {
+      return false;
+    }
+
+    return this._isHasStatusAwaitingReview(collection, reviewConfig);
   }
 
   _getReminderEmailData({ collection, reviewConfig, docType }) {
@@ -149,15 +137,16 @@ export default class ReviewReminderSender {
   }
 
   _sendReminders() {
-    this._reminders.forEach((reminder) => {
-      const reminderEmailData = this._getReminderEmailData(reminder);
+    const reminderEmailDataList = this._reminders
+      .map(reminder => this._getReminderEmailData(reminder)).
+      filter(n => !!n);
 
-      if (!reminderEmailData) return;
-
+    reminderEmailDataList.forEach(reminderEmailData =>
       new NotificationSender({
         templateName: REMINDER_EMAIL_TEMPLATE,
         ...reminderEmailData,
-      }).sendEmail();
-    });
+      }).sendEmail());
+
+    return !!reminderEmailDataList.length;
   }
 }
