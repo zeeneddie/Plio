@@ -88,6 +88,7 @@ Meteor.publish('currentUserOrganizationBySerialNumber', function (serialNumber) 
     updatedAt: 1,
     updatedBy: 1,
     lastAccessedDate: 1,
+    transfer: 1,
   };
 
   if (this.userId) {
