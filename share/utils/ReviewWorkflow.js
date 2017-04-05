@@ -6,7 +6,7 @@ import { reviewConfigSchema } from '../schemas/organization-schema';
 
 class ReviewWorkflow {
 
-  constructor(doc, reviewConfig, timezone = 'UTC') {
+  constructor(doc, reviewConfig, timezone = 'UTC', date = new Date()) {
     if (!doc) {
       throw new Error('Document is required');
     }
@@ -21,7 +21,7 @@ class ReviewWorkflow {
     this.reviewConfig = reviewConfig;
     this.timezone = timezone;
 
-    this._date = moment()
+    this._date = moment(date)
       .tz(this.timezone)
       .startOf('day')
       .toDate();
@@ -121,8 +121,8 @@ class ReviewWorkflow {
       .add(until.timeValue, until.timeUnit)
       .toDate();
 
-    return moment().isSameOrAfter(reminderStart)
-      && moment().isSameOrBefore(reminderEnd);
+    return moment(this._date).isSameOrAfter(reminderStart)
+      && moment(this._date).isSameOrBefore(reminderEnd);
   }
 
 }
