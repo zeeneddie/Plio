@@ -85,8 +85,8 @@ export default class ReviewReminderSender {
     if (!this._isDateScheduled(reviewConfig)) {
       return false;
     }
-
-    return this._isHasStatusAwaitingReview(collection, reviewConfig);
+    const withsStatus =  this._isHasStatusAwaitingReview(collection, reviewConfig);
+    return withsStatus;
   }
 
   _getReminderEmailData({ collection, reviewConfig, docType }) {
