@@ -87,6 +87,8 @@ export default {
   },
 
   completeAnalysis({ _id, completionComments, userId }) {
+    const doc = this.collection.findOne({ _id }) || {};
+
     const ret = this.collection.update({
       _id
     }, {
@@ -94,7 +96,9 @@ export default {
         'analysis.status': 1, // Completed
         'analysis.completedAt': new Date(),
         'analysis.completedBy': userId,
-        'analysis.completionComments': completionComments
+        'analysis.completionComments': completionComments,
+        'updateOfStandards.executor': doc.originatorId,
+        'updateOfStandards.assignedBy': userId,
       }
     });
 

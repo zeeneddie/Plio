@@ -9,11 +9,19 @@
       </button>
     </div>
   {{else}}
-    <div class="margin-bottom text-xs-center">
-      <button type="button" class="btn btn-success" {{b "click: update(true)"}}>
-        <span>Complete</span>
-      </button>
-    </div>
+    {{#if isType 'COMPLETE_UPDATE_OF_DOCUMENTS'}}
+      <div class="margin-bottom text-xs-center">
+        <button type="button" class="btn btn-success" {{b "click: update(true)"}}>
+          <span>Approve</span>
+        </button>
+      </div>
+    {{else}}
+      <div class="margin-bottom text-xs-center">
+        <button type="button" class="btn btn-success" {{b "click: update(true)"}}>
+          <span>Complete</span>
+        </button>
+      </div>
+    {{/if}}
   {{/if}}
 
   <div class="form-group">

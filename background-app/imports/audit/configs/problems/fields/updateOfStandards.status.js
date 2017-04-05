@@ -13,9 +13,9 @@ export default {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +
-            'Update of standards approved {{#if comments}}: {{{comments}}}{{/if}}' +
+            'Update of standard(s) approved {{#if comments}}: {{{comments}}}{{/if}}' +
           '{{else}}' +
-            'The approval of updating standards was canceled' +
+            'Update of standard(s) approval was canceled' +
           '{{/if}}',
       },
     },
@@ -29,9 +29,9 @@ export default {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +
-            '{{{userName}}} completed update of standards of {{{docDesc}}} {{{docName}}}' +
+            '{{{userName}}} approved the update of standard(s) of {{{docDesc}}} {{{docName}}}' +
           '{{else}}' +
-            '{{{userName}}} canceled update of standards of {{{docDesc}}} {{{docName}}}' +
+            '{{{userName}}} canceled the update standard(s) of {{{docDesc}}} {{{docName}}}' +
           '{{/if}}',
       },
     },

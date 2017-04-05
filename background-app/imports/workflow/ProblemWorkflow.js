@@ -91,11 +91,11 @@ export default class ProblemWorkflow extends Workflow {
     const timezone = this._timezone;
 
     if (isOverdue(targetDate, timezone)) {
-      return 17; // Open - action(s) verified as effective, update of standard(s) past due
+      return 17; // Open - action(s) verified as effective, approval past due
     }
 
     if (isDueToday(targetDate, timezone)) {
-      return 16; // Open - action(s) verified as effective, update of standard(s) due today
+      return 16; // Open - action(s) verified as effective, approval due today
     }
   }
 
@@ -121,7 +121,7 @@ export default class ProblemWorkflow extends Workflow {
 
     // check if all actions are verified
     if (this._allActionsVerifiedAsEffective()) {
-      return 15; // Open - action(s) verified as effective, awaiting update of standard(s)
+      return 15; // Open - action(s) verified as effective, approval
     }
 
     const actions = this._actions;

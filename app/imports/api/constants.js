@@ -181,8 +181,8 @@ export const DepartmentsListProjection = {
 export const AnalysisTitles = {
   rootCauseAnalysis: 'Root cause analysis',
   riskAnalysis: 'Initial risk analysis',
-  updateOfStandards: 'Approval',
-  updateOfRiskRecord: 'Update of risk record',
+  updateOfStandards: 'Approve the update of standard(s)',
+  updateOfRiskRecord: 'Approve the update of risk record(s)',
 };
 
 export const ActionTitles = {

@@ -23,7 +23,7 @@ const WorkInboxHelp = {
   completeActionHelp: `Click on the Complete button to indicate completion of this action. Optionally you can enter any relevant completion comments.`,
   verifyActionHelp: `Click on the Verify button to indicate verification of this action. Optionally you can enter any relevant verification comments.`,
   completeAnalysisHelp: `Click on the Complete button to indicate completion of this analysis. Optionally you can enter any relevant completion comments.`,
-  updateDocumentHelp: `Click on the Update button to indicate that the relevant standard(s) or risk record(s) has been updated. Optionally you can enter any relevant update comments.`
+  updateDocumentHelp: `Click on the Approve button to approve the update of the relevant standard(s). Optionally you can enter any relevant approval comments.`
 };
 
 const OrganizationSettingsHelp = {

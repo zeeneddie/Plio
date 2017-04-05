@@ -272,12 +272,12 @@ export const ProblemsStatuses = {
   [ProblemIndexes.ACTIONS_COMPLETED_WAITING_VERIFY]: 'Open - action(s) completed, awaiting verification',
   [ProblemIndexes.VERIFY_DUE_TODAY]: 'Open - verification due today',
   [ProblemIndexes.VERIFY_PAST_DUE]: 'Open - verification past due',
-  [ProblemIndexes.ACTIONS_AWAITING_UPDATE]: 'Open - action(s) verified as effective, awaiting update of standard(s)',
-  [ProblemIndexes.ACTIONS_UPDATE_DUE_TODAY]: 'Open - action(s) verified as effective, update of standard(s) due today',
-  [ProblemIndexes.ACTIONS_UPDATE_PAST_DUE]: 'Open - action(s) verified as effective, update of standard(s) past due',
+  [ProblemIndexes.ACTIONS_AWAITING_UPDATE]: 'Open - action(s) verified as effective, awaiting approval',
+  [ProblemIndexes.ACTIONS_UPDATE_DUE_TODAY]: 'Open - action(s) verified as effective, approval due today',
+  [ProblemIndexes.ACTIONS_UPDATE_PAST_DUE]: 'Open - action(s) verified as effective, approval past due',
   [ProblemIndexes.ACTIONS_FAILED_VERIFICATION]: 'Open - action(s) failed verification',
   [ProblemIndexes.CLOSED_ACTIONS_COMPLETED]: 'Closed - action(s) completed',
-  [ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED]: 'Closed - action(s) verified, standard(s) reviewed',
+  [ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED]: 'Closed - action(s) verified, approval given, and notification(s) sent to Owner(s) of standard(s) to remind them to update standards',
   [ProblemIndexes.DELETED]: 'Deleted',
 };
 
@@ -410,7 +410,7 @@ export const WorkItemsStore = {
     COMPLETE_ACTION: 'complete action',
     VERIFY_ACTION: 'verify action',
     COMPLETE_ANALYSIS: 'complete analysis',
-    COMPLETE_UPDATE_OF_DOCUMENTS: 'complete update of documents',
+    COMPLETE_UPDATE_OF_DOCUMENTS: 'complete approval',
   },
   LINKED_TYPES: {
     ...ActionTypes,

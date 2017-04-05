@@ -11,7 +11,6 @@ import {
   generateSerialNumber
 } from '/imports/share/helpers.js';
 
-
 export default {
   collection: Actions,
 
@@ -119,16 +118,32 @@ export default {
     const action = this.collection.findOne({ _id });
     const linkedTo = action.linkedTo || [];
     const organization = Organizations.findOne({ _id: action.organizationId });
+
+    // We need to find the owner of the first linked problem to set him as a "To be verified by" user
+    const firstLinkedTo = linkedTo[0];
+    let problemOwnerId;
+    if (firstLinkedTo) {
+      const problemCollection = getCollectionByDocType(firstLinkedTo.documentType);
+      const firstLinkedToDoc = problemCollection && problemCollection.findOne({ _id: firstLinkedTo.documentId });
+      problemOwnerId = firstLinkedToDoc.ownerId;
+    }
+
+    let set = {
+      completionComments,
+      isCompleted: true,
+      completedBy: userId,
+      completedAt: new Date(),
+      verificationTargetDate: getWorkflowDefaultStepDate({ organization, linkedTo }),
+    };
+
+    if (problemOwnerId) {
+      set.toBeVerifiedBy = problemOwnerId
+    }
+
     const ret = this.collection.update({
       _id
     }, {
-      $set: {
-        completionComments,
-        isCompleted: true,
-        completedBy: userId,
-        completedAt: new Date(),
-        verificationTargetDate: getWorkflowDefaultStepDate({ organization, linkedTo })
-      }
+      $set: set
     });
 
     WorkItemService.actionCompleted(_id);

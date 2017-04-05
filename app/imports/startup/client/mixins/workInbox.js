@@ -34,7 +34,7 @@ export default {
           title = linkedDoc.type === ProblemTypes.RISK
             ? updateOfRiskRecord
             : updateOfStandards;
-          return getText(COMPLETE, title);
+          return title;
         case WorkItemsStore.TYPES.COMPLETE_ACTION:
           title = ActionTitles[linkedDoc.type];
           return getText(COMPLETE, title);
@@ -49,7 +49,14 @@ export default {
     return result;
   },
   getLinkedDocTypeText({ type, linkedDoc }) {
-    return capitalize(this.getTypeText({ type, linkedDoc }).replace(/^(complete|verify)\s/i, ''));
+    const { TYPES } = WorkItemsStore;
+
+    switch (type) {
+      case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
+        return 'Update of standard(s)';
+      default:
+        return capitalize(this.getTypeText({ type, linkedDoc }).replace(/^(complete|verify)\s/i, ''));
+    }
   },
   currentWorkItem() {
     return WorkItems.findOne({ _id: this.workItemId() });
