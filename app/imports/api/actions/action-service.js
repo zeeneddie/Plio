@@ -138,6 +138,7 @@ export default {
 
     if (problemOwnerId) {
       set.toBeVerifiedBy = problemOwnerId
+      WorkItemService.actionVerificationUserUpdated(_id, problemOwnerId);
     }
 
     const ret = this.collection.update({

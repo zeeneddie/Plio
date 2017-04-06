@@ -103,6 +103,7 @@ export default {
     });
 
     WorkItemService.analysisCompleted(_id, this._docType);
+    WorkItemService.updateOfStandardsUserUpdated(_id, this._docType, doc.originatorId);
 
     return ret;
   },

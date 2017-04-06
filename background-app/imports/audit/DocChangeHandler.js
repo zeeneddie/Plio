@@ -305,7 +305,7 @@ export default class DocChangeHandler {
     let data = getData && getData(args);
     data = _.isArray(data) ? data : [data];
 
-    let receiversArr = getReceivers(args) || [];
+    let receiversArr = _.isFunction(getReceivers) && getReceivers(args) || [];
     receiversArr = _.isArray(receiversArr[0]) ? receiversArr : [receiversArr];
 
     let emailTplDataArr;
