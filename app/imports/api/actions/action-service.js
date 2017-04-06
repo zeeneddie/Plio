@@ -136,11 +136,6 @@ export default {
       verificationTargetDate: getWorkflowDefaultStepDate({ organization, linkedTo }),
     };
 
-    if (problemOwnerId) {
-      set.toBeVerifiedBy = problemOwnerId
-      WorkItemService.actionVerificationUserUpdated(_id, problemOwnerId);
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -148,6 +143,9 @@ export default {
     });
 
     WorkItemService.actionCompleted(_id);
+    if (action.getWorkflowType() === WorkflowTypes.SIX_STEP && problemOwnerId) {
+      this.setVerificationExecutor({ _id, userId: problemOwnerId, assignedBy: userId });
+    }
 
     return ret;
   },
