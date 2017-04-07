@@ -5,6 +5,7 @@ import {
   BaseProblemsRequiredSchema,
   BaseProblemsOptionalSchema,
   FileIdsSchema,
+  getNotifySchema,
 } from './schemas';
 import { ProblemsStatuses, RCAMaxCauses, WorkflowTypes, StringLimits } from '../constants';
 
@@ -69,6 +70,7 @@ const NonConformitiesSchema = new SimpleSchema([
   BaseEntitySchema,
   RequiredSchema,
   OptionalSchema,
+  getNotifySchema(['ownerId', 'originatorId']),
   {
     serialNumber: {
       type: Number,

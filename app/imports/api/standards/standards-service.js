@@ -5,7 +5,6 @@ import BaseEntityService from '../base-entity-service.js';
 import NonConformityService from '../non-conformities/non-conformities-service';
 import RiskService from '../risks/risks-service';
 
-
 export default {
   collection: Standards,
 

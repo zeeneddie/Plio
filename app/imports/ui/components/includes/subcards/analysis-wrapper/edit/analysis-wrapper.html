@@ -7,7 +7,7 @@
       methods=methods.Analysis
       areStandardsUpdated=(isCompleted updateOfStandards)
       areCompletionFieldsDisabled=(not (isCurrentOwner analysis))}}
-  {{#if isCompleted analysis}}
+  {{#if isApprovalVisible}}
     {{> UOS_Edit
         label=UOSLabel
         updateOfStandards=updateOfStandards

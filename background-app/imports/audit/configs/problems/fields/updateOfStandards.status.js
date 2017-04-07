@@ -26,6 +26,7 @@ export default {
         return diffs['updateOfStandards.completedAt']
             && diffs['updateOfStandards.completedBy'];
       },
+      sendBoth: true,
       text: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +

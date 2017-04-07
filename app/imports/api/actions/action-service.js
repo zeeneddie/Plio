@@ -118,15 +118,10 @@ export default {
     const action = this.collection.findOne({ _id });
     const linkedTo = action.linkedTo || [];
     const organization = Organizations.findOne({ _id: action.organizationId });
+    const { ownerId } = action;
 
     // We need to find the owner of the first linked problem to set him as a "To be verified by" user
     const firstLinkedTo = linkedTo[0];
-    let problemOwnerId;
-    if (firstLinkedTo) {
-      const problemCollection = getCollectionByDocType(firstLinkedTo.documentType);
-      const firstLinkedToDoc = problemCollection && problemCollection.findOne({ _id: firstLinkedTo.documentId });
-      problemOwnerId = firstLinkedToDoc.ownerId;
-    }
 
     let set = {
       completionComments,
@@ -143,8 +138,8 @@ export default {
     });
 
     WorkItemService.actionCompleted(_id);
-    if (action.getWorkflowType() === WorkflowTypes.SIX_STEP && problemOwnerId) {
-      this.setVerificationExecutor({ _id, userId: problemOwnerId, assignedBy: userId });
+    if (action.getWorkflowType() === WorkflowTypes.SIX_STEP && ownerId) {
+      this.setVerificationExecutor({ _id, userId: ownerId, assignedBy: userId });
     }
 
     return ret;

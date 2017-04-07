@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 Template.UOS_Edit.viewmodel({
   mixin: 'utils',
-  label: 'Approval',
+  label: 'Final approval',
   updateOfStandards: '',
   methods: {}
 });

@@ -271,6 +271,8 @@
           margin: 0 0 3px;
           font-weight: normal;
           word-break: break-word;
+          overflow: hidden;
+          text-overflow: ellipsis;
           font-family: $font-semilight;
         }
 

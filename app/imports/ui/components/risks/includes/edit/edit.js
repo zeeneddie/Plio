@@ -7,6 +7,7 @@ import {
   removeScore,
 } from '/imports/api/risks/methods';
 import { AnalysisTitles, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { ProblemIndexes } from '/imports/share/constants.js';
 
 Template.Risks_Card_Edit.viewmodel({
   mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils', 'router'],

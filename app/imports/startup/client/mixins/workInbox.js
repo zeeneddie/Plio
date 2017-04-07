@@ -6,7 +6,12 @@ import {
   ProblemTypes,
   ActionTypes,
 } from '/imports/share/constants.js';
-import { AnalysisTitles, ActionTitles, WorkInboxFilters } from '/imports/api/constants.js';
+import {
+  AnalysisTitles,
+  ActionTitles,
+  WorkInboxFilters,
+  WorkItemDescriptions,
+} from '/imports/api/constants.js';
 import { capitalize, lowercase } from '/imports/share/helpers';
 import { propEq } from '/imports/api/helpers';
 
@@ -15,7 +20,7 @@ const {
   rootCauseAnalysis,
   updateOfRiskRecord,
   updateOfStandards,
-} = AnalysisTitles;
+} = WorkItemDescriptions;
 
 export default {
   getTypeText({ type, linkedDoc }) {
