@@ -1,10 +1,10 @@
 import { Risks } from '/imports/share/collections/risks.js';
-import RiskService from './risks-service.js';
+import RiskService from '/imports/share/services/risks-service.js';
 import { Discussions } from '/imports/share/collections/discussions.js';
 import DiscussionsService from '../discussions/discussions-service.js';
 import FilesService from '../files/files-service.js';
 import { DocumentTypes } from '/imports/share/constants.js';
-import WorkItemService from '../work-items/work-item-service.js';
+import WorkItemService from '/imports/share/services/work-item-service.js';
 
 Risks.after.insert((userId, { _id, organizationId }) => {
   DiscussionsService.insert({

@@ -3,8 +3,8 @@ import { Organizations } from '/imports/share/collections/organizations.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Risks } from '/imports/share/collections/risks.js';
 import { ProblemTypes, WorkflowTypes } from '/imports/share/constants.js';
-import BaseEntityService from '../base-entity-service.js';
-import WorkItemService from '../work-items/work-item-service.js';
+import BaseEntityService from '/imports/share/services/base-entity-service.js';
+import WorkItemService from '/imports/share/services/work-item-service.js';
 import {
   getCollectionByDocType,
   getWorkflowDefaultStepDate,

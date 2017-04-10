@@ -85,4 +85,8 @@ export default class Workflow {
     // Implement in child class
   }
 
+  static get _docType() {
+    // Implement in child class
+  }
+
 }

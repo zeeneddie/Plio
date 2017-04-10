@@ -1,5 +1,5 @@
 import { HelpDocs } from '/imports/share/collections/help-docs';
-import BaseEntityService from '../base-entity-service.js';
+import BaseEntityService from '/imports/share/services/base-entity-service.js';
 
 
 export default HelpDocService = {
