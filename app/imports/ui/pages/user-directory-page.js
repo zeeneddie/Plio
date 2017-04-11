@@ -11,8 +11,9 @@ Template.UserDirectory_Page.viewmodel({
   autorun() {
     const userIds = this.getCurrentOrganizationUsers();
     const organizationId = this.organizationId();
+    console.log('OrgID, userIds', organizationId, userIds);
     if (userIds && userIds.length) {
-      const organizationUsersHandle = UserSubs.subscribe(
+      const organizationUsersHandle = Meteor.subscribe(
         'organizationUsers',
         userIds,
         organizationId
