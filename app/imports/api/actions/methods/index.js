@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import ActionService from '../action-service';
+import ActionService from '/imports/share/services/action-service';
 import { RequiredSchema } from '/imports/share/schemas/action-schema';
 import { Actions } from '/imports/share/collections/actions';
 import { IdSchema, CompleteActionSchema } from '/imports/share/schemas/schemas';

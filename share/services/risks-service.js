@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor';
 
 import { Risks } from '/imports/share/collections/risks.js';
 import { ProblemTypes } from '/imports/share/constants.js';
-import BaseEntityService from '../base-entity-service.js';
-import ProblemsService from '../problems/problems-service.js';
+import BaseEntityService from '/imports/share/services/base-entity-service.js';
+import ProblemsService from '/imports/share/services/problems-service.js';
 
 if (Meteor.isServer) {
   //import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';

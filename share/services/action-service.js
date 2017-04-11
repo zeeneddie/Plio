@@ -3,14 +3,13 @@ import { Organizations } from '/imports/share/collections/organizations.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Risks } from '/imports/share/collections/risks.js';
 import { ProblemTypes, WorkflowTypes } from '/imports/share/constants.js';
-import BaseEntityService from '../base-entity-service.js';
-import WorkItemService from '../work-items/work-item-service.js';
+import BaseEntityService from '/imports/share/services/base-entity-service.js';
+import WorkItemService from '/imports/share/services/work-item-service.js';
 import {
   getCollectionByDocType,
   getWorkflowDefaultStepDate,
   generateSerialNumber
 } from '/imports/share/helpers.js';
-
 
 export default {
   collection: Actions,
@@ -119,19 +118,29 @@ export default {
     const action = this.collection.findOne({ _id });
     const linkedTo = action.linkedTo || [];
     const organization = Organizations.findOne({ _id: action.organizationId });
+    const { ownerId } = action;
+
+    // We need to find the owner of the first linked problem to set him as a "To be verified by" user
+    const firstLinkedTo = linkedTo[0];
+
+    let set = {
+      completionComments,
+      isCompleted: true,
+      completedBy: userId,
+      completedAt: new Date(),
+      verificationTargetDate: getWorkflowDefaultStepDate({ organization, linkedTo }),
+    };
+
     const ret = this.collection.update({
       _id
     }, {
-      $set: {
-        completionComments,
-        isCompleted: true,
-        completedBy: userId,
-        completedAt: new Date(),
-        verificationTargetDate: getWorkflowDefaultStepDate({ organization, linkedTo })
-      }
+      $set: set
     });
 
     WorkItemService.actionCompleted(_id);
+    if (action.getWorkflowType() === WorkflowTypes.SIX_STEP && ownerId) {
+      this.setVerificationExecutor({ _id, userId: ownerId, assignedBy: userId });
+    }
 
     return ret;
   },

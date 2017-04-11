@@ -29,6 +29,7 @@ export default {
       shouldSendNotification({ diffs: { verifiedAt, verifiedBy } }) {
         return verifiedAt && verifiedBy;
       },
+      sendBoth: true,
       text: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if verified}}' +

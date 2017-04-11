@@ -60,7 +60,14 @@ Template.WorkInbox_QAPanel_Edit_Complete.viewmodel({
     }
   },
   getCommentsPlaceholder() {
-    return this.type() === TYPES.VERIFY_ACTION ? 'Enter any verification comments' : 'Enter any completion comments';
+    switch (this.type()) {
+      case TYPES.VERIFY_ACTION:
+        return 'Enter any verification comments';
+      case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
+        return 'Enter any approval comments';
+      default:
+        return 'Enter any completion comments';
+    }
   },
   getData() {
     const { comments } = this.data();

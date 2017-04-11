@@ -2,7 +2,7 @@ import { Actions } from '/imports/share/collections/actions.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Risks } from '/imports/share/collections/risks.js';
 import { WorkItems } from '/imports/share/collections/work-items.js';
-import BaseEntityService from '../base-entity-service.js';
+import BaseEntityService from './base-entity-service.js';
 import { ProblemTypes, WorkItemsStore, WorkflowTypes } from '/imports/share/constants.js';
 
 

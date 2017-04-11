@@ -1,8 +1,7 @@
 import { Template } from 'meteor/templating';
 
-import { WorkflowTypes } from '/imports/share/constants.js';
+import { WorkflowTypes, ProblemIndexes } from '/imports/share/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
-
 
 import {
   updateViewedBy,
@@ -34,11 +33,15 @@ Template.NC_Card_Edit_Main.viewmodel({
   },
   isStandardsEditable: true,
   RCAArgs({ _id, analysis, updateOfStandards, magnitude } = {}) {
+    const nc = this.NC && this.NC();
+    const isApprovalVisible = nc && (nc.status >= ProblemIndexes.ACTIONS_AWAITING_UPDATE);
+
     return {
       _id,
       analysis,
       updateOfStandards,
       magnitude,
+      isApprovalVisible,
       methodRefs: this.methodRefs,
       ...(fn => fn ? { callMethod: fn } : undefined)(this.callMethod)
     };

@@ -5,6 +5,7 @@ import { _ } from 'meteor/underscore';
 import { ProblemsStatuses, DocumentTypes } from '/imports/share/constants';
 import { AnalysisTitles } from '/imports/api/constants';
 import { getFullNameOrEmail } from '/imports/api/users/helpers';
+import { getClassByStatus } from '/imports/api/problems/helpers.js';
 import Label from '/imports/ui/react/components/Labels/Label';
 import LinkItemList from '/imports/ui/react/fields/read/components/LinkItemList';
 import ImprovementPlan from '/imports/ui/react/fields/read/components/ImprovementPlan';
@@ -71,7 +72,7 @@ const Body = ({
         {title && (
           <span>
             <span>{title}</span>
-            <Label names="warning" margin="left">{sequentialId}</Label>
+            <Label names={getClassByStatus(status)} margin="left">{sequentialId}</Label>
             <Label names="" className="text-default">{ProblemsStatuses[status]}</Label>
           </span>
         )}

@@ -277,6 +277,39 @@ Migrations.add({
   },
 });
 
+Migrations.add({
+  version: 8,
+  name: 'Migrate work item "complete update of documents" type to "complete approval"',
+  up() {
+    const query = {
+      type: 'complete update of documents',
+    };
+
+    WorkItems.update(query, {
+      $set: {
+        type: 'complete approval',
+      }
+    }, {
+      multi: true
+    });
+
+    console.log('Work item "complete update of documents" types were migrated to "complete approval"');
+  },
+  down() {
+    const query = {
+      type: 'complete approval',
+    };
+
+    WorkItems.update(query, {
+      $set: {
+        type: 'complete update of documents',
+      }
+    });
+
+    console.log('Work item "complete update of documents" types were restored');
+  },
+});
+
 Meteor.startup(() => {
   Migrations.migrateTo('latest');
 });

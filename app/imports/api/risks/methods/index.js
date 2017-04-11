@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import RisksService from '../risks-service';
+import RisksService from '/imports/share/services/risks-service';
 import {
   RequiredSchema,
   RiskScoreSchema,

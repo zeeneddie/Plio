@@ -1,6 +1,18 @@
-import { WorkflowTypes } from '/imports/share/constants';
+import {
+  WorkflowTypes,
+  ProblemIndexes,
+  SystemName,
+  ProblemTypes,
+} from '/imports/share/constants';
 import { Actions } from '/imports/share/collections/actions';
-import { isDueToday, isOverdue } from '/imports/share/helpers';
+import {
+  isDueToday,
+  isOverdue,
+  getWorkflowDefaultStepDate,
+} from '/imports/share/helpers';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import NonConformitiesService from '/imports/share/services/non-conformities-service';
+import RisksService from '/imports/share/services/risks-service';
 import Workflow from './Workflow';
 
 
@@ -91,11 +103,11 @@ export default class ProblemWorkflow extends Workflow {
     const timezone = this._timezone;
 
     if (isOverdue(targetDate, timezone)) {
-      return 17; // Open - action(s) verified as effective, update of standard(s) past due
+      return 17; // Open - action(s) verified as effective, approval past due
     }
 
     if (isDueToday(targetDate, timezone)) {
-      return 16; // Open - action(s) verified as effective, update of standard(s) due today
+      return 16; // Open - action(s) verified as effective, approval due today
     }
   }
 
@@ -121,7 +133,7 @@ export default class ProblemWorkflow extends Workflow {
 
     // check if all actions are verified
     if (this._allActionsVerifiedAsEffective()) {
-      return 15; // Open - action(s) verified as effective, awaiting update of standard(s)
+      return 15; // Open - action(s) verified as effective, approval
     }
 
     const actions = this._actions;
@@ -228,6 +240,45 @@ export default class ProblemWorkflow extends Workflow {
     if (isDueToday(targetDate, timezone)) {
       return 4; // Open - analysis due today
     }
+  }
+
+  _onUpdateStatus(status) {
+    const initiateApprovalProcess = () => {
+      if (status === ProblemIndexes.ACTIONS_AWAITING_UPDATE) {
+        const doc = this._doc || {};
+        const organization = Organizations.findOne({ _id: doc.organizationId, });
+        const _id = doc._id;
+        const docType = this.constructor._docType;
+
+        if (doc.updateOfStandards && doc.updateOfStandards.executor) {
+          return;
+        }
+
+        const targetDate = getWorkflowDefaultStepDate({
+          organization,
+          linkedTo: [{ documentId: _id, documentType: docType, }]
+        });
+        let service;
+
+        if (docType === ProblemTypes.RISK) {
+          service = RisksService;
+        } else {
+          service = NonConformitiesService;
+        }
+
+        service.setStandardsUpdateExecutor({
+          _id,
+          executor: doc.originatorId,
+          assignedBy: doc.originatorId,
+        }, doc);
+        service.setStandardsUpdateDate({
+          _id,
+          targetDate,
+        }, doc);
+      }
+    };
+
+    initiateApprovalProcess();
   }
 
 }

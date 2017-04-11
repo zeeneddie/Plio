@@ -1,6 +1,6 @@
 import { Actions } from '/imports/share/collections/actions.js';
 import FilesService from '../files/files-service.js';
-import WorkItemService from '../work-items/work-item-service';
+import WorkItemService from '/imports/share/services/work-item-service';
 
 Actions.after.remove((userId, doc) => {
   const fileIds = doc.fileIds;
