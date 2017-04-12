@@ -23,7 +23,7 @@ const WorkInboxHelp = {
   completeActionHelp: `Click on the Complete button to indicate completion of this action. Optionally you can enter any relevant completion comments.`,
   verifyActionHelp: `Click on the Verify button to indicate verification of this action. Optionally you can enter any relevant verification comments.`,
   completeAnalysisHelp: `Click on the Complete button to indicate completion of this analysis. Optionally you can enter any relevant completion comments.`,
-  updateDocumentHelp: `Give your approval that this problem, which is currently open, can now be closed.`
+  updateDocumentHelp: `Give your approval that this open work item (see below) can now be closed.`
 };
 
 const OrganizationSettingsHelp = {
