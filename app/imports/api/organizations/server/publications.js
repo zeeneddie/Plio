@@ -166,7 +166,6 @@ Meteor.publish('organizationDeps', function (organizationId) {
   const users = Meteor.users.find({ _id: { $in: userIds } }, {
     fields: {
       ...Meteor.users.publicFields,
-      [`roles.${organizationId}`]: 1,
     },
   });
 

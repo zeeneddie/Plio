@@ -13,11 +13,11 @@ export const getUsersCursorByIdsAndOrgId = (
   const _query = { _id: { $in: ids }, ...query };
   let _projection = {
     fields: {
-      ...Meteor.users.publicFields
+      ...Meteor.users.publicFields,
     },
   };
 
-  _projection.fields.roles = 1;
+  _projection.fields[`roles.${organizationId}`] = 1;
 
   return Meteor.users.find(_query, _projection);
 };

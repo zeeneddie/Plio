@@ -25,7 +25,7 @@ Template.Dashboard_Page.viewmodel({
         CountSubs.subscribe('risksNotViewedCount', 'risks-not-viewed-count-' + organizationId, organizationId)
       ]);
 
-      BackgroundSubs.subscribe('organizationDeps', this.organizationId());
+      BackgroundSubs.subscribe('organizationDeps', organizationId);
     },
     function () {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
