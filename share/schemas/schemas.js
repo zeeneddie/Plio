@@ -292,8 +292,8 @@ export const ViewedBySchema = new SimpleSchema({
     optional: true,
     // maxCount: ?
     autoValue() {
-      if (this.isInsert && this.userId) {
-        return [this.userId];
+      if (this.isInsert) {
+        return this.userId ? [this.userId] : [];
       }
     },
   },
