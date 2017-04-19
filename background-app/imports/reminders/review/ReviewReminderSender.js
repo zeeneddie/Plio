@@ -56,10 +56,22 @@ export default class ReviewReminderSender {
     }
   }
 
+  /**
+   * Show when need send Review Reminder notification send
+   *  deadline = annualDate + frequency;
+           annualDate     deadline - start       deadline     deadline + until
+     <--------*------------------*------------------*--------------*------->
+     ____________________________++++++$++++++++$+++++++++$+++++++++________
+                                    interval  interval   interval
+     todayDay ->0000000000000000000000010000000010000000001000000000000000000
+                                      pass     pas       pass
+   **/
   _isDateScheduled(reviewConfig) {
+    const nextScheduleDate = moment(reviewConfig.annualDate)
+      .add(reviewConfig.frequency.timeValue, reviewConfig.frequency.timeUnit);
     return isDateScheduled(
       reviewConfig.reminders,
-      reviewConfig.annualDate,
+      nextScheduleDate,
       this._timezone,
       this._date,
     );
