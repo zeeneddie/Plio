@@ -66,7 +66,7 @@ export default class ReviewReminderSender {
   }
   _isHasStatusAwaitingReview(collection, reviewConfig) {
     const isStatusAwaitingReview = (doc) => {
-      const workflow = new ReviewWorkflow(doc, reviewConfig, this._timezone, this._date);
+      const workflow = new ReviewWorkflow(doc, reviewConfig, this._timezone);
       return workflow && workflow.getStatus && workflow.getStatus() === 1;
     };
 

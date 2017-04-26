@@ -27,7 +27,8 @@ export default HandlebarsCache = {
         Handlebars.registerHelper(helperName, helperFn);
       });
     }
-    return this._cachedTemplates[templateName] && this._cachedTemplates[templateName](data);
+
+    return this._cachedTemplates[templateName](data);
   }
 
 };
