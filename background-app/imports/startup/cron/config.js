@@ -29,7 +29,6 @@ SyncedCron.config({
   collectionTTL: 172800,
 });
 
-// if (Meteor.isProduction) {
-//   SyncedCron.start();
-// }
-SyncedCron.start();
+if (Meteor.isProduction) {
+  SyncedCron.start();
+}

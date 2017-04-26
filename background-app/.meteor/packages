@@ -19,5 +19,3 @@ matb33:collection-hooks
 mdg:validated-method
 percolate:synced-cron
 blaze-html-templates
-practicalmeteor:mocha
-dispatch:mocha
