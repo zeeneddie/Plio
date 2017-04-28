@@ -1,24 +1,27 @@
-import moment from 'moment-timezone';
 import { SyncedCron } from 'meteor/percolate:synced-cron';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { getTimezones } from './helpers';
 import ReviewReminderSender from '/imports/reminders/review/ReviewReminderSender';
 
+
+// send reminders at 05:00
+const REMINDERS_SENDING_TIME = '05:00';
+
 SyncedCron.add({
   name: 'Send review reminders',
 
   schedule(parser) {
-    return parser.text('at 05:00 pm'); // send reminders at 05:00 pm
+    return parser.text('every 15 mins');
   },
 
   job() {
-    const todayDate = new Date();
-    const todayMoment = moment(todayDate);
-    const timezones = getTimezones(todayMoment.format('hh:mm'), todayDate);
+    const timezones = getTimezones(REMINDERS_SENDING_TIME);
     const query = { timezone: { $in: timezones } };
+    const options = { fields: { _id: 1 } };
 
-    Organizations.find(query).forEach(organization =>
-      new ReviewReminderSender(organization, todayDate).send());
+    Organizations.find(query, options).forEach((org) => {
+      new ReviewReminderSender(org._id).send();
+    });
   },
 });

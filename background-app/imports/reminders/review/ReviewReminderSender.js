@@ -18,14 +18,30 @@ import NotificationSender from '/imports/share/utils/NotificationSender';
 const REMINDER_EMAIL_TEMPLATE = 'defaultEmail';
 
 export default class ReviewReminderSender {
-  constructor(organization, date = new Date()) {
+  constructor(organizationId) {
+    this._organizationId = organizationId;
+  }
+
+  _prepare() {
+    const query = { _id: this._organizationId };
+    const organization = Organizations.findOne(query);
+    if (!organization) {
+      throw new Error('Organization does not exist');
+    }
+
     this._organization = organization;
     this._timezone = organization.timezone || 'UTC';
-    this._date = moment(date).tz(this._timezone).startOf('day').toDate();
+
+    this._date = moment()
+      .tz(this._timezone)
+      .startOf('day')
+      .toDate();
+
     this._reminders = [];
   }
 
   send() {
+    this._prepare();
 
     const { review } = this._organization;
 
@@ -34,7 +50,7 @@ export default class ReviewReminderSender {
     this._createReviewReminder(Risks, review.risks, DocumentTypes.RISK);
     this._createReviewReminder(Standards, review.standards, DocumentTypes.STANDARD);
 
-    return this._sendReminders();
+    this._sendReminders();
   }
 
   _checkReviewConfiguration(reviewConfig) {
@@ -56,49 +72,24 @@ export default class ReviewReminderSender {
     }
   }
 
-  /**
-   * Show when need send Review Reminder notification send
-   *  deadline = annualDate + frequency;
-           annualDate     deadline - start       deadline     deadline + until
-     <--------*------------------*------------------*--------------*------->
-     ____________________________++++++$++++++++$+++++++++$+++++++++________
-                                    interval  interval   interval
-     todayDay ->0000000000000000000000010000000010000000001000000000000000000
-                                      pass     pas       pass
-   **/
-  _isDateScheduled(reviewConfig) {
-    const nextScheduleDate = moment(reviewConfig.annualDate)
-      .add(reviewConfig.frequency.timeValue, reviewConfig.frequency.timeUnit);
-    return isDateScheduled(
-      reviewConfig.reminders,
-      nextScheduleDate,
-      this._timezone,
-      this._date,
-    );
-  }
-  _isHasStatusAwaitingReview(collection, reviewConfig) {
+  _shouldSendReminder(collection, reviewConfig) {
     const isStatusAwaitingReview = (doc) => {
-      const workflow = new ReviewWorkflow(doc, reviewConfig, this._timezone, this._date);
+      const workflow = new ReviewWorkflow(doc, reviewConfig, this._timezone);
+
       return workflow && workflow.getStatus && workflow.getStatus() === 1;
     };
 
     const query = {
-      organizationId: this._organization._id,
+      organizationId: this._organizationId,
       isDeleted: false,
       deletedAt: { $exists: false },
       deletedBy: { $exists: false },
     };
     const options = { fields: { _id: 1, createdAt: 1 } };
     const docs = collection.find(query, options).fetch();
-    return docs.some(isStatusAwaitingReview);
-  }
+    const result = docs.some(isStatusAwaitingReview);
 
-  _shouldSendReminder(collection, reviewConfig) {
-    if (!this._isDateScheduled(reviewConfig)) {
-      return false;
-    }
-    const withsStatus =  this._isHasStatusAwaitingReview(collection, reviewConfig);
-    return withsStatus;
+    return result;
   }
 
   _getReminderEmailData({ collection, reviewConfig, docType }) {
@@ -149,16 +140,15 @@ export default class ReviewReminderSender {
   }
 
   _sendReminders() {
-    const reminderEmailDataList = this._reminders
-      .map(reminder => this._getReminderEmailData(reminder)).
-      filter(n => !!n);
+    this._reminders.forEach((reminder) => {
+      const reminderEmailData = this._getReminderEmailData(reminder);
 
-    reminderEmailDataList.forEach(reminderEmailData =>
+      if (!reminderEmailData) return;
+
       new NotificationSender({
         templateName: REMINDER_EMAIL_TEMPLATE,
         ...reminderEmailData,
-      }).sendEmail());
-
-    return !!reminderEmailDataList.length;
+      }).sendEmail();
+    });
   }
 }
