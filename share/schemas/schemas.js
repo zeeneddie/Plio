@@ -356,6 +356,10 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       // maxCount: ?
     },
+    description: {
+      type: String,
+      min: 1,
+    },
     originatorId: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
