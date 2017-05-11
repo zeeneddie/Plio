@@ -25,7 +25,7 @@ const RootCauseAnalysisSchema = new SimpleSchema([
     },
     'causes.$.text': {
       type: String,
-      // max: ?
+      optional: true,
     },
   },
   FileIdsSchema,

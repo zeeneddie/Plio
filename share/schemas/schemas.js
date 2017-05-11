@@ -358,7 +358,7 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
     },
     description: {
       type: String,
-      min: 1,
+      optional: true,
     },
     originatorId: {
       type: String,
