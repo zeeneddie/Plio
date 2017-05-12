@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Approval executor set to {{{newValue}}}',
+          'Approval assigned to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'Approval executor changed from {{{oldValue}}} to {{{newValue}}}',
+          'Approval executor reassigned to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           'Approval executor removed',
       },
@@ -21,9 +21,9 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} set approval executor of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
+          '{{{userName}}} assigned {{{newValue}}} to approve {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed approval executor of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
+          '{{{userName}}} assigned {{{newValue}}} to approve {{{docDesc}}} {{{docName}}} instead of {{{oldValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           '{{{userName}}} removed approval executor of {{{docDesc}}} {{{docName}}}',
       },

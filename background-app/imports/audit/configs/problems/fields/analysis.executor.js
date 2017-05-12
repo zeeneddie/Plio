@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Root cause analysis executor set to {{{newValue}}}',
+          'Root cause analysis assigned to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'Root cause analysis executor changed from {{{oldValue}}} to {{{newValue}}}',
+          'Root cause analysis reassigned to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           'Root cause analysis executor removed',
       },
@@ -21,9 +21,9 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} set root cause analysis executor of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
+          '{{{userName}}} assigned {{{newValue}}} to carry out root cause analysis of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed root cause analysis executor of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
+          '{{{userName}}} assigned {{{newValue}}} to carry out root cause analysis of {{{docDesc}}} {{{docName}}} instead of {{{oldValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           '{{{userName}}} removed root cause analysis executor of {{{docDesc}}} {{{docName}}}',
       },
