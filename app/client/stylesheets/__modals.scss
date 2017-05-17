@@ -43,8 +43,7 @@
           max-width: calc(100% - 200px);
           line-height: 21px;
           white-space: nowrap;
-          overflow-x: hidden;
-          overflow-y: visible;
+          overflow: hidden;
           text-overflow: ellipsis;
           margin: 0 auto;
           text-align: center !important;
