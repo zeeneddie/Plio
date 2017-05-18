@@ -3,24 +3,34 @@ import { Blaze } from 'meteor/blaze';
 
 Template.Select_Single.viewmodel({
   mixin: 'utils',
-  autorun(computation) {
-    const items = this.itemsArray();
+  autorun: [
+    function (computation) {
+      const items = this.itemsArray();
 
-    if (!this.loading() && items.length > 0 && !this.focused()) {
-      if (!this.selected() && items.length > 0 && this.selectFirstIfNoSelected()) {
-        const { _id, title } = items[0];
+      if (!this.loading() && items.length > 0 && !this.focused()) {
+        if (!this.selected() && items.length > 0 && this.selectFirstIfNoSelected()) {
+          const { _id, title } = items[0];
 
-        this.selected(_id);
-        this.value(title);
-        computation.stop();
-      } else if (!!this.selected() && !this.value() && items.length > 0) {
-        const item = this.getSelectedItem();
+          this.selected(_id);
+          this.value(title);
+          computation.stop();
+        } else if (!!this.selected() && !this.value() && items.length > 0) {
+          const item = this.getSelectedItem();
 
-        item && item.title && this.value(item.title);
-        computation.stop();
+          item && item.title && this.value(item.title);
+          computation.stop();
+        }
       }
-    }
-  },
+    },
+    function () {
+      const selected = this.selected()
+
+      if (!this.loading() && !this.focused() && _.isFunction(this.getAllItems)) {
+        const selectedItem = this.getAllItems().find(({ _id }) => _id === selected);
+        selectedItem && selectedItem.title && this.value(selectedItem.title);
+      }
+    },
+  ],
   onRendered() {
     if (this.dropdown) {
       this.dropdown.on('show.bs.dropdown', e => this.onShow(e));
