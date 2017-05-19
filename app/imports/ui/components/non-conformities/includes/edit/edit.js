@@ -32,6 +32,11 @@ Template.NC_Card_Edit.viewmodel({
   },
   update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
     const _id = this._id();
+
+    if ((_.keys(query).length > 0) && (!('_id' in query))) {
+      query = { _id, ...query };
+    }
+
     const allArgs = { ...args, _id, options, query };
 
     const updateFn = () => this.modal().callMethod(update, allArgs, cb);
