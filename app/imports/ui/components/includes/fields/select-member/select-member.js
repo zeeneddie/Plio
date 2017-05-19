@@ -26,6 +26,7 @@ Template.Select_Member.viewmodel({
       selectFirstIfNoSelected,
       disabled,
       items: this._members(this.query() || {}),
+      getAllItems: () => this._members(this.query() || {}, {}, false) || [],
       onUpdate: (viewmodel) => {
         const { selected:value } = viewmodel.getData();
 
@@ -34,7 +35,7 @@ Template.Select_Member.viewmodel({
         this.value(value);
 
         return onUpdate(viewmodel);
-      }
+      },
     };
   }
 });
