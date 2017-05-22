@@ -1,6 +1,7 @@
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { Blaze } from 'meteor/blaze';
 import { Template } from 'meteor/templating';
+import { _ } from 'meteor/underscore';
 
 export default {
   modal: {
@@ -12,8 +13,17 @@ export default {
 
       Blaze.renderWithData(Template.ModalWindow, data, document.body);
     },
-    close() {
-      this.instance() && this.instance().modal.modal('hide');
+    close(cb) {
+      const modalInst = this.instance() && this.instance().modal;
+      if (!modalInst) {
+        return;
+      }
+
+      if (_.isFunction(cb)) {
+        modalInst.one('hidden.bs.modal', cb);
+      }
+
+      modalInst.modal('hide');
     },
     isSaving(val) {
       const instance = this.instance();
