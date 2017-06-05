@@ -17,6 +17,7 @@ import identifiedBy from './fields/identifiedBy';
 import isDeleted from './fields/isDeleted';
 import magnitude from './fields/magnitude';
 import notify from './fields/notify';
+import ownerId from './fields/ownerId';
 import standardsIds from './fields/standardsIds';
 import status from './fields/status';
 import title from './fields/title';
@@ -49,6 +50,7 @@ export default ProblemAuditConfig = {
     isDeleted,
     magnitude,
     notify,
+    ownerId,
     standardsIds,
     status,
     title,

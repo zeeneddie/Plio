@@ -37,7 +37,21 @@ export default {
       oldValue: () => getUserFullNameOrEmail(oldValue),
     };
   },
-  receivers({ newDoc, user }) {
-    return getReceivers(newDoc, user);
+  receivers({ diffs, newDoc, user }) {
+    const receivers = getReceivers(newDoc, user) || [];
+
+    const executorField = diffs['analysis.executor'];
+    if (executorField.kind === ChangesKinds.FIELD_REMOVED) {
+      return receivers;
+    }
+
+    // Remove new analysis executor from receivers
+    // because he will receive a personal notification
+    const executor = executorField.newValue;
+    const index = receivers.indexOf(executor);
+
+    return index > -1
+      ? receivers.slice(0, index).concat(receivers.slice(index + 1))
+      : receivers;
   },
 };
