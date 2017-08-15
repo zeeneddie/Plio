@@ -9,6 +9,13 @@ Template.Actions_CreateSubcard.viewmodel({
   type: '',
   title: '',
   description: '',
+  defaultToBeCompletedBy:'',
+  autorun() {
+    const data = this.getData();
+    if (data && data.ownerId) {
+      this.defaultToBeCompletedBy(data.ownerId);
+    }
+  },
   ownerId() { return Meteor.userId() },
   planInPlace: ActionPlanOptions.NO,
   completionTargetDate() {
@@ -18,7 +25,9 @@ Template.Actions_CreateSubcard.viewmodel({
 
     return getWorkflowDefaultStepDate({ organization, linkedTo });
   },
-  toBeCompletedBy() { return Meteor.userId() },
+  toBeCompletedBy() {
+    return this.defaultToBeCompletedBy() || this.ownerId();
+  },
   verificationTargetDate: '',
   toBeVerifiedBy: '',
   linkedTo: [],

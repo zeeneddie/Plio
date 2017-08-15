@@ -13,6 +13,12 @@ Template.Actions_Create.viewmodel({
   mixin: ['workInbox', 'organization', 'router', 'getChildrenData'],
   type: '',
   title: '',
+  autorun() {
+    const data = this.getData();
+    if (data && data.ownerId) {
+      this.defaultToBeCompletedBy(data.ownerId);
+    }
+  },
   ownerId() { return Meteor.userId() },
   planInPlace: ActionPlanOptions.NO,
   completionTargetDate() {
@@ -22,7 +28,10 @@ Template.Actions_Create.viewmodel({
 
     return getWorkflowDefaultStepDate({ organization, linkedTo });
   },
-  toBeCompletedBy() { return Meteor.userId() },
+  toBeCompletedBy() {
+    return this.defaultToBeCompletedBy() || this.ownerId();
+  },
+  defaultToBeCompletedBy:'',
   verificationTargetDate: '',
   toBeVerifiedBy: '',
   save() {
