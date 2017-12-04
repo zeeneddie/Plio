@@ -5,5 +5,5 @@ const getAssetPath = (type, name) => `notification-templates/${type}/${name}.han
 
 HandlebarsCache.addTemplates({
   minimalisticEmail: getAssetPath('email', 'minimalistic-email'),
-  personalEmail: getAssetPath('email', 'personal-email')
+  personalEmail: getAssetPath('email', 'personal-email'),
 });

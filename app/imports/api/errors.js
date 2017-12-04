@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-const { Error:E } = Meteor;
+const { Error: E } = Meteor;
 
 export * from './work-items/errors.js';
 

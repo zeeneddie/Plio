@@ -7,12 +7,12 @@ export default {
     const lastLesson = this.collection.findOne({
       organizationId,
       serialNumber: {
-        $type: 16 // 32-bit integer
-      }
+        $type: 16, // 32-bit integer
+      },
     }, {
       sort: {
-        serialNumber: -1
-      }
+        serialNumber: -1,
+      },
     });
 
     const serialNumber = lastLesson ? lastLesson.serialNumber + 1 : 1;
@@ -23,9 +23,9 @@ export default {
   update({ _id, ...args }) {
     const query = { _id };
     const options = {
-      '$set': {
-        ...args
-      }
+      $set: {
+        ...args,
+      },
     };
     return this.collection.update(query, options);
   },
@@ -34,8 +34,8 @@ export default {
     const query = { _id };
     const options = {
       $addToSet: {
-        viewedBy: userId
-      }
+        viewedBy: userId,
+      },
     };
 
     return this.collection.update(query, options);
@@ -43,5 +43,5 @@ export default {
 
   remove({ _id }) {
     return this.collection.remove({ _id });
-  }
+  },
 };

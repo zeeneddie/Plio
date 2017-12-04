@@ -186,8 +186,10 @@ class MessagesListWrapper extends React.Component {
   }
 
   render() {
-    const { discussion, messages, loading, userId, users } = this.props;
-    const loader = (getRef) => (
+    const {
+      discussion, messages, loading, userId, users, 
+    } = this.props;
+    const loader = getRef => (
       <InfiniteLoader
         {...{ getRef }}
         loading
@@ -203,7 +205,10 @@ class MessagesListWrapper extends React.Component {
           {loader(node => (this.loaderOlder = node))}
 
           <div className="chat-messages-list">
-            <MessagesListContainer {...{ messages, discussion, userId, users }} />
+            <MessagesListContainer {...{
+              messages, discussion, userId, users, 
+            }}
+            />
           </div>
 
           {loader(node => (this.loaderNewer = node))}

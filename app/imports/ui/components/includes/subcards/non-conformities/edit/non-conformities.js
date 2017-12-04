@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
 import {
-  insert, update, remove
+  insert, update, remove,
 } from '/imports/api/non-conformities/methods';
 import { getTzTargetDate } from '/imports/share/helpers.js';
 import { inspire } from '/imports/api/helpers.js';
@@ -16,11 +16,11 @@ Template.Subcards_NonConformities_Edit.viewmodel({
     const {
       NCs,
       _id,
-      isStandardsEditable
+      isStandardsEditable,
     } = inspire([
       'NCs',
       '_id',
-      'isStandardsEditable'
+      'isStandardsEditable',
     ], this);
 
     const items = NCs.fetch();
@@ -32,7 +32,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
       _lText: 'Non-conformities',
       _rText: items.length,
       onAdd: this.onAdd({ _id, isStandardsEditable }),
-      getSubcardArgs: this.getSubcardArgs.bind(this)
+      getSubcardArgs: this.getSubcardArgs.bind(this),
     };
   },
   getSubcardArgs(doc) {
@@ -43,7 +43,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
       content: 'NC_Subcard',
       insertFn: this.insert.bind(this),
       updateFn: this.update.bind(this),
-      removeFn: this.remove.bind(this)
+      removeFn: this.remove.bind(this),
     };
   },
   NCs() {
@@ -62,8 +62,8 @@ Template.Subcards_NonConformities_Edit.viewmodel({
         _lText: 'New non-conformity',
         isNew: false,
         insertFn: this.insert.bind(this),
-        removeFn: this.remove.bind(this)
-      }
+        removeFn: this.remove.bind(this),
+      },
     );
   },
   insert({ ...args }, cb) {
@@ -79,36 +79,35 @@ Template.Subcards_NonConformities_Edit.viewmodel({
 
     if (!_id) {
       return viewmodel.destroy();
-    } else {
-      const { title } = viewmodel.getData();
+    } 
+    const { title } = viewmodel.getData();
 
-      swal({
-        title: 'Are you sure?',
-        text: `The non-conformity "${title}" will be removed.`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Remove',
-        closeOnConfirm: false
-      }, () => {
-        const cb = (err) => {
-          if (err) {
-            swal.close();
-            return;
-          }
+    swal({
+      title: 'Are you sure?',
+      text: `The non-conformity "${title}" will be removed.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove',
+      closeOnConfirm: false,
+    }, () => {
+      const cb = (err) => {
+        if (err) {
+          swal.close();
+          return;
+        }
 
-          viewmodel.destroy();
+        viewmodel.destroy();
 
-          swal({
-            title: 'Removed!',
-            text: `The non-conformity "${title}" was removed successfully.`,
-            type: 'success',
-            timer: ALERT_AUTOHIDE_TIME,
-            showConfirmButton: false,
-          });
-        };
+        swal({
+          title: 'Removed!',
+          text: `The non-conformity "${title}" was removed successfully.`,
+          type: 'success',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
+        });
+      };
 
-        this.modal().callMethod(remove, { _id }, cb);
-      });
-    }
-  }
+      this.modal().callMethod(remove, { _id }, cb);
+    });
+  },
 });

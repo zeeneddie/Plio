@@ -34,12 +34,12 @@ const enhance = compose(
   lifecycle({
     componentWillUpdate(props) {
       _.each(
-          props.attachments,
-          props.fileUploader.upload,
-          props.fileUploader
+        props.attachments,
+        props.fileUploader.upload,
+        props.fileUploader,
       );
     },
-  })
+  }),
 );
 
 const DiscussionFileUploader = enhance(({ setAttachments }) => (

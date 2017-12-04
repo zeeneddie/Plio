@@ -2,7 +2,9 @@ import React, { PropTypes } from 'react';
 import { ListGroupItemText } from 'reactstrap';
 import cx from 'classnames';
 
-const Table = ({ header, borderless, big, className, children, ...other }) => (
+const Table = ({
+  header, borderless, big, className, children, ...other 
+}) => (
   <table className={cx('table', { borderless, big }, className)} {...other}>
     <thead>
       <tr>

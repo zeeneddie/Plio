@@ -5,7 +5,7 @@ export default {
     return ReviewStatuses[status];
   },
   getClassByStatus(status) {
-    switch(status) {
+    switch (status) {
       case 0:
         return 'danger';
       case 1:
@@ -15,5 +15,5 @@ export default {
       default:
         return '';
     }
-  }
+  },
 };

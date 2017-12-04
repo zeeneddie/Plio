@@ -14,25 +14,24 @@ Template.Risks_Create.viewmodel({
   save() {
     const data = this.getData();
 
-    for (let key in data) {
+    for (const key in data) {
       if (!data[key]) {
         if (key === 'title') {
-          errorMessage = `The new risk cannot be created without a title. Please enter a title for your risk`;
+          errorMessage = 'The new risk cannot be created without a title. Please enter a title for your risk';
           setModalError(errorMessage);
           return;
         } else if (key === 'sectionId') {
-          errorMessage = `The new risk cannot be created without a section. You can create a new section by typing it's name into the corresponding text input`;
+          errorMessage = 'The new risk cannot be created without a section. You can create a new section by typing it\'s name into the corresponding text input';
           setModalError(errorMessage);
           return;
         } else if (key === 'typeId') {
-          errorMessage = `The new standard cannot be created without a type. You can create a new risk type in Org settings`;
+          errorMessage = 'The new standard cannot be created without a type. You can create a new risk type in Org settings';
           setModalError(errorMessage);
           return;
-        } else {
-          const errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
-          setModalError(errorMessage);
-          return;
-        }
+        } 
+        const errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
+        setModalError(errorMessage);
+        return;
       }
     }
 
@@ -41,7 +40,7 @@ Template.Risks_Create.viewmodel({
   insert({ ...args }) {
     const allArgs = {
       ...args,
-      ...inspire(['organizationId'], this)
+      ...inspire(['organizationId'], this),
     };
 
     const cb = (_id, open) => {
@@ -58,5 +57,5 @@ Template.Risks_Create.viewmodel({
   },
   getData() {
     return this.getChildrenData();
-  }
+  },
 });

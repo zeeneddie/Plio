@@ -30,7 +30,7 @@ const enhance = compose(
       changeField: PropTypes.func,
       getField: PropTypes.func,
     },
-    (props) => ({
+    props => ({
       changeField(fieldName, newFieldValue, shouldSave = true, ...other) {
         const newFormData = set({ ...props.formData }, fieldName, newFieldValue);
         props.setFormData(newFormData);
@@ -43,7 +43,7 @@ const enhance = compose(
         return get(props.formData, fieldName);
       },
     }),
-  )
+  ),
 );
 const Form = enhance(({ children, onSubmit }) => {
   let formRef;
@@ -55,7 +55,7 @@ const Form = enhance(({ children, onSubmit }) => {
   };
 
   return (
-    <form ref={form => { formRef = form; }} onSubmit={submitWrap}>
+    <form ref={(form) => { formRef = form; }} onSubmit={submitWrap}>
       {children}
     </form>
   );

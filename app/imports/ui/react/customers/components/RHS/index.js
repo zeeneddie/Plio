@@ -18,19 +18,19 @@ const CustomersRHS = ({ isReady, organization }) => (
         title="Organization"
         isReady={isReady}
       >
-      {organization && (
-        <ModalHandle
-          title="Organization"
-          openByClickOn={(<Button color="primary">Edit</Button>)}
-        >
-          <ModalEdit organization={organization} />
-        </ModalHandle>
-      )}
+        {organization && (
+          <ModalHandle
+            title="Organization"
+            openByClickOn={(<Button color="primary">Edit</Button>)}
+          >
+            <ModalEdit organization={organization} />
+          </ModalHandle>
+        )}
       </RHS.Header>
 
       <RHS.ContentList isReady={isReady}>
         <BodyContainer {...organization} />
-        <div className="card-footer"></div>
+        <div className="card-footer" />
       </RHS.ContentList>
     </RHS.Card>
   </RHS>

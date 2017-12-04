@@ -21,9 +21,7 @@ export const insert = new Method({
   validate: StandardsBookSectionSchema.validator(),
 
   check(checker) {
-    return checker(
-      ORG_EnsureCanChangeCheckerCurried(this.userId)
-    );
+    return checker(ORG_EnsureCanChangeCheckerCurried(this.userId));
   },
 
   run(doc) {

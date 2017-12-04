@@ -5,11 +5,9 @@ import Form from '/imports/ui/react/forms/components/Form';
 import ReviewReminders from '../Reminders';
 import { getFormProps } from '../helpers';
 
-const enhance = compose(
-  withProps(props => getFormProps(props)),
-);
+const enhance = compose(withProps(props => getFormProps(props)));
 
-const ReviewRemindersForm = enhance((props) => (
+const ReviewRemindersForm = enhance(props => (
   <Form
     autosave
     initialFormData={props.initialFormData}

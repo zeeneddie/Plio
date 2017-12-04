@@ -49,7 +49,7 @@ export default compose(
   branch(
     property('loading'),
     renderComponent(CustomersLayout),
-    identity
+    identity,
   ),
 
   composeWithTracker(loadUsersData, null, null, {
@@ -96,12 +96,12 @@ export default compose(
   }),
 
   withHandlers({
-    onHandleReturn: (props) => () => {
+    onHandleReturn: props => () => {
       if (props.width <= MOBILE_BREAKPOINT && props.showCard) {
         return props.dispatch(setShowCard(false));
       }
 
       return goTo('dashboardPage')();
     },
-  })
+  }),
 )(CustomersLayout);

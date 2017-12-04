@@ -11,7 +11,10 @@ const ModalHandle = ({
   children,
   ...props
 }) => (
-  <Portal {...{ closeOnEsc, closeOnOutsideClick, openByClickOn, isOpened }}>
+  <Portal {...{
+    closeOnEsc, closeOnOutsideClick, openByClickOn, isOpened, 
+  }}
+  >
     <ModalWindowContainer {...props}>
       {children}
     </ModalWindowContainer>

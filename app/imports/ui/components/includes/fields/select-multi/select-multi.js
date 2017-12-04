@@ -44,7 +44,7 @@ Template.Select_Multi.viewmodel({
   },
   onRemove() {},
   remove(e) {
-    const { _id:targetId } = Blaze.getData(e.target);
+    const { _id: targetId } = Blaze.getData(e.target);
     const selected = this.selectedArray();
     const selectedItem = selected.find(({ _id }) => _id === targetId);
 
@@ -52,7 +52,7 @@ Template.Select_Multi.viewmodel({
 
     const newArray = selected.filter(({ _id }) => _id !== targetId);
 
-    this.selectedItemId(targetId)
+    this.selectedItemId(targetId);
     this.selected(newArray);
     this.selectedItem(selectedItem);
 
@@ -62,5 +62,5 @@ Template.Select_Multi.viewmodel({
     const { selected = [], selectedItem = {} } = this.data();
     const { _id: selectedItemId } = selectedItem;
     return { selectedItem, selectedItemId, selected: [...new Set(selected)] };
-  }
+  },
 });

@@ -33,7 +33,7 @@ const enhance = compose(
     changeField: PropTypes.func,
     getField: PropTypes.func,
   }),
-  withProps((props) => ({
+  withProps(props => ({
     options: selectOptions,
     value: getSelectValue(props.getField(props.fieldName)),
     onChange: (e) => {
@@ -46,7 +46,7 @@ const enhance = compose(
   })),
 );
 
-const ReviewFrequencySelect = enhance((props) => (
+const ReviewFrequencySelect = enhance(props => (
   <div className="form-group">
     <label className="form-control-label">
       Review frequency

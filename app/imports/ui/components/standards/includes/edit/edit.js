@@ -45,9 +45,13 @@ Template.EditStandard.viewmodel({
   onUpdateNotifyUser({ query, options }, cb) {
     return this.update({ query, options }, cb);
   },
-  update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
+  update({
+    query = {}, options = {}, e = {}, withFocusCheck = false, ...args 
+  }, cb = () => {}) {
     const _id = this._id();
-    const allArgs = { ...args, _id, options, query };
+    const allArgs = {
+      ...args, _id, options, query, 
+    };
 
     const updateFn = () => this.modal().callMethod(update, allArgs, cb);
 
@@ -66,13 +70,13 @@ Template.EditStandard.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       this.modal().callMethod(remove, { _id }, (err) => {
         if (err) {
           swal.close();
           return;
-        };
+        }
 
         swal({
           title: 'Removed!',
@@ -89,7 +93,7 @@ Template.EditStandard.viewmodel({
         if (list) {
           const { first } = Object.assign({}, invoke(list, '_findStandardForFilter'));
 
-          if (!!first) {
+          if (first) {
             const { _id } = first;
 
             Meteor.setTimeout(() => {
@@ -100,5 +104,5 @@ Template.EditStandard.viewmodel({
         }
       });
     });
-  }
+  },
 });

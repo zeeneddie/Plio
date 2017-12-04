@@ -20,7 +20,7 @@ const dataExportProps = {
 };
 
 const enhance = withState('isOpen', 'setIsOpen', false);
-const HeaderMenu = (props) => (
+const HeaderMenu = props => (
   <HeaderOptionsMenu {...props}>
     <DataExportModal title="Data export" {...dataExportProps}>
       <DropdownItem tag="a">Data export</DropdownItem>

@@ -34,7 +34,7 @@ SyncedCron.add({
         $lt: emailVerificationThresholdDate,
       },
       'emails.verified': false,
-    }, { fields: { _id: 1 } }).forEach(userDoc => {
+    }, { fields: { _id: 1 } }).forEach((userDoc) => {
       Meteor.users.update(
         { _id: userDoc._id },
         { multi: true },

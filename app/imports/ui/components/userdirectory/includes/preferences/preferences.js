@@ -87,11 +87,11 @@ Template.UserPreferences.viewmodel({
     });
   },
   events: {
-    'change #notification-sounds'() {
+    'change #notification-sounds': function () {
       this.isPlayEnabled(true);
       this.updateSound();
     },
-    'ended #audio'() {
+    'ended #audio': function () {
       this.isPlayEnabled(true);
     },
   },

@@ -8,13 +8,13 @@ Template.QuillEditor.viewmodel({
   onRendered(tpl) {
     this.editor(new Quill(this.templateInstance.find('.editor-container')));
     this.editor().addModule('toolbar', {
-      container: this.templateInstance.find('.editor-toolbar')
+      container: this.templateInstance.find('.editor-toolbar'),
     });
     this.editor().addModule('link-tooltip', true);
 
     const $modalDialog = $(tpl.firstNode.closest('.modal-dialog'));
 
-    tpl.autorun(()=> {
+    tpl.autorun(() => {
       if (this.isExpanded()) {
         $modalDialog.addClass('ql-expanded');
       } else {
@@ -32,5 +32,5 @@ Template.QuillEditor.viewmodel({
   getData() {
     const html = this.editor().getHTML();
     return { html };
-  }
+  },
 });

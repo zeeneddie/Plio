@@ -9,10 +9,10 @@ Template.RiskScoring_ScoredBy_Edit.viewmodel({
   disabled: false,
   selectArgs() {
     const {
-      scoredBy:value,
+      scoredBy: value,
       placeholder,
       selectFirstIfNoSelected,
-      disabled
+      disabled,
     } = this.data();
 
     return {
@@ -21,12 +21,12 @@ Template.RiskScoring_ScoredBy_Edit.viewmodel({
       selectFirstIfNoSelected,
       disabled,
       onUpdate: (viewmodel) => {
-        const { selected:scoredBy } = viewmodel.getData();
+        const { selected: scoredBy } = viewmodel.getData();
 
         this.scoredBy(scoredBy);
 
         return invoke(this.parent(), 'update', { scoredBy });
-      }
+      },
     };
-  }
+  },
 });

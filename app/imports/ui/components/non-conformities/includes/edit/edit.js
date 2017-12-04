@@ -4,7 +4,7 @@ import invoke from 'lodash.invoke';
 
 import {
   update,
-  remove
+  remove,
 } from '/imports/api/non-conformities/methods';
 import { getTzTargetDate } from '/imports/share/helpers.js';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
@@ -18,7 +18,7 @@ Template.NC_Card_Edit.viewmodel({
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),
-      nonConformityId: this._id()
+      nonConformityId: this._id(),
     };
   },
   onUpdateNotifyUserCb() {
@@ -30,9 +30,13 @@ Template.NC_Card_Edit.viewmodel({
   onUpdateCb() {
     return this.update.bind(this);
   },
-  update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
+  update({
+    query = {}, options = {}, e = {}, withFocusCheck = false, ...args 
+  }, cb = () => {}) {
     const _id = this._id();
-    const allArgs = { ...args, _id, options, query };
+    const allArgs = {
+      ...args, _id, options, query, 
+    };
 
     const updateFn = () => this.modal().callMethod(update, allArgs, cb);
 
@@ -52,13 +56,13 @@ Template.NC_Card_Edit.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       this.modal().callMethod(remove, { _id }, (err) => {
         if (err) {
           swal.close();
           return;
-        };
+        }
 
         swal({
           title: 'Removed!',
@@ -80,7 +84,7 @@ Template.NC_Card_Edit.viewmodel({
     if (list) {
       const { first } = Object.assign({}, invoke(list, '_findNCForFilter'));
 
-      if (!!first) {
+      if (first) {
         const { _id } = first;
 
         Meteor.setTimeout(() => {
@@ -89,5 +93,5 @@ Template.NC_Card_Edit.viewmodel({
         }, 0);
       }
     }
-  }
+  },
 });

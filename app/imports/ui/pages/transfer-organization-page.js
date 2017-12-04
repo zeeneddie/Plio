@@ -24,16 +24,16 @@ Template.TransferOrganizationPage.viewmodel({
         onReady: () => {
           const organization = Organizations.findOne({
             'transfer._id': transferId,
-            'transfer.newOwnerId': Meteor.userId()
+            'transfer.newOwnerId': Meteor.userId(),
           });
 
           if (!organization) {
             return;
-          } else {
-            const { name, serialNumber } = organization;
-            this.orgName(name);
-            this.orgSerialNumber(serialNumber);
-          }
+          } 
+          const { name, serialNumber } = organization;
+          this.orgName(name);
+          this.orgSerialNumber(serialNumber);
+          
 
           transferOrganization.call({ transferId }, (err) => {
             if (err) {
@@ -48,8 +48,8 @@ Template.TransferOrganizationPage.viewmodel({
           if (err.error === 403) {
             Meteor.logout();
           }
-        }
+        },
       });
     });
-  }
+  },
 });

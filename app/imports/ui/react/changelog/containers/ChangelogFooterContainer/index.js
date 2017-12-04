@@ -28,7 +28,7 @@ const onPropsChange = (props, onData) => {
       'auditLogsCount',
       counterName,
       documentId,
-      collection
+      collection,
     );
 
     dispatch(setLoadingLogsCount(true));

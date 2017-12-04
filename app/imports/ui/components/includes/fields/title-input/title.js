@@ -34,7 +34,7 @@ Template.TitleInput.viewmodel({
         invoke(
           ViewModel.findOne('ModalWindow'),
           'setError',
-          'Title is required!'
+          'Title is required!',
         );
 
         this.value(value);

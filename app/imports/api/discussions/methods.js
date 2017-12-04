@@ -48,10 +48,9 @@ export const updateViewedByOrganization = new Method({
 
   check(checker) {
     return checker(({ _id }) => chain(
-        checkDocExistance(Organizations, _id),
-        checkOrgMembership(this.userId, _id)
-      )
-    );
+      checkDocExistance(Organizations, _id),
+      checkOrgMembership(this.userId, _id),
+    ));
   },
 
   run({ _id }) {

@@ -4,7 +4,7 @@ import React from 'react';
 import { ReminderTimeUnits } from '/imports/share/constants';
 import TimePicker from '../TimePicker';
 
-const ReminderTimePicker = (props) => (
+const ReminderTimePicker = props => (
   <TimePicker
     timeUnits={_.values(ReminderTimeUnits)}
     {...props}

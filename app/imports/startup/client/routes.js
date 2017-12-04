@@ -56,10 +56,8 @@ function checkEmailVerified(context, redirect) {
       if (!isOnUserWaiting) {
         redirect('userWaiting');
       }
-    } else {
-      if (isOnUserWaiting) {
-        redirect('hello');
-      }
+    } else if (isOnUserWaiting) {
+      redirect('hello');
     }
   }
 }

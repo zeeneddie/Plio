@@ -13,7 +13,9 @@ import { getMentionData, getMentionDataWithUsers } from '/imports/share/mentions
 
 const renderMentions = (text, defaultRenderer) => {
   const data = getMentionDataWithUsers(getMentionData(text));
-  const content = data.map(({ firstName, email, user, mentionString }, i) => (user ? (
+  const content = data.map(({
+    firstName, email, user, mentionString, 
+  }, i) => (user ? (
     <a key={email} onClick={openUserDetails({ user })}>{firstName}</a>
   ) : defaultRenderer(mentionString, i, text)));
 

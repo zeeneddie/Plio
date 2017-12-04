@@ -8,7 +8,7 @@ import WorkItemService from '../work-items/work-item-service.js';
 import {
   getCollectionByDocType,
   getWorkflowDefaultStepDate,
-  generateSerialNumber
+  generateSerialNumber,
 } from '/imports/share/helpers.js';
 
 
@@ -26,9 +26,14 @@ export default {
     const sequentialId = `${type}${serialNumber}`;
 
     const actionId = this.collection.insert({
-      organizationId, type, linkedTo,
-      serialNumber, sequentialId, completionTargetDate,
-      toBeCompletedBy, ...args
+      organizationId,
+      type,
+      linkedTo,
+      serialNumber,
+      sequentialId,
+      completionTargetDate,
+      toBeCompletedBy,
+      ...args,
     });
 
     WorkItemService.actionCreated(actionId);
@@ -36,12 +41,14 @@ export default {
     return actionId;
   },
 
-  update({ _id, query = {}, options = {}, ...args }) {
+  update({
+    _id, query = {}, options = {}, ...args 
+  }) {
     if (!_.keys(query).length > 0) {
       query = { _id };
     }
     if (!_.keys(options).length > 0) {
-      options['$set'] = args;
+      options.$set = args;
     }
 
     return this.collection.update(query, options);
@@ -53,8 +60,8 @@ export default {
 
     const ret = this.collection.update({ _id }, {
       $addToSet: {
-        linkedTo: { documentId, documentType }
-      }
+        linkedTo: { documentId, documentType },
+      },
     });
 
     const newAction = this.collection.findOne({ _id });
@@ -65,8 +72,8 @@ export default {
       this.collection.update({ _id }, {
         $unset: {
           toBeVerifiedBy: '',
-          verificationTargetDate: ''
-        }
+          verificationTargetDate: '',
+        },
       });
 
       WorkItemService.actionWorkflowSetToThreeStep(_id);
@@ -81,8 +88,8 @@ export default {
         },
         $unset: {
           'updateOfStandards.completedAt': '',
-          'updateOfStandards.completedBy': ''
-        }
+          'updateOfStandards.completedBy': '',
+        },
       });
     }
 
@@ -91,11 +98,11 @@ export default {
 
   unlinkDocument({ _id, documentId, documentType }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $pull: {
-        linkedTo: { documentId, documentType }
-      }
+        linkedTo: { documentId, documentType },
+      },
     });
 
     const newAction = this.collection.findOne({ _id });
@@ -105,8 +112,8 @@ export default {
       this.collection.update({ _id }, {
         $unset: {
           toBeVerifiedBy: '',
-          verificationTargetDate: ''
-        }
+          verificationTargetDate: '',
+        },
       });
 
       WorkItemService.actionWorkflowSetToThreeStep(_id);
@@ -120,15 +127,15 @@ export default {
     const linkedTo = action.linkedTo || [];
     const organization = Organizations.findOne({ _id: action.organizationId });
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $set: {
         completionComments,
         isCompleted: true,
         completedBy: userId,
         completedAt: new Date(),
-        verificationTargetDate: getWorkflowDefaultStepDate({ organization, linkedTo })
-      }
+        verificationTargetDate: getWorkflowDefaultStepDate({ organization, linkedTo }),
+      },
     });
 
     WorkItemService.actionCompleted(_id);
@@ -138,18 +145,18 @@ export default {
 
   undoCompletion({ _id, userId }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $set: {
-        isCompleted: false
+        isCompleted: false,
       },
       $unset: {
         completedBy: '',
         completedAt: '',
         completionComments: '',
         toBeVerifiedBy: '',
-        verificationTargetDate: ''
-      }
+        verificationTargetDate: '',
+      },
     });
 
     WorkItemService.actionCompletionCanceled(_id);
@@ -157,17 +164,19 @@ export default {
     return ret;
   },
 
-  verify({ _id, userId, success, verificationComments }) {
+  verify({
+    _id, userId, success, verificationComments, 
+  }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $set: {
         verificationComments,
         isVerified: true,
         isVerifiedAsEffective: success,
         verifiedBy: userId,
-        verifiedAt: new Date
-      }
+        verifiedAt: new Date(),
+      },
     });
 
     WorkItemService.actionVerified(_id);
@@ -179,7 +188,7 @@ export default {
     const query = {
       'updateOfStandards.status': 1, // Completed
       'updateOfStandards.completedAt': { $exists: true },
-      'updateOfStandards.completedBy': { $exists: true }
+      'updateOfStandards.completedBy': { $exists: true },
     };
 
     const modifier = {
@@ -188,8 +197,8 @@ export default {
       },
       $unset: {
         'updateOfStandards.completedAt': '',
-        'updateOfStandards.completedBy': ''
-      }
+        'updateOfStandards.completedBy': '',
+      },
     };
 
     const linkedNCsIds = action.getLinkedNCsIds();
@@ -206,17 +215,17 @@ export default {
     }
 
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $set: {
         isVerified: false,
-        isVerifiedAsEffective: false
+        isVerifiedAsEffective: false,
       },
       $unset: {
         verifiedBy: '',
         verifiedAt: '',
-        verificationComments: ''
-      }
+        verificationComments: '',
+      },
     });
 
     WorkItemService.actionVerificationCanceled(_id);
@@ -226,9 +235,9 @@ export default {
 
   setCompletionDate({ _id, targetDate }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
-      $set: { completionTargetDate: targetDate }
+      $set: { completionTargetDate: targetDate },
     });
 
     WorkItemService.actionCompletionDateUpdated(_id, targetDate);
@@ -253,9 +262,9 @@ export default {
 
   setVerificationDate({ _id, targetDate }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
-      $set: { verificationTargetDate: targetDate }
+      $set: { verificationTargetDate: targetDate },
     });
 
     WorkItemService.actionVerificationDateUpdated(_id, targetDate);
@@ -278,7 +287,7 @@ export default {
     return ret;
   },
 
-  updateViewedBy({ _id, userId:viewedBy }) {
+  updateViewedBy({ _id, userId: viewedBy }) {
     this._service.updateViewedBy({ _id, viewedBy });
   },
 
@@ -289,7 +298,9 @@ export default {
     const onPermanentDelete = () =>
       WorkItemService.removePermanently(workQuery);
 
-    return this._service.remove({ _id, deletedBy, onSoftDelete, onPermanentDelete });
+    return this._service.remove({
+      _id, deletedBy, onSoftDelete, onPermanentDelete, 
+    });
   },
 
   restore({ _id }) {

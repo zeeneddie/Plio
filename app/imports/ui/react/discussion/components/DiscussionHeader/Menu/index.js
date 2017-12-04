@@ -3,7 +3,9 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap
 
 import { Icon } from '../../../../components/Icons';
 
-const DiscussionHeaderMenu = ({ isOpen, toggle, isMuted, onToggleMute }) => (
+const DiscussionHeaderMenu = ({
+  isOpen, toggle, isMuted, onToggleMute, 
+}) => (
   <Dropdown {...{ isOpen, toggle }}>
     <DropdownToggle color="link">
       <Icon name="ellipsis-v" size={2} />

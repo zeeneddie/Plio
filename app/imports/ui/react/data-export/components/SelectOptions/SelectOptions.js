@@ -6,8 +6,7 @@ const SelectOptions = ({ fields }) => (
   <div className="relative">
     <Form.SubForm name="fields">
       {fields.map(({ name, label, isDefault }) =>
-        <Checkbox checked={isDefault} name={name} text={label} key={`risk-export-${name}`} />
-      )}
+        <Checkbox checked={isDefault} name={name} text={label} key={`risk-export-${name}`} />)}
     </Form.SubForm>
   </div>
 );

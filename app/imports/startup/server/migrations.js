@@ -169,9 +169,7 @@ Migrations.add({
 
     Meteor.users.update(query, modifier, options);
 
-    console.log(
-      'Default value for \'areEmailNotificationsEnabled\' was set for all users without it'
-    );
+    console.log('Default value for \'areEmailNotificationsEnabled\' was set for all users without it');
   },
   down() {
     const query = {};

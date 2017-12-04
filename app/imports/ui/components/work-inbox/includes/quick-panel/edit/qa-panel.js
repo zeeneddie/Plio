@@ -27,5 +27,5 @@ Template.WorkInbox_QAPanel_Edit.viewmodel({
     };
 
     this.modal().callMethod(method, { _id, ...args }, callback);
-  }
+  },
 });

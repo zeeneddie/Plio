@@ -15,7 +15,7 @@ import {
   setAnalysisComments,
   setStandardsUpdateCompletedBy,
   setStandardsUpdateCompletedDate,
-  setStandardsUpdateComments
+  setStandardsUpdateComments,
 } from '/imports/api/risks/methods';
 import { WorkflowTypes } from '/imports/share/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
@@ -41,7 +41,9 @@ Template.Risk_Card_Edit_Main.viewmodel({
   update(...args) {
     this.parent().update(...args);
   },
-  RCAArgs({ _id, analysis, updateOfStandards, magnitude } = {}) {
+  RCAArgs({
+    _id, analysis, updateOfStandards, magnitude, 
+  } = {}) {
     return {
       _id,
       analysis,
@@ -68,7 +70,7 @@ Template.Risk_Card_Edit_Main.viewmodel({
       setAnalysisComments,
       setStandardsUpdateCompletedBy,
       setStandardsUpdateCompletedDate,
-      setStandardsUpdateComments
+      setStandardsUpdateComments,
     };
   },
   showRootCauseAnalysis() {
@@ -77,5 +79,5 @@ Template.Risk_Card_Edit_Main.viewmodel({
   },
   getData() {
     return this.getChildrenData();
-  }
+  },
 });

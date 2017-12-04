@@ -29,7 +29,9 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     return this.toArray(this.linkedDocs()).map(({ _id }) => _id);
   },
   mapDocs(array, type) {
-    return array.map(({ sequentialId, title, ...args }) => ({ docTitle: title, title: `${sequentialId} ${title}`, sequentialId, type, ...args }));
+    return array.map(({ sequentialId, title, ...args }) => ({
+      docTitle: title, title: `${sequentialId} ${title}`, sequentialId, type, ...args, 
+    }));
   },
   getDocs(query, options) {
     const ncs = this.mapDocs(this._getNCsByQuery(query, options), ProblemTypes.NON_CONFORMITY);
@@ -48,7 +50,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     return this.getDocsByType(this.type(), ncs, risks);
   },
   getDocsByType(type = '', ncs = [], risks = []) {
-    switch(type) {
+    switch (type) {
       case ActionTypes.CORRECTIVE_ACTION:
         return ncs.concat(risks);
         break;
@@ -69,11 +71,11 @@ Template.Actions_LinkedTo_Edit.viewmodel({
   },
   update(viewmodel) {
     const { selectedItem = {}, selected } = viewmodel.getData();
-    const { _id:documentId, type:documentType } = selectedItem;
+    const { _id: documentId, type: documentType } = selectedItem;
     const { linkedTo } = this.getData();
     const { linkedDocs } = this.data();
 
-    if (linkedTo.find(({ documentId:_id }) => _id === documentId)) return;
+    if (linkedTo.find(({ documentId: _id }) => _id === documentId)) return;
 
     const newLinkedTo = linkedTo.concat([{ documentId, documentType }]);
     const newDocs = Array.from(linkedDocs || []).concat([selectedItem]);
@@ -98,13 +100,13 @@ Template.Actions_LinkedTo_Edit.viewmodel({
   },
   remove(viewmodel) {
     const { selectedItem = {}, selected } = viewmodel.getData();
-    const { _id:documentId, type:documentType } = selectedItem;
+    const { _id: documentId, type: documentType } = selectedItem;
     const { linkedTo } = this.getData();
     const { linkedDocs } = this.data();
 
-    if (!linkedTo.find(({ documentId:_id }) => _id === documentId)) return;
+    if (!linkedTo.find(({ documentId: _id }) => _id === documentId)) return;
 
-    const newLinkedTo = linkedTo.filter(({ documentId:_id }) => _id !== documentId);
+    const newLinkedTo = linkedTo.filter(({ documentId: _id }) => _id !== documentId);
     const newDocs = Array.from(linkedDocs || []).filter(({ _id }) => _id !== documentId);
 
     this.linkedTo(newLinkedTo);
@@ -124,5 +126,5 @@ Template.Actions_LinkedTo_Edit.viewmodel({
   getData() {
     const { linkedTo } = this.data();
     return { linkedTo: [...new Set(linkedTo)] };
-  }
+  },
 });

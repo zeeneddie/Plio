@@ -9,5 +9,5 @@ export default compose(
   connect(pickFromDiscussion(['at'])),
   withProps(transsoc({
     messages: transformMessages,
-  }))
+  })),
 )(MessagesList);

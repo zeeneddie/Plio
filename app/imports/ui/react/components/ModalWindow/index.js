@@ -95,7 +95,9 @@ class ModalWindow extends React.Component {
   }
 
   _getCloseCaptionText() {
-    const { isSaving, variation, closeCaptionText, closeCaptionTextOnSave } = this.props;
+    const {
+      isSaving, variation, closeCaptionText, closeCaptionTextOnSave, 
+    } = this.props;
 
     return isSaving && variation === 'save' ? closeCaptionTextOnSave : closeCaptionText;
   }

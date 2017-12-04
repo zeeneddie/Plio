@@ -15,5 +15,5 @@ export default {
     } else {
       FlowRouter.go('dashboardPage', { orgSerialNumber: this.organizationSerialNumber() });
     }
-  }
+  },
 };

@@ -27,12 +27,12 @@ Template.ESBookSection.viewmodel({
     const query = {
       $and: [
         {
-          organizationId: this.organizationId()
+          organizationId: this.organizationId(),
         },
         {
-          ...this.searchObject('section', [{ name: 'title' }])
-        }
-      ]
+          ...this.searchObject('section', [{ name: 'title' }]),
+        },
+      ],
     };
     const options = { sort: { title: 1 } };
     const sections = StandardsBookSections.find(query, options).fetch();
@@ -41,14 +41,14 @@ Template.ESBookSection.viewmodel({
   },
   content() {
     return canChangeOrgSettings(Meteor.userId(), this.organizationId())
-            ? 'ESBookSectionCreate'
-            : null;
+      ? 'ESBookSectionCreate'
+      : null;
   },
   onUpdateCb() {
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { selected:sectionId } = viewmodel.getData();
+    const { selected: sectionId } = viewmodel.getData();
 
     this.selectedBookSectionId(sectionId);
 

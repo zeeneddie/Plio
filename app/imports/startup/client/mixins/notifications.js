@@ -5,18 +5,20 @@ export default {
   // Notifications document can be passed as an argument
   // _id is used as notification tag if there's no tag argument passed
   // Only title is required
-  sendNotification({ _id, title, body, tag, icon, url, silent = true, timeout = 4000 }) {
+  sendNotification({
+    _id, title, body, tag, icon, url, silent = true, timeout = 4000, 
+  }) {
     const notificationSound = document.getElementById('notification-sound');
 
     if (notificationSound) {
       notificationSound.currentTime = 0;
       notificationSound.play();
     }
-    let notification = new Notification(title, {
+    const notification = new Notification(title, {
       body,
       tag: tag || _id,
       icon: icon || '/p-logo-square.png',
-      silent
+      silent,
     });
 
     if (url) {
@@ -36,5 +38,5 @@ export default {
       sound.currentTime = 0;
       invoke(sound, 'play');
     }
-  }
+  },
 };

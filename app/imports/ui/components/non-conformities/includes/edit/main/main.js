@@ -19,7 +19,7 @@ import {
   setAnalysisComments,
   setStandardsUpdateCompletedBy,
   setStandardsUpdateCompletedDate,
-  setStandardsUpdateComments
+  setStandardsUpdateComments,
 } from '/imports/api/non-conformities/methods';
 
 Template.NC_Card_Edit_Main.viewmodel({
@@ -33,14 +33,16 @@ Template.NC_Card_Edit_Main.viewmodel({
     }
   },
   isStandardsEditable: true,
-  RCAArgs({ _id, analysis, updateOfStandards, magnitude } = {}) {
+  RCAArgs({
+    _id, analysis, updateOfStandards, magnitude, 
+  } = {}) {
     return {
       _id,
       analysis,
       updateOfStandards,
       magnitude,
       methodRefs: this.methodRefs,
-      ...(fn => fn ? { callMethod: fn } : undefined)(this.callMethod)
+      ...(fn => fn ? { callMethod: fn } : undefined)(this.callMethod),
     };
   },
   methodRefs() {
@@ -58,7 +60,7 @@ Template.NC_Card_Edit_Main.viewmodel({
       setAnalysisComments,
       setStandardsUpdateCompletedBy,
       setStandardsUpdateCompletedDate,
-      setStandardsUpdateComments
+      setStandardsUpdateComments,
     };
   },
   showRootCauseAnalysis() {
@@ -73,5 +75,5 @@ Template.NC_Card_Edit_Main.viewmodel({
   },
   getData() {
     return this.getChildrenData();
-  }
+  },
 });

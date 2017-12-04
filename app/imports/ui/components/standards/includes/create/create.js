@@ -13,39 +13,38 @@ Template.CreateStandard.viewmodel({
   save() {
     const data = this.getChildrenData();
 
-    const { sourceType, sourceFile, sourceUrl, sourceVideoUrl } = data;
+    const {
+      sourceType, sourceFile, sourceUrl, sourceVideoUrl, 
+    } = data;
     const isSourcePresent = _.every([
       sourceType,
       sourceFile || sourceUrl || sourceVideoUrl,
     ]);
     if (!isSourcePresent) {
-      setModalError(
-        'The new standard cannot be created without a source file. ' +
-        'Please add a source file to your standard.'
-      );
+      setModalError('The new standard cannot be created without a source file. ' +
+        'Please add a source file to your standard.');
       return;
     }
 
-    for (let key in data) {
+    for (const key in data) {
       if (!data[key]) {
         let errorMessage;
         if (key === 'title') {
-          errorMessage = `The new standard cannot be created without a title. Please enter a title for your standard`;
+          errorMessage = 'The new standard cannot be created without a title. Please enter a title for your standard';
           setModalError(errorMessage);
           return;
         } else if (key === 'sectionId') {
-          errorMessage = `The new standard cannot be created without a section. You can create a new section by typing it's name into the corresponding text input`;
+          errorMessage = 'The new standard cannot be created without a section. You can create a new section by typing it\'s name into the corresponding text input';
           setModalError(errorMessage);
           return;
         } else if (key === 'typeId') {
-          errorMessage = `The new standard cannot be created without a type. You can create a new standard type in Org settings`;
-          setModalError(errorMessage);
-          return;
-        } else {
-          const errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
+          errorMessage = 'The new standard cannot be created without a type. You can create a new standard type in Org settings';
           setModalError(errorMessage);
           return;
         }
+        errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
+        setModalError(errorMessage);
+        return;
       }
     }
 
@@ -150,19 +149,17 @@ Template.CreateStandard.viewmodel({
   _launchDocxRendering(fileUrl, fileName, standardId) {
     Meteor.call('Mammoth.convertStandardFileToHtml', {
       fileUrl,
-      htmlFileName: fileName + '.html',
+      htmlFileName: `${fileName}.html`,
       source: 'source1',
       standardId,
     }, (error, result) => {
       if (error) {
         // HTTP errors
         toastr.error(`Failed to get .docx file: ${error}`);
-      } else {
-        if (result.error) {
-          // Mammoth errors
-          toastr.error(`Rendering document: ${result.error}`);
-        }
+      } else if (result.error) {
+        // Mammoth errors
+        toastr.error(`Rendering document: ${result.error}`);
       }
     });
-  }
+  },
 });

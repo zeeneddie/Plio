@@ -37,7 +37,7 @@ Template.UserEdit_MainDetails.viewmodel({
       lastName: this.lastName(),
       initials: this.initials() && this.initials().toUpperCase(),
       description: this.description(),
-      avatar: this.avatar()
+      avatar: this.avatar(),
     };
-  }
+  },
 });

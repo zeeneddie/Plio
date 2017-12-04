@@ -5,7 +5,9 @@ import Button from '../../../components/Buttons/Button';
 import Icon from '../../../components/Icons/Icon';
 import Mention from '../../../components/Mention';
 
-const MessagesForm = ({ value, setValue, users, onSubmit, disabled, children }) => (
+const MessagesForm = ({
+  value, setValue, users, onSubmit, disabled, children, 
+}) => (
   <div className="chat-form" {...{ onSubmit }}>
     <form className="f1">
       <fieldset {...{ disabled }}>

@@ -29,8 +29,8 @@ Template.List_Read.viewmodel({
   _transform() {
     return {
       onValue: _.identity,
-      onEmpty: _.identity
-    }
+      onEmpty: _.identity,
+    };
   },
   onModalOpen() {},
   onSearchInputValue(value) {},
@@ -41,7 +41,7 @@ Template.List_Read.viewmodel({
       this.onInputEmpty();
     }
   },
-  onHandleSearchInput: _.debounce(function(e) {
+  onHandleSearchInput: _.debounce(function (e) {
     const value = e.target.value;
 
     this.handleSearchInput(value);
@@ -50,7 +50,7 @@ Template.List_Read.viewmodel({
     const doubleQuotes = '"';
     const getQuotesIndexes = quotes => [value.indexOf(quotes), value.lastIndexOf(quotes)];
     const doubleQuotesIndexes = getQuotesIndexes(doubleQuotes);
-    const isPrecise = (quotesIndexes) =>
+    const isPrecise = quotesIndexes =>
       quotesIndexes.length > 1
       && quotesIndexes.every(idx => idx !== -1);
 
@@ -60,7 +60,7 @@ Template.List_Read.viewmodel({
       this.isPrecise(true);
 
       // remove these characters
-      let newValue = value.replace(/"/g, '').trim();
+      const newValue = value.replace(/"/g, '').trim();
 
       this.searchText(newValue);
     } else {
@@ -109,7 +109,7 @@ Template.List_Read.viewmodel({
   expandAllFound(vms = [], complete = () => {}) {
     this.expandCollapseItems(vms, {
       complete,
-      forceExpand: true
+      forceExpand: true,
     });
   },
   expandCurrent() {

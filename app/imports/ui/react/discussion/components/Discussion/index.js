@@ -9,7 +9,7 @@ import DiscussionFileUploaderContainer from '../../containers/DiscussionFileUplo
 import RHS from '../../../components/RHS';
 import DiscussionHeader from '../DiscussionHeader';
 
-const Discussion = (props) => (
+const Discussion = props => (
   <RHS className="flexbox-column">
     <RHS.Card className="chat">
       <DiscussionHeader {...props} />

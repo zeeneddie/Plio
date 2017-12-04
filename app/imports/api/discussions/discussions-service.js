@@ -13,11 +13,13 @@ export default {
   },
 
   start(_id, startedBy) {
-    this.collection.update({ _id }, { $set: {
-      startedBy,
-      startedAt: new Date,
-      isStarted: true,
-    } });
+    this.collection.update({ _id }, {
+      $set: {
+        startedBy,
+        startedAt: new Date(),
+        isStarted: true,
+      }, 
+    });
   },
 
   remove({ _id }) {

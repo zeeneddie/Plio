@@ -1,13 +1,13 @@
 Template.ClearableField.viewmodel({
   isFocused: false,
   events: {
-    'focusin input'(e) {
+    'focusin input': function (e) {
       e.stopImmediatePropagation();
       this.isFocused(true);
     },
-    'focusout input'(e) {
+    'focusout input': function (e) {
       e.stopImmediatePropagation();
       this.isFocused(false);
-    }
-  }
+    },
+  },
 });

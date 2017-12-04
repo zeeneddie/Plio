@@ -26,21 +26,23 @@ export default {
     return StandardFilters[id];
   },
   currentStandard() {
-    const _id =  FlowRouter.getParam('urlItemId');
+    const _id = FlowRouter.getParam('urlItemId');
     return Standards.findOne({ _id });
   },
 
   // Whether a given standard type exists
-  standardTypeExists({ typeId }){
+  standardTypeExists({ typeId }) {
     return StandardTypes.find({ _id: typeId }).count() > 0;
   },
-  _getStandardsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {},
-    options = { sort: { title: 1 } }) {
+  _getStandardsByQuery(
+    { isDeleted = { $in: [null, false] }, ...args } = {},
+    options = { sort: { title: 1 } },
+  ) {
     const query = { isDeleted, ...args, organizationId: this.organizationId() };
     return Standards.find(query, options);
   },
   _getStandardByQuery(filter = {}, options = { sort: { title: 1 } }) {
     const query = { ...filter, organizationId: this.organizationId() };
     return Standards.findOne(query, options);
-  }
+  },
 };

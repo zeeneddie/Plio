@@ -4,7 +4,7 @@ import { WI_CANNOT_RESTORE_ASSIGNED_TO_OTHER } from '../errors.js';
 import { checkAndThrow } from '/imports/api/helpers.js';
 
 export const WI_OnRestoreChecker = ({ ...args }, workItem) => {
-  onRestoreChecker({ ...args}, workItem);
+  onRestoreChecker({ ...args }, workItem);
 
   const { type, linkedDoc, _id } = workItem;
 
@@ -13,7 +13,7 @@ export const WI_OnRestoreChecker = ({ ...args }, workItem) => {
     const query = {
       type,
       linkedDoc,
-      _id: { $ne: _id }
+      _id: { $ne: _id },
     };
 
     const doc = WorkItems.findOne(query);

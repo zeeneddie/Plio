@@ -22,12 +22,12 @@ NonConformities.after.remove((userId, doc) => {
   
   let fileIds = doc.fileIds || [];
   const improvementPlanFileIds = get(doc, 'improvementPlan.fileIds');
-  if (!!improvementPlanFileIds) {
+  if (improvementPlanFileIds) {
     fileIds = fileIds.concat(improvementPlanFileIds);
   }
 
   const rcaFileIds = get(doc, 'rootCauseAnalysis.fileIds');
-  if (!!rcaFileIds) {
+  if (rcaFileIds) {
     fileIds = fileIds.concat(rcaFileIds);
   }
 

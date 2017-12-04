@@ -24,7 +24,9 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
         return 'Complete';
     }
   },
-  getDescription({ type, linkedDoc, assigneeId, targetDate, isCompleted, completedAt }) {
+  getDescription({
+    type, linkedDoc, assigneeId, targetDate, isCompleted, completedAt, 
+  }) {
     const chooseOne = this.chooseOne(isCompleted);
     const typeText = this.getLinkedDocTypeText({ type, linkedDoc });
     const operation = this.getOperationText({ type });

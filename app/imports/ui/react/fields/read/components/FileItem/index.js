@@ -10,16 +10,18 @@ const isUploaded = ({ progress }) => progress === 1;
 
 const isFailed = ({ status }) => status === 'failed' || status === 'terminated';
 
-const FileItem = ({ url = '#', name = null, extension, progress, status }) => {
+const FileItem = ({
+  url = '#', name = null, extension, progress, status, 
+}) => {
   const uploaded = isUploaded({ progress });
   const failed = isFailed({ status });
   const buttonCName = cx(
     'file-label text-xs-left',
-    { uploaded, failed, 'no-pointer-events': !uploaded }
+    { uploaded, failed, 'no-pointer-events': !uploaded },
   );
   const progressBarCName = cx(
     'uploading-file progress progress-striped stripes progress-animated',
-    { uploaded }
+    { uploaded },
   );
   const styles = { width: `${progress * 100}%` };
 
@@ -38,7 +40,7 @@ const FileItem = ({ url = '#', name = null, extension, progress, status }) => {
 
         <span>{name}</span>
 
-        <div className={progressBarCName} style={styles}></div>
+        <div className={progressBarCName} style={styles} />
       </Button>
     </div>
   );

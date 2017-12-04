@@ -15,7 +15,7 @@ import { toggleMute } from '/imports/api/discussions/methods';
 const discussionLoad = ({ dispatch, urlItemId, organizationId }, onData) => {
   const subscription = DiscussionSubs.subscribe(
     'discussionsByDocId',
-    { organizationId, docId: urlItemId }
+    { organizationId, docId: urlItemId },
   );
 
   if (subscription.ready()) {
@@ -64,5 +64,5 @@ export default compose(
     componentWillUnmount() {
       this.props.dispatch(reset());
     },
-  })
+  }),
 )(Discussion);

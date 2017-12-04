@@ -39,7 +39,7 @@ export const getPublishCompositeOrganizationUsersObject = (userId, selector) => 
   ],
 });
 
-export const getPublishCompositeOrganizationUsers = (fn) =>
+export const getPublishCompositeOrganizationUsers = fn =>
   function publishCompositeOrganizationUsers(serialNumber, isDeleted) {
     check(serialNumber, Number);
     check(isDeleted, Match.OneOf(Boolean, undefined)); // eslint-disable-line new-cap

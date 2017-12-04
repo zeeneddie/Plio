@@ -32,9 +32,9 @@ Template.Actions_VerifiedBy.viewmodel({
   },
   selectArgs() {
     const {
-      verifiedBy:value,
+      verifiedBy: value,
       placeholder,
-      selectFirstIfNoSelected
+      selectFirstIfNoSelected,
     } = this.data();
 
     return {
@@ -42,12 +42,12 @@ Template.Actions_VerifiedBy.viewmodel({
       placeholder,
       selectFirstIfNoSelected,
       onUpdate: (viewmodel) => {
-        const { selected:verifiedBy } = viewmodel.getData();
+        const { selected: verifiedBy } = viewmodel.getData();
 
         this.verifiedBy(verifiedBy);
 
         return invoke(this.parent(), 'update', { verifiedBy });
-      }
+      },
     };
   },
   canBeUndone() {
@@ -73,5 +73,5 @@ Template.Actions_VerifiedBy.viewmodel({
   },
   getData() {
     return { verifiedBy: this.verifiedBy() };
-  }
+  },
 });

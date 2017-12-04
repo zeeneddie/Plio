@@ -21,5 +21,5 @@ export default _.extend({}, ProblemsService, {
       throw new Meteor.Error(400, 'Non-conformity does not exist');
     }
     return NC;
-  }
+  },
 });

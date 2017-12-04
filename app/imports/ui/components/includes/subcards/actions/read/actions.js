@@ -26,8 +26,8 @@ Template.Subcards_Actions_Read.viewmodel({
         ...query,
         $or: [
           { 'linkedTo.documentId': { $in: NCsIds }, 'linkedTo.documentType': ProblemTypes.NON_CONFORMITY },
-          { 'linkedTo.documentId': { $in: risksIds }, 'linkedTo.documentType': ProblemTypes.RISK }
-        ]
+          { 'linkedTo.documentId': { $in: risksIds }, 'linkedTo.documentType': ProblemTypes.RISK },
+        ],
       };
     }
 
@@ -42,5 +42,5 @@ Template.Subcards_Actions_Read.viewmodel({
       })());
       return { ...action, href };
     });
-  }
+  },
 });

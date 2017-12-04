@@ -20,7 +20,7 @@ const collections = {
   [CollectionNames.LESSONS]: LessonsLearned,
   [CollectionNames.MESSAGES]: Messages,
   [CollectionNames.ORGANIZATIONS]: Organizations,
-  [CollectionNames.WORK_ITEMS]: WorkItems
+  [CollectionNames.WORK_ITEMS]: WorkItems,
 };
 
 _(collections).each((coll, name) => AuditManager.registerCollection(coll, name));

@@ -12,5 +12,5 @@ Template.NC_Subcard.viewmodel({
   },
   getData() {
     return this.child('NC_Card_Edit_Main').getData();
-  }
+  },
 });

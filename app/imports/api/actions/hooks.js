@@ -8,5 +8,5 @@ Actions.after.remove((userId, doc) => {
     FilesService.bulkRemove({ fileIds });
   }
 
-  WorkItemService.removePermanently({ query: { 'linkedDoc._id': doc._id  } });
+  WorkItemService.removePermanently({ query: { 'linkedDoc._id': doc._id } });
 });

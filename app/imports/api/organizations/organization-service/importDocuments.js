@@ -174,7 +174,9 @@ const bulkInsertDocuments = (documentType, to, from, userId) => {
   return executeBulks(bulk, bulkFiles, bulkDiscussions);
 };
 
-export default function importDocuments({ to, from, userId, documentType }) {
+export default function importDocuments({
+  to, from, userId, documentType, 
+}) {
   const res = bulkInsertDocuments(documentType, to, from, userId)[0];
 
   return res && res.getInsertedIds();

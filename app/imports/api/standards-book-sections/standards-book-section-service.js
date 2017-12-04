@@ -7,18 +7,18 @@ export default StandardsBookSectionService = {
 
   insert({ title, organizationId, createdBy }) {
     return this.collection.insert({
-      title, organizationId, createdBy
+      title, organizationId, createdBy,
     });
   },
 
   update({ _id, title }) {
     return this.collection.update({ _id }, {
-      $set: { title }
+      $set: { title },
     });
   },
 
   remove({ _id }) {
     return this.collection.remove({ _id });
-  }
+  },
 
 };

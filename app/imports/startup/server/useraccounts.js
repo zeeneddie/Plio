@@ -15,9 +15,9 @@ function postSignUpHook(userId, info) {
     orgId = OrganizationService.insert({
       name: orgName,
       timezone: orgTimezone,
-      ownerId: userId
+      ownerId: userId,
     });
-  } catch(err) {
+  } catch (err) {
     Meteor.users.remove({ _id: userId });
     throw err;
   }
@@ -25,15 +25,15 @@ function postSignUpHook(userId, info) {
   Roles.addUsersToRoles(userId, OrgOwnerRoles, orgId);
 
   Meteor.users.update({
-    _id: userId
+    _id: userId,
   }, {
     $unset: {
       'profile.organizationName': '',
-      'profile.organizationTimezone': ''
-    }
+      'profile.organizationTimezone': '',
+    },
   });
 }
 
 AccountsTemplates.configure({
-  postSignUpHook
+  postSignUpHook,
 });

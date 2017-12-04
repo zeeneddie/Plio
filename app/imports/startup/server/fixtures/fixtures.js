@@ -19,7 +19,9 @@ import { insertMessageFixtures } from './fixtures-messages.js';
 import AuditManager from '/imports/share/utils/audit-manager.js';
 
 // Extend the global object to have a scope of collections
-_.extend(global, { Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, LessonsLearned, Discussions });
+_.extend(global, {
+  Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, LessonsLearned, Discussions, 
+});
 
 import path from 'path';
 import fs from 'fs';
@@ -30,7 +32,8 @@ import { UserRoles } from '/imports/share/constants.js';
 // If attrPath is 'Organization' and obj is global, it returns the value of global.Organization
 // If attrPath is 'Meteor.users' and obj is this, it returns the value of this.Meteor.users
 const getAttributeValue = (obj, attrPath) => {
-  let attrName, len;
+  let attrName, 
+    len;
   let attrVal = obj;
   attrPath = attrPath.split('.');
   for (let i = 0, len = attrPath.length; i < len; i++) {
@@ -50,10 +53,10 @@ const getAssets = (assetsDir) => {
   try {
     files = fs.readdirSync(fullPath);
   } catch (error) {
-    console.log("Can't load fixtures from directory '" + assetsDir + "'! " + error);
+    console.log(`Can't load fixtures from directory '${assetsDir}'! ${error}`);
     return;
   }
-  return _.map(files, function(fileName) {
+  return _.map(files, (fileName) => {
     const filePath = path.join(assetsDir, fileName);
     return EJSON.parse(Assets.getText(filePath));
   });
@@ -61,7 +64,7 @@ const getAssets = (assetsDir) => {
 
 const fillCollection = (collection, assets) => {
   if (!collection.find().count()) {
-    return _.each(assets, function(doc) {
+    return _.each(assets, (doc) => {
       collection.insert(doc, { validate: false });
     });
   }
@@ -70,7 +73,7 @@ const fillCollection = (collection, assets) => {
 const logAction = (assetsNumber, collectionName) => {
   let msg;
   if (_.every(arguments, _.identity)) {
-    msg = ["Created " + assetsNumber + " new fixtures", "for the " + collectionName + " collection."];
+    msg = [`Created ${assetsNumber} new fixtures`, `for the ${collectionName} collection.`];
     msg = msg.join(' ');
     return console.log(msg);
   }

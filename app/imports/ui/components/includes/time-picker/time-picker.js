@@ -22,7 +22,7 @@ Template.TimePicker.viewmodel({
 
     return _.every([
       timeValue && timeUnit,
-      (savedTimeValue !== timeValue) || (savedTimeUnit !== timeUnit)
+      (savedTimeValue !== timeValue) || (savedTimeUnit !== timeUnit),
     ]);
   },
   onFocusOut(e) {
@@ -39,7 +39,7 @@ Template.TimePicker.viewmodel({
   getData() {
     return {
       timeValue: Number(this.timeValue()),
-      timeUnit: this.timeUnit()
+      timeUnit: this.timeUnit(),
     };
-  }
+  },
 });

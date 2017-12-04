@@ -33,12 +33,12 @@ Template.Risks_Type_Edit.viewmodel({
       ViewModel.findOne('ModalWindow').setError('Type is required!');
     }
 
-    this.parent().update({ typeId }, (err) =>
+    this.parent().update({ typeId }, err =>
       Tracker.afterFlush(() =>
         this.expandCollapsed(this.riskId())));
   },
   getData() {
     const { typeId } = this.data();
     return { typeId };
-  }
+  },
 });

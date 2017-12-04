@@ -94,7 +94,9 @@ Template.Subcards_Actions_Edit.viewmodel({
   lText({ sequentialId, title }) {
     return `<strong>${sequentialId}</strong> ${title}`;
   },
-  rText({ isCompleted, completedAt, completionTargetDate, status }) {
+  rText({
+    isCompleted, completedAt, completionTargetDate, status, 
+  }) {
     let date = (isCompleted && completedAt) ? completedAt : completionTargetDate;
     date = this.renderDate(date);
 
@@ -124,12 +126,12 @@ Template.Subcards_Actions_Edit.viewmodel({
     } else if (standardId) {
       const NCsIds = _.pluck(
         NonConformities.find({ standardsIds: standardId }).fetch(),
-        '_id'
+        '_id',
       );
 
       const risksIds = _.pluck(
         Risks.find({ standardsIds: standardId }).fetch(),
-        '_id'
+        '_id',
       );
 
       _.extend(query, {
@@ -173,10 +175,12 @@ Template.Subcards_Actions_Edit.viewmodel({
 
           return data;
         })(),
-      }
+      },
     );
   },
-  insert({ _id, linkTo, completionTargetDate, ...args }, cb) {
+  insert({
+    _id, linkTo, completionTargetDate, ...args 
+  }, cb) {
     if (_id) {
       let documentId;
       let documentType;
@@ -216,31 +220,30 @@ Template.Subcards_Actions_Edit.viewmodel({
 
     if (!_id) {
       return viewmodel.destroy();
-    } else {
-      swal({
-        title: 'Are you sure?',
-        text: `The action "${title}" will be removed.`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Remove',
-        closeOnConfirm: false
-      }, () => {
-        const cb = (err, res) => {
-          if (!err) {
-            viewmodel.destroy();
-            swal({
-              title: 'Removed!',
-              text: `The action "${title}" was removed successfully.`,
-              type: 'success',
-              timer: ALERT_AUTOHIDE_TIME,
-              showConfirmButton: false,
-            });
-          }
-        };
+    } 
+    swal({
+      title: 'Are you sure?',
+      text: `The action "${title}" will be removed.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove',
+      closeOnConfirm: false,
+    }, () => {
+      const cb = (err, res) => {
+        if (!err) {
+          viewmodel.destroy();
+          swal({
+            title: 'Removed!',
+            text: `The action "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
+        }
+      };
 
-        this.modal().callMethod(remove, { _id }, cb);
-      });
-    }
+      this.modal().callMethod(remove, { _id }, cb);
+    });
   },
   complete({ ...args }, cb) {
     this.modal().callMethod(complete, { ...args }, cb);

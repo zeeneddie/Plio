@@ -5,7 +5,9 @@ import { getFormattedDate } from '/imports/share/helpers';
 import { mapC } from '/imports/api/helpers';
 import Field from '../Field';
 
-const renderReviews = mapC(({ _id, reviewedAt, reviewedBy, comments }) => (
+const renderReviews = mapC(({
+  _id, reviewedAt, reviewedBy, comments, 
+}) => (
   <Field key={_id}>
     <span>Document reviewed</span>
     {reviewedBy && <span> by {getFullNameOrEmail(reviewedBy)}</span>}

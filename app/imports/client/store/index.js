@@ -23,9 +23,9 @@ const processedMiddlewares = process.NODE_ENV !== 'production' &&
 
 const store = createStore(
   enableBatching(reducer),
-  processedMiddlewares
+  processedMiddlewares,
 );
 
 export default store;
 
-export const getState = path => (!!path ? get(store.getState(), path) : store.getState());
+export const getState = path => (path ? get(store.getState(), path) : store.getState());

@@ -9,7 +9,7 @@ const enhance = compose(
     changeField: PropTypes.func,
     getField: PropTypes.func,
   }),
-  withProps((props) => ({
+  withProps(props => ({
     value: props.getField(props.fieldName),
     onChange: (e) => {
       props.changeField(props.fieldName, e.date);
@@ -17,7 +17,7 @@ const enhance = compose(
   })),
 );
 
-const ReviewAnnualDate = enhance((props) => (
+const ReviewAnnualDate = enhance(props => (
   <div className="form-group">
     <label className="form-control-label">
       Annual review date

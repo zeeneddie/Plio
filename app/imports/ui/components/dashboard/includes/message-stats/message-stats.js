@@ -45,7 +45,7 @@ Template.Dashboard_MessageStats.viewmodel({
           'messagesNotViewedCountTotal',
           `unread-messages-count-${organizationId}`,
           organizationId,
-          dummy++
+          dummy++,
         ),
       ]);
     });
@@ -114,19 +114,19 @@ Template.Dashboard_MessageStats.viewmodel({
         url = FlowRouter.path(
           'standardDiscussion',
           { orgSerialNumber, standardId: linkedTo },
-          { at: message._id }
+          { at: message._id },
         );
       } else if (discussion.documentType === 'non-conformity') {
         url = FlowRouter.path(
           'nonConformityDiscussion',
           { orgSerialNumber, urlItemId: linkedTo },
-          { at: message._id }
+          { at: message._id },
         );
       } else if (discussion.documentType === 'risk') {
         url = FlowRouter.path(
           'riskDiscussion',
           { orgSerialNumber, riskId: linkedTo },
-          { at: message._id }
+          { at: message._id },
         );
       }
 

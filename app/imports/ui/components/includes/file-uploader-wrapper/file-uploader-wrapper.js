@@ -17,19 +17,19 @@ Template.FileUploader_Wrapper.viewmodel({
     // if (this.files() && this.files().length) {
     const options = {
       $addToSet: {
-        fileIds: fileId
-      }
+        fileIds: fileId,
+      },
     };
 
     this.parent().update({ options }, cb);
   },
   files() {
-		const fileIds = this.fileIds() && this.fileIds().array() || [];
+    const fileIds = this.fileIds() && this.fileIds().array() || [];
 
-		return Files.find({ _id: { $in: fileIds } });
-	},
+    return Files.find({ _id: { $in: fileIds } });
+  },
   removeFileFn() {
-    return this.removeFile.bind(this)
+    return this.removeFile.bind(this);
   },
   removeFile(file) {
     const { _id, url } = file;
@@ -48,7 +48,7 @@ Template.FileUploader_Wrapper.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: buttonText,
-      closeOnConfirm: true
+      closeOnConfirm: true,
     }, () => {
       if (isFileUploading) {
         UploadsStore.terminateUploading(_id);
@@ -56,8 +56,8 @@ Template.FileUploader_Wrapper.viewmodel({
 
       const options = {
         $pull: {
-          fileIds: _id
-        }
+          fileIds: _id,
+        },
       };
 
       removeFile.call({ _id });
@@ -65,5 +65,5 @@ Template.FileUploader_Wrapper.viewmodel({
       this.parent().update({ options });
     });
   },
-  uploaderMetaContext: {}
+  uploaderMetaContext: {},
 });

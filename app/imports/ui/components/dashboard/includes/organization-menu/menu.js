@@ -31,7 +31,7 @@ Template.Organization_Menu.viewmodel({
       template: 'OrgSettings',
       _title: 'Organization settings',
       helpText: OrganizationSettingsHelp.organizationSettings,
-      organizationId: this.organization()._id
+      organizationId: this.organization()._id,
     });
   },
   openCreateNewOrgModal(e) {
@@ -42,7 +42,7 @@ Template.Organization_Menu.viewmodel({
       variation: 'save',
       timezone: moment.tz.guess(),
       ownerName: Meteor.user().fullName(),
-      currency: OrgCurrencies.GBP
+      currency: OrgCurrencies.GBP,
     });
-  }
+  },
 });

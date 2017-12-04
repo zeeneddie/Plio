@@ -81,7 +81,7 @@ export default {
       organizationId = this.organizationId(),
       ...args
     } = {},
-    options = { sort: { createdAt: -1 } }
+    options = { sort: { createdAt: -1 } },
   ) {
     const query = { isDeleted, organizationId, ...args };
     return WorkItems.find(query, options);
@@ -117,16 +117,13 @@ export default {
       if (isCompleted) { // completed
         if (assigneeId === userId) {
           return { filter: 3 }; // My completed work
-        } else {
-          return { filter: 4 }; // Team completed work
-        }
-      } else {
-        if (assigneeId === userId) {
-          return { filter: 1 }; // My current work
-        } else {
-          return { filter: 2 }; // Team current work
-        }
-      }
+        } 
+        return { filter: 4 }; // Team completed work
+      } 
+      if (assigneeId === userId) {
+        return { filter: 1 }; // My current work
+      } 
+      return { filter: 2 }; // Team current work
     };
   },
 };

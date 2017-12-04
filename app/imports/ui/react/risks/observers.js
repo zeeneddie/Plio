@@ -31,7 +31,7 @@ export const observeRisks = (dispatch, query, options) => {
 
       // expand the section and type that are holding selected risk
       if (getState('global.urlItemId') === _id && (
-          fields.status ||
+        fields.status ||
           fields.typeId ||
           fields.departmentsIds)) {
         expandCollapsedRisks(_id, true);

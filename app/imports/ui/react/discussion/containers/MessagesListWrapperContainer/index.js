@@ -69,7 +69,9 @@ const loadMessagesData = ({
 }, onData) => {
   dispatch(setLoading(true));
 
-  const subOpts = { sort, at, priorLimit, followingLimit };
+  const subOpts = {
+    sort, at, priorLimit, followingLimit, 
+  };
   const messagesSubscription = Meteor.subscribe('messages', discussionId, subOpts);
   const lastMessageSubscription = Meteor.subscribe('discussionMessagesLast', discussionId);
   const subscriptions = [messagesSubscription, lastMessageSubscription];
@@ -104,7 +106,7 @@ export default compose(
     'at', 'sort', 'priorLimit', 'followingLimit', 'resetCompleted',
   ])),
   composeWithTracker(loadMessagesData, PreloaderPage, null, { shouldResubscribe }),
-  connect((state) => ({
+  connect(state => ({
     userId: state.global.userId,
     ...pickFromDiscussion([
       'loading', 'messages', 'priorLimit',

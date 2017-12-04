@@ -3,7 +3,7 @@ import { withContext } from 'recompose';
 
 const enhance = withContext(
   { subFormName: PropTypes.string },
-  (props) => ({
+  props => ({
     subFormName: props.name,
   }),
 );

@@ -10,9 +10,9 @@ Template.IP_Owner_Edit.viewmodel({
   selectFirstIfNoSelected: false,
   selectArgs() {
     const {
-      owner:value,
+      owner: value,
       placeholder,
-      selectFirstIfNoSelected
+      selectFirstIfNoSelected,
     } = this.data();
 
     return {
@@ -20,16 +20,16 @@ Template.IP_Owner_Edit.viewmodel({
       placeholder,
       selectFirstIfNoSelected,
       onUpdate: (viewmodel) => {
-        const { selected:owner } = viewmodel.getData();
+        const { selected: owner } = viewmodel.getData();
 
         this.owner(owner);
 
         invoke(this.parent(), 'update', { 'improvementPlan.owner': owner });
-      }
+      },
     };
   },
   getData() {
     const { owner } = this.data();
     return { owner };
-  }
+  },
 });

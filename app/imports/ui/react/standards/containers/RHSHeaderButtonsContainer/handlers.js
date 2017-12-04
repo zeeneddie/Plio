@@ -10,7 +10,7 @@ import { STANDARD_FILTER_MAP, ALERT_AUTOHIDE_TIME } from '/imports/api/constants
 import { goTo } from '../../../../utils/router/actions';
 import { setIsFullScreenMode } from '/imports/client/store/actions/globalActions';
 
-export const onToggleScreenMode = props => e => {
+export const onToggleScreenMode = props => (e) => {
   const $div = $(e.target).closest('.content-cards-inner');
   const offset = $div.offset();
 

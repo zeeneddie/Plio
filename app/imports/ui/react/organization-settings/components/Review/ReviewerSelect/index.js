@@ -27,7 +27,9 @@ const enhance = compose(
   }),
 );
 
-const ReviewReviewerSelect = enhance(({ value, setValue, selected, items, onSelect }) => (
+const ReviewReviewerSelect = enhance(({
+  value, setValue, selected, items, onSelect, 
+}) => (
   <FormGroup>
     <label className="form-control-label">
       Reviewer
@@ -36,7 +38,9 @@ const ReviewReviewerSelect = enhance(({ value, setValue, selected, items, onSele
       caret
       hint
       input={{ placeholder: 'Select a reviewer...' }}
-      {...{ value, setValue, selected, items, onSelect }}
+      {...{
+        value, setValue, selected, items, onSelect, 
+      }}
     />
   </FormGroup>
 ));

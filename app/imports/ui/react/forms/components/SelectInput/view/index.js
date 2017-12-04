@@ -96,7 +96,7 @@ const SelectInputView = (props) => {
 
     const _renderNoAvailableHint = () => {
       if (hint && !items.length) {
-        const Tag = !!children ? 'span' : 'strong';
+        const Tag = children ? 'span' : 'strong';
 
         return (
           <DropdownItem tag="div">

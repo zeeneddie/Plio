@@ -12,7 +12,7 @@ Template.OrgSettings_WorkflowDefaults.viewmodel({
     return this.onWorkflowTypeChange.bind(this);
   },
   onWorkflowTypeChange(viewModel) {
-    const { selected:workflowType } = viewModel.getData();
+    const { selected: workflowType } = viewModel.getData();
 
     if (viewModel.templateInstance.data.selected === workflowType) {
       return;
@@ -22,7 +22,7 @@ Template.OrgSettings_WorkflowDefaults.viewmodel({
     const _id = this.organizationId();
 
     this.modal().callMethod(setWorkflowDefaults, {
-      _id, type, workflowType
+      _id, type, workflowType,
     });
   },
   onStepTimeChangeCb() {
@@ -34,7 +34,7 @@ Template.OrgSettings_WorkflowDefaults.viewmodel({
     const _id = this.organizationId();
 
     this.modal().callMethod(setWorkflowDefaults, {
-      _id, type, stepTime: { timeValue, timeUnit }
+      _id, type, stepTime: { timeValue, timeUnit },
     });
-  }
+  },
 });

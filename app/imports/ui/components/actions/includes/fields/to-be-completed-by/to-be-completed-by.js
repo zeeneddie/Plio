@@ -10,9 +10,9 @@ Template.Actions_ToBeCompletedBy.viewmodel({
   completionComments: '',
   selectArgs() {
     const {
-      toBeCompletedBy:value = '',
+      toBeCompletedBy: value = '',
       placeholder,
-      selectFirstIfNoSelected
+      selectFirstIfNoSelected,
     } = this.data();
 
     return {
@@ -20,14 +20,14 @@ Template.Actions_ToBeCompletedBy.viewmodel({
       placeholder,
       selectFirstIfNoSelected,
       onUpdate: (viewmodel) => {
-        const { selected:userId } = viewmodel.getData();
+        const { selected: userId } = viewmodel.getData();
 
         this.toBeCompletedBy(userId);
 
         if (!this._id) return;
 
         invoke(this, 'onUpdate', { userId });
-      }
+      },
     };
   },
   canBeCompleted() {
@@ -35,12 +35,12 @@ Template.Actions_ToBeCompletedBy.viewmodel({
   },
   complete() {
     return (viewmodel) => {
-      const { text:completionComments } = viewmodel.getData();
+      const { text: completionComments } = viewmodel.getData();
 
       this.onComplete && this.onComplete({ completionComments });
     };
   },
   getData() {
     return { toBeCompletedBy: this.toBeCompletedBy() };
-  }
+  },
 });

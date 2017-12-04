@@ -72,7 +72,7 @@ export const getCollectionByDocType = (docType) => {
   }
 };
 
-export const getCollectionNameByDocType = (docType) => ({
+export const getCollectionNameByDocType = docType => ({
   [DocumentTypes.STANDARD]: CollectionNames.STANDARDS,
   [DocumentTypes.NON_CONFORMITY]: CollectionNames.NCS,
   [DocumentTypes.RISK]: CollectionNames.RISKS,
@@ -84,7 +84,7 @@ export const getFormattedDate = (date, stringFormat) => {
   return moment(date).format(format);
 };
 
-export const getDocTypePlural = (docType) => ({
+export const getDocTypePlural = docType => ({
   [DocumentTypes.STANDARD]: DocumentTypesPlural.STANDARDS,
   [DocumentTypes.RISK]: DocumentTypesPlural.RISKS,
   [DocumentTypes.NON_CONFORMITY]: DocumentTypesPlural.NON_CONFORMITIES,
@@ -108,9 +108,7 @@ export const getTitlePrefix = (title) => {
     const stringPrefix = matchedPrefixArray[0];
 
     // Convert 1.2.3.4 to 1.2345 for sorting purposes
-    const stringPrefixFloat = stringPrefix.replace(/^([^.]*\.)(.*)$/, function (a, b, c) {
-      return b + c.replace(/\./g, '');
-    });
+    const stringPrefixFloat = stringPrefix.replace(/^([^.]*\.)(.*)$/, (a, b, c) => b + c.replace(/\./g, ''));
     titlePrefix = parseFloat(stringPrefixFloat);
 
     if (!titlePrefix && titlePrefix !== 0) {
@@ -151,10 +149,10 @@ export const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
   const workflowStepTime = organization.workflowStepTime(magnitude);
   const { timeValue, timeUnit } = workflowStepTime;
   const date = moment()
-      .tz(organization.timezone)
-      .startOf('day')
-      .add(timeValue, timeUnit)
-      .toDate();
+    .tz(organization.timezone)
+    .startOf('day')
+    .add(timeValue, timeUnit)
+    .toDate();
 
   return date;
 };
@@ -218,7 +216,7 @@ export const renderTemplate = (template, data = {}) => {
   return compiledTemplate(data);
 };
 
-export const getUser = (userId) => Meteor.users.findOne({ _id: userId });
+export const getUser = userId => Meteor.users.findOne({ _id: userId });
 
 export const getUserFullNameOrEmail = (userOrId) => {
   let user = userOrId;

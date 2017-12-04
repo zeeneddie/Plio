@@ -87,7 +87,7 @@ Meteor.publish('nonConformitiesDeps', function (organizationId) {
 
   const departments = Departments.find(
     { organizationId },
-    makeOptionsFields(Departments.publicFields)
+    makeOptionsFields(Departments.publicFields),
   );
   const occurrences = Occurrences.find({ organizationId });
   const actions = getActionsWithLimitedFields(actionsQuery);
@@ -103,7 +103,7 @@ Meteor.publish('nonConformitiesDeps', function (organizationId) {
   ];
 });
 
-Meteor.publishComposite('nonConformitiesByIds', function (ids = []) {
+Meteor.publishComposite('nonConformitiesByIds', (ids = []) => {
   check(ids, [String]);
 
   return {

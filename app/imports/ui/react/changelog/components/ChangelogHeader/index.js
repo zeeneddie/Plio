@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 import propTypes from './propTypes';
 
-const ChangelogHeader = (props) => (
+const ChangelogHeader = props => (
   <div
     className={cx(
       'card-footer',
@@ -11,7 +11,7 @@ const ChangelogHeader = (props) => (
       {
         collapsed: props.isChangelogCollapsed,
         waiting: props.isLoadingLastHumanLog || props.isLoadingLastLogs,
-      }
+      },
     )}
   >
     <div className="row">

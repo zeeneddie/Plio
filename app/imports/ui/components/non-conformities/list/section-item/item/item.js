@@ -8,7 +8,7 @@ import { updateViewedBy } from '/imports/api/non-conformities/methods';
 Template.NC_Item.viewmodel({
   share: 'window',
   mixin: ['date', 'user', 'nonconformity', 'currency', 'organization', 'problemsStatus', {
-    counter: 'counter'
+    counter: 'counter',
   }],
   onCreated(template) {
     const currency = this.organization() && this.organization().currency;
@@ -25,7 +25,7 @@ Template.NC_Item.viewmodel({
 
       if (!_id) return;
 
-      template.subscribe('messagesNotViewedCount', 'nc-messages-not-viewed-count-' + _id, _id);
+      template.subscribe('messagesNotViewedCount', `nc-messages-not-viewed-count-${_id}`, _id);
     });
   },
   _id: '',
@@ -46,11 +46,11 @@ Template.NC_Item.viewmodel({
       href: (() => {
         const params = {
           urlItemId: _id,
-          orgSerialNumber: this.organizationSerialNumber()
+          orgSerialNumber: this.organizationSerialNumber(),
         };
         const queryParams = { filter: this.activeNCFilterId() };
         return FlowRouter.path('nonconformity', params, queryParams);
-      })()
+      })(),
     };
   },
   isNew() {
@@ -80,15 +80,15 @@ Template.NC_Item.viewmodel({
   },
   getUserText({ isDeleted, createdBy, deletedBy }) {
     return isDeleted
-            ? `Deleted by: ${this.userNameOrEmail(deletedBy)}`
-            : '';
+      ? `Deleted by: ${this.userNameOrEmail(deletedBy)}`
+      : '';
   },
   unreadMessagesCount() {
-    return this.counter.get('nc-messages-not-viewed-count-' + this._id());
+    return this.counter.get(`nc-messages-not-viewed-count-${this._id()}`);
   },
   updateViewedBy() {
     const _id = this._id();
 
     Meteor.defer(() => updateViewedBy.call({ _id }));
-  }
+  },
 });

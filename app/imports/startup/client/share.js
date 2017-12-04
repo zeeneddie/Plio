@@ -2,7 +2,7 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 
 ViewModel.share({
   window: {
-    width: null
+    width: null,
   },
   search: {
     searchText: '',
@@ -10,6 +10,6 @@ ViewModel.share({
     searchResult: [],
   },
   uploader: {
-    uploads: new ReactiveArray
-  }
+    uploads: new ReactiveArray(),
+  },
 });

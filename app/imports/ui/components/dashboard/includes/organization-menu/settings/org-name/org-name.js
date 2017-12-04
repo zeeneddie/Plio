@@ -14,5 +14,5 @@ Template.OrgSettings_OrgName.viewmodel({
   },
   getData() {
     return { name: this.name() };
-  }
+  },
 });

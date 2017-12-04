@@ -20,7 +20,7 @@ export default compose(
   setPropTypes({
     standardId: PropTypes.string.isRequired,
   }),
-  connect(() => (state) => ({
+  connect(() => state => ({
     ...pickC(['userId'], state.global),
     ...pickC([
       'ncs', 'risks', 'actions', 'lessons', 'workItems',
@@ -46,6 +46,8 @@ export default compose(
     const actions = getLinkedActions(predicate, props, props.actions);
     const lessons = getLinkedLessons(props.standardId, DocumentTypes.STANDARD, props.lessons);
 
-    return { ...props, ncs, risks, actions, lessons };
-  })
+    return {
+      ...props, ncs, risks, actions, lessons, 
+    };
+  }),
 )(ConnectedDocList);

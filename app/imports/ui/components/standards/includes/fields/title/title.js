@@ -6,14 +6,14 @@ Template.Standards_Title_Edit.viewmodel({
   title: '',
 
   titleArgs() {
-    const { title:value } = this.data();
-    const withFocusCheck = this._id ? true : false;
+    const { title: value } = this.data();
+    const withFocusCheck = !!this._id;
 
     return {
       value,
       withFocusCheck,
       label: 'Document title',
-      onFocusOut: (e, { value:title }) => {
+      onFocusOut: (e, { value: title }) => {
         const number = this.parseNumber(title);
         const nestingLevel = (_.first(number) || '').split('.').length || 1;
 
@@ -21,7 +21,7 @@ Template.Standards_Title_Edit.viewmodel({
           return invoke(
             ViewModel.findOne('ModalWindow'),
             'setError',
-            'Maximum nesting is 4 levels. Please change your title.'
+            'Maximum nesting is 4 levels. Please change your title.',
           );
         }
 
@@ -30,11 +30,11 @@ Template.Standards_Title_Edit.viewmodel({
         if (!this._id) return;
 
         return invoke(this.parent(), 'update', { title, nestingLevel });
-      }
+      },
     };
   },
   getData() {
     const { title } = this.data();
     return { title };
-  }
+  },
 });

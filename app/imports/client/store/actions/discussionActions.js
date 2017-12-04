@@ -57,7 +57,9 @@ export function setAt(at) {
 export function reset({ isDiscussionOpened = false, ...other } = {}) {
   return {
     type: RESET,
-    payload: { ...initialState, isDiscussionOpened, resetCompleted: true, ...other },
+    payload: {
+      ...initialState, isDiscussionOpened, resetCompleted: true, ...other, 
+    },
   };
 }
 
@@ -97,8 +99,10 @@ export function setIsDiscussionOpened(isDiscussionOpened) {
 }
 
 export const submit = (
-  { organizationId, discussionId, text, fileId, type },
-  callback = () => {}
+  {
+    organizationId, discussionId, text, fileId, type, 
+  },
+  callback = () => {},
 ) =>
   (dispatch, getState) =>
     insert.call(
@@ -109,7 +113,7 @@ export const submit = (
         fileId,
         text: sanitizeHtml(text),
       },
-      handleMethodResult(callback(dispatch, getState))
+      handleMethodResult(callback(dispatch, getState)),
     );
 
 
@@ -144,6 +148,6 @@ export const removeMessage = (message, cb = () => {}) =>
         confirmButtonText: 'Remove',
         closeOnConfirm: true,
       },
-      () => remove.call({ _id: message._id }, handleMethodResult(cb(dispatch, getState)))
+      () => remove.call({ _id: message._id }, handleMethodResult(cb(dispatch, getState))),
     );
   };

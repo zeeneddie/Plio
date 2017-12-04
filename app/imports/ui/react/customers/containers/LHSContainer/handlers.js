@@ -11,7 +11,7 @@ const transform = ({ name, serialNumber }) => [name, `${CUSTOMER_SEQUENTIAL_ID}$
 
 const getItems = ({ organizations }, search) => extractIds(search(transform, organizations));
 
-const getActions = (ids) => [setFilteredOrganizations(ids)];
+const getActions = ids => [setFilteredOrganizations(ids)];
 
 export const onSearchTextChange =
   onSearch(getItems, getActions, expandCollapsedCustomers, collapseExpandedCustomers);

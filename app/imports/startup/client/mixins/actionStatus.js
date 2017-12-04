@@ -5,7 +5,7 @@ export default {
     return ActionStatuses[status];
   },
   getClassByStatus(status) {
-    switch(status) {
+    switch (status) {
       case 1:
       case 4:
         return 'yellow';
@@ -22,5 +22,5 @@ export default {
       default:
         return 'default';
     }
-  }
+  },
 };

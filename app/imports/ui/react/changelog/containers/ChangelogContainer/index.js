@@ -30,7 +30,7 @@ const onPropsChange = (props, onData) => {
   onData(null, props);
 };
 
-const onToggleCollapse = (props) => () => {
+const onToggleCollapse = props => () => {
   const {
     dispatch,
     isChangelogCollapsed,
@@ -67,8 +67,10 @@ const onToggleCollapse = (props) => () => {
   });
 };
 
-const onViewAllClick = (props) => () => {
-  const { dispatch, isAllLogsLoaded, documentId, collection } = props;
+const onViewAllClick = props => () => {
+  const {
+    dispatch, isAllLogsLoaded, documentId, collection, 
+  } = props;
 
   if (!isAllLogsLoaded) {
     dispatch(setLoadingAllLogs(true));
@@ -121,8 +123,7 @@ const ChangelogContainer = compose(
 
   shouldUpdate((props, nextProps) =>
     (props.documentId !== nextProps.documentId)
-    || (props.isChangelogCollapsed !== nextProps.isChangelogCollapsed)
-  ),
+    || (props.isChangelogCollapsed !== nextProps.isChangelogCollapsed)),
 )(Changelog);
 
 ChangelogContainer.propTypes = propTypes;

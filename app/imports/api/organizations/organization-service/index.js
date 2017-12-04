@@ -42,7 +42,9 @@ const OrganizationService = {
 
   collection: Organizations,
 
-  insert({ name, timezone, currency, ownerId }) {
+  insert({
+    name, timezone, currency, ownerId, 
+  }) {
     const serialNumber = generateSerialNumber(this.collection, {}, 100);
 
     const {
@@ -128,14 +130,16 @@ const OrganizationService = {
 
   setWorkflowDefaults({ _id, type, ...args }) {
     const $set = {};
-    for (let key in args) {
+    for (const key in args) {
       $set[`workflowDefaults.${type}.${key}`] = args[key];
     }
 
     return this.collection.update({ _id }, { $set });
   },
 
-  setReminder({ _id, type, reminderType, timeValue, timeUnit }) {
+  setReminder({
+    _id, type, reminderType, timeValue, timeUnit, 
+  }) {
     return this.collection.update({ _id }, {
       $set: {
         [`reminders.${type}.${reminderType}`]: { timeValue, timeUnit },
@@ -170,7 +174,9 @@ const OrganizationService = {
     });
   },
 
-  setReviewReminderTimeValue({ _id, documentKey, reminderType, timeValue }) {
+  setReviewReminderTimeValue({
+    _id, documentKey, reminderType, timeValue, 
+  }) {
     return this.collection.update({ _id }, {
       $set: {
         [`review.${documentKey}.reminders.${reminderType}.timeValue`]: timeValue,
@@ -178,7 +184,9 @@ const OrganizationService = {
     });
   },
 
-  setReviewReminderTimeUnit({ _id, documentKey, reminderType, timeUnit }) {
+  setReviewReminderTimeUnit({
+    _id, documentKey, reminderType, timeUnit, 
+  }) {
     return this.collection.update({ _id }, {
       $set: {
         [`review.${documentKey}.reminders.${reminderType}.timeUnit`]: timeUnit,
@@ -211,9 +219,7 @@ const OrganizationService = {
   },
 
   removeUser({ userId, organizationId, removedBy }) {
-    Roles.removeUsersFromRoles(
-      userId, _.values(UserRoles), organizationId
-    );
+    Roles.removeUsersFromRoles(userId, _.values(UserRoles), organizationId);
 
     const ret = this.collection.update({
       _id: organizationId,
@@ -227,8 +233,7 @@ const OrganizationService = {
     });
 
     Meteor.isServer && Meteor.defer(() =>
-      new OrgNotificationsSender(organizationId).userRemoved(userId, removedBy)
-    );
+      new OrgNotificationsSender(organizationId).userRemoved(userId, removedBy));
 
     return ret;
   },
@@ -249,10 +254,7 @@ const OrganizationService = {
     });
 
     Meteor.isServer && Meteor.defer(() =>
-      new OrgNotificationsSender(organizationId).transferCreated(
-        newOwnerId, transferId, currOwnerId
-      )
-    );
+      new OrgNotificationsSender(organizationId).transferCreated(newOwnerId, transferId, currOwnerId));
   },
 
   transfer({ newOwnerId, transferId }, organization) {
@@ -290,8 +292,7 @@ const OrganizationService = {
     });
 
     Meteor.isServer && Meteor.defer(() =>
-      new OrgNotificationsSender(organizationId).transferCompleted(newOwnerId, currOwnerId)
-    );
+      new OrgNotificationsSender(organizationId).transferCompleted(newOwnerId, currOwnerId));
   },
 
   cancelTransfer({ organizationId }) {
@@ -333,7 +334,7 @@ const OrganizationService = {
     Roles.removeUsersFromRoles(
       orgUsersIds,
       _.union(OrgOwnerRoles, OrgMemberRoles),
-      organizationId
+      organizationId,
     );
 
     const collections = [
@@ -393,7 +394,7 @@ const OrganizationService = {
     const query = { _id: organizationId };
     const modifier = {
       $set: {
-        lastAccessedDate: new Date,
+        lastAccessedDate: new Date(),
       },
     };
     return this.collection.update(query, modifier);

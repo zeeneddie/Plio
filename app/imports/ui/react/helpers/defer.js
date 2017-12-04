@@ -16,7 +16,7 @@ export default compose(
   branch(
     props => !props.show,
     renderNothing,
-    identity
+    identity,
   ),
   omitProps(['show', 'setShow']),
 );
