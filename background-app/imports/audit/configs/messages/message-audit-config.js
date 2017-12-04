@@ -52,7 +52,7 @@ const MessageAuditConfig = {
 MessageAuditConfig.docUnsubscribeUrl = _.compose(
   getDocUnsubscribePath,
   removeQueryParams,
-  MessageAuditConfig.docUrl
+  MessageAuditConfig.docUrl,
 );
 
 export default MessageAuditConfig;

@@ -68,7 +68,9 @@ export const getWorkItemUrlByAction = ({ doc, reminderType, org }) => {
   return _id && getWorkItemUrl(org.serialNumber, _id);
 };
 
-export const getDocUrlByData = ({ doc, docType, org, reminderType }) => {
+export const getDocUrlByData = ({
+  doc, docType, org, reminderType,
+}) => {
   switch (docType) {
     case ReminderDocTypes.NON_CONFORMITY:
     case ReminderDocTypes.RISK:
@@ -84,7 +86,9 @@ export const getDocUrlByData = ({ doc, docType, org, reminderType }) => {
   }
 };
 
-export const getDefaultData = ({ doc, docType, targetDate, org }) => ({
+export const getDefaultData = ({
+  doc, docType, targetDate, org,
+}) => ({
   docName: () => getDocName(doc, docType),
   docDesc: () => getDocDesc(docType),
   date: () => getPrettyTzDate(targetDate, org.timezone),
@@ -99,5 +103,5 @@ export const getActionUnsubscribeUrl = _.compose(
     prefix: 'actions',
     serialNumber: org.serialNumber,
     documentId: doc._id,
-  })
+  }),
 );

@@ -11,12 +11,10 @@ import RiskAuditConfig from '../risks/risk-audit-config';
 
 
 export const getReceivers = ({ linkedTo, notify }, user) => {
-  const getLinkedDocsIds = (linkedDocs, docType) => {
-    return _.pluck(
-      linkedDocs.filter(({ documentType }) => documentType === docType),
-      'documentId'
-    );
-  };
+  const getLinkedDocsIds = (linkedDocs, docType) => _.pluck(
+    linkedDocs.filter(({ documentType }) => documentType === docType),
+    'documentId',
+  );
 
   const usersIds = new Set(notify);
   const standardsIds = new Set();
@@ -52,12 +50,10 @@ export const getReceivers = ({ linkedTo, notify }, user) => {
     : receivers;
 };
 
-export const getLinkedDocAuditConfig = (documentType) => {
-  return {
-    [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
-    [ProblemTypes.RISK]: RiskAuditConfig,
-  }[documentType];
-};
+export const getLinkedDocAuditConfig = documentType => ({
+  [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
+  [ProblemTypes.RISK]: RiskAuditConfig,
+}[documentType]);
 
 const getLinkedDoc = (documentId, documentType) => {
   const collection = getCollectionByDocType(documentType);

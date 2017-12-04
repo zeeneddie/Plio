@@ -33,7 +33,9 @@ auditConfigs.forEach((config) => {
 AuditManager.startAudit();
 
 Changelog.find().observe({
-  added: ({ _id, collection, changeKind, newDocument, oldDocument, userId }) => {
+  added: ({
+    _id, collection, changeKind, newDocument, oldDocument, userId,
+  }) => {
     try {
       const auditConfig = AuditConfigs.get(collection);
 

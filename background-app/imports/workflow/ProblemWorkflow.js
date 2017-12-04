@@ -5,7 +5,6 @@ import Workflow from './Workflow';
 
 
 export default class ProblemWorkflow extends Workflow {
-
   _prepare() {
     super._prepare();
 
@@ -130,7 +129,7 @@ export default class ProblemWorkflow extends Workflow {
     const unverifiedActions = actions.filter(action => !action.verified());
 
     // check if there is overduded verification
-    const overduded = unverifiedActions.find((action) => (
+    const overduded = unverifiedActions.find(action => (
       isOverdue(action.verificationTargetDate, timezone)
     ));
 
@@ -139,7 +138,7 @@ export default class ProblemWorkflow extends Workflow {
     }
 
     // check if there is verification for today
-    const dueToday = unverifiedActions.find((action) => (
+    const dueToday = unverifiedActions.find(action => (
       isDueToday(action.verificationTargetDate, timezone)
     ));
 
@@ -177,7 +176,7 @@ export default class ProblemWorkflow extends Workflow {
     const uncompletedActions = actions.filter(action => !action.completed());
 
     // check if there is overduded action
-    const overduded = uncompletedActions.find((action) => (
+    const overduded = uncompletedActions.find(action => (
       isOverdue(action.completionTargetDate, timezone)
     ));
 
@@ -186,7 +185,7 @@ export default class ProblemWorkflow extends Workflow {
     }
 
     // check if there is an action that must completed today
-    const dueToday = uncompletedActions.find((action) => (
+    const dueToday = uncompletedActions.find(action => (
       isDueToday(action.completionTargetDate, timezone)
     ));
 
@@ -229,5 +228,4 @@ export default class ProblemWorkflow extends Workflow {
       return 4; // Open - analysis due today
     }
   }
-
 }

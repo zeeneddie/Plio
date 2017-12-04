@@ -38,7 +38,7 @@ export default {
         [ChangesKinds.ITEM_ADDED]:
           '{{{userName}}} linked {{{docDesc}}} {{{docName}}} to {{{linkedDocDesc}}} {{{linkedDocName}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{{userName}}} unlinked {{{docDesc}}} {{{docName}}} from {{{linkedDocDesc}}} {{{linkedDocName}}}'
+          '{{{userName}}} unlinked {{{docDesc}}} {{{docName}}} from {{{linkedDocDesc}}} {{{linkedDocName}}}',
       },
     },
   ],
@@ -50,7 +50,9 @@ export default {
       linkedDocName: () => getLinkedDocName(documentId, documentType),
     };
   },
-  receivers({ diffs: { linkedTo }, newDoc, oldDoc, user }) {
+  receivers({
+    diffs: { linkedTo }, newDoc, oldDoc, user,
+  }) {
     const doc = (linkedTo.kind === ChangesKinds.ITEM_ADDED) ? newDoc : oldDoc;
     return getReceivers(doc, user);
   },
