@@ -7,7 +7,7 @@ Template.FileItem_Read.viewmodel({
   file: {},
   onRendered() {
     const {
-      createdBy, progress, _id, status, 
+      createdBy, progress, _id, status,
     } = Object.assign({}, this.file());
 
     if (createdBy === Meteor.userId()) {

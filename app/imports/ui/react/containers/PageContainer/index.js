@@ -24,7 +24,7 @@ export default compose(
     },
   }),
   mapProps(({
-    width, showCard, isDiscussionOpened, ...props 
+    width, showCard, isDiscussionOpened, ...props
   }) => ({
     ...props,
     displayRHS: width <= MOBILE_BREAKPOINT && (showCard || isDiscussionOpened),

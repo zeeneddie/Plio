@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
 const CardHeadingButtons = ({
-  className, children, tag: Tag = 'div', ...other 
+  className, children, tag: Tag = 'div', ...other
 }) => (
   <Tag className={cx('card-heading-buttons', className)} {...other}>
     {children}

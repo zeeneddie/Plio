@@ -12,7 +12,7 @@ const ModalHandle = ({
   ...props
 }) => (
   <Portal {...{
-    closeOnEsc, closeOnOutsideClick, openByClickOn, isOpened, 
+    closeOnEsc, closeOnOutsideClick, openByClickOn, isOpened,
   }}
   >
     <ModalWindowContainer {...props}>

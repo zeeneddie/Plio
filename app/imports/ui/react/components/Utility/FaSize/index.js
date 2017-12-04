@@ -11,7 +11,7 @@ const sizeMap = {
 };
 
 const FaSize = ({
-  size = '1', prefix = '', className: cn, children, ...other 
+  size = '1', prefix = '', className: cn, children, ...other
 }) => {
   const child = React.Children.only(children);
   const sizeValue = sizeMap[size];

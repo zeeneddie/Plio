@@ -22,7 +22,7 @@ export default compose(
   ])),
 
   mapProps(({
-    standard: { _id, title, isDeleted = false }, organizationId, userId, ...props 
+    standard: { _id, title, isDeleted = false }, organizationId, userId, ...props
   }) => {
     const hasAccess = canChangeStandards(userId, organizationId);
     const hasFullAccess = isOrgOwner(userId, organizationId);

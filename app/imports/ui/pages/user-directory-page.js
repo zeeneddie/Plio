@@ -61,7 +61,7 @@ Template.UserDirectory_Page.viewmodel({
       this.activeUser(result[0]);
 
       return cursor;
-    } 
+    }
     this.activeUser(null);
   },
 
@@ -78,7 +78,7 @@ Template.UserDirectory_Page.viewmodel({
       });
 
       return _.pluck(existingUsersIds, 'userId');
-    } 
+    }
     return [];
   },
 });

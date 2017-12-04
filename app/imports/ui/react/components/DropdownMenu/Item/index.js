@@ -34,7 +34,7 @@ class DropdownMenuItem extends React.Component {
 
   render() {
     const {
-      href = '', className, tag = 'a', onMouseDown, children, ...other 
+      href = '', className, tag = 'a', onMouseDown, children, ...other
     } = this.props;
     const Tag = tag;
 

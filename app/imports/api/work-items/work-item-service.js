@@ -23,7 +23,7 @@ export default {
   },
 
   update({
-    _id, query = {}, options = {}, ...args 
+    _id, query = {}, options = {}, ...args
   }) {
     if (!_.keys(query).length > 0) {
       query = { _id };
@@ -58,7 +58,7 @@ export default {
   actionCreated(actionId) {
     const action = Actions.findOne({ _id: actionId });
     const {
-      organizationId, type, completionTargetDate, toBeCompletedBy, 
+      organizationId, type, completionTargetDate, toBeCompletedBy,
     } = action;
 
     this.collection.insert({
@@ -217,8 +217,8 @@ export default {
   },
 
   _getDocData(docId, docType, workItemType) {
-    let doc, 
-      targetDate, 
+    let doc,
+      targetDate,
       type;
 
     if (docType) {

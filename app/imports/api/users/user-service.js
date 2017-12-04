@@ -50,7 +50,7 @@ export default {
   },
 
   updatePhoneNumber({
-    userId, _id, number, type, 
+    userId, _id, number, type,
   }) {
     return this.collection.update({
       _id: userId,
@@ -64,7 +64,7 @@ export default {
   },
 
   addPhoneNumber({
-    userId, _id, number, type, 
+    userId, _id, number, type,
   }) {
     return this.collection.update({
       _id: userId,

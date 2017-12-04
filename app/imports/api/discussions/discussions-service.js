@@ -18,7 +18,7 @@ export default {
         startedBy,
         startedAt: new Date(),
         isStarted: true,
-      }, 
+      },
     });
   },
 

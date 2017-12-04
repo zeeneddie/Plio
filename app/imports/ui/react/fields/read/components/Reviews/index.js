@@ -6,7 +6,7 @@ import { mapC } from '/imports/api/helpers';
 import Field from '../Field';
 
 const renderReviews = mapC(({
-  _id, reviewedAt, reviewedBy, comments, 
+  _id, reviewedAt, reviewedBy, comments,
 }) => (
   <Field key={_id}>
     <span>Document reviewed</span>

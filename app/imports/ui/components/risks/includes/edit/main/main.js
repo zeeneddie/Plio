@@ -42,7 +42,7 @@ Template.Risk_Card_Edit_Main.viewmodel({
     this.parent().update(...args);
   },
   RCAArgs({
-    _id, analysis, updateOfStandards, magnitude, 
+    _id, analysis, updateOfStandards, magnitude,
   } = {}) {
     return {
       _id,

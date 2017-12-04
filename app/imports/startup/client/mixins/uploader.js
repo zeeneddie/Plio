@@ -42,7 +42,7 @@ export default {
     }
 
     const {
-      slingshotDirective, metaContext, addFile, afterUpload, 
+      slingshotDirective, metaContext, addFile, afterUpload,
     } = this.templateInstance.data;
 
     beforeUpload && beforeUpload();

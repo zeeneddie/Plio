@@ -87,13 +87,13 @@ class DataAggregator {
 
       // the code bellow works for aggregate lookup
       const {
-        from, internalField, externalField, target, many, 
+        from, internalField, externalField, target, many,
       } = reference;
 
       this
         .addUnwind(internalField, PRE_LOOKUP)
         .addLookup({
-          from, localField: internalField, foreignField: externalField, as: field, 
+          from, localField: internalField, foreignField: externalField, as: field,
         })
         .addUnwind(field, POST_LOOKUP)
         .addProjectField(field, target ? `${field}.${target}` : true)

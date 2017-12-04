@@ -19,7 +19,7 @@ NonConformities.after.insert((userId, { _id, organizationId }) => {
 
 NonConformities.after.remove((userId, doc) => {
   Discussions.remove({ linkedTo: doc._id });
-  
+
   let fileIds = doc.fileIds || [];
   const improvementPlanFileIds = get(doc, 'improvementPlan.fileIds');
   if (improvementPlanFileIds) {

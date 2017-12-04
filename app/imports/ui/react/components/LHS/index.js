@@ -75,7 +75,7 @@ const LHS = ({
           )}
         </div>
         {renderAddButton({
-          animating, isFocused, searchText, searchResultsText, 
+          animating, isFocused, searchText, searchResultsText,
         })}
       </div>
 

@@ -93,7 +93,7 @@ Template.Select_Single.viewmodel({
     const { value, selected, items } = this.data();
     const item = this.getSelectedItem();
     return {
-      value, selected, items, item, 
+      value, selected, items, item,
     };
   },
   getContentData() {

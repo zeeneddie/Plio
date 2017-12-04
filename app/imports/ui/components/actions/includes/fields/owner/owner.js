@@ -8,7 +8,7 @@ Template.Actions_Owner.viewmodel({
   ownerId() { return Meteor.userId(); },
   selectArgs() {
     const { ownerId: value, placeholder } = this.data();
-    
+
     return {
       value,
       placeholder,

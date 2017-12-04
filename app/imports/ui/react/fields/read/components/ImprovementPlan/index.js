@@ -59,7 +59,7 @@ const ImprovementPlan = ({
     <Block>
       {label}
       {[...renderFields({
-        desiredOutcome, targetDate, owner, reviewDates, fileIds, 
+        desiredOutcome, targetDate, owner, reviewDates, fileIds,
       })]}
     </Block>
   ) : null

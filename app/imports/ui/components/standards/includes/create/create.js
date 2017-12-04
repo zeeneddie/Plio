@@ -14,7 +14,7 @@ Template.CreateStandard.viewmodel({
     const data = this.getChildrenData();
 
     const {
-      sourceType, sourceFile, sourceUrl, sourceVideoUrl, 
+      sourceType, sourceFile, sourceUrl, sourceVideoUrl,
     } = data;
     const isSourcePresent = _.every([
       sourceType,

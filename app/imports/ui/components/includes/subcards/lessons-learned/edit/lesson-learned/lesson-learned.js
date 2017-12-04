@@ -79,10 +79,10 @@ Template.Subcards_LessonLearned.viewmodel({
   },
   getData() {
     const {
-      title, date, owner, notes, 
+      title, date, owner, notes,
     } = this.data();
     return {
-      title, date, owner, notes, 
+      title, date, owner, notes,
     };
   },
 });

@@ -46,11 +46,11 @@ Template.EditStandard.viewmodel({
     return this.update({ query, options }, cb);
   },
   update({
-    query = {}, options = {}, e = {}, withFocusCheck = false, ...args 
+    query = {}, options = {}, e = {}, withFocusCheck = false, ...args
   }, cb = () => {}) {
     const _id = this._id();
     const allArgs = {
-      ...args, _id, options, query, 
+      ...args, _id, options, query,
     };
 
     const updateFn = () => this.modal().callMethod(update, allArgs, cb);

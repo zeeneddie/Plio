@@ -69,7 +69,7 @@ const onToggleCollapse = props => () => {
 
 const onViewAllClick = props => () => {
   const {
-    dispatch, isAllLogsLoaded, documentId, collection, 
+    dispatch, isAllLogsLoaded, documentId, collection,
   } = props;
 
   if (!isAllLogsLoaded) {

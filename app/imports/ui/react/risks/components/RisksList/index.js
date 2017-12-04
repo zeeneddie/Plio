@@ -17,7 +17,7 @@ const RisksList = ({
       <RisksListItemContainer
         key={risk._id}
         {...{
-          section, orgSerialNumber, organization, userId, filter, urlItemId, ...risk, 
+          section, orgSerialNumber, organization, userId, filter, urlItemId, ...risk,
         }}
       />
     ))}

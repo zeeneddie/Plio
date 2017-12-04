@@ -11,7 +11,7 @@ const isUploaded = ({ progress }) => progress === 1;
 const isFailed = ({ status }) => status === 'failed' || status === 'terminated';
 
 const FileItem = ({
-  url = '#', name = null, extension, progress, status, 
+  url = '#', name = null, extension, progress, status,
 }) => {
   const uploaded = isUploaded({ progress });
   const failed = isFailed({ status });

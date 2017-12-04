@@ -28,7 +28,7 @@ Template.Risks_Create.viewmodel({
           errorMessage = 'The new standard cannot be created without a type. You can create a new risk type in Org settings';
           setModalError(errorMessage);
           return;
-        } 
+        }
         const errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
         setModalError(errorMessage);
         return;

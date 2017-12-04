@@ -16,7 +16,7 @@ const enhance = compose(
   withState('isChecked', 'setIsChecked', props => !!props.checked),
 );
 const Checkbox = enhance(({
-  text, name, subFormName, changeField, isChecked, setIsChecked, 
+  text, name, subFormName, changeField, isChecked, setIsChecked,
 }) => (
   <FormGroup check>
     <Label check>

@@ -42,7 +42,7 @@ const CardBlockCollapse = enhance(({
 
   return (
     <CollapseBlock {...{
-      tag, classNames, collapsed, onToggleCollapse, ...collapseBlock, 
+      tag, classNames, collapsed, onToggleCollapse, ...collapseBlock,
     }}
     >
       <div>

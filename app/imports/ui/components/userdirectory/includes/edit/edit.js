@@ -111,7 +111,7 @@ Template.UserDirectory_Card_Edit.viewmodel({
     const userId = this.userId();
 
     this.modal().callMethod(updatePhoneNumber, {
-      _id, userId, number, type, 
+      _id, userId, number, type,
     }, cb);
   },
   addPhoneNumber(viewModel, cb) {
@@ -122,7 +122,7 @@ Template.UserDirectory_Card_Edit.viewmodel({
     if (_.isEmpty(number)) return;
 
     this.modal().callMethod(addPhoneNumber, {
-      _id, userId, number, type, 
+      _id, userId, number, type,
     }, cb);
   },
   removePhoneNumber(viewModel, cb) {

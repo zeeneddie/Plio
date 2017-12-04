@@ -86,7 +86,7 @@ Template.Subcards_AnalysisWrapper_Edit.viewmodel({
          */
         return {
           [key]: () => (...args) =>
-            this.callMethod(from[key](ref), ...args), 
+            this.callMethod(from[key](ref), ...args),
         };
       }
 

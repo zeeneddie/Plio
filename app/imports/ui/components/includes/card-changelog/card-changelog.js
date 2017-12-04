@@ -78,7 +78,7 @@ Template.CardChangelog.viewmodel({
   getUser(userId) {
     if (userId === SystemName) {
       return userId;
-    } 
+    }
     const user = Meteor.users.findOne({ _id: userId });
     return (user && user.fullNameOrEmail()) || userId;
   },

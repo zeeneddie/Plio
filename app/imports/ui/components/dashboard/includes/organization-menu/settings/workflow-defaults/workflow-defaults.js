@@ -7,7 +7,7 @@ Template.OrgSettings_WorkflowDefaults.viewmodel({
   mixin: 'modal',
   _lText: 'Workflow steps',
   helpText: OrganizationSettingsHelp.workflowSteps,
-  
+
   onWorkflowTypeChangeCb() {
     return this.onWorkflowTypeChange.bind(this);
   },

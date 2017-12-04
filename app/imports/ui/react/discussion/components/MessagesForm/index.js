@@ -6,7 +6,7 @@ import Icon from '../../../components/Icons/Icon';
 import Mention from '../../../components/Mention';
 
 const MessagesForm = ({
-  value, setValue, users, onSubmit, disabled, children, 
+  value, setValue, users, onSubmit, disabled, children,
 }) => (
   <div className="chat-form" {...{ onSubmit }}>
     <form className="f1">

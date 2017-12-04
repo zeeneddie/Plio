@@ -69,7 +69,7 @@ const StandardsLHS = ({
   return (
     <LHSContainer
       {...{
-        animating, searchText, searchResultsText, onClear, 
+        animating, searchText, searchResultsText, onClear,
       }}
       onChange={onSearchTextChange}
       onModalButtonClick={onModalOpen}

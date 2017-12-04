@@ -20,7 +20,7 @@ import AuditManager from '/imports/share/utils/audit-manager.js';
 
 // Extend the global object to have a scope of collections
 _.extend(global, {
-  Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, LessonsLearned, Discussions, 
+  Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, LessonsLearned, Discussions,
 });
 
 import path from 'path';
@@ -32,7 +32,7 @@ import { UserRoles } from '/imports/share/constants.js';
 // If attrPath is 'Organization' and obj is global, it returns the value of global.Organization
 // If attrPath is 'Meteor.users' and obj is this, it returns the value of this.Meteor.users
 const getAttributeValue = (obj, attrPath) => {
-  let attrName, 
+  let attrName,
     len;
   let attrVal = obj;
   attrPath = attrPath.split('.');

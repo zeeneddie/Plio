@@ -36,12 +36,12 @@ Template.Card_Read.viewmodel({
 
       setTimeout(() => {
         $div.css({
-          position: 'inherit', top: 'auto', right: 'auto', bottom: 'auto', left: 'auto', transition: 'none', 
+          position: 'inherit', top: 'auto', right: 'auto', bottom: 'auto', left: 'auto', transition: 'none',
         });
       }, 150);
     } else {
       $div.css({
-        position: 'fixed', top: offset.top, right: $(window).width() - (offset.left + $div.outerWidth()), bottom: '0', left: offset.left, 
+        position: 'fixed', top: offset.top, right: $(window).width() - (offset.left + $div.outerWidth()), bottom: '0', left: offset.left,
       });
 
       setTimeout(() => {
@@ -73,7 +73,7 @@ Template.Card_Read.viewmodel({
     }
   },
   restore({
-    _id, title, isDeleted, ...args 
+    _id, title, isDeleted, ...args
   }) {
     if (!isDeleted) return;
 
@@ -88,7 +88,7 @@ Template.Card_Read.viewmodel({
       },
       () => {
         this.onRestore({
-          _id, title, isDeleted, ...args, 
+          _id, title, isDeleted, ...args,
         }, (err, cb) => {
           this.handleMethodCall(err, title, 'restored', cb);
         });
@@ -96,7 +96,7 @@ Template.Card_Read.viewmodel({
     );
   },
   delete({
-    _id, title, isDeleted, organizationId, ...args 
+    _id, title, isDeleted, organizationId, ...args
   }) {
     if (!isDeleted || !this.isOrgOwner({ organizationId })) return;
 
@@ -109,7 +109,7 @@ Template.Card_Read.viewmodel({
       closeOnConfirm: false,
     }, () => {
       this.onDelete({
-        _id, title, isDeleted, ...args, 
+        _id, title, isDeleted, ...args,
       }, (err, cb) => {
         this.handleMethodCall(err, title, 'deleted', cb);
       });

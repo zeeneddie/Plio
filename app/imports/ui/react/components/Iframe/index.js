@@ -13,7 +13,7 @@ const Iframe = ({
 }) => (
   <iframe
     {...{
-      width, height, src, frameBorder, allowFullScreen, ...other, 
+      width, height, src, frameBorder, allowFullScreen, ...other,
     }}
   />
 );

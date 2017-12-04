@@ -11,7 +11,7 @@ import mammoth from 'mammoth';
 export default {
 
   convertToHtml({
-    fileUrl, htmlFileName, s3Params, convertParams, afterConvertation, 
+    fileUrl, htmlFileName, s3Params, convertParams, afterConvertation,
   }) {
     const afterConvertBinded = Meteor.bindEnvironment(afterConvertation);
     const fut = new Future();

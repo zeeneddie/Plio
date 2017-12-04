@@ -49,7 +49,7 @@ Template.Actions_Edit.viewmodel({
     return this.update.bind(this);
   },
   update({
-    query = {}, options = {}, e = {}, withFocusCheck = false, ...args 
+    query = {}, options = {}, e = {}, withFocusCheck = false, ...args
   }, cb = () => {}) {
     const updateFn = () => this.callUpdate(update, { query, options, ...args }, cb);
 

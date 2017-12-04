@@ -25,7 +25,7 @@ export default [
   },
   {
     name: 'Office',
-    file: '/sounds/office-1', 
+    file: '/sounds/office-1',
   },
   {
     name: 'Oringz',

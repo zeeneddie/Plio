@@ -5,7 +5,7 @@ import ListItem from '../../../components/ListItem';
 import SequentialId from '../../fields/read/components/SequentialId';
 
 const CustomersListItem = ({
-  isActive, onClick, href, name, owner, createdAt, serialNumber, 
+  isActive, onClick, href, name, owner, createdAt, serialNumber,
 }) => (
   <ListItemLink {...{ isActive, onClick, href }}>
     <ListItem>

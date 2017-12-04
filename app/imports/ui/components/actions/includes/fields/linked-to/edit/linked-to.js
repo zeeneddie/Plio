@@ -30,7 +30,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
   },
   mapDocs(array, type) {
     return array.map(({ sequentialId, title, ...args }) => ({
-      docTitle: title, title: `${sequentialId} ${title}`, sequentialId, type, ...args, 
+      docTitle: title, title: `${sequentialId} ${title}`, sequentialId, type, ...args,
     }));
   },
   getDocs(query, options) {

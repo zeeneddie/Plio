@@ -47,7 +47,7 @@ Template.Dashboard_Page.viewmodel({
       const lastChar = str.substr(str.length - 1);
       if (str.length > 2 && lastChar === 'S') {
         return str.substr(0, str.length - 1) + lastChar.toLowerCase();
-      } 
+      }
       return str;
     };
 

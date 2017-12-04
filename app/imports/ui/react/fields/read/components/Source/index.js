@@ -13,7 +13,7 @@ const getSourceTitle = (id) => {
 };
 
 const Source = ({
-  id, type, url, file, 
+  id, type, url, file,
 }) => {
   const title = getSourceTitle(id);
   let content;

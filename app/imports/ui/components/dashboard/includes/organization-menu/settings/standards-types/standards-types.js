@@ -37,7 +37,7 @@ Template.OrgSettings_StandardTypes.viewmodel({
       const _id = viewModel._id();
 
       this.modal().callMethod(update, {
-        _id, title, abbreviation, organizationId, 
+        _id, title, abbreviation, organizationId,
       });
     }
   },

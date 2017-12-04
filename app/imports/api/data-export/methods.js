@@ -59,7 +59,7 @@ export const generateLink = new Method({
   name: 'DataExport.generateLink',
 
   validate({
-    org, docType, fields, filters, 
+    org, docType, fields, filters,
   }) {
     const docTypeSchema = new SimpleSchema({
       docType: {
@@ -94,7 +94,7 @@ export const generateLink = new Method({
   },
 
   run({
-    org, docType, fields, filters, 
+    org, docType, fields, filters,
   }) {
     const { mapping } = Mapping[docType];
     const file = createFileInfo(org.name, docType);

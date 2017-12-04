@@ -28,7 +28,7 @@ export default {
   },
 
   update({
-    _id, query = {}, options = {}, ...args 
+    _id, query = {}, options = {}, ...args
   }) {
     if (!_.keys(query).length > 0) {
       query = { _id };
@@ -228,7 +228,7 @@ export default {
       WorkItemService.removePermanently(workQuery);
 
     return this._service.remove({
-      _id, deletedBy, onSoftDelete, onPermanentDelete, 
+      _id, deletedBy, onSoftDelete, onPermanentDelete,
     });
   },
 

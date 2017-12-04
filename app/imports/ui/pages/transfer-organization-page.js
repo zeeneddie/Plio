@@ -29,11 +29,11 @@ Template.TransferOrganizationPage.viewmodel({
 
           if (!organization) {
             return;
-          } 
+          }
           const { name, serialNumber } = organization;
           this.orgName(name);
           this.orgSerialNumber(serialNumber);
-          
+
 
           transferOrganization.call({ transferId }, (err) => {
             if (err) {

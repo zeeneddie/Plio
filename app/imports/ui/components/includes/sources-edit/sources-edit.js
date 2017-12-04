@@ -190,7 +190,7 @@ Template.Sources_Edit.viewmodel({
     } = this.data();
 
     return {
-      type, fileId, url, extension, 
+      type, fileId, url, extension,
     };
   },
 });

@@ -65,7 +65,7 @@ const ChangelogHeaderContainer = compose(
   })),
 
   kompose(({
-    documentId, collection, dispatch, doc, 
+    documentId, collection, dispatch, doc,
   }, onData) => {
     dispatch(setChangelogDocument(doc));
 

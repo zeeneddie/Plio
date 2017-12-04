@@ -79,7 +79,7 @@ Template.Subcards_Risks_Edit.viewmodel({
 
     if (!_id) {
       return viewmodel.destroy();
-    } 
+    }
     const { title } = viewmodel.getData();
 
     swal({

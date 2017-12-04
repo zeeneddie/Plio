@@ -218,7 +218,7 @@ Template.atModalPwdForm.events({
           // ...simply ignore submit event!
           AccountsTemplates.setDisabled(false);
           return;
-        } 
+        }
         formData.reCaptchaResponse = response;
       }
 

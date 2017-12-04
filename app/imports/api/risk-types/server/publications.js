@@ -6,7 +6,7 @@ import { isOrgMember } from '../../checkers.js';
 
 Meteor.publish('riskTypes', function (organizationId) {
   check(organizationId, String);
-  
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {

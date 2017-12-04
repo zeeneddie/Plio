@@ -56,7 +56,7 @@ export default class UploadService {
 
   _insert(file) {
     const name = file.name;
-    
+
     insertFile.call({
       name,
       extension: name.split('.').pop().toLowerCase(),

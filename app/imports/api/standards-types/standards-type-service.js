@@ -6,7 +6,7 @@ export default StandardsTypeService = {
   collection: StandardTypes,
 
   insert({
-    title, abbreviation, organizationId, createdBy, 
+    title, abbreviation, organizationId, createdBy,
   }) {
     return this.collection.insert({
       title, abbreviation, organizationId, createdBy,

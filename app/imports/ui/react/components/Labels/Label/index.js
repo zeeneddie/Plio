@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { MarginMap } from '/imports/api/constants';
 
 const Label = ({
-  names = 'default', className, margin, children, 
+  names = 'default', className, margin, children,
 }) => {
   const namesCx = names.split(' ').map(name => `label-${name}`);
   const marginCx = margin && MarginMap[margin];

@@ -5,7 +5,7 @@ export default {
     return Array.from(scores || []).sort(({ scoredAt: sc1 }, { scoredAt: sc2 }) => {
       if (direction === -1) {
         return sc2 - sc1;
-      } 
+      }
       return sc1 - sc2;
     });
   },
@@ -27,7 +27,7 @@ export default {
       return 'Medium';
     } else if (score > 45 && score <= 66) {
       return 'High';
-    } 
+    }
     return 'Very high';
   },
   getClassByScore(score) {
@@ -37,7 +37,7 @@ export default {
       return 'low';
     } else if (score >= 50 && score < 75) {
       return 'medium';
-    } 
+    }
     return 'high';
   },
 };

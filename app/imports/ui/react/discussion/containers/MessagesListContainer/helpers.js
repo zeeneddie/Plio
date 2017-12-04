@@ -9,7 +9,7 @@ import {
 } from '/imports/ui/react/discussion/helpers';
 
 export const transformMessages = ({
-  discussion, messages, at, users, 
+  discussion, messages, at, users,
 }) => {
   const messagesMapped = messages.map((message, i) => {
     const { _id, createdBy, createdAt } = message;

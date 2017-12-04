@@ -4,7 +4,7 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap
 import Icon from '../../../../components/Icons/Icon';
 
 const MessageMenu = ({
-  pathToMessage, isAuthor, onDelete, isOpen, toggle, 
+  pathToMessage, isAuthor, onDelete, isOpen, toggle,
 }) => (
   <Dropdown className="chat-item-dropdown" {...{ isOpen, toggle }}>
     <DropdownToggle color="link">

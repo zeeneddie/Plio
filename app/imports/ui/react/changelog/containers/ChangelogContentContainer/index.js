@@ -11,7 +11,7 @@ import propTypes from './propTypes';
 
 const onPropsChange = (props, onData) => {
   const {
-    dispatch, documentId, collection, showAll, 
+    dispatch, documentId, collection, showAll,
   } = props;
   const query = { documentId, collection };
   const options = { sort: { date: -1 } };

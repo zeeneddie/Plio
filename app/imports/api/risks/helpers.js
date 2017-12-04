@@ -8,7 +8,7 @@ export const getPrimaryScore = (scores) => {
     ...find(some([
       propEqScoreTypeId(riskScoreTypes.residual.id),
       propEqScoreTypeId(riskScoreTypes.inherent.id),
-    ]), scores), 
+    ]), scores),
   };
 };
 

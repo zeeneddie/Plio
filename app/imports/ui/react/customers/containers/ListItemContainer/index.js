@@ -29,7 +29,7 @@ const CustomersListItemContainer = compose(
     notEquals(props.users, nextProps.users)
   )),
   mapProps(({
-    _id, urlItemId, users, ...props 
+    _id, urlItemId, users, ...props
   }) => {
     const href = getPath('customer')({ urlItemId: _id });
     const isActive = urlItemId === _id;

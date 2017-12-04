@@ -7,7 +7,7 @@ Template.ListItemLink.viewmodel({
   share: 'window',
   linkArgs() {
     const {
-      isActive, href, onClick, className, 
+      isActive, href, onClick, className,
     } = this.templateInstance.data;
     const active = isActive ? 'active' : '';
     const finalClassName = `list-group-item ${className} ${active}`;

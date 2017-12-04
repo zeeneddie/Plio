@@ -21,7 +21,7 @@ export default compose(
   ])),
 
   mapProps(({
-    risk: { _id, title, isDeleted = false }, organizationId, userId, ...props 
+    risk: { _id, title, isDeleted = false }, organizationId, userId, ...props
   }) => {
     const hasAccess = canChangeStandards(userId, organizationId);
     const hasFullAccess = isOrgOwner(userId, organizationId);

@@ -70,7 +70,7 @@ const loadMessagesData = ({
   dispatch(setLoading(true));
 
   const subOpts = {
-    sort, at, priorLimit, followingLimit, 
+    sort, at, priorLimit, followingLimit,
   };
   const messagesSubscription = Meteor.subscribe('messages', discussionId, subOpts);
   const lastMessageSubscription = Meteor.subscribe('discussionMessagesLast', discussionId);

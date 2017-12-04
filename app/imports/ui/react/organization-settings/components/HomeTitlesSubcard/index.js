@@ -59,7 +59,7 @@ const HomeTitlesSubcard = ({
     return (
       <HomeScreenTitle
         {...{
-          ...currentItem, key, items, onSelect, 
+          ...currentItem, key, items, onSelect,
         }}
         id={key}
         selected={createWorkspaceTitleValue(key, selectedTitle)}

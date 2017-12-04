@@ -9,7 +9,7 @@ import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
 const TypeListItem = ({
   onToggleCollapse,
   type: {
-    _id, abbreviation, unreadMessagesCount, title, risks, 
+    _id, abbreviation, unreadMessagesCount, title, risks,
   },
 }) => (
   <LHSItemContainer

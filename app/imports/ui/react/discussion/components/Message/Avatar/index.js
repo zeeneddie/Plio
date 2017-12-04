@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
 const MessageAvatar = ({
-  tag = 'a', className, children, ...other 
+  tag = 'a', className, children, ...other
 }) => {
   const Tag = tag;
 

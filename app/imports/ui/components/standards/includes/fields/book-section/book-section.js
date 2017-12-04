@@ -36,7 +36,7 @@ Template.ESBookSection.viewmodel({
     };
     const options = { sort: { title: 1 } };
     const sections = StandardsBookSections.find(query, options).fetch();
-  
+
     return sortArrayByTitlePrefix(sections);
   },
   content() {

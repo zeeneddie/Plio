@@ -95,7 +95,7 @@ Template.Subcards_Actions_Edit.viewmodel({
     return `<strong>${sequentialId}</strong> ${title}`;
   },
   rText({
-    isCompleted, completedAt, completionTargetDate, status, 
+    isCompleted, completedAt, completionTargetDate, status,
   }) {
     let date = (isCompleted && completedAt) ? completedAt : completionTargetDate;
     date = this.renderDate(date);
@@ -179,7 +179,7 @@ Template.Subcards_Actions_Edit.viewmodel({
     );
   },
   insert({
-    _id, linkTo, completionTargetDate, ...args 
+    _id, linkTo, completionTargetDate, ...args
   }, cb) {
     if (_id) {
       let documentId;
@@ -220,7 +220,7 @@ Template.Subcards_Actions_Edit.viewmodel({
 
     if (!_id) {
       return viewmodel.destroy();
-    } 
+    }
     swal({
       title: 'Are you sure?',
       text: `The action "${title}" will be removed.`,

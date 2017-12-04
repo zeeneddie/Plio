@@ -37,7 +37,7 @@ export default {
   },
   'keyup input': function (e, tpl) {
     e.preventDefault();
-    
+
     const parentData = Template.parentData();
 
     if (e.keyCode === 13) {

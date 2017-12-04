@@ -87,7 +87,7 @@ Meteor.publishComposite('messages', (discussionId, {
       }),
     },
   }).validate({
-    sort, at, priorLimit, followingLimit, 
+    sort, at, priorLimit, followingLimit,
   });
 
   return {

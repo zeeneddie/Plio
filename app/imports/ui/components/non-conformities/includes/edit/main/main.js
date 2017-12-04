@@ -34,7 +34,7 @@ Template.NC_Card_Edit_Main.viewmodel({
   },
   isStandardsEditable: true,
   RCAArgs({
-    _id, analysis, updateOfStandards, magnitude, 
+    _id, analysis, updateOfStandards, magnitude,
   } = {}) {
     return {
       _id,

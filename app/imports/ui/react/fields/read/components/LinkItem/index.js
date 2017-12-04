@@ -4,7 +4,7 @@ import Button from '../../../../components/Buttons/Button';
 import Icon from '../../../../components/Icons/Icon';
 
 const LinkItem = ({
-  href, indicator, title, sequentialId, 
+  href, indicator, title, sequentialId,
 }) => (
   <Button
     href={href}

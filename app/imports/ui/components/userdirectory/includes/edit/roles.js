@@ -5,7 +5,7 @@ import { UserRoles } from '/imports/share/constants.js';
 
 Template.UserEdit_Roles.viewmodel({
   mixin: ['collapse'],
-  
+
   isEditable() {
     return this.parent().isRolesEditable();
   },

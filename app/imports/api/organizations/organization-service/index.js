@@ -43,7 +43,7 @@ const OrganizationService = {
   collection: Organizations,
 
   insert({
-    name, timezone, currency, ownerId, 
+    name, timezone, currency, ownerId,
   }) {
     const serialNumber = generateSerialNumber(this.collection, {}, 100);
 
@@ -138,7 +138,7 @@ const OrganizationService = {
   },
 
   setReminder({
-    _id, type, reminderType, timeValue, timeUnit, 
+    _id, type, reminderType, timeValue, timeUnit,
   }) {
     return this.collection.update({ _id }, {
       $set: {
@@ -175,7 +175,7 @@ const OrganizationService = {
   },
 
   setReviewReminderTimeValue({
-    _id, documentKey, reminderType, timeValue, 
+    _id, documentKey, reminderType, timeValue,
   }) {
     return this.collection.update({ _id }, {
       $set: {
@@ -185,7 +185,7 @@ const OrganizationService = {
   },
 
   setReviewReminderTimeUnit({
-    _id, documentKey, reminderType, timeUnit, 
+    _id, documentKey, reminderType, timeUnit,
   }) {
     return this.collection.update({ _id }, {
       $set: {

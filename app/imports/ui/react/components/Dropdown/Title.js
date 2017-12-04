@@ -31,9 +31,9 @@ const enhance = mapProps(props => ({
 
 export const Title = enhance((props) => {
   const {
-    children, as = 'a', dropdownValue, ...other 
+    children, as = 'a', dropdownValue, ...other
   } = props;
-  
+
   return React.createElement(as, { 'data-toggle': 'dropdown', ...other }, children);
 });
 

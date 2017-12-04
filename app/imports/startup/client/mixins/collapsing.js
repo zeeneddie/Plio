@@ -20,7 +20,7 @@ export default {
   findRecursive(viewmodel, _id) {
     if (_.isArray(_id)) {
       return viewmodel && _.some(viewmodel.children(), vm => (vm._id && _.contains(_id, vm._id()) || this.findRecursive(vm, _id)));
-    } 
+    }
     return viewmodel && _.some(viewmodel.children(), vm => (vm._id && vm._id() === _id) || this.findRecursive(vm, _id));
   },
   // Recursive function to expand items one after another

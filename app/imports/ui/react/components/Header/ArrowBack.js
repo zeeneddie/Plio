@@ -4,7 +4,7 @@ import { _ } from 'meteor/underscore';
 import { PullMap } from '/imports/api/constants';
 
 export const ArrowBack = ({
-  pull, href = '#', onClick, ...other 
+  pull, href = '#', onClick, ...other
 }) => (
   <ul className={cx('nav', 'navbar-nav', PullMap[pull])}>
     <li className="nav-item">

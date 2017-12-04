@@ -79,7 +79,7 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
 
     if (!_id) {
       return viewmodel.destroy();
-    } 
+    }
     swal({
       title: 'Are you sure?',
       text: `The lesson "${title}" will be removed.`,

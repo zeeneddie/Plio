@@ -47,7 +47,7 @@ export default compose(
     const lessons = getLinkedLessons(props.standardId, DocumentTypes.STANDARD, props.lessons);
 
     return {
-      ...props, ncs, risks, actions, lessons, 
+      ...props, ncs, risks, actions, lessons,
     };
   }),
 )(ConnectedDocList);

@@ -175,7 +175,7 @@ const bulkInsertDocuments = (documentType, to, from, userId) => {
 };
 
 export default function importDocuments({
-  to, from, userId, documentType, 
+  to, from, userId, documentType,
 }) {
   const res = bulkInsertDocuments(documentType, to, from, userId)[0];
 

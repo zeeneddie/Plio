@@ -213,12 +213,12 @@ class InvitationSender {
       userIdToInvite = this._createNewUser();
       this._inviteUser(userIdToInvite, false);
       return 1;
-    } 
+    }
     const userToInvite = Meteor.users.findOne({ _id: userIdToInvite });
     if (userToInvite && userToInvite.invitationId) {
       this._inviteUser(userIdToInvite, false);
       return 1;
-    } 
+    }
     this._inviteUser(userIdToInvite, true);
     return 2;
   }

@@ -37,7 +37,7 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
   const NCsIds = _.pluck(linkedToByType[ProblemTypes.NON_CONFORMITY], 'documentId');
   const risksIds = _.pluck(linkedToByType[ProblemTypes.RISK], 'documentId');
 
-  let docWithUncompletedAnalysis, 
+  let docWithUncompletedAnalysis,
     analysisTitle;
 
   docWithUncompletedAnalysis = Risks.findOne({

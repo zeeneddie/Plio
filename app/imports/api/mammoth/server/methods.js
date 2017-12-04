@@ -36,7 +36,7 @@ export const convertStandardFileToHtml = new ValidatedMethod({
   }).validator(),
 
   run({
-    fileUrl, htmlFileName, source, standardId, convertParams, 
+    fileUrl, htmlFileName, source, standardId, convertParams,
   }) {
     const userId = this.userId;
     if (!this.userId) {

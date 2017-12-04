@@ -31,7 +31,7 @@ Template.Actions_LinkTo.viewmodel({
       return this.NCsDocs();
     } else if (actionType === ActionTypes.RISK_CONTROL) {
       return this.risksDocs();
-    } 
+    }
     return [];
   },
   NCsDocs() {
@@ -52,7 +52,7 @@ Template.Actions_LinkTo.viewmodel({
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
       return {
-        html, sequentialId, title: fullTitle, documentType: ProblemTypes.NON_CONFORMITY, ...args, 
+        html, sequentialId, title: fullTitle, documentType: ProblemTypes.NON_CONFORMITY, ...args,
       };
     });
   },
@@ -74,7 +74,7 @@ Template.Actions_LinkTo.viewmodel({
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
       return {
-        html, sequentialId, title: fullTitle, documentType: ProblemTypes.RISK, ...args, 
+        html, sequentialId, title: fullTitle, documentType: ProblemTypes.RISK, ...args,
       };
     });
   },

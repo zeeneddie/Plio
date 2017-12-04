@@ -9,7 +9,7 @@ import HomeScreenTitleAdd from '../HomeScreenTitleAdd';
 const enhance = withState('value', 'setValue', '');
 
 const HomeScreenTitle = enhance(({
-  value, setValue, label, ...other 
+  value, setValue, label, ...other
 }) => (
   <FormField>
     <span>{label}</span>

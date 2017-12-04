@@ -11,4 +11,4 @@ const StandardsProvider = props => (
 );
 
 export default StandardsProvider;
- 
+

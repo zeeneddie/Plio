@@ -17,7 +17,7 @@ export default class BaseEntityService {
   }
 
   update({
-    _id, query = {}, options = {}, ...args 
+    _id, query = {}, options = {}, ...args
   }) {
     if (!Object.keys(query).length) {
       Object.assign(query, { _id });
@@ -38,7 +38,7 @@ export default class BaseEntityService {
   }
 
   remove({
-    _id, deletedBy, onSoftDelete, onPermanentDelete, 
+    _id, deletedBy, onSoftDelete, onPermanentDelete,
   }) {
     const query = { _id };
 
@@ -52,7 +52,7 @@ export default class BaseEntityService {
       }
 
       return result;
-    } 
+    }
     const modifier = {
       $set: {
         deletedBy,

@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import { getPath } from '/imports/ui/utils/router/paths';
 
 const Unsubscribe = ({
-  loading, error, orgSerialNumber, children, 
+  loading, error, orgSerialNumber, children,
 }) => {
   if (loading) return (<span>Unsubscribing...</span>);
 

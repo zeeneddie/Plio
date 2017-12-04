@@ -9,12 +9,12 @@ const LinkItemList = ({ items, label }) => (
     {label}
     <Field>
       {items.map(({
-        _id, href, indicator, title, sequentialId, 
+        _id, href, indicator, title, sequentialId,
       }) => (
         <LinkItem
           key={_id}
           {...{
-            href, indicator, title, sequentialId, 
+            href, indicator, title, sequentialId,
           }}
         />
       ))}

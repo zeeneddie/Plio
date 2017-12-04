@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
 const Select = ({
-  value, options, className, onChange, 
+  value, options, className, onChange,
 }) => (
   <div className="dropdown">
     <select className={cx('form-control c-select', className)} {...{ value, onChange }}>

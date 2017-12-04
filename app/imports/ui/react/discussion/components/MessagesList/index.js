@@ -3,14 +3,14 @@ import React, { PropTypes } from 'react';
 import MessageContainer from '../../containers/MessageContainer';
 
 const MessagesList = ({
-  messages, at, dispatch, userId, 
+  messages, at, dispatch, userId,
 }) => (
   <div>
     {messages.map(message => (
       <MessageContainer
         key={message._id}
         {...{
-          ...message, at, dispatch, userId, 
+          ...message, at, dispatch, userId,
         }}
       />
     ))}

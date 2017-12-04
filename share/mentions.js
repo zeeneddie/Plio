@@ -22,7 +22,7 @@ export const getMentionData = (text) => {
     const email = match2 && match2.substring(1, match2.length - 1);
 
     return {
-      firstName, email, match, text, mentionString: str, 
+      firstName, email, match, text, mentionString: str,
     };
   });
 

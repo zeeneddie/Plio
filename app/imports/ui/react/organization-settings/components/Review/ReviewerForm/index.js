@@ -8,7 +8,7 @@ import ReviewReviewerSelect from '../ReviewerSelect';
 const enhance = withProps(getFormProps);
 
 const ReviewerForm = enhance(({
-  initialFormData, onReviewerChanged, fieldNames, users, 
+  initialFormData, onReviewerChanged, fieldNames, users,
 }) => (
   <Form
     {...{ initialFormData }}

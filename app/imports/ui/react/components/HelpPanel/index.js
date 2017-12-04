@@ -4,7 +4,7 @@ import Head from './Head';
 import Body from './Body';
 
 const HelpPanel = ({
-  collapsed, onToggleCollapse, refCb, showIconAlways, children, 
+  collapsed, onToggleCollapse, refCb, showIconAlways, children,
 }) => (
   <div>
     <Head {...{ onToggleCollapse, collapsed: showIconAlways ? true : collapsed }} />

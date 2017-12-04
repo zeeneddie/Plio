@@ -58,7 +58,7 @@ export function reset({ isDiscussionOpened = false, ...other } = {}) {
   return {
     type: RESET,
     payload: {
-      ...initialState, isDiscussionOpened, resetCompleted: true, ...other, 
+      ...initialState, isDiscussionOpened, resetCompleted: true, ...other,
     },
   };
 }
@@ -100,7 +100,7 @@ export function setIsDiscussionOpened(isDiscussionOpened) {
 
 export const submit = (
   {
-    organizationId, discussionId, text, fileId, type, 
+    organizationId, discussionId, text, fileId, type,
   },
   callback = () => {},
 ) =>

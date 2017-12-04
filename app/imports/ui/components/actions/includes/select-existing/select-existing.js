@@ -32,12 +32,12 @@ Template.Actions_SelectExisting.viewmodel({
         sequentialId: 1,
       },
     }).map(({
-      _id, sequentialId, title, ...args 
+      _id, sequentialId, title, ...args
     }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
       return {
-        _id, html, title: fullTitle, ...args, 
+        _id, html, title: fullTitle, ...args,
       };
     });
 

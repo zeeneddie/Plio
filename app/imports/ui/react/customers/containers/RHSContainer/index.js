@@ -30,7 +30,7 @@ export default compose(
     identity,
   ),
   mapProps(({
-    isCardReady, organizationsLength, organization, ...props 
+    isCardReady, organizationsLength, organization, ...props
   }) => ({
     ...props,
     organization,
