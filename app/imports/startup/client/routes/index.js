@@ -10,10 +10,6 @@ import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
 import { DocumentTypes } from '/imports/share/constants';
-import UnsubscribeFromNotifications
-  from '/imports/ui/react/pages/components/Unsubscribe/Notifications';
-import UnsubscribeFromDailyRecap from '/imports/ui/react/pages/components/Unsubscribe/DailyRecap';
-import UnsubscribeFromDiscussion from '/imports/ui/react/pages/components/Unsubscribe/Discussion';
 import {
   renderStandards,
   renderRisks,
@@ -351,6 +347,8 @@ FlowRouter.route('/:orgSerialNumber/:route/:documentId/unsubscribe', {
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action: renderTransitionalLayout(async ({ documentId, route, orgSerialNumber }) => {
     const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
+    const { default: UnsubscribeFromNotifications } =
+      await import('../../../ui/react/pages/components/Unsubscribe/Notifications');
 
     return {
       content: (
@@ -363,11 +361,16 @@ FlowRouter.route('/:orgSerialNumber/:route/:documentId/unsubscribe', {
 FlowRouter.route('/:orgSerialNumber/unsubscribe', {
   name: 'unsubscribeFromDailyRecap',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action: renderTransitionalLayout(async ({ orgSerialNumber }) => ({
-    content: (
-      <UnsubscribeFromDailyRecap {...{ orgSerialNumber }} />
-    ),
-  })),
+  action: renderTransitionalLayout(async ({ orgSerialNumber }) => {
+    const { default: UnsubscribeFromDailyRecap } =
+      await import('../../../ui/react/pages/components/Unsubscribe/DailyRecap');
+
+    return {
+      content: (
+        <UnsubscribeFromDailyRecap {...{ orgSerialNumber }} />
+      ),
+    };
+  }),
 });
 
 FlowRouter.route('/:orgSerialNumber/:route/:documentId/discussion/unsubscribe', {
@@ -375,6 +378,8 @@ FlowRouter.route('/:orgSerialNumber/:route/:documentId/discussion/unsubscribe', 
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action: renderTransitionalLayout(async ({ documentId, route, orgSerialNumber }) => {
     const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
+    const { default: UnsubscribeFromDiscussion } =
+      await import('../../../ui/react/pages/components/Unsubscribe/Discussion');
 
     return {
       content: (
