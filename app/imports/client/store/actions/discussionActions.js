@@ -99,11 +99,14 @@ export function setIsDiscussionOpened(isDiscussionOpened) {
 
 export const submit = (
   {
-    organizationId, discussionId, text, fileId, type,
+    organizationId, discussionId, text: inputText, fileId, type,
   },
   callback = () => {},
 ) => async (dispatch, getState) => {
-  const { sanitizeHtml } = await import('meteor/djedi:sanitize-html-client');
+  const { default: sanitizeHtml } = await import('sanitize-html');
+  const text = sanitizeHtml(inputText);
+
+  if (!text) return;
 
   insert.call(
     {
