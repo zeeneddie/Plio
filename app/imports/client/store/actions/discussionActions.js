@@ -114,7 +114,7 @@ export const submit = (
       discussionId,
       type,
       fileId,
-      text: sanitizeHtml(text),
+      text,
     },
     handleMethodResult(callback(dispatch, getState)),
   );
