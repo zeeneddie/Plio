@@ -39,5 +39,10 @@
   },
   "settings": {
     "import/resolver": "meteor"
+  },
+  "globals": {
+    "window": true,
+    "document": true,
+    "global": true
   }
 }
