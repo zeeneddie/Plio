@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
 import { initialState } from '../reducers/discussionReducer';
 import { handleMethodResult } from '/imports/api/helpers';
 import { insert, remove } from '/imports/api/messages/methods';
@@ -103,19 +102,20 @@ export const submit = (
     organizationId, discussionId, text, fileId, type,
   },
   callback = () => {},
-) =>
-  (dispatch, getState) =>
-    insert.call(
-      {
-        organizationId,
-        discussionId,
-        type,
-        fileId,
-        text: sanitizeHtml(text),
-      },
-      handleMethodResult(callback(dispatch, getState)),
-    );
+) => async (dispatch, getState) => {
+  const { sanitizeHtml } = await import('meteor/djedi:sanitize-html-client');
 
+  insert.call(
+    {
+      organizationId,
+      discussionId,
+      type,
+      fileId,
+      text: sanitizeHtml(text),
+    },
+    handleMethodResult(callback(dispatch, getState)),
+  );
+};
 
 export const markMessagesAsRead = (discussion, message) =>
   () => {
