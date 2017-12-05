@@ -1,11 +1,12 @@
 import mount from './mount';
 
-export const renderComponent = getComponent => (options = {}) => async (...args) => {
+export const renderComponent = getComponent => options => async (...args) => {
+  let opts = options || {};
   const { default: component } = await getComponent();
 
-  if (typeof options === 'function') options = await options(...args);
+  if (typeof opts === 'function') opts = await options(...args);
 
-  mount(component, options);
+  mount(component, opts);
 };
 
 export const renderStandards = renderComponent(async () =>
