@@ -17,9 +17,13 @@ const middlewares = [
   throttleActions(DEFAULT_WAIT, DEFAULT_THROTTLE_OPTIONS),
 ];
 
-const processedMiddlewares = process.env.NODE_ENV !== 'production' &&
-  require('redux-devtools-extension').composeWithDevTools(applyMiddleware(...middlewares)) ||
-  applyMiddleware(...middlewares);
+let processedMiddlewares = applyMiddleware(...middlewares);
+
+if (process.env.NODE_ENV !== 'production') {
+  import('redux-devtools-extension').then(({ composeWithDevTools }) => {
+    processedMiddlewares = composeWithDevTools(processedMiddlewares);
+  });
+}
 
 const store = createStore(
   enableBatching(reducer),
