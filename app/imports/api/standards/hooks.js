@@ -30,7 +30,7 @@ Standards.after.remove((userId, doc) => {
     source2FileId && fileIds.push(source2FileId);
 
     const improvementPlanFileIds = get(doc, 'improvementPlan.fileIds');
-    if (!!improvementPlanFileIds) {
+    if (improvementPlanFileIds) {
       fileIds = fileIds.concat(improvementPlanFileIds);
     }
 

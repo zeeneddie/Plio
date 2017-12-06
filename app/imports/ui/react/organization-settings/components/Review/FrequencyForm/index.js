@@ -7,7 +7,7 @@ import { getFormProps } from '../helpers';
 
 const enhance = withProps(getFormProps);
 
-const ReviewFrequencyForm = enhance((props) => (
+const ReviewFrequencyForm = enhance(props => (
   <Form
     autosave
     initialFormData={props.initialFormData}

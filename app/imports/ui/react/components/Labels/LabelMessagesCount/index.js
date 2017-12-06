@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 const LabelMessagesCount = ({ count }) => (
   <span className="chat-indicator">
-    <i className="fa fa-comment"></i>
+    <i className="fa fa-comment" />
     <span className="label label-danger">{count}</span>
   </span>
 );

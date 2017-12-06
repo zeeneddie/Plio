@@ -31,7 +31,7 @@ const enhance = compose(
   }),
 );
 
-const ReviewReminder = enhance((props) => (
+const ReviewReminder = enhance(props => (
   <ReminderTimePicker
     timeValue={props.timeValue}
     timeUnit={props.timeUnit}

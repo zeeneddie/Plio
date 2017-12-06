@@ -54,7 +54,7 @@ const handleMethodResult = (resolve, reject) => (err, res) => (dispatch) => {
   dispatch(batchActions(actions));
 };
 
-export const callMethod = (method, args) => (dispatch) => new Promise((resolve, reject) => {
+export const callMethod = (method, args) => dispatch => new Promise((resolve, reject) => {
   const methodArgs = [args, compose(dispatch, handleMethodResult(resolve, reject))];
 
   dispatch(batchActions([

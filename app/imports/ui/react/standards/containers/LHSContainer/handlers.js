@@ -25,7 +25,7 @@ import { canChangeRoles } from '/imports/api/checkers';
 const getItems = ({ standards }, search) =>
   extractIds(search(['title', 'description', 'status'], standards));
 
-const getActions = (ids) => [setFilteredStandards(ids)];
+const getActions = ids => [setFilteredStandards(ids)];
 
 export const onSearchTextChange =
   onSearch(getItems, getActions, expandCollapsedStandards, collapseExpandedStandards);
@@ -42,7 +42,7 @@ export const openDocumentCreationModal = ({ dispatch }) => () => {
   });
 };
 
-export const onModalOpen = (props) => (e) => {
+export const onModalOpen = props => (e) => {
   const {
     dispatch,
     filteredStandards,

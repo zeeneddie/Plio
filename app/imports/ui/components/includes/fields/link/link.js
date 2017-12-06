@@ -9,5 +9,5 @@ Template.Link.viewmodel({
     e.preventDefault();
 
     _.isFunction(this.onClick) && this.onClick(e);
-  }
+  },
 });

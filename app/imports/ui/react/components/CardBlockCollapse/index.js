@@ -41,7 +41,10 @@ const CardBlockCollapse = enhance(({
   else if (rightText) rightContent = <span className="text-muted">{rightText}</span>;
 
   return (
-    <CollapseBlock {...{ tag, classNames, collapsed, onToggleCollapse, ...collapseBlock }}>
+    <CollapseBlock {...{
+      tag, classNames, collapsed, onToggleCollapse, ...collapseBlock,
+    }}
+    >
       <div>
         <CardTitle className={cx('pull-xs-left', lTextCx)} {...lTextProps}>
           {leftText}

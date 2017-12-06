@@ -16,7 +16,7 @@ Template.NC_Page.viewmodel({
   isDiscussionReady: false,
   isDiscussionOpened: false,
   autorun: [
-    function() {
+    function () {
       const organizationId = this.organizationId();
       const NCId = this.NCId();
       let _subHandlers = [BackgroundSubs.subscribe('nonConformitiesDeps', organizationId)];
@@ -29,7 +29,7 @@ Template.NC_Page.viewmodel({
 
       this._subHandlers(_subHandlers);
     },
-    function() {
+    function () {
       const docId = this.NCId();
       const organizationId = this.organizationId();
       if (!docId) return;
@@ -40,7 +40,7 @@ Template.NC_Page.viewmodel({
         this.isDiscussionReady(discussionHandle.ready());
       }
     },
-    function() {
+    function () {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
     },
   ],
@@ -68,7 +68,7 @@ Template.NC_Page.viewmodel({
     };
   },
   messagesNotViewedCount() {
-    const count = this.counter.get('nc-messages-not-viewed-count-' + this.NCId());
+    const count = this.counter.get(`nc-messages-not-viewed-count-${this.NCId()}`);
     return count;
   },
 });

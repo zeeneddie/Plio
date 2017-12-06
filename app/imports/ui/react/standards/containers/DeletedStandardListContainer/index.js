@@ -10,7 +10,7 @@ import { pickDeep } from '/imports/api/helpers';
 import { getState } from '/imports/client/store';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 
-const redirectHandle = (props) => setTimeout(() => {
+const redirectHandle = props => setTimeout(() => {
   const { urlItemId } = getState('global');
   const standardsByIds = getState('collections.standardsByIds');
   const {
@@ -49,5 +49,5 @@ export default compose(
         redirectHandle(nextProps);
       }
     },
-  })
+  }),
 )(StandardListContainer);

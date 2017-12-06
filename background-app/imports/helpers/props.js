@@ -11,4 +11,4 @@ export const propOwner = property('owner');
 export const propIdentifiedBy = property('identifiedBy');
 
 export const propCreatedBy = property('createdBy');
- 
+

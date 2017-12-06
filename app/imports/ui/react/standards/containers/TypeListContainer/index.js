@@ -15,12 +15,12 @@ import {
   createUncategorizedType,
 } from '../../helpers';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   standardTypes: state.collections.standardTypes,
   ...getSelectedStandardDeletedState(state),
 });
 
-const openType = (props) => setTimeout(() => {
+const openType = props => setTimeout(() => {
   const urlItemId = getState('global.urlItemId');
   const standardsByIds = getState('collections.standardsByIds');
   const {

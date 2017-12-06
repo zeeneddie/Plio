@@ -3,7 +3,9 @@ import React, { PropTypes } from 'react';
 import Button from '../../../../components/Buttons/Button';
 import Icon from '../../../../components/Icons/Icon';
 
-const LinkItem = ({ href, indicator, title, sequentialId }) => (
+const LinkItem = ({
+  href, indicator, title, sequentialId,
+}) => (
   <Button
     href={href}
     color="secondary"

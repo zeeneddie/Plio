@@ -63,7 +63,7 @@ const configureSlingshot = () => {
       return createPath(
         userAvatarsDir,
         userId,
-        `${Random.id()}-${sanitizeFilename(file.name)}`
+        `${Random.id()}-${sanitizeFilename(file.name)}`,
       );
     },
   });
@@ -86,7 +86,7 @@ const configureSlingshot = () => {
         organizationId,
         standardFilesDir,
         standardId,
-        `${Random.id()}-${sanitizeFilename(file.name)}`
+        `${Random.id()}-${sanitizeFilename(file.name)}`,
       );
     },
   });
@@ -108,7 +108,7 @@ const configureSlingshot = () => {
         organizationId,
         standardFilesDir,
         standardId,
-        `${Random.id()}-${sanitizeFilename(file.name)}`
+        `${Random.id()}-${sanitizeFilename(file.name)}`,
       );
     },
   });
@@ -132,7 +132,7 @@ const configureSlingshot = () => {
         'uploads',
         organizationId,
         improvementPlanFilesDir,
-        `${Random.id()}-${sanitizeFilename(file.name)}`
+        `${Random.id()}-${sanitizeFilename(file.name)}`,
       );
     },
   });
@@ -155,7 +155,7 @@ const configureSlingshot = () => {
         organizationId,
         nonConformityFilesDir,
         nonConformityId,
-        `${Random.id()}-${sanitizeFilename(file.name)}`
+        `${Random.id()}-${sanitizeFilename(file.name)}`,
       );
     },
   });
@@ -178,7 +178,7 @@ const configureSlingshot = () => {
         organizationId,
         riskFilesDir,
         riskId,
-        `${Random.id()}-${sanitizeFilename(file.name)}`
+        `${Random.id()}-${sanitizeFilename(file.name)}`,
       );
     },
   });
@@ -203,7 +203,7 @@ const configureSlingshot = () => {
         organizationId,
         actionFilesDir,
         actionId,
-        `${Random.id()}-${sanitizeFilename(file.name)}`
+        `${Random.id()}-${sanitizeFilename(file.name)}`,
       );
     },
   });
@@ -223,9 +223,7 @@ const configureSlingshot = () => {
       }
 
       if (!isOrgMember(this.userId, NC.organizationId)) {
-        throw new Meteor.Error(
-          403, 'User is not authorized for uploading files in this organization'
-        );
+        throw new Meteor.Error(403, 'User is not authorized for uploading files in this organization');
       }
 
       return true;
@@ -240,7 +238,7 @@ const configureSlingshot = () => {
         organizationId,
         rootCauseAnalysisFilesDir,
         nonConformityId,
-        `${Random.id()}-${sanitizeFilename(file.name)}`
+        `${Random.id()}-${sanitizeFilename(file.name)}`,
       );
     },
   });
@@ -260,9 +258,7 @@ const configureSlingshot = () => {
       }
 
       if (!canChangeHelpDocs(this.userId)) {
-        throw new Meteor.Error(
-          403, 'User is not authorized for uploading files for help documents'
-        );
+        throw new Meteor.Error(403, 'User is not authorized for uploading files for help documents');
       }
 
       return true;
@@ -275,7 +271,7 @@ const configureSlingshot = () => {
         organizationId,
         helpDocsFilesDir,
         helpDocId,
-        `${Random.id()}-${sanitizeFilename(file.name)}`
+        `${Random.id()}-${sanitizeFilename(file.name)}`,
       );
     },
   });

@@ -73,7 +73,7 @@ class DataAggregator {
   }
 
   _initData() {
-    this.fields.forEach(field => {
+    this.fields.forEach((field) => {
       const { reference } = this.mapping.fields[field];
 
       // if reference not set that export by field name else by string selector
@@ -86,11 +86,15 @@ class DataAggregator {
       }
 
       // the code bellow works for aggregate lookup
-      const { from, internalField, externalField, target, many } = reference;
+      const {
+        from, internalField, externalField, target, many,
+      } = reference;
 
       this
         .addUnwind(internalField, PRE_LOOKUP)
-        .addLookup({ from, localField: internalField, foreignField: externalField, as: field })
+        .addLookup({
+          from, localField: internalField, foreignField: externalField, as: field,
+        })
         .addUnwind(field, POST_LOOKUP)
         .addProjectField(field, target ? `${field}.${target}` : true)
         .addGroupField(field, Boolean(many));

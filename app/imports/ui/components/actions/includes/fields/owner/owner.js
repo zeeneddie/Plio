@@ -5,10 +5,10 @@ import invoke from 'lodash.invoke';
 Template.Actions_Owner.viewmodel({
   label: 'Owner',
   placeholder: 'Owner',
-  ownerId() { return Meteor.userId() },
+  ownerId() { return Meteor.userId(); },
   selectArgs() {
     const { ownerId: value, placeholder } = this.data();
-    
+
     return {
       value,
       placeholder,
@@ -18,11 +18,11 @@ Template.Actions_Owner.viewmodel({
         this.ownerId(ownerId);
 
         invoke(this.parent(), 'update', { ownerId });
-      }
+      },
     };
   },
   getData() {
     const { ownerId = Meteor.userId() } = this.data();
     return { ownerId };
-  }
+  },
 });

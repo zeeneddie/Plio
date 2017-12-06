@@ -25,10 +25,8 @@ const mapStateToProps = state => ({
 
 export default compose(
   connect(pickDeep(['global.filter', 'collections.risks'])),
-  shouldUpdate((props, nextProps) => Boolean(
-    lengthRisks(props) !== lengthRisks(nextProps) ||
-    props.filter !== nextProps.filter
-  )),
+  shouldUpdate((props, nextProps) => Boolean(lengthRisks(props) !== lengthRisks(nextProps) ||
+    props.filter !== nextProps.filter)),
   mapProps(props => ({ risks: getRisksByFilter(props) })),
   branch(
     lengthRisks,
@@ -40,7 +38,7 @@ export default compose(
     isCardReady,
     risk,
     risks,
-    ...props,
+    ...props
   }) => ({
     ...props,
     risk,
@@ -54,10 +52,8 @@ export default compose(
   ),
   shouldUpdate((props, nextProps) => {
     const omitRiskKeys = omitC(['updatedAt']);
-    return Boolean(
-      props.isReady !== nextProps.isReady ||
+    return Boolean(props.isReady !== nextProps.isReady ||
       props.isFullScreenMode !== nextProps.isFullScreenMode ||
-      notEquals(omitRiskKeys(props.risk), omitRiskKeys(nextProps.risk))
-    );
+      notEquals(omitRiskKeys(props.risk), omitRiskKeys(nextProps.risk)));
   }),
 )(RisksRHS);

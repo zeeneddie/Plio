@@ -8,7 +8,7 @@ import {
   complete,
   verify,
   undoCompletion,
-  undoVerification
+  undoVerification,
 } from '/imports/api/actions/methods';
 
 
@@ -21,14 +21,14 @@ Template.Actions_EditSubcard.viewmodel({
     return ({ completionComments }) => {
       this.parent().callUpdate(this.completeFn, {
         _id: this._id(),
-        completionComments
+        completionComments,
       });
     };
   },
   getUndoCompletionFn() {
     return () => {
       this.parent().callUpdate(this.undoCompletionFn, {
-        _id: this._id()
+        _id: this._id(),
       });
     };
   },
@@ -37,14 +37,14 @@ Template.Actions_EditSubcard.viewmodel({
       this.parent().callUpdate(this.verifyFn, {
         _id: this._id(),
         success,
-        verificationComments
+        verificationComments,
       });
     };
   },
   getUndoVerificationFn() {
     return () => {
       this.parent().callUpdate(this.undoVerificationFn, {
-        _id: this._id()
+        _id: this._id(),
       });
     };
   },
@@ -52,7 +52,7 @@ Template.Actions_EditSubcard.viewmodel({
     return ({ standardId }, cb) => {
       this.parent().callUpdate(this.linkStandardFn, {
         _id: this._id(),
-        standardId
+        standardId,
       }, cb);
     };
   },
@@ -60,7 +60,7 @@ Template.Actions_EditSubcard.viewmodel({
     return ({ standardId }, cb) => {
       this.parent().callUpdate(this.unlinkStandardFn, {
         _id: this._id(),
-        standardId
+        standardId,
       }, cb);
     };
   },
@@ -69,7 +69,7 @@ Template.Actions_EditSubcard.viewmodel({
       this.parent().callUpdate(this.linkDocumentFn, {
         _id: this._id(),
         documentId,
-        documentType
+        documentType,
       }, cb);
     };
   },
@@ -78,7 +78,7 @@ Template.Actions_EditSubcard.viewmodel({
       this.parent().callUpdate(this.unlinkDocumentFn, {
         _id: this._id(),
         documentId,
-        documentType
+        documentType,
       }, cb);
     };
   },
@@ -86,7 +86,7 @@ Template.Actions_EditSubcard.viewmodel({
     return ({ targetDate }, cb) => {
       this.parent().callUpdate(this.updateCompletionDateFn, {
         _id: this._id(),
-        targetDate
+        targetDate,
       }, cb);
     };
   },
@@ -94,7 +94,7 @@ Template.Actions_EditSubcard.viewmodel({
     return ({ userId }, cb) => {
       this.parent().callUpdate(this.updateCompletionExecutorFn, {
         _id: this._id(),
-        userId
+        userId,
       }, cb);
     };
   },
@@ -102,7 +102,7 @@ Template.Actions_EditSubcard.viewmodel({
     return ({ targetDate }, cb) => {
       this.parent().callUpdate(this.updateVerificationDateFn, {
         _id: this._id(),
-        targetDate
+        targetDate,
       }, cb);
     };
   },
@@ -110,11 +110,11 @@ Template.Actions_EditSubcard.viewmodel({
     return ({ userId }, cb) => {
       this.parent().callUpdate(this.updateVerificationExecutorFn, {
         _id: this._id(),
-        userId
+        userId,
       }, cb);
     };
   },
   getData() {
     return this.child('Actions_Card_Edit_Main').getData();
-  }
+  },
 });

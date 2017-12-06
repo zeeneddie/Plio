@@ -9,5 +9,5 @@ export default compose(
   withHandlers({
     onFocus: props => () => props.setFocused(T),
     onBlur: props => () => props.setFocused(F),
-  })
+  }),
 )(LHS);

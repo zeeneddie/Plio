@@ -33,5 +33,5 @@ Template.SCSource.viewmodel({
       url = `https://player.vimeo.com/video/${videoId}`;
     }
     return url;
-  }
+  },
 });

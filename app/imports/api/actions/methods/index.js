@@ -17,7 +17,7 @@ import {
   ACT_OnUndoCompletionChecker,
   ACT_OnVerifyChecker,
   ACT_OnUndoVerificationChecker,
-  ACT_LinkedDocsChecker
+  ACT_LinkedDocsChecker,
 } from '../../checkers';
 import { inject, always, T } from '/imports/api/helpers';
 import {
@@ -107,7 +107,7 @@ export const setCompletionExecutor = new CheckedMethod({
   check(checker) {
     return injectACT(checker)(
       () => action => action.completed(),
-      ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED
+      ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED,
     );
   },
 
@@ -133,7 +133,7 @@ export const setVerificationDate = new CheckedMethod({
   check(checker) {
     return injectACT(checker)(
       () => action => action.verified(),
-      ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED
+      ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED,
     );
   },
 
@@ -213,7 +213,7 @@ export const unlinkDocument = new CheckedMethod({
   ]).validator(),
 
   check(checker) {
-    const _checker = ({ documentId, documentType }) => (action) =>
+    const _checker = ({ documentId, documentType }) => action =>
       !action.isLinkedToDocument(documentId, documentType);
 
     return injectACT(checker)(_checker, ACT_NOT_LINKED);

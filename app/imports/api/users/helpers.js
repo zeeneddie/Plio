@@ -16,7 +16,7 @@ export const getAvatar = property('profile.avatar');
 export const getFullName = compose(
   trim,
   join(' '),
-  chain(getFirstName, getLastName)
+  chain(getFirstName, getLastName),
 );
 
 const isUserSystem = user => typeof user === 'string' && user === SystemName && user;

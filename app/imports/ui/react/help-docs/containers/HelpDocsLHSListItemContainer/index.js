@@ -11,13 +11,13 @@ const HelpDocsLHSListItemContainer = compose(
   connect(pickDeep(['global.urlItemId'])),
 
   withHandlers({
-    onClick: props => handler => {
+    onClick: props => (handler) => {
       props.dispatch(setUrlItemId(props._id));
       handler({ urlItemId: props._id });
     },
   }),
 
-  withProps((props) => ({
+  withProps(props => ({
     href: getPath('helpDoc')({ helpId: props._id }),
     isActive: props.urlItemId === props._id,
   })),
@@ -33,7 +33,7 @@ const HelpDocsLHSListItemContainer = compose(
     'userHasChangeAccess',
   ])(props)),
 
-  shouldUpdate((props, nextProps) => !shallowEqual(props, nextProps))
+  shouldUpdate((props, nextProps) => !shallowEqual(props, nextProps)),
 )(HelpDocsLHSListItem);
 
 HelpDocsLHSListItemContainer.propTypes = propTypes;

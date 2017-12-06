@@ -35,7 +35,9 @@ export const convertStandardFileToHtml = new ValidatedMethod({
     },
   }).validator(),
 
-  run({ fileUrl, htmlFileName, source, standardId, convertParams }) {
+  run({
+    fileUrl, htmlFileName, source, standardId, convertParams,
+  }) {
     const userId = this.userId;
     if (!this.userId) {
       throw new Meteor.Error(403, 'Unathorized user cannot convert docx files');
@@ -59,7 +61,7 @@ export const convertStandardFileToHtml = new ValidatedMethod({
     };
 
     const afterConvertation = (htmlUrl) => {
-      if (!!standard[source]) {
+      if (standard[source]) {
         StandardsService.update({
           _id: standardId,
           [`${source}.htmlUrl`]: htmlUrl,
@@ -103,9 +105,7 @@ export const convertHelpDocFileToHtml = new ValidatedMethod({
     }
 
     if (!canChangeHelpDocs(this.userId)) {
-      throw new Meteor.Error(
-        403, 'You are not authorized for converting files for help documents'
-      );
+      throw new Meteor.Error(403, 'You are not authorized for converting files for help documents');
     }
 
     this.unblock();
@@ -117,7 +117,7 @@ export const convertHelpDocFileToHtml = new ValidatedMethod({
     };
 
     const afterConvertation = (htmlUrl) => {
-      if (!!helpDoc.source) {
+      if (helpDoc.source) {
         HelpDocService.update({
           _id: helpDocId,
           'source.htmlUrl': htmlUrl,

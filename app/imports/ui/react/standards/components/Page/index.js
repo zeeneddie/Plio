@@ -18,7 +18,7 @@ const enhance = mapProps(props => (
   }) : props
 ));
 
-const StandardsPage = enhance((props) => (
+const StandardsPage = enhance(props => (
   props.organization ? (
     <PageContainer classNames={props.classNames}>
       {(!props.isDiscussionOpened ? <StandardsLHSContainer /> : null)}

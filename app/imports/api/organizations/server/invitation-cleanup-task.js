@@ -9,7 +9,7 @@ SyncedCron.add({
     return parser.text('every 1 minute');
   },
 
-  job: function () {
+  job() {
     const emailVerificationExpirationTimeInHours = 0.03;
     const emailVerificationExpirationThresholdDate = moment()
       .subtract(emailVerificationExpirationTimeInHours, 'hours')
@@ -18,7 +18,7 @@ SyncedCron.add({
     // get all users with expired invitations
     Meteor.users.find({
       invitationExpirationDate: {
-        $lt: new Date,
+        $lt: new Date(),
       },
     }, { fields: { _id: 1 } }).forEach(userDoc => Meteor.users.remove({ _id: userDoc._id }));
 
@@ -28,13 +28,13 @@ SyncedCron.add({
         $lt: emailVerificationExpirationThresholdDate,
       },
       'emails.verified': false,
-    }, { fields: { _id: 1 } }).forEach(userDoc => {
+    }, { fields: { _id: 1 } }).forEach((userDoc) => {
       Meteor.users.update({ _id: userDoc._id }, { $unset: { 'services.email': '' } });
     });
 
     console.log(
       'Expired invitations and expired email verification tokens removed at ',
-      new Date()
+      new Date(),
     );
   },
 });

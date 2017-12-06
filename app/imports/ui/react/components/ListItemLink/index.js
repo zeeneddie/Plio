@@ -11,7 +11,7 @@ import { transsoc } from '/imports/api/helpers';
 import { setShowCard } from '/imports/client/store/actions/mobileActions';
 import propTypes from './propTypes';
 
-const ListItemLink = (props) => (
+const ListItemLink = props => (
   <a
     className={props.className}
     href={props.href}
@@ -35,5 +35,5 @@ export default compose(
         FlowRouter.setParams(params);
       });
     },
-  })
+  }),
 )(ListItemLink);

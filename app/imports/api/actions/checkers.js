@@ -20,7 +20,7 @@ import {
   ACT_COMPLETION_CANNOT_BE_UNDONE,
   ACT_CANNOT_VERIFY,
   ACT_VERIFICATION_CANNOT_BE_UNDONE,
-  ACT_ANALYSIS_MUST_BE_COMPLETED
+  ACT_ANALYSIS_MUST_BE_COMPLETED,
 } from '../errors';
 
 export const ACT_Check = function ACT_Check(_id) {
@@ -37,12 +37,13 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
   const NCsIds = _.pluck(linkedToByType[ProblemTypes.NON_CONFORMITY], 'documentId');
   const risksIds = _.pluck(linkedToByType[ProblemTypes.RISK], 'documentId');
 
-  let docWithUncompletedAnalysis, analysisTitle;
+  let docWithUncompletedAnalysis,
+    analysisTitle;
 
   docWithUncompletedAnalysis = Risks.findOne({
     _id: { $in: risksIds },
     workflowType: WorkflowTypes.SIX_STEP,
-    'analysis.status': 0 // Not completed
+    'analysis.status': 0, // Not completed
   });
 
   if (docWithUncompletedAnalysis) {
@@ -51,11 +52,10 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
     docWithUncompletedAnalysis = NonConformities.findOne({
       _id: { $in: NCsIds },
       workflowType: WorkflowTypes.SIX_STEP,
-      'analysis.status': 0 // Not completed
+      'analysis.status': 0, // Not completed
     });
     analysisTitle = AnalysisTitles.rootCauseAnalysis;
   }
-
 
 
   if (docWithUncompletedAnalysis) {
@@ -94,7 +94,7 @@ export const ACT_OnLinkChecker = ({ documentId, documentType }, action) => {
   return {
     doc,
     collection,
-    action
+    action,
   };
 };
 

@@ -70,10 +70,10 @@ export const inspire = curry((props, instance, ...args) =>
 
 export const invokeId = instance => invoke(instance, '_id');
 
-export const $isScrolledToBottom = (div) =>
+export const $isScrolledToBottom = div =>
   div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
 
-export const $isAlmostScrolledToBottom = (div) =>
+export const $isAlmostScrolledToBottom = div =>
   div.scrollTop() + div.innerHeight() + 100 >= div.prop('scrollHeight');
 
 export const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
@@ -148,7 +148,7 @@ export const invoker = curry((arity, method) => curry((...args) => {
   const target = args[arity];
 
   if (target != null && typeof target[method] === 'function') {
-    return target[method].apply(target, Array.prototype.slice.call(args, 0, arity));
+    return target[method](...Array.prototype.slice.call(args, 0, arity));
   }
 
   throw new TypeError(`${target} does not have a method named "${method}"`);
@@ -314,7 +314,7 @@ export const pickDocuments = curry((fields, collection, ids) => {
   return reduceC(reducer, [], ids);
 });
 
-export const combineObjects = (fns) => obj =>
+export const combineObjects = fns => obj =>
   Object.assign([], fns).reduce((prev, cur) => ({ ...prev, ...cur(obj) }), {});
 
 // Works like recompose's branch but for functions
@@ -336,15 +336,13 @@ export const empty = (a) => {
 
 export const startsWith = curry((search, str) => str.startsWith(search));
 
-export const handleMethodResult = (cb) => {
-  return (err, res) => {
-    if (err) {
-      toastr.error(err.reason);
-    }
-    if (_.isFunction(cb)) {
-      cb(err, res);
-    }
-  };
+export const handleMethodResult = cb => (err, res) => {
+  if (err) {
+    toastr.error(err.reason);
+  }
+  if (_.isFunction(cb)) {
+    cb(err, res);
+  }
 };
 
 export const showError = (errorMsg) => {
@@ -352,7 +350,7 @@ export const showError = (errorMsg) => {
 };
 
 // 1, 1.2, 3, 10.3, a, b, c
-export const sortArrayByTitlePrefix = (arr) => [...arr].sort((a, b) => {
+export const sortArrayByTitlePrefix = arr => [...arr].sort((a, b) => {
   const at = getTitlePrefix(`${a.titlePrefix}`.toLowerCase());
   const bt = getTitlePrefix(`${b.titlePrefix}`.toLowerCase());
 
@@ -377,7 +375,7 @@ export const explainMongoQuery = (
   collection,
   query = {},
   options = {},
-  verbose = 'queryPlanner'
+  verbose = 'queryPlanner',
 ) => {
   let results = collection.rawCollection().find(query, _.omit(options, 'sort', 'limit'));
 
@@ -416,24 +414,16 @@ export const getRequiredFieldsByCollection = (collection) => {
 
 export const compareDates = (date1, date2) => {
   if (!_.isDate(date1)) {
-    throw new Error(
-      'First argument of "compareDates" function must be of type Date'
-    );
+    throw new Error('First argument of "compareDates" function must be of type Date');
   }
 
   if (!_.isDate(date2)) {
-    throw new Error(
-      'Second argument of "compareDates" function must be of type Date'
-    );
+    throw new Error('Second argument of "compareDates" function must be of type Date');
   }
 
-  const utcDate1 = new Date(
-    date1.getTime() + (date1.getTimezoneOffset() * 60000)
-  );
+  const utcDate1 = new Date(date1.getTime() + (date1.getTimezoneOffset() * 60000));
 
-  const utcDate2 = new Date(
-    date2.getTime() + (date2.getTimezoneOffset() * 60000)
-  );
+  const utcDate2 = new Date(date2.getTime() + (date2.getTimezoneOffset() * 60000));
 
   if (utcDate1 > utcDate2) {
     return 1;
@@ -456,7 +446,7 @@ export const diff = (o1, o2) => {
   return result;
 };
 
-export const testPerformance = (func) => (...args) => {
+export const testPerformance = func => (...args) => {
   const type = typeof func;
 
   if (type !== 'function') throw new Error(`Expected function, got ${type}`);
@@ -543,9 +533,9 @@ export const createSearchRegex = (val, isPrecise) => {
       r = new RegExp(`.*(${value}).*`, 'i');
     } else {
       r = value.split(' ')
-          .filter(word => !!word)
-          .map(word => `(?=.*\\b.*${word}.*\\b)`)
-          .join('');
+        .filter(word => !!word)
+        .map(word => `(?=.*\\b.*${word}.*\\b)`)
+        .join('');
 
       r = new RegExp(`^${r}.*$`, 'i');
     }

@@ -5,7 +5,6 @@ import cx from 'classnames';
 import { getFormattedDate } from '/imports/share/helpers';
 
 export default class DatePicker extends React.Component {
-
   static get propTypes() {
     return {
       className: React.PropTypes.string,
@@ -54,5 +53,4 @@ export default class DatePicker extends React.Component {
       />
     );
   }
-
 }

@@ -3,9 +3,7 @@ import ProblemWorkflow from './ProblemWorkflow';
 
 
 export default class NCWorkflow extends ProblemWorkflow {
-
   static get _collection() {
     return NonConformities;
   }
-
 }

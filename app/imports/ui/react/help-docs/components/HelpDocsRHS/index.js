@@ -6,7 +6,7 @@ import HelpDocsRHSBodyContainer from '../../containers/HelpDocsRHSBodyContainer'
 import RHS from '../../../components/RHS';
 import propTypes from './propTypes';
 
-const HelpDocsRHS = (props) => (
+const HelpDocsRHS = props => (
   <RHS
     flex
     className={cx('expandable', {
@@ -38,7 +38,7 @@ const HelpDocsRHS = (props) => (
         userHasChangeAccess={props.userHasChangeAccess}
       />
 
-      <div className="card-footer"></div>
+      <div className="card-footer" />
 
     </RHS.Card>
   </RHS>

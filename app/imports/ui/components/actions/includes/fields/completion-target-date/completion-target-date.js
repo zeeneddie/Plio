@@ -22,5 +22,5 @@ Template.Actions_CompletionTargetDate.viewmodel({
   },
   getData() {
     return { completionTargetDate: this.completionTargetDate() };
-  }
+  },
 });

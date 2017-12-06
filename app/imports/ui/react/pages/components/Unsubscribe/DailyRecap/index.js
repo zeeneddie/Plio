@@ -10,9 +10,8 @@ const enhancer = compose(
   lifecycle({
     componentDidMount() {
       const orgSerialNumber = parseInt(this.props.orgSerialNumber, 10);
-      unsubscribeFromDailyRecap.call({ orgSerialNumber }, handleMethodResult((error) =>
-        this.props.setState({ error, loading: false })
-      ));
+      unsubscribeFromDailyRecap.call({ orgSerialNumber }, handleMethodResult(error =>
+        this.props.setState({ error, loading: false })));
     },
   }),
   withProps({

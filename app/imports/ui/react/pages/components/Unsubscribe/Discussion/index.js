@@ -11,9 +11,8 @@ const enhancer = compose(
     componentDidMount() {
       const { documentId, documentType } = this.props;
 
-      unsubscribe.call({ documentId, documentType }, handleMethodResult((error) =>
-        this.props.setState({ error, loading: false })
-      ));
+      unsubscribe.call({ documentId, documentType }, handleMethodResult(error =>
+        this.props.setState({ error, loading: false })));
     },
   }),
   withProps({

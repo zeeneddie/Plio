@@ -30,7 +30,7 @@ Template.HelloPage.viewmodel({
             if (org) {
               localStorage.setItem(
                 `${Meteor.userId()}: selectedOrganizationSerialNumber`,
-                org.serialNumber
+                org.serialNumber,
               );
               this.goToDashboard(org.serialNumber);
             }
@@ -52,7 +52,7 @@ Template.HelloPage.viewmodel({
       variation: 'save',
       timezone: moment.tz.guess(),
       ownerName: Meteor.user().fullName(),
-      currency: OrgCurrencies.GBP
+      currency: OrgCurrencies.GBP,
     });
   },
   deleteAccount(e) {
@@ -60,25 +60,25 @@ Template.HelloPage.viewmodel({
 
     swal({
       title: 'Are you sure?',
-      text: `Your account will be deleted permanently!`,
+      text: 'Your account will be deleted permanently!',
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Delete',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       remove.call({}, (err) => {
         if (err) {
           swal({
             title: 'Oops... Something went wrong!',
             text: err.reason,
-            type:'error',
+            type: 'error',
             timer: ALERT_AUTOHIDE_TIME,
             showConfirmButton: false,
           });
         } else {
           swal({
             title: 'Removed!',
-            text: `Your account was removed successfully!`,
+            text: 'Your account was removed successfully!',
             type: 'success',
             timer: ALERT_AUTOHIDE_TIME,
             showConfirmButton: false,
@@ -86,5 +86,5 @@ Template.HelloPage.viewmodel({
         }
       });
     });
-  }
+  },
 });

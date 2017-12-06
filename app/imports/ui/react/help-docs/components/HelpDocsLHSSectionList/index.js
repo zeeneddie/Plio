@@ -5,7 +5,7 @@ import LHSItem from '../../../components/LHSItem';
 import HelpDocsLHSHelpList from '../HelpDocsLHSHelpList';
 import propTypes from './propTypes';
 
-const HelpDocsLHSSectionList = (props) => (
+const HelpDocsLHSSectionList = props => (
   <div>
     {props.sections.map(section => (
       <LHSItem
@@ -21,7 +21,7 @@ const HelpDocsLHSSectionList = (props) => (
           userHasChangeAccess={props.userHasChangeAccess}
         />
       </LHSItem>
-      ))}
+    ))}
   </div>
 );
 

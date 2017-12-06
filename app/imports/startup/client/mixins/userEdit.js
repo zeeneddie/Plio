@@ -25,5 +25,5 @@ export default {
     } else {
       updateFn();
     }
-  }
+  },
 };

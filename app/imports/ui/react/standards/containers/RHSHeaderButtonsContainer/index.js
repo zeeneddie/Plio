@@ -21,7 +21,9 @@ export default compose(
     'discussion.isDiscussionOpened',
   ])),
 
-  mapProps(({ standard: { _id, title, isDeleted = false }, organizationId, userId, ...props }) => {
+  mapProps(({
+    standard: { _id, title, isDeleted = false }, organizationId, userId, ...props
+  }) => {
     const hasAccess = canChangeStandards(userId, organizationId);
     const hasFullAccess = isOrgOwner(userId, organizationId);
     const pathToDiscussion = getPath('standardDiscussion')({ urlItemId: _id });

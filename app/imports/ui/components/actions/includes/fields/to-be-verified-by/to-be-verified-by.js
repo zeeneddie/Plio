@@ -9,9 +9,9 @@ Template.Actions_ToBeVerifiedBy.viewmodel({
   selectFirstIfNoSelected: false,
   selectArgs() {
     const {
-      toBeVerifiedBy:value = '',
+      toBeVerifiedBy: value = '',
       placeholder,
-      selectFirstIfNoSelected
+      selectFirstIfNoSelected,
     } = this.data();
 
     return {
@@ -19,12 +19,12 @@ Template.Actions_ToBeVerifiedBy.viewmodel({
       placeholder,
       selectFirstIfNoSelected,
       onUpdate: (viewmodel) => {
-        const { selected:userId } = viewmodel.getData();
+        const { selected: userId } = viewmodel.getData();
 
         this.toBeVerifiedBy(userId);
 
         return invoke(this, 'onUpdate', { userId });
-      }
+      },
     };
   },
   canBeVerified() {
@@ -32,25 +32,25 @@ Template.Actions_ToBeVerifiedBy.viewmodel({
   },
   verify() {
     return (viewmodel) => {
-      const { text:verificationComments } = viewmodel.getData();
+      const { text: verificationComments } = viewmodel.getData();
 
       this.onVerify && this.onVerify({
         verificationComments,
-        success: true
+        success: true,
       });
     };
   },
   failVerification() {
     return (viewmodel) => {
-      const { text:verificationComments } = viewmodel.getData();
+      const { text: verificationComments } = viewmodel.getData();
 
       this.onVerify && this.onVerify({
         verificationComments,
-        success: false
+        success: false,
       });
     };
   },
   getData() {
     return { toBeVerifiedBy: this.toBeVerifiedBy() };
-  }
+  },
 });

@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-const { Error:E } = Meteor;
+const { Error: E } = Meteor;
 
 export const P_CANNOT_SET_EXECUTOR_FOR_COMPLETED_ANALYSIS = new E(400, 'Cannot set "Who will do it?" for completed root cause analysis');
 

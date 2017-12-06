@@ -11,5 +11,5 @@ Template.DeleteButton.viewmodel({
   },
   iconClass() {
     return this.iconCssClass();
-  }
+  },
 });

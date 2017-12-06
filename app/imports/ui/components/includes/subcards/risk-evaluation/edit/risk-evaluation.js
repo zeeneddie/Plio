@@ -16,9 +16,9 @@ Template.Subcards_RiskEvaluation_Edit.viewmodel({
   update({ ...args }, cb = () => {}) {
     const data = this.data();
     const _args = _.keys(args)
-                    .map(key => ({ [`riskEvaluation.${key}`]: args[key] }) )
-                    .reduce((prev, cur) => ({ ...prev, ...cur }));
+      .map(key => ({ [`riskEvaluation.${key}`]: args[key] }))
+      .reduce((prev, cur) => ({ ...prev, ...cur }));
 
     this.parent().update(_args, cb);
-  }
+  },
 });

@@ -14,93 +14,67 @@ import {
   SET_CHANGELOG_DOCUMENT_DATA,
 } from './types';
 
-export const setLoadingLastHumanLog = (isLoadingLastHumanLog) => {
-  return {
-    type: SET_LOADING_LAST_HUMAN_LOG,
-    payload: { isLoadingLastHumanLog },
-  };
-};
+export const setLoadingLastHumanLog = isLoadingLastHumanLog => ({
+  type: SET_LOADING_LAST_HUMAN_LOG,
+  payload: { isLoadingLastHumanLog },
+});
 
-export const setLoadingLastLogs = (isLoadingLastLogs) => {
-  return {
-    type: SET_LOADING_LAST_LOGS,
-    payload: { isLoadingLastLogs },
-  };
-};
+export const setLoadingLastLogs = isLoadingLastLogs => ({
+  type: SET_LOADING_LAST_LOGS,
+  payload: { isLoadingLastLogs },
+});
 
-export const setLastLogsLoaded = (isLastLogsLoaded) => {
-  return {
-    type: SET_LAST_LOGS_LOADED,
-    payload: { isLastLogsLoaded },
-  };
-};
+export const setLastLogsLoaded = isLastLogsLoaded => ({
+  type: SET_LAST_LOGS_LOADED,
+  payload: { isLastLogsLoaded },
+});
 
-export const setLoadingAllLogs = (isLoadingAllLogs) => {
-  return {
-    type: SET_LOADING_ALL_LOGS,
-    payload: { isLoadingAllLogs },
-  };
-};
+export const setLoadingAllLogs = isLoadingAllLogs => ({
+  type: SET_LOADING_ALL_LOGS,
+  payload: { isLoadingAllLogs },
+});
 
-export const setAllLogsLoaded = (isAllLogsLoaded) => {
-  return {
-    type: SET_ALL_LOGS_LOADED,
-    payload: { isAllLogsLoaded },
-  };
-};
+export const setAllLogsLoaded = isAllLogsLoaded => ({
+  type: SET_ALL_LOGS_LOADED,
+  payload: { isAllLogsLoaded },
+});
 
-export const setLoadingLogsCount = (isLoadingLogsCount) => {
-  return {
-    type: SET_LOADING_LOGS_COUNT,
-    payload: { isLoadingLogsCount },
-  };
-};
+export const setLoadingLogsCount = isLoadingLogsCount => ({
+  type: SET_LOADING_LOGS_COUNT,
+  payload: { isLoadingLogsCount },
+});
 
-export const setLogsCount = (logsCount) => {
-  return {
-    type: SET_LOGS_COUNT,
-    payload: { logsCount },
-  };
-};
+export const setLogsCount = logsCount => ({
+  type: SET_LOGS_COUNT,
+  payload: { logsCount },
+});
 
-export const setChangelogCollapsed = (isChangelogCollapsed) => {
-  return {
-    type: SET_CHANGELOG_COLLAPSED,
-    payload: { isChangelogCollapsed },
-  };
-};
+export const setChangelogCollapsed = isChangelogCollapsed => ({
+  type: SET_CHANGELOG_COLLAPSED,
+  payload: { isChangelogCollapsed },
+});
 
-export const setLogs = (logs) => {
-  return {
-    type: SET_LOGS,
-    payload: { logs },
-  };
-};
+export const setLogs = logs => ({
+  type: SET_LOGS,
+  payload: { logs },
+});
 
-export const setLastHumanLog = (lastHumanLog) => {
-  return {
-    type: SET_LAST_HUMAN_LOG,
-    payload: { lastHumanLog },
-  };
-};
+export const setLastHumanLog = lastHumanLog => ({
+  type: SET_LAST_HUMAN_LOG,
+  payload: { lastHumanLog },
+});
 
-export const setChangelogDocument = (changelogDocument) => {
-  return {
-    type: SET_CHANGELOG_DOCUMENT,
-    payload: { changelogDocument },
-  };
-};
+export const setChangelogDocument = changelogDocument => ({
+  type: SET_CHANGELOG_DOCUMENT,
+  payload: { changelogDocument },
+});
 
-export const setShowAll = (showAll) => {
-  return {
-    type: SET_SHOW_ALL,
-    payload: { showAll },
-  };
-};
+export const setShowAll = showAll => ({
+  type: SET_SHOW_ALL,
+  payload: { showAll },
+});
 
-export const setChangelogDocumentData = ({ documentId, collection }) => {
-  return {
-    type: SET_CHANGELOG_DOCUMENT_DATA,
-    payload: { documentId, collection },
-  };
-};
+export const setChangelogDocumentData = ({ documentId, collection }) => ({
+  type: SET_CHANGELOG_DOCUMENT_DATA,
+  payload: { documentId, collection },
+});

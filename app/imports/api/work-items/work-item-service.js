@@ -10,7 +10,7 @@ const {
   COMPLETE_ACTION,
   VERIFY_ACTION,
   COMPLETE_ANALYSIS,
-  COMPLETE_UPDATE_OF_DOCUMENTS
+  COMPLETE_UPDATE_OF_DOCUMENTS,
 } = WorkItemsStore.TYPES;
 
 export default {
@@ -22,12 +22,14 @@ export default {
     return this.collection.insert({ ...args });
   },
 
-  update({ _id, query = {}, options = {}, ...args }) {
+  update({
+    _id, query = {}, options = {}, ...args
+  }) {
     if (!_.keys(query).length > 0) {
       query = { _id };
     }
     if (!_.keys(options).length > 0) {
-      options['$set'] = args;
+      options.$set = args;
     }
 
     return this.collection.update(query, options);
@@ -55,7 +57,9 @@ export default {
 
   actionCreated(actionId) {
     const action = Actions.findOne({ _id: actionId });
-    const { organizationId, type, completionTargetDate, toBeCompletedBy } = action;
+    const {
+      organizationId, type, completionTargetDate, toBeCompletedBy,
+    } = action;
 
     this.collection.insert({
       organizationId,
@@ -64,8 +68,8 @@ export default {
       type: WorkItemsStore.TYPES.COMPLETE_ACTION,
       linkedDoc: {
         type,
-        _id: actionId
-      }
+        _id: actionId,
+      },
     });
   },
 
@@ -79,7 +83,7 @@ export default {
     this.collection.remove({
       'linkedDoc._id': actionId,
       type: WorkItemsStore.TYPES.VERIFY_ACTION,
-      isCompleted: false
+      isCompleted: false,
     });
   },
 
@@ -111,7 +115,7 @@ export default {
     this.collection.remove({
       'linkedDoc._id': actionId,
       type: WorkItemsStore.TYPES.VERIFY_ACTION,
-      isCompleted: false
+      isCompleted: false,
     });
   },
 
@@ -125,7 +129,7 @@ export default {
     this.collection.remove({
       'linkedDoc._id': docId,
       type: WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_DOCUMENTS,
-      isCompleted: false
+      isCompleted: false,
     });
   },
 
@@ -157,12 +161,12 @@ export default {
     const { _id } = this.collection.findOne({
       'linkedDoc._id': docId,
       type: workItemType,
-      isCompleted: false
+      isCompleted: false,
     }) || {};
 
     if (!_id) {
       const {
-        organizationId, targetDate, type
+        organizationId, targetDate, type,
       } = this._getDocData(docId, docType, workItemType);
 
       const newId = this.collection.insert({
@@ -172,12 +176,12 @@ export default {
         type: workItemType,
         linkedDoc: {
           type,
-          _id: docId
-        }
+          _id: docId,
+        },
       });
     } else {
       this.collection.update({ _id }, {
-        $set: { assigneeId: userId }
+        $set: { assigneeId: userId },
       });
     }
   },
@@ -186,9 +190,9 @@ export default {
     this.collection.update({
       'linkedDoc._id': docId,
       type: workItemType,
-      isCompleted: false
+      isCompleted: false,
     }, {
-      $set: { targetDate: date }
+      $set: { targetDate: date },
     });
   },
 
@@ -196,9 +200,9 @@ export default {
     this.collection.update({
       'linkedDoc._id': docId,
       type: workItemType,
-      isCompleted: false
+      isCompleted: false,
     }, {
-      $set: { isCompleted: true }
+      $set: { isCompleted: true },
     });
   },
 
@@ -206,14 +210,16 @@ export default {
     this.collection.update({
       'linkedDoc._id': docId,
       type: workItemType,
-      isCompleted: true
+      isCompleted: true,
     }, {
-      $set: { isCompleted: false }
+      $set: { isCompleted: false },
     });
   },
 
   _getDocData(docId, docType, workItemType) {
-    let doc, targetDate, type;
+    let doc,
+      targetDate,
+      type;
 
     if (docType) {
       doc = this._getProblemDoc(docId, docType);
@@ -238,18 +244,18 @@ export default {
     return {
       organizationId: doc.organizationId,
       targetDate,
-      type
+      type,
     };
   },
 
   _getProblemDoc(docId, docType) {
     const collections = {
       [ProblemTypes.NON_CONFORMITY]: NonConformities,
-      [ProblemTypes.RISK]: Risks
+      [ProblemTypes.RISK]: Risks,
     };
 
     const docCollection = collections[docType];
 
     return docCollection && docCollection.findOne({ _id: docId });
-  }
-}
+  },
+};

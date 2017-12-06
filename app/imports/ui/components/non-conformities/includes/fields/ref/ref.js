@@ -5,7 +5,7 @@ Template.NC_Ref_Edit.viewmodel({
   text: '',
   url: '',
   updateText(e) {
-    let { text } = this.data();
+    const { text } = this.data();
     const context = this.templateInstance.data;
 
     if (!text) return;
@@ -20,7 +20,7 @@ Template.NC_Ref_Edit.viewmodel({
 
     if (url === context.url) return;
     if (!this._id) return;
-    if (!!url) {
+    if (url) {
       if (url.search(/^https?\:\/\//) === -1) {
         url = `http://${url}`;
       }
@@ -34,5 +34,5 @@ Template.NC_Ref_Edit.viewmodel({
     }
 
     this.parent().update({ 'ref.url': url, e, withFocusCheck: true });
-  }
+  },
 });

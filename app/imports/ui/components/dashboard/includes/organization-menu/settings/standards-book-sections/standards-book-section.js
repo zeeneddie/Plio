@@ -23,7 +23,7 @@ Template.OrgSettings_StandardsBookSection.viewmodel({
   },
   getData() {
     return {
-      title: this.title()
+      title: this.title(),
     };
-  }
+  },
 });

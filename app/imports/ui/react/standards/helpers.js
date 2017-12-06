@@ -160,9 +160,7 @@ export const expandCollapsedStandard = (_id) => {
       action = addCollapsed({ ...sectionItem, close: { type: sectionItem.type } });
       break;
     case STANDARD_FILTER_MAP.TYPE:
-      action = chainActions(
-        [typeItem, sectionItem].map(item => addCollapsed({ ...item, close: { type: item.type } }))
-      );
+      action = chainActions([typeItem, sectionItem].map(item => addCollapsed({ ...item, close: { type: item.type } })));
       break;
     default:
       return false;
@@ -185,8 +183,7 @@ export const expandCollapsedStandards = (ids) => {
   });
   let sections = standardBookSections.filter(section =>
     notCollapsed(section._id) &&
-    standardsFound.filter(propEq('sectionId', section._id)).length
-  );
+    standardsFound.filter(propEq('sectionId', section._id)).length);
 
   sections = uncategorizedSection.standards.length
     ? sections.concat(uncategorizedSection)
@@ -202,16 +199,13 @@ export const expandCollapsedStandards = (ids) => {
       });
       let types = standardTypes.filter(type =>
         notCollapsed(type._id) &&
-        standardsFound.filter(propEq('typeId', type._id)).length
-      );
+        standardsFound.filter(propEq('typeId', type._id)).length);
 
       types = uncategorizedType.standards.length
         ? types.concat(uncategorizedType)
         : types;
 
-      return store.dispatch(chainActions(
-        types.map(addCollapsedType).concat(sections.map(addCollapsedSection))
-      ));
+      return store.dispatch(chainActions(types.map(addCollapsedType).concat(sections.map(addCollapsedSection))));
     }
     default:
       return false;
@@ -264,6 +258,6 @@ export const withStandard = withProps(props => ({
 export const getSelectedStandardDeletedState = state => ({
   isSelectedStandardDeleted: getC(
     'isDeleted',
-    state.collections.standardsByIds[state.global.urlItemId]
+    state.collections.standardsByIds[state.global.urlItemId],
   ),
 });

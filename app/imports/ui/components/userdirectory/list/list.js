@@ -25,7 +25,7 @@ Template.UserDirectory_List.viewmodel({
       submitCaption: 'Invite',
       submitCaptionOnSave: 'Inviting...',
       closeCaption: 'Cancel',
-      variation: 'save'
+      variation: 'save',
     });
   },
   onSearchInputValue(value) {

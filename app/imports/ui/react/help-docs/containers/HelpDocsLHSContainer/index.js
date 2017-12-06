@@ -61,7 +61,7 @@ const HelpDocsLHSContainer = compose(
     }
 
     return newProps;
-  })
+  }),
 )(HelpDocsLHS);
 
 export default HelpDocsLHSContainer;

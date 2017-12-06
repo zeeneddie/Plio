@@ -50,13 +50,13 @@ const enhance = compose(
     null,
     {
       shouldResubscribe: (props, nextProps) =>
-      props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
-    }
+        props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
+    },
   ),
   branch(
     props => props.loading,
     renderComponent(RisksLayout),
-    identity
+    identity,
   ),
   composeWithTracker(loadUsersData),
   connect(pickDeep(['organizations.organizationId'])),
@@ -67,15 +67,13 @@ const enhance = compose(
   }),
   connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
   composeWithTracker(loadCardData, null, null, {
-    shouldResubscribe: (props, nextProps) => Boolean(
-      props.organizationId !== nextProps.organizationId ||
-      props.urlItemId !== nextProps.urlItemId
-    ),
+    shouldResubscribe: (props, nextProps) => Boolean(props.organizationId !== nextProps.organizationId ||
+      props.urlItemId !== nextProps.urlItemId),
   }),
   connect(pickDeep(['organizations.organizationId', 'risks.initializing'])),
   composeWithTracker(loadDeps, null, null, {
     shouldResubscribe: (props, nextProps) =>
-    props.organizationId !== nextProps.organizationId ||
+      props.organizationId !== nextProps.organizationId ||
     props.initializing !== nextProps.initializing,
   }),
   connect(pickDeep(['global.dataLoading', 'risks.areDepsReady', 'risks.initializing'])),
@@ -113,13 +111,11 @@ const enhance = compose(
       'global.filter',
     ])(state),
   })),
-  shouldUpdate((props, nextProps) => Boolean(
-    props.isDiscussionOpened !== nextProps.isDiscussionOpened ||
+  shouldUpdate((props, nextProps) => Boolean(props.isDiscussionOpened !== nextProps.isDiscussionOpened ||
     props.loading !== nextProps.loading ||
     typeof props.organization !== typeof nextProps.organization ||
     props.orgSerialNumber !== nextProps.orgSerialNumber ||
-    props.filter !== nextProps.filter
-  )),
+    props.filter !== nextProps.filter)),
   connect(pickDeep(['window.width', 'mobile.showCard'])),
   withHandlers({
     onHandleFilterChange,

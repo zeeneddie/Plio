@@ -6,7 +6,7 @@ Template.NC_Title_Edit.viewmodel({
   title: '',
   sequentialId: '',
   titleArgs() {
-    const { label, title:value, sequentialId:addon } = this.data();
+    const { label, title: value, sequentialId: addon } = this.data();
     const withFocusCheck = !!this._id;
 
     return {
@@ -14,7 +14,7 @@ Template.NC_Title_Edit.viewmodel({
       value,
       addon,
       withFocusCheck,
-      onFocusOut: (e, { value:title }) => {
+      onFocusOut: (e, { value: title }) => {
         this.title(title);
 
         if (!this._id) return;

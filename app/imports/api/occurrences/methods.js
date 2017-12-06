@@ -25,12 +25,10 @@ export const updateViewedBy = new Method({
   check(checker) {
     // check membership and occurrence existance
     // as we need the document itself in checkMembership function we just compose it with checkOccurrenceExistance
-    return checker(
-      compose(
-        checkMembership(this.userId),
-        checkOccurrenceExistance(property('_id'))
-      )
-    );
+    return checker(compose(
+      checkMembership(this.userId),
+      checkOccurrenceExistance(property('_id')),
+    ));
   },
 
   run({ _id }) {
@@ -45,12 +43,10 @@ export const insert = new Method({
 
   check(checker) {
     // we don't need compose there cause nonConformityId is passed through arguments
-    return checker(
-      chain(
-        checkMembership(this.userId),
-        checkNCExistance(property('nonConformityId'))
-      )
-    );
+    return checker(chain(
+      checkMembership(this.userId),
+      checkNCExistance(property('nonConformityId')),
+    ));
   },
 
   run({ ...args }) {
@@ -64,14 +60,14 @@ export const update = new Method({
   validate(doc) {
     const validationContext = new SimpleSchema([IdSchema, {
       description: {
-        type: String
+        type: String,
       },
       date: {
-        type: Date
-      }
+        type: Date,
+      },
     }]).newContext();
 
-    for (let key in doc) {
+    for (const key in doc) {
       if (_.isEqual(key, 'description') && _.isEmpty(doc[key])) {
         doc[key] = undefined;
       }
@@ -85,12 +81,10 @@ export const update = new Method({
   },
 
   check(checker) {
-    return checker(
-      compose(
-        checkMembership(this.userId),
-        checkOccurrenceExistance(property('_id'))
-      )
-    );
+    return checker(compose(
+      checkMembership(this.userId),
+      checkOccurrenceExistance(property('_id')),
+    ));
   },
 
   run({ ...args }) {
@@ -104,12 +98,10 @@ export const remove = new Method({
   validate: IdSchema.validator(),
 
   check(checker) {
-    return checker(
-      compose(
-        checkMembership(this.userId),
-        checkOccurrenceExistance(property('_id'))
-      )
-    );
+    return checker(compose(
+      checkMembership(this.userId),
+      checkOccurrenceExistance(property('_id')),
+    ));
   },
 
   run({ _id }) {

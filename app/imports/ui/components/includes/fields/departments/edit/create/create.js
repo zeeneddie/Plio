@@ -18,12 +18,12 @@ Template.Departments_Create.viewmodel({
   },
   showAlert() {
     swal({
-      title: "Are you sure?",
+      title: 'Are you sure?',
       text: `New department/sector "${this.value()}" will be added.`,
-      type: "warning",
+      type: 'warning',
       showCancelButton: true,
-      confirmButtonText: "Add",
-      closeOnConfirm: false
+      confirmButtonText: 'Add',
+      closeOnConfirm: false,
     }, () => {
       this.onAlertConfirm();
     });
@@ -31,14 +31,14 @@ Template.Departments_Create.viewmodel({
   onAlertConfirm() {
     this.modal().callMethod(insert, {
       name: this.value(),
-      organizationId: this.organizationId()
+      organizationId: this.organizationId(),
     }, (err, _id) => {
       if (!err) {
         const departmentsEdit = ViewModel.findOne('Departments_Edit');
 
         try {
           departmentsEdit.child('Select_Multi').child('Select_Single').clear();
-        } catch(err) {
+        } catch (err) {
           console.log(err);
         }
 
@@ -57,7 +57,7 @@ Template.Departments_Create.viewmodel({
     });
   },
   getData() {
-    const { value, selected:selectedItemId } = this.data();
+    const { value, selected: selectedItemId } = this.data();
     return { value, selectedItemId };
-  }
+  },
 });

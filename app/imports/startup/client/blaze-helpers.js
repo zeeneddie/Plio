@@ -7,7 +7,7 @@ const cutSpacebarsKw = fn => (...args) => {
   if (_.last(args) instanceof Spacebars.kw) {
     return fn(...Array.prototype.slice.call(args, 0, args.length - 1));
   }
-  
+
   return fn(...args);
 };
 

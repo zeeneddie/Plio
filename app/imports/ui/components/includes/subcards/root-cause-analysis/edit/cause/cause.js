@@ -42,17 +42,15 @@ Template.RCA_Cause_Edit.viewmodel({
           options: { $addToSet: { 'rootCauseAnalysis.causes': { index, text } } },
         };
       }
+    } else if (text) {
+      args = {
+        query: { 'rootCauseAnalysis.causes': { $elemMatch: { index } } },
+        options: { $set: { 'rootCauseAnalysis.causes.$.text': text } },
+      };
     } else {
-      if (text) {
-        args = {
-          query: { 'rootCauseAnalysis.causes': { $elemMatch: { index } } },
-          options: { $set: { 'rootCauseAnalysis.causes.$.text': text } },
-        };
-      } else {
-        args = {
-          options: { $pull: { 'rootCauseAnalysis.causes': { index } } },
-        };
-      }
+      args = {
+        options: { $pull: { 'rootCauseAnalysis.causes': { index } } },
+      };
     }
 
     if (args) {

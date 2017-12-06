@@ -20,7 +20,7 @@ Meteor.publishComposite('actionCard', function ({ _id, organizationId }) {
   return createActionCardPublicationTree(() => ({ _id, organizationId }));
 });
 
-Meteor.publishComposite('actionsByIds', function (ids = []) {
+Meteor.publishComposite('actionsByIds', (ids = []) => {
   check(ids, [String]);
 
   return {

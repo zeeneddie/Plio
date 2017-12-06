@@ -16,7 +16,7 @@ const RootCauseAnalysis = ({ causes, fileIds }) => {
   return (
     <div>
       {fields}
-      {!!fileIds.length && fileIds.map((fileId) => (
+      {!!fileIds.length && fileIds.map(fileId => (
         <FileProvider key={fileId} {...{ fileId }} />
       ))}
     </div>

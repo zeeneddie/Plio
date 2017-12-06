@@ -4,4 +4,3 @@ import * as Actions from './actions';
 
 export { Risks, NonConformities, Actions };
 
-

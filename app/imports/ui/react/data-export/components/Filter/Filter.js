@@ -9,13 +9,12 @@ const Filter = ({ statuses, checkedFilters }) => (
     <Form.SubForm name="filter">
       <FormGroup>
         {Object.keys(statuses).map(status =>
-          <Checkbox
+          (<Checkbox
             checked={_.contains(checkedFilters, Number(status))}
             name={status}
             text={statuses[status]}
             key={`actions-status-${status}`}
-          />
-        )}
+          />))}
       </FormGroup>
     </Form.SubForm>
   </div>

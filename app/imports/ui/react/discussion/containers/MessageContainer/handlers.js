@@ -33,6 +33,4 @@ export const select = ({ dispatch, _id }) => () => dispatch(setAt(_id));
 
 export const deselect = props => () => clearAtWithRouter(props);
 
-export const remove = props => () => props.dispatch(
-  removeMessage(props, () => err => !err && clearAtWithRouter(props))
-);
+export const remove = props => () => props.dispatch(removeMessage(props, () => err => !err && clearAtWithRouter(props)));

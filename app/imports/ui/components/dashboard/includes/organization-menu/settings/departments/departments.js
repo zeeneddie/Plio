@@ -29,7 +29,7 @@ Template.OrgSettings_Departments.viewmodel({
     return this.onDelete.bind(this);
   },
   onChange(viewModel) {
-    const { title:name } = viewModel.getData();
+    const { title: name } = viewModel.getData();
     const organizationId = this.organizationId();
 
     if (!viewModel._id) {
@@ -56,7 +56,7 @@ Template.OrgSettings_Departments.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       const _id = viewModel._id();
       const organizationId = this.organizationId();

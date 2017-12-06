@@ -22,5 +22,5 @@ export default {
     const match = url.match(vimeoRegex);
     if (!match) return false;
     return match[4];
-  }
+  },
 };

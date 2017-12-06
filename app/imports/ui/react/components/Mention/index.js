@@ -94,7 +94,7 @@ class Mention extends React.Component {
           return React.cloneElement(child, {
             onChange: this.onInputChange,
             value: this.props.value,
-            getRef: (input) => (this.input = input),
+            getRef: input => (this.input = input),
           });
         case Menu:
           return this.state.users.length ? React.cloneElement(child, {

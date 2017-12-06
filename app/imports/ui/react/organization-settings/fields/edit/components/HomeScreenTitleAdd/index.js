@@ -27,7 +27,7 @@ const enhance = compose(
         confirmButtonText: 'Add',
       }, addNewItem);
     },
-  })
+  }),
 );
 
 const HomeScreenTitleAdd = enhance(({ value, showAlert }) => (

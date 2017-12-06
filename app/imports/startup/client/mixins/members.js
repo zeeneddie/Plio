@@ -12,12 +12,12 @@ export default {
     const query = {
       _id: { $in: memberIds },
       ...this.searchObject('_searchString', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]),
-      ..._query
+      ..._query,
     };
 
     return this._mapMembers(Meteor.users.find(query, options));
   },
   _mapMembers(array) {
     return array.map(doc => ({ title: this.userNameOrEmail(doc), ...doc }));
-  }
+  },
 };

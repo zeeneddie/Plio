@@ -65,12 +65,12 @@ const getMessageData = (id) => {
   return messageData;
 };
 
-Meteor.publishComposite('messages', function (discussionId, {
+Meteor.publishComposite('messages', (discussionId, {
   sort = { createdAt: -1 },
   at = null,
   priorLimit = 50,
   followingLimit = 50,
-} = {}) {
+} = {}) => {
   check(discussionId, String);
 
   new SimpleSchema({
@@ -86,7 +86,9 @@ Meteor.publishComposite('messages', function (discussionId, {
         createdAt: { type: Number },
       }),
     },
-  }).validate({ sort, at, priorLimit, followingLimit });
+  }).validate({
+    sort, at, priorLimit, followingLimit,
+  });
 
   return {
     find() {

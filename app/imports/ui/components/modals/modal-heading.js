@@ -13,5 +13,5 @@ Template.ModalHeading.viewmodel({
 
     $button
       .removeClass('collapsed');
-  }
+  },
 });

@@ -3,7 +3,9 @@ import React, { PropTypes } from 'react';
 import Head from './Head';
 import Body from './Body';
 
-const HelpPanel = ({ collapsed, onToggleCollapse, refCb, showIconAlways, children }) => (
+const HelpPanel = ({
+  collapsed, onToggleCollapse, refCb, showIconAlways, children,
+}) => (
   <div>
     <Head {...{ onToggleCollapse, collapsed: showIconAlways ? true : collapsed }} />
     <Body {...{ refCb, collapsed, onToggleCollapse }}>{children}</Body>

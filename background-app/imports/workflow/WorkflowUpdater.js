@@ -13,12 +13,9 @@ import WorkItemWorkflow from '/imports/workflow/WorkItemWorkflow';
 
 
 export default class WorkflowUpdater {
-
   constructor(organizationId) {
     if (!SimpleSchema.RegEx.Id.test(organizationId)) {
-      throw new Error(
-        `${JSON.stringify(organizationId)} is not valid organization ID`
-      );
+      throw new Error(`${JSON.stringify(organizationId)} is not valid organization ID`);
     }
 
     this._organizationId = organizationId;
@@ -27,9 +24,7 @@ export default class WorkflowUpdater {
   _prepare() {
     const org = Organizations.findOne({ _id: this._organizationId });
     if (!org) {
-      throw new Error(
-        `Organization with ID ${this._organizationId} does not exist`
-      );
+      throw new Error(`Organization with ID ${this._organizationId} does not exist`);
     }
 
     this._organization = org;
@@ -92,5 +87,4 @@ export default class WorkflowUpdater {
 
     workItemsIds.forEach(id => new WorkItemWorkflow(id).refreshStatus());
   }
-
 }

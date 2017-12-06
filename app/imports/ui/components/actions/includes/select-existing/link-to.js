@@ -31,9 +31,8 @@ Template.Actions_LinkTo.viewmodel({
       return this.NCsDocs();
     } else if (actionType === ActionTypes.RISK_CONTROL) {
       return this.risksDocs();
-    } else {
-      return [];
     }
+    return [];
   },
   NCsDocs() {
     const NCsIds = this.NCsIds();
@@ -52,7 +51,9 @@ Template.Actions_LinkTo.viewmodel({
     return NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
-      return { html, sequentialId, title: fullTitle, documentType: ProblemTypes.NON_CONFORMITY, ...args };
+      return {
+        html, sequentialId, title: fullTitle, documentType: ProblemTypes.NON_CONFORMITY, ...args,
+      };
     });
   },
   risksDocs() {
@@ -61,7 +62,7 @@ Template.Actions_LinkTo.viewmodel({
     const riskQuery = {
       ...this.searchObject('docSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
       organizationId: this.organizationId(),
-      _id: { $nin: risksIds }
+      _id: { $nin: risksIds },
     };
 
     const standardId = this.standardId && this.standardId();
@@ -72,14 +73,16 @@ Template.Actions_LinkTo.viewmodel({
     return Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
-      return { html, sequentialId, title: fullTitle, documentType: ProblemTypes.RISK, ...args };
+      return {
+        html, sequentialId, title: fullTitle, documentType: ProblemTypes.RISK, ...args,
+      };
     });
   },
   onSelectCb() {
     return this.onSelect.bind(this);
   },
   onSelect(viewmodel) {
-    const { _id:documentId, documentType } = viewmodel.getSelectedItem();
+    const { _id: documentId, documentType } = viewmodel.getSelectedItem();
 
     this.onLink && this.onLink({ documentId, documentType });
   },
@@ -88,11 +91,11 @@ Template.Actions_LinkTo.viewmodel({
     if (docType) {
       docs = _.filter(
         this.linkedTo(),
-        ({ documentType }) => documentType === docType
+        ({ documentType }) => documentType === docType,
       );
     } else {
       docs = this.linkedTo();
     }
     return _.pluck(docs, 'documentId');
-  }
+  },
 });

@@ -6,7 +6,9 @@ import Source from '../../../fields/read/components/Source';
 import propTypes from './propTypes';
 
 const HelpDocsRHSBodyContents = (props) => {
-  const { source, section, file, owner, issueNumber } = props;
+  const {
+    source, section, file, owner, issueNumber,
+  } = props;
 
   const render = field => (<Col sm="6">{field}</Col>);
   const fieldsData = [

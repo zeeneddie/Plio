@@ -22,5 +22,5 @@ Template.Actions_CompletedOn.viewmodel({
   },
   getData() {
     return { completedAt: this.completedAt() };
-  }
+  },
 });

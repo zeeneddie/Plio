@@ -13,7 +13,7 @@ Template.UserDirectory_Card_Read.viewmodel({
       template: 'UserDirectory_Card_Edit',
       _title: 'Edit User',
       helpText: UserProfileHelp.userProfile,
-      userId: this.user()._id
+      userId: this.user()._id,
     });
   },
 

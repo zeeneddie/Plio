@@ -73,7 +73,7 @@ export const onOrgClick = ({
 
       swal.success(
         'Success',
-        `Data import from ${name} organization has been successfully completed`
+        `Data import from ${name} organization has been successfully completed`,
       );
       if (typeof onSuccess === 'function') onSuccess(res);
     };

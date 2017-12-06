@@ -12,13 +12,11 @@ export default class Method extends ValidatedMethod {
     props.mixins = Object.assign([], props.mixins).concat(LoggedInMixin);
     props.checkLoggedInError = {
       error: '403',
-      reason: UNAUTHORIZED.reason
+      reason: UNAUTHORIZED.reason,
     };
 
-    props.run = function({ ...args }) {
-      const res = props.check && props.check.call(this, (checker) => {
-        return checker.call(this, { ...args });
-      });
+    props.run = function ({ ...args }) {
+      const res = props.check && props.check.call(this, checker => checker.call(this, { ...args }));
 
       return run.call(this, { ...args }, res);
     };
@@ -36,20 +34,16 @@ export class CheckedMethod extends ValidatedMethod {
     props.mixins = Object.assign([], props.mixins).concat(LoggedInMixin);
     props.checkLoggedInError = {
       error: '403',
-      reason: UNAUTHORIZED.reason
+      reason: UNAUTHORIZED.reason,
     };
 
-    props.run = function({ ...args }) {
+    props.run = function ({ ...args }) {
       const userId = this.userId;
 
-      const res = props.check((collection) => {
-        return (checker, err) => {
-          return checkDocAndMembershipAndMore(collection, args._id, userId)(curry(checker)({ ...args, userId }), err);
-        };
-      });
+      const res = props.check(collection => (checker, err) => checkDocAndMembershipAndMore(collection, args._id, userId)(curry(checker)({ ...args, userId }), err));
 
       return run.call(this, { ...args }, res);
-    }
+    };
 
     super(props);
   }

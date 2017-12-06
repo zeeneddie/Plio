@@ -18,7 +18,7 @@ const ReviewsContainer = ({ label = 'Reviews', ...props }) => (
 
 ReviewsContainer.propTypes = { label: PropTypes.string };
 
-const mapReview = ({ usersByIds }) => mapC((review) =>
+const mapReview = ({ usersByIds }) => mapC(review =>
   assoc('reviewedBy', usersByIds[review.reviewedBy], review));
 
 const mapReviews = ({ sliceCount = 3, ...props }) => compose(
@@ -40,6 +40,6 @@ export default compose(
   branch(
     compose(length, property('reviews')),
     identity,
-    renderNothing
-  )
+    renderNothing,
+  ),
 )(ReviewsContainer);

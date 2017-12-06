@@ -8,7 +8,7 @@ import Dropdown from 'reactstrap/lib/Dropdown';
 import DropdownMenu from 'reactstrap/lib/DropdownMenu';
 import DropdownToggle from 'reactstrap/lib/DropdownToggle';
 
-const HeaderOptionsMenu = (props) => (
+const HeaderOptionsMenu = props => (
   <Nav navbar className="pull-xs-right">
     <NavItem>
       <Dropdown isOpen={props.isOpen} toggle={props.setIsOpen}>

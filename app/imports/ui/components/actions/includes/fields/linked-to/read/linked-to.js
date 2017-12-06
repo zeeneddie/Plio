@@ -10,24 +10,18 @@ Template.Actions_LinkedTo_Read.viewmodel({
     const ids = Array.from(this.linkedTo() || []).map(({ documentId }) => documentId);
     const query = { _id: { $in: ids } };
     const options = { sort: { serialNumber: 1 } };
-    const mapToDocType = (documentType) => {
-      return ({ ...args }) => {
-        return {
-          documentType,
-          ...args
-        };
-      };
-    };
+    const mapToDocType = documentType => ({ ...args }) => ({
+      documentType,
+      ...args,
+    });
     const NCs = this._getNCsByQuery(query, options).map(mapToDocType(ProblemTypes.NON_CONFORMITY));
     const risks = this._getRisksByQuery(query, options).map(mapToDocType(ProblemTypes.RISK));
     return NCs.concat(risks);
   },
   getLink({ _id, documentType }) {
-    const getRoute = (routeName, params) => {
-      return FlowRouter.path(routeName, { ...params, orgSerialNumber: this.organizationSerialNumber() });
-    };
+    const getRoute = (routeName, params) => FlowRouter.path(routeName, { ...params, orgSerialNumber: this.organizationSerialNumber() });
 
-    switch(documentType) {
+    switch (documentType) {
       case ProblemTypes.NON_CONFORMITY:
         return getRoute('nonconformity', { urlItemId: _id });
         break;
@@ -35,8 +29,8 @@ Template.Actions_LinkedTo_Read.viewmodel({
         return getRoute('risk', { riskId: _id });
         break;
       default:
-        return "#";
+        return '#';
         break;
     }
-  }
+  },
 });

@@ -456,13 +456,13 @@ export const inviteMultipleUsersByEmail = new Method({
     const invitedEmails = [];
     const addedEmails = [];
     const errors = [];
-    emails.forEach(email => {
+    emails.forEach((email) => {
       // aggregate service errors for each email
       try {
         const invitationStatus = InvitationService.inviteUserByEmail(
           organizationId,
           email,
-          welcomeMessage
+          welcomeMessage,
         );
         if (invitationStatus === InvitationStatuses.invited) {
           invitedEmails.push(email);
@@ -624,7 +624,7 @@ export const deleteOrganization = new Method({
     return checker(chain(
       ({ organizationId }) => ORG_EnsureCanDelete(this.userId, organizationId),
       ({ ownerPassword }) => USR_EnsurePasswordIsValid(this.userId, ownerPassword),
-      ({ organizationId }) => ORG_EnsureCanBeDeleted(organizationId)
+      ({ organizationId }) => ORG_EnsureCanBeDeleted(organizationId),
     ));
   },
 
@@ -645,7 +645,7 @@ export const deleteCustomerOrganization = new Method({
     {
       // Plio Ltd. owner's password encoded with SHA256
       adminPassword: pwdSchemaObj,
-    }
+    },
   ]).validator(),
 
   check(checker) {
@@ -656,7 +656,7 @@ export const deleteCustomerOrganization = new Method({
     return checker(chain(
       () => USR_EnsureIsPlioAdmin(this.userId),
       ({ adminPassword }) => USR_EnsurePasswordIsValid(this.userId, adminPassword),
-      ({ organizationId }) => ORG_EnsureCanBeDeleted(organizationId)
+      ({ organizationId }) => ORG_EnsureCanBeDeleted(organizationId),
     ));
   },
 
@@ -666,7 +666,7 @@ export const deleteCustomerOrganization = new Method({
     }
 
     return OrganizationService.deleteOrganization({ organizationId });
-  }
+  },
 });
 
 export const changeCustomerType = new Method({
@@ -745,7 +745,7 @@ export const updateLastAccessedDate = new Method({
   name: 'Organizations.updateLastAccessedDate',
 
   validate: new SimpleSchema([
-    OrganizationIdSchema
+    OrganizationIdSchema,
   ]).validator(),
 
   check(checker) {

@@ -7,7 +7,6 @@ import RiskWorkflow from './RiskWorkflow';
 
 
 export default class ActionWorkflow extends Workflow {
-
   _prepare() {
     super._prepare();
     this._workflowType = this._getWorkflowType();
@@ -98,5 +97,4 @@ export default class ActionWorkflow extends Workflow {
   static get _collection() {
     return Actions;
   }
-
 }

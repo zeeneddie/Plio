@@ -34,7 +34,6 @@ import NotificationSender from '/imports/share/utils/NotificationSender';
 const RECAP_EMAIL_TEMPLATE = 'recapEmail';
 
 export default class DailyRecapSender {
-
   constructor(orgId, date) {
     this._organizationId = orgId;
     this._date = date;
@@ -201,7 +200,9 @@ export default class DailyRecapSender {
     this._makeOrgData();
   }
 
-  _makeDocsData({ collection, idsSet, docDescFn, docNameFn, docUrlFn }) {
+  _makeDocsData({
+    collection, idsSet, docDescFn, docNameFn, docUrlFn,
+  }) {
     const docsIds = Array.from(idsSet);
 
     const docsLength = docsIds.length;
@@ -270,11 +271,12 @@ export default class DailyRecapSender {
 
   _getRecipients() {
     const orgMembers = this._organization.users.filter((userData) => {
-      const { isRemoved, removedAt, removedBy, sendDailyRecap } = userData;
+      const {
+        isRemoved, removedAt, removedBy, sendDailyRecap,
+      } = userData;
       return !isRemoved && !removedAt && !removedBy && sendDailyRecap;
     });
 
     return _.pluck(orgMembers, 'userId');
   }
-
 }

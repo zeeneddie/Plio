@@ -7,7 +7,7 @@ Template.IP_TargetDate_Edit.viewmodel({
     return this.update.bind(this);
   },
   update(viewmodel, cb) {
-    const { date:targetDate } = viewmodel.getData();
+    const { date: targetDate } = viewmodel.getData();
 
     this.targetDate(targetDate);
 
@@ -21,5 +21,5 @@ Template.IP_TargetDate_Edit.viewmodel({
   getData() {
     const { targetDate } = this.data();
     return { targetDate };
-  }
+  },
 });

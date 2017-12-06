@@ -21,7 +21,7 @@ import {
 } from '../../helpers';
 import { CollectionNames } from '/imports/share/constants';
 
-const redirectAndOpen = (props) => setTimeout(() => {
+const redirectAndOpen = props => setTimeout(() => {
   const { urlItemId, filter, collapsed } = getState('global');
   const { standardsByIds, standards } = getState('collections');
   const {
@@ -91,7 +91,7 @@ const redirectAndOpen = (props) => setTimeout(() => {
   }
 }, 0);
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   standardBookSections: state.collections.standardBookSections,
   ...getSelectedStandardDeletedState(state),
 });

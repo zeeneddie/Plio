@@ -12,18 +12,18 @@ const STATUSES = [
   {
     text: 'Online',
     css: 'text-success',
-    status: 'online'
+    status: 'online',
   },
   {
     text: 'Away',
     css: 'text-warning',
-    status: 'away'
+    status: 'away',
   },
   {
     text: 'Offline',
     css: 'text-danger',
-    status: 'offline'
-  }
+    status: 'offline',
+  },
 ];
 
 Template.UserMenu.viewmodel({
@@ -40,31 +40,31 @@ Template.UserMenu.viewmodel({
 
       return {
         href,
-        onClick: () => this.goToMyProfile(href)
-      }
+        onClick: () => this.goToMyProfile(href),
+      };
     };
 
     const links = {
       myProfile: myProfile(),
       myPreferences: {
-        onClick: this.openUserPreferences.bind(this)
+        onClick: this.openUserPreferences.bind(this),
       },
       userDirectory: {
-        href: getPath('userDirectoryPage')
+        href: getPath('userDirectoryPage'),
       },
       inviteUsers: {
-        onClick: this.onInviteClick.bind(this)
+        onClick: this.onInviteClick.bind(this),
       },
       logout: {
-        onClick: this.logout.bind(this)
-      }
+        onClick: this.logout.bind(this),
+      },
     };
 
     const status = (index) => {
       const active = this.isActiveStatus(index) ? 'active' : '';
       return {
         className: `${className} pointer ${active}`,
-        onClick: this.changeStatus.bind(this)
+        onClick: this.changeStatus.bind(this),
       };
     };
 
@@ -75,8 +75,8 @@ Template.UserMenu.viewmodel({
 
     return {
       ...mappedLinks,
-      status
-    }
+      status,
+    };
   },
   getStatuses() {
     return STATUSES;
@@ -92,9 +92,7 @@ Template.UserMenu.viewmodel({
   getActiveClass() {
     const user = Meteor.user();
     const userStatus = user.status;
-    const activeStatus = STATUSES.find((status) => {
-      return status.text.toLowerCase() === userStatus;
-    });
+    const activeStatus = STATUSES.find(status => status.text.toLowerCase() === userStatus);
 
     return (activeStatus && activeStatus.css) || STATUSES[0].css;
   },
@@ -111,8 +109,8 @@ Template.UserMenu.viewmodel({
   },
   onInviteClick(event) {
     event.preventDefault();
-    let orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
-    let organizationId = Organizations.findOne({serialNumber: orgSerialNumber})._id;
+    const orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
+    const organizationId = Organizations.findOne({ serialNumber: orgSerialNumber })._id;
 
     this.modal().open({
       template: 'UserDirectory_InviteUsers',
@@ -121,7 +119,7 @@ Template.UserMenu.viewmodel({
       submitCaptionOnSave: 'Inviting...',
       closeCaption: 'Cancel',
       variation: 'save',
-      organizationId
+      organizationId,
     });
   },
   goToMyProfile(href) {
@@ -148,7 +146,7 @@ Template.UserMenu.viewmodel({
       template: 'UserPreferences',
       _title: 'My preferences',
       helpText: MyPreferencesHelp.myPreferences,
-      userId: Meteor.userId()
+      userId: Meteor.userId(),
     });
-  }
+  },
 });

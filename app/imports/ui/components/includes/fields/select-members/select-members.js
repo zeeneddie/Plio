@@ -3,9 +3,9 @@ import { Meteor } from 'meteor/meteor';
 
 const destructure = fn => (viewmodel) => {
   const {
-    selectedItem:user,
-    selectedItemId:userId,
-    selected:users
+    selectedItem: user,
+    selectedItemId: userId,
+    selected: users,
   } = viewmodel.getData();
 
   return fn({ user, userId, users });
@@ -45,7 +45,7 @@ Template.Select_Members.viewmodel({
         this.values().remove(userId);
 
         return onRemove(({ user, userId, users }));
-      })
+      }),
     };
-  }
+  },
 });

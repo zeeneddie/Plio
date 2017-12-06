@@ -32,7 +32,7 @@ Template.OrgSettings_RisksTypes.viewmodel({
       Blaze.remove(viewModel.templateInstance.view);
 
       this.modal().callMethod(insert, {
-        title, organizationId
+        title, organizationId,
       });
     } else {
       const _id = viewModel._id();
@@ -54,7 +54,7 @@ Template.OrgSettings_RisksTypes.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       const _id = viewModel._id();
 
@@ -78,5 +78,5 @@ Template.OrgSettings_RisksTypes.viewmodel({
         }
       });
     });
-  }
+  },
 });

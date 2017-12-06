@@ -27,7 +27,7 @@ const Analysis = ({
 }) => {
   if (!executor && !targetDate) return null;
 
-  const render = (field) => (<Col sm="6">{field}</Col>);
+  const render = field => (<Col sm="6">{field}</Col>);
   const data = [
     { label: 'Status', text: AnalysisStatuses[status] },
     { label: 'Who will do it?', text: executor && getFullNameOrEmail(executor), render },

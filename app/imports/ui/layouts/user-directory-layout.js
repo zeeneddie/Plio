@@ -7,13 +7,13 @@ Template.UserDirectory_Layout.viewmodel({
   isReady: false,
   _subHandlers: [],
   autorun: [
-    function() {
+    function () {
       this._subHandlers([
-        this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', this.organizationSerialNumber())
+        this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', this.organizationSerialNumber()),
       ]);
     },
     function () {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
-    }
-  ]
+    },
+  ],
 });

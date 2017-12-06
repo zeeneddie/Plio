@@ -5,5 +5,5 @@ Template.Subcards_RiskScoring_Read.viewmodel({
   scores: [],
   scoresSorted() {
     return this.sortScores(this.scores(), 1);
-  }
+  },
 });

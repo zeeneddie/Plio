@@ -42,9 +42,7 @@ export const insert = new ValidatedMethod({
     const userId = this.userId;
 
     if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot add messages to discussions'
-      );
+      throw new Meteor.Error(403, 'Unauthorized user cannot add messages to discussions');
     }
 
     checkOrgMembership(userId, args.organizationId);
@@ -62,9 +60,7 @@ export const remove = new ValidatedMethod({
     const userId = this.userId;
 
     if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove messages from discussions'
-      );
+      throw new Meteor.Error(403, 'Unauthorized user cannot remove messages from discussions');
     }
 
     onUpdateCheck({ _id, userId });

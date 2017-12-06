@@ -28,5 +28,5 @@ Template.Subcards_ImprovementPlan_Edit.viewmodel({
   },
   update({ query = {}, options = {}, ...args }, cb) {
     this.parent().update({ query, options, ...args }, cb);
-  }
+  },
 });

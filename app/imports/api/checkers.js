@@ -40,48 +40,38 @@ export const isMobileRes = () => {
 
 const userIdOrgIdTester = (userId, organizationId) => _.every([
   SimpleSchema.RegEx.Id.test(userId),
-  SimpleSchema.RegEx.Id.test(organizationId)
+  SimpleSchema.RegEx.Id.test(organizationId),
 ]);
 
-export const canChangeStandards = (userId, organizationId) => {
-  return Roles.userIsInRole(
-    userId,
-    UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
-    organizationId
-  );
-};
+export const canChangeStandards = (userId, organizationId) => Roles.userIsInRole(
+  userId,
+  UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
+  organizationId,
+);
 
-export const canChangeOrgSettings = (userId, organizationId) => {
-  return Roles.userIsInRole(
-    userId,
-    UserRoles.CHANGE_ORG_SETTINGS,
-    organizationId
-  );
-};
+export const canChangeOrgSettings = (userId, organizationId) => Roles.userIsInRole(
+  userId,
+  UserRoles.CHANGE_ORG_SETTINGS,
+  organizationId,
+);
 
-export const canInviteUsers = (userId, organizationId) => {
-  return Roles.userIsInRole(
-    userId,
-    UserRoles.INVITE_USERS,
-    organizationId
-  );
-};
+export const canInviteUsers = (userId, organizationId) => Roles.userIsInRole(
+  userId,
+  UserRoles.INVITE_USERS,
+  organizationId,
+);
 
-export const canDeleteUsers = (userId, organizationId) => {
-  return Roles.userIsInRole(
-    userId,
-    UserRoles.DELETE_USERS,
-    organizationId
-  );
-};
+export const canDeleteUsers = (userId, organizationId) => Roles.userIsInRole(
+  userId,
+  UserRoles.DELETE_USERS,
+  organizationId,
+);
 
-export const canChangeRoles = (userId, organizationId) => {
-  return Roles.userIsInRole(
-    userId,
-    UserRoles.EDIT_USER_ROLES,
-    organizationId
-  );
-};
+export const canChangeRoles = (userId, organizationId) => Roles.userIsInRole(
+  userId,
+  UserRoles.EDIT_USER_ROLES,
+  organizationId,
+);
 
 export const isOrgOwner = (userId, organizationId) => {
   if (!userIdOrgIdTester(userId, organizationId)) return false;
@@ -125,12 +115,10 @@ export const canChangeHelpDocs = (userId) => {
   return !!adminOrgId && canChangeStandards(userId, adminOrgId);
 };
 
-export const isOrgMemberBySelector = (userId, selector) => {
-  return !!Organizations.findOne({
-    ...selector,
-    ...createOrgQueryWhereUserIsMember(userId),
-  });
-};
+export const isOrgMemberBySelector = (userId, selector) => !!Organizations.findOne({
+  ...selector,
+  ...createOrgQueryWhereUserIsMember(userId),
+});
 
 export const isOrgMember = (userId, organizationId) => {
   if (!userIdOrgIdTester(userId, organizationId)) return false;
@@ -143,9 +131,7 @@ export const isViewed = (doc, userId) => {
   return viewedBy.includes(userId);
 };
 
-export const checkOrgMembership = curry((userId, organizationId) => {
-  return checkAndThrow(!isOrgMember(userId, organizationId), NOT_AN_ORG_MEMBER);
-});
+export const checkOrgMembership = curry((userId, organizationId) => checkAndThrow(!isOrgMember(userId, organizationId), NOT_AN_ORG_MEMBER));
 
 export const checkOrgMembershipBySelector = curry((userId, selector) =>
   checkAndThrow(!isOrgMemberBySelector(userId, selector), NOT_AN_ORG_MEMBER));
@@ -180,9 +166,7 @@ export const checkDocAndMembershipAndMore = (collection, _id, userId) => {
   };
 };
 
-export const exists = collection => fn => (...args) => {
-  return compose(injectCurry(collection, checkDocExistance), fn)(...args);
-};
+export const exists = collection => fn => (...args) => compose(injectCurry(collection, checkDocExistance), fn)(...args);
 
 export const wrap = curry((predicate, error) => curry((args, doc) => {
   checkAndThrow(predicate(args, doc), error);
@@ -190,13 +174,9 @@ export const wrap = curry((predicate, error) => curry((args, doc) => {
   return doc;
 }));
 
-export const onRemoveChecker = wrap(({ userId }, doc) => {
-  return doc.isDeleted && !isOrgOwner(userId, doc.organizationId);
-}, ONLY_ORG_OWNER_CAN_DELETE);
+export const onRemoveChecker = wrap(({ userId }, doc) => doc.isDeleted && !isOrgOwner(userId, doc.organizationId), ONLY_ORG_OWNER_CAN_DELETE);
 
-export const onRestoreChecker = wrap((_, doc) => {
-  return !doc.isDeleted;
-}, CANNOT_RESTORE_NOT_DELETED);
+export const onRestoreChecker = wrap((_, doc) => !doc.isDeleted, CANNOT_RESTORE_NOT_DELETED);
 
 export const isNewDoc = (organization, userId, { createdAt, viewedBy }) => {
   if (!organization || !userId || !(viewedBy instanceof Array)) return false;

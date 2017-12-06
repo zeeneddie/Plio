@@ -5,7 +5,7 @@ export default {
     return WorkItemsStore.STATUSES[status];
   },
   getClassByStatus(status) {
-    switch(status) {
+    switch (status) {
       case 0:
         return 'default';
       case 1:
@@ -19,5 +19,5 @@ export default {
     }
   },
   IN_PROGRESS: [0, 1, 2],
-  COMPLETED: 3
+  COMPLETED: 3,
 };

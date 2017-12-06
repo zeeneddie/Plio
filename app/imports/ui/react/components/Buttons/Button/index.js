@@ -21,7 +21,7 @@ const Button = compose(
     className,
     size = 2,
     pull,
-    ...other,
+    ...other
   }) => {
     const colorCx = color.split(' ').map(t => `btn-${t}`).join(' ');
     const sizeCx = size && `btn-${size}`;
@@ -33,7 +33,7 @@ const Button = compose(
       children,
       className: cx('btn', colorCx, sizeCx, pullCx, className),
     };
-  })
+  }),
 )(componentFromProp('component'));
 
 Button.propTypes = {
