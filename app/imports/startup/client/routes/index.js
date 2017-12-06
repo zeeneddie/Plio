@@ -279,7 +279,12 @@ FlowRouter.route('/:orgSerialNumber', {
 FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
+  async action() {
+    await Promise.all([
+      import('../../../ui/layouts/user-directory-layout'),
+      import('../../../ui/pages/user-directory-page'),
+    ]);
+
     BlazeLayout.render('UserDirectory_Layout', {
       content: 'UserDirectory_Page',
     });
@@ -289,7 +294,12 @@ FlowRouter.route('/:orgSerialNumber/users', {
 FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
+  async action() {
+    await Promise.all([
+      import('../../../ui/layouts/user-directory-layout'),
+      import('../../../ui/pages/user-directory-page'),
+    ]);
+
     BlazeLayout.render('UserDirectory_Layout', {
       content: 'UserDirectory_Page',
     });
