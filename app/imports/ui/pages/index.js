@@ -1,5 +1,3 @@
-import './dashboard-page.html';
-import './dashboard-page.js';
 import './hello-page.html';
 import './preloader-page.html';
 import './not-found-page.html';

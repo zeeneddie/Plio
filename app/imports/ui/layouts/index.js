@@ -1,5 +1,3 @@
-import './dashboard-layout.html';
-import './dashboard-layout.js';
 import './login-layout.html';
 import './user-directory-layout.html';
 import './user-directory-layout.js';

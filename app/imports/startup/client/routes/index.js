@@ -260,10 +260,15 @@ FlowRouter.route('/:orgSerialNumber/risks/:urlItemId/discussion', {
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
+  async action() {
     BlazeLayout.reset();
 
     $(() => ReactDOM.unmountComponentAtNode(document.getElementById('app')));
+
+    await Promise.all([
+      import('../../../ui/layouts/dashboard-layout'),
+      import('../../../ui/pages/dashboard-page'),
+    ]);
 
     BlazeLayout.render('Dashboard_Layout', {
       content: 'Dashboard_Page',
