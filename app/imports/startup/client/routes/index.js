@@ -309,7 +309,12 @@ FlowRouter.route('/:orgSerialNumber/users/:userId', {
 FlowRouter.route('/:orgSerialNumber/non-conformities', {
   name: 'nonconformities',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
+  async action() {
+    await Promise.all([
+      import('../../../ui/layouts/non-conformities-layout'),
+      import('../../../ui/pages/non-conformities-page'),
+    ]);
+
     BlazeLayout.render('NC_Layout', {
       content: 'NC_Page',
     });
@@ -319,7 +324,12 @@ FlowRouter.route('/:orgSerialNumber/non-conformities', {
 FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
+  async action() {
+    await Promise.all([
+      import('../../../ui/layouts/non-conformities-layout'),
+      import('../../../ui/pages/non-conformities-page'),
+    ]);
+
     BlazeLayout.render('NC_Layout', {
       content: 'NC_Page',
     });
@@ -329,7 +339,12 @@ FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId', {
 FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId/discussion', {
   name: 'nonConformityDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
+  async action() {
+    await Promise.all([
+      import('../../../ui/layouts/non-conformities-layout'),
+      import('../../../ui/pages/non-conformities-page'),
+    ]);
+
     BlazeLayout.render('NC_Layout', {
       content: 'NC_Page',
       isDiscussionOpened: true,
@@ -340,7 +355,12 @@ FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId/discussion', {
 FlowRouter.route('/:orgSerialNumber/work-inbox', {
   name: 'workInbox',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
+  async action() {
+    await Promise.all([
+      import('../../../ui/layouts/work-inbox-layout'),
+      import('../../../ui/pages/work-inbox-page'),
+    ]);
+
     BlazeLayout.render('WorkInbox_Layout', {
       content: 'WorkInbox_Page',
     });
@@ -350,7 +370,12 @@ FlowRouter.route('/:orgSerialNumber/work-inbox', {
 FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   name: 'workInboxItem',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
+  async action() {
+    await Promise.all([
+      import('../../../ui/layouts/work-inbox-layout'),
+      import('../../../ui/pages/work-inbox-page'),
+    ]);
+
     BlazeLayout.render('WorkInbox_Layout', {
       content: 'WorkInbox_Page',
     });

@@ -10,8 +10,4 @@ import './verify-email-page.html';
 import './verify-email-page.js';
 import './transfer-organization-page.html';
 import './transfer-organization-page.js';
-import './non-conformities-page.html';
-import './non-conformities-page.js';
-import './work-inbox-page.html';
-import './work-inbox-page.js';
 import './maintenance-page.html';
