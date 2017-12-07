@@ -9,14 +9,18 @@ import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
-import { DocumentTypes } from '/imports/share/constants';
 import {
   renderStandards,
   renderRisks,
   renderCustomers,
   renderHelpDocs,
   renderTransitionalLayout,
+  renderNcs,
+  renderWorkInbox,
+  renderUserDirectory,
+  renderDashboard,
 } from './actions';
+import { DOCUMENT_TYPE_BY_ROUTE_MAP } from './constants';
 
 BlazeLayout.setRoot('#app');
 
@@ -57,20 +61,6 @@ function checkEmailVerified(context, redirect) {
     }
   }
 }
-
-const ROUTE_MAP = {
-  STANDARDS: 'standards',
-  NON_CONFORMITIES: 'non-conformities',
-  RISKS: 'risks',
-  ACTIONS: 'actions',
-};
-
-const DOCUMENT_TYPE_BY_ROUTE_MAP = {
-  [ROUTE_MAP.STANDARDS]: DocumentTypes.STANDARD,
-  [ROUTE_MAP.NON_CONFORMITIES]: DocumentTypes.NON_CONFORMITY,
-  [ROUTE_MAP.RISKS]: DocumentTypes.RISK,
-  [ROUTE_MAP.ACTIONS]: DocumentTypes.CORRECTIVE_ACTION,
-};
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
@@ -265,81 +255,50 @@ FlowRouter.route('/:orgSerialNumber', {
 
     $(() => ReactDOM.unmountComponentAtNode(document.getElementById('app')));
 
-    BlazeLayout.render('Dashboard_Layout', {
-      content: 'Dashboard_Page',
-    });
+    renderDashboard();
   },
 });
 
 FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('UserDirectory_Layout', {
-      content: 'UserDirectory_Page',
-    });
-  },
+  action: renderUserDirectory,
 });
 
 FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('UserDirectory_Layout', {
-      content: 'UserDirectory_Page',
-    });
-  },
+  action: renderUserDirectory,
 });
 
 FlowRouter.route('/:orgSerialNumber/non-conformities', {
   name: 'nonconformities',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('NC_Layout', {
-      content: 'NC_Page',
-    });
-  },
+  action: renderNcs,
 });
 
 FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('NC_Layout', {
-      content: 'NC_Page',
-    });
-  },
+  action: renderNcs,
 });
 
 FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId/discussion', {
   name: 'nonConformityDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('NC_Layout', {
-      content: 'NC_Page',
-      isDiscussionOpened: true,
-    });
-  },
+  action: renderNcs,
 });
 
 FlowRouter.route('/:orgSerialNumber/work-inbox', {
   name: 'workInbox',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('WorkInbox_Layout', {
-      content: 'WorkInbox_Page',
-    });
-  },
+  action: renderWorkInbox,
 });
 
 FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   name: 'workInboxItem',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('WorkInbox_Layout', {
-      content: 'WorkInbox_Page',
-    });
-  },
+  action: renderWorkInbox,
 });
 
 FlowRouter.route('/:orgSerialNumber/:route/:documentId/unsubscribe', {
