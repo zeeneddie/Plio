@@ -15,6 +15,9 @@ import {
   renderCustomers,
   renderHelpDocs,
   renderTransitionalLayout,
+  renderNcs,
+  renderWorkInbox,
+  renderUserDirectory,
 } from './actions';
 import { DOCUMENT_TYPE_BY_ROUTE_MAP } from './constants';
 
@@ -265,107 +268,43 @@ FlowRouter.route('/:orgSerialNumber', {
 FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  async action() {
-    await Promise.all([
-      import('../../../ui/layouts/user-directory-layout'),
-      import('../../../ui/pages/user-directory-page'),
-    ]);
-
-    BlazeLayout.render('UserDirectory_Layout', {
-      content: 'UserDirectory_Page',
-    });
-  },
+  action: renderUserDirectory,
 });
 
 FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  async action() {
-    await Promise.all([
-      import('../../../ui/layouts/user-directory-layout'),
-      import('../../../ui/pages/user-directory-page'),
-    ]);
-
-    BlazeLayout.render('UserDirectory_Layout', {
-      content: 'UserDirectory_Page',
-    });
-  },
+  action: renderUserDirectory,
 });
 
 FlowRouter.route('/:orgSerialNumber/non-conformities', {
   name: 'nonconformities',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  async action() {
-    await Promise.all([
-      import('../../../ui/layouts/non-conformities-layout'),
-      import('../../../ui/pages/non-conformities-page'),
-    ]);
-
-    BlazeLayout.render('NC_Layout', {
-      content: 'NC_Page',
-    });
-  },
+  action: renderNcs,
 });
 
 FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  async action() {
-    await Promise.all([
-      import('../../../ui/layouts/non-conformities-layout'),
-      import('../../../ui/pages/non-conformities-page'),
-    ]);
-
-    BlazeLayout.render('NC_Layout', {
-      content: 'NC_Page',
-    });
-  },
+  action: renderNcs,
 });
 
 FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId/discussion', {
   name: 'nonConformityDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  async action() {
-    await Promise.all([
-      import('../../../ui/layouts/non-conformities-layout'),
-      import('../../../ui/pages/non-conformities-page'),
-    ]);
-
-    BlazeLayout.render('NC_Layout', {
-      content: 'NC_Page',
-      isDiscussionOpened: true,
-    });
-  },
+  action: renderNcs,
 });
 
 FlowRouter.route('/:orgSerialNumber/work-inbox', {
   name: 'workInbox',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  async action() {
-    await Promise.all([
-      import('../../../ui/layouts/work-inbox-layout'),
-      import('../../../ui/pages/work-inbox-page'),
-    ]);
-
-    BlazeLayout.render('WorkInbox_Layout', {
-      content: 'WorkInbox_Page',
-    });
-  },
+  action: renderWorkInbox,
 });
 
 FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   name: 'workInboxItem',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  async action() {
-    await Promise.all([
-      import('../../../ui/layouts/work-inbox-layout'),
-      import('../../../ui/pages/work-inbox-page'),
-    ]);
-
-    BlazeLayout.render('WorkInbox_Layout', {
-      content: 'WorkInbox_Page',
-    });
-  },
+  action: renderWorkInbox,
 });
 
 FlowRouter.route('/:orgSerialNumber/:route/:documentId/unsubscribe', {
