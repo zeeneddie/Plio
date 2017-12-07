@@ -141,8 +141,10 @@ Template.UserMenu.viewmodel({
       FlowRouter.go('signIn');
     });
   },
-  openUserPreferences(e) {
+  async openUserPreferences(e) {
     e.preventDefault();
+
+    await import('../../../userdirectory/includes/preferences');
 
     this.modal().open({
       template: 'UserPreferences',
