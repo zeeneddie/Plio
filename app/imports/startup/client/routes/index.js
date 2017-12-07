@@ -9,7 +9,6 @@ import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
-import { DocumentTypes } from '/imports/share/constants';
 import {
   renderStandards,
   renderRisks,
@@ -17,6 +16,7 @@ import {
   renderHelpDocs,
   renderTransitionalLayout,
 } from './actions';
+import { DOCUMENT_TYPE_BY_ROUTE_MAP } from './constants';
 
 BlazeLayout.setRoot('#app');
 
@@ -57,20 +57,6 @@ function checkEmailVerified(context, redirect) {
     }
   }
 }
-
-const ROUTE_MAP = {
-  STANDARDS: 'standards',
-  NON_CONFORMITIES: 'non-conformities',
-  RISKS: 'risks',
-  ACTIONS: 'actions',
-};
-
-const DOCUMENT_TYPE_BY_ROUTE_MAP = {
-  [ROUTE_MAP.STANDARDS]: DocumentTypes.STANDARD,
-  [ROUTE_MAP.NON_CONFORMITIES]: DocumentTypes.NON_CONFORMITY,
-  [ROUTE_MAP.RISKS]: DocumentTypes.RISK,
-  [ROUTE_MAP.ACTIONS]: DocumentTypes.CORRECTIVE_ACTION,
-};
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
