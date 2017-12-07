@@ -1,6 +1,13 @@
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import mount from './mount';
 
+/*
+  render(renderer(component: Any, options: Object) => Any) =>
+  getComponent(() => Promise) =>
+  (options: Object | (...args: [...Any]) => Promise) =>
+  (...args: [...Any]) => Any
+*/
+
 export const render = renderer => getComponent => options => async (...args) => {
   let opts = options || {};
   let component = await getComponent();
@@ -18,8 +25,14 @@ export const renderBlazeComponent = render(BlazeLayout.render.bind(BlazeLayout))
 
 /* REACT */
 
-export const renderStandards = renderComponent(async () =>
-  import('../../../ui/react/standards/components/Provider'));
+export const renderStandards = renderComponent(async () => {
+  const [StandardsProvider] = await Promise.all([
+    import('../../../ui/react/standards/components/Provider'),
+    import('../../../ui/components/standards'),
+  ]);
+
+  return StandardsProvider;
+});
 
 export const renderRisks = renderComponent(async () =>
   import('../../../ui/react/risks/components/Provider'));
