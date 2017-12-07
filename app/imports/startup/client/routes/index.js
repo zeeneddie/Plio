@@ -18,6 +18,7 @@ import {
   renderNcs,
   renderWorkInbox,
   renderUserDirectory,
+  renderDashboard,
 } from './actions';
 import { DOCUMENT_TYPE_BY_ROUTE_MAP } from './constants';
 
@@ -249,19 +250,12 @@ FlowRouter.route('/:orgSerialNumber/risks/:urlItemId/discussion', {
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  async action() {
+  action() {
     BlazeLayout.reset();
 
     $(() => ReactDOM.unmountComponentAtNode(document.getElementById('app')));
 
-    await Promise.all([
-      import('../../../ui/layouts/dashboard-layout'),
-      import('../../../ui/pages/dashboard-page'),
-    ]);
-
-    BlazeLayout.render('Dashboard_Layout', {
-      content: 'Dashboard_Page',
-    });
+    renderDashboard();
   },
 });
 

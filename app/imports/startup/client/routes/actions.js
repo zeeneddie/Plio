@@ -61,3 +61,12 @@ export const renderUserDirectory = renderBlazeComponent(async () => {
 
   return 'UserDirectory_Layout';
 })({ content: 'UserDirectory_Page' });
+
+export const renderDashboard = renderBlazeComponent(async () => {
+  await Promise.all([
+    import('../../../ui/layouts/dashboard-layout'),
+    import('../../../ui/pages/dashboard-page'),
+  ]);
+
+  return 'Dashboard_Layout';
+})({ content: 'Dashboard_Page' });
