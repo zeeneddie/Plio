@@ -19,7 +19,7 @@ export const renderCustomers = renderComponent(async () =>
   import('../../../ui/react/customers/components/Provider'));
 
 export const renderHelpDocs = renderComponent(async () =>
-  import('../../../ui/react/help-docs/components/Provider'));
+  import('../../../ui/react/help-docs/components/HelpDocsProvider'));
 
 export const renderTransitionalLayout = renderComponent(async () =>
   import('../../../ui/react/layouts/TransitionalLayout'));
