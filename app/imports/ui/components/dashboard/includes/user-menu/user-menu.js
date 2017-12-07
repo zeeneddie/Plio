@@ -107,10 +107,12 @@ Template.UserMenu.viewmodel({
       Meteor.call('UserPresence:setDefaultStatus', status);
     }
   },
-  onInviteClick(event) {
+  async onInviteClick(event) {
     event.preventDefault();
     const orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
     const organizationId = Organizations.findOne({ serialNumber: orgSerialNumber })._id;
+
+    await import('../../../userdirectory/includes/invite');
 
     this.modal().open({
       template: 'UserDirectory_InviteUsers',
