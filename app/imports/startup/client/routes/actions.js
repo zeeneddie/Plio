@@ -57,6 +57,7 @@ export const renderUserDirectory = renderBlazeComponent(async () => {
   await Promise.all([
     import('../../../ui/layouts/user-directory-layout'),
     import('../../../ui/pages/user-directory-page'),
+    import('../../../ui/components/userdirectory'),
   ]);
 
   return 'UserDirectory_Layout';
