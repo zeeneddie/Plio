@@ -2,8 +2,8 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import mount from './mount';
 
 /*
-  render(renderer(component: Any, options: Object) => Any) =>
-  getComponent(() => Promise) =>
+  render(renderer: (component: Any, options: Object) => Any) =>
+  (getComponent: () => Promise) =>
   (options: Object | (...args: [...Any]) => Promise) =>
   (...args: [...Any]) => Any
 */
