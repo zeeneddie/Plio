@@ -41,7 +41,7 @@ export const renderCustomers = renderComponent(async () =>
   import('../../../ui/react/customers/components/Provider'));
 
 export const renderHelpDocs = renderComponent(async () =>
-  import('../../../ui/react/help-docs/components/Provider'));
+  import('../../../ui/react/help-docs/components/HelpDocsProvider'));
 
 export const renderTransitionalLayout = renderComponent(async () =>
   import('../../../ui/react/layouts/TransitionalLayout'));
@@ -70,6 +70,7 @@ export const renderUserDirectory = renderBlazeComponent(async () => {
   await Promise.all([
     import('../../../ui/layouts/user-directory-layout'),
     import('../../../ui/pages/user-directory-page'),
+    import('../../../ui/components/userdirectory'),
   ]);
 
   return 'UserDirectory_Layout';

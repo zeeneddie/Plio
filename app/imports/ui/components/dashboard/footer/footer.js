@@ -4,8 +4,10 @@ import { DocumentsListSubs } from '/imports/startup/client/subsmanagers';
 
 Template.Dashboard_Footer.viewmodel({
   mixin: ['modal', 'organization', 'roles'],
-  onInviteClick(e) {
+  async onInviteClick(e) {
     e.preventDefault();
+
+    await import('../../userdirectory/includes/invite');
 
     this.modal().open({
       organizationId: this.organizationId(),
