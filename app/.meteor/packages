@@ -56,7 +56,6 @@ shell-server@0.3.0
 
 # meteorhacks:sikka
 
-meteorhacks:kadira
 percolate:migrations
 blaze-react-component
 react-template-helper
