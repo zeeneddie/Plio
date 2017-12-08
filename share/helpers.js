@@ -1,7 +1,6 @@
 import { check } from 'meteor/check';
 import get from 'lodash.get';
 import moment from 'moment-timezone';
-import Handlebars from 'handlebars';
 import { _ } from 'meteor/underscore';
 import { Meteor } from 'meteor/meteor';
 
@@ -210,11 +209,6 @@ const checkTargetDate = (targetDate, timezone) => {
 export const isDueToday = (targetDate, timezone) => checkTargetDate(targetDate, timezone) === 0;
 
 export const isOverdue = (targetDate, timezone) => checkTargetDate(targetDate, timezone) === 1;
-
-export const renderTemplate = (template, data = {}) => {
-  const compiledTemplate = Handlebars.compile(template);
-  return compiledTemplate(data);
-};
 
 export const getUser = userId => Meteor.users.findOne({ _id: userId });
 
