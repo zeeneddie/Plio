@@ -132,9 +132,7 @@ export const getCount = new Method({
   check(checker) {
     if (this.isSimulation) return undefined;
 
-    return checker(
-      compose(checkOrgMembership(this.userId), property('organizationId'))
-    );
+    return checker(compose(checkOrgMembership(this.userId), property('organizationId')));
   },
 
   run(props) {

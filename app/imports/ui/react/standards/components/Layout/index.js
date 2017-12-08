@@ -31,14 +31,12 @@ getMenuItems.propTypes = {
   filter: PropTypes.string,
 };
 
-const StandardsLayout = (props) => (
+const StandardsLayout = props => (
   <div>
     <Header>
       {props.isDiscussionOpened ? (
         <span className="navbar-title">
-          {cx(
-            props.standard ? `${props.standard.title}` : ''
-          )}
+          {cx(props.standard ? `${props.standard.title}` : '')}
         </span>
       ) : (
         <Dropdown

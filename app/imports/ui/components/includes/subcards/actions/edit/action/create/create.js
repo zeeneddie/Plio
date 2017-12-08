@@ -9,7 +9,7 @@ Template.Actions_CreateSubcard.viewmodel({
   type: '',
   title: '',
   description: '',
-  ownerId() { return Meteor.userId() },
+  ownerId() { return Meteor.userId(); },
   planInPlace: ActionPlanOptions.NO,
   completionTargetDate() {
     const organization = this.organization();
@@ -18,7 +18,7 @@ Template.Actions_CreateSubcard.viewmodel({
 
     return getWorkflowDefaultStepDate({ organization, linkedTo });
   },
-  toBeCompletedBy() { return Meteor.userId() },
+  toBeCompletedBy() { return Meteor.userId(); },
   verificationTargetDate: '',
   toBeVerifiedBy: '',
   linkedTo: [],

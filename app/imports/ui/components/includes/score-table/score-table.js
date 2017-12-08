@@ -10,9 +10,9 @@ Template.ScoreTable_Edit.viewmodel({
       data: [
         {
           label: '',
-          rows: []
-        }
-      ]
+          rows: [],
+        },
+      ],
     };
   },
   onUpdateCb() {
@@ -24,8 +24,8 @@ Template.ScoreTable_Edit.viewmodel({
   },
   onGuidePanelToggle() {},
   events: {
-    'click .toggle-collapse'(e) {
+    'click .toggle-collapse': function (e) {
       this.onGuidePanelToggle(this);
-    }
-  }
+    },
+  },
 });

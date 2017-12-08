@@ -20,7 +20,7 @@ Template.UserDirectory_Card_Read_Inner.viewmodel({
     const user = this.user();
 
     if (this.organization()) {
-      return `${this.userNameOrEmail(user)}'s superpowers for ${this.organization().name}`
+      return `${this.userNameOrEmail(user)}'s superpowers for ${this.organization().name}`;
     }
   },
   orgOwnerLabel() {
@@ -32,7 +32,7 @@ Template.UserDirectory_Card_Read_Inner.viewmodel({
     if (userId && organization) {
       const orgName = organization.name;
       if (userId === organization.ownerId()) {
-        return `${firstNameOrEmail} is the organization owner for organization ${orgName} and has the full set of superpowers`;;
+        return `${firstNameOrEmail} is the organization owner for organization ${orgName} and has the full set of superpowers`;
       }
     }
   },
@@ -43,12 +43,8 @@ Template.UserDirectory_Card_Read_Inner.viewmodel({
       const orgId = this.organization()._id;
       const userRoles = user.roles[orgId] || [];
 
-      const superpowers = Object.keys(UserRolesNames).map((key) => {
-        return { key, value: UserRolesNames[key], flag: userRoles.indexOf(key) !== -1 };
-      });
-      return superpowers.sort((a, b) => {
-        return b.flag - a.flag;
-      });
+      const superpowers = Object.keys(UserRolesNames).map(key => ({ key, value: UserRolesNames[key], flag: userRoles.indexOf(key) !== -1 }));
+      return superpowers.sort((a, b) => b.flag - a.flag);
     }
   },
 });

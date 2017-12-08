@@ -19,15 +19,15 @@ NonConformities.after.insert((userId, { _id, organizationId }) => {
 
 NonConformities.after.remove((userId, doc) => {
   Discussions.remove({ linkedTo: doc._id });
-  
+
   let fileIds = doc.fileIds || [];
   const improvementPlanFileIds = get(doc, 'improvementPlan.fileIds');
-  if (!!improvementPlanFileIds) {
+  if (improvementPlanFileIds) {
     fileIds = fileIds.concat(improvementPlanFileIds);
   }
 
   const rcaFileIds = get(doc, 'rootCauseAnalysis.fileIds');
-  if (!!rcaFileIds) {
+  if (rcaFileIds) {
     fileIds = fileIds.concat(rcaFileIds);
   }
 

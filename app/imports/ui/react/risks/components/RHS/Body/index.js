@@ -166,7 +166,7 @@ const Body = ({
       <Block>
         <span>Other files</span>
         <Field>
-          {fileIds.map((fileId) => (
+          {fileIds.map(fileId => (
             <FileProvider key={fileId} {...{ fileId }} />
           ))}
         </Field>

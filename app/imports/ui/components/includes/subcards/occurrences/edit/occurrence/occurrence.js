@@ -11,7 +11,7 @@ Template.Subcards_Occurrence.viewmodel({
     const doc = templateInstance.data.doc;
     const userId = Meteor.userId();
 
-    if(doc && !isViewed(doc, userId)) {
+    if (doc && !isViewed(doc, userId)) {
       Meteor.defer(() => updateViewedBy.call({ _id: doc._id }));
     }
   },
@@ -33,5 +33,5 @@ Template.Subcards_Occurrence.viewmodel({
   getData() {
     const { description, date } = this.data();
     return { description, date };
-  }
+  },
 });

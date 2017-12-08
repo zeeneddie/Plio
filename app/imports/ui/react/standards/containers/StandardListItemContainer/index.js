@@ -51,7 +51,7 @@ export default compose(
     );
   }),
   withHandlers({
-    onClick: props => handler => {
+    onClick: props => (handler) => {
       props.dispatch(setUrlItemId(props._id));
 
       handler({ urlItemId: props._id });

@@ -26,7 +26,7 @@ import {
   P_OnSetAnalysisCommentsChecker,
   P_OnSetStandardsUpdateCompletedByChecker,
   P_OnSetStandardsUpdateCompletedDateChecker,
-  P_OnSetStandardsUpdateCommentsChecker
+  P_OnSetStandardsUpdateCommentsChecker,
 } from '../../checkers';
 
 export { default as update } from './update';

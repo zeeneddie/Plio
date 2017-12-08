@@ -42,7 +42,7 @@ const BodyContents = ({
   section = {},
   type = {},
 }) => {
-  const render = (field) => (<Col sm="6">{field}</Col>);
+  const render = field => (<Col sm="6">{field}</Col>);
   const data = [
     { label: 'Description', text: description },
     { label: 'Issue number', text: issueNumber, render },

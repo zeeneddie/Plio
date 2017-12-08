@@ -8,8 +8,15 @@ const LinkItemList = ({ items, label }) => (
   <Block>
     {label}
     <Field>
-      {items.map(({ _id, href, indicator, title, sequentialId }) => (
-        <LinkItem key={_id} {...{ href, indicator, title, sequentialId }} />
+      {items.map(({
+        _id, href, indicator, title, sequentialId,
+      }) => (
+        <LinkItem
+          key={_id}
+          {...{
+            href, indicator, title, sequentialId,
+          }}
+        />
       ))}
     </Field>
   </Block>

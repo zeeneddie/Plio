@@ -5,7 +5,7 @@ import Header from '../../../components/Header';
 import CustomersPage from '../Page';
 import PreloaderPage from '../../../components/PreloaderPage';
 
-const CustomersLayout = (props) => (
+const CustomersLayout = props => (
   <div>
     <Header>
       <Header.Title>

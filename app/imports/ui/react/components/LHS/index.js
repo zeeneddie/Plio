@@ -74,7 +74,9 @@ const LHS = ({
             <Icon name="circle-o-notch spin" className="small-loader" />
           )}
         </div>
-        {renderAddButton({ animating, isFocused, searchText, searchResultsText })}
+        {renderAddButton({
+          animating, isFocused, searchText, searchResultsText,
+        })}
       </div>
 
       <ListGroup className="list-group-accordion">

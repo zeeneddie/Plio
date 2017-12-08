@@ -57,7 +57,7 @@ Template.Subcards_Reviews_Edit.viewmodel({
         updateFn: this.update.bind(this),
         removeFn: this.remove.bind(this),
         scheduledDate: this._getScheduledDate(),
-      }
+      },
     );
   },
   insert({ ...args }, cb) {

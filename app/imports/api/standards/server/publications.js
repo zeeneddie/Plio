@@ -90,25 +90,23 @@ Meteor.publishComposite(
   getPublishCompositeOrganizationUsers(getStandardsLayoutPub),
 );
 
-Meteor.publishComposite('standardsList', function (
+Meteor.publishComposite('standardsList', (
   organizationId,
   isDeleted = { $in: [null, false] },
-) {
-  return {
-    find() {
-      const userId = this.userId;
+) => ({
+  find() {
+    const userId = this.userId;
 
-      if (!userId || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
+    if (!userId || !isOrgMember(userId, organizationId)) {
+      return this.ready();
+    }
 
-      return Standards.find({
-        organizationId,
-        isDeleted,
-      }, { fields: Standards.publicFields });
-    },
-  };
-});
+    return Standards.find({
+      organizationId,
+      isDeleted,
+    }, { fields: Standards.publicFields });
+  },
+}));
 
 Meteor.publishComposite('standardCard', function publishStandardCard({
   _id,
@@ -184,7 +182,7 @@ Meteor.publish('standardsDeps', function (organizationId) {
   const actions = getActionsWithLimitedFields(actionsQuery);
   const departments = Departments.find(
     { organizationId },
-    makeOptionsFields(Departments.publicFields)
+    makeOptionsFields(Departments.publicFields),
   );
   const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
   const riskTypes = RiskTypes.find({ organizationId });

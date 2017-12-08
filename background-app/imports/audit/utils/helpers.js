@@ -6,7 +6,7 @@ import RiskAuditConfig from '../configs/risks/risk-audit-config.js';
 
 export const getUserId = user => ((user === SystemName) ? user : user._id);
 
-export const getLinkedDocAuditConfig = (docType) => ({
+export const getLinkedDocAuditConfig = docType => ({
   [DocumentTypes.STANDARD]: StandardAuditConfig,
   [DocumentTypes.NON_CONFORMITY]: NCAuditConfig,
   [DocumentTypes.RISK]: RiskAuditConfig,

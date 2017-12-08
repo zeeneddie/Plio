@@ -12,5 +12,5 @@ Template.RiskEvaluation_PrevLossExp_Edit.viewmodel({
   getData() {
     const { prevLossExp } = this.data();
     return { prevLossExp };
-  }
+  },
 });

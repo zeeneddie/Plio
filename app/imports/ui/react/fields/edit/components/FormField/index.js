@@ -14,7 +14,9 @@ const FormField = ({
 }) => (
   <div className="form-group row">
     <FormLabel
-      {...{ colXs, collapsed, onToggleCollapse, helpText }}
+      {...{
+        colXs, collapsed, onToggleCollapse, helpText,
+      }}
       colSm={12 - parseInt(colSm, 10)}
     >
       {children[0]}

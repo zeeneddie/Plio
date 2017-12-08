@@ -8,13 +8,13 @@ export const createOrgUserMatcher = (userId, matcher) => ({
   ...matcher,
 });
 
-export const createOrgQueryWhereUserIsMember = (userId) => ({
+export const createOrgQueryWhereUserIsMember = userId => ({
   users: {
     $elemMatch: createOrgUserMatcher(userId),
   },
 });
 
-export const createOrgQueryWhereUserIsOwner = (userId) => ({
+export const createOrgQueryWhereUserIsOwner = userId => ({
   users: {
     $elemMatch: createOrgUserMatcher(userId, { role: UserMembership.ORG_OWNER }),
   },

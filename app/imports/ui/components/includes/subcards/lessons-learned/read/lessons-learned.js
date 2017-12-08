@@ -8,5 +8,5 @@ Template.Subcards_LessonsLearned_Read.viewmodel({
     const query = { documentId };
     const options = { sort: { serialNumber: 1 } };
     return LessonsLearned.find(query, options);
-  }
+  },
 });

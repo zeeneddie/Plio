@@ -25,7 +25,7 @@ const enhance = compose(
   branch(
     property('flat'),
     flattenProp('file'),
-    identity
+    identity,
   ),
 );
 

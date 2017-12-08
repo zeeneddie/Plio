@@ -9,7 +9,7 @@ import Source from '../../../fields/read/components/Source';
 import PreloaderPage from '../../../components/PreloaderPage';
 import propTypes from './propTypes';
 
-const HelpDocsRHSBody = (props) => (
+const HelpDocsRHSBody = props => (
   <div className="content-list">
     {props.isReady ? (
       <div>

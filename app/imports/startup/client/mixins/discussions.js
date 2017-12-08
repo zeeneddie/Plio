@@ -17,8 +17,6 @@ export default {
     const query = { documentType: DocumentTypes.STANDARD, linkedTo: standardId };
     const options = { fields: { _id: 1 } };
 
-    return Discussions.find(query, options).map(
-      c => c._id
-    );
-  }
+    return Discussions.find(query, options).map(c => c._id);
+  },
 };

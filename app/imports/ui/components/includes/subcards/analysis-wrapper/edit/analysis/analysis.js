@@ -5,5 +5,5 @@ Template.Analysis_Edit.viewmodel({
   label: 'Root cause analysis',
   analysis: '',
   defaultTargetDate: '',
-  methods: {}
+  methods: {},
 });

@@ -47,13 +47,13 @@ Template.NC_Card_Read.viewmodel({
       _title: 'Non-conformity',
       template: 'NC_Card_Edit',
       helpText: NonConformitiesHelp.nonConformity,
-      _id: this.NC() && this.NC()._id
+      _id: this.NC() && this.NC()._id,
     });
   },
   pathToDiscussion() {
     const params = {
       orgSerialNumber: this.organizationSerialNumber(),
-      urlItemId: this.NCId()
+      urlItemId: this.NCId(),
     };
     const queryParams = { filter: this.activeNCFilterId() };
     return FlowRouter.path('nonConformityDiscussion', params, queryParams);

@@ -29,13 +29,11 @@ export const insert = new Method({
   ]).validator(),
 
   check(checker) {
-    return checker(
-      ({ documentId, documentType }) => checkDocAndMembership(
-        getCollectionByDocType(documentType),
-        documentId,
-        this.userId,
-      )
-    );
+    return checker(({ documentId, documentType }) => checkDocAndMembership(
+      getCollectionByDocType(documentType),
+      documentId,
+      this.userId,
+    ));
   },
 
   run({ ...args }) {
@@ -53,7 +51,7 @@ export const update = new CheckedMethod({
       RequiredSchema,
     ]).newContext();
 
-    for (let key in doc) {
+    for (const key in doc) {
       if (!validationContext.validateOne(doc, key)) {
         const errors = validationContext.invalidKeys();
         const message = validationContext.keyErrorMessage(errors[0].name);

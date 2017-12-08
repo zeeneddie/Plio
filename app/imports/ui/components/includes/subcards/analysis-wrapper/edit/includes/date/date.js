@@ -24,5 +24,5 @@ Template.Analysis_TargetDate_Edit.viewmodel({
   getData() {
     const { date } = this.data();
     return { date };
-  }
+  },
 });

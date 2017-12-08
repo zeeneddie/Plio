@@ -22,7 +22,7 @@ const enhance = compose(
       organization,
       setProcessing,
       docType,
-    }) => data => {
+    }) => (data) => {
       setProcessing(true);
       const selectedFields = Object
         .keys(data.fields)

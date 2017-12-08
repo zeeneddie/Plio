@@ -22,5 +22,5 @@ export default method => compose(
     componentWillReceiveProps(nextProps) {
       updater(method, nextProps);
     },
-  })
+  }),
 );

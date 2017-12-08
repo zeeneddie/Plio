@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from 'reactstrap';
 
-const MentionInput = (props) => (
+const MentionInput = props => (
   <Input {...props} />
 );
 

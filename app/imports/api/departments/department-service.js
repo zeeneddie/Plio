@@ -11,12 +11,12 @@ export default DepartmentService = {
 
   update({ _id, name }) {
     return this.collection.update({ _id }, {
-      $set: { name }
+      $set: { name },
     });
   },
 
   remove({ _id }) {
     return this.collection.remove({ _id });
-  }
+  },
 
 };

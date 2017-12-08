@@ -7,7 +7,7 @@ import { WorkItemsStore } from '/imports/share/constants';
 
 Template.Dashboard_WorkItemStats.viewmodel({
   mixin: ['utils', 'organization', 'workInbox', {
-    counter: 'counter'
+    counter: 'counter',
   }],
   _subHandlers: [],
   isInitialDataReady: false,
@@ -34,10 +34,10 @@ Template.Dashboard_WorkItemStats.viewmodel({
 
       this._subHandlers([
         WorkItemSubs.subscribe('workItemsOverdue', this.organizationId(), limit),
-        CountSubs.subscribe('workItemsOverdueCount', 'work-items-overdue-count-' + organizationId, organizationId),
+        CountSubs.subscribe('workItemsOverdueCount', `work-items-overdue-count-${organizationId}`, organizationId),
         template.subscribe('nonConformitiesByIds', ids),
         template.subscribe('risksByIds', ids),
-        template.subscribe('actionsByIds', ids)
+        template.subscribe('actionsByIds', ids),
       ]);
     });
 
@@ -57,7 +57,7 @@ Template.Dashboard_WorkItemStats.viewmodel({
     return total > current;
   },
   overdueCount() {
-    return this.counter.get('work-items-overdue-count-' + this.organizationId());
+    return this.counter.get(`work-items-overdue-count-${this.organizationId()}`);
   },
   hiddenOverdueItemsNumber() {
     const count = this.overdueCount() || Object.assign([], this.items()).length;
@@ -71,8 +71,8 @@ Template.Dashboard_WorkItemStats.viewmodel({
     const query = { status: 2, assigneeId: Meteor.userId() }; // Overdue
     const options = {
       sort: {
-        targetDate: -1 // New overdue items first
-      }
+        targetDate: -1, // New overdue items first
+      },
     };
     if (this.enableLimit()) {
       options.limit = this.limit();
@@ -98,7 +98,7 @@ Template.Dashboard_WorkItemStats.viewmodel({
         linkedDoc,
         type,
         time,
-        href
+        href,
       };
     });
 
@@ -106,5 +106,5 @@ Template.Dashboard_WorkItemStats.viewmodel({
   },
   loadAll() {
     this.enableLimit(false);
-  }
+  },
 });

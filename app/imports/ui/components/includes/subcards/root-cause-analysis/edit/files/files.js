@@ -6,12 +6,12 @@ Template.RCA_Files_Edit.viewmodel({
   fileIds: [],
   uploaderMetaContext() {
     return {
-      nonConformityId: this.NCId()
+      nonConformityId: this.NCId(),
     };
   },
   update({ ...args }, cb) {
     const renameFields = (obj, fieldRe) => {
-      for (let key in obj) {
+      for (const key in obj) {
         if (!obj.hasOwnProperty(key)) {
           continue;
         }
@@ -28,5 +28,5 @@ Template.RCA_Files_Edit.viewmodel({
 
     renameFields(args, /^fileIds/);
     this.parent().update({ ...args }, cb);
-  }
-})
+  },
+});

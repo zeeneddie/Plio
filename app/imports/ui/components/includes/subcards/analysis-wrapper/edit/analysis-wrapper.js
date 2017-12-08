@@ -61,7 +61,7 @@ Template.Subcards_AnalysisWrapper_Edit.viewmodel({
       setAnalysisComments,
       setStandardsUpdateCompletedBy,
       setStandardsUpdateCompletedDate,
-      setStandardsUpdateComments
+      setStandardsUpdateComments,
     } = this.methodRefs();
 
     const half = {
@@ -71,7 +71,7 @@ Template.Subcards_AnalysisWrapper_Edit.viewmodel({
       setCompletedDate: setDate('completedAt'),
       setComments: setKey('completionComments'),
       complete: setKey('completionComments'),
-      undo: undo
+      undo,
     };
 
     const makeMethods = (methods, from) => methods.map((ref, i) => {
@@ -84,8 +84,10 @@ Template.Subcards_AnalysisWrapper_Edit.viewmodel({
          * @param {object} method arguments
          * @param {function} optional callback
          */
-        return { [key]: () => (...args) =>
-          this.callMethod(from[key](ref), ...args) };
+        return {
+          [key]: () => (...args) =>
+            this.callMethod(from[key](ref), ...args),
+        };
       }
 
       return { [key]: () => from[key](ref) };
@@ -109,7 +111,7 @@ Template.Subcards_AnalysisWrapper_Edit.viewmodel({
         setStandardsUpdateComments,
         updateStandards,
         undoStandardsUpdate,
-      ], half)
+      ], half),
     };
-  }
+  },
 });

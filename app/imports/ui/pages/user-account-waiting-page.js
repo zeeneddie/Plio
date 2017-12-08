@@ -27,5 +27,5 @@ Template.UserAccountWaitingPage.viewmodel({
         toastr.info('Verification email has been sent!');
       }
     }));
-  }
+  },
 });

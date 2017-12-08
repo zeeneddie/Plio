@@ -11,10 +11,10 @@ Template.UserDirectory_List_Item.viewmodel({
       href: (() => {
         const params = {
           userId: _id,
-          orgSerialNumber: this.organizationSerialNumber()
+          orgSerialNumber: this.organizationSerialNumber(),
         };
         return FlowRouter.path('userDirectoryUserPage', params);
-      })()
+      })(),
     };
-  }
+  },
 });

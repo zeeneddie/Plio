@@ -5,7 +5,7 @@ import { _ } from 'meteor/underscore';
 import StandardsRHSBody from '../../components/RHS/Body';
 import withStateCollapsed from '../../../helpers/withStateCollapsed';
 
-const setCollapsed = _.throttle((props) =>
+const setCollapsed = _.throttle(props =>
   props.setCollapsed(() => props.hasDocxAttachment), 800);
 
 export default compose(

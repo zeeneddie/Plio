@@ -7,7 +7,7 @@ const ReactAutolinker = ({
   text,
   options,
   renderLink = tag => React.createElement(tag.tagName, tag.attrs, tag.innerHtml || tag.textContent),
-  ...props,
+  ...props
 }) => {
   let tags = [];
   const replaceFn = (match) => {

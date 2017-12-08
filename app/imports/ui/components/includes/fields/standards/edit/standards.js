@@ -38,7 +38,7 @@ Template.Fields_Standards_Edit.viewmodel({
       return;
     }
 
-    if (selected.length === this.selected().count() &&  selected.every(({ _id:itemId }) => this.selected().fetch().find(({ _id }) => _id === itemId))) return;
+    if (selected.length === this.selected().count() && selected.every(({ _id: itemId }) => this.selected().fetch().find(({ _id }) => _id === itemId))) return;
 
     const standardsIds = selected.map(({ _id }) => _id);
 
@@ -48,8 +48,8 @@ Template.Fields_Standards_Edit.viewmodel({
 
     const options = {
       [`${option}`]: {
-        standardsIds: selectedItemId
-      }
+        standardsIds: selectedItemId,
+      },
     };
 
     this.parent().update({ options });
@@ -70,5 +70,5 @@ Template.Fields_Standards_Edit.viewmodel({
   getData() {
     const { standardsIds } = this.data();
     return { standardsIds };
-  }
+  },
 });

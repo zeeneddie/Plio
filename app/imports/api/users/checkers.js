@@ -10,7 +10,7 @@ import {
   USR_NOT_EXIST,
   USR_INCORRECT_PASSWORD,
   ACCESS_DENIED,
- } from '../errors.js';
+} from '../errors.js';
 import { checkAndThrow } from '/imports/api/helpers.js';
 import { canChangeRoles, isOrgOwner, isPlioAdmin, isPlioUser } from '../checkers.js';
 
@@ -65,5 +65,5 @@ export const USR_EnsureIsPlioAdmin = (userId) => {
   checkAndThrow(!isPlioAdmin(userId), ACCESS_DENIED);
 };
 
-export const USR_EnsureIsPlioUser = (userId) =>
+export const USR_EnsureIsPlioUser = userId =>
   checkAndThrow(!isPlioUser(userId), ACCESS_DENIED);

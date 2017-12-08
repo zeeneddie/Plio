@@ -8,7 +8,9 @@ import HomeScreenTitleAdd from '../HomeScreenTitleAdd';
 
 const enhance = withState('value', 'setValue', '');
 
-const HomeScreenTitle = enhance(({ value, setValue, label, ...other }) => (
+const HomeScreenTitle = enhance(({
+  value, setValue, label, ...other
+}) => (
   <FormField>
     <span>{label}</span>
     <SelectInput caret {...{ value, setValue, ...other }}>

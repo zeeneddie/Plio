@@ -23,7 +23,9 @@ export default compose(
       $window.on('resize', setNewWidthThrottled);
     },
   }),
-  mapProps(({ width, showCard, isDiscussionOpened, ...props }) => ({
+  mapProps(({
+    width, showCard, isDiscussionOpened, ...props
+  }) => ({
     ...props,
     displayRHS: width <= MOBILE_BREAKPOINT && (showCard || isDiscussionOpened),
     children: _.isFunction(props.children.filter)

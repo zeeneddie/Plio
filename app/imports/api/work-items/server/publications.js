@@ -55,10 +55,10 @@ const getWorkInboxLayoutPub = (userId, __, isDeleted) => [
 
 Meteor.publishComposite(
   'workInboxLayout',
-  getPublishCompositeOrganizationUsers(getWorkInboxLayoutPub)
+  getPublishCompositeOrganizationUsers(getWorkInboxLayoutPub),
 );
 
-Meteor.publishComposite('workItemCard', function ({ _id, organizationId }) {
+Meteor.publishComposite('workItemCard', ({ _id, organizationId }) => {
   check(_id, String);
   check(organizationId, String);
 

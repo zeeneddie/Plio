@@ -13,7 +13,7 @@ Template.Actions_AddSubcard.viewmodel({
     const standardId = this.standardId && this.standardId();
 
     const defaultData = {
-      type: this.type()
+      type: this.type(),
     };
 
     if (linkedTo) {
@@ -41,5 +41,5 @@ Template.Actions_AddSubcard.viewmodel({
   getData() {
     const form = this.child(this.form());
     return form && form.getData && form.getData();
-  }
+  },
 });

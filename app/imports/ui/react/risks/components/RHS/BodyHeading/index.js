@@ -7,7 +7,7 @@ const RisksRHSBodyHeading = ({ title }) => (
     <h4 className="list-group-item-heading pull-left">
       <span>{title}</span>
     </h4>
-    <div className="flex"></div>
+    <div className="flex" />
   </div>
 );
 

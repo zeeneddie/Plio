@@ -6,7 +6,7 @@ import BaseEntityService from '../base-entity-service.js';
 import ProblemsService from '../problems/problems-service.js';
 
 if (Meteor.isServer) {
-  //import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
+  // import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
 }
 
 
@@ -19,13 +19,13 @@ export default _.extend({}, ProblemsService, {
 
   _docType: ProblemTypes.RISK,
 
-  'scores.insert'({ _id, ...args }) {
+  'scores.insert': function ({ _id, ...args }) {
     const id = Random.id();
     const query = { _id };
     const options = {
       $addToSet: {
-        scores: { _id: id, ...args }
-      }
+        scores: { _id: id, ...args },
+      },
     };
 
     this.collection.update(query, options);
@@ -33,12 +33,12 @@ export default _.extend({}, ProblemsService, {
     return id;
   },
 
-  'scores.remove'({ _id, score }) {
+  'scores.remove': function ({ _id, score }) {
     const query = { _id };
     const options = {
-      '$pull': {
-        'scores': score
-      }
+      $pull: {
+        scores: score,
+      },
     };
 
     return this.collection.update(query, options);
@@ -53,8 +53,8 @@ export default _.extend({}, ProblemsService, {
   },
 
   _refreshStatus(_id) {
-    /*Meteor.isServer && Meteor.defer(() => {
+    /* Meteor.isServer && Meteor.defer(() => {
       new RiskWorkflow(_id).refreshStatus();
-    });*/
-  }
+    }); */
+  },
 });

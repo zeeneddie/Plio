@@ -15,7 +15,7 @@ Template.UserDirectory_Page.viewmodel({
       const organizationUsersHandle = UserSubs.subscribe(
         'organizationUsers',
         userIds,
-        organizationId
+        organizationId,
       );
       if (!this.activeUser() && organizationUsersHandle.ready()) {
         FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
@@ -48,12 +48,12 @@ Template.UserDirectory_Page.viewmodel({
 
     const searchUsers = this.searchObject('searchText', searchFields);
 
-    findQuery['$and'] = [
-      { _id: { $in: userIds }},
-      { ...searchUsers }
+    findQuery.$and = [
+      { _id: { $in: userIds } },
+      { ...searchUsers },
     ];
 
-    const cursor = Meteor.users.find(findQuery, { sort: { 'profile.firstName': 1, 'emails.0.address': 1 }});
+    const cursor = Meteor.users.find(findQuery, { sort: { 'profile.firstName': 1, 'emails.0.address': 1 } });
 
     const result = _.pluck(cursor.fetch(), '_id');
 
@@ -61,14 +61,13 @@ Template.UserDirectory_Page.viewmodel({
       this.activeUser(result[0]);
 
       return cursor;
-    } else {
-      this.activeUser(null);
     }
+    this.activeUser(null);
   },
 
   getCurrentOrganizationUsers() {
     const organization = Organizations.findOne({
-      serialNumber: this.organizationSerialNumber()
+      serialNumber: this.organizationSerialNumber(),
     });
 
     if (organization) {
@@ -79,8 +78,7 @@ Template.UserDirectory_Page.viewmodel({
       });
 
       return _.pluck(existingUsersIds, 'userId');
-    } else {
-      return [];
     }
-  }
+    return [];
+  },
 });

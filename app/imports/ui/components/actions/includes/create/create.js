@@ -13,7 +13,7 @@ Template.Actions_Create.viewmodel({
   mixin: ['workInbox', 'organization', 'router', 'getChildrenData'],
   type: '',
   title: '',
-  ownerId() { return Meteor.userId() },
+  ownerId() { return Meteor.userId(); },
   planInPlace: ActionPlanOptions.NO,
   completionTargetDate() {
     const organization = this.organization();
@@ -22,13 +22,13 @@ Template.Actions_Create.viewmodel({
 
     return getWorkflowDefaultStepDate({ organization, linkedTo });
   },
-  toBeCompletedBy() { return Meteor.userId() },
+  toBeCompletedBy() { return Meteor.userId(); },
   verificationTargetDate: '',
   toBeVerifiedBy: '',
   save() {
     const data = this.getData();
 
-    for (let key in data) {
+    for (const key in data) {
       if (!data[key]) {
         const errorMessage = `The new action cannot be created without a ${key}. Please enter a ${key} for your action.`;
         setModalError(errorMessage);
@@ -49,7 +49,7 @@ Template.Actions_Create.viewmodel({
       ...args,
       type,
       organizationId,
-      completionTargetDate: tzDate
+      completionTargetDate: tzDate,
     };
 
     const cb = (_id, open) => {
@@ -62,7 +62,7 @@ Template.Actions_Create.viewmodel({
       open({
         _id,
         _title: action ? this._getNameByType(action.type) : '',
-        template: 'Actions_Edit'
+        template: 'Actions_Edit',
       });
     };
 
@@ -70,5 +70,5 @@ Template.Actions_Create.viewmodel({
   },
   getData() {
     return this.getChildrenData();
-  }
+  },
 });

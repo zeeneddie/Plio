@@ -64,7 +64,9 @@ const ChangelogHeaderContainer = compose(
     doc: state.collections[getNormalizedDataKey(STORE_COLLECTION_NAMES[collection])][documentId],
   })),
 
-  kompose(({ documentId, collection, dispatch, doc }, onData) => {
+  kompose(({
+    documentId, collection, dispatch, doc,
+  }, onData) => {
     dispatch(setChangelogDocument(doc));
 
     onData(null, { documentId, collection, dispatch });

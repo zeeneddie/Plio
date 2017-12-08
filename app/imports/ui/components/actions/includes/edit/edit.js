@@ -15,7 +15,7 @@ import {
   setCompletionDate,
   setCompletionExecutor,
   setVerificationDate,
-  setVerificationExecutor
+  setVerificationExecutor,
 } from '/imports/api/actions/methods';
 import { getTzTargetDate } from '/imports/share/helpers.js';
 
@@ -32,7 +32,7 @@ Template.Actions_Edit.viewmodel({
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),
-      action: this._id()
+      action: this._id(),
     };
   },
   callUpdate(method, args = {}, cb = () => {}) {
@@ -48,8 +48,9 @@ Template.Actions_Edit.viewmodel({
   onUpdateCb() {
     return this.update.bind(this);
   },
-  update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
-
+  update({
+    query = {}, options = {}, e = {}, withFocusCheck = false, ...args
+  }, cb = () => {}) {
     const updateFn = () => this.callUpdate(update, { query, options, ...args }, cb);
 
     if (withFocusCheck) {
@@ -62,13 +63,13 @@ Template.Actions_Edit.viewmodel({
     return ({ ...args }, cb) => this.callUpdate(complete, { ...args }, cb);
   },
   getUndoCompletionFn() {
-    return (cb) => this.callUpdate(undoCompletion, {}, cb);
+    return cb => this.callUpdate(undoCompletion, {}, cb);
   },
   getVerifyFn() {
     return ({ ...args }, cb) => this.callUpdate(verify, { ...args }, cb);
   },
   getUndoVerificationFn() {
-    return (cb) => this.callUpdate(undoVerification, {}, cb);
+    return cb => this.callUpdate(undoVerification, {}, cb);
   },
   getLinkStandardFn() {
     return ({ standardId }, cb) => {
@@ -120,31 +121,33 @@ Template.Actions_Edit.viewmodel({
     const { title } = this.action();
     const _id = this._id();
 
-    swal({
-      title: 'Are you sure?',
-      text: `An action "${title}" will be removed.`,
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Remove',
-      closeOnConfirm: false,
-    },
-    () => {
-      this.modal().callMethod(remove, { _id }, (err) => {
-        if (err) {
-          swal.close();
-          return;
-        }
+    swal(
+      {
+        title: 'Are you sure?',
+        text: `An action "${title}" will be removed.`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Remove',
+        closeOnConfirm: false,
+      },
+      () => {
+        this.modal().callMethod(remove, { _id }, (err) => {
+          if (err) {
+            swal.close();
+            return;
+          }
 
-        swal({
-          title: 'Removed!',
-          text: `An action "${title}" was removed successfully.`,
-          type: 'success',
-          timer: ALERT_AUTOHIDE_TIME,
-          showConfirmButton: false,
+          swal({
+            title: 'Removed!',
+            text: `An action "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
+
+          this.modal().close();
         });
-
-        this.modal().close();
-      });
-    });
+      },
+    );
   },
 });

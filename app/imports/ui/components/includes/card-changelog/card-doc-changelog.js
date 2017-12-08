@@ -23,7 +23,7 @@ Template.CardDocChangelog.viewmodel({
       'auditLogsCount',
       `doc-logs-count-${documentId}`,
       documentId,
-      collection
+      collection,
     );
 
     tpl.subscribe('auditLogs', documentId, collection, { onReady });
@@ -37,5 +37,5 @@ Template.CardDocChangelog.viewmodel({
   },
   logsLength() {
     return this.get(`doc-logs-count-${this.documentId()}`);
-  }
+  },
 });

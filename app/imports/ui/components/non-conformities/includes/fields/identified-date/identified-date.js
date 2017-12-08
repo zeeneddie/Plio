@@ -9,7 +9,7 @@ Template.NC_IdentifiedDate_Edit.viewmodel({
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { date:identifiedAt } = viewmodel.getData();
+    const { date: identifiedAt } = viewmodel.getData();
 
     this.identifiedAt(identifiedAt);
 
@@ -20,5 +20,5 @@ Template.NC_IdentifiedDate_Edit.viewmodel({
   getData() {
     const { identifiedAt } = this.data();
     return { identifiedAt };
-  }
+  },
 });

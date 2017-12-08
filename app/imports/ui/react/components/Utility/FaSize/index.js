@@ -10,7 +10,9 @@ const sizeMap = {
   6: '5x',
 };
 
-const FaSize = ({ size = '1', prefix = '', className: cn, children, ...other }) => {
+const FaSize = ({
+  size = '1', prefix = '', className: cn, children, ...other
+}) => {
   const child = React.Children.only(children);
   const sizeValue = sizeMap[size];
   const sizeCx = sizeValue && `fa-${prefix ? `${prefix}-` : ''}${sizeValue}`;

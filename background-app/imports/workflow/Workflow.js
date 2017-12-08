@@ -5,7 +5,6 @@ import { Organizations } from '/imports/share/collections/organizations';
 
 
 export default class Workflow {
-
   constructor(id) {
     if (!SimpleSchema.RegEx.Id.test(id)) {
       throw new Error(`${JSON.stringify(id)} is not valid document ID`);
@@ -84,5 +83,4 @@ export default class Workflow {
   static get _collection() {
     // Implement in child class
   }
-
 }

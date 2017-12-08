@@ -5,5 +5,5 @@ Template.Subcards_NonConformities_Read.viewmodel({
   _query: {},
   NCs() {
     return this._getNCsByQuery({ ...this._query() }, { sort: { serialNumber: 1 } });
-  }
+  },
 });

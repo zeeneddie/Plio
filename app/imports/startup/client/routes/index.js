@@ -1,7 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
-import { withOptions } from 'react-mounter';
-import { mounter } from 'react-mounter/dist/client';
 import { Meteor } from 'meteor/meteor';
 import { AccountsTemplates } from 'meteor/useraccounts:core';
 import ReactDOM from 'react-dom';
@@ -11,16 +9,18 @@ import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
-import { DocumentTypes } from '/imports/share/constants';
-import StandardsProvider from '/imports/ui/react/standards/components/Provider';
-import RisksProvider from '/imports/ui/react/risks/components/Provider';
-import CustomersProvider from '/imports/ui/react/customers/components/Provider';
-import HelpDocsProvider from '/imports/ui/react/help-docs/components/HelpDocsProvider';
-import TransitionalLayout from '/imports/ui/react/layouts/TransitionalLayout';
-import UnsubscribeFromNotifications
-  from '/imports/ui/react/pages/components/Unsubscribe/Notifications';
-import UnsubscribeFromDailyRecap from '/imports/ui/react/pages/components/Unsubscribe/DailyRecap';
-import UnsubscribeFromDiscussion from '/imports/ui/react/pages/components/Unsubscribe/Discussion';
+import {
+  renderStandards,
+  renderRisks,
+  renderCustomers,
+  renderHelpDocs,
+  renderTransitionalLayout,
+  renderNcs,
+  renderWorkInbox,
+  renderUserDirectory,
+  renderDashboard,
+} from './actions';
+import { DOCUMENT_TYPE_BY_ROUTE_MAP } from './constants';
 
 BlazeLayout.setRoot('#app');
 
@@ -56,40 +56,11 @@ function checkEmailVerified(context, redirect) {
       if (!isOnUserWaiting) {
         redirect('userWaiting');
       }
-    } else {
-      if (isOnUserWaiting) {
-        redirect('hello');
-      }
+    } else if (isOnUserWaiting) {
+      redirect('hello');
     }
   }
 }
-
-function mount(layoutClass, regions, options = {}) {
-  const additionalOptions = {
-    rootId: regions && regions.rootId || options.rootId || 'react-root',
-    rootProps: options.rootProps || {},
-  };
-
-  mounter(layoutClass, regions, { ...options, ...additionalOptions });
-}
-
-const mount2 = withOptions({
-  rootId: 'app',
-}, mount);
-
-const ROUTE_MAP = {
-  STANDARDS: 'standards',
-  NON_CONFORMITIES: 'non-conformities',
-  RISKS: 'risks',
-  ACTIONS: 'actions',
-};
-
-const DOCUMENT_TYPE_BY_ROUTE_MAP = {
-  [ROUTE_MAP.STANDARDS]: DocumentTypes.STANDARD,
-  [ROUTE_MAP.NON_CONFORMITIES]: DocumentTypes.NON_CONFORMITY,
-  [ROUTE_MAP.RISKS]: DocumentTypes.RISK,
-  [ROUTE_MAP.ACTIONS]: DocumentTypes.CORRECTIVE_ACTION,
-};
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
@@ -219,95 +190,61 @@ FlowRouter.route('/transfer-organization/:transferId', {
 FlowRouter.route('/customers', {
   name: 'customers',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    mount2(CustomersProvider);
-  },
+  action: renderCustomers(),
 });
 
 FlowRouter.route('/customers/:urlItemId', {
   name: 'customer',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    mount2(CustomersProvider);
-  },
+  action: renderCustomers(),
 });
 
 FlowRouter.route('/help-center', {
   name: 'helpDocs',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    mount2(HelpDocsProvider);
-  },
+  action: renderHelpDocs(),
 });
 
 FlowRouter.route('/help-center/:helpId', {
   name: 'helpDoc',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    mount2(HelpDocsProvider);
-  },
+  action: renderHelpDocs(),
 });
 
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    mount2(StandardsProvider);
-  },
+  action: renderStandards(),
 });
 
 FlowRouter.route('/:orgSerialNumber/standards/:urlItemId', {
   name: 'standard',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    mount2(StandardsProvider);
-  },
+  action: renderStandards(),
 });
 
 FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
-  // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
   name: 'standardDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
-  action() {
-    mount2(StandardsProvider, { isDiscussionOpened: true });
-  },
+  action: renderStandards({ isDiscussionOpened: true }),
 });
 
 FlowRouter.route('/:orgSerialNumber/risks', {
   name: 'risks',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    mount2(RisksProvider);
-  },
+  action: renderRisks(),
 });
 
 FlowRouter.route('/:orgSerialNumber/risks/:urlItemId', {
   name: 'risk',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    mount2(RisksProvider);
-  },
+  action: renderRisks(),
 });
 
 FlowRouter.route('/:orgSerialNumber/risks/:urlItemId/discussion', {
-  // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
   name: 'riskDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
-  action() {
-    mount2(RisksProvider, { isDiscussionOpened: true });
-  },
-});
-
-FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId/discussion', {
-  // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
-  name: 'nonConformityDiscussion',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('NC_Layout', {
-      content: 'NC_Page',
-      isDiscussionOpened: true,
-    });
-  },
+  action: renderRisks({ isDiscussionOpened: true }),
 });
 
 FlowRouter.route('/:orgSerialNumber', {
@@ -318,110 +255,97 @@ FlowRouter.route('/:orgSerialNumber', {
 
     $(() => ReactDOM.unmountComponentAtNode(document.getElementById('app')));
 
-    BlazeLayout.render('Dashboard_Layout', {
-      content: 'Dashboard_Page',
-    });
+    renderDashboard();
   },
 });
 
 FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('UserDirectory_Layout', {
-      content: 'UserDirectory_Page',
-    });
-  },
+  action: renderUserDirectory,
 });
 
 FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('UserDirectory_Layout', {
-      content: 'UserDirectory_Page',
-    });
-  },
+  action: renderUserDirectory,
 });
 
 FlowRouter.route('/:orgSerialNumber/non-conformities', {
   name: 'nonconformities',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('NC_Layout', {
-      content: 'NC_Page',
-    });
-  },
+  action: renderNcs,
 });
 
 FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('NC_Layout', {
-      content: 'NC_Page',
-    });
-  },
+  action: renderNcs,
+});
+
+FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId/discussion', {
+  name: 'nonConformityDiscussion',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action: renderNcs,
 });
 
 FlowRouter.route('/:orgSerialNumber/work-inbox', {
   name: 'workInbox',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('WorkInbox_Layout', {
-      content: 'WorkInbox_Page',
-    });
-  },
+  action: renderWorkInbox,
 });
 
 FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   name: 'workInboxItem',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.render('WorkInbox_Layout', {
-      content: 'WorkInbox_Page',
-    });
-  },
+  action: renderWorkInbox,
 });
 
 FlowRouter.route('/:orgSerialNumber/:route/:documentId/unsubscribe', {
   name: 'unsubscribeFromNotifications',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action({ documentId, route, orgSerialNumber }) {
+  action: renderTransitionalLayout(async ({ documentId, route, orgSerialNumber }) => {
     const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
+    const { default: UnsubscribeFromNotifications } =
+      await import('../../../ui/react/pages/components/Unsubscribe/Notifications');
 
-    mount2(TransitionalLayout, {
+    return {
       content: (
         <UnsubscribeFromNotifications {...{ documentId, documentType, orgSerialNumber }} />
       ),
-    });
-  },
+    };
+  }),
 });
 
 FlowRouter.route('/:orgSerialNumber/unsubscribe', {
   name: 'unsubscribeFromDailyRecap',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action({ orgSerialNumber }) {
-    mount2(TransitionalLayout, {
+  action: renderTransitionalLayout(async ({ orgSerialNumber }) => {
+    const { default: UnsubscribeFromDailyRecap } =
+      await import('../../../ui/react/pages/components/Unsubscribe/DailyRecap');
+
+    return {
       content: (
         <UnsubscribeFromDailyRecap {...{ orgSerialNumber }} />
       ),
-    });
-  },
+    };
+  }),
 });
 
 FlowRouter.route('/:orgSerialNumber/:route/:documentId/discussion/unsubscribe', {
   name: 'unsubscribeFromDiscussionNotifications',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action({ documentId, route, orgSerialNumber }) {
+  action: renderTransitionalLayout(async ({ documentId, route, orgSerialNumber }) => {
     const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
+    const { default: UnsubscribeFromDiscussion } =
+      await import('../../../ui/react/pages/components/Unsubscribe/Discussion');
 
-    mount2(TransitionalLayout, {
+    return {
       content: (
         <UnsubscribeFromDiscussion
           {...{ documentId, documentType, orgSerialNumber }}
         />
       ),
-    });
-  },
+    };
+  }),
 });

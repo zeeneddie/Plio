@@ -9,7 +9,7 @@ import CardBlockCollapse from '/imports/ui/react/components/CardBlockCollapse';
 import Filter from '../Filter';
 import SelectOptions from '../SelectOptions';
 
-const DataExportModal = (props) => (
+const DataExportModal = props => (
   <Form onSubmit={props.onSubmit}>
     <div className="relative">
       <CardBlock>

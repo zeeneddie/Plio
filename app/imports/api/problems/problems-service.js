@@ -18,17 +18,23 @@ export default {
     const workflowType = organization.workflowType(magnitude);
 
     return this.collection.insert({
-      organizationId, serialNumber, sequentialId,
-      workflowType, magnitude, ...args
+      organizationId,
+      serialNumber,
+      sequentialId,
+      workflowType,
+      magnitude,
+      ...args,
     });
   },
 
-  update({ _id, query = {}, options = {}, ...args }) {
+  update({
+    _id, query = {}, options = {}, ...args
+  }) {
     if (!_.keys(query).length > 0) {
       query = { _id };
     }
     if (!_.keys(options).length > 0) {
-      options['$set'] = args;
+      options.$set = args;
     }
 
     return this.collection.update(query, options);
@@ -53,7 +59,7 @@ export default {
   },
 
   setAnalysisDate({ _id, targetDate }, doc) {
-    const { analysis: { targetDate:td, ...analysis } = {}, ...rest } = doc;
+    const { analysis: { targetDate: td, ...analysis } = {}, ...rest } = doc;
 
     const query = { _id };
     const options = { $set: { 'analysis.targetDate': targetDate } };
@@ -88,14 +94,14 @@ export default {
 
   completeAnalysis({ _id, completionComments, userId }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $set: {
         'analysis.status': 1, // Completed
         'analysis.completedAt': new Date(),
         'analysis.completedBy': userId,
-        'analysis.completionComments': completionComments
-      }
+        'analysis.completionComments': completionComments,
+      },
     });
 
     WorkItemService.analysisCompleted(_id, this._docType);
@@ -105,7 +111,7 @@ export default {
 
   undoAnalysis({ _id, userId }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $set: { 'analysis.status': 0 }, // Not completed
       $unset: {
@@ -113,8 +119,8 @@ export default {
         'analysis.completedBy': '',
         'analysis.completionComments': '',
         'updateOfStandards.targetDate': '',
-        'updateOfStandards.executor': ''
-      }
+        'updateOfStandards.executor': '',
+      },
     });
 
     WorkItemService.analysisCanceled(_id, this._docType);
@@ -124,14 +130,14 @@ export default {
 
   updateStandards({ _id, completionComments, userId }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $set: {
         'updateOfStandards.status': 1, // Completed
         'updateOfStandards.completedAt': new Date(),
         'updateOfStandards.completedBy': userId,
-        'updateOfStandards.completionComments': completionComments
-      }
+        'updateOfStandards.completionComments': completionComments,
+      },
     });
 
     WorkItemService.standardsUpdated(_id, this._docType);
@@ -141,16 +147,16 @@ export default {
 
   undoStandardsUpdate({ _id, userId }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $set: {
-        'updateOfStandards.status': 0 // Not completed
+        'updateOfStandards.status': 0, // Not completed
       },
       $unset: {
         'updateOfStandards.completedAt': '',
         'updateOfStandards.completedBy': '',
-        'updateOfStandards.completionComments': ''
-      }
+        'updateOfStandards.completionComments': '',
+      },
     });
 
     WorkItemService.standardsUpdateCanceled(_id, this._docType);
@@ -177,12 +183,12 @@ export default {
   },
 
   setStandardsUpdateDate({ _id, targetDate }, doc) {
-    const { updateOfStandards: { targetDate:td, ...updateOfStandards } = {}, ...rest } = doc;
+    const { updateOfStandards: { targetDate: td, ...updateOfStandards } = {}, ...rest } = doc;
 
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
-      $set: { 'updateOfStandards.targetDate': targetDate }
+      $set: { 'updateOfStandards.targetDate': targetDate },
     });
 
     WorkItemService.updateOfStandardsDateUpdated(_id, this._docType, targetDate);
@@ -221,7 +227,9 @@ export default {
     const onPermanentDelete = () =>
       WorkItemService.removePermanently(workQuery);
 
-    return this._service.remove({ _id, deletedBy, onSoftDelete, onPermanentDelete });
+    return this._service.remove({
+      _id, deletedBy, onSoftDelete, onPermanentDelete,
+    });
   },
 
   restore({ _id }) {
@@ -238,22 +246,22 @@ export default {
 
   unlinkStandard({ _id, standardId }) {
     this.collection.update({ _id }, {
-      $pull: { standardsIds: standardId }
+      $pull: { standardsIds: standardId },
     });
   },
 
   unlinkActions({ _id }) {
     const query = {
       'linkedTo.documentId': _id,
-      'linkedTo.documentType': this._docType
+      'linkedTo.documentType': this._docType,
     };
 
     Actions.find(query).forEach((action) => {
       ActionService.unlinkDocument({
         _id: action._id,
         documentId: _id,
-        documentType: this._docType
+        documentType: this._docType,
       });
     });
-  }
+  },
 };

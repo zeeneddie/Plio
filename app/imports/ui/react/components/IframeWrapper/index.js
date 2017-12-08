@@ -5,7 +5,7 @@ import propTypes from './propTypes';
 
 const IframeWrapper = ({ className, children }) => (
   <div className={cx(className, 'iframe-wrapper')}>
-    <div className="iframe-placeholder"></div>
+    <div className="iframe-placeholder" />
     {children}
   </div>
 );

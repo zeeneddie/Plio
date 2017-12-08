@@ -25,5 +25,5 @@ Template.OrgSettings_OrgCurrency.viewmodel({
   },
   getData() {
     return { currency: this.currency() };
-  }
+  },
 });

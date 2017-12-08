@@ -12,5 +12,5 @@ Template.Risk_Subcard.viewmodel({
   },
   getData() {
     return this.child('Risk_Card_Edit_Main').getData();
-  }
+  },
 });

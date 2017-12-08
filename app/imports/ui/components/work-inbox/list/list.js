@@ -29,9 +29,7 @@ Template.WorkInbox_List.viewmodel({
         const allItems = this.items();
 
         const filter = Object.keys(WorkInboxFilters).find((filterId) => {
-          const itemsForFilter = this._getWorkItemsForFilter(
-            allItems, parseInt(filterId, 10)
-          );
+          const itemsForFilter = this._getWorkItemsForFilter(allItems, parseInt(filterId, 10));
           return !!itemsForFilter.find(propEqId(queriedId));
         });
 
@@ -82,7 +80,7 @@ Template.WorkInbox_List.viewmodel({
     const allItems = Object.assign({}, this.items());
     const itemsForFilter = this._getWorkItemsForFilter(allItems, filter);
 
-    const results = (items) => ({
+    const results = items => ({
       result: findById(_id, items),
       first: _.first(items),
       array: items,
@@ -94,10 +92,8 @@ Template.WorkInbox_List.viewmodel({
     const { my = {} } = items || {};
     const assignees = this.assignees();
 
-    const getUserItems = (typeKey) => (
-      _.flatten(
-        assignees[typeKey].map(usersId => this.getTeamItems(usersId, typeKey))
-      )
+    const getUserItems = typeKey => (
+      _.flatten(assignees[typeKey].map(usersId => this.getTeamItems(usersId, typeKey)))
     );
 
     const teamCurrent = getUserItems('current');
@@ -128,8 +124,8 @@ Template.WorkInbox_List.viewmodel({
   },
   getPendingItems(_query = {}) {
     const linkedDocsIds = ['_getNCsByQuery', '_getRisksByQuery', '_getActionsByQuery']
-        .map(prop => extractIds(this[prop](_query.isDeleted ? { isDeleted: true } : {})))
-        .reduce((prev, cur) => [...prev, ...cur]);
+      .map(prop => extractIds(this[prop](_query.isDeleted ? { isDeleted: true } : {})))
+      .reduce((prev, cur) => [...prev, ...cur]);
 
     const workItems = this._getWorkItemsByQuery({
       'linkedDoc._id': { $in: linkedDocsIds },
@@ -179,11 +175,11 @@ Template.WorkInbox_List.viewmodel({
 
     const current = sortByFirstName(
       'assigneeId',
-      byStatus(getItems(), status => this.STATUSES.IN_PROGRESS().includes(status))
+      byStatus(getItems(), status => this.STATUSES.IN_PROGRESS().includes(status)),
     );
     const completed = sortByFirstName(
       'assigneeId',
-      byStatus(getItems(), status => this.STATUSES.COMPLETED() === status)
+      byStatus(getItems(), status => this.STATUSES.COMPLETED() === status),
     );
     const deleted = sortByFirstName('deletedBy', deletedActions);
 

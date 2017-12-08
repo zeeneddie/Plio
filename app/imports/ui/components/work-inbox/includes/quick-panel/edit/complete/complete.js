@@ -18,7 +18,7 @@ Template.WorkInbox_QAPanel_Edit_Complete.viewmodel({
     const method = this._getMethodByType({ type, docType });
     const args = {
       ...this.getData(),
-      ...(() => this.isType('VERIFY_ACTION') ? { success } : {})()
+      ...(() => this.isType('VERIFY_ACTION') ? { success } : {})(),
     };
 
     this.parent().update(method, args);
@@ -28,7 +28,7 @@ Template.WorkInbox_QAPanel_Edit_Complete.viewmodel({
   },
   _getMethodByType({ type, docType }) {
     const byDocType = ([NCMethod, riskMethod]) => {
-      switch(docType) {
+      switch (docType) {
         case LINKED_TYPES.NON_CONFORMITY:
           return NCMethod;
           break;
@@ -41,7 +41,7 @@ Template.WorkInbox_QAPanel_Edit_Complete.viewmodel({
       }
     };
 
-    switch(type) {
+    switch (type) {
       case TYPES.COMPLETE_ACTION:
         return complete;
         break;
@@ -66,5 +66,5 @@ Template.WorkInbox_QAPanel_Edit_Complete.viewmodel({
     const { comments } = this.data();
     const key = this.isType('VERIFY_ACTION') ? 'verificationComments' : 'completionComments';
     return { [key]: comments };
-  }
+  },
 });

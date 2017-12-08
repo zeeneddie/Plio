@@ -6,5 +6,5 @@ Template.Subcards_Analysis_Read_Item.viewmodel({
   mixin: ['user', 'date', 'utils'],
   getAnalysisStatusName(status = 0) {
     return AnalysisStatuses[status];
-  }
+  },
 });

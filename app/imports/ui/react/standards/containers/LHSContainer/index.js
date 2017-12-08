@@ -46,7 +46,7 @@ export default compose(
     props.isModalOpened !== nextProps.isModalOpened ||
     !equals(
       pickComparableProps(props.standardsByIds[props.urlItemId]),
-      pickComparableProps(nextProps.standardsByIds[nextProps.urlItemId])
+      pickComparableProps(nextProps.standardsByIds[nextProps.urlItemId]),
     )
   )),
   mapProps(({ isModalOpened: isDataImportModalOpened, ...props }) => {

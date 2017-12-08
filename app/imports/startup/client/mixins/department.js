@@ -4,10 +4,10 @@ export default {
   _getDepartmentsByQuery(filter = {}, options = { sort: { name: 1 } }) {
     const query = {
       ...filter,
-      organizationId: this.organizationId()
+      organizationId: this.organizationId(),
     };
 
     return Departments.find(query, options)
-      .map( ({ name, ...args }) => ({ title: name, name, ...args }) );
-  }
+      .map(({ name, ...args }) => ({ title: name, name, ...args }));
+  },
 };

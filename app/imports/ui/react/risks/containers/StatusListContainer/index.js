@@ -16,7 +16,7 @@ import { getClassByStatus } from '/imports/api/problems/helpers';
 import Icon from '../../../components/Icons/Icon';
 import { Pull } from '../../../components/Utility';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   ...getSelectedRiskDeletedState(state),
 });
 
@@ -24,7 +24,7 @@ const redirectAndOpen = ({ statuses, risksByIds, ...props }) => handleRisksRedir
   compose(createRiskStatusItem, property('value')),
   statuses,
   risksByIds,
-  props
+  props,
 );
 
 export default compose(

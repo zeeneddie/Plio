@@ -20,9 +20,7 @@ Template.UserPreferences_DailyRecap.viewmodel({
     const userOrganizations = Organizations.find(query, options);
 
     return userOrganizations.map((org) => {
-      const orgUserDoc = _(org.users).find((userDoc) => {
-        return userDoc.userId === this.userId();
-      });
+      const orgUserDoc = _(org.users).find(userDoc => userDoc.userId === this.userId());
 
       return {
         orgId: org._id,

@@ -38,10 +38,10 @@ Template.OrgSettings_OrgTransfer.viewmodel({
       disabled,
       query: { _id: { $in: membersIds } },
       onUpdate: (viewmodel) => {
-        const { selected:ownerId } = viewmodel.getData();
+        const { selected: ownerId } = viewmodel.getData();
 
         return this.newOwnerId(ownerId);
-      }
+      },
     };
   },
   transferOrg(e) {
@@ -59,7 +59,7 @@ Template.OrgSettings_OrgTransfer.viewmodel({
       this.isOrgOwner(),
       !!this.newOwnerId(),
       !this.invitationSent(),
-      this.newOwnerId() !== this.ownerId()
+      this.newOwnerId() !== this.ownerId(),
     ]);
   },
   transfer() {
@@ -75,7 +75,7 @@ Template.OrgSettings_OrgTransfer.viewmodel({
     const newOwnerId = transfer && transfer.newOwnerId;
 
     const newOwner = Meteor.users.findOne({
-      _id: newOwnerId
+      _id: newOwnerId,
     });
 
     if (!newOwner || !date) {
@@ -88,5 +88,5 @@ Template.OrgSettings_OrgTransfer.viewmodel({
   },
   cancelOrgTransfer() {
     this.parent().cancelOrgTransfer();
-  }
+  },
 });

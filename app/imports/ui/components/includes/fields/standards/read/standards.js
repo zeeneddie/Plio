@@ -12,7 +12,9 @@ Template.Fields_Standards_Read.viewmodel({
         const orgSerialNumber = this.organizationSerialNumber();
         return FlowRouter.path('standard', { orgSerialNumber, standardId: _id });
       })());
-      return { _id, title, href, ...args };
+      return {
+        _id, title, href, ...args,
+      };
     });
-  }
+  },
 });

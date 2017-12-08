@@ -5,7 +5,7 @@ import ListItem from '../../../components/ListItem';
 import LabelDraft from '../../../components/Labels/LabelDraft';
 import propTypes from './propTypes';
 
-const HelpDocsLHSListItem = (props) => (
+const HelpDocsLHSListItem = props => (
   <ListItemLink
     isActive={props.isActive}
     onClick={props.onClick}

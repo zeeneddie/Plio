@@ -56,7 +56,7 @@ const propsMapper = ({
     notDeleted,
     compose(
       find(propEq('documentId', risk._id)),
-      property('linkedTo')
+      property('linkedTo'),
     ),
   ]);
   const linkedActions = getLinkedActions(predicate, props, props.actions);

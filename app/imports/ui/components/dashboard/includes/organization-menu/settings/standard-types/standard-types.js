@@ -27,19 +27,21 @@ Template.OrgSettings_StandardTypes.viewmodel({
     return this.onDelete.bind(this);
   },
   onChange(viewModel) {
-    const { title:name, abbreviation } = viewModel.getData();
+    const { title: name, abbreviation } = viewModel.getData();
     const organizationId = this.organizationId();
 
     if (!viewModel._id) {
       Blaze.remove(viewModel.templateInstance.view);
 
       this.modal().callMethod(insert, {
-        name, abbreviation, organizationId
+        name, abbreviation, organizationId,
       });
     } else {
       const _id = viewModel._id();
 
-      this.modal().callMethod(update, { _id, name, abbreviation, organizationId });
+      this.modal().callMethod(update, {
+        _id, name, abbreviation, organizationId,
+      });
     }
   },
   onDelete(viewModel) {
@@ -56,7 +58,7 @@ Template.OrgSettings_StandardTypes.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       const _id = viewModel._id();
       const organizationId = this.organizationId();
@@ -81,5 +83,5 @@ Template.OrgSettings_StandardTypes.viewmodel({
         }
       });
     });
-  }
+  },
 });

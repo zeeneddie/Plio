@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 
 Template.Standards_Owner_Edit.viewmodel({
   label: 'Owner',
-  owner() { return Meteor.userId() },
+  owner() { return Meteor.userId(); },
   selectArgs() {
     const { owner: value } = this.data();
 
@@ -16,11 +16,11 @@ Template.Standards_Owner_Edit.viewmodel({
         if (!this._id) return;
 
         return this.parent().update({ owner });
-      }
+      },
     };
   },
   getData() {
     const { owner = Meteor.userId() } = this.data();
     return { owner };
-  }
+  },
 });

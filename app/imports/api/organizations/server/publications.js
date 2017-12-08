@@ -14,7 +14,7 @@ import { createOrgQueryWhereUserIsOwner } from '../../queries';
 
 
 Meteor.publish('invitationInfo', (invitationId) => {
-  const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
+  const sendInternalError = message => this.error(new Meteor.Error(500, message));
 
   if (!SimpleSchema.RegEx.Id.test(invitationId)) {
     sendInternalError('Incorrect invitation ID!');
@@ -128,7 +128,7 @@ Meteor.publish('transferredOrganization', function (transferId) {
     }
     const error = new Meteor.Error(
       403,
-      'Your account is not authorized for this action. Sign out and login as a proper user'
+      'Your account is not authorized for this action. Sign out and login as a proper user',
     );
 
     this.error(error);
@@ -158,7 +158,7 @@ Meteor.publish('organizationDeps', function (organizationId) {
 
   const standardsBookSections = StandardsBookSections.find(
     query,
-    makeOptionsFields(StandardsBookSections.publicFields)
+    makeOptionsFields(StandardsBookSections.publicFields),
   );
   const standardsTypes = StandardTypes.find(query, makeOptionsFields(StandardTypes.publicFields));
   const riskTypes = RiskTypes.find(query);

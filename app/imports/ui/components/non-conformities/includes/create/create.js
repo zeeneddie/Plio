@@ -14,7 +14,7 @@ Template.NC_Create.viewmodel({
   save() {
     const data = this.getData();
 
-    for (let key in data) {
+    for (const key in data) {
       if (!data[key]) {
         const errorMessage = `The new non-conformity cannot be created without a ${key}. Please enter a ${key} for your non-conformity.`;
         return setModalError(errorMessage);
@@ -26,7 +26,7 @@ Template.NC_Create.viewmodel({
   insert({ ...args }) {
     const allArgs = {
       ...args,
-      ...inspire(['organizationId'], this)
+      ...inspire(['organizationId'], this),
     };
 
     const cb = (_id, open) => {
@@ -35,7 +35,7 @@ Template.NC_Create.viewmodel({
       open({
         _id,
         _title: 'Non-conformity',
-        template: 'NC_Card_Edit'
+        template: 'NC_Card_Edit',
       });
     };
 
@@ -43,5 +43,5 @@ Template.NC_Create.viewmodel({
   },
   getData() {
     return this.getChildrenData();
-  }
+  },
 });

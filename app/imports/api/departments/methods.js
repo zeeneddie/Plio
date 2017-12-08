@@ -8,7 +8,7 @@ import { chain, inject } from '/imports/api/helpers';
 import {
   ORG_EnsureCanChange,
   ORG_EnsureCanChangeChecker,
-  checkOrgMembership
+  checkOrgMembership,
 } from '../checkers';
 import Method, { CheckedMethod } from '../method';
 

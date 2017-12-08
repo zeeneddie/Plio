@@ -52,7 +52,7 @@ export const getRisksByFilter = ({ filter, risks }) => (
     : risks.filter(notDeleted)
 );
 
-const addCollapsedItem = (...fns) => closeOthers => {
+const addCollapsedItem = (...fns) => (closeOthers) => {
   let fn = addCollapsed;
 
   if (closeOthers) {
@@ -79,7 +79,7 @@ export const createUncategorizedDepartment = ({ risks = [], departments = [] }) 
   organizationId: getC('organizationId', risks[0]),
   risks: risks.filter(risk => !find(
     department => _.contains(risk.departmentsIds, department._id),
-    departments
+    departments,
   )),
 });
 
@@ -88,7 +88,7 @@ export const getRiskListData = getListData('risks');
 export const handleRisksRedirectAndOpen = handleRedirectAndOpen(
   getRiskListData,
   goToRisk,
-  goToRisks
+  goToRisks,
 );
 
 export const withRisksRedirectAndOpen = withRedirectAndOpen(
@@ -233,6 +233,6 @@ export const collapseExpandedRisks = () => {
 export const getSelectedRiskDeletedState = state => ({
   isSelectedRiskDeleted: getC(
     'isDeleted',
-    state.collections.risksByIds[state.global.urlItemId]
+    state.collections.risksByIds[state.global.urlItemId],
   ),
 });

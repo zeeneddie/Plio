@@ -16,7 +16,7 @@ import {
   withRisksRedirectAndOpen,
 } from '../../helpers';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   departments: state.collections.departments,
   ...getSelectedRiskDeletedState(state),
 });

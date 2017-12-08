@@ -5,5 +5,5 @@ Template.SimpleCard.viewmodel({
   route: '',
   href() {
     return this.route() ? FlowRouter.path(this.route(), { orgSerialNumber: this.organization().serialNumber }) : '#';
-  }
+  },
 });

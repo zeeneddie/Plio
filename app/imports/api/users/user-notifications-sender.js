@@ -14,8 +14,8 @@ export default class UserNotificationsSender {
   }
 
   passwordReset() {
-    const emailSubject = `Password reset`;
-    const title = `Your password was successfully reset.`;
+    const emailSubject = 'Password reset';
+    const title = 'Your password was successfully reset.';
 
     const templateData = {
       title,
@@ -29,5 +29,4 @@ export default class UserNotificationsSender {
       options: { isImportant: true },
     }).sendEmail();
   }
-
 }

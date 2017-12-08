@@ -16,7 +16,9 @@ const createKey = (label) => {
   return result;
 };
 
-const mapFields = fields => fields.map(({ label, text, render, ...other }) => {
+const mapFields = fields => fields.map(({
+  label, text, render, ...other
+}) => {
   const key = createKey(label);
   const field = <Field {...{ key, label, ...other }}>{text}</Field>;
   return !!text && ({

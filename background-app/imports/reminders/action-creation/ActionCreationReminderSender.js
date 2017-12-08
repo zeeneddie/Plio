@@ -15,7 +15,6 @@ import NotificationSender from '/imports/share/utils/NotificationSender';
 const REMINDER_EMAIL_TEMPLATE = 'defaultEmail';
 
 export default class ActionCreationReminderSender {
-
   constructor(organizationId) {
     this._organizationId = organizationId;
   }
@@ -46,19 +45,23 @@ export default class ActionCreationReminderSender {
       deletedBy: { $exists: false },
       $or: [{
         workflowType: WorkflowTypes.SIX_STEP,
-        status: { $in: [
-          1, // Open - just reported,
-          6, // Open - analysis completed, action needed
-        ] },
+        status: {
+          $in: [
+            1, // Open - just reported,
+            6, // Open - analysis completed, action needed
+          ],
+        },
         'analysis.status': 1, // Completed
         'analysis.completedAt': { $exists: true },
         'analysis.completedBy': { $exists: true },
       }, {
         workflowType: WorkflowTypes.THREE_STEP,
-        status: { $in: [
-          1, // Open - just reported,
-          3, // Open - just reported, awaiting action
-        ] },
+        status: {
+          $in: [
+            1, // Open - just reported,
+            3, // Open - just reported, awaiting action
+          ],
+        },
       }],
     };
 
@@ -154,5 +157,4 @@ export default class ActionCreationReminderSender {
       ...reminderEmailData,
     }).sendEmail();
   }
-
 }

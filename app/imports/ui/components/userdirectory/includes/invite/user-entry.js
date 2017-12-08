@@ -9,5 +9,5 @@ Template.UserDirectory_InviteUsers_UserEntry.viewmodel({
   },
   randomAvatarUrl() {
     return AvatarPlaceholders[this.avatarIndex()];
-  }
+  },
 });

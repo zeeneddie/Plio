@@ -24,25 +24,30 @@ Template.Organization_Menu.viewmodel({
   haveCustomerAccess() {
     return isPlioUser(Meteor.userId());
   },
-  openOrgSettings(e) {
+  async openOrgSettings(e) {
     e.preventDefault();
+
+    await import('./settings');
 
     this.modal().open({
       template: 'OrgSettings',
       _title: 'Organization settings',
       helpText: OrganizationSettingsHelp.organizationSettings,
-      organizationId: this.organization()._id
+      organizationId: this.organization()._id,
     });
   },
-  openCreateNewOrgModal(e) {
+  async openCreateNewOrgModal(e) {
     e.preventDefault();
+
+    await import('./settings');
+
     this.modal().open({
       template: 'Organizations_Create',
       _title: 'New organization',
       variation: 'save',
       timezone: moment.tz.guess(),
       ownerName: Meteor.user().fullName(),
-      currency: OrgCurrencies.GBP
+      currency: OrgCurrencies.GBP,
     });
-  }
+  },
 });

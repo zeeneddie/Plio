@@ -17,7 +17,7 @@ const enhance = withProps(transsoc({
   remindersFormData: getData('reminders'),
 }));
 
-const ReviewConfig = enhance((props) => (
+const ReviewConfig = enhance(props => (
   <div>
     <ReviewReviewerForm
       onReviewerChanged={props.onReviewerChanged}

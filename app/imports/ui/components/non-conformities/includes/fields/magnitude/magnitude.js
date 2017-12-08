@@ -38,5 +38,5 @@ Template.Problems_Magnitude_Edit.viewmodel({
   getData() {
     const { magnitude } = this.data();
     return { magnitude };
-  }
+  },
 });

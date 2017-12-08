@@ -30,7 +30,7 @@ export default compose(
       deletedBy: state.collections.usersByIds[risk.deletedBy],
     };
   }),
-  withProps((props) => ({
+  withProps(props => ({
     isNew: isNewDoc(props.organization, props.userId, props),
     primaryScore: getPrimaryScore(props.scores),
   })),
@@ -51,7 +51,7 @@ export default compose(
     );
   }),
   withHandlers({
-    onClick: props => handler => {
+    onClick: props => (handler) => {
       props.dispatch(setUrlItemId(props._id));
 
       handler({ urlItemId: props._id });

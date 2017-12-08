@@ -14,7 +14,7 @@ Template.SimpleSelection_Edit_Item.viewmodel({
   onFocusOut(e) {
     const data = prop => ({
       current: get(this.getData(), prop),
-      stored: get(this.templateInstance.data, prop)
+      stored: get(this.templateInstance.data, prop),
     });
     const title = data('title');
     const abbr = data('abbreviation');
@@ -24,7 +24,7 @@ Template.SimpleSelection_Edit_Item.viewmodel({
         return;
       }
     } else if (!title.current || title.current === title.stored) {
-       return;
+      return;
     }
 
     return this.callWithFocusCheck(e, () => this.onChange(this));
@@ -35,5 +35,5 @@ Template.SimpleSelection_Edit_Item.viewmodel({
   },
   getData() {
     return { ...this.data() };
-  }
+  },
 });

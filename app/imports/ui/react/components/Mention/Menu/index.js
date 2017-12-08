@@ -9,7 +9,7 @@ const MentionMenu = ({
   ...other
 }) => (
   <DropdownMenu {...other}>
-    {users.map((user) => (
+    {users.map(user => (
       <DropdownMenu.Item key={user.value} onMouseDown={e => onUserSelect && onUserSelect(e, user)}>
         <Message.Avatar tag="div">
           <img src={user.avatar} alt={user.text} tabIndex="-1" />

@@ -9,7 +9,7 @@ Template.Dashboard_UserStats.viewmodel({
   usersOnline() {
     const org = this.organization();
 
-    if(!org || !(org.users instanceof Array)){
+    if (!org || !(org.users instanceof Array)) {
       return;
     }
 
@@ -19,7 +19,7 @@ Template.Dashboard_UserStats.viewmodel({
 
     return Meteor.users.find(
       { _id: { $in: orgUserIds }, status: { $in: ['online', 'away'] } },
-      { sort: { 'profile.firstName': 1 } }
+      { sort: { 'profile.firstName': 1 } },
     );
   },
 
@@ -27,7 +27,7 @@ Template.Dashboard_UserStats.viewmodel({
     const usersOnline = this.usersOnline();
 
     return usersOnline
-      ? pluralize('user', usersOnline.count(), true) + ' online'
+      ? `${pluralize('user', usersOnline.count(), true)} online`
       : '';
-  }
+  },
 });

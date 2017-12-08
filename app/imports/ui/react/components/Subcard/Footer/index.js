@@ -8,7 +8,9 @@ import IconLoading from '../../Icons/IconLoading';
 
 const enhance = getContext({ collapsed: PropTypes.bool, onToggleCollapse: PropTypes.func });
 
-const SubcardFooter = enhance(({ isSaving, isNew, onClose, onSave, onDelete, ...otherProps }) => {
+const SubcardFooter = enhance(({
+  isSaving, isNew, onClose, onSave, onDelete, ...otherProps
+}) => {
   let content = null;
   let rightButtonCb = onSave;
   const showRightButton = !!(isNew && onSave || !isNew && onClose);

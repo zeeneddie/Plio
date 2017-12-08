@@ -3,10 +3,10 @@ import { OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 import invoke from 'lodash.invoke';
 
 import {
-  StandardsBookSections
+  StandardsBookSections,
 } from '/imports/share/collections/standards-book-sections.js';
 import {
-  insert, update, remove
+  insert, update, remove,
 } from '/imports/api/standards-book-sections/methods.js';
 import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
@@ -36,7 +36,7 @@ Template.OrgSettings_StandardsBookSections.viewmodel({
       Blaze.remove(viewModel.templateInstance.view);
 
       this.modal().callMethod(insert, {
-        title, organizationId
+        title, organizationId,
       });
     } else {
       const _id = viewModel._id();
@@ -58,7 +58,7 @@ Template.OrgSettings_StandardsBookSections.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       const _id = viewModel._id();
       const organizationId = this.organizationId();
@@ -83,5 +83,5 @@ Template.OrgSettings_StandardsBookSections.viewmodel({
         }
       });
     });
-  }
+  },
 });

@@ -16,9 +16,7 @@ export default {
       _id: linkedDoc.organizationId,
     });
     const reviewConfig = getReviewConfig(organization, documentType);
-    const reviewWorkflow = new ReviewWorkflow(
-      linkedDoc, reviewConfig, organization.timezone
-    );
+    const reviewWorkflow = new ReviewWorkflow(linkedDoc, reviewConfig, organization.timezone);
 
     return this._service.insert({
       scheduledDate: reviewWorkflow.getReviewSchedule(),

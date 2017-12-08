@@ -17,14 +17,14 @@ Template.AcceptInvitationPage.viewmodel({
 
   onCreated(template) {
     template.autorun(() => {
-      let invitationId = FlowRouter.getParam('invitationId');
+      const invitationId = FlowRouter.getParam('invitationId');
       this.invitationId(invitationId);
       template.subscribe('invitationInfo', invitationId);
     });
   },
 
   userEmail() {
-    let user = Meteor.users.findOne({invitationId: this.invitationId()});
+    const user = Meteor.users.findOne({ invitationId: this.invitationId() });
     return user && user.emails && user.emails[0].address;
   },
 
@@ -33,17 +33,17 @@ Template.AcceptInvitationPage.viewmodel({
   },
 
   organizationName() {
-    let organization = this.organization();
+    const organization = this.organization();
     return organization && organization.name;
   },
 
-  disabled: function() {
+  disabled() {
     return AccountsTemplates.disabled();
   },
 
   acceptInvitation() {
     AccountsTemplates.setDisabled(true);
-    let userData = this.data();
+    const userData = this.data();
 
     if (userData.password === userData.repeatPassword) {
       delete userData.repeatPassword;
@@ -51,7 +51,7 @@ Template.AcceptInvitationPage.viewmodel({
 
       const args = {
         invitationId: this.invitationId(),
-        userData: userData
+        userData,
       };
 
       const userEmail = this.userEmail();
@@ -71,13 +71,13 @@ Template.AcceptInvitationPage.viewmodel({
     }
   },
 
-  _loginUserWithPassword(email, userData, orgSerialNumber){
-    Meteor.loginWithPassword({email}, userData.password, (err) => {
+  _loginUserWithPassword(email, userData, orgSerialNumber) {
+    Meteor.loginWithPassword({ email }, userData.password, (err) => {
       if (err) {
         showError(err.reason);
       } else {
         this.goToDashboard(orgSerialNumber.toString());
       }
     });
-  }
+  },
 });

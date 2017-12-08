@@ -10,7 +10,7 @@ import { Departments } from '/imports/share/collections/departments.js';
 import { ProblemsStatuses } from '/imports/share/constants.js';
 import {
   extractIds, inspire, findById,
-  lengthItems, flattenMapItems
+  lengthItems, flattenMapItems,
 } from '/imports/api/helpers.js';
 
 
@@ -18,15 +18,15 @@ Template.NC_List.viewmodel({
   mixin: [
     'collapsing', 'organization', 'modal', 'magnitude',
     'nonconformity', 'router', 'utils', 'currency', 'problemsStatus', {
-      counter: 'counter'
-    }
+      counter: 'counter',
+    },
   ],
   onCreated() {
     Meteor.defer(() => this.handleRoute());
   },
   handleRoute() {
     const NCId = this.NCId();
-    const { result:contains, first:defaultDoc } = this._findNCForFilter(NCId);
+    const { result: contains, first: defaultDoc } = this._findNCForFilter(NCId);
 
     if (contains) {
       return;
@@ -58,12 +58,12 @@ Template.NC_List.viewmodel({
       return {
         result: finder(items),
         first: _.first(items),
-        array: items
+        array: items,
       };
     });
     const resulstsFromItems = results(flattenMapItems);
 
-    switch(this.activeNCFilterId()) {
+    switch (this.activeNCFilterId()) {
       case 1:
         const magnitude = this.magnitude();
         return resulstsFromItems(magnitude);
@@ -87,7 +87,7 @@ Template.NC_List.viewmodel({
   },
   magnitude() {
     const mapper = (m) => {
-      const query = { magnitude:m.value, ...this._getSearchQuery() };
+      const query = { magnitude: m.value, ...this._getSearchQuery() };
       const items = this._getNCsByQuery(query, this._getSearchOptions()).fetch();
 
       return {
@@ -100,7 +100,7 @@ Template.NC_List.viewmodel({
     return this._magnitude().map(mapper).filter(lengthItems);
   },
   calculateTotalCost(items) {
-    const total = items.reduce((prev, { _id:nonConformityId, cost } = {}) => {
+    const total = items.reduce((prev, { _id: nonConformityId, cost } = {}) => {
       const occurrences = Occurrences.find({ nonConformityId }).fetch();
       const t = cost * occurrences.length || 0;
       return prev + t;
@@ -122,9 +122,7 @@ Template.NC_List.viewmodel({
   },
   _getTotalUnreadMessages(ncs) {
     const NCIds = extractIds(ncs);
-    const totalUnreadMessages = NCIds.reduce((prev, cur) => {
-      return prev + this.counter.get('nc-messages-not-viewed-count-' + cur);
-    }, 0);
+    const totalUnreadMessages = NCIds.reduce((prev, cur) => prev + this.counter.get(`nc-messages-not-viewed-count-${cur}`), 0);
 
     return totalUnreadMessages;
   },
@@ -133,7 +131,7 @@ Template.NC_List.viewmodel({
       this.modal().open({
         _title: 'Non-conformity',
         template: 'NC_Create',
-        variation: 'save'
+        variation: 'save',
       });
-  }
+  },
 });

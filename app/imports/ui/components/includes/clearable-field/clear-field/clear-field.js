@@ -10,8 +10,7 @@ Template.ClearField.viewmodel({
       .find('input')
       .focus();
     if (this.field()) {
-
-      // this.parent() is Template.ClearableField 
+      // this.parent() is Template.ClearableField
       this.parent().parent()[this.field()]('');
     } else if (this.clearFn) {
       this.parent().parent()[this.clearFn()]();
@@ -19,5 +18,5 @@ Template.ClearField.viewmodel({
   },
   editable() {
     return this.isEditable && this.isEditable();
-  }
+  },
 });

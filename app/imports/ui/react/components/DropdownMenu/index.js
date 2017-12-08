@@ -17,7 +17,9 @@ const enhance = compose(
       ? onKeyDown(props, handleKeyDown(props))
       : handleKeyDown(props)),
   }),
-  mapProps(({ focused, children, setFocus, ...props }) => ({
+  mapProps(({
+    focused, children, setFocus, ...props
+  }) => ({
     ...props,
     children: React.Children.map(React.Children.toArray(children), (child, index) => {
       if (child.type !== Item) return child;

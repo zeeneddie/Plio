@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-const { Error:E } = Meteor;
+const { Error: E } = Meteor;
 
 export const ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED = new E(400, 'Cannot set completion date for completed action');
 

@@ -67,5 +67,5 @@ Template.Actions_Card_Edit_Main.viewmodel({
   },
   getData() {
     return this.getChildrenData();
-  }
+  },
 });

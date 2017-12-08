@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Organizations } from '/imports/share/collections/organizations';
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 
-const getPathPrefixByDocType = (docType) => ({
+const getPathPrefixByDocType = docType => ({
   [DocumentTypes.STANDARD]: 'standards',
   [DocumentTypes.RISK]: 'risks',
   [DocumentTypes.NON_CONFORMITY]: 'non-conformities',

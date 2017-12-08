@@ -28,7 +28,7 @@ Template.Actions_CompletedBy.viewmodel({
     this.clearInterval();
   },
   selectArgs() {
-    const { completedBy:value, placeholder, selectFirstIfNoSelected } = this.data();
+    const { completedBy: value, placeholder, selectFirstIfNoSelected } = this.data();
     const disabled = this.isDisabled();
 
     return {
@@ -37,12 +37,12 @@ Template.Actions_CompletedBy.viewmodel({
       selectFirstIfNoSelected,
       disabled,
       onUpdate: (viewmodel) => {
-        const { selected:completedBy } = viewmodel.getData();
+        const { selected: completedBy } = viewmodel.getData();
 
         this.completedBy(completedBy);
 
         invoke(this.parent(), 'update', { completedBy });
-      }
+      },
     };
   },
   clearInterval() {
@@ -74,5 +74,5 @@ Template.Actions_CompletedBy.viewmodel({
   },
   getData() {
     return { completedBy: this.completedBy() };
-  }
+  },
 });

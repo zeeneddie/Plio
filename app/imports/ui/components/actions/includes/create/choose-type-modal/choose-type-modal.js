@@ -13,8 +13,8 @@ Template.Actions_ChooseTypeModal.viewmodel({
         type,
         template: 'Actions_Create',
         variation: 'save',
-        isLinkedToEditable: true
+        isLinkedToEditable: true,
       });
     }, 400);
-  }
+  },
 });
