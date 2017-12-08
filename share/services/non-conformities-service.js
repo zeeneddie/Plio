@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import ProblemsService from '../problems/problems-service.js';
+import ProblemsService from '/imports/share/services/problems-service.js';
 import { ProblemTypes } from '/imports/share/constants.js';
-import BaseEntityService from '../base-entity-service.js';
+import BaseEntityService from '/imports/share/services/base-entity-service.js';
 
 
 export default _.extend({}, ProblemsService, {

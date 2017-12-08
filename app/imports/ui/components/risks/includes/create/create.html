@@ -2,13 +2,15 @@
   {{#Card_Create ref="card"}}
     {{> NC_Title_Edit label="Risk name"}}
 
+    {{> DescriptionTextBox}}
+
     {{> Fields_Standards_Edit
         isEditable=isStandardsEditable
         standardsIds=standardsIds}}
 
-    {{> NC_IdentifiedBy_Edit}}
+    {{> NC_Originator_Edit}}
 
-    {{> NC_IdentifiedDate_Edit}}
+    {{> NC_Owner_Edit}}
 
     {{> Problems_Magnitude_Edit guidelines=RKGuidelines}}
 

@@ -67,6 +67,7 @@ Template.OrgSettings_OrgTransfer.viewmodel({
   },
   invitationSent() {
     const transfer = this.transfer();
+    
     return !!(transfer && transfer._id && transfer.newOwnerId && transfer.createdAt);
   },
   invitationSentText() {

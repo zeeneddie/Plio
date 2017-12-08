@@ -128,6 +128,7 @@ export const isOrgMember = (userId, organizationId) => {
 
 export const isViewed = (doc, userId) => {
   const { viewedBy = [] } = Object.assign({}, doc);
+
   return viewedBy.includes(userId);
 };
 
@@ -178,7 +179,7 @@ export const onRemoveChecker = wrap(({ userId }, doc) => doc.isDeleted && !isOrg
 
 export const onRestoreChecker = wrap((_, doc) => !doc.isDeleted, CANNOT_RESTORE_NOT_DELETED);
 
-export const isNewDoc = (organization, userId, { createdAt, viewedBy }) => {
+export const isNewDoc = (organization, userId, { createdAt, viewedBy = [] }) => {
   if (!organization || !userId || !(viewedBy instanceof Array)) return false;
 
   const joinedAt = getUserJoinedAt(organization, userId);

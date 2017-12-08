@@ -37,6 +37,7 @@ import { Discussions } from '/imports/share/collections/discussions.js';
 import DiscussionsService from '/imports/api/discussions/discussions-service.js';
 import { Risks } from '/imports/share/collections/risks.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import curry from 'lodash.curry';
 import {
   DocumentTypes,
   CollectionNames,
@@ -222,6 +223,88 @@ Migrations.add({
     });
 
     console.log('Review settings were removed from organizations');
+  },
+});
+
+Migrations.add({
+  version: 7,
+  name: 'Migrate createdBy to owner for NC and RK',
+  up() {
+    const query = {
+      $or: [
+        { ownerId: { $exists: false } },
+        { originatorId: { $exists: false } },
+      ],
+    };
+
+    const createOriginator = curry((collection, { _id, createdBy }) => {
+      collection.update({ _id }, {
+        $set: {
+          ownerId: createdBy,
+          originatorId: createdBy,
+        },
+      });
+    });
+
+    Risks
+      .find(query)
+      .forEach(createOriginator(Risks));
+
+    NonConformities
+      .find(query)
+      .forEach(createOriginator(NonConformities));
+
+    console.log('Fields ownerId and originatorId was created');
+  },
+  down() {
+    const query = [{
+      $or: [
+        { ownerId: { $exists: true } },
+        { originatorId: { $exists: true } },
+      ],
+    }, {
+      $unset: { ownerId: '',  originatorId: '' },
+    }, {
+      multi: true,
+    }];
+
+    Risks.update(...query);
+    NonConformities.update(...query);
+
+    console.log('Fields ownerId and originatorId was removed');
+  },
+});
+
+Migrations.add({
+  version: 8,
+  name: 'Migrate work item "complete update of documents" type to "complete approval"',
+  up() {
+    const query = {
+      type: 'complete update of documents',
+    };
+
+    WorkItems.update(query, {
+      $set: {
+        type: 'complete approval',
+      }
+    }, {
+      multi: true
+    });
+
+    console.log('Work item "complete update of documents" types were migrated to "complete approval"');
+  },
+  down() {
+    const query = {
+      type: 'complete approval',
+    };
+
+    WorkItems.update(query, {
+      $set: {
+        type: 'complete update of documents',
+      }
+    });
+
+    console.log('Work item "complete update of documents" types were restored');
   },
 });
 

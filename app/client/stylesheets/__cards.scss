@@ -176,6 +176,10 @@
 .content-cards {
   @include flex(1);
 
+  &.scroll {
+    transform: translateZ(0);
+  }
+
   .content-cards-inner {
     position: relative;
     z-index: 101;
@@ -271,6 +275,8 @@
           margin: 0 0 3px;
           font-weight: normal;
           word-break: break-word;
+          overflow: hidden;
+          text-overflow: ellipsis;
           font-family: $font-semilight;
         }
 

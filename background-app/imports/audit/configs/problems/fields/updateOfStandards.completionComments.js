@@ -10,9 +10,9 @@ export default {
         return !diffs['updateOfStandards.status'];
       },
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'Update of standards completion comments set',
-        [ChangesKinds.FIELD_CHANGED]: 'Update of standards completion comments changed',
-        [ChangesKinds.FIELD_REMOVED]: 'Update of standards completion comments removed',
+        [ChangesKinds.FIELD_ADDED]: 'Approval completion comments set',
+        [ChangesKinds.FIELD_CHANGED]: 'Approval completion comments changed',
+        [ChangesKinds.FIELD_REMOVED]: 'Approval completion comments removed',
       },
     },
   ],
@@ -23,11 +23,11 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} set update of standards completion comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} set approval completion comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed update of standards completion comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} changed approval completion comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{{userName}}} removed update of standards completion comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed approval completion comments of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

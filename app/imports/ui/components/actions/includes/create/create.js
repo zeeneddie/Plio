@@ -13,7 +13,17 @@ Template.Actions_Create.viewmodel({
   mixin: ['workInbox', 'organization', 'router', 'getChildrenData'],
   type: '',
   title: '',
+<<<<<<< HEAD
   ownerId() { return Meteor.userId(); },
+=======
+  autorun() {
+    const data = this.getData();
+    if (data && data.ownerId) {
+      this.defaultToBeCompletedBy(data.ownerId);
+    }
+  },
+  ownerId() { return Meteor.userId() },
+>>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
   planInPlace: ActionPlanOptions.NO,
   completionTargetDate() {
     const organization = this.organization();
@@ -22,7 +32,14 @@ Template.Actions_Create.viewmodel({
 
     return getWorkflowDefaultStepDate({ organization, linkedTo });
   },
+<<<<<<< HEAD
   toBeCompletedBy() { return Meteor.userId(); },
+=======
+  toBeCompletedBy() {
+    return this.defaultToBeCompletedBy() || this.ownerId();
+  },
+  defaultToBeCompletedBy:'',
+>>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
   verificationTargetDate: '',
   toBeVerifiedBy: '',
   save() {

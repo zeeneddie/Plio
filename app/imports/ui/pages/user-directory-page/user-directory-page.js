@@ -12,7 +12,7 @@ Template.UserDirectory_Page.viewmodel({
     const userIds = this.getCurrentOrganizationUsers();
     const organizationId = this.organizationId();
     if (userIds && userIds.length) {
-      const organizationUsersHandle = UserSubs.subscribe(
+      const organizationUsersHandle = Meteor.subscribe(
         'organizationUsers',
         userIds,
         organizationId,

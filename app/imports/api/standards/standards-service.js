@@ -1,10 +1,9 @@
 import { Standards } from '/imports/share/collections/standards.js';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
-import BaseEntityService from '../base-entity-service.js';
-import NonConformityService from '../non-conformities/non-conformities-service';
-import RiskService from '../risks/risks-service';
-
+import BaseEntityService from '/imports/share/services/base-entity-service.js';
+import NonConformityService from '/imports/share/services/non-conformities-service';
+import RiskService from '/imports/share/services/risks-service';
 
 export default {
   collection: Standards,

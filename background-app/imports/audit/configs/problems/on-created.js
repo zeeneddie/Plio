@@ -4,6 +4,7 @@ import { Standards } from '/imports/share/collections/standards';
 import { getUserId } from '../../utils/helpers';
 import StandardAuditConfig from '../standards/standard-audit-config';
 import onCreated from '../common/on-created';
+import ownerIdField from '../common/fields/ownerId';
 
 export default {
   logs: [
@@ -41,6 +42,18 @@ export default {
         return standards.map(({ owner }) => (
           (owner !== userId) ? [owner] : []
         ));
+      },
+    },
+    {
+      text: ownerIdField.notifications.personal.text,
+      title: ownerIdField.notifications.personal.title,
+      emailTemplateData: ownerIdField.notifications.personal.emailTemplateData,
+      sendBoth: true,
+      receivers({ newDoc, user }) {
+        const userId = getUserId(user);
+        const { ownerId } = newDoc || {};
+
+        return (ownerId && (userId !== ownerId)) ? [ownerId] : [];
       },
     },
   ],

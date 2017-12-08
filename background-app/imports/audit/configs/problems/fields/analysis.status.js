@@ -24,6 +24,7 @@ export default {
       shouldSendNotification({ diffs }) {
         return diffs['analysis.completedAt'] && diffs['analysis.completedBy'];
       },
+      sendBoth: true,
       text: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +

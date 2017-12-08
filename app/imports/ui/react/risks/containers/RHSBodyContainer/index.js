@@ -83,7 +83,8 @@ const propsMapper = ({
   )(risk.standardsIds);
 
   const setUsers = () => [
-    'identifiedBy',
+    'originatorId',
+    'ownerId',
     'notify',
     'improvementPlan.owner',
     'analysis.executor',

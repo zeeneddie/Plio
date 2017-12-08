@@ -73,15 +73,6 @@ export default class ReviewReminderSender {
   }
 
   _shouldSendReminder(collection, reviewConfig) {
-    const isScheduled = isDateScheduled(
-      reviewConfig.reminders,
-      reviewConfig.annualDate,
-      this._timezone,
-      this._date,
-    );
-
-    if (!isScheduled) return false;
-
     const isStatusAwaitingReview = (doc) => {
       const workflow = new ReviewWorkflow(doc, reviewConfig, this._timezone);
 
@@ -106,7 +97,7 @@ export default class ReviewReminderSender {
 
     if (!receivers.length) return false;
 
-    const prettyAnnualDate = moment(reviewConfig.annualDate).format(DefaultDateFormat);
+    const prettyAnnualDate = getPrettyTzDate(reviewConfig.annualDate, this._timezone)
     const title = `${getDocTypePlural(docType)}`;
     const emailSubject = `The ${title} documents need a review`;
     const emailText = `

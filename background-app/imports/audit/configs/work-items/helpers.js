@@ -102,6 +102,14 @@ export const getNotifications = () => [
     shouldSendNotification({ newDoc: { type, linkedDoc } }) {
       return (type === COMPLETE_UPDATE_OF_DOCUMENTS)
             && (linkedDoc.type === ProblemTypes.NON_CONFORMITY);
+<<<<<<< HEAD
+=======
+      },
+      text: '{{{userName}}} assigned you to do an approval related to {{{docDesc}}} {{{docName}}}',
+      title: 'You have been assigned to do an approval',
+      sendBoth: true,
+      emailTemplateData: getEmailTemplateData,
+>>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
     },
     text: '{{{userName}}} assigned you to do an update of standards related to {{{docDesc}}} {{{docName}}}',
     title: 'You have been assigned to do an update of standards',
@@ -112,6 +120,14 @@ export const getNotifications = () => [
     shouldSendNotification({ newDoc: { type, linkedDoc } }) {
       return (type === COMPLETE_UPDATE_OF_DOCUMENTS)
             && (linkedDoc.type === ProblemTypes.RISK);
+<<<<<<< HEAD
+=======
+      },
+      text: '{{{userName}}} assigned you to do an approval {{{docName}}}',
+      title: 'You have been assigned to do an approval',
+      sendBoth: true,
+      emailTemplateData: getEmailTemplateData,
+>>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
     },
     text: '{{{userName}}} assigned you to do an update of risk record {{{docName}}}',
     title: 'You have been assigned to do an update of risk record',

@@ -51,8 +51,12 @@ export default {
   },
   goToRisk(urlItemId, withQueryParams = true) {
     const params = { urlItemId, orgSerialNumber: this.organizationSerialNumber() };
+<<<<<<< HEAD
     const queryParams = withQueryParams ? { filter: this.activeRiskFilterId() } : {};
     console.log('risk', params, queryParams);
+=======
+    const queryParams = !!withQueryParams ? { filter: this.activeRiskFilterId() } : {};
+>>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('risk', params, queryParams);
     });

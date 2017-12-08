@@ -8,18 +8,16 @@ import { isOrgMemberBySelector } from '../../api/checkers';
 export const getUsersCursorByIdsAndOrgId = (
   ids,
   organizationId,
-  query,
-  { fields, ...projection } = {},
+  query
 ) => {
   const _query = { _id: { $in: ids }, ...query };
-  const _projection = {
+  let _projection = {
     fields: {
       ...Meteor.users.publicFields,
-      [`roles.${organizationId}`]: 1,
-      ...fields,
     },
-    ...projection,
   };
+
+  _projection.fields[`roles.${organizationId}`] = 1;
 
   return Meteor.users.find(_query, _projection);
 };

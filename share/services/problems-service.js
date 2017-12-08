@@ -2,10 +2,10 @@ import { Meteor } from 'meteor/meteor';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { Actions } from '/imports/share/collections/actions.js';
-import { generateSerialNumber } from '/imports/share/helpers.js';
-import ActionService from '../actions/action-service';
-import WorkItemService from '../work-items/work-item-service.js';
-import { WorkItemsStore } from '/imports/share/constants.js';
+import { generateSerialNumber, getWorkflowDefaultStepDate } from '/imports/share/helpers.js';
+import ActionService from '/imports/share/services/action-service';
+import WorkItemService from '/imports/share/services/work-item-service.js';
+import { WorkItemsStore, WorkflowTypes } from '/imports/share/constants.js';
 
 export default {
 
@@ -17,6 +17,7 @@ export default {
 
     const workflowType = organization.workflowType(magnitude);
 
+<<<<<<< HEAD:app/imports/api/problems/problems-service.js
     return this.collection.insert({
       organizationId,
       serialNumber,
@@ -24,7 +25,30 @@ export default {
       workflowType,
       magnitude,
       ...args,
+=======
+    const _id = this.collection.insert({
+      organizationId, serialNumber, sequentialId,
+      workflowType, magnitude, ...args
+>>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17:share/services/problems-service.js
     });
+
+    if (workflowType === WorkflowTypes.SIX_STEP) {
+
+      const doc = this.collection.findOne({ _id });
+
+      this.setAnalysisExecutor({
+        _id,
+        executor: args.ownerId,
+        assignedBy: args.originatorId,
+      }, doc);
+
+      this.setAnalysisDate({
+        _id,
+        targetDate: getWorkflowDefaultStepDate({ organization, linkedTo: [{ documentId: _id, documentType: this._docType, }] }),
+      }, doc);
+    }
+
+    return _id;
   },
 
   update({
@@ -93,6 +117,8 @@ export default {
   },
 
   completeAnalysis({ _id, completionComments, userId }) {
+    const doc = this.collection.findOne({ _id }) || {};
+
     const ret = this.collection.update({
       _id,
     }, {
@@ -101,7 +127,11 @@ export default {
         'analysis.completedAt': new Date(),
         'analysis.completedBy': userId,
         'analysis.completionComments': completionComments,
+<<<<<<< HEAD:app/imports/api/problems/problems-service.js
       },
+=======
+      }
+>>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17:share/services/problems-service.js
     });
 
     WorkItemService.analysisCompleted(_id, this._docType);

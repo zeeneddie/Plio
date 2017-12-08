@@ -19,7 +19,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       case TYPES.VERIFY_ACTION:
         return 'Verify';
       case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
-        return 'Update completed';
+        return 'Approve';
       default:
         return 'Complete';
     }
@@ -46,7 +46,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       case TYPES.VERIFY_ACTION:
         return 'verified';
       case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
-        return 'completed';
+        return 'approved';
       default:
         return `${this.lowercase(this.getButtonText({ type }))}d`;
     }

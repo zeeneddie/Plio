@@ -8,7 +8,12 @@ import { getUserFullNameOrEmail } from '/imports/share/helpers';
 import { DocChangesKinds, SystemName } from '/imports/share/constants';
 import { ChangesKinds } from './utils/changes-kinds';
 import DocumentDiffer from './utils/document-differ';
+<<<<<<< HEAD
 import { renderTemplate } from '../helpers/render';
+=======
+import NotificationsTempStore from './notifications-temp-store';
+
+>>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
 
 const DEFAULT_EMAIL_TEMPLATE = 'defaultEmail';
 
@@ -42,7 +47,7 @@ export default class DocChangeHandler {
     this._processHandlers();
 
     this._saveLogs();
-    this._sendNotifications();
+    this._addNotificationsToTempStore();
   }
 
   _prepare() {
@@ -304,7 +309,7 @@ export default class DocChangeHandler {
     let data = getData && getData(args);
     data = _.isArray(data) ? data : [data];
 
-    let receiversArr = getReceivers(args) || [];
+    let receiversArr = _.isFunction(getReceivers) && getReceivers(args) || [];
     receiversArr = _.isArray(receiversArr[0]) ? receiversArr : [receiversArr];
 
     let emailTplDataArr;
@@ -428,55 +433,8 @@ export default class DocChangeHandler {
     this._logs.forEach(log => AuditLogs.insert(log));
   }
 
-  _sendNotifications() {
-    const notificationsMap = {};
-
-    this._notifications.forEach((notification) => {
-      notification.recipients.forEach((receiverId) => {
-        const userNotifications = notificationsMap[receiverId];
-
-        if (_.isArray(userNotifications)) {
-          userNotifications.push(notification);
-        } else {
-          notificationsMap[receiverId] = [notification];
-        }
-      });
-    });
-
-    const receiversCursor = Meteor.users.find({
-      _id: { $in: Object.keys(notificationsMap) },
-    });
-
-    receiversCursor.forEach((user) => {
-      this._sendNotificationsToUser(notificationsMap[user._id], user);
-    });
-  }
-
-  _sendNotificationsToUser(notifications, user) {
-    const isUserOnline = user.status === 'online';
-
-    notifications.forEach(({
-      sendBoth,
-      templateData: {
-        unsubscribeUrl,
-        ...templateData
-      },
-      ...args
-    }) => {
-      const options = { recipients: user._id, templateData, ...args };
-
-      if (unsubscribeUrl) {
-        Object.assign(options.templateData, { unsubscribeUrl });
-      }
-
-      const sender = new NotificationSender(options);
-
-      if (sendBoth) {
-        return sender.sendAll();
-      }
-
-      return isUserOnline ? sender.sendOnSite() : sender.sendEmail();
-    });
+  _addNotificationsToTempStore() {
+    NotificationsTempStore.addNotifications(this._notifications);
   }
 
   _callTrigger(handler, args) {

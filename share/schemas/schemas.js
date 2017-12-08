@@ -251,7 +251,7 @@ export const ImprovementPlanSchema = new SimpleSchema([
   FileIdsSchema,
 ]);
 
-export const getNotifySchema = (field) => new SimpleSchema({
+export const getNotifySchema = (fieldNames) => new SimpleSchema({
   notify: {
     type: [String],
     regEx: SimpleSchema.RegEx.Id,
@@ -259,9 +259,24 @@ export const getNotifySchema = (field) => new SimpleSchema({
     // maxCount: ?
     autoValue() {
       if (this.isInsert) {
-        const userIdField = this.field(field);
-        if (userIdField.isSet) {
-          return [userIdField.value];
+        if (_.isString(fieldNames)) {
+          fieldNames = [fieldNames];
+        }
+        let notifyChanges = [];
+        _.each(fieldNames, (fieldName) => {
+          const field = this.field(fieldName);
+          if (field.isSet) {
+            const fieldValue = field.value;
+
+            // To avoid duplicates
+            if (notifyChanges.indexOf(fieldValue) === -1) {
+              notifyChanges.push(field.value);
+            }
+          }
+        });
+
+        if (!!notifyChanges.length) {
+          return notifyChanges;
         }
 
         this.unset();
@@ -277,8 +292,8 @@ export const ViewedBySchema = new SimpleSchema({
     optional: true,
     // maxCount: ?
     autoValue() {
-      if (this.isInsert && this.userId) {
-        return [this.userId];
+      if (this.isInsert) {
+        return this.userId ? [this.userId] : [];
       }
     },
   },
@@ -332,13 +347,6 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
       min: StringLimits.title.min,
       max: StringLimits.title.max,
     },
-    identifiedBy: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-    },
-    identifiedAt: {
-      type: Date,
-    },
     magnitude: {
       type: String,
       allowedValues: Object.values(ProblemMagnitudes),
@@ -346,8 +354,19 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
     standardsIds: {
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
-      minCount: 1,
       // maxCount: ?
+    },
+    description: {
+      type: String,
+      optional: true,
+    },
+    originatorId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+    },
+    ownerId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
     },
   },
 ]);
