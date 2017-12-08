@@ -52,7 +52,6 @@ force-ssl@1.1.0
 plio:bootstrap-sweetalert
 meteorhacks:subs-manager
 tunifight:loggedin-mixin
-djedi:sanitize-html-client
 shell-server@0.3.0
 
 # meteorhacks:sikka
