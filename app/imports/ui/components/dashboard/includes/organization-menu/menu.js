@@ -24,8 +24,10 @@ Template.Organization_Menu.viewmodel({
   haveCustomerAccess() {
     return isPlioUser(Meteor.userId());
   },
-  openOrgSettings(e) {
+  async openOrgSettings(e) {
     e.preventDefault();
+
+    await import('./settings');
 
     this.modal().open({
       template: 'OrgSettings',
@@ -34,8 +36,11 @@ Template.Organization_Menu.viewmodel({
       organizationId: this.organization()._id,
     });
   },
-  openCreateNewOrgModal(e) {
+  async openCreateNewOrgModal(e) {
     e.preventDefault();
+
+    await import('./settings');
+
     this.modal().open({
       template: 'Organizations_Create',
       _title: 'New organization',
