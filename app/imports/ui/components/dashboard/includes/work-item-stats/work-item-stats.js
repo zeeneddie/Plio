@@ -15,9 +15,9 @@ Template.Dashboard_WorkItemStats.viewmodel({
   enableLimit: true,
   limit: 5,
   currentDate: new Date(),
-
   autorun() {
-    const isReady = this._subHandlers().every(handler => handler.ready());
+    const subHandlers = this._subHandlers();
+    const isReady = subHandlers.length && subHandlers.every(handler => handler.ready());
 
     if (!this.isInitialDataReady()) {
       this.isInitialDataReady(isReady);

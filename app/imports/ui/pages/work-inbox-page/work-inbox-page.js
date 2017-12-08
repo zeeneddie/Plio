@@ -31,7 +31,9 @@ Template.WorkInbox_Page.viewmodel({
       }
     },
     function trackReadyState() {
-      this.isReady(this._subHandlers().every(handle => handle.ready()));
+      const subHandlers = this._subHandlers();
+      const isReady = subHandlers.length && subHandlers.every(handle => handle.ready());
+      this.isReady(isReady);
     },
   ],
 });
