@@ -1,4 +1,9 @@
 {
+  "env": {
+    "jest": true,
+    "node": true,
+    "browser": true
+  },
   "parser": "babel-eslint",
   "plugins": [
     "react",
@@ -43,10 +48,5 @@
   },
   "settings": {
     "import/resolver": "meteor"
-  },
-  "globals": {
-    "window": true,
-    "document": true,
-    "global": true
   }
 }
