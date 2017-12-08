@@ -11,11 +11,6 @@ export default {
     const memberIds = organization && organization.getMemberIds() || [];
     const query = {
       _id: { $in: memberIds },
-<<<<<<< HEAD
-      ...this.searchObject('_searchString', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]),
-      ..._query,
-=======
->>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
     };
 
     if (defaultSearch) {

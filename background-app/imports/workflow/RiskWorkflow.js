@@ -7,12 +7,9 @@ export default class RiskWorkflow extends ProblemWorkflow {
   static get _collection() {
     return Risks;
   }
-<<<<<<< HEAD
-=======
 
   static get _docType() {
     return ProblemTypes.RISK;
   }
 
->>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
 }

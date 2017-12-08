@@ -87,10 +87,8 @@ modules@0.11.0
 modules-runtime@0.9.0
 mongo@1.3.0
 mongo-dev-server@1.1.0
-meteortoys:toykit@3.0.4
 mongo-id@1.0.6
 mongo-livedata@1.0.12
-msavin:mongol@2.0.1
 nooitaf:colors@1.1.2_1
 npm-bcrypt@0.9.3
 npm-mongo@2.2.33
@@ -113,7 +111,6 @@ retry@1.0.9
 reywood:publish-composite@1.4.2
 routepolicy@1.0.12
 service-configuration@1.0.11
-session@1.1.7
 sha@1.0.9
 shell-server@0.3.0
 softwarerero:accounts-t9n@1.3.3

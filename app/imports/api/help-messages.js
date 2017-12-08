@@ -20,17 +20,10 @@ const RisksHelp = {
 };
 
 const WorkInboxHelp = {
-<<<<<<< HEAD
   completeActionHelp: 'Click on the Complete button to indicate completion of this action. Optionally you can enter any relevant completion comments.',
   verifyActionHelp: 'Click on the Verify button to indicate verification of this action. Optionally you can enter any relevant verification comments.',
   completeAnalysisHelp: 'Click on the Complete button to indicate completion of this analysis. Optionally you can enter any relevant completion comments.',
-  updateDocumentHelp: 'Click on the Update button to indicate that the relevant standard(s) or risk record(s) has been updated. Optionally you can enter any relevant update comments.',
-=======
-  completeActionHelp: `Click on the Complete button to indicate completion of this action. Optionally you can enter any relevant completion comments.`,
-  verifyActionHelp: `Click on the Verify button to indicate verification of this action. Optionally you can enter any relevant verification comments.`,
-  completeAnalysisHelp: `Click on the Complete button to indicate completion of this analysis. Optionally you can enter any relevant completion comments.`,
-  updateDocumentHelp: `Give your approval that this open work item (see below) can now be closed.`
->>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
+  updateDocumentHelp: 'Give your approval that this open work item (see below) can now be closed.',
 };
 
 const OrganizationSettingsHelp = {

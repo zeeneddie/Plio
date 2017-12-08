@@ -130,7 +130,7 @@ export default {
     // We need to find the owner of the first linked problem to set him as a "To be verified by" user
     const firstLinkedTo = linkedTo[0];
 
-    let set = {
+    const set = {
       completionComments,
       isCompleted: true,
       completedBy: userId,
@@ -141,17 +141,7 @@ export default {
     const ret = this.collection.update({
       _id,
     }, {
-<<<<<<< HEAD:app/imports/api/actions/action-service.js
-      $set: {
-        completionComments,
-        isCompleted: true,
-        completedBy: userId,
-        completedAt: new Date(),
-        verificationTargetDate: getWorkflowDefaultStepDate({ organization, linkedTo }),
-      },
-=======
-      $set: set
->>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17:share/services/action-service.js
+      $set: set,
     });
 
     WorkItemService.actionCompleted(_id);

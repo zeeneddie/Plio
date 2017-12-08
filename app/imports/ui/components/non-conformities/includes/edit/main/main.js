@@ -32,16 +32,10 @@ Template.NC_Card_Edit_Main.viewmodel({
     }
   },
   isStandardsEditable: true,
-<<<<<<< HEAD
-  RCAArgs({
-    _id, analysis, updateOfStandards, magnitude,
-  } = {}) {
-=======
   RCAArgs({ _id, analysis, updateOfStandards, magnitude } = {}) {
     const nc = this.NC && this.NC();
     const isApprovalVisible = nc && (nc.status >= ProblemIndexes.ACTIONS_AWAITING_UPDATE);
 
->>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
     return {
       _id,
       analysis,

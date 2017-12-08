@@ -240,8 +240,6 @@ export default class ProblemWorkflow extends Workflow {
       return 4; // Open - analysis due today
     }
   }
-<<<<<<< HEAD
-=======
 
   _onUpdateStatus(status) {
     const initiateApprovalProcess = () => {
@@ -282,5 +280,4 @@ export default class ProblemWorkflow extends Workflow {
     initiateApprovalProcess();
   }
 
->>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
 }

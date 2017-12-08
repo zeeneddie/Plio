@@ -3,17 +3,13 @@ import { _ } from 'meteor/underscore';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { Organizations } from '/imports/share/collections/organizations';
-import NotificationSender from '/imports/share/utils/NotificationSender';
 import { getUserFullNameOrEmail } from '/imports/share/helpers';
 import { DocChangesKinds, SystemName } from '/imports/share/constants';
 import { ChangesKinds } from './utils/changes-kinds';
 import DocumentDiffer from './utils/document-differ';
-<<<<<<< HEAD
 import { renderTemplate } from '../helpers/render';
-=======
 import NotificationsTempStore from './notifications-temp-store';
 
->>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
 
 const DEFAULT_EMAIL_TEMPLATE = 'defaultEmail';
 

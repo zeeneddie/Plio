@@ -41,16 +41,10 @@ Template.Risk_Card_Edit_Main.viewmodel({
   update(...args) {
     this.parent().update(...args);
   },
-<<<<<<< HEAD
-  RCAArgs({
-    _id, analysis, updateOfStandards, magnitude,
-  } = {}) {
-=======
   RCAArgs({ _id, analysis, updateOfStandards, magnitude } = {}) {
     const risk = this.risk && this.risk();
     const isApprovalVisible = risk && (risk.status >= ProblemIndexes.ACTIONS_AWAITING_UPDATE);
 
->>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
     return {
       _id,
       analysis,

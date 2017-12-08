@@ -17,19 +17,9 @@ export default {
 
     const workflowType = organization.workflowType(magnitude);
 
-<<<<<<< HEAD:app/imports/api/problems/problems-service.js
-    return this.collection.insert({
-      organizationId,
-      serialNumber,
-      sequentialId,
-      workflowType,
-      magnitude,
-      ...args,
-=======
     const _id = this.collection.insert({
       organizationId, serialNumber, sequentialId,
       workflowType, magnitude, ...args
->>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17:share/services/problems-service.js
     });
 
     if (workflowType === WorkflowTypes.SIX_STEP) {
@@ -127,11 +117,7 @@ export default {
         'analysis.completedAt': new Date(),
         'analysis.completedBy': userId,
         'analysis.completionComments': completionComments,
-<<<<<<< HEAD:app/imports/api/problems/problems-service.js
-      },
-=======
       }
->>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17:share/services/problems-service.js
     });
 
     WorkItemService.analysisCompleted(_id, this._docType);

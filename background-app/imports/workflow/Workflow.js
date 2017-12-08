@@ -83,12 +83,9 @@ export default class Workflow {
   static get _collection() {
     // Implement in child class
   }
-<<<<<<< HEAD
-=======
 
   static get _docType() {
     // Implement in child class
   }
 
->>>>>>> d9bedfa586277a878b2e425b1cdf3771f9696b17
 }
