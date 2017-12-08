@@ -4,18 +4,18 @@
   "scripts": {
     "lint-app": "./node_modules/.bin/eslint app",
     "lint-background-app": "./node_modules/.bin/eslint background-app",
+    "test": "yarn jest",
     "jest": "./node_modules/.bin/jest"
   },
-  "jest": {
-    "transform": {
-      ".*": "babel-jest"
-    }
-  },
   "pre-commit": [
-    "jest"
+    "test"
   ],
   "devDependencies": {
+    "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.3",
+    "babel-jest": "^21.2.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "eslint": "^4.12.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-meteor": "^0.1.0",
@@ -26,6 +26,7 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.5.1",
     "jest": "^21.2.1",
+    "jest-meteor-stubs": "^1.5.1",
     "pre-commit": "^1.2.2"
   },
   "dependencies": {}
