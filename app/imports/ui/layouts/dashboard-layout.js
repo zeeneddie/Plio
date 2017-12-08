@@ -8,7 +8,9 @@ Template.Dashboard_Layout.viewmodel({
   _subHandlers: [],
   autorun: [
     function () {
-      this.isReady(this._subHandlers().every(handle => handle.ready()));
+      const subHandlers = this._subHandlers();
+      const isReady = subHandlers.length && subHandlers.every(handle => handle.ready());
+      this.isReady(isReady);
     },
     function () {
       if (typeof this.organizationSerialNumber() !== 'number') return;

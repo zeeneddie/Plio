@@ -28,7 +28,9 @@ Template.Dashboard_Page.viewmodel({
       BackgroundSubs.subscribe('organizationDeps', this.organizationId());
     },
     function () {
-      this.isReady(this._subHandlers().every(handle => handle.ready()));
+      const subHandlers = this._subHandlers();
+      const isReady = subHandlers.length && subHandlers.every(handle => handle.ready());
+      this.isReady(isReady);
     }
   ],
   onRendered() {

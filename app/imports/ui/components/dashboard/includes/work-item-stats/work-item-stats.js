@@ -7,7 +7,7 @@ import { WorkItemsStore } from '/imports/share/constants';
 
 Template.Dashboard_WorkItemStats.viewmodel({
   mixin: ['utils', 'organization', 'workInbox', {
-    counter: 'counter'
+    counter: 'counter',
   }],
   _subHandlers: [],
   isInitialDataReady: false,
@@ -15,9 +15,9 @@ Template.Dashboard_WorkItemStats.viewmodel({
   enableLimit: true,
   limit: 5,
   currentDate: new Date(),
-
   autorun() {
-    const isReady = this._subHandlers().every(handler => handler.ready());
+    const subHandlers = this._subHandlers();
+    const isReady = subHandlers.length && subHandlers.every(handler => handler.ready());
 
     if (!this.isInitialDataReady()) {
       this.isInitialDataReady(isReady);

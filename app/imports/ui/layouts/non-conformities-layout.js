@@ -6,7 +6,7 @@ Template.NC_Layout.viewmodel({
   _subHandlers: [],
   isReady: false,
   autorun: [
-    function() {
+    function () {
       const orgSerialNumber = this.organizationSerialNumber();
       const isDeleted = this.isActiveNCFilter(4);
       const _subHandlers = [
@@ -15,8 +15,10 @@ Template.NC_Layout.viewmodel({
 
       this._subHandlers(_subHandlers);
     },
-    function() {
-      this.isReady(this._subHandlers().every(handle => handle.ready()));
-    }
-  ]
+    function () {
+      const subHandlers = this._subHandlers();
+      const isReady = subHandlers.length && subHandlers.every(handle => handle.ready());
+      this.isReady(isReady);
+    },
+  ],
 });

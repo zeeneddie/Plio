@@ -6,7 +6,7 @@ Template.WorkInbox_Layout.viewmodel({
   _subHandlers: [],
   isReady: false,
   autorun: [
-    function() {
+    function () {
       const orgSerialNumber = this.organizationSerialNumber();
       const _subHandlers = [
         DocumentLayoutSubs.subscribe('workInboxLayout', orgSerialNumber),
@@ -14,8 +14,10 @@ Template.WorkInbox_Layout.viewmodel({
 
       this._subHandlers(_subHandlers);
     },
-    function() {
-      this.isReady(this._subHandlers().every(handle => handle.ready()));
-    }
-  ]
+    function () {
+      const subHandlers = this._subHandlers();
+      const isReady = subHandlers.length && subHandlers.every(handle => handle.ready());
+      this.isReady(isReady);
+    },
+  ],
 });
