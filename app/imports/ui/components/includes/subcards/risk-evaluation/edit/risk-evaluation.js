@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { RisksHelp } from '/imports/api/help-messages';
-import { chain } from '/imports/api/helpers.js';
+import { chain } from '/imports/api/helpers';
 
 Template.Subcards_RiskEvaluation_Edit.viewmodel({
   mixin: ['utils', 'modal'],

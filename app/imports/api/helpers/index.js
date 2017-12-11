@@ -9,10 +9,12 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import { shallowEqual } from 'recompose';
 import { $ } from 'meteor/jquery';
 
-import { Actions } from '/imports/share/collections/actions.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { getTitlePrefix } from '/imports/share/helpers';
+import { Actions } from '../../share/collections/actions';
+import { NonConformities } from '../../share/collections/non-conformities';
+import { Risks } from '../../share/collections/risks';
+
+export { default as sortArrayByTitlePrefix } from './sortByTitlePrefix';
+export { default as getTitlePrefix } from './getTitlePrefix';
 
 export const { compose } = _;
 
@@ -348,26 +350,6 @@ export const handleMethodResult = cb => (err, res) => {
 export const showError = (errorMsg) => {
   toastr.error(errorMsg);
 };
-
-// 1, 1.2, 3, 10.3, a, b, c
-export const sortArrayByTitlePrefix = arr => [...arr].sort((a, b) => {
-  const at = getTitlePrefix(`${a.titlePrefix}`.toLowerCase());
-  const bt = getTitlePrefix(`${b.titlePrefix}`.toLowerCase());
-
-  if (typeof at === 'number' && typeof bt !== 'number') {
-    return -1;
-  }
-  if (typeof bt === 'number' && typeof at !== 'number') {
-    return 1;
-  }
-  if (at < bt) {
-    return -1;
-  }
-  if (at > bt) {
-    return 1;
-  }
-  return at === bt ? 0 : -1;
-});
 
 export const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));
 

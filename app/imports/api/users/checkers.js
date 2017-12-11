@@ -11,7 +11,7 @@ import {
   USR_INCORRECT_PASSWORD,
   ACCESS_DENIED,
 } from '../errors.js';
-import { checkAndThrow } from '/imports/api/helpers.js';
+import { checkAndThrow } from '/imports/api/helpers';
 import { canChangeRoles, isOrgOwner, isPlioAdmin, isPlioUser } from '../checkers.js';
 
 export const USR_EnsureUpdatingHimselfChecker = curry(({ userId }, doc) => {

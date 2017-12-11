@@ -1,4 +1,4 @@
-import { checkAndThrow } from '/imports/api/helpers.js';
+import { checkAndThrow } from '/imports/api/helpers';
 import { DOC_NOT_FOUND } from '../errors.js';
 import { checkDocExistance, checkOrgMembership } from '../checkers.js';
 import { Occurrences } from '/imports/share/collections/occurrences.js';

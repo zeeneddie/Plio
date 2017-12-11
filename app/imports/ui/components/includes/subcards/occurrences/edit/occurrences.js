@@ -3,7 +3,7 @@ import invoke from 'lodash.invoke';
 
 import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { insert, update, remove } from '/imports/api/occurrences/methods.js';
-import { invokeId } from '/imports/api/helpers.js';
+import { invokeId } from '/imports/api/helpers';
 import { NonConformitiesHelp } from '/imports/api/help-messages.js';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 

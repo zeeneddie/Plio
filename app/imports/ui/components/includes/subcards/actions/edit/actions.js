@@ -5,8 +5,8 @@ import { _ } from 'meteor/underscore';
 
 import { ProblemTypes } from '/imports/share/constants.js';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
-import { getTzTargetDate } from '/imports/share/helpers.js';
-import { flattenObjects, inspire } from '/imports/api/helpers.js';
+import { getTzTargetDate } from '/imports/share/helpers';
+import { flattenObjects, inspire } from '/imports/api/helpers';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Risks } from '/imports/share/collections/risks.js';
 import {

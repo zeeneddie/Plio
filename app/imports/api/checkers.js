@@ -11,7 +11,7 @@ import {
   ONLY_ORG_OWNER_CAN_DELETE,
   CANNOT_RESTORE_NOT_DELETED,
 } from './errors.js';
-import { chain, checkAndThrow, injectCurry, getUserJoinedAt } from './helpers.js';
+import { chain, checkAndThrow, injectCurry, getUserJoinedAt } from './helpers';
 import { MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { createOrgQueryWhereUserIsOwner, createOrgQueryWhereUserIsMember } from './queries';
 

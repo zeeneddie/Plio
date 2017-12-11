@@ -11,7 +11,7 @@ import { ProblemsStatuses } from '/imports/share/constants.js';
 import {
   extractIds, inspire, findById,
   lengthItems, flattenMapItems,
-} from '/imports/api/helpers.js';
+} from '/imports/api/helpers';
 
 
 Template.NC_List.viewmodel({

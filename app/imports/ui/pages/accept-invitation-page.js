@@ -4,7 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { acceptInvitation } from '../../api/organizations/methods';
-import { showError } from '/imports/api/helpers.js';
+import { showError } from '/imports/api/helpers';
 
 
 Template.AcceptInvitationPage.viewmodel({

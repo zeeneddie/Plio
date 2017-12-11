@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
-import { inspire } from '/imports/api/helpers.js';
+import { inspire } from '/imports/api/helpers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 const getTableData = instance => inspire(['tableData', 'guideHtml'], instance);

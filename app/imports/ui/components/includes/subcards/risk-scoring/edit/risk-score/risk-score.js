@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { RisksHelp } from '/imports/api/help-messages';
-import { mapByIndex } from '/imports/api/helpers.js';
+import { mapByIndex } from '/imports/api/helpers';
 
 Template.Subcards_RiskScore.viewmodel({
   mixin: 'utils',

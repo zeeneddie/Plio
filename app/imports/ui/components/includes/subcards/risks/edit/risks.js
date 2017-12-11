@@ -4,8 +4,8 @@ import invoke from 'lodash.invoke';
 import {
   insert, update, remove,
 } from '/imports/api/risks/methods';
-import { getTzTargetDate } from '/imports/share/helpers.js';
-import { inspire } from '/imports/api/helpers.js';
+import { getTzTargetDate } from '/imports/share/helpers';
+import { inspire } from '/imports/api/helpers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.Subcards_Risks_Edit.viewmodel({

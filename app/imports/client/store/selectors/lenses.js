@@ -14,6 +14,7 @@ const organizations = lensProp('organizations');
 const organizationId = lensProp('organizationId');
 const dataImport = lensProp('dataImport');
 const isModalOpened = lensProp('isModalOpened');
+const deletedAt = lensProp('deletedAt');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
@@ -31,6 +32,7 @@ const organizationsOrganizationId = compose(organizations, organizationId);
 const dataImportIsModalOpened = compose(dataImport, isModalOpened);
 
 export default {
+  deletedAt,
   collections: Object.assign(collections, {
     standards: collectionsStandards,
     standardsByIds: collectionsStandardsByIds,
