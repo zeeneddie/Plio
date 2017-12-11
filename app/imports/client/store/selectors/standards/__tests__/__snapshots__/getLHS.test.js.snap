@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getLHS matches snapshot 1`] = `
+Object {
+  "animating": undefined,
+  "filter": 1,
+  "filteredStandards": Array [
+    Object {
+      "_id": 1,
+    },
+    Object {
+      "_id": 2,
+    },
+    Object {
+      "_id": 5,
+    },
+  ],
+  "isDataImportModalOpened": undefined,
+  "organizationId": undefined,
+  "searchResultsText": "",
+  "searchText": "",
+  "standards": Array [
+    Object {
+      "_id": 1,
+    },
+    Object {
+      "_id": 2,
+    },
+    Object {
+      "_id": 5,
+    },
+  ],
+  "urlItemId": undefined,
+  "userId": undefined,
+}
+`;
