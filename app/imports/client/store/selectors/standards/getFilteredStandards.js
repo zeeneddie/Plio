@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { ifElse, filter, equals, propSatisfies, complement } from 'ramda';
+import { compose, ifElse, filter, equals, propSatisfies, complement, nthArg } from 'ramda';
 
 import { getStandards } from './state';
 import { getFilter } from '../global';
@@ -9,8 +9,8 @@ const deleted = propSatisfies(equals(true), 'isDeleted');
 
 const selector = ifElse(
   equals(STANDARD_FILTER_MAP.DELETED),
-  filter(deleted),
-  filter(complement(deleted)),
+  compose(filter(deleted), nthArg(1)),
+  compose(filter(complement(deleted)), nthArg(1)),
 );
 
 export default createSelector([getFilter, getStandards], selector);

@@ -1,4 +1,4 @@
-import { CollectionNames } from '/imports/share/constants';
+import { CollectionNames } from '../../../share/constants';
 
 const mirrorKeys = (obj = {}) => Object.keys(obj)
   .reduce((prev, cur) => ({ ...prev, [cur]: cur }), {});
