@@ -39,6 +39,7 @@ export const findSelectedStandard = id =>
 export const findSelectedSection = id =>
   compose(find(findSelectedStandard(id)), propSections);
 
+// DELETE AFTER REFACTORING
 export const getStandardsByFilter = ({ filter, standards }) => (
   filter === STANDARD_FILTER_MAP.DELETED
     ? standards.filter(propEq('isDeleted', true))
