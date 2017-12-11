@@ -6,20 +6,18 @@ import {
   shouldUpdate,
 } from 'recompose';
 import { connect } from 'react-redux';
+import { length, view, allPass, complement, identity } from 'ramda';
 
 import {
   some,
   getC,
-  lengthStandards,
   notEquals,
   omitC,
-  pickDeep,
-  identity,
   pickC,
-  assoc,
 } from '/imports/api/helpers';
 import StandardsRHS from '../../components/RHS';
-import { getStandardsByFilter } from '../../helpers';
+import { getRHSMeta } from '../../../../../client/store/selectors/standards';
+import lenses from '../../../../../client/store/selectors/lenses';
 
 const mapStateToProps = state => ({
   ...pickC(['isFullScreenMode', 'isCardReady', 'urlItemId'])(state.global),
@@ -27,20 +25,17 @@ const mapStateToProps = state => ({
 });
 
 export default compose(
-  connect(pickDeep([
-    'global.filter',
-    'global.searchText',
-    'collections.standards',
-    'standards.standardsFiltered',
-  ])),
-  mapProps(props => assoc('standards', getStandardsByFilter(props), props)),
+  connect(getRHSMeta),
   branch(
-    props => lengthStandards(props),
+    compose(length, view(lenses.standards)),
     identity,
     renderComponent(StandardsRHS.NotFound),
   ),
   branch(
-    props => props.searchText && !props.standardsFiltered.length,
+    allPass([
+      view(lenses.searchText),
+      compose(complement(length), view(lenses.standardsFiltered)),
+    ]),
     renderComponent(StandardsRHS.NoResults),
     identity,
   ),
