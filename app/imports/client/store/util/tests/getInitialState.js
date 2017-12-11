@@ -1,5 +1,4 @@
 import { mergeDeepRight } from 'ramda';
-import { STANDARD_FILTER_MAP } from '../../../../../api/constants';
 
 export default mergeDeepRight({
   standards: {
@@ -15,7 +14,7 @@ export default mergeDeepRight({
     ],
   },
   global: {
-    filter: STANDARD_FILTER_MAP.SECTION,
+    filter: 1,
     searchText: '',
   },
 });

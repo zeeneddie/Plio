@@ -1,5 +1,5 @@
 import getLHS from '../getLHS';
-import { getInitialState } from '../../../util/tests/standards';
+import { getInitialState } from '../../../util/tests';
 
 describe('getLHS', () => {
   it('matches snapshot', () => {
