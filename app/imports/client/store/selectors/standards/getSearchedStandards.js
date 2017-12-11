@@ -1,14 +1,15 @@
 import { createSelector } from 'reselect';
-import { when, complement, isEmpty, contains, filter, __, where } from 'ramda';
+import { unless, isEmpty, contains, filter, __, where } from 'ramda';
 
 import { getSearchText } from '../global';
 import getFilteredStandards from './getFilteredStandards';
 import { getStandardsFiltered } from './state';
 
-const selector = (searchText, searchedIds, standards) => when(
-  complement(isEmpty),
-  () => filter(where({ _id: contains(__, searchedIds) }), standards),
-)(searchText);
+// selector(searchText: String, searchedIds: Array, standards: Array) => Array
+const selector = (searchText, searchedIds, standards) => unless(
+  () => isEmpty(searchText),
+  filter(where({ _id: contains(__, searchedIds) })),
+)(standards);
 
 export default createSelector([
   getSearchText,

@@ -15,6 +15,7 @@ import { Risks } from '../../share/collections/risks';
 
 export { default as sortArrayByTitlePrefix } from './sortByTitlePrefix';
 export { default as getTitlePrefix } from './getTitlePrefix';
+export { default as getSearchMatchText } from './getSearchMatchText';
 
 export const { compose } = _;
 
@@ -521,9 +522,6 @@ export const searchByRegex = curry((regex, transformOrArrayOfProps, array) =>
     return transformOrArrayOfProps.filter(prop =>
       typeof item[prop] === 'string' && item[prop].search(regex) >= 0).length;
   }));
-
-export const getSearchMatchText = (searchText, count) =>
-  (searchText && count ? `${count} matching results` : '');
 
 export const toDocId = transsoc({ documentId: propId });
 
