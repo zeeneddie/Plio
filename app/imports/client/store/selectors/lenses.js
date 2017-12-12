@@ -24,11 +24,14 @@ const standard = lensProp('standard');
 const discussion = lensProp('discussion');
 const isDiscussionOpened = lensProp('isDiscussionOpened');
 const standardBookSectionsByIds = lensProp('standardBookSectionsByIds');
+const standardBookSections = lensProp('standardBookSections');
 const standardTypesByIds = lensProp('standardTypesByIds');
 const usersByIds = lensProp('usersByIds');
+const isDeleted = lensProp('isDeleted');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
+const collectionsStandardBookSections = compose(collections, standardBookSections);
 const collectionsStandardBookSectionsByIds = compose(collections, standardBookSectionsByIds);
 const collectionsStandardTypesByIds = compose(collections, standardTypesByIds);
 const collectionsUsersByIds = compose(collections, usersByIds);
@@ -59,6 +62,7 @@ export default {
   isCardReady,
   urlItemId,
   standard,
+  isDeleted,
   source1: Object.assign(source1, {
     htmlUrl: source1HtmlUrl,
   }),
@@ -68,6 +72,7 @@ export default {
   collections: Object.assign(collections, {
     standards: collectionsStandards,
     standardsByIds: collectionsStandardsByIds,
+    standardBookSections: collectionsStandardBookSections,
     standardBookSectionsByIds: collectionsStandardBookSectionsByIds,
     standardTypesByIds: collectionsStandardTypesByIds,
     usersByIds: collectionsUsersByIds,

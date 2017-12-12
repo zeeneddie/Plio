@@ -8,3 +8,4 @@ export { default as getRHS } from './getRHS';
 export { default as getRHSHeaderButtons } from './getRHSHeaderButtons';
 export { default as getRHSBodyContents } from './getRHSBodyContents';
 export { default as getSearchInfo } from './getSearchInfo';
+export { default as getStandardSectionList } from './getStandardSectionList';
