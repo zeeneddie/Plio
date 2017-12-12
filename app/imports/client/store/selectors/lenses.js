@@ -23,9 +23,15 @@ const htmlUrl = lensProp('htmlUrl');
 const standard = lensProp('standard');
 const discussion = lensProp('discussion');
 const isDiscussionOpened = lensProp('isDiscussionOpened');
+const standardBookSectionsByIds = lensProp('standardBookSectionsByIds');
+const standardTypesByIds = lensProp('standardTypesByIds');
+const usersByIds = lensProp('usersByIds');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
+const collectionsStandardBookSectionsByIds = compose(collections, standardBookSectionsByIds);
+const collectionsStandardTypesByIds = compose(collections, standardTypesByIds);
+const collectionsUsersByIds = compose(collections, usersByIds);
 
 const standardsStandardsFiltered = compose(standards, standardsFiltered);
 
@@ -62,6 +68,9 @@ export default {
   collections: Object.assign(collections, {
     standards: collectionsStandards,
     standardsByIds: collectionsStandardsByIds,
+    standardBookSectionsByIds: collectionsStandardBookSectionsByIds,
+    standardTypesByIds: collectionsStandardTypesByIds,
+    usersByIds: collectionsUsersByIds,
   }),
   standards: Object.assign(standards, {
     standardsFiltered: standardsStandardsFiltered,

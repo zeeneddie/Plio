@@ -6,3 +6,4 @@ export { default as getSortedStandardsByFilter } from './getSortedStandardsByFil
 export { default as getLHS } from './getLHS';
 export { default as getRHS } from './getRHS';
 export { default as getRHSHeaderButtons } from './getRHSHeaderButtons';
+export { default as getRHSBodyContents } from './getRHSBodyContents';

@@ -16,6 +16,8 @@ import { Risks } from '../../share/collections/risks';
 export { default as sortArrayByTitlePrefix } from './sortByTitlePrefix';
 export { default as getTitlePrefix } from './getTitlePrefix';
 export { default as getSearchMatchText } from './getSearchMatchText';
+export { default as pickDocuments } from './pickDocuments';
+export { default as pickDeep } from './pickDeep';
 
 export const { compose } = _;
 
@@ -184,12 +186,6 @@ export const transsoc = curry((transformations, obj) => {
 
 export const pickC = curry((keys, obj) => _.pick(Object.assign({}, obj), ...keys));
 
-// pickDeep(['a.b.c'])({ a: { b: { c: 123 }}}) => { c: 123 }
-export const pickDeep = curry((paths, obj) => Object.assign([], paths).reduce((acc, path) => ({
-  ...acc,
-  [path.replace(/.*\./g, '')]: get(obj, path),
-}), {}));
-
 export const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
 
 export const pickFromDiscussion = pickFrom('discussion');
@@ -294,28 +290,6 @@ export const reduceC = curry((reducer, initialValue, array) =>
 // slice(0, 2)([1, 2, 3, 4, 5]) => [1, 2, 3]
 // slice (1, Infinity)([1, 2, 3, 4, 5]) => [2, 3, 4, 5]
 export const slice = curry((a, b, c) => c.slice(a, b));
-
-// pickDocuments(
-//   ['_id', 'profile.firstName'],
-//   [{ _id: 1, profile: { firstName: 'Alan', ... }, ... }, ...],
-//   1
-// );
-// => { _id: 1, firstName: 'Alan' }
-export const pickDocuments = curry((fields, collection, ids) => {
-  if (typeof ids !== 'string' && !Array.isArray(ids)) return ids;
-
-  if (typeof ids === 'string') return pickDeep(fields, collection[ids]);
-
-  const reducer = (prev, cur) => {
-    const doc = collection[cur];
-
-    if (doc) return prev.concat(pickDeep(fields, doc));
-
-    return prev;
-  };
-
-  return reduceC(reducer, [], ids);
-});
 
 export const combineObjects = fns => obj =>
   Object.assign([], fns).reduce((prev, cur) => ({ ...prev, ...cur(obj) }), {});
