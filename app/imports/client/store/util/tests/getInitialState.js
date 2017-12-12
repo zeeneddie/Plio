@@ -68,6 +68,18 @@ export default mergeDeepRight({
         ],
       },
     },
+    standardBookSections: [
+      { _id: 8 },
+    ],
+    standardBookSectionsByIds: {
+      8: { _id: 8 },
+    },
+    standardTypes: [
+      { _id: 9 },
+    ],
+    standardTypesByIds: {
+      9: { _id: 9 },
+    },
   },
   global: {
     filter: 1,
