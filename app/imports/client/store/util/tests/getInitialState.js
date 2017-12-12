@@ -1,8 +1,19 @@
 import { mergeDeepRight } from 'ramda';
 
+import { OrgOwnerRoles, UserMembership } from '../../../../share/constants';
+
 export default mergeDeepRight({
   standards: {
     standardsFiltered: [],
+  },
+  organizations: {
+    organizationId: 7,
+  },
+  discussion: {
+    isDiscussionOpened: false,
+  },
+  dataImport: {
+    isModalOpened: false,
   },
   collections: {
     standards: [
@@ -20,10 +31,42 @@ export default mergeDeepRight({
       5: { _id: 5 },
     },
     users: [
-      { _id: 6 },
+      {
+        _id: 6,
+        roles: {
+          7: OrgOwnerRoles,
+        },
+      },
     ],
     usersByIds: {
-      6: { _id: 6 },
+      6: {
+        _id: 6,
+        roles: {
+          7: OrgOwnerRoles,
+        },
+      },
+    },
+    organizations: [
+      {
+        _id: 7,
+        users: [
+          {
+            userId: 6,
+            role: UserMembership.ORG_OWNER,
+          },
+        ],
+      },
+    ],
+    organizationsByIds: {
+      7: {
+        _id: 7,
+        users: [
+          {
+            userId: 6,
+            role: UserMembership.ORG_OWNER,
+          },
+        ],
+      },
     },
   },
   global: {

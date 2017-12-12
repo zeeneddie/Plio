@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getRHSHeaderButtons matches snapshot 1`] = `
+Object {
+  "hasAccess": true,
+  "hasFullAccess": true,
+  "isDiscussionOpened": false,
+  "isFullScreenMode": false,
+  "organizationId": 7,
+  "userId": 1,
+}
+`;

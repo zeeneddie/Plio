@@ -15,8 +15,8 @@ Object {
       "_id": 5,
     },
   ],
-  "isDataImportModalOpened": undefined,
-  "organizationId": undefined,
+  "isDataImportModalOpened": false,
+  "organizationId": 7,
   "searchResultsText": "",
   "searchText": "",
   "standards": Array [
