@@ -54,7 +54,9 @@ export const createUncategorizedSection = ({ standards, sections }) => ({
   _id: SECTION_UNCATEGORIZED,
   title: 'Uncategorized',
   organizationId: getC('organizationId', standards[0]),
-  standards: standards.filter(standard => !sections.find(propEqId(standard.sectionId))),
+  standards: standards.filter(standard =>
+    !sections.find(section =>
+      section._id === standard.sectionId)),
 });
 
 export const createUncategorizedType = ({ standards, types }) => ({

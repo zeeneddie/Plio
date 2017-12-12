@@ -8,5 +8,7 @@ describe('getStandardSectionList', () => {
     const props = {
       standards: state.collections.standards,
     };
+
+    expect(getStandardSectionList(state, props)).toMatchSnapshot();
   });
 });

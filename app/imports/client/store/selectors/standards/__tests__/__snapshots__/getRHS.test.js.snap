@@ -9,13 +9,19 @@ Object {
   "searchText": "",
   "standard": Object {
     "_id": 1,
+    "sectionId": 8,
+    "typeId": 9,
   },
   "standards": Array [
     Object {
       "_id": 1,
+      "sectionId": 8,
+      "typeId": 9,
     },
     Object {
       "_id": 2,
+      "sectionId": 8,
+      "typeId": 9,
     },
     Object {
       "_id": 5,
@@ -24,19 +30,27 @@ Object {
   "standardsByIds": Object {
     "1": Object {
       "_id": 1,
+      "sectionId": 8,
+      "typeId": 9,
     },
     "2": Object {
       "_id": 2,
+      "sectionId": 8,
+      "typeId": 9,
     },
     "3": Object {
       "_id": 3,
       "deletedAt": 1513074233019,
       "isDeleted": true,
+      "sectionId": 8,
+      "typeId": 9,
     },
     "4": Object {
       "_id": 4,
       "deletedAt": 1513074233018,
       "isDeleted": true,
+      "sectionId": 8,
+      "typeId": 9,
     },
     "5": Object {
       "_id": 5,

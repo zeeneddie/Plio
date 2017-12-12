@@ -89,7 +89,6 @@ const redirectAndOpen = props => setTimeout(() => {
 
 export default compose(
   connect(getStandardSectionList),
-  connect(pickDeep(['global.searchText', 'standards.standardsFiltered'])),
   lifecycle({
     componentWillMount() {
       redirectAndOpen(this.props);

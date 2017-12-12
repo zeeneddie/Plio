@@ -7,9 +7,13 @@ Object {
   "filteredStandards": Array [
     Object {
       "_id": 1,
+      "sectionId": 8,
+      "typeId": 9,
     },
     Object {
       "_id": 2,
+      "sectionId": 8,
+      "typeId": 9,
     },
     Object {
       "_id": 5,
@@ -22,9 +26,13 @@ Object {
   "standards": Array [
     Object {
       "_id": 1,
+      "sectionId": 8,
+      "typeId": 9,
     },
     Object {
       "_id": 2,
+      "sectionId": 8,
+      "typeId": 9,
     },
     Object {
       "_id": 5,
