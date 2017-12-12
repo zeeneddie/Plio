@@ -1,4 +1,4 @@
-import { compareProps, equals, compose, not, omitC, propEq } from '/imports/api/helpers';
+import { compareProps, equals, compose, not, omitC, propEq } from '../../../api/helpers';
 
 /**
  * @param {Object[]} collapsed - array of all currently collapsed items

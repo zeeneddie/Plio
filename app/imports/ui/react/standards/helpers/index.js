@@ -2,8 +2,8 @@ import { _ } from 'meteor/underscore';
 import { withProps } from 'recompose';
 import curry from 'lodash.curry';
 
-import { CollectionNames } from '/imports/share/constants';
-import { STANDARD_FILTER_MAP } from '/imports/api/constants';
+import { CollectionNames } from '../../../../share/constants';
+import { STANDARD_FILTER_MAP } from '../../../../api/constants';
 import {
   compose,
   find,
@@ -16,12 +16,12 @@ import {
   notDeleted,
   getId,
   propEqKey,
-} from '/imports/api/helpers';
-import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
-import { goTo } from '../../utils/router/actions';
-import createTypeItem from '../helpers/createTypeItem';
-import store, { getState } from '/imports/client/store';
-import { SECTION_UNCATEGORIZED, TYPE_UNCATEGORIZED } from './constants';
+} from '../../../../api/helpers';
+import { addCollapsed, chainActions } from '../../../../client/store/actions/globalActions';
+import { goTo } from '../../../utils/router/actions';
+import createTypeItem from '../../helpers/createTypeItem';
+import store, { getState } from '../../../../client/store';
+import { SECTION_UNCATEGORIZED, TYPE_UNCATEGORIZED } from '../constants';
 
 export const getSubNestingClassName = ({ nestingLevel = 1 }) =>
   'sub'.repeat(parseInt(nestingLevel, 10) - 1);

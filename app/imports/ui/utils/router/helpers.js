@@ -1,6 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { getSelectedOrgSerialNumber } from '/imports/api/helpers';
+import { getSelectedOrgSerialNumber } from '../../../api/helpers';
 
 export const getOrgSerialNumber = ({ orgSerialNumber } = {}) => (
   orgSerialNumber ||

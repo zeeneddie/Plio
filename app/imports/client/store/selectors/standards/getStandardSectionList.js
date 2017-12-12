@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { compose, filter, map, set, concat, propEq, view, length, tap } from 'ramda';
+import { compose, filter, map, set, concat, propEq, view, length } from 'ramda';
 
 import { getStandardBookSections } from '../standardBookSections';
 import { getSelectedStandardIsDeleted } from './state';

@@ -2297,10 +2297,6 @@ jest-message-util@^21.2.1:
     micromatch "^2.3.11"
     slash "^1.0.0"
 
-jest-meteor-stubs@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/jest-meteor-stubs/-/jest-meteor-stubs-1.5.1.tgz#aff8adfa262077783a48cecebc4115e6b60f7338"
-
 jest-mock@^21.2.0:
   version "21.2.0"
   resolved "https://registry.yarnpkg.com/jest-mock/-/jest-mock-21.2.0.tgz#7eb0770e7317968165f61ea2a7281131534b3c0f"

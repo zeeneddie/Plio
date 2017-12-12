@@ -8,6 +8,7 @@ import { _ } from 'meteor/underscore';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { shallowEqual } from 'recompose';
 import { $ } from 'meteor/jquery';
+import { compose } from 'ramda';
 
 import { Actions } from '../../share/collections/actions';
 import { NonConformities } from '../../share/collections/non-conformities';
@@ -18,8 +19,7 @@ export { default as getTitlePrefix } from './getTitlePrefix';
 export { default as getSearchMatchText } from './getSearchMatchText';
 export { default as pickDocuments } from './pickDocuments';
 export { default as pickDeep } from './pickDeep';
-
-export const { compose } = _;
+export { compose } from 'ramda';
 
 export const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
 
