@@ -18,7 +18,7 @@ import {
   setStandardsUpdateComments,
 } from '/imports/api/risks/methods';
 import { WorkflowTypes, ProblemIndexes } from '/imports/share/constants.js';
-import { isViewed } from '/imports/api/checkers.js';
+import { isViewed } from '/imports/api/checkers';
 import { AnalysisTitles } from '/imports/api/constants.js';
 import { RisksHelp } from '/imports/api/help-messages';
 

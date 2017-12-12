@@ -1,4 +1,4 @@
-import { onRestoreChecker } from '../checkers.js';
+import { onRestoreChecker } from '../checkers';
 import { WorkItems } from '/imports/share/collections/work-items.js';
 import { WI_CANNOT_RESTORE_ASSIGNED_TO_OTHER } from '../errors.js';
 import { checkAndThrow } from '/imports/api/helpers';

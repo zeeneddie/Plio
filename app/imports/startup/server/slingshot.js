@@ -5,7 +5,7 @@ import { Random } from 'meteor/random';
 import { HelpDocs } from '/imports/share/collections/help-docs.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { isOrgMember, canChangeHelpDocs } from '/imports/api/checkers.js';
+import { isOrgMember, canChangeHelpDocs } from '/imports/api/checkers';
 import { sanitizeFilename } from '/imports/share/helpers';
 
 

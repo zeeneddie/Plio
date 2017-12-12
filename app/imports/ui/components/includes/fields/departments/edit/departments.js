@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-import { canChangeOrgSettings } from '/imports/api/checkers.js';
+import { canChangeOrgSettings } from '/imports/api/checkers';
 
 Template.Departments_Edit.viewmodel({
   mixin: ['search', 'organization', 'department', 'collapsing'],

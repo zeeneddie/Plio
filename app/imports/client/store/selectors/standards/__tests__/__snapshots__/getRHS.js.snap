@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getRHS matches snapshot 1`] = `
+Object {
+  "hasDocxAttachment": false,
+  "isCardReady": true,
+  "isFullScreenMode": false,
+  "isReady": true,
+  "searchText": "",
+  "standard": Object {
+    "_id": 1,
+  },
+  "standards": Array [
+    Object {
+      "_id": 1,
+    },
+    Object {
+      "_id": 2,
+    },
+    Object {
+      "_id": 5,
+    },
+  ],
+  "standardsByIds": Object {
+    "1": Object {
+      "_id": 1,
+    },
+    "2": Object {
+      "_id": 2,
+    },
+    "3": Object {
+      "_id": 3,
+      "deletedAt": 1513074233019,
+      "isDeleted": true,
+    },
+    "4": Object {
+      "_id": 4,
+      "deletedAt": 1513074233018,
+      "isDeleted": true,
+    },
+    "5": Object {
+      "_id": 5,
+    },
+  },
+  "standardsFiltered": Array [],
+  "urlItemId": 1,
+}
+`;

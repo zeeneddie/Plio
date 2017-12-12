@@ -1,2 +1,2 @@
-import './checkers.js';
+import './checkers';
 import './errors.js';

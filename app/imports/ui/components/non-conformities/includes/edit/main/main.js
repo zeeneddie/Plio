@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { WorkflowTypes, ProblemIndexes } from '/imports/share/constants.js';
-import { isViewed } from '/imports/api/checkers.js';
+import { isViewed } from '/imports/api/checkers';
 
 import {
   updateViewedBy,

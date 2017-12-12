@@ -5,3 +5,4 @@ export { default as getSearchedStandards } from './getSearchedStandards';
 export { default as getSortedStandardsByFilter } from './getSortedStandardsByFilter';
 export { default as getLHS } from './getLHS';
 export { default as getRHS } from './getRHS';
+export { default as getRHSHeaderButtons } from './getRHSHeaderButtons';

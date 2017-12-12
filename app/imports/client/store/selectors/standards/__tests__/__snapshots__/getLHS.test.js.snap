@@ -30,7 +30,7 @@ Object {
       "_id": 5,
     },
   ],
-  "urlItemId": undefined,
-  "userId": undefined,
+  "urlItemId": 1,
+  "userId": 1,
 }
 `;

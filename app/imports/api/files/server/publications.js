@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 import { Files } from '/imports/share/collections/files.js';
-import { isOrgMember } from '../../checkers.js';
+import { isOrgMember } from '../../checkers';
 
 
 Meteor.publish('fileById', function (fileId) {

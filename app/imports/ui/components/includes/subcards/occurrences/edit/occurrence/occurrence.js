@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { updateViewedBy } from '/imports/api/occurrences/methods.js';
-import { isViewed } from '/imports/api/checkers.js';
+import { isViewed } from '/imports/api/checkers';
 import { NonConformitiesHelp } from '/imports/api/help-messages.js';
 
 Template.Subcards_Occurrence.viewmodel({

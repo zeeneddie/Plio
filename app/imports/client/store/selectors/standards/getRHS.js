@@ -6,6 +6,17 @@ import { getStandardsByIds, getStandardsFiltered } from './state';
 import getFilteredStandards from './getFilteredStandards';
 import lenses from '../lenses';
 
+/*
+  selector(
+    standards: Array,
+    standardsByIds: Object,
+    standardsFiltered: Array,
+    urlItemId: String,
+    isCardReady: Boolean,
+    isFullScreenMode: Boolean,
+    searchText: String
+  ) => Object
+*/
 const selector = (
   standards,
   standardsByIds,

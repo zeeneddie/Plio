@@ -6,7 +6,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { HelpDocs } from '/imports/share/collections/help-docs';
 import { Organizations } from '/imports/share/collections/organizations';
 import { Standards } from '/imports/share/collections/standards.js';
-import { canChangeStandards, canChangeHelpDocs } from '/imports/api/checkers.js';
+import { canChangeStandards, canChangeHelpDocs } from '/imports/api/checkers';
 import MammothService from './service.js';
 import HelpDocService from '/imports/api/help-docs/help-doc-service';
 import StandardsService from '/imports/api/standards/standards-service.js';

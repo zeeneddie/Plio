@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { isOrgOwner } from '/imports/api/checkers.js';
+import { isOrgOwner } from '/imports/api/checkers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.Card_Read.viewmodel({

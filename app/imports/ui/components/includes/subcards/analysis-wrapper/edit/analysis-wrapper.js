@@ -6,7 +6,7 @@ import moment from 'moment-timezone';
 import { AnalysisStatuses } from '/imports/share/constants.js';
 import { AnalysisTitles } from '/imports/api/constants.js';
 import { getTzTargetDate } from '/imports/share/helpers';
-import { P_IsAnalysisOwner } from '/imports/api/checkers.js';
+import { P_IsAnalysisOwner } from '/imports/api/checkers';
 
 Template.Subcards_AnalysisWrapper_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'date', 'modal', 'utils'],

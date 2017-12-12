@@ -2,47 +2,33 @@ import { compose, mapProps, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 
 import { getPath } from '../../../../utils/router/paths';
-import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
-import { pickDeep } from '/imports/api/helpers';
 import {
   onToggleScreenMode,
-  onDiscussionOpen,
   onModalOpen,
   onRestore,
   onDelete,
 } from './handlers';
 import HeaderButtons from '../../components/RHS/HeaderButtons';
+import { getRHSHeaderButtons } from '../../../../../client/store/selectors/standards';
 
 export default compose(
-  connect(pickDeep([
-    'global.isFullScreenMode',
-    'global.userId',
-    'organizations.organizationId',
-    'discussion.isDiscussionOpened',
-  ])),
-
+  connect(getRHSHeaderButtons),
   mapProps(({
-    standard: { _id, title, isDeleted = false }, organizationId, userId, ...props
+    standard: { _id, title, isDeleted = false },
+    ...props
   }) => {
-    const hasAccess = canChangeStandards(userId, organizationId);
-    const hasFullAccess = isOrgOwner(userId, organizationId);
     const pathToDiscussion = getPath('standardDiscussion')({ urlItemId: _id });
 
     return {
       ...props,
-      userId,
-      organizationId,
       _id,
       title,
-      hasAccess,
-      hasFullAccess,
-      pathToDiscussion,
       isDeleted,
+      pathToDiscussion,
     };
   }),
   withHandlers({
     onToggleScreenMode,
-    onDiscussionOpen,
     onModalOpen,
     onRestore,
     onDelete,

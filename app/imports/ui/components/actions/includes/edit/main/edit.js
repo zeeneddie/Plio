@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { ActionPlanOptions, WorkflowTypes } from '/imports/share/constants.js';
 import { updateViewedBy } from '/imports/api/actions/methods';
-import { isViewed } from '/imports/api/checkers.js';
+import { isViewed } from '/imports/api/checkers';
 
 
 Template.Actions_Card_Edit_Main.viewmodel({

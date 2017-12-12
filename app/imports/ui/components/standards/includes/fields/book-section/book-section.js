@@ -3,7 +3,7 @@ import { Tracker } from 'meteor/tracker';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
-import { canChangeOrgSettings } from '/imports/api/checkers.js';
+import { canChangeOrgSettings } from '/imports/api/checkers';
 import { sortArrayByTitlePrefix } from '/imports/api/helpers';
 
 Template.ESBookSection.viewmodel({

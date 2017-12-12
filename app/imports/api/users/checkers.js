@@ -12,7 +12,7 @@ import {
   ACCESS_DENIED,
 } from '../errors.js';
 import { checkAndThrow } from '/imports/api/helpers';
-import { canChangeRoles, isOrgOwner, isPlioAdmin, isPlioUser } from '../checkers.js';
+import { canChangeRoles, isOrgOwner, isPlioAdmin, isPlioUser } from '../checkers';
 
 export const USR_EnsureUpdatingHimselfChecker = curry(({ userId }, doc) => {
   const predicate = Object.is(userId, doc._id);

@@ -21,6 +21,8 @@ const source1 = lensProp('source1');
 const source2 = lensProp('source2');
 const htmlUrl = lensProp('htmlUrl');
 const standard = lensProp('standard');
+const discussion = lensProp('discussion');
+const isDiscussionOpened = lensProp('isDiscussionOpened');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
@@ -41,6 +43,8 @@ const dataImportIsModalOpened = compose(dataImport, isModalOpened);
 
 const source1HtmlUrl = compose(source1, htmlUrl);
 const source2HtmlUrl = compose(source2, htmlUrl);
+
+const discussionisDiscussionOpened = compose(discussion, isDiscussionOpened);
 
 export default {
   deletedAt,
@@ -76,5 +80,8 @@ export default {
   }),
   dataImport: Object.assign(dataImport, {
     isModalOpened: dataImportIsModalOpened,
+  }),
+  discussion: Object.assign(discussion, {
+    isDiscussionOpened: discussionisDiscussionOpened,
   }),
 };
