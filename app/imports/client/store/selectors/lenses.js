@@ -17,6 +17,10 @@ const isModalOpened = lensProp('isModalOpened');
 const deletedAt = lensProp('deletedAt');
 const isFullScreenMode = lensProp('isFullScreenMode');
 const isCardReady = lensProp('isCardReady');
+const source1 = lensProp('source1');
+const source2 = lensProp('source2');
+const htmlUrl = lensProp('htmlUrl');
+const standard = lensProp('standard');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
@@ -35,10 +39,22 @@ const organizationsOrganizationId = compose(organizations, organizationId);
 
 const dataImportIsModalOpened = compose(dataImport, isModalOpened);
 
+const source1HtmlUrl = compose(source1, htmlUrl);
+const source2HtmlUrl = compose(source2, htmlUrl);
+
 export default {
   deletedAt,
   searchText,
   standardsFiltered,
+  isCardReady,
+  urlItemId,
+  standard,
+  source1: Object.assign(source1, {
+    htmlUrl: source1HtmlUrl,
+  }),
+  source2: Object.assign(source2, {
+    htmlUrl: source2HtmlUrl,
+  }),
   collections: Object.assign(collections, {
     standards: collectionsStandards,
     standardsByIds: collectionsStandardsByIds,
