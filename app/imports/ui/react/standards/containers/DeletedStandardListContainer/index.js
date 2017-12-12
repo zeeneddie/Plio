@@ -1,14 +1,14 @@
 import { lifecycle, compose } from 'recompose';
 import { connect } from 'react-redux';
 
+import { getState } from '../../../../../client/store';
+import { STANDARD_FILTER_MAP } from '../../../../../api/constants';
 import StandardListContainer from '../StandardListContainer';
 import {
   getSelectedAndDefaultStandardByFilter,
   redirectToStandardOrDefault,
 } from '../../helpers';
-import { pickDeep } from '/imports/api/helpers';
-import { getState } from '/imports/client/store';
-import { STANDARD_FILTER_MAP } from '/imports/api/constants';
+import { getSearchInfo } from '../../../../../client/store/selectors/standards';
 
 const redirectHandle = props => setTimeout(() => {
   const { urlItemId } = getState('global');
@@ -37,7 +37,7 @@ const redirectHandle = props => setTimeout(() => {
 }, 0);
 
 export default compose(
-  connect(pickDeep(['global.searchText', 'standards.standardsFiltered'])),
+  connect(getSearchInfo),
   lifecycle({
     componentWillMount() {
       // handle redirect to default standard

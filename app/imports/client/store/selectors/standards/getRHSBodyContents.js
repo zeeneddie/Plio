@@ -5,6 +5,24 @@ import { getStandardTypesByIds } from '../standardTypes';
 import { getUsersByIds } from '../users';
 import pickDocuments from '../../../../api/helpers/pickDocuments';
 
+/*
+  interface improvementPlan {
+    owner: ID
+  }
+
+  selector({
+    sectionId: ID,
+    typeId: ID,
+    owner: ID,
+    notify: [...ID],
+    improvementPlan
+  }) => (
+    standardBookSectionsByIds: Object,
+    standardTypesByIds: Object,
+    usersByIds: Object
+  ) => Object
+*/
+
 const selector = ({
   sectionId,
   typeId,
