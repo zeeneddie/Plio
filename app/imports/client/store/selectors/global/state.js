@@ -14,3 +14,5 @@ export const getUserId = view(lenses.global.userId);
 export const getIsFullScreenMode = view(lenses.global.isFullScreenMode);
 
 export const getIsCardReady = view(lenses.global.isCardReady);
+
+export const getDataLoading = view(lenses.global.dataLoading);

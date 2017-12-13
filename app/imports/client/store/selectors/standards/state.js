@@ -16,3 +16,7 @@ export const getSelectedStandardIsDeleted = compose(
   view(lenses.isDeleted),
   getSelectedStandard,
 );
+
+export const getStandardsInitializing = view(lenses.standards.initializing);
+
+export const getStandardsAreDepsReady = view(lenses.standards.areDepsReady);
