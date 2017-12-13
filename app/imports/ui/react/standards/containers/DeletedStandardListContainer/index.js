@@ -8,7 +8,8 @@ import {
   getSelectedAndDefaultStandardByFilter,
   redirectToStandardOrDefault,
 } from '../../helpers';
-import { getSearchInfo } from '../../../../../client/store/selectors/standards';
+import { getSearchText } from '../../../../../client/store/selectors/global';
+import { getStandardsFiltered } from '../../../../../client/store/selectors/standards';
 
 const redirectHandle = props => setTimeout(() => {
   const { urlItemId } = getState('global');
@@ -36,8 +37,13 @@ const redirectHandle = props => setTimeout(() => {
   redirectToStandardOrDefault(redirectOptions);
 }, 0);
 
+const mapStateToProps = state => ({
+  searchText: getSearchText(state),
+  standardsFiltered: getStandardsFiltered(state),
+});
+
 export default compose(
-  connect(getSearchInfo),
+  connect(mapStateToProps),
   lifecycle({
     componentWillMount() {
       // handle redirect to default standard
