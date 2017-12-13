@@ -1,6 +1,17 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 
+import { getIsModalOpened } from '../../../../../client/store/selectors/dataImport';
+import { getOrganizationId } from '../../../../../client/store/selectors/organizations';
+import {
+  getSearchText,
+  getFilter,
+  getAnimating,
+  getUrlItemId,
+  getUserId,
+} from '../../../../../client/store/selectors/global';
+import { getSearchMatchText } from '../../../../../api/helpers';
+
 import { onToggleCollapse } from '../../../share/LHS/handlers';
 import StandardsLHS from '../../components/LHS';
 import {
@@ -12,10 +23,31 @@ import {
   onDataImportModalClose,
   openDocumentCreationModal,
 } from './handlers';
-import { getLHS } from '../../../../../client/store/selectors/standards';
+import {
+  getFilteredStandards,
+  getSortedStandardsByFilter,
+} from '../../../../../client/store/selectors/standards';
+
+const mapStateToProps = (state) => {
+  const standards = getSortedStandardsByFilter(state);
+  const searchText = getSearchText(state);
+
+  return {
+    standards,
+    searchText,
+    filteredStandards: getFilteredStandards(state),
+    organizationId: getOrganizationId(state),
+    filter: getFilter(state),
+    animating: getAnimating(state),
+    urlItemId: getUrlItemId(state),
+    userId: getUserId(state),
+    isDataImportModalOpened: getIsModalOpened(state),
+    searchResultsText: getSearchMatchText(searchText, standards.length),
+  };
+};
 
 export default compose(
-  connect(getLHS),
+  connect(mapStateToProps),
   withHandlers({
     onToggleCollapse,
     onClear,
