@@ -3,6 +3,8 @@ import { lenses } from '../../../../client/util';
 
 export const getStandards = view(lenses.collections.standards);
 
+export const getStandardsFromProps = (_, { standards }) => standards;
+
 export const getStandardsByIds = view(lenses.collections.standardsByIds);
 
 export const getStandardsFiltered = view(lenses.standards.standardsFiltered);

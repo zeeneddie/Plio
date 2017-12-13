@@ -8,7 +8,10 @@ import {
   openStandardByFilter,
   getSelectedAndDefaultStandardByFilter,
 } from '../../helpers';
-import { getStandardTypeListData } from '../../../../../client/store/selectors/standards';
+import {
+  getTypesWithUncategorized,
+  getSelectedStandardIsDeleted,
+} from '../../../../../client/store/selectors/standards';
 
 const openType = props => setTimeout(() => {
   const urlItemId = getState('global.urlItemId');
@@ -39,8 +42,13 @@ const openType = props => setTimeout(() => {
   });
 }, 0);
 
+const mapStateToProps = (state, props) => ({
+  types: getTypesWithUncategorized(state, props),
+  isSelectedStandardDeleted: getSelectedStandardIsDeleted(state),
+});
+
 export default compose(
-  connect(getStandardTypeListData),
+  connect(mapStateToProps),
   lifecycle({
     componentWillMount() {
       openType(this.props);

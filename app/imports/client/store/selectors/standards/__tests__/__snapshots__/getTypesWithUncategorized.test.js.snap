@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`getStandardSectionList matches snapshot 1`] = `
+exports[`getTypesWithUncategorized matches snapshot 1`] = `
 Array [
   Object {
-    "_id": 8,
+    "_id": 9,
     "standards": Array [
       Object {
         "_id": 1,
@@ -32,7 +32,7 @@ Array [
     ],
   },
   Object {
-    "_id": "StandardBookSections.Uncategorized",
+    "_id": "StandardTypes.Uncategorized",
     "organizationId": undefined,
     "standards": Array [
       Object {

@@ -2,7 +2,7 @@ import getSectionsWithUncategorized from '../getSectionsWithUncategorized';
 import { getInitialState } from '../../../util/tests';
 
 
-describe('getStandardSectionList', () => {
+describe('getSectionsWithUncategorized', () => {
   it('matches snapshot', () => {
     const state = getInitialState({});
     const props = {
