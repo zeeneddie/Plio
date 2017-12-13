@@ -1,6 +1,22 @@
 import { connect } from 'react-redux';
 
 import StandardList from '../../components/StandardList';
-import { getStandardListData } from '../../../../../client/store/selectors/standards';
+import {
+  getOrganization,
+  getOrgSerialNumber,
+} from '../../../../../client/store/selectors/organizations';
+import {
+  getUserId,
+  getFilter,
+  getUrlItemId,
+} from '../../../../../client/store/selectors/global';
 
-export default connect(getStandardListData)(StandardList);
+const mapStateToProps = state => ({
+  organization: getOrganization(state),
+  orgSerialNumber: getOrgSerialNumber(state),
+  userId: getUserId(state),
+  filter: getFilter(state),
+  urlItemId: getUrlItemId(state),
+});
+
+export default connect(mapStateToProps)(StandardList);

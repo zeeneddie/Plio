@@ -12,5 +12,4 @@ export {
   default as getSectionsWithUncategorized,
   makeGetSectionsWithUncategorized,
 } from './getSectionsWithUncategorized';
-export { default as getStandardListData } from './getStandardListData';
 export { default as getTypesWithUncategorized } from './getTypesWithUncategorized';
