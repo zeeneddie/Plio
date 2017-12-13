@@ -8,6 +8,17 @@ export default mergeDeepRight({
   },
   organizations: {
     organizationId: 7,
+    orgSerialNumber: 1,
+    organization: {
+      _id: 7,
+      serialNumber: 1,
+      users: [
+        {
+          userId: 6,
+          role: UserMembership.ORG_OWNER,
+        },
+      ],
+    },
   },
   discussion: {
     isDiscussionOpened: false,
@@ -73,6 +84,7 @@ export default mergeDeepRight({
     organizations: [
       {
         _id: 7,
+        serialNumber: 1,
         users: [
           {
             userId: 6,
@@ -84,6 +96,7 @@ export default mergeDeepRight({
     organizationsByIds: {
       7: {
         _id: 7,
+        serialNumber: 1,
         users: [
           {
             userId: 6,
@@ -111,6 +124,6 @@ export default mergeDeepRight({
     isCardReady: true,
     isFullScreenMode: false,
     urlItemId: 1,
-    userId: 1,
+    userId: 6,
   },
 });

@@ -7,6 +7,6 @@ Object {
   "isDiscussionOpened": false,
   "isFullScreenMode": false,
   "organizationId": 7,
-  "userId": 1,
+  "userId": 6,
 }
 `;

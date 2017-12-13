@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getStandardListData matches snapshot 1`] = `
+Object {
+  "filter": 1,
+  "orgSerialNumber": 1,
+  "organization": Object {
+    "_id": 7,
+    "serialNumber": 1,
+    "users": Array [
+      Object {
+        "role": "owner",
+        "userId": 6,
+      },
+    ],
+  },
+  "urlItemId": 1,
+  "userId": 6,
+}
+`;

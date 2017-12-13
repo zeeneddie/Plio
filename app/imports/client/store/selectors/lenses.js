@@ -12,6 +12,8 @@ const urlItemId = lensProp('urlItemId');
 const userId = lensProp('userId');
 const organizations = lensProp('organizations');
 const organizationId = lensProp('organizationId');
+const organization = lensProp('organization');
+const orgSerialNumber = lensProp('orgSerialNumber');
 const dataImport = lensProp('dataImport');
 const isModalOpened = lensProp('isModalOpened');
 const deletedAt = lensProp('deletedAt');
@@ -47,6 +49,8 @@ const globalIsFullScreenMode = compose(_global, isFullScreenMode);
 const globalIsCardReady = compose(_global, isCardReady);
 
 const organizationsOrganizationId = compose(organizations, organizationId);
+const organizationsOrganization = compose(organizations, organization);
+const organizationsOrgSerialNumber = compose(organizations, orgSerialNumber);
 
 const dataImportIsModalOpened = compose(dataImport, isModalOpened);
 
@@ -91,6 +95,8 @@ export default {
   }),
   organizations: Object.assign(organizations, {
     organizationId: organizationsOrganizationId,
+    organization: organizationsOrganization,
+    orgSerialNumber: organizationsOrgSerialNumber,
   }),
   dataImport: Object.assign(dataImport, {
     isModalOpened: dataImportIsModalOpened,

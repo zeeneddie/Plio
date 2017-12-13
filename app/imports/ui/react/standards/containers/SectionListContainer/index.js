@@ -2,7 +2,6 @@ import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
 import {
-  pickDeep,
   propEqType,
 } from '/imports/api/helpers';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
