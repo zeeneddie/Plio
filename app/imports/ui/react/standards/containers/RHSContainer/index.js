@@ -14,10 +14,8 @@ import {
 
 import StandardsRHS from '../../components/RHS';
 import { getRHS } from '../../../../../client/store/selectors/standards';
-import lenses from '../../../../../client/store/selectors/lenses';
+import { lenses, getStandardsLength } from '../../../../../client/util';
 
-// ({ standards: Array }) => Boolean
-const getStandardsLength = compose(length, view(lenses.standards));
 // ({ searchText: String, standardsFiltered: Array }) => Boolean
 const noResultsPred = allPass([
   view(lenses.searchText),

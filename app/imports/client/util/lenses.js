@@ -28,6 +28,7 @@ const isDiscussionOpened = lensProp('isDiscussionOpened');
 const standardBookSectionsByIds = lensProp('standardBookSectionsByIds');
 const standardBookSections = lensProp('standardBookSections');
 const standardTypesByIds = lensProp('standardTypesByIds');
+const standardTypes = lensProp('standardTypes');
 const usersByIds = lensProp('usersByIds');
 const isDeleted = lensProp('isDeleted');
 
@@ -37,6 +38,7 @@ const collectionsStandardBookSections = compose(collections, standardBookSection
 const collectionsStandardBookSectionsByIds = compose(collections, standardBookSectionsByIds);
 const collectionsStandardTypesByIds = compose(collections, standardTypesByIds);
 const collectionsUsersByIds = compose(collections, usersByIds);
+const collectionsStandardTypes = compose(collections, standardTypes);
 
 const standardsStandardsFiltered = compose(standards, standardsFiltered);
 
@@ -78,6 +80,7 @@ export default {
     standardsByIds: collectionsStandardsByIds,
     standardBookSections: collectionsStandardBookSections,
     standardBookSectionsByIds: collectionsStandardBookSectionsByIds,
+    standardTypes: collectionsStandardTypes,
     standardTypesByIds: collectionsStandardTypesByIds,
     usersByIds: collectionsUsersByIds,
   }),

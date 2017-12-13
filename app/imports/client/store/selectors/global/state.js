@@ -1,5 +1,5 @@
 import { view } from 'ramda';
-import lenses from '../lenses';
+import { lenses } from '../../../../client/util';
 
 export const getSearchText = view(lenses.global.searchText);
 

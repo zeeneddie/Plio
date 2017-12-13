@@ -14,11 +14,7 @@ import {
   getSelectedStandardDeletedState,
   createUncategorizedType,
 } from '../../helpers';
-
-const mapStateToProps = state => ({
-  standardTypes: state.collections.standardTypes,
-  ...getSelectedStandardDeletedState(state),
-});
+import { getStandardTypeListData } from '../../../../../client/store/selectors/standards';
 
 const openType = props => setTimeout(() => {
   const urlItemId = getState('global.urlItemId');
@@ -50,24 +46,7 @@ const openType = props => setTimeout(() => {
 }, 0);
 
 export default compose(
-  connect(mapStateToProps),
-  mapProps(({ standardTypes, standards, ...props }) => {
-    let types = standardTypes;
-    const uncategorized = createUncategorizedType({ types, standards });
-
-    // add own standards to each type
-    types = types.map(type => ({
-      ...type,
-      standards: standards.filter(propEq('typeId', type._id)),
-    }));
-
-    // add uncategorized type
-    types = types.concat(uncategorized);
-
-    types = types.filter(lengthStandards);
-
-    return { ...props, types };
-  }),
+  connect(getStandardTypeListData),
   lifecycle({
     componentWillMount() {
       openType(this.props);

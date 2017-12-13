@@ -1,32 +1,14 @@
 import { createSelector } from 'reselect';
-import { compose, filter, map, set, concat, propEq, view, length } from 'ramda';
+import { compose } from 'ramda';
 
 import { getStandardBookSections } from '../standardBookSections';
 import { getSelectedStandardIsDeleted } from './state';
 import getSearchInfo from './getSearchInfo';
 import { createUncategorizedSection } from '../../../../ui/react/standards/helpers';
-import lenses from '../lenses';
 import sortByTitlePrefix from '../../../../api/helpers/sortByTitlePrefix';
+import { withUncategorized } from './util';
 
 const getStandards = (_, { standards }) => standards;
-
-// ({ standards: Array }) => Number | Any
-const getStandardsLength = compose(length, view(lenses.standards));
-
-// (standards: Array) => (section: Object) => Object
-const setFilteredBySectionStandards = standards => section => set(
-  lenses.standards,
-  filter(propEq('sectionId', section._id), standards),
-  section,
-);
-
-// getSections(standards: Array, uncategorizedSections: Array, sections: Array) => Array
-const getSections = (standards, uncategorizedSections, sections) => compose(
-  sortByTitlePrefix,
-  filter(getStandardsLength),
-  concat(uncategorizedSections),
-  map(setFilteredBySectionStandards(standards)),
-)(sections);
 
 /*
 selector(
@@ -42,7 +24,10 @@ const selector = (standards, standardBookSections, isSelectedStandardDeleted, se
     standards,
     sections: standardBookSections,
   });
-  const sections = getSections(standards, [uncategorized], standardBookSections);
+  const sections = compose(
+    sortByTitlePrefix,
+    withUncategorized,
+  )('sectionId', uncategorized, standards, standardBookSections);
 
   return {
     sections,

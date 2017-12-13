@@ -14,12 +14,12 @@ import { Actions } from '../../share/collections/actions';
 import { NonConformities } from '../../share/collections/non-conformities';
 import { Risks } from '../../share/collections/risks';
 
+export { compose } from 'ramda';
 export { default as sortArrayByTitlePrefix } from './sortByTitlePrefix';
 export { default as getTitlePrefix } from './getTitlePrefix';
 export { default as getSearchMatchText } from './getSearchMatchText';
 export { default as pickDocuments } from './pickDocuments';
 export { default as pickDeep } from './pickDeep';
-export { compose } from 'ramda';
 
 export const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
 

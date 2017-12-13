@@ -3,7 +3,7 @@ import { ifElse, equals, sortBy, descend, compose, nthArg, view } from 'ramda';
 
 import getSearchedStandards from './getSearchedStandards';
 import getIsDeletedFilter from './getIsDeletedFilter';
-import lenses from '../lenses';
+import { lenses } from '../../../../client/util';
 import sortByTitlePrefix from '../../../../api/helpers/sortByTitlePrefix';
 
 const byDeleted = descend(view(lenses.deletedAt));

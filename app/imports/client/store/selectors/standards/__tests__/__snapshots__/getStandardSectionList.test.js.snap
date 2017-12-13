@@ -6,16 +6,6 @@ Object {
   "searchText": "",
   "sections": Array [
     Object {
-      "_id": "StandardBookSections.Uncategorized",
-      "organizationId": undefined,
-      "standards": Array [
-        Object {
-          "_id": 5,
-        },
-      ],
-      "title": "Uncategorized",
-    },
-    Object {
       "_id": 8,
       "standards": Array [
         Object {
@@ -43,6 +33,16 @@ Object {
           "typeId": 9,
         },
       ],
+    },
+    Object {
+      "_id": "StandardBookSections.Uncategorized",
+      "organizationId": undefined,
+      "standards": Array [
+        Object {
+          "_id": 5,
+        },
+      ],
+      "title": "Uncategorized",
     },
   ],
   "standardBookSections": Array [

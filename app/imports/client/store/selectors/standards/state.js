@@ -1,5 +1,5 @@
 import { view, compose } from 'ramda';
-import lenses from '../lenses';
+import { lenses } from '../../../../client/util';
 
 export const getStandards = view(lenses.collections.standards);
 

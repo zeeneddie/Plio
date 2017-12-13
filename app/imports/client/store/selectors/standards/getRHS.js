@@ -4,7 +4,7 @@ import { anyPass, view } from 'ramda';
 import { getIsFullScreenMode, getIsCardReady, getUrlItemId, getSearchText } from '../global';
 import { getStandardsByIds, getStandardsFiltered } from './state';
 import getFilteredStandards from './getFilteredStandards';
-import lenses from '../lenses';
+import { lenses } from '../../../../client/util';
 
 /*
   selector(
