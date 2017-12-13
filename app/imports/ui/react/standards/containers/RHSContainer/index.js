@@ -10,11 +10,23 @@ import {
   allPass,
   complement,
   identity,
+  anyPass,
 } from 'ramda';
 
 import StandardsRHS from '../../components/RHS';
-import { getRHS } from '../../../../../client/store/selectors/standards';
 import { lenses, getStandardsLength } from '../../../../../client/util';
+import {
+  getIsFullScreenMode,
+  getIsCardReady,
+  getUrlItemId,
+  getSearchText,
+} from '../../../../../client/store/selectors/global';
+import {
+  getStandardsByIds,
+  getStandardsFiltered,
+  getFilteredStandards,
+  getSelectedStandard,
+} from '../../../../../client/store/selectors/standards';
 
 // ({ searchText: String, standardsFiltered: Array }) => Boolean
 const noResultsPred = allPass([
@@ -28,8 +40,32 @@ const notExistPred = allPass([
   complement(view)(lenses.standard),
 ]);
 
+const mapStateToProps = (state) => {
+  const standard = getSelectedStandard(state);
+  const isCardReady = getIsCardReady(state);
+  const standards = getFilteredStandards(state);
+  const isReady = !!(isCardReady && standards.length && standard);
+  const hasDocxAttachment = anyPass([
+    view(lenses.source1.htmlUrl),
+    view(lenses.source2.htmlUrl),
+  ])(standard);
+
+  return {
+    standard,
+    isReady,
+    hasDocxAttachment,
+    standards,
+    isCardReady,
+    standardsByIds: getStandardsByIds(state),
+    standardsFiltered: getStandardsFiltered(state),
+    urlItemId: getUrlItemId(state),
+    isFullScreenMode: getIsFullScreenMode(state),
+    searchText: getSearchText(state),
+  };
+};
+
 export default compose(
-  connect(getRHS),
+  connect(mapStateToProps),
   branch(
     getStandardsLength,
     identity,
