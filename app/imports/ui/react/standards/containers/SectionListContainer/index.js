@@ -14,7 +14,12 @@ import {
   getStandardsByFilter,
 } from '../../helpers';
 import { CollectionNames } from '../../../../../share/constants';
-import { getStandardSectionList } from '../../../../../client/store/selectors/standards';
+import {
+  makeGetSectionsWithUncategorized,
+  getStandardsFiltered,
+  getSelectedStandardIsDeleted,
+} from '../../../../../client/store/selectors/standards';
+import { getSearchText } from '../../../../../client/store/selectors/global';
 
 const redirectAndOpen = props => setTimeout(() => {
   const { urlItemId, filter, collapsed } = getState('global');
@@ -86,8 +91,19 @@ const redirectAndOpen = props => setTimeout(() => {
   }
 }, 0);
 
+const makeMapStateToProps = () => {
+  const getSectionsWithUncategorized = makeGetSectionsWithUncategorized();
+  const mapStateToProps = (state, props) => ({
+    sections: getSectionsWithUncategorized(state, props),
+    searchText: getSearchText(state),
+    isSelectedStandardDeleted: getSelectedStandardIsDeleted(state),
+    standardsFiltered: getStandardsFiltered(state),
+  });
+  return mapStateToProps;
+};
+
 export default compose(
-  connect(getStandardSectionList),
+  connect(makeMapStateToProps),
   lifecycle({
     componentWillMount() {
       redirectAndOpen(this.props);

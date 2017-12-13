@@ -1,4 +1,4 @@
-import getStandardSectionList from '../getStandardSectionList';
+import getSectionsWithUncategorized from '../getSectionsWithUncategorized';
 import { getInitialState } from '../../../util/tests';
 
 
@@ -9,6 +9,6 @@ describe('getStandardSectionList', () => {
       standards: state.collections.standards,
     };
 
-    expect(getStandardSectionList(state, props)).toMatchSnapshot();
+    expect(getSectionsWithUncategorized(state, props)).toMatchSnapshot();
   });
 });

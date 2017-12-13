@@ -63,7 +63,9 @@ export const createUncategorizedType = ({ standards, types }) => ({
   _id: TYPE_UNCATEGORIZED,
   title: 'Uncategorized',
   organizationId: getC('organizationId', standards[0]),
-  standards: standards.filter(standard => !types.find(propEqId(standard.typeId))),
+  standards: standards.filter(standard =>
+    !types.find(type =>
+      type._id === standard.typeId)),
 });
 
 export const getSelectedAndDefaultStandardByFilter = ({

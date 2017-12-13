@@ -1,4 +1,4 @@
-import { set, filter, propEq, append, compose, map } from 'ramda';
+import { set, filter, propEq, append, compose, map, curry } from 'ramda';
 import { lenses, getStandardsLength } from '../../../../util';
 
 // (prop: String, standards: Array) => (item: Object) => Object
@@ -9,8 +9,8 @@ export const setFilteredStandards = (prop, standards) => item => set(
 );
 
 // (prop: String, uncategorized: Object, standards: Array, items: Array) => Array
-export default (prop, uncategorized, standards, items) => compose(
+export default curry((prop, uncategorized, standards, items) => compose(
   filter(getStandardsLength),
   append(uncategorized),
   map(setFilteredStandards(prop, standards)),
-)(items);
+)(items));

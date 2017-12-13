@@ -1,12 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`getStandardSectionList matches snapshot 1`] = `
+exports[`getStandardTypeListData matches snapshot 1`] = `
 Object {
   "isSelectedStandardDeleted": undefined,
-  "searchText": "",
-  "sections": Array [
+  "standardTypes": Array [
     Object {
-      "_id": 8,
+      "_id": 9,
+    },
+  ],
+  "types": Array [
+    Object {
+      "_id": 9,
       "standards": Array [
         Object {
           "_id": 1,
@@ -35,7 +39,7 @@ Object {
       ],
     },
     Object {
-      "_id": "StandardBookSections.Uncategorized",
+      "_id": "StandardTypes.Uncategorized",
       "organizationId": undefined,
       "standards": Array [
         Object {
@@ -45,11 +49,5 @@ Object {
       "title": "Uncategorized",
     },
   ],
-  "standardBookSections": Array [
-    Object {
-      "_id": 8,
-    },
-  ],
-  "standardsFiltered": Array [],
 }
 `;

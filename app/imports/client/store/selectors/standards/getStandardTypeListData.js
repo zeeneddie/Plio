@@ -12,7 +12,7 @@ selector(
   standards: Array,
   standardTypes: Array,
   isSelectedStandardDeleted: Boolean
-)
+) => Object
 */
 const selector = (standards, standardTypes, isSelectedStandardDeleted) => {
   const uncategorized = createUncategorizedType({ standards, types: standardTypes });

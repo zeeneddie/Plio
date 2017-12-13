@@ -1,18 +1,12 @@
-import { compose, lifecycle, mapProps } from 'recompose';
+import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
 import TypeList from '../../components/TypeList';
-import {
-  lengthStandards,
-  propEq,
-} from '/imports/api/helpers';
-import { getState } from '/imports/client/store';
-import { STANDARD_FILTER_MAP } from '/imports/api/constants';
+import { getState } from '../../../../../client/store';
+import { STANDARD_FILTER_MAP } from '../../../../../api/constants';
 import {
   openStandardByFilter,
   getSelectedAndDefaultStandardByFilter,
-  getSelectedStandardDeletedState,
-  createUncategorizedType,
 } from '../../helpers';
 import { getStandardTypeListData } from '../../../../../client/store/selectors/standards';
 
