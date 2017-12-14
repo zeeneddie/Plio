@@ -56,12 +56,13 @@ const standardTypes = [{ _id: 9 }];
 const standardTypesByIds = normalize(standardTypes);
 
 const risks = [
-  { _id: 10 },
-  { _id: 11 },
+  { _id: 10, typeId: 15 },
+  { _id: 11, typeId: 15 },
   {
     _id: 12,
     isDeleted: true,
     deletedAt: 1513074233019,
+    typeId: 15,
   },
   {
     _id: 13,
@@ -71,6 +72,8 @@ const risks = [
   { _id: 14 },
 ];
 const risksByIds = normalize(risks);
+const riskTypes = [{ _id: 15 }];
+const riskTypesByIds = normalize(riskTypes);
 
 export default mergeDeepRight({
   standards: {
@@ -103,6 +106,8 @@ export default mergeDeepRight({
     standardTypesByIds,
     risks,
     risksByIds,
+    riskTypes,
+    riskTypesByIds,
   },
   global: {
     filter: 1,

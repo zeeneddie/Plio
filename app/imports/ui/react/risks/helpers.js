@@ -2,12 +2,11 @@ import { _ } from 'meteor/underscore';
 import property from 'lodash.property';
 
 import { TYPE_UNCATEGORIZED, RISK_STATUSES } from './constants';
-import { CollectionNames } from '/imports/share/constants';
-import { RiskFilterIndexes, DEPARTMENT_UNCATEGORIZED } from '/imports/api/constants';
+import { CollectionNames } from '../../../share/constants';
+import { RiskFilterIndexes, DEPARTMENT_UNCATEGORIZED } from '../../../api/constants';
 import {
   compose,
   find,
-  propEqId,
   propId,
   propEq,
   getC,
@@ -23,14 +22,14 @@ import {
   not,
   propEqKey,
   length,
-} from '/imports/api/helpers';
+} from '../../../api/helpers';
 import {
   addCollapsed,
   chainActions,
   addCollapsedWithClose,
-} from '/imports/client/store/actions/globalActions';
+} from '../../../client/store/actions/globalActions';
 import { goTo } from '../../utils/router/actions';
-import store, { getState } from '/imports/client/store';
+import store, { getState } from '../../../client/store';
 import {
   createTypeItem,
   getListData,

@@ -1,4 +1,4 @@
-import { ProblemsStatuses } from '/imports/share/constants';
+import { ProblemsStatuses } from '../../../share/constants';
 
 export const problemsStatuses = Object.keys(ProblemsStatuses).map(status => ({
   value: parseInt(status, 10),

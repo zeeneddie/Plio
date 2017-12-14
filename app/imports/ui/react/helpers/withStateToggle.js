@@ -1,7 +1,7 @@
 import { compose, withState, withHandlers } from 'recompose';
+import { not } from 'ramda';
 
-import { not } from '/imports/api/helpers';
-import { capitalize } from '/imports/share/helpers';
+import { capitalize } from '../../../share/helpers';
 
 export default (initialValue, prop, handle) => {
   const setProp = `set${capitalize(prop)}`;
