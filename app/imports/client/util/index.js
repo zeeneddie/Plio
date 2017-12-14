@@ -1,2 +1,4 @@
-export * from './length';
 export { default as lenses } from './lenses';
+export * from './length';
+export * from './object-relation';
+export * from './filter';

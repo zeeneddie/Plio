@@ -42,6 +42,7 @@ const mobile = lensProp('mobile');
 const showCard = lensProp('showCard');
 const risks = lensProp('risks');
 const risksByIds = lensProp('risksByIds');
+const risksFiltered = lensProp('risksFiltered');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
@@ -84,6 +85,7 @@ const mobileShowCard = compose(mobile, showCard);
 
 const risksInitializing = compose(risks, initializing);
 const risksAreDepsReady = compose(risks, areDepsReady);
+const risksRisksFiltered = compose(risks, risksFiltered);
 
 export default {
   deletedAt,
@@ -152,5 +154,6 @@ export default {
   risks: Object.assign(risks, {
     initializing: risksInitializing,
     areDepsReady: risksAreDepsReady,
+    risksFiltered: risksRisksFiltered,
   }),
 };

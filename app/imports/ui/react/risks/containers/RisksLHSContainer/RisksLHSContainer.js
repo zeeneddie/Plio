@@ -13,26 +13,24 @@ import {
   sortArrayByTitlePrefix,
   pickC,
   getSearchMatchText,
-} from '/imports/api/helpers';
-import { onToggleCollapse } from '/imports/ui/react/share/LHS/handlers';
-import { RiskFilterIndexes } from '/imports/api/constants';
+} from '../../../../../api/helpers';
+import { onToggleCollapse } from '../../../share/LHS/handlers';
+import { RiskFilterIndexes } from '../../../../../api/constants';
+import { getRisksFiltered, getRisks } from '../../../../../client/store/selectors/risks';
+import {
+  getFilter,
+  getSearchText,
+  getAnimating,
+  getUrlItemId,
+} from '../../../../../client/store/selectors/global';
 
-const mapStateToProps = ({
-  risks: { risksFiltered },
-  collections: { risks },
-  global: {
-    searchText,
-    filter,
-    animating,
-    urlItemId,
-  },
-}) => ({
-  risksFiltered,
-  searchText,
-  filter,
-  animating,
-  urlItemId,
-  risks,
+const mapStateToProps = state => ({
+  risksFiltered: getRisksFiltered(state),
+  risks: getRisks(state),
+  searchText: getSearchText(state),
+  filter: getFilter(state),
+  animating: getAnimating(state),
+  urlItemId: getUrlItemId(state),
 });
 
 export default compose(

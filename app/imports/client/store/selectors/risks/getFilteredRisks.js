@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
-import { getStandards } from './state';
+import { getRisks } from './state';
 import getIsDeletedFilter from './getIsDeletedFilter';
 import { filterByDeleted } from '../../../util';
 
-export default createSelector([getIsDeletedFilter, getStandards], filterByDeleted);
+export default createSelector([getIsDeletedFilter, getRisks], filterByDeleted);
