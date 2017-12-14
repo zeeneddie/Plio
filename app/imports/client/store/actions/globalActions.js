@@ -1,7 +1,7 @@
 import { _ } from 'meteor/underscore';
 import curry from 'lodash.curry';
 
-import { equals, assoc, compose } from '/imports/api/helpers';
+import { equals, assoc, compose } from '../../../api/helpers';
 import {
   SET_USER_ID,
   SET_FILTER,

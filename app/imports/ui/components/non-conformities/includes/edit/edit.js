@@ -6,7 +6,7 @@ import {
   update,
   remove,
 } from '/imports/api/non-conformities/methods';
-import { getTzTargetDate } from '/imports/share/helpers.js';
+import { getTzTargetDate } from '/imports/share/helpers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.NC_Card_Edit.viewmodel({

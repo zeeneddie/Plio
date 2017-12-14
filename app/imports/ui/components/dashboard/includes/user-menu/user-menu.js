@@ -3,8 +3,8 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
-import { isMobileRes } from '/imports/api/checkers.js';
-import { flattenObjects } from '/imports/api/helpers.js';
+import { isMobileRes } from '/imports/api/checkers';
+import { flattenObjects } from '/imports/api/helpers';
 import { MyPreferencesHelp } from '/imports/api/help-messages.js';
 import { userLogout } from '/imports/client/store/actions/globalActions';
 

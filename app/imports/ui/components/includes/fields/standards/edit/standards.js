@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
+import { sortArrayByTitlePrefix } from '/imports/api/helpers';
 
 
 Template.Fields_Standards_Edit.viewmodel({

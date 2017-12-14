@@ -4,7 +4,7 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import cx from 'classnames';
 
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
-import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
+import { sortArrayByTitlePrefix } from '/imports/api/helpers';
 
 Template.ESType.viewmodel({
   share: 'standard',

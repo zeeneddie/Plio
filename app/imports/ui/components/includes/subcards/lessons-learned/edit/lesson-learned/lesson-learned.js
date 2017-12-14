@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 
 import { updateViewedBy } from '/imports/api/lessons/methods.js';
-import { isViewed } from '/imports/api/checkers.js';
+import { isViewed } from '/imports/api/checkers';
 
 Template.Subcards_LessonLearned.viewmodel({
   mixin: ['search', 'user', 'members'],

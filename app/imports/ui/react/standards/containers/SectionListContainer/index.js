@@ -1,25 +1,25 @@
-import { compose, lifecycle, mapProps } from 'recompose';
+import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
 import {
-  propEq,
-  lengthStandards,
-  sortArrayByTitlePrefix,
-  pickDeep,
   propEqType,
 } from '/imports/api/helpers';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import SectionList from '../../components/SectionList';
-import { getState } from '/imports/client/store';
+import { getState } from '../../../../../client/store';
 import {
   getSelectedAndDefaultStandardByFilter,
   redirectToStandardOrDefault,
   openStandardByFilter,
-  getSelectedStandardDeletedState,
-  createUncategorizedSection,
   getStandardsByFilter,
 } from '../../helpers';
-import { CollectionNames } from '/imports/share/constants';
+import { CollectionNames } from '../../../../../share/constants';
+import {
+  makeGetSectionsWithUncategorized,
+  getStandardsFiltered,
+  getSelectedStandardIsDeleted,
+} from '../../../../../client/store/selectors/standards';
+import { getSearchText } from '../../../../../client/store/selectors/global';
 
 const redirectAndOpen = props => setTimeout(() => {
   const { urlItemId, filter, collapsed } = getState('global');
@@ -91,33 +91,19 @@ const redirectAndOpen = props => setTimeout(() => {
   }
 }, 0);
 
-const mapStateToProps = state => ({
-  standardBookSections: state.collections.standardBookSections,
-  ...getSelectedStandardDeletedState(state),
-});
+const makeMapStateToProps = () => {
+  const getSectionsWithUncategorized = makeGetSectionsWithUncategorized();
+  const mapStateToProps = (state, props) => ({
+    sections: getSectionsWithUncategorized(state, props),
+    searchText: getSearchText(state),
+    isSelectedStandardDeleted: getSelectedStandardIsDeleted(state),
+    standardsFiltered: getStandardsFiltered(state),
+  });
+  return mapStateToProps;
+};
 
 export default compose(
-  connect(mapStateToProps),
-  mapProps(({ standardBookSections, standards, ...props }) => {
-    let sections = standardBookSections;
-    const uncategorized = createUncategorizedSection({ standards, sections });
-
-    // add own standards to each section
-    sections = sections.map(section => ({
-      ...section,
-      standards: standards.filter(propEq('sectionId', section._id)),
-    }));
-
-    // add uncategorized section
-    sections = sections.concat(uncategorized);
-
-    sections = sections.filter(lengthStandards);
-
-    sections = sortArrayByTitlePrefix(sections);
-
-    return { ...props, sections };
-  }),
-  connect(pickDeep(['global.searchText', 'standards.standardsFiltered'])),
+  connect(makeMapStateToProps),
   lifecycle({
     componentWillMount() {
       redirectAndOpen(this.props);

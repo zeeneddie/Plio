@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { sendVerificationEmail } from '../../api/users/methods.js';
-import { handleMethodResult } from '../../api/helpers.js';
+import { handleMethodResult } from '../../api/helpers';
 
 Template.UserAccountWaitingPage.viewmodel({
   isSendingEmail: false,

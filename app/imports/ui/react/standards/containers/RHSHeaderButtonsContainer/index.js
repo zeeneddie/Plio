@@ -2,47 +2,53 @@ import { compose, mapProps, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 
 import { getPath } from '../../../../utils/router/paths';
-import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
-import { pickDeep } from '/imports/api/helpers';
 import {
   onToggleScreenMode,
-  onDiscussionOpen,
   onModalOpen,
   onRestore,
   onDelete,
 } from './handlers';
 import HeaderButtons from '../../components/RHS/HeaderButtons';
+import { getIsFullScreenMode, getUserId } from '../../../../../client/store/selectors/global';
+import { getOrganizationId } from '../../../../../client/store/selectors/organizations';
+import { getIsDiscussionOpened } from '../../../../../client/store/selectors/discussion';
+import { canChangeStandards } from '../../../../../api/checkers/roles';
+import { isOrgOwner } from '../../../../../api/checkers/membership';
+
+const mapStateToProps = (state) => {
+  const userId = getUserId(state);
+  const organizationId = getOrganizationId(state);
+  const hasAccess = canChangeStandards(userId, organizationId);
+  const hasFullAccess = isOrgOwner(userId, organizationId);
+
+  return {
+    userId,
+    organizationId,
+    hasAccess,
+    hasFullAccess,
+    isFullScreenMode: getIsFullScreenMode(state),
+    isDiscussionOpened: getIsDiscussionOpened(state),
+  };
+};
 
 export default compose(
-  connect(pickDeep([
-    'global.isFullScreenMode',
-    'global.userId',
-    'organizations.organizationId',
-    'discussion.isDiscussionOpened',
-  ])),
-
+  connect(mapStateToProps),
   mapProps(({
-    standard: { _id, title, isDeleted = false }, organizationId, userId, ...props
+    standard: { _id, title, isDeleted = false },
+    ...props
   }) => {
-    const hasAccess = canChangeStandards(userId, organizationId);
-    const hasFullAccess = isOrgOwner(userId, organizationId);
     const pathToDiscussion = getPath('standardDiscussion')({ urlItemId: _id });
 
     return {
       ...props,
-      userId,
-      organizationId,
       _id,
       title,
-      hasAccess,
-      hasFullAccess,
-      pathToDiscussion,
       isDeleted,
+      pathToDiscussion,
     };
   }),
   withHandlers({
     onToggleScreenMode,
-    onDiscussionOpen,
     onModalOpen,
     onRestore,
     onDelete,

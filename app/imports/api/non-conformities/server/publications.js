@@ -7,7 +7,7 @@ import { Standards } from '/imports/share/collections/standards';
 import { Occurrences } from '/imports/share/collections/occurrences';
 import { Departments } from '/imports/share/collections/departments';
 import { Risks } from '/imports/share/collections/risks';
-import { isOrgMember } from '../../checkers.js';
+import { isOrgMember } from '../../checkers';
 import { ActionTypes } from '/imports/share/constants';
 import Counter from '../../counter/server.js';
 import {

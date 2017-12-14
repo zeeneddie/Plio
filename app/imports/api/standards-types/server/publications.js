@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
-import { isOrgMember } from '../../checkers.js';
+import { isOrgMember } from '../../checkers';
 
 
 Meteor.publish('standards-types', function (organizationId) {

@@ -26,7 +26,6 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.5.1",
     "jest": "^21.2.1",
-    "jest-meteor-stubs": "^1.5.1",
     "pre-commit": "^1.2.2"
   },
   "dependencies": {}

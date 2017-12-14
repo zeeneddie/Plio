@@ -8,13 +8,18 @@ import { _ } from 'meteor/underscore';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { shallowEqual } from 'recompose';
 import { $ } from 'meteor/jquery';
+import { compose } from 'ramda';
 
-import { Actions } from '/imports/share/collections/actions.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { getTitlePrefix } from '/imports/share/helpers';
+import { Actions } from '../../share/collections/actions';
+import { NonConformities } from '../../share/collections/non-conformities';
+import { Risks } from '../../share/collections/risks';
 
-export const { compose } = _;
+export { compose } from 'ramda';
+export { default as sortArrayByTitlePrefix } from './sortByTitlePrefix';
+export { default as getTitlePrefix } from './getTitlePrefix';
+export { default as getSearchMatchText } from './getSearchMatchText';
+export { default as pickDocuments } from './pickDocuments';
+export { default as pickDeep } from './pickDeep';
 
 export const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
 
@@ -181,12 +186,6 @@ export const transsoc = curry((transformations, obj) => {
 
 export const pickC = curry((keys, obj) => _.pick(Object.assign({}, obj), ...keys));
 
-// pickDeep(['a.b.c'])({ a: { b: { c: 123 }}}) => { c: 123 }
-export const pickDeep = curry((paths, obj) => Object.assign([], paths).reduce((acc, path) => ({
-  ...acc,
-  [path.replace(/.*\./g, '')]: get(obj, path),
-}), {}));
-
 export const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
 
 export const pickFromDiscussion = pickFrom('discussion');
@@ -292,28 +291,6 @@ export const reduceC = curry((reducer, initialValue, array) =>
 // slice (1, Infinity)([1, 2, 3, 4, 5]) => [2, 3, 4, 5]
 export const slice = curry((a, b, c) => c.slice(a, b));
 
-// pickDocuments(
-//   ['_id', 'profile.firstName'],
-//   [{ _id: 1, profile: { firstName: 'Alan', ... }, ... }, ...],
-//   1
-// );
-// => { _id: 1, firstName: 'Alan' }
-export const pickDocuments = curry((fields, collection, ids) => {
-  if (typeof ids !== 'string' && !Array.isArray(ids)) return ids;
-
-  if (typeof ids === 'string') return pickDeep(fields, collection[ids]);
-
-  const reducer = (prev, cur) => {
-    const doc = collection[cur];
-
-    if (doc) return prev.concat(pickDeep(fields, doc));
-
-    return prev;
-  };
-
-  return reduceC(reducer, [], ids);
-});
-
 export const combineObjects = fns => obj =>
   Object.assign([], fns).reduce((prev, cur) => ({ ...prev, ...cur(obj) }), {});
 
@@ -348,26 +325,6 @@ export const handleMethodResult = cb => (err, res) => {
 export const showError = (errorMsg) => {
   toastr.error(errorMsg);
 };
-
-// 1, 1.2, 3, 10.3, a, b, c
-export const sortArrayByTitlePrefix = arr => [...arr].sort((a, b) => {
-  const at = getTitlePrefix(`${a.titlePrefix}`.toLowerCase());
-  const bt = getTitlePrefix(`${b.titlePrefix}`.toLowerCase());
-
-  if (typeof at === 'number' && typeof bt !== 'number') {
-    return -1;
-  }
-  if (typeof bt === 'number' && typeof at !== 'number') {
-    return 1;
-  }
-  if (at < bt) {
-    return -1;
-  }
-  if (at > bt) {
-    return 1;
-  }
-  return at === bt ? 0 : -1;
-});
 
 export const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));
 
@@ -539,9 +496,6 @@ export const searchByRegex = curry((regex, transformOrArrayOfProps, array) =>
     return transformOrArrayOfProps.filter(prop =>
       typeof item[prop] === 'string' && item[prop].search(regex) >= 0).length;
   }));
-
-export const getSearchMatchText = (searchText, count) =>
-  (searchText && count ? `${count} matching results` : '');
 
 export const toDocId = transsoc({ documentId: propId });
 

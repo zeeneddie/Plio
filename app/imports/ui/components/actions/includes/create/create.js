@@ -5,8 +5,8 @@ import invoke from 'lodash.invoke';
 import { ActionPlanOptions } from '/imports/share/constants.js';
 import { insert } from '/imports/api/actions/methods';
 import { Actions } from '/imports/share/collections/actions.js';
-import { getTzTargetDate, getWorkflowDefaultStepDate } from '/imports/share/helpers.js';
-import { setModalError, inspire } from '/imports/api/helpers.js';
+import { getTzTargetDate, getWorkflowDefaultStepDate } from '/imports/share/helpers';
+import { setModalError, inspire } from '/imports/api/helpers';
 import { WorkItems } from '/imports/share/collections/work-items.js';
 
 Template.Actions_Create.viewmodel({

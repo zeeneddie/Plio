@@ -7,7 +7,7 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import invoke from 'lodash.invoke';
 
 import { NonConformityFilters } from '/imports/api/constants.js';
-import { isMobileRes } from '/imports/api/checkers.js';
+import { isMobileRes } from '/imports/api/checkers';
 import HeaderMenu from '/imports/ui/react/non-comformities/components/HeaderMenu';
 
 Template.NC_Header.viewmodel({

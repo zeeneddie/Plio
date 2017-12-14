@@ -9,7 +9,7 @@ import {
   getCollectionByDocType,
   getWorkflowDefaultStepDate,
   generateSerialNumber,
-} from '/imports/share/helpers.js';
+} from '/imports/share/helpers';
 
 export default {
   collection: Actions,

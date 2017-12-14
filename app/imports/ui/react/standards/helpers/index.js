@@ -2,8 +2,8 @@ import { _ } from 'meteor/underscore';
 import { withProps } from 'recompose';
 import curry from 'lodash.curry';
 
-import { CollectionNames } from '/imports/share/constants';
-import { STANDARD_FILTER_MAP } from '/imports/api/constants';
+import { CollectionNames } from '../../../../share/constants';
+import { STANDARD_FILTER_MAP } from '../../../../api/constants';
 import {
   compose,
   find,
@@ -16,12 +16,12 @@ import {
   notDeleted,
   getId,
   propEqKey,
-} from '/imports/api/helpers';
-import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
-import { goTo } from '../../utils/router/actions';
-import createTypeItem from '../helpers/createTypeItem';
-import store, { getState } from '/imports/client/store';
-import { SECTION_UNCATEGORIZED, TYPE_UNCATEGORIZED } from './constants';
+} from '../../../../api/helpers';
+import { addCollapsed, chainActions } from '../../../../client/store/actions/globalActions';
+import { goTo } from '../../../utils/router/actions';
+import createTypeItem from '../../helpers/createTypeItem';
+import store, { getState } from '../../../../client/store';
+import { SECTION_UNCATEGORIZED, TYPE_UNCATEGORIZED } from '../constants';
 
 export const getSubNestingClassName = ({ nestingLevel = 1 }) =>
   'sub'.repeat(parseInt(nestingLevel, 10) - 1);
@@ -39,6 +39,7 @@ export const findSelectedStandard = id =>
 export const findSelectedSection = id =>
   compose(find(findSelectedStandard(id)), propSections);
 
+// DELETE AFTER REFACTORING
 export const getStandardsByFilter = ({ filter, standards }) => (
   filter === STANDARD_FILTER_MAP.DELETED
     ? standards.filter(propEq('isDeleted', true))
@@ -53,14 +54,18 @@ export const createUncategorizedSection = ({ standards, sections }) => ({
   _id: SECTION_UNCATEGORIZED,
   title: 'Uncategorized',
   organizationId: getC('organizationId', standards[0]),
-  standards: standards.filter(standard => !sections.find(propEqId(standard.sectionId))),
+  standards: standards.filter(standard =>
+    !sections.find(section =>
+      section._id === standard.sectionId)),
 });
 
 export const createUncategorizedType = ({ standards, types }) => ({
   _id: TYPE_UNCATEGORIZED,
   title: 'Uncategorized',
   organizationId: getC('organizationId', standards[0]),
-  standards: standards.filter(standard => !types.find(propEqId(standard.typeId))),
+  standards: standards.filter(standard =>
+    !types.find(type =>
+      type._id === standard.typeId)),
 });
 
 export const getSelectedAndDefaultStandardByFilter = ({

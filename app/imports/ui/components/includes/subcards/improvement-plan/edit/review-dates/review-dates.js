@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 
-import { getTzTargetDate } from '/imports/share/helpers.js';
+import { getTzTargetDate } from '/imports/share/helpers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 

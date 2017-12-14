@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 
-import { isOrgOwner } from '/imports/api/checkers.js';
+import { isOrgOwner } from '/imports/api/checkers';
 
 
 Template.OrgSettings_OrgTransfer.viewmodel({

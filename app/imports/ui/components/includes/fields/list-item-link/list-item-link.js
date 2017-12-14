@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { isMobileRes } from '/imports/api/checkers.js';
+import { isMobileRes } from '/imports/api/checkers';
 
 Template.ListItemLink.viewmodel({
   share: 'window',

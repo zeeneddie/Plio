@@ -3,7 +3,7 @@ import { LoggedInMixin } from 'meteor/tunifight:loggedin-mixin';
 import curry from 'lodash.curry';
 
 import { UNAUTHORIZED } from './errors.js';
-import { checkDocAndMembershipAndMore } from './checkers.js';
+import { checkDocAndMembershipAndMore } from './checkers';
 
 export default class Method extends ValidatedMethod {
   constructor(props) {

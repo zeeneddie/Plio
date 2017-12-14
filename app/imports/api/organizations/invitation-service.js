@@ -6,7 +6,7 @@ import moment from 'moment-timezone';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { OrgMemberRoles, UserMembership } from '/imports/share/constants.js';
-import { getRandomAvatarUrl, generateUserInitials } from '/imports/share/helpers.js';
+import { getRandomAvatarUrl, generateUserInitials } from '/imports/share/helpers';
 
 import OrgNotificationsSender from './org-notifications-sender.js';
 import NotificationSender from '/imports/share/utils/NotificationSender';

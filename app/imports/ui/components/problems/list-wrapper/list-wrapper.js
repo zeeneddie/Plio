@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { ProblemsStatuses } from '/imports/share/constants.js';
-import { lengthItems, inspire } from '/imports/api/helpers.js';
+import { lengthItems, inspire } from '/imports/api/helpers';
 import { Departments } from '/imports/share/collections/departments.js';
 
 Template.Problems_ListWrapper.viewmodel({

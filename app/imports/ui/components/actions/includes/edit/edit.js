@@ -17,7 +17,7 @@ import {
   setVerificationDate,
   setVerificationExecutor,
 } from '/imports/api/actions/methods';
-import { getTzTargetDate } from '/imports/share/helpers.js';
+import { getTzTargetDate } from '/imports/share/helpers';
 
 Template.Actions_Edit.viewmodel({
   mixin: ['organization', 'workInbox', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
