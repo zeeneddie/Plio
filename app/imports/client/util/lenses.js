@@ -43,6 +43,7 @@ const showCard = lensProp('showCard');
 const risks = lensProp('risks');
 const risksByIds = lensProp('risksByIds');
 const risksFiltered = lensProp('risksFiltered');
+const sequentialId = lensProp('sequentialId');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
@@ -101,6 +102,7 @@ export default {
   dataLoading,
   areDepsReady,
   initializing,
+  sequentialId,
   source1: Object.assign(source1, {
     htmlUrl: source1HtmlUrl,
   }),

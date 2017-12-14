@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { ifElse, equals, sortBy, descend, compose, nthArg, view } from 'ramda';
+import { ifElse, equals, sort, descend, compose, nthArg, view } from 'ramda';
 
 import getSearchedStandards from './getSearchedStandards';
 import getIsDeletedFilter from './getIsDeletedFilter';
@@ -11,7 +11,7 @@ const byDeleted = descend(view(lenses.deletedAt));
 // selector(isDeletedFilter: Boolean, standards: Array) => Array
 const selector = ifElse(
   equals(true),
-  compose(sortBy(byDeleted), nthArg(1)),
+  compose(sort(byDeleted), nthArg(1)),
   compose(sortByTitlePrefix, nthArg(1)),
 );
 
