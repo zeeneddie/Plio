@@ -70,7 +70,7 @@ export const createUncategorizedType = ({ risks = [], types = [] }) => ({
   _id: TYPE_UNCATEGORIZED,
   title: 'Uncategorized',
   organizationId: getC('organizationId', risks[0]),
-  risks: risks.filter(risk => !find(propEqId(risk.typeId), types)),
+  risks: risks.filter(risk => !find(type => type._id === risk.typeId, types)),
 });
 
 export const createUncategorizedDepartment = ({ risks = [], departments = [] }) => ({

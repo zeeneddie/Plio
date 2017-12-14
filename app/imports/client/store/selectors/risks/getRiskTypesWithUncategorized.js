@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
-import { getStandardTypes } from '../standardTypes';
-import { createUncategorizedType } from '../../../../ui/react/standards/helpers';
+import { getRiskTypes } from '../riskTypes';
+import { createUncategorizedType } from '../../../../ui/react/risks/helpers';
 import { lenses, withUncategorized } from '../../../util';
 
 const getRisks = (_, { risks }) => risks;
@@ -17,5 +17,5 @@ const selector = (risks, types) => withUncategorized(
 
 export default createSelector([
   getRisks,
-  getStandardTypes,
+  getRiskTypes,
 ], selector);

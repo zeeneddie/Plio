@@ -46,6 +46,8 @@ const risksFiltered = lensProp('risksFiltered');
 const sequentialId = lensProp('sequentialId');
 const typeId = lensProp('typeId');
 const sectionId = lensProp('sectionId');
+const riskTypes = lensProp('riskTypes');
+const riskTypesByIds = lensProp('riskTypesByIds');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
@@ -56,6 +58,8 @@ const collectionsUsersByIds = compose(collections, usersByIds);
 const collectionsStandardTypes = compose(collections, standardTypes);
 const collectionsRisks = compose(collections, risks);
 const collectionsRisksByIds = compose(collections, risksByIds);
+const collectionsRiskTypes = compose(collections, riskTypes);
+const collectionsRiskTypesByIds = compose(collections, riskTypesByIds);
 
 const standardsStandardsFiltered = compose(standards, standardsFiltered);
 const standardsInitializing = compose(standards, initializing);
@@ -123,6 +127,8 @@ export default {
     usersByIds: collectionsUsersByIds,
     risks: collectionsRisks,
     risksByIds: collectionsRisksByIds,
+    riskTypes: collectionsRiskTypes,
+    riskTypesByIds: collectionsRiskTypesByIds,
   }),
   standards: Object.assign(standards, {
     standardsFiltered: standardsStandardsFiltered,
