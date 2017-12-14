@@ -54,7 +54,7 @@ const Body = ({
   originatorId,
   ownerId,
   magnitude,
-  type,
+  type = {},
   departments,
   scores,
   correctiveActions,

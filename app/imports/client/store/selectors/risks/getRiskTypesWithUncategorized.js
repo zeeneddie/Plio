@@ -3,18 +3,19 @@ import { createSelector } from 'reselect';
 import { getStandardTypes } from '../standardTypes';
 import { createUncategorizedType } from '../../../../ui/react/standards/helpers';
 import { lenses, withUncategorized } from '../../../util';
-import { getStandardsFromProps } from './state';
 
-// selector(standards: Array, types: Array) => Array
-const selector = (standards, types) => withUncategorized(
+const getRisks = (_, { risks }) => risks;
+
+// selector(risks: Array, types: Array) => Array
+const selector = (risks, types) => withUncategorized(
   lenses.typeId,
-  lenses.standards,
-  createUncategorizedType({ standards, types }),
-  standards,
+  lenses.risks,
+  createUncategorizedType({ risks, types }),
+  risks,
   types,
 );
 
 export default createSelector([
-  getStandardsFromProps,
+  getRisks,
   getStandardTypes,
 ], selector);
