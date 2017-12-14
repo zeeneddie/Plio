@@ -40,6 +40,8 @@ const _window = lensProp('window');
 const width = lensProp('width');
 const mobile = lensProp('mobile');
 const showCard = lensProp('showCard');
+const risks = lensProp('risks');
+const risksByIds = lensProp('risksByIds');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
@@ -48,6 +50,8 @@ const collectionsStandardBookSectionsByIds = compose(collections, standardBookSe
 const collectionsStandardTypesByIds = compose(collections, standardTypesByIds);
 const collectionsUsersByIds = compose(collections, usersByIds);
 const collectionsStandardTypes = compose(collections, standardTypes);
+const collectionsRisks = compose(collections, risks);
+const collectionsRisksByIds = compose(collections, risksByIds);
 
 const standardsStandardsFiltered = compose(standards, standardsFiltered);
 const standardsInitializing = compose(standards, initializing);
@@ -78,6 +82,9 @@ const windowWidth = compose(_window, width);
 
 const mobileShowCard = compose(mobile, showCard);
 
+const risksInitializing = compose(risks, initializing);
+const risksAreDepsReady = compose(risks, areDepsReady);
+
 export default {
   deletedAt,
   searchText,
@@ -106,6 +113,8 @@ export default {
     standardTypes: collectionsStandardTypes,
     standardTypesByIds: collectionsStandardTypesByIds,
     usersByIds: collectionsUsersByIds,
+    risks: collectionsRisks,
+    risksByIds: collectionsRisksByIds,
   }),
   standards: Object.assign(standards, {
     standardsFiltered: standardsStandardsFiltered,
@@ -134,10 +143,14 @@ export default {
   discussion: Object.assign(discussion, {
     isDiscussionOpened: discussionisDiscussionOpened,
   }),
-  window: Object.assign(window, {
+  window: Object.assign(_window, {
     width: windowWidth,
   }),
   mobile: Object.assign(mobile, {
     showCard: mobileShowCard,
+  }),
+  risks: Object.assign(risks, {
+    initializing: risksInitializing,
+    areDepsReady: risksAreDepsReady,
   }),
 };
