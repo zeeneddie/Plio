@@ -2,22 +2,22 @@ import React from 'react';
 import { compose, mapProps } from 'recompose';
 import { connect } from 'react-redux';
 import property from 'lodash.property';
+import { propEq } from 'ramda';
 
 import StatusList from '../../components/StatusList';
-import { propEq } from '/imports/api/helpers';
 import {
-  getSelectedRiskDeletedState,
   handleRisksRedirectAndOpen,
   createRiskStatusItem,
   withRisksRedirectAndOpen,
 } from '../../helpers';
 import { problemsStatuses } from '../../../problems/constants';
-import { getClassByStatus } from '/imports/api/problems/helpers';
+import { getClassByStatus } from '../../../../../api/problems/helpers';
 import Icon from '../../../components/Icons/Icon';
 import { Pull } from '../../../components/Utility';
+import { getSelectedRiskIsDeleted } from '../../../../../client/store/selectors/risks';
 
 const mapStateToProps = state => ({
-  ...getSelectedRiskDeletedState(state),
+  isSelectedRiskDeleted: getSelectedRiskIsDeleted(state),
 });
 
 const redirectAndOpen = ({ statuses, risksByIds, ...props }) => handleRisksRedirectAndOpen(
