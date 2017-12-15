@@ -3,4 +3,5 @@ export const _ = {
   keys: jest.fn(() => []),
   isEqual: jest.fn(),
   first: jest.fn(),
+  contains: jest.fn(() => true),
 };

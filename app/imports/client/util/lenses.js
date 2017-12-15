@@ -1,4 +1,9 @@
-import { compose, lensProp } from 'ramda';
+import { compose, lensProp, curryN, defaultTo, view } from 'ramda';
+
+export const viewOr = curryN(
+  3,
+  (defaultValue, lens, data) => defaultTo(defaultValue, view(lens, data)),
+);
 
 const collections = lensProp('collections');
 const standards = lensProp('standards');
