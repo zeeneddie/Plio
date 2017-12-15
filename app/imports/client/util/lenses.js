@@ -50,6 +50,7 @@ const riskTypes = lensProp('riskTypes');
 const riskTypesByIds = lensProp('riskTypesByIds');
 const departments = lensProp('departments');
 const departmentsByIds = lensProp('departmentsByIds');
+const departmentsIds = lensProp('departmentsIds');
 const _id = lensProp('_id');
 
 const collectionsStandards = compose(collections, standards);
@@ -117,6 +118,7 @@ export default {
   sequentialId,
   typeId,
   sectionId,
+  departmentsIds,
   source1: Object.assign(source1, {
     htmlUrl: source1HtmlUrl,
   }),

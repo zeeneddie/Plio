@@ -7,3 +7,4 @@ export {
   default as getSearchedFilteredSortedRisksByFilter,
 } from './getSearchedFilteredSortedRisksByFilter';
 export { default as getRiskTypesWithUncategorized } from './getRiskTypesWithUncategorized';
+export { default as getRisksDepartmentsList } from './getRisksDepartmentsList';

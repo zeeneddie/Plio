@@ -18,3 +18,5 @@ export const getRisksFiltered = view(lenses.risks.risksFiltered);
 export const getRisks = view(lenses.collections.risks);
 
 export const getRisksByIds = view(lenses.collections.risksByIds);
+
+export const getRisksFromProps = (_, { risks }) => risks;
