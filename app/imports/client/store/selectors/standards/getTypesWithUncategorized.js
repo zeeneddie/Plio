@@ -2,12 +2,16 @@ import { createSelector } from 'reselect';
 
 import { getStandardTypes } from '../standardTypes';
 import { createUncategorizedType } from '../../../../ui/react/standards/helpers';
-import { withUncategorized } from './util';
+import { lenses, lensEqById } from '../../../util';
+import { withUncategorized } from '../../../util/plio';
 import { getStandardsFromProps } from './state';
 
 // selector(standards: Array, types: Array) => Array
 const selector = (standards, types) => withUncategorized(
-  'typeId',
+  // (lens: Lens) => (type: Object) => (standard: Object) => Boolean
+  lensEqById(lenses.typeId),
+  lenses.typeId,
+  lenses.standards,
   createUncategorizedType({ standards, types }),
   standards,
   types,

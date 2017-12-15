@@ -1,7 +1,7 @@
 import getIsDeletedFilter from '../getIsDeletedFilter';
 import { STANDARD_FILTER_MAP } from '../../../../../api/constants';
 
-describe('getIsDeletedFilter', () => {
+describe('standards getIsDeletedFilter', () => {
   it('returns true if is deleted filter', () => {
     const state = {
       global: {

@@ -1,5 +1,5 @@
-import { riskScoreTypes } from '/imports/share/constants';
-import { find, some, propEq } from '/imports/api/helpers';
+import { riskScoreTypes } from '../../share/constants';
+import { find, some, propEq } from '../../api/helpers';
 
 export const getPrimaryScore = (scores) => {
   const propEqScoreTypeId = propEq('scoreTypeId');

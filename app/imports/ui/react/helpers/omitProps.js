@@ -1,5 +1,4 @@
 import { compose, mapProps } from 'recompose';
+import { omit } from 'ramda';
 
-import { omitC } from '/imports/api/helpers';
-
-export default compose(mapProps, omitC);
+export default compose(mapProps, omit);
