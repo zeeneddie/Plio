@@ -5,9 +5,8 @@ import property from 'lodash.property';
 
 import DepartmentList from '../../components/DepartmentList';
 import {
-  lengthRisks,
   getId,
-} from '/imports/api/helpers';
+} from '../../../../../api/helpers';
 import {
   getSelectedRiskDeletedState,
   createUncategorizedDepartment,
@@ -15,6 +14,7 @@ import {
   createRiskDepartmentItem,
   withRisksRedirectAndOpen,
 } from '../../helpers';
+import { getRisksLength } from '../../../../../client/util';
 
 const mapStateToProps = state => ({
   departments: state.collections.departments,
@@ -42,7 +42,7 @@ export default compose(
     // add uncategorized type
     types = types.concat(uncategorized);
 
-    types = types.filter(lengthRisks);
+    types = types.filter(getRisksLength);
 
     return { ...props, departments: types };
   }),
