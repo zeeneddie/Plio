@@ -52,7 +52,6 @@ HeaderButtons.propTypes = {
   unreadMessagesCount: PropTypes.number,
   hasAccess: PropTypes.bool,
   hasFullAccess: PropTypes.bool,
-  onToggleScreenMode: PropTypes.func,
   pathToDiscussion: PropTypes.string,
   onDiscussionOpen: PropTypes.func,
   onRestore: PropTypes.func,
