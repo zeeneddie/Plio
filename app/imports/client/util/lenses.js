@@ -50,6 +50,7 @@ const riskTypes = lensProp('riskTypes');
 const riskTypesByIds = lensProp('riskTypesByIds');
 const departments = lensProp('departments');
 const departmentsByIds = lensProp('departmentsByIds');
+const _id = lensProp('_id');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
@@ -99,6 +100,7 @@ const risksAreDepsReady = compose(risks, areDepsReady);
 const risksRisksFiltered = compose(risks, risksFiltered);
 
 export default {
+  _id,
   deletedAt,
   searchText,
   standardsFiltered,
