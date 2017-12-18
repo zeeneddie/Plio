@@ -29,7 +29,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
       items,
       addText: 'Add a new nonconformity',
       renderContentOnInitial: !(items.length > 5),
-      _lText: 'Non-conformities',
+      _lText: 'Nonconformities',
       _rText: items.length,
       onAdd: this.onAdd({ _id, isStandardsEditable }),
       getSubcardArgs: this.getSubcardArgs.bind(this),
