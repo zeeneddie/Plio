@@ -27,7 +27,7 @@ export const getActionDesc = (docType) => {
 export const getActionName = doc => `${doc.sequentialId} "${doc.title}"`;
 
 // problems
-export const getNCDesc = () => 'non-conformity';
+export const getNCDesc = () => 'nonconformity';
 
 export const getRiskDesc = () => 'risk';
 

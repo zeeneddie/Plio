@@ -94,7 +94,7 @@ Migrations.add({
           isPrimary: true,
         });
 
-        console.log(`Discussion for ${nc._id} non-conformity is created!`);
+        console.log(`Discussion for ${nc._id} nonconformity is created!`);
       }
     });
   },

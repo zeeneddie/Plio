@@ -16,12 +16,12 @@ export const mapping = {
   ),
   fields: {
     _id: {
-      label: 'Non-conformity ID',
+      label: 'Nonconformity ID',
       isDefault: true,
       reference: 'sequentialId',
     },
     name: {
-      label: 'Non-conformity name',
+      label: 'Nonconformity name',
       isDefault: true,
       reference: 'title',
     },
