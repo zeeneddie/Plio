@@ -45,6 +45,11 @@ export const AnalysisStatuses = {
   1: 'Completed',
 };
 
+export const ANALYSIS_STATUSES = {
+  NOT_COMPLETED: 0,
+  COMPLETED: 1,
+};
+
 export const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/1.png',
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/2.png',
