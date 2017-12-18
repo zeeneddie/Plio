@@ -4,11 +4,13 @@
   "scripts": {
     "lint-app": "./node_modules/.bin/eslint app",
     "lint-background-app": "./node_modules/.bin/eslint background-app",
+    "jest": "./node_modules/.bin/jest",
     "test": "yarn jest",
-    "jest": "./node_modules/.bin/jest"
+    "test:shared": "yarn jest --config share/jest.config.js"
   },
   "pre-commit": [
-    "test"
+    "test",
+    "test:shared"
   ],
   "devDependencies": {
     "babel-core": "^6.26.0",
