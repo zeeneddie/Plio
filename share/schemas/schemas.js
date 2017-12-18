@@ -372,7 +372,7 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
 ]);
 
 export const BaseProblemsOptionalSchema = ((() => {
-  const getRepeatingFields = (key) => ({
+  const getRepeatingFields = key => ({
     [`${key}.targetDate`]: {
       type: Date,
       optional: true,
