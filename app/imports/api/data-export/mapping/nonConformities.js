@@ -21,7 +21,7 @@ export const mapping = {
       reference: 'sequentialId',
     },
     name: {
-      label: 'Non-conformity name',
+      label: 'Title',
       isDefault: true,
       reference: 'title',
     },
