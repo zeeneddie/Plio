@@ -1,13 +1,19 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { M } from '../../method';
 
-import Method from '../../method';
-import { PotentialGainsSchema } from '../../../share/schemas/potential-gains-schema';
-
-export const insert = new Method({
-  name: 'NonConformities.insert',
-
-  validate: new SimpleSchema({}).validator(),
-
-  run({}) {
+export default new M({
+  name: 'PG.insert',
+  validate: null,
+  middleware: [
+    (next, args, context) => {
+      console.log(context.userId); // SQHmBKJ94gJvpLKLt
+      return next(args, { ...context, userId: 123 });
+    },
+    (next, args, context) => {
+      console.log(context.userId); // 123
+      return next(args, context);
+    },
+  ],
+  run(args, context) {
+    console.log(context.userId); // 123
   },
 });

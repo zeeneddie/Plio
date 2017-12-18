@@ -1,1 +1,1 @@
-import './create';
+export { default as create } from './create';
