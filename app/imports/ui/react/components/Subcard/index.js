@@ -6,6 +6,7 @@ import CollapseBlock from '../CollapseBlock';
 import Label from '../Labels/Label';
 import ErrorSection from '../ErrorSection';
 import Footer from './Footer';
+import { Pull } from '../Utility';
 
 const enhance = withContextCollapsed(({ collapsed = true }) => collapsed);
 
@@ -14,10 +15,16 @@ const Subcard = enhance(({
   onToggleCollapse,
   errorText,
   isNew,
-  leftText,
-  rightText,
+  renderLeftContent,
+  renderRightContent,
   children,
 }) => {
+  const props = {
+    isNew,
+    errorText,
+    collapsed,
+    onToggleCollapse,
+  };
   const classNames = {
     head: cx('card-block card-block-collapse-toggle', {
       'with-error': errorText,
@@ -29,9 +36,11 @@ const Subcard = enhance(({
   return (
     <CollapseBlock {...{ collapsed, onToggleCollapse, classNames }} tag="div">
       <div>
-        <span>{leftText}</span>
+        {renderLeftContent(props)}
         {isNew && (<Label names="primary">New</Label>)}
-        <span className="pull-xs-right">{rightText}</span>
+        <Pull right>
+          {renderRightContent(props)}
+        </Pull>
       </div>
       <div>
         <ErrorSection size="3" {...{ errorText }} />
@@ -47,8 +56,8 @@ Subcard.propTypes = {
   collapsed: PropTypes.bool,
   errorText: PropTypes.string,
   isNew: PropTypes.bool,
-  leftText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  rightText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  renderLeftContent: PropTypes.func,
+  renderRightContent: PropTypes.func,
   children: PropTypes.node,
 };
 

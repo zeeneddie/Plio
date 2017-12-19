@@ -5,9 +5,18 @@ import get from 'lodash.get';
 import { update, remove, updateViewedBy } from '/imports/api/standards/methods';
 import { isViewed } from '/imports/api/checkers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import RiskSubcard from '../../../../react/risks/components/RiskSubcard';
 
 Template.EditStandard.viewmodel({
-  mixin: ['organization', 'standard', 'modal', 'callWithFocusCheck', 'router', 'collapsing'],
+  mixin: [
+    'organization',
+    'standard',
+    'modal',
+    'callWithFocusCheck',
+    'router',
+    'collapsing',
+    'risk',
+  ],
   areActionsIsEditOnly: true,
   onRendered() {
     const doc = this._getStandardByQuery({ _id: this.standardId() });
@@ -38,6 +47,12 @@ Template.EditStandard.viewmodel({
   },
   _getRisksQuery() {
     return { standardsIds: this._id && this._id() };
+  },
+  risks() {
+    return this._getRisksByQuery(
+      { ...this._getRisksQuery() },
+      { sort: { serialNumber: 1 } },
+    ).fetch();
   },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
@@ -105,4 +120,5 @@ Template.EditStandard.viewmodel({
       });
     });
   },
+  RiskSubcard: () => RiskSubcard,
 });
