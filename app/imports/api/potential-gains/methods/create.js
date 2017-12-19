@@ -5,6 +5,7 @@ import { checkOrgMembership } from '../../middleware/auth';
 import { PotentialGainsSchema } from '../../../share/schemas/potential-gains-schema';
 import PotentialGainsService from '../../../share/services/potential-gains-service';
 
+const NAME = 'PG.insert';
 const validate = new SimpleSchema([
   PotentialGainsSchema.pick([
     'organizationId',
@@ -25,10 +26,11 @@ const validate = new SimpleSchema([
   },
 ]).validator();
 const middleware = [checkOrgMembership()];
-const run = PotentialGainsService.insert;
+// const run = PotentialGainsService.insert;
+const run = () => true;
 
 export default new MiddlewareMethod({
-  name: 'PG.insert',
+  name: NAME,
   validate,
   middleware,
   run,
