@@ -75,7 +75,7 @@ function applyMiddleware(...middleware) {
   };
 }
 
-export class M extends ValidatedMethod {
+export class MiddlewareMethod extends ValidatedMethod {
   constructor({ middleware, ...props }) {
     const run = async function (args) {
       const { userId } = this;

@@ -1,19 +1,35 @@
-import { M } from '../../method';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-export default new M({
-  name: 'PG.insert',
-  validate: null,
-  middleware: [
-    (next, args, context) => {
-      console.log(context.userId); // SQHmBKJ94gJvpLKLt
-      return next(args, { ...context, userId: 123 });
+import { MiddlewareMethod } from '../../method';
+import { checkOrgMembership } from '../../middleware/auth';
+import { PotentialGainsSchema } from '../../../share/schemas/potential-gains-schema';
+import PotentialGainsService from '../../../share/services/potential-gains-service';
+
+const validate = new SimpleSchema([
+  PotentialGainsSchema.pick([
+    'organizationId',
+    'title',
+    'magnitude',
+    'standardsIds',
+    'standardsIds.$',
+    'description',
+    'originatorId',
+    'ownerId',
+  ]),
+  {
+    standardId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
     },
-    (next, args, context) => {
-      console.log(context.userId); // 123
-      return next(args, context);
-    },
-  ],
-  run(args, context) {
-    console.log(context.userId); // 123
   },
+]).validator();
+const middleware = [checkOrgMembership()];
+const run = PotentialGainsService.insert;
+
+export default new MiddlewareMethod({
+  name: 'PG.insert',
+  validate,
+  middleware,
+  run,
 });
