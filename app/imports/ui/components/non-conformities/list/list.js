@@ -1,17 +1,12 @@
 import { Template } from 'meteor/templating';
-import { ViewModel } from 'meteor/manuel:viewmodel';
-import { FlowRouter } from 'meteor/kadira:flow-router';
-import get from 'lodash.get';
-import property from 'lodash.property';
 import curry from 'lodash.curry';
 
 import { Occurrences } from '/imports/share/collections/occurrences.js';
-import { Departments } from '/imports/share/collections/departments.js';
-import { ProblemsStatuses } from '/imports/share/constants.js';
 import {
-  extractIds, inspire, findById,
+  extractIds, findById,
   lengthItems, flattenMapItems,
 } from '/imports/api/helpers';
+import { create } from '../../../../api/potential-gains/methods';
 
 
 Template.NC_List.viewmodel({

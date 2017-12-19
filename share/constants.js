@@ -285,6 +285,7 @@ export const ProblemsStatuses = {
 export const ProblemTypes = {
   NON_CONFORMITY: 'non-conformity',
   RISK: 'risk',
+  POTENTIAL_GAIN: 'potential gain',
 };
 
 export const DocumentTypes = {

@@ -8,7 +8,6 @@ import {
 } from '/imports/startup/client/subsmanagers.js';
 import { Discussions } from '/imports/share/collections/discussions.js';
 
-
 Template.NC_Page.viewmodel({
   mixin: ['discussions', 'mobile', 'nonconformity', 'organization', { counter: 'counter' }],
   _subHandlers: [],

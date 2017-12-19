@@ -1,7 +1,7 @@
 import { onRestoreChecker } from '../checkers';
-import { WorkItems } from '/imports/share/collections/work-items.js';
+import { WorkItems } from '../../share/collections/work-items';
 import { WI_CANNOT_RESTORE_ASSIGNED_TO_OTHER } from '../errors.js';
-import { checkAndThrow } from '/imports/api/helpers';
+import { checkAndThrow } from '../helpers';
 
 export const WI_OnRestoreChecker = ({ ...args }, workItem) => {
   onRestoreChecker({ ...args }, workItem);

@@ -1,20 +1,16 @@
-import { NonConformities } from '/imports/share/collections/non-conformities';
-import { Risks } from '/imports/share/collections/risks';
-import { Actions } from '/imports/share/collections/actions';
-import { ProblemTypes, ActionTypes, WorkflowTypes } from '/imports/share/constants';
+import { NonConformities } from '../../share/collections/non-conformities';
+import { Risks } from '../../share/collections/risks';
+import { Actions } from '../../share/collections/actions';
+import { ProblemTypes, ActionTypes, WorkflowTypes } from '../../share/constants';
 import { AnalysisTitles } from '../constants';
 import { checkAndThrow } from '../helpers';
-import { capitalize } from '/imports/share/helpers';
+import { capitalize } from '../../share/helpers';
 
 import { checkDocAndMembership, checkDocAndMembershipAndMore } from '../checkers';
 import {
   INVALID_DOC_TYPE,
   DOC_NOT_FOUND,
-  ONLY_OWNER_CAN_DELETE,
-  ONLY_OWNER_CAN_RESTORE,
-  ONLY_ORG_OWNER_CAN_RESTORE,
   ACT_RK_CANNOT_BE_LINKED_TO_NC,
-  ACT_PA_CANNOT_BE_LINKED_TO_RISK,
   ACT_ALREADY_LINKED,
   ACT_CANNOT_COMPLETE,
   ACT_COMPLETION_CANNOT_BE_UNDONE,
