@@ -26,8 +26,7 @@ const validate = new SimpleSchema([
   },
 ]).validator();
 const middleware = [checkOrgMembership()];
-// const run = PotentialGainsService.insert;
-const run = () => true;
+const run = PotentialGainsService.insert;
 
 export default new MiddlewareMethod({
   name: NAME,
