@@ -1,9 +1,8 @@
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { LoggedInMixin } from 'meteor/tunifight:loggedin-mixin';
 import curry from 'lodash.curry';
-import { pipeP, is } from 'ramda';
 
-import { UNAUTHORIZED } from './errors.js';
+import { UNAUTHORIZED } from './errors';
 import { checkDocAndMembershipAndMore } from './checkers';
 
 export default class Method extends ValidatedMethod {

@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
-import { PotentialGains } from '../../share/collections/potential-gains';
-import ProblemsService from '../../share/services/problems-service';
-import { ProblemTypes } from '../../share/constants';
-import BaseEntityService from '../../share/services/base-entity-service';
+import { PotentialGains } from '../collections';
+import ProblemsService from './problems-service';
+import BaseEntityService from './base-entity-service';
+import { ProblemTypes } from '../constants';
 
 export default Object.assign({}, ProblemsService, {
   collection: PotentialGains,

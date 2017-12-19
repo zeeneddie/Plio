@@ -1,16 +1,17 @@
 import { Meteor } from 'meteor/meteor';
+import Random from 'meteor/random';
 
-import { Risks } from '/imports/share/collections/risks.js';
-import { ProblemTypes } from '/imports/share/constants.js';
-import BaseEntityService from '/imports/share/services/base-entity-service.js';
-import ProblemsService from '/imports/share/services/problems-service.js';
+import { Risks } from '../collections';
+import { ProblemTypes } from '../constants';
+import BaseEntityService from './base-entity-service';
+import ProblemsService from './problems-service';
 
 if (Meteor.isServer) {
   // import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
 }
 
 
-export default _.extend({}, ProblemsService, {
+export default Object.assign({}, ProblemsService, {
   collection: Risks,
 
   _service: new BaseEntityService(Risks),

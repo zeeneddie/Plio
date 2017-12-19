@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 
-import { SystemName } from '/imports/share/constants';
+import { SystemName } from '../constants';
 
 export default class BaseEntityService {
   constructor(collection) {
