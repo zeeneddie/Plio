@@ -3,10 +3,10 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { MiddlewareMethod } from '../../method';
 import { checkOrgMembership } from '../../middleware/auth';
 import { PotentialGainsSchema } from '../../../share/schemas/potential-gains-schema';
-import PotentialGainsService from '../../../share/services/potential-gains-service';
+import { PotentialGainService } from '../../../share/services';
 
-const NAME = 'PG.insert';
-const validate = new SimpleSchema([
+export const NAME = 'PG.insert';
+export const validate = new SimpleSchema([
   PotentialGainsSchema.pick([
     'organizationId',
     'title',
@@ -25,8 +25,8 @@ const validate = new SimpleSchema([
     },
   },
 ]).validator();
-const middleware = [checkOrgMembership()];
-const run = PotentialGainsService.insert;
+export const middleware = [checkOrgMembership()];
+export const run = PotentialGainService.insert.bind(PotentialGainService);
 
 export default new MiddlewareMethod({
   name: NAME,

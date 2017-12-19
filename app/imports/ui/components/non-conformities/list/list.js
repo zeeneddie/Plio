@@ -6,8 +6,6 @@ import {
   extractIds, findById,
   lengthItems, flattenMapItems,
 } from '/imports/api/helpers';
-import { create } from '../../../../api/potential-gains/methods';
-
 
 Template.NC_List.viewmodel({
   mixin: [
@@ -124,9 +122,9 @@ Template.NC_List.viewmodel({
   onModalOpen() {
     return () =>
       this.modal().open({
-        _title: 'Non-conformity',
-        template: 'NC_Create',
-        variation: 'save',
+        _title: 'Add',
+        template: 'NCs_ChooseTypeModal',
+        variation: 'simple',
       });
   },
 });

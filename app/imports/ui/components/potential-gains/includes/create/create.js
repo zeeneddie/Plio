@@ -1,13 +1,13 @@
 import { Template } from 'meteor/templating';
 
-import { insert } from '/imports/api/non-conformities/methods';
-import { setModalError } from '/imports/api/helpers';
+import { create } from '../../../../../api/potential-gains/methods';
+import { setModalError } from '../../../../../api/helpers';
 
-Template.NC_Create.viewmodel({
-  mixin: ['organization', 'nonconformity', 'router', 'getChildrenData'],
+Template.PG_Create.viewmodel({
+  mixin: ['organization', 'router', 'getChildrenData'],
   isStandardsEditable: true,
   standardsIds: [],
-  NCGuidelines() {
+  guidelines() {
     return this.organization().ncGuidelines;
   },
   validate(data) {
@@ -17,7 +17,7 @@ Template.NC_Create.viewmodel({
       if (key !== 'description' && !data[key]) {
         valid = false;
         // eslint-disable-next-line max-len
-        const errorMessage = `The new potential gain cannot be created without a ${key}. Please enter a ${key} for your potential gain.`;        
+        const errorMessage = `The new potential gain cannot be created without a ${key}. Please enter a ${key} for your potential gain.`;
         setModalError(errorMessage);
       }
     });
@@ -33,18 +33,17 @@ Template.NC_Create.viewmodel({
         ...data,
         organizationId,
       };
-
       const cb = (_id, open) => {
         this.goToNC(_id, false);
 
         open({
           _id,
-          _title: 'Non-conformity',
+          _title: 'Potential Gain',
           template: 'NC_Card_Edit',
         });
       };
 
-      return this.card.insert(insert, args, cb);
+      return this.card.insert(create, args, cb);
     }
 
     return null;

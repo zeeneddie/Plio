@@ -298,6 +298,7 @@ export const DocumentTypesPlural = {
   STANDARDS: 'standards',
   NON_CONFORMITIES: 'non-conformities',
   RISKS: 'risks',
+  POTENTIAL_GAINS: 'potential gains',
 };
 
 export const AllDocumentTypes = {

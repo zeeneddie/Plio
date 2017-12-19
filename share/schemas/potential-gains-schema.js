@@ -24,9 +24,10 @@ const PGAnalysisItem = new SimpleSchema({
 const PGAnalysis = new SimpleSchema([
   FileIdsSchema,
   {
-    gains: {
+    causes: {
       type: [PGAnalysisItem],
-      maxCount: 5,
+      defaultValue: [],
+      maxCount: RCAMaxCauses,
     },
   },
 ]);
@@ -58,7 +59,7 @@ const PotentialGainsSchema = new SimpleSchema([
       type: Number,
       optional: true,
     },
-    potentialGainAnalysis: {
+    rootCauseAnalysis: {
       type: PGAnalysis,
       defaultValue: {},
       optional: true,
