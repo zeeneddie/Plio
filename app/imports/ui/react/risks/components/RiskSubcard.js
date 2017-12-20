@@ -5,6 +5,7 @@ import Blaze from 'meteor/gadicc:blaze-react-component';
 import CardBlockCollapse from '../../components/CardBlockCollapse';
 import Subcard from '../../components/Subcard';
 import Label from '../../components/Labels/Label';
+import { SwitchView } from '../../components/plio';
 
 const RiskSubcard = ({
   risks = [],
@@ -31,7 +32,15 @@ const RiskSubcard = ({
             isNew ? <Label names="primary"> New</Label> : null,
           ]}
         >
-          <Subcard.SwitchView />
+          <Subcard.SwitchView
+            buttons={[
+              <span>New</span>,
+              <span>Existing</span>,
+            ]}
+          >
+            <span>Hello World</span>
+            <span>World Hello</span>
+          </Subcard.SwitchView>
           <Subcard.Footer
             isNew
             id={card.id}
