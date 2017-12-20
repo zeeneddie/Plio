@@ -1,38 +1,55 @@
 import React, { PropTypes } from 'react';
 import { CardBlock, Card } from 'reactstrap';
 import { compose, withState, withHandlers } from 'recompose';
-import { propOr, times, identity } from 'ramda';
+import { propOr, map, identity, reject } from 'ramda';
+import { Random } from 'meteor/random';
 
 import { TextAlign } from '../Utility';
 import Button from '../Buttons/Button';
+import { lenses, lensEq } from '../../../../client/util';
 
 const onAddHandler = ({
-  onAdd = identity,
   setCards,
+  onAdd = identity,
   ...props
 }) => () => {
-  const cards = props.cards + 1;
+  const cards = props.cards.concat({ id: Random.id() });
   setCards(cards);
   return onAdd({ ...props, cards });
 };
 
+const onDeleteHandler = ({
+  cards,
+  setCards,
+  onDelete = identity,
+  ...props
+}) => ({ id }) => {
+  const nextCards = reject(lensEq(lenses.id, id), cards);
+  setCards(nextCards);
+  onDelete({ ...props, cards: nextCards });
+};
+
 const enhance = compose(
-  withState('cards', 'setCards', propOr(0, 'cards')),
-  withHandlers({ onAdd: onAddHandler }),
+  withState('cards', 'setCards', propOr([], 'cards')),
+  withHandlers({
+    onAdd: onAddHandler,
+    onDelete: onDeleteHandler,
+  }),
 );
 
 const AddNewDocument = enhance(({
   children,
   onAdd,
   cards,
+  onDelete,
   render,
-  renderBtnContent = () => 'add a new document',
+  renderBtnContent = () => 'Add a new document',
 }) => (
   <CardBlock>
     {children}
     {!!cards && (
       <Card className="new-cards">
-        {times(render, cards)}
+        {map(card => render({ ...card, onDelete }), cards)}
       </Card>
     )}
     <TextAlign center>

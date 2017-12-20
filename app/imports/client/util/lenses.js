@@ -57,6 +57,7 @@ const departments = lensProp('departments');
 const departmentsByIds = lensProp('departmentsByIds');
 const departmentsIds = lensProp('departmentsIds');
 const _id = lensProp('_id');
+const id = lensProp('id');
 const workItems = lensProp('workItems');
 const workItemsByIds = lensProp('workItemsByIds');
 const lessons = lensProp('lessons');
@@ -119,6 +120,7 @@ const risksRisksFiltered = compose(risks, risksFiltered);
 
 export default {
   _id,
+  id,
   deletedAt,
   searchText,
   standardsFiltered,

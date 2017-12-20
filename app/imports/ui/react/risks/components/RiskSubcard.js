@@ -20,21 +20,23 @@ const RiskSubcard = ({
     loading={isSaving}
   >
     <Subcard.AddNewDocument
-      render={key => (
+      renderBtnContent={() => 'Add a new risk'}
+      render={card => (
         <Subcard
           isNew
           disabled
+          key={card.id}
           renderLeftContent={() => [
             'New risk',
             isNew ? <Label names="primary"> New</Label> : null,
           ]}
-          {...{ key }}
         >
           <Subcard.SwitchView />
           <Subcard.Footer
             isNew
+            id={card.id}
+            onDelete={card.onDelete}
             {...{
-              onDelete,
               onSave,
               isSaving,
             }}
