@@ -2,19 +2,19 @@ import React, { PropTypes } from 'react';
 import { CardTitle } from 'reactstrap';
 import cx from 'classnames';
 import { setPropTypes, branch } from 'recompose';
-import property from 'lodash.property';
+import { prop, propOr } from 'ramda';
 
 import withStateCollapsed from '../../helpers/withStateCollapsed';
 import CollapseBlock from '../CollapseBlock';
 import IconLoading from '../Icons/IconLoading';
 
 const enhance = branch(
-  property('onToggleCollapse'),
+  prop('onToggleCollapse'),
   setPropTypes({
     collapsed: PropTypes.bool.isRequired,
     onToggleCollapse: PropTypes.func.isRequired,
   }),
-  withStateCollapsed(true),
+  withStateCollapsed(propOr(true, 'collapsed')),
 );
 
 const CardBlockCollapse = enhance(({

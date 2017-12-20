@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
+import { prop } from 'ramda';
+import { branch, withProps } from 'recompose';
 
 import withContextCollapsed from '../../helpers/withContextCollapsed';
 import CollapseBlock from '../CollapseBlock';
@@ -8,7 +10,15 @@ import ErrorSection from '../ErrorSection';
 import Footer from './Footer';
 import { Pull } from '../Utility';
 
-const enhance = withContextCollapsed(({ collapsed = true }) => collapsed);
+const enhance = branch(
+  prop('disabled'),
+  withProps(() => ({
+    collapsed: false,
+    onToggleCollapse: () => null,
+    chevron: false,
+  })),
+  withContextCollapsed(({ collapsed = true }) => collapsed),
+);
 
 const Subcard = enhance(({
   collapsed,
@@ -18,6 +28,7 @@ const Subcard = enhance(({
   renderLeftContent,
   renderRightContent,
   children,
+  ...otherProps
 }) => {
   const props = {
     isNew,
@@ -34,10 +45,17 @@ const Subcard = enhance(({
   };
 
   return (
-    <CollapseBlock {...{ collapsed, onToggleCollapse, classNames }} tag="div">
+    <CollapseBlock
+      tag="div"
+      {...{
+        collapsed,
+        onToggleCollapse,
+        classNames,
+        ...otherProps,
+      }}
+    >
       <div>
         {renderLeftContent(props)}
-        {isNew && (<Label names="primary">New</Label>)}
         {!!renderRightContent && (
           <Pull right>
             {renderRightContent(props)}
@@ -61,6 +79,7 @@ Subcard.propTypes = {
   renderLeftContent: PropTypes.func.isRequired,
   renderRightContent: PropTypes.func,
   children: PropTypes.node,
+  disabled: PropTypes.bool,
 };
 
 Subcard.Footer = Footer;

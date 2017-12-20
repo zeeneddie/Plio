@@ -27,7 +27,6 @@ const CreateSubcard = enhance(({ active }) => (
         </ButtonGroup>
       </div>
     </FormGroup>
-    <hr />
   </CardBlock>
 ));
 

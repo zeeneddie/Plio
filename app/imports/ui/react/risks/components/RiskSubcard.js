@@ -6,11 +6,12 @@ import CardBlockCollapse from '../../components/CardBlockCollapse';
 import SubcardAddNew from '../../components/SubcardAddNew';
 import SubcardCreate from '../../components/SubcardCreate';
 import Subcard from '../../components/Subcard';
+import Label from '../../components/Labels/Label';
 
 const RiskSubcard = ({
-  loading,
   risks = [],
   isSaving,
+  isNew,
   onSave,
   onDelete,
   onClose,
@@ -18,13 +19,29 @@ const RiskSubcard = ({
   <CardBlockCollapse
     leftText="Risks"
     rightText={risks.length}
-    {...{ loading }}
+    loading={isSaving}
   >
     <SubcardAddNew
       render={key => (
-        <Card {...{ key }}>
+        <Subcard
+          isNew
+          disabled
+          renderLeftContent={() => [
+            'New risk',
+            isNew ? <Label names="primary"> New</Label> : null,
+          ]}
+          {...{ key }}
+        >
           <SubcardCreate />
-        </Card>
+          <Subcard.Footer
+            isNew
+            {...{
+              onDelete,
+              onSave,
+              isSaving,
+            }}
+          />
+        </Subcard>
       )}
     >
       {!!risks.length && (
@@ -60,9 +77,9 @@ const RiskSubcard = ({
 );
 
 RiskSubcard.propTypes = {
-  loading: PropTypes.bool,
   risks: PropTypes.arrayOf(PropTypes.object).isRequired,
   isSaving: PropTypes.bool,
+  isNew: PropTypes.bool,
   onSave: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onClose: PropTypes.func,
