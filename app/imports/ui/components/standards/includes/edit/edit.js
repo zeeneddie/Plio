@@ -5,7 +5,7 @@ import get from 'lodash.get';
 import { update, remove, updateViewedBy } from '/imports/api/standards/methods';
 import { isViewed } from '/imports/api/checkers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
-import RiskSubcardContainer from '../../../../react/risks/containers/RiskSubcardContainer';
+import RisksSubcardContainer from '../../../../react/risks/containers/RisksSubcardContainer';
 
 Template.EditStandard.viewmodel({
   mixin: [
@@ -120,5 +120,5 @@ Template.EditStandard.viewmodel({
       });
     });
   },
-  RiskSubcardContainer: () => RiskSubcardContainer,
+  RisksSubcardContainer: () => RisksSubcardContainer,
 });

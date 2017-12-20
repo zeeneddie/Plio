@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { withHandlers } from 'recompose';
 import cx from 'classnames';
+import { DebounceInput } from 'react-debounce-input';
 
-import TextInput from '../TextInput';
 import ClearField from '../../../fields/read/components/ClearField';
 import { onHandleBlur, onHandleClear } from './handlers';
 
@@ -14,6 +14,8 @@ const FormInput = enhance(({
   children,
   onHandleBlur: onBlur,
   onHandleClear: onClear,
+  onChange,
+  debounceTimeout,
   ...other
 }) => {
   let textInput;
@@ -22,12 +24,15 @@ const FormInput = enhance(({
     <ClearField onClick={e => onClear(e)(textInput)}>
       <div className={cx(!!children && 'input-group')}>
         {children}
-        <TextInput
+        <DebounceInput
           className={cx('form-control', className)}
-          getRef={(input) => {
-            textInput = input;
+          {...{
+            value,
+            onChange,
+            onBlur,
+            debounceTimeout,
+            ...other,
           }}
-          {...{ ...other, onBlur, value }}
         />
       </div>
     </ClearField>
@@ -37,7 +42,9 @@ const FormInput = enhance(({
 FormInput.propTypes = {
   className: PropTypes.string,
   onBlur: PropTypes.func,
+  onChange: PropTypes.func,
   value: PropTypes.string.isRequired,
+  debounceTimeout: PropTypes.number,
   children: PropTypes.node,
 };
 
