@@ -5,7 +5,6 @@ import Blaze from 'meteor/gadicc:blaze-react-component';
 import CardBlockCollapse from '../../components/CardBlockCollapse';
 import Subcard from '../../components/Subcard';
 import Label from '../../components/Labels/Label';
-import { SwitchView } from '../../components/plio';
 
 const RiskSubcard = ({
   risks = [],
