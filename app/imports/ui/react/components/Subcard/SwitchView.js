@@ -36,9 +36,7 @@ const SwitchView = enhance(({
         </div>
       </FormGroup>
     </CardBlock>
-    <CardBlock>
-      {children[active]}
-    </CardBlock>
+    {children[active]}
   </div>
 ));
 

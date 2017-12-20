@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Card } from 'reactstrap';
+import { Card, CardBlock } from 'reactstrap';
 import Blaze from 'meteor/gadicc:blaze-react-component';
 
 import CardBlockCollapse from '../../components/CardBlockCollapse';
@@ -37,7 +37,12 @@ const RiskSubcard = ({
               <span>Existing</span>,
             ]}
           >
-            <span>Hello World</span>
+            <CardBlock>
+              <input type="text" />
+              <textarea cols="30" rows="10" />
+              <input type="text" />
+              <input type="text" />
+            </CardBlock>
             <span>World Hello</span>
           </Subcard.SwitchView>
           <Subcard.Footer
