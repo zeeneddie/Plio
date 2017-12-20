@@ -3,8 +3,8 @@ import { CardBlock, Card } from 'reactstrap';
 import { compose, withState, withHandlers } from 'recompose';
 import { propOr, times, identity } from 'ramda';
 
-import { TextAlign } from './Utility';
-import Button from './Buttons/Button';
+import { TextAlign } from '../Utility';
+import Button from '../Buttons/Button';
 
 const onAddHandler = ({
   onAdd = identity,
@@ -21,7 +21,7 @@ const enhance = compose(
   withHandlers({ onAdd: onAddHandler }),
 );
 
-const SubcardAddNew = enhance(({
+const AddNewDocument = enhance(({
   children,
   onAdd,
   cards,
@@ -45,7 +45,7 @@ const SubcardAddNew = enhance(({
   </CardBlock>
 ));
 
-SubcardAddNew.propTypes = {
+AddNewDocument.propTypes = {
   children: PropTypes.node,
   render: PropTypes.func.isRequired,
   renderBtnContent: PropTypes.func,
@@ -53,4 +53,4 @@ SubcardAddNew.propTypes = {
   cards: PropTypes.number,
 };
 
-export default SubcardAddNew;
+export default AddNewDocument;

@@ -5,10 +5,11 @@ import { branch, withProps } from 'recompose';
 
 import withContextCollapsed from '../../helpers/withContextCollapsed';
 import CollapseBlock from '../CollapseBlock';
-import Label from '../Labels/Label';
 import ErrorSection from '../ErrorSection';
-import Footer from './Footer';
 import { Pull } from '../Utility';
+import Footer from './Footer';
+import AddNewDocument from './AddNewDocument';
+import SwitchView from './SwitchView';
 
 const enhance = branch(
   prop('disabled'),
@@ -83,5 +84,7 @@ Subcard.propTypes = {
 };
 
 Subcard.Footer = Footer;
+Subcard.AddNewDocument = AddNewDocument;
+Subcard.SwitchView = SwitchView;
 
 export default Subcard;

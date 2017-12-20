@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { pluck, propOr, map, equals } from 'ramda';
 import { withState } from 'recompose';
 
-import RadioButton from './Buttons/RadioButton';
+import RadioButton from '../Buttons/RadioButton';
 
 const buttons = [
   { contents: 'New', id: 1 },
@@ -17,7 +17,7 @@ const renderButtons = active => map(({ contents, id }) => (
 ), buttons);
 const enhance = withState('active', 'setActive', propOr(buttons[0].id, 'active'));
 
-const CreateSubcard = enhance(({ active }) => (
+const SwitchView = enhance(({ active }) => (
   <CardBlock>
     <FormGroup className="row">
       <label className="form-control-label col-sm-4 col-xs-12" />
@@ -30,8 +30,8 @@ const CreateSubcard = enhance(({ active }) => (
   </CardBlock>
 ));
 
-CreateSubcard.propTypes = {
+SwitchView.propTypes = {
   active: PropTypes.oneOf(pluck('id', buttons)),
 };
 
-export default CreateSubcard;
+export default SwitchView;

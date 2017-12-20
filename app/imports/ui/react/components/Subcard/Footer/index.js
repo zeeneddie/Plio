@@ -34,7 +34,7 @@ const SubcardFooter = enhance(({
     } else {
       rightButtonCb = (...args) => {
         onToggleCollapse();
-        return onClose(...args);
+        return onClose && onClose(...args);
       };
       content = 'Close';
     }

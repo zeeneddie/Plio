@@ -3,8 +3,6 @@ import { Card } from 'reactstrap';
 import Blaze from 'meteor/gadicc:blaze-react-component';
 
 import CardBlockCollapse from '../../components/CardBlockCollapse';
-import SubcardAddNew from '../../components/SubcardAddNew';
-import SubcardCreate from '../../components/SubcardCreate';
 import Subcard from '../../components/Subcard';
 import Label from '../../components/Labels/Label';
 
@@ -21,7 +19,7 @@ const RiskSubcard = ({
     rightText={risks.length}
     loading={isSaving}
   >
-    <SubcardAddNew
+    <Subcard.AddNewDocument
       render={key => (
         <Subcard
           isNew
@@ -32,7 +30,7 @@ const RiskSubcard = ({
           ]}
           {...{ key }}
         >
-          <SubcardCreate />
+          <Subcard.SwitchView />
           <Subcard.Footer
             isNew
             {...{
@@ -72,7 +70,7 @@ const RiskSubcard = ({
           ))}
         </Card>
       )}
-    </SubcardAddNew>
+    </Subcard.AddNewDocument>
   </CardBlockCollapse>
 );
 
