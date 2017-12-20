@@ -10,7 +10,6 @@ import Subcard from '../../components/Subcard';
 const RiskSubcard = ({
   loading,
   risks = [],
-  isNew,
   isSaving,
   onSave,
   onDelete,
@@ -43,12 +42,13 @@ const RiskSubcard = ({
             >
               <Blaze template="Risk_Subcard" {...{ risk }} />
               <Subcard.Footer
+                isNew={false}
                 {...{
-                  isNew,
                   isSaving,
                   onSave,
                   onDelete,
                   onClose,
+                  risk,
                 }}
               />
             </Subcard>
@@ -62,7 +62,6 @@ const RiskSubcard = ({
 RiskSubcard.propTypes = {
   loading: PropTypes.bool,
   risks: PropTypes.arrayOf(PropTypes.object).isRequired,
-  isNew: PropTypes.bool,
   isSaving: PropTypes.bool,
   onSave: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,

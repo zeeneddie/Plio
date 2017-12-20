@@ -19,7 +19,7 @@ const SubcardFooter = enhance(({
 }) => {
   let content = null;
   let rightButtonCb = onSave;
-  const showRightButton = !!(isNew && onSave || !isNew && onClose);
+  const showRightButton = !!(isNew && onSave || !isNew);
 
   if (showRightButton) {
     if (isSaving) {
@@ -53,7 +53,11 @@ const SubcardFooter = enhance(({
         </Button>
       )}
       {!!onDelete && (
-        <Button color="secondary" pull="left" onClick={onDelete}>
+        <Button
+          color="secondary"
+          pull="left"
+          onClick={e => onDelete({ isSaving, isNew, ...otherProps }, e)}
+        >
           Delete
         </Button>
       )}
@@ -62,8 +66,6 @@ const SubcardFooter = enhance(({
 });
 
 SubcardFooter.propTypes = {
-  onToggleCollapse: PropTypes.func,
-  collapsed: PropTypes.bool,
   isSaving: PropTypes.bool,
   isNew: PropTypes.bool,
   onClose: PropTypes.func,
