@@ -1,16 +1,15 @@
 import React, { PropTypes } from 'react';
 import { CardBlock } from 'reactstrap';
-import { withState } from 'recompose';
 
 import { FormInput, FormField, SelectInput } from '../../components';
-
-const SelectInputEnhanced = withState('value', 'setValue', '')(SelectInput);
 
 const AddNewRiskSubcard = ({
   title,
   originatorId,
+  ownerId,
   onChangeTitle,
   onChangeOriginatorId,
+  onChangeOwnerId,
   users,
 }) => (
   <CardBlock>
@@ -24,7 +23,8 @@ const AddNewRiskSubcard = ({
     </FormField>
     <FormField>
       Originator
-      <SelectInputEnhanced
+      <SelectInput
+        uncontrolled
         caret
         hint
         input={{ placeholder: 'Originator' }}
@@ -33,15 +33,29 @@ const AddNewRiskSubcard = ({
         onSelect={onChangeOriginatorId}
       />
     </FormField>
+    <FormField>
+      Owner
+      <SelectInput
+        uncontrolled
+        caret
+        hint
+        input={{ placeholder: 'Owner' }}
+        selected={ownerId}
+        items={users}
+        onSelect={onChangeOwnerId}
+      />
+    </FormField>
   </CardBlock>
 );
 
 AddNewRiskSubcard.propTypes = {
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
   title: PropTypes.string.isRequired,
   originatorId: PropTypes.string.isRequired,
+  ownerId: PropTypes.string.isRequired,
   onChangeTitle: PropTypes.func.isRequired,
   onChangeOriginatorId: PropTypes.func.isRequired,
-  users: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onChangeOwnerId: PropTypes.func.isRequired,
 };
 
 export default AddNewRiskSubcard;

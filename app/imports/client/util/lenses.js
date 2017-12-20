@@ -69,6 +69,8 @@ const target = lensProp('target');
 const value = lensProp('value');
 const profile = lensProp('profile');
 const firstName = lensProp('firstName');
+const originatorId = lensProp('originatorId');
+const ownerId = lensProp('ownerId');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
@@ -148,6 +150,9 @@ export default {
   typeId,
   sectionId,
   departmentsIds,
+  originatorId,
+  ownerId,
+  userId,
   source1: Object.assign(source1, {
     htmlUrl: source1HtmlUrl,
   }),

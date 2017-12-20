@@ -10,10 +10,12 @@ import {
   getSortedUsersByFirstNameAsItems,
 } from '../../../../client/store/selectors/users';
 import store from '../../../../client/store';
+import { getUserId } from '../../../../client/store/selectors/global';
 
 export default compose(
   withProps(() => ({ store })),
   connect(state => ({
+    userId: getUserId(state),
     users: getSortedUsersByFirstNameAsItems(state),
   })),
   withHandlers({
@@ -34,7 +36,7 @@ export default compose(
             swal.close();
             return;
           }
-  
+
           swal({
             title: 'Removed!',
             text: `The risk "${title}" was removed successfully.`,
@@ -43,7 +45,7 @@ export default compose(
             showConfirmButton: false,
           });
         };
-  
+
         // TEMP
         // because edit modal is still in blaze
         _modal_.modal.callMethod(remove, { _id }, cb);

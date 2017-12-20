@@ -9,6 +9,7 @@ import CreateRiskSubcard from './CreateRiskSubcard';
 const RisksSubcard = ({
   risks = [],
   users = [],
+  userId,
   isSaving,
   isNew,
   onSave,
@@ -28,6 +29,7 @@ const RisksSubcard = ({
           id={card.id}
           onDelete={card.onDelete}
           {...{
+            userId,
             users,
             isNew,
             isSaving,
