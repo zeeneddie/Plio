@@ -34,6 +34,7 @@ const standardBookSectionsByIds = lensProp('standardBookSectionsByIds');
 const standardBookSections = lensProp('standardBookSections');
 const standardTypesByIds = lensProp('standardTypesByIds');
 const standardTypes = lensProp('standardTypes');
+const users = lensProp('users');
 const usersByIds = lensProp('usersByIds');
 const isDeleted = lensProp('isDeleted');
 const isInProgress = lensProp('isInProgress');
@@ -66,12 +67,15 @@ const actions = lensProp('actions');
 const actionsByIds = lensProp('actionsByIds');
 const target = lensProp('target');
 const value = lensProp('value');
+const profile = lensProp('profile');
+const firstName = lensProp('firstName');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
 const collectionsStandardBookSections = compose(collections, standardBookSections);
 const collectionsStandardBookSectionsByIds = compose(collections, standardBookSectionsByIds);
 const collectionsStandardTypesByIds = compose(collections, standardTypesByIds);
+const collectionsUsers = compose(collections, users);
 const collectionsUsersByIds = compose(collections, usersByIds);
 const collectionsStandardTypes = compose(collections, standardTypes);
 const collectionsRisks = compose(collections, risks);
@@ -122,6 +126,8 @@ const risksRisksFiltered = compose(risks, risksFiltered);
 
 const targetValue = compose(target, value);
 
+const profileFirstName = compose(profile, firstName);
+
 export default {
   _id,
   id,
@@ -155,6 +161,7 @@ export default {
     standardBookSectionsByIds: collectionsStandardBookSectionsByIds,
     standardTypes: collectionsStandardTypes,
     standardTypesByIds: collectionsStandardTypesByIds,
+    users: collectionsUsers,
     usersByIds: collectionsUsersByIds,
     risks: collectionsRisks,
     risksByIds: collectionsRisksByIds,
@@ -209,5 +216,8 @@ export default {
   }),
   target: Object.assign(target, {
     value: targetValue,
+  }),
+  profile: Object.assign(profile, {
+    firstName: profileFirstName,
   }),
 };

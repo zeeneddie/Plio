@@ -11,6 +11,7 @@ const AddNewRiskSubcard = ({
   originatorId,
   onChangeTitle,
   onChangeOriginatorId,
+  users,
 }) => (
   <CardBlock>
     <FormField>
@@ -28,7 +29,7 @@ const AddNewRiskSubcard = ({
         hint
         input={{ placeholder: 'Originator' }}
         selected={originatorId}
-        items={[{ text: 'hello', value: 1 }]}
+        items={users}
         onSelect={onChangeOriginatorId}
       />
     </FormField>
@@ -40,6 +41,7 @@ AddNewRiskSubcard.propTypes = {
   originatorId: PropTypes.string.isRequired,
   onChangeTitle: PropTypes.func.isRequired,
   onChangeOriginatorId: PropTypes.func.isRequired,
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default AddNewRiskSubcard;
