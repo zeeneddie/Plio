@@ -1,15 +1,23 @@
 import React, { PropTypes } from 'react';
 import { Card, CardBlock } from 'reactstrap';
 import Blaze from 'meteor/gadicc:blaze-react-component';
+import { withState } from 'recompose';
 
 import CardBlockCollapse from '../../components/CardBlockCollapse';
 import Subcard from '../../components/Subcard';
 import Label from '../../components/Labels/Label';
+import { FormInput, FormField, SelectInput } from '../../components';
+
+const SelectInputEnhanced = withState('value', 'setValue', '')(SelectInput);
 
 const RiskSubcard = ({
   risks = [],
   isSaving,
   isNew,
+  title,
+  originatorId,
+  onChangeTitle,
+  onChangeOriginatorId,
   onSave,
   onDelete,
   onClose,
@@ -38,10 +46,25 @@ const RiskSubcard = ({
             ]}
           >
             <CardBlock>
-              <input type="text" />
-              <textarea cols="30" rows="10" />
-              <input type="text" />
-              <input type="text" />
+              <FormField>
+                Risk name
+                <FormInput
+                  onChange={onChangeTitle}
+                  value={title}
+                  placeholder="Risk name"
+                />
+              </FormField>
+              <FormField>
+                Originator
+                <SelectInputEnhanced
+                  caret
+                  hint
+                  input={{ placeholder: 'Originator' }}
+                  selected={originatorId}
+                  items={[{ text: 'hello', value: 1 }]}
+                  onSelect={onChangeOriginatorId}
+                />
+              </FormField>
             </CardBlock>
             <span>World Hello</span>
           </Subcard.SwitchView>

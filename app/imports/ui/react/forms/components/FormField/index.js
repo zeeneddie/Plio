@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 
-import FormLabel from '../../../../components/Labels/FormLabel';
-import HelpPanel from '../../../../components/HelpPanel';
-import withStateCollapsed from '../../../../helpers/withStateCollapsed';
+import FormLabel from '../../../components/Labels/FormLabel';
+import HelpPanel from '../../../components/HelpPanel';
+import withStateCollapsed from '../../../helpers/withStateCollapsed';
 
 const FormField = ({
   colXs = 12,

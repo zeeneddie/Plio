@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import FormField from '../../../../../fields/edit/components/FormField';
-import FormInput from '../../../../../forms/components/FormInput';
+import { FormField, FormInput } from '../../../../../components';
 import SequentialId from '../../../read/components/SequentialId';
 
 const OrgName = ({ name, serialNumber }) => (

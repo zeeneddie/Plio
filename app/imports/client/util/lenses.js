@@ -64,6 +64,8 @@ const lessons = lensProp('lessons');
 const lessonsByIds = lensProp('lessonsByIds');
 const actions = lensProp('actions');
 const actionsByIds = lensProp('actionsByIds');
+const target = lensProp('target');
+const value = lensProp('value');
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
@@ -117,6 +119,8 @@ const mobileShowCard = compose(mobile, showCard);
 const risksInitializing = compose(risks, initializing);
 const risksAreDepsReady = compose(risks, areDepsReady);
 const risksRisksFiltered = compose(risks, risksFiltered);
+
+const targetValue = compose(target, value);
 
 export default {
   _id,
@@ -202,5 +206,8 @@ export default {
     initializing: risksInitializing,
     areDepsReady: risksAreDepsReady,
     risksFiltered: risksRisksFiltered,
+  }),
+  target: Object.assign(target, {
+    value: targetValue,
   }),
 };
