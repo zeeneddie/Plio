@@ -9,6 +9,7 @@ import { lenses } from '../../../../client/util';
 
 const enhance = compose(
   withState('title', 'setTitle', propOr('', 'title')),
+  withState('description', 'setDescription', propOr('', 'description')),
   // default to current user id if no originatorId is passed
   withState(
     'originatorId',
@@ -28,6 +29,7 @@ const enhance = compose(
   ),
   withHandlers({
     onChangeTitle: ({ setTitle }) => e => setTitle(e.target.value),
+    onChangeDescription: ({ setDescription }) => e => setDescription(e.target.value),
     onChangeOriginatorId: ({ setOriginatorId }) => (_, { value }, cb) =>
       setOriginatorId(value, cb),
     onChangeOwnerId: ({ setOwnerId }) => (_, { value }, cb) =>
@@ -41,9 +43,11 @@ const CreateRiskSubcard = enhance(({
   isNew,
   isSaving,
   title,
+  description,
   originatorId,
   ownerId,
   onChangeTitle,
+  onChangeDescription,
   onChangeOriginatorId,
   onChangeOwnerId,
   onSave,
@@ -67,9 +71,11 @@ const CreateRiskSubcard = enhance(({
         {...{
           users,
           title,
+          description,
           originatorId,
           ownerId,
           onChangeTitle,
+          onChangeDescription,
           onChangeOriginatorId,
           onChangeOwnerId,
         }}
@@ -82,8 +88,11 @@ const CreateRiskSubcard = enhance(({
         onSave,
         onDelete,
         isSaving,
-        title,
         id,
+        title,
+        description,
+        originatorId,
+        ownerId,
       }}
     />
   </Subcard>

@@ -5,9 +5,11 @@ import { FormInput, FormField, SelectInput } from '../../components';
 
 const AddNewRiskSubcard = ({
   title,
+  description,
   originatorId,
   ownerId,
   onChangeTitle,
+  onChangeDescription,
   onChangeOriginatorId,
   onChangeOwnerId,
   users,
@@ -19,6 +21,15 @@ const AddNewRiskSubcard = ({
         onChange={onChangeTitle}
         value={title}
         placeholder="Risk name"
+      />
+    </FormField>
+    <FormField>
+      Description
+      <FormInput
+        element="textarea"
+        onChange={onChangeDescription}
+        value={description}
+        placeholder="Description"
       />
     </FormField>
     <FormField>
@@ -51,9 +62,11 @@ const AddNewRiskSubcard = ({
 AddNewRiskSubcard.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object).isRequired,
   title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
   originatorId: PropTypes.string.isRequired,
   ownerId: PropTypes.string.isRequired,
   onChangeTitle: PropTypes.func.isRequired,
+  onChangeDescription: PropTypes.func.isRequired,
   onChangeOriginatorId: PropTypes.func.isRequired,
   onChangeOwnerId: PropTypes.func.isRequired,
 };
