@@ -38,9 +38,11 @@ const Subcard = enhance(({
       <div>
         {renderLeftContent(props)}
         {isNew && (<Label names="primary">New</Label>)}
-        <Pull right>
-          {renderRightContent(props)}
-        </Pull>
+        {!!renderRightContent && (
+          <Pull right>
+            {renderRightContent(props)}
+          </Pull>
+        )}
       </div>
       <div>
         <ErrorSection size="3" {...{ errorText }} />
@@ -56,7 +58,7 @@ Subcard.propTypes = {
   collapsed: PropTypes.bool,
   errorText: PropTypes.string,
   isNew: PropTypes.bool,
-  renderLeftContent: PropTypes.func,
+  renderLeftContent: PropTypes.func.isRequired,
   renderRightContent: PropTypes.func,
   children: PropTypes.node,
 };

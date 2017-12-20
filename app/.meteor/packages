@@ -60,3 +60,4 @@ percolate:migrations
 react-template-helper
 meteorhacks:aggregate
 dynamic-import@0.2.0
+gadicc:blaze-react-component

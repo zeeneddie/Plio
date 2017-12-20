@@ -9,7 +9,13 @@ import IconLoading from '../../Icons/IconLoading';
 const enhance = getContext({ collapsed: PropTypes.bool, onToggleCollapse: PropTypes.func });
 
 const SubcardFooter = enhance(({
-  isSaving, isNew, onClose, onSave, onDelete, ...otherProps
+  isSaving,
+  isNew,
+  onClose,
+  onSave,
+  onDelete,
+  onToggleCollapse,
+  ...otherProps
 }) => {
   let content = null;
   let rightButtonCb = onSave;
@@ -20,25 +26,28 @@ const SubcardFooter = enhance(({
       content = (
         <div>
           <IconLoading margin="bottom" />
-          <span>Saving...</span>
+          Saving...
         </div>
       );
     } else if (isNew) {
-      content = (<span>Save</span>);
+      content = 'Save';
     } else {
-      rightButtonCb = onClose;
-      content = (<span>Close</span>);
+      rightButtonCb = (...args) => {
+        onToggleCollapse();
+        return onClose(...args);
+      };
+      content = 'Close';
     }
   }
 
   return (
     <CardBlock className="clearfix">
-      {showRightButton && (
+      {!!showRightButton && (
         <Button
           color="secondary"
           pull="right"
           className={cx({ disabled: isSaving })}
-          onClick={e => !isSaving && rightButtonCb(e, { isSaving, isNew, ...otherProps })}
+          onClick={e => !isSaving && rightButtonCb({ isSaving, isNew, ...otherProps }, e)}
         >
           {content}
         </Button>

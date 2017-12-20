@@ -37,7 +37,7 @@ const Button = compose(
 )(componentFromProp('component'));
 
 Button.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   onClick: PropTypes.func,
   className: PropTypes.string,
   href: PropTypes.string,
