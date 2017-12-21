@@ -1,16 +1,18 @@
 import React, { PropTypes } from 'react';
+import { InputGroup, InputGroupAddon, Input } from 'reactstrap';
 
-import { FormField, FormInput } from '../../../../../components';
+import { FormField } from '../../../../../components';
 import SequentialId from '../../../read/components/SequentialId';
 
 const OrgName = ({ name, serialNumber }) => (
   <FormField>
     <span>Org name</span>
-    <FormInput readOnly disabled value={name}>
-      <div className="input-group-addon">
+    <InputGroup>
+      <InputGroupAddon>
         <SequentialId {...{ serialNumber }} />
-      </div>
-    </FormInput>
+      </InputGroupAddon>
+      <Input readOnly disabled value={name} />
+    </InputGroup>
   </FormField>
 );
 

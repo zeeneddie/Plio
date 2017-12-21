@@ -22,19 +22,16 @@ const FormInput = enhance(({
 
   return (
     <ClearField onClick={e => onClear(e)(textInput)}>
-      <div className={cx(!!children && 'input-group')}>
-        {children}
-        <DebounceInput
-          className={cx('form-control', className)}
-          {...{
-            value,
-            onChange,
-            onBlur,
-            debounceTimeout,
-            ...other,
-          }}
-        />
-      </div>
+      <DebounceInput
+        className={cx('form-control', className)}
+        {...{
+          value,
+          onChange,
+          onBlur,
+          debounceTimeout,
+          ...other,
+        }}
+      />
     </ClearField>
   );
 });
