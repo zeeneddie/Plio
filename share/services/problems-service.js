@@ -1,11 +1,8 @@
-import { Meteor } from 'meteor/meteor';
-
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { Actions } from '/imports/share/collections/actions.js';
-import { generateSerialNumber, getWorkflowDefaultStepDate } from '/imports/share/helpers';
-import ActionService from '/imports/share/services/action-service';
-import WorkItemService from '/imports/share/services/work-item-service.js';
-import { WorkItemsStore, WorkflowTypes } from '/imports/share/constants.js';
+import { generateSerialNumber, getWorkflowDefaultStepDate } from '../helpers';
+import { WorkflowTypes } from '../constants';
+import { Organizations, Actions } from '../collections';
+import ActionService from './action-service';
+import WorkItemService from './work-item-service';
 
 export default {
 

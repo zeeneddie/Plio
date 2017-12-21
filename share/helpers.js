@@ -13,12 +13,15 @@ import {
   DocumentTypesPlural,
   AllDocumentTypes,
 } from './constants.js';
-import { Actions } from './collections/actions.js';
-import { NonConformities } from './collections/non-conformities.js';
-import { Risks } from './collections/risks.js';
-import { Standards } from './collections/standards.js';
-import { Organizations } from './collections/organizations';
-import { Discussions } from './collections/discussions';
+import {
+  PotentialGains,
+  Actions,
+  NonConformities,
+  Risks,
+  Standards,
+  Organizations,
+  Discussions,
+} from './collections';
 
 
 export const capitalize = str => `${str}`.charAt(0).toUpperCase() + `${str}`.substring(1);
@@ -39,6 +42,7 @@ export const getCollectionByName = (colName) => {
   const collections = {
     [CollectionNames.ACTIONS]: Actions,
     [CollectionNames.NCS]: NonConformities,
+    [CollectionNames.POTENTIAL_GAINS]: PotentialGains,
     [CollectionNames.RISKS]: Risks,
     [CollectionNames.STANDARDS]: Standards,
     [CollectionNames.ORGANIZATIONS]: Organizations,
@@ -54,6 +58,9 @@ export const getCollectionByDocType = (docType) => {
 
     case AllDocumentTypes.NON_CONFORMITY:
       return NonConformities;
+
+    case AllDocumentTypes.POTENTIAL_GAIN:
+      return PotentialGains;
 
     case AllDocumentTypes.RISK:
       return Risks;
@@ -75,6 +82,7 @@ export const getCollectionNameByDocType = docType => ({
   [DocumentTypes.STANDARD]: CollectionNames.STANDARDS,
   [DocumentTypes.NON_CONFORMITY]: CollectionNames.NCS,
   [DocumentTypes.RISK]: CollectionNames.RISKS,
+  [DocumentTypes.POTENTIAL_GAIN]: CollectionNames.POTENTIAL_GAINS,
 })[docType];
 
 export const getFormattedDate = (date, stringFormat) => {
@@ -87,6 +95,7 @@ export const getDocTypePlural = docType => ({
   [DocumentTypes.STANDARD]: DocumentTypesPlural.STANDARDS,
   [DocumentTypes.RISK]: DocumentTypesPlural.RISKS,
   [DocumentTypes.NON_CONFORMITY]: DocumentTypesPlural.NON_CONFORMITIES,
+  [DocumentTypes.POTENTIAL_GAIN]: DocumentTypesPlural.POTENTIAL_GAINS,
 })[docType];
 
 export const getLinkedDoc = (documentId, documentType) => {

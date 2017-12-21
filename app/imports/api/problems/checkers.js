@@ -22,8 +22,8 @@ import {
   P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_ANALYSIS,
   P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_ANALYSIS,
 } from '../errors';
-import { checkAndThrow } from '/imports/api/helpers';
-import { Actions } from '/imports/share/collections/actions';
+import { checkAndThrow } from '../helpers';
+import { Actions } from '../../share/collections/actions';
 import { isOrgOwner } from '../checkers';
 
 export const P_IsAnalysisOwner = (userId, organizationId, {

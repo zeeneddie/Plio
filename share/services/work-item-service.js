@@ -1,9 +1,6 @@
-import { Actions } from '/imports/share/collections/actions.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { WorkItems } from '/imports/share/collections/work-items.js';
-import BaseEntityService from './base-entity-service.js';
-import { ProblemTypes, WorkItemsStore, WorkflowTypes } from '/imports/share/constants.js';
+import { Actions, NonConformities, Risks, WorkItems, PotentialGains } from '../collections';
+import BaseEntityService from './base-entity-service';
+import { ProblemTypes, WorkItemsStore } from '../constants';
 
 
 const {
@@ -252,6 +249,7 @@ export default {
     const collections = {
       [ProblemTypes.NON_CONFORMITY]: NonConformities,
       [ProblemTypes.RISK]: Risks,
+      [ProblemTypes.POTENTIAL_GAIN]: PotentialGains,
     };
 
     const docCollection = collections[docType];

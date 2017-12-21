@@ -93,6 +93,7 @@ export const CollectionNames = {
   STANDARDS: 'Standards',
   WORK_ITEMS: 'WorkItems',
   USERS: 'users',
+  POTENTIAL_GAINS: 'PotentialGains',
 };
 
 export const DefaultRiskTypes = [
@@ -284,6 +285,7 @@ export const ProblemsStatuses = {
 export const ProblemTypes = {
   NON_CONFORMITY: 'non-conformity',
   RISK: 'risk',
+  POTENTIAL_GAIN: 'potential gain',
 };
 
 export const DocumentTypes = {
@@ -296,6 +298,7 @@ export const DocumentTypesPlural = {
   STANDARDS: 'standards',
   NON_CONFORMITIES: 'non-conformities',
   RISKS: 'risks',
+  POTENTIAL_GAINS: 'potential gains',
 };
 
 export const AllDocumentTypes = {

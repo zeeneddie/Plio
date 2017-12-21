@@ -4,8 +4,8 @@
   "scripts": {
     "lint-app": "./node_modules/.bin/eslint app",
     "lint-background-app": "./node_modules/.bin/eslint background-app",
-    "test": "yarn jest",
-    "jest": "./node_modules/.bin/jest"
+    "jest": "./node_modules/.bin/jest",
+    "test": "yarn jest"
   },
   "pre-commit": [
     "test"

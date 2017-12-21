@@ -1,18 +1,11 @@
 import { Template } from 'meteor/templating';
-import { ViewModel } from 'meteor/manuel:viewmodel';
-import { FlowRouter } from 'meteor/kadira:flow-router';
-import get from 'lodash.get';
-import property from 'lodash.property';
 import curry from 'lodash.curry';
 
 import { Occurrences } from '/imports/share/collections/occurrences.js';
-import { Departments } from '/imports/share/collections/departments.js';
-import { ProblemsStatuses } from '/imports/share/constants.js';
 import {
-  extractIds, inspire, findById,
+  extractIds, findById,
   lengthItems, flattenMapItems,
 } from '/imports/api/helpers';
-
 
 Template.NC_List.viewmodel({
   mixin: [
@@ -129,9 +122,9 @@ Template.NC_List.viewmodel({
   onModalOpen() {
     return () =>
       this.modal().open({
-        _title: 'Non-conformity',
-        template: 'NC_Create',
-        variation: 'save',
+        _title: 'Add',
+        template: 'NCs_ChooseTypeModal',
+        variation: 'simple',
       });
   },
 });

@@ -3,6 +3,7 @@ SimpleSchema.extendOptions = jest.fn();
 SimpleSchema.messages = jest.fn();
 SimpleSchema.prototype.messages = jest.fn();
 SimpleSchema.prototype.validator = jest.fn();
+SimpleSchema.prototype.pick = jest.fn();
 SimpleSchema.RegEx = {
   Id: jest.fn(),
 };
