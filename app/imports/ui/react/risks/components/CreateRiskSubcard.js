@@ -4,8 +4,9 @@ import { propOr, either, view } from 'ramda';
 
 import Subcard from '../../components/Subcard';
 import Label from '../../components/Labels/Label';
-import AddNewRiskSubcard from './AddNewRiskSubcard';
 import { lenses, viewOr } from '../../../../client/util';
+import AddNewRiskSubcard from './AddNewRiskSubcard';
+import AddExistingRiskSubcard from './AddExistingRiskSubcard';
 
 const enhance = compose(
   withState('title', 'setTitle', propOr('', 'title')),
@@ -55,7 +56,6 @@ const CreateRiskSubcard = enhance(({
   users,
   types,
   standards,
-  id,
   isNew,
   isSaving,
   title,
@@ -75,6 +75,7 @@ const CreateRiskSubcard = enhance(({
   onSave,
   onDelete,
   guidelines,
+  standard,
 }) => (
   <Subcard
     isNew
@@ -94,25 +95,29 @@ const CreateRiskSubcard = enhance(({
         {...{
           users,
           types,
-          standards,
           title,
           description,
           originatorId,
           ownerId,
           magnitude,
           typeId,
-          standardsIds,
           onChangeTitle,
           onChangeDescription,
           onChangeOriginatorId,
           onChangeOwnerId,
           onChangeMagnitude,
           onChangeTypeId,
-          onChangeStandardsIds,
           guidelines,
+          standard,
         }}
       />
-      <span>World Hello</span>
+      <AddExistingRiskSubcard
+        {...{
+          standards,
+          standardsIds,
+          onChangeStandardsIds,
+        }}
+      />
     </Subcard.SwitchView>
     <Subcard.Footer
       isNew
@@ -120,7 +125,6 @@ const CreateRiskSubcard = enhance(({
         onSave,
         onDelete,
         isSaving,
-        id,
         title,
         description,
         originatorId,
@@ -134,7 +138,6 @@ const CreateRiskSubcard = enhance(({
 ));
 
 CreateRiskSubcard.propTypes = {
-  id: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
   isSaving: PropTypes.bool,
   isNew: PropTypes.bool,

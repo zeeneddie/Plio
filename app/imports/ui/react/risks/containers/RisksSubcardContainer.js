@@ -1,5 +1,6 @@
-import { compose, withHandlers, withProps } from 'recompose';
+import { compose, withHandlers, withProps, withState } from 'recompose';
 import { connect } from 'react-redux';
+import { propOr } from 'ramda';
 
 import RisksSubcard from '../components/RisksSubcard';
 import { insert, remove } from '../../../../api/risks/methods';
@@ -11,24 +12,60 @@ import {
 } from '../../../../client/store/selectors/users';
 import store from '../../../../client/store';
 import { getUserId } from '../../../../client/store/selectors/global';
-import { getRiskGuidelines } from '../../../../client/store/selectors/organizations/index';
+import {
+  getRiskGuidelines,
+  getOrganizationId,
+} from '../../../../client/store/selectors/organizations';
 import { getRiskTypesAsItems } from '../../../../client/store/selectors/riskTypes';
 import { getStandardsAsItems } from '../../../../client/store/selectors/standards';
 
 export default compose(
   withProps(() => ({ store })),
-  connect(state => ({
+  connect((state, { standardId }) => ({
     userId: getUserId(state),
     users: getSortedUsersByFirstNameAsItems(state),
     guidelines: getRiskGuidelines(state),
     types: getRiskTypesAsItems(state),
     standards: getStandardsAsItems(state),
+    organizationId: getOrganizationId(state),
+    standard: state.collections.standardsByIds[standardId],
   })),
+  withState('isSaving', 'setIsSaving', propOr(false, 'isSaving')),
   withHandlers({
-    onSave: () => (args, cb) => {
-      console.log(args, cb);
+    onSave: ({
+      organizationId,
+      setIsSaving,
+      standardId,
+    }) => ({
+      title,
+      description,
+      originatorId,
+      ownerId,
+      magnitude,
+      typeId,
+      onDelete,
+    }) => {
+      setIsSaving(true);
+      const methodArgs = {
+        title,
+        description,
+        originatorId,
+        ownerId,
+        magnitude,
+        typeId,
+        organizationId,
+        standardId,
+        standardsIds: [standardId],
+      };
+      // TEMP
+      // because edit modal is still in blaze
+      _modal_.modal.callMethod(insert, methodArgs, (err, res) => {
+        setIsSaving(false);
+        // remove subcard from ui
+        onDelete();
+      });
     },
-    onDelete: () => ({ risk: { _id, title } }) => {
+    onDelete: ({ setIsSaving }) => ({ risk: { _id, title } }) => {
       swal({
         title: 'Are you sure?',
         text: `The risk "${title}" will be removed.`,
@@ -37,7 +74,10 @@ export default compose(
         confirmButtonText: 'Remove',
         closeOnConfirm: false,
       }, () => {
+        setIsSaving(true);
+
         const cb = (err) => {
+          setIsSaving(false);
           if (err) {
             swal.close();
             return;

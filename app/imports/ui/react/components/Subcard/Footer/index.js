@@ -1,14 +1,11 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
 import { CardBlock } from 'reactstrap';
-import { getContext } from 'recompose';
 
 import Button from '../../Buttons/Button';
 import IconLoading from '../../Icons/IconLoading';
 
-const enhance = getContext({ collapsed: PropTypes.bool, onToggleCollapse: PropTypes.func });
-
-const SubcardFooter = enhance(({
+const SubcardFooter = ({
   isSaving,
   isNew,
   onClose,
@@ -47,7 +44,12 @@ const SubcardFooter = enhance(({
           color="secondary"
           pull="right"
           className={cx({ disabled: isSaving })}
-          onClick={e => !isSaving && rightButtonCb({ isSaving, isNew, ...otherProps }, e)}
+          onClick={e => !isSaving && rightButtonCb({
+            isSaving,
+            isNew,
+            onDelete,
+            ...otherProps,
+          }, e)}
         >
           {content}
         </Button>
@@ -63,7 +65,7 @@ const SubcardFooter = enhance(({
       )}
     </CardBlock>
   );
-});
+};
 
 SubcardFooter.propTypes = {
   isSaving: PropTypes.bool,
@@ -71,6 +73,7 @@ SubcardFooter.propTypes = {
   onClose: PropTypes.func,
   onSave: PropTypes.func,
   onDelete: PropTypes.func,
+  onToggleCollapse: PropTypes.func,
 };
 
 export default SubcardFooter;

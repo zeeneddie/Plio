@@ -11,6 +11,7 @@ const RisksSubcard = ({
   users = [],
   types = [],
   standards = [],
+  standard,
   userId,
   guidelines,
   isSaving,
@@ -29,8 +30,7 @@ const RisksSubcard = ({
       render={card => (
         <CreateRiskSubcard
           key={card.id}
-          id={card.id}
-          onDelete={card.onDelete}
+          onDelete={() => card.onDelete(card.id)}
           {...{
             userId,
             users,
@@ -40,6 +40,7 @@ const RisksSubcard = ({
             isSaving,
             onSave,
             guidelines,
+            standard,
           }}
         />
       )}
@@ -88,6 +89,7 @@ RisksSubcard.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onClose: PropTypes.func,
   guidelines: PropTypes.object,
+  standard: PropTypes.object,
 };
 
 export default RisksSubcard;

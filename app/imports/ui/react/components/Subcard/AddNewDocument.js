@@ -23,7 +23,7 @@ const onDeleteHandler = ({
   setCards,
   onDelete = identity,
   ...props
-}) => ({ id }) => {
+}) => (id) => {
   const nextCards = reject(lensEq(lenses.id, id), cards);
   setCards(nextCards);
   onDelete({ ...props, cards: nextCards });

@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
 import { prop } from 'ramda';
-import { branch, withProps } from 'recompose';
+import { withProps, branch, compose, lifecycle, mapProps } from 'recompose';
 
-import withContextCollapsed from '../../helpers/withContextCollapsed';
+import withStateCollapsed from '../../helpers/withStateCollapsed';
 import CollapseBlock from '../CollapseBlock';
 import ErrorSection from '../ErrorSection';
 import { Pull } from '../Utility';
@@ -14,11 +14,30 @@ import SwitchView from './SwitchView';
 const enhance = branch(
   prop('disabled'),
   withProps(() => ({
+    chevron: false,
     collapsed: false,
     onToggleCollapse: () => null,
-    chevron: false,
   })),
-  withContextCollapsed(({ collapsed = true }) => collapsed),
+  compose(
+    withStateCollapsed(({ collapsed = true }) => collapsed),
+    mapProps(({
+      children,
+      collapsed,
+      onToggleCollapse,
+      ...props
+    }) => ({
+      ...props,
+      collapsed,
+      onToggleCollapse,
+      children: React.Children.map(children, (child) => {
+        if (child.type === Footer) {
+          return React.cloneElement(child, { collapsed, onToggleCollapse });
+        }
+
+        return child;
+      }),
+    })),
+  ),
 );
 
 const Subcard = enhance(({

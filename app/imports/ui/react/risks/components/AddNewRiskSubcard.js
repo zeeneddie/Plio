@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { CardBlock } from 'reactstrap';
+import { CardBlock, Input } from 'reactstrap';
 
 import {
   FormInput,
@@ -7,7 +7,6 @@ import {
   SelectInput,
   Select,
   Magnitudes,
-  SelectMultiInput,
 } from '../../components';
 
 const AddNewRiskSubcard = ({
@@ -17,18 +16,16 @@ const AddNewRiskSubcard = ({
   ownerId,
   magnitude,
   typeId,
-  standardsIds,
   onChangeTitle,
   onChangeDescription,
   onChangeOriginatorId,
   onChangeOwnerId,
   onChangeMagnitude,
   onChangeTypeId,
-  onChangeStandardsIds,
   users,
   types,
-  standards,
   guidelines,
+  standard,
 }) => (
   <CardBlock>
     <FormField>
@@ -50,12 +47,7 @@ const AddNewRiskSubcard = ({
     </FormField>
     <FormField>
       Standards
-      <SelectMultiInput
-        items={standards}
-        input={{ placeholder: 'Link to standard(s)' }}
-        onChange={onChangeStandardsIds}
-        selected={standardsIds}
-      />
+      <Input value={standard.title} disabled />
     </FormField>
     <FormField>
       Originator
@@ -101,21 +93,19 @@ const AddNewRiskSubcard = ({
 AddNewRiskSubcard.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object).isRequired,
   types: PropTypes.arrayOf(PropTypes.object).isRequired,
-  standards: PropTypes.arrayOf(PropTypes.object).isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   originatorId: PropTypes.string.isRequired,
   ownerId: PropTypes.string.isRequired,
   magnitude: PropTypes.string,
   typeId: PropTypes.string,
-  standardsIds: PropTypes.arrayOf(PropTypes.string),
+  standard: PropTypes.object.isRequired,
   onChangeTitle: PropTypes.func.isRequired,
   onChangeDescription: PropTypes.func.isRequired,
   onChangeOriginatorId: PropTypes.func.isRequired,
   onChangeOwnerId: PropTypes.func.isRequired,
   onChangeMagnitude: PropTypes.func.isRequired,
   onChangeTypeId: PropTypes.func.isRequired,
-  onChangeStandardsIds: PropTypes.func.isRequired,
   // eslint-disable-next-line react/no-typos
   guidelines: Magnitudes.propTypes.guidelines,
 };
