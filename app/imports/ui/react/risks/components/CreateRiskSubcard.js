@@ -28,7 +28,14 @@ const enhance = compose(
     ),
   ),
   withState('magnitude', 'setMagnitude', propOr('', 'magnitude')),
-  withState('typeId', 'setTypeId', propOr('', 'typeId')),
+  withState(
+    'typeId',
+    'setTypeId',
+    either(
+      view(lenses.typeId),
+      view(lenses.types.head.value),
+    ),
+  ),
   withHandlers({
     onChangeTitle: ({ setTitle }) => e => setTitle(e.target.value),
     onChangeDescription: ({ setDescription }) => e => setDescription(e.target.value),
