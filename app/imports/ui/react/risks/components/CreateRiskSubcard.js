@@ -149,8 +149,6 @@ CreateRiskSubcard.propTypes = {
   isNew: PropTypes.bool,
   onSave: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  activeView: PropTypes.number.isRequired,
-  setActiveView: PropTypes.func.isRequired,
 };
 
 export default CreateRiskSubcard;
