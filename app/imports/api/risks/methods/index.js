@@ -33,6 +33,7 @@ import {
 import { inject, always, T } from '/imports/api/helpers';
 
 export { default as update } from './update';
+export { default as linkToStandards } from './linkToStandards';
 
 const injectRK = inject(Risks);
 
