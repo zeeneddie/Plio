@@ -72,6 +72,8 @@ const firstName = lensProp('firstName');
 const originatorId = lensProp('originatorId');
 const ownerId = lensProp('ownerId');
 const options = lensProp('options');
+const rkGuidelines = lensProp('rkGuidelines');
+const ncGuidelines = lensProp('ncGuidelines');
 
 const head = lensIndex(0);
 
@@ -111,6 +113,8 @@ const globalDataLoading = compose(_global, dataLoading);
 
 const organizationsOrganizationId = compose(organizations, organizationId);
 const organizationsOrganization = compose(organizations, organization);
+const organizationsOrganizationRkGuidelines = compose(organizationsOrganization, rkGuidelines);
+const organizationsOrganizationNcGuidelines = compose(organizationsOrganization, ncGuidelines);
 const organizationsOrgSerialNumber = compose(organizations, orgSerialNumber);
 
 const dataImportIsModalOpened = compose(dataImport, isModalOpened);
@@ -204,8 +208,11 @@ export default {
   }),
   organizations: Object.assign(organizations, {
     organizationId: organizationsOrganizationId,
-    organization: organizationsOrganization,
     orgSerialNumber: organizationsOrgSerialNumber,
+    organization: Object.assign(organizationsOrganization, {
+      ncGuidelines: organizationsOrganizationNcGuidelines,
+      rkGuidelines: organizationsOrganizationRkGuidelines,
+    }),
   }),
   dataImport: Object.assign(dataImport, {
     isModalOpened: dataImportIsModalOpened,

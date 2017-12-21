@@ -2,10 +2,10 @@ import React, { PropTypes } from 'react';
 import { withProps, compose, lifecycle } from 'recompose';
 import { map, values, view } from 'ramda';
 
-import { Select } from '../../components';
-import { ProblemMagnitudes } from '../../../../share/constants';
-import { lenses } from '../../../../client/util';
-import { capitalize } from '../../../../share/helpers';
+import { Select } from '../../../components';
+import { ProblemMagnitudes } from '../../../../../share/constants';
+import { lenses } from '../../../../../client/util';
+import { capitalize } from '../../../../../share/helpers';
 
 const enhance = compose(
   withProps(() => ({

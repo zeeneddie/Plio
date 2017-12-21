@@ -10,6 +10,7 @@ const RisksSubcard = ({
   risks = [],
   users = [],
   userId,
+  guidelines,
   isSaving,
   isNew,
   onSave,
@@ -34,6 +35,7 @@ const RisksSubcard = ({
             isNew,
             isSaving,
             onSave,
+            guidelines,
           }}
         />
       )}
@@ -71,12 +73,15 @@ const RisksSubcard = ({
 );
 
 RisksSubcard.propTypes = {
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
   risks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  userId: PropTypes.string.isRequired,
   isSaving: PropTypes.bool,
   isNew: PropTypes.bool,
   onSave: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onClose: PropTypes.func,
+  guidelines: PropTypes.object,
 };
 
 export default RisksSubcard;

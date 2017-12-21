@@ -56,6 +56,7 @@ const CreateRiskSubcard = enhance(({
   onChangeMagnitude,
   onSave,
   onDelete,
+  guidelines,
 }) => (
   <Subcard
     isNew
@@ -84,6 +85,7 @@ const CreateRiskSubcard = enhance(({
           onChangeOriginatorId,
           onChangeOwnerId,
           onChangeMagnitude,
+          guidelines,
         }}
       />
       <span>World Hello</span>

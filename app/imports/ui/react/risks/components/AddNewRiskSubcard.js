@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { CardBlock } from 'reactstrap';
 
-import { FormInput, FormField, SelectInput, Select, MagnitudeSelect } from '../../components';
+import { FormInput, FormField, SelectInput, Magnitudes } from '../../components';
 
 const AddNewRiskSubcard = ({
   title,
@@ -15,6 +15,7 @@ const AddNewRiskSubcard = ({
   onChangeOwnerId,
   onChangeMagnitude,
   users,
+  guidelines,
 }) => (
   <CardBlock>
     <FormField>
@@ -58,14 +59,12 @@ const AddNewRiskSubcard = ({
         onSelect={onChangeOwnerId}
       />
     </FormField>
-    <FormField>
-      Magnitude
-      <MagnitudeSelect
-        selectFirstAsDefault
+    <Magnitudes {...{ guidelines }}>
+      <Magnitudes.Select
         value={magnitude}
         onChange={onChangeMagnitude}
       />
-    </FormField>
+    </Magnitudes>
   </CardBlock>
 );
 
@@ -81,6 +80,8 @@ AddNewRiskSubcard.propTypes = {
   onChangeOriginatorId: PropTypes.func.isRequired,
   onChangeOwnerId: PropTypes.func.isRequired,
   onChangeMagnitude: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/no-typos
+  guidelines: Magnitudes.Select.propTypes.guidelines,
 };
 
 export default AddNewRiskSubcard;

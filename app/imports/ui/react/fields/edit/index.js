@@ -1,1 +1,1 @@
-export { default as MagnitudeSelect } from './MagnitudeSelect';
+export { default as Magnitudes } from './Magnitudes';

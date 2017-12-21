@@ -11,12 +11,14 @@ import {
 } from '../../../../client/store/selectors/users';
 import store from '../../../../client/store';
 import { getUserId } from '../../../../client/store/selectors/global';
+import { getRiskGuidelines } from '../../../../client/store/selectors/organizations/index';
 
 export default compose(
   withProps(() => ({ store })),
   connect(state => ({
     userId: getUserId(state),
     users: getSortedUsersByFirstNameAsItems(state),
+    guidelines: getRiskGuidelines(state),
   })),
   withHandlers({
     onSave: () => (args, cb) => {
