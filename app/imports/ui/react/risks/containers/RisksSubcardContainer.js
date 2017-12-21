@@ -36,34 +36,39 @@ export default compose(
       organizationId,
       setIsSaving,
       standardId,
-    }) => ({
-      title,
-      description,
-      originatorId,
-      ownerId,
-      magnitude,
-      typeId,
-      onDelete,
-    }) => {
+      active,
+    }) => (props) => {
       setIsSaving(true);
-      const methodArgs = {
-        title,
-        description,
-        originatorId,
-        ownerId,
-        magnitude,
-        typeId,
-        organizationId,
-        standardId,
-        standardsIds: [standardId],
-      };
-      // TEMP
-      // because edit modal is still in blaze
-      _modal_.modal.callMethod(insert, methodArgs, (err, res) => {
-        setIsSaving(false);
-        // remove subcard from ui
-        onDelete();
-      });
+
+      if (active === 0) {
+        const {
+          title,
+          description,
+          originatorId,
+          ownerId,
+          magnitude,
+          typeId,
+          onDelete,
+        } = props;
+        const methodArgs = {
+          title,
+          description,
+          originatorId,
+          ownerId,
+          magnitude,
+          typeId,
+          organizationId,
+          standardId,
+          standardsIds: [standardId],
+        };
+        // TEMP
+        // because edit modal is still in blaze
+        return _modal_.modal.callMethod(insert, methodArgs, (err, id) => {
+          setIsSaving(false);
+          // remove subcard from ui
+          onDelete();
+        });
+      }
     },
     onDelete: ({ setIsSaving }) => ({ risk: { _id, title } }) => {
       swal({

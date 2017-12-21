@@ -50,6 +50,7 @@ const enhance = compose(
     onChangeStandardsIds: ({ setStandardsIds }) => ({ selected }) =>
       setStandardsIds(selected),
   }),
+  withState('activeView', 'setActiveView', propOr(0, 'activeView')),
 );
 
 const CreateRiskSubcard = enhance(({
@@ -76,6 +77,8 @@ const CreateRiskSubcard = enhance(({
   onDelete,
   guidelines,
   standard,
+  activeView,
+  setActiveView,
 }) => (
   <Subcard
     isNew
@@ -90,6 +93,8 @@ const CreateRiskSubcard = enhance(({
         <span>New</span>,
         <span>Existing</span>,
       ]}
+      onChange={setActiveView}
+      active={activeView}
     >
       <AddNewRiskSubcard
         {...{
@@ -132,6 +137,7 @@ const CreateRiskSubcard = enhance(({
         magnitude,
         typeId,
         standardsIds,
+        activeView,
       }}
     />
   </Subcard>
@@ -143,6 +149,8 @@ CreateRiskSubcard.propTypes = {
   isNew: PropTypes.bool,
   onSave: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  activeView: PropTypes.number.isRequired,
+  setActiveView: PropTypes.func.isRequired,
 };
 
 export default CreateRiskSubcard;

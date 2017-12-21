@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
 import { prop } from 'ramda';
-import { withProps, branch, compose, lifecycle, mapProps } from 'recompose';
+import { withProps, branch, compose, mapProps } from 'recompose';
 
 import withStateCollapsed from '../../helpers/withStateCollapsed';
 import CollapseBlock from '../CollapseBlock';
@@ -11,33 +11,33 @@ import Footer from './Footer';
 import AddNewDocument from './AddNewDocument';
 import SwitchView from './SwitchView';
 
-const enhance = branch(
-  prop('disabled'),
-  withProps(() => ({
-    chevron: false,
-    collapsed: false,
-    onToggleCollapse: () => null,
-  })),
-  compose(
-    withStateCollapsed(({ collapsed = true }) => collapsed),
-    mapProps(({
-      children,
-      collapsed,
-      onToggleCollapse,
-      ...props
-    }) => ({
-      ...props,
-      collapsed,
-      onToggleCollapse,
-      children: React.Children.map(children, (child) => {
-        if (child.type === Footer) {
-          return React.cloneElement(child, { collapsed, onToggleCollapse });
-        }
-
-        return child;
-      }),
+const enhance = compose(
+  branch(
+    prop('disabled'),
+    withProps(() => ({
+      chevron: false,
+      collapsed: false,
+      onToggleCollapse: () => null,
     })),
+    withStateCollapsed(({ collapsed = true }) => collapsed),
   ),
+  mapProps(({
+    children,
+    collapsed,
+    onToggleCollapse,
+    ...props
+  }) => ({
+    ...props,
+    collapsed,
+    onToggleCollapse,
+    children: React.Children.map(children, (child) => {
+      if (child.type === Footer) {
+        return React.cloneElement(child, { collapsed, onToggleCollapse });
+      }
+
+      return child;
+    }),
+  })),
 );
 
 const Subcard = enhance(({
