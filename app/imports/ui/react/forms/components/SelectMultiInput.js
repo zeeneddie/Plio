@@ -4,28 +4,37 @@ import { reject, unless, prop, propOr, append, equals } from 'ramda';
 
 import SelectInput from './SelectInput';
 import FormButtonList from './FormButtonList';
-import { lenses, filterBy, rejectBy, viewOr } from '../../../../client/util';
+import { filterBy, rejectBy } from '../../../../client/util';
 
 const enhance = compose(
   withState('value', 'setValue', propOr('', 'value')),
-  withState(
-    'selected',
-    'setSelected',
-    viewOr([], lenses.selected),
-  ),
   unless(
     prop('onDelete'),
     withHandlers({
-      onDelete: ({ selected, setSelected }) => ({ value }) =>
-        setSelected(reject(equals(value), selected)),
+      onDelete: ({
+        selected,
+        setSelected,
+        onChange,
+        ...props
+      }) => ({ value, ...item }) => {
+        const nextSelected = reject(equals(value), selected);
+        onChange({ selected: nextSelected, ...props }, { value, ...item });
+      },
     }),
   ),
   unless(
     prop('onSelect'),
     withHandlers({
-      onSelect: ({ selected, setSelected, setValue }) => (_, { value }, cb) => {
+      onSelect: ({
+        selected,
+        setValue,
+        onChange,
+        ...props
+      }) => (_, { value, ...item }, cb) => {
+        const nextSelected = append(value, selected);
         setValue('');
-        setSelected(append(value, selected), cb);
+        onChange({ selected: nextSelected, ...props }, { value, ...item });
+        cb();
       },
     }),
   ),
@@ -41,7 +50,6 @@ const SelectMultiInput = enhance(({
   items,
   selectedItems,
   selected,
-  onChange,
   onSelect,
   onDelete,
   value,
@@ -71,7 +79,7 @@ const SelectMultiInput = enhance(({
 SelectMultiInput.propTypes = {
   // eslint-disable-next-line react/no-typos
   items: SelectInput.propTypes.items,
-
+  onChange: PropTypes.func.isRequired,
 };
 
 export default SelectMultiInput;

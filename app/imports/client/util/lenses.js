@@ -77,6 +77,7 @@ const ncGuidelines = lensProp('ncGuidelines');
 const types = lensProp('types');
 const selected = lensProp('selected');
 const items = lensProp('items');
+const standardsIds = lensProp('standardsIds');
 
 const head = lensIndex(0);
 
@@ -174,6 +175,7 @@ export default {
   options,
   selected,
   value,
+  standardsIds,
   source1: Object.assign(source1, {
     htmlUrl: source1HtmlUrl,
   }),

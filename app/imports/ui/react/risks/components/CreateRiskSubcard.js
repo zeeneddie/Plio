@@ -5,7 +5,7 @@ import { propOr, either, view } from 'ramda';
 import Subcard from '../../components/Subcard';
 import Label from '../../components/Labels/Label';
 import AddNewRiskSubcard from './AddNewRiskSubcard';
-import { lenses } from '../../../../client/util';
+import { lenses, viewOr } from '../../../../client/util';
 
 const enhance = compose(
   withState('title', 'setTitle', propOr('', 'title')),
@@ -36,6 +36,7 @@ const enhance = compose(
       view(lenses.types.head.value),
     ),
   ),
+  withState('standardsIds', 'setStandardsIds', viewOr([], lenses.standardsIds)),
   withHandlers({
     onChangeTitle: ({ setTitle }) => e => setTitle(e.target.value),
     onChangeDescription: ({ setDescription }) => e => setDescription(e.target.value),
@@ -45,6 +46,8 @@ const enhance = compose(
       setOwnerId(value, cb),
     onChangeMagnitude: ({ setMagnitude }) => e => setMagnitude(e.target.value),
     onChangeTypeId: ({ setTypeId }) => e => setTypeId(e.target.value),
+    onChangeStandardsIds: ({ setStandardsIds }) => ({ selected }) =>
+      setStandardsIds(selected),
   }),
 );
 
@@ -61,12 +64,14 @@ const CreateRiskSubcard = enhance(({
   ownerId,
   magnitude,
   typeId,
+  standardsIds,
   onChangeTitle,
   onChangeDescription,
   onChangeOriginatorId,
   onChangeOwnerId,
   onChangeMagnitude,
   onChangeTypeId,
+  onChangeStandardsIds,
   onSave,
   onDelete,
   guidelines,
@@ -96,12 +101,14 @@ const CreateRiskSubcard = enhance(({
           ownerId,
           magnitude,
           typeId,
+          standardsIds,
           onChangeTitle,
           onChangeDescription,
           onChangeOriginatorId,
           onChangeOwnerId,
           onChangeMagnitude,
           onChangeTypeId,
+          onChangeStandardsIds,
           guidelines,
         }}
       />
@@ -120,6 +127,7 @@ const CreateRiskSubcard = enhance(({
         ownerId,
         magnitude,
         typeId,
+        standardsIds,
       }}
     />
   </Subcard>
