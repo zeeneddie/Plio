@@ -27,6 +27,7 @@ const enhance = compose(
       view(lenses.userId),
     ),
   ),
+  withState('magnitude', 'setMagnitude', propOr('', 'magnitude')),
   withHandlers({
     onChangeTitle: ({ setTitle }) => e => setTitle(e.target.value),
     onChangeDescription: ({ setDescription }) => e => setDescription(e.target.value),
@@ -34,6 +35,7 @@ const enhance = compose(
       setOriginatorId(value, cb),
     onChangeOwnerId: ({ setOwnerId }) => (_, { value }, cb) =>
       setOwnerId(value, cb),
+    onChangeMagnitude: ({ setMagnitude }) => e => setMagnitude(e.target.value),
   }),
 );
 
@@ -46,10 +48,12 @@ const CreateRiskSubcard = enhance(({
   description,
   originatorId,
   ownerId,
+  magnitude,
   onChangeTitle,
   onChangeDescription,
   onChangeOriginatorId,
   onChangeOwnerId,
+  onChangeMagnitude,
   onSave,
   onDelete,
 }) => (
@@ -74,10 +78,12 @@ const CreateRiskSubcard = enhance(({
           description,
           originatorId,
           ownerId,
+          magnitude,
           onChangeTitle,
           onChangeDescription,
           onChangeOriginatorId,
           onChangeOwnerId,
+          onChangeMagnitude,
         }}
       />
       <span>World Hello</span>
@@ -93,6 +99,7 @@ const CreateRiskSubcard = enhance(({
         description,
         originatorId,
         ownerId,
+        magnitude,
       }}
     />
   </Subcard>

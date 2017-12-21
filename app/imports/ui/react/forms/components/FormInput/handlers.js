@@ -8,7 +8,8 @@ export const onHandleBlur = ({ onBlur, value }) => (e) => {
   return typeof onBlur === 'function' && onBlur(e);
 };
 
-export const onHandleClear = () => () => (input) => {
+export const onHandleClear = ({ onChange }) => (e, input) => {
   input.value = '';
   input.focus();
+  return onChange && onChange({ ...e, target: input });
 };

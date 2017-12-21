@@ -16,14 +16,19 @@ const FormInput = enhance(({
   onHandleClear: onClear,
   onChange,
   debounceTimeout,
+  inputRef,
   ...other
 }) => {
   let textInput;
 
   return (
-    <ClearField onClick={e => onClear(e)(textInput)}>
+    <ClearField onClick={e => onClear(e, textInput)}>
       <DebounceInput
         className={cx('form-control', className)}
+        inputRef={(input) => {
+          textInput = input;
+          return inputRef && inputRef(input);
+        }}
         {...{
           value,
           onChange,
@@ -42,6 +47,7 @@ FormInput.propTypes = {
   onChange: PropTypes.func,
   value: PropTypes.string.isRequired,
   debounceTimeout: PropTypes.number,
+  inputRef: PropTypes.func,
   children: PropTypes.node,
 };
 

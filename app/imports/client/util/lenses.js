@@ -1,4 +1,4 @@
-import { compose, lensProp, curryN, defaultTo, view } from 'ramda';
+import { compose, lensProp, lensIndex, curryN, defaultTo, view } from 'ramda';
 
 export const viewOr = curryN(
   3,
@@ -71,6 +71,9 @@ const profile = lensProp('profile');
 const firstName = lensProp('firstName');
 const originatorId = lensProp('originatorId');
 const ownerId = lensProp('ownerId');
+const options = lensProp('options');
+
+const head = lensIndex(0);
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
@@ -130,6 +133,8 @@ const targetValue = compose(target, value);
 
 const profileFirstName = compose(profile, firstName);
 
+const headValue = compose(head, value);
+
 export default {
   _id,
   id,
@@ -153,6 +158,7 @@ export default {
   originatorId,
   ownerId,
   userId,
+  options,
   source1: Object.assign(source1, {
     htmlUrl: source1HtmlUrl,
   }),
@@ -224,5 +230,8 @@ export default {
   }),
   profile: Object.assign(profile, {
     firstName: profileFirstName,
+  }),
+  head: Object.assign(head, {
+    value: headValue,
   }),
 };
