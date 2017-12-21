@@ -75,6 +75,8 @@ const options = lensProp('options');
 const rkGuidelines = lensProp('rkGuidelines');
 const ncGuidelines = lensProp('ncGuidelines');
 const types = lensProp('types');
+const selected = lensProp('selected');
+const items = lensProp('items');
 
 const head = lensIndex(0);
 
@@ -143,6 +145,9 @@ const headValue = compose(head, value);
 const typesHead = compose(types, head);
 const typesHeadValue = compose(types, head, value);
 
+const itemsHead = compose(items, head);
+const itemsHeadValue = compose(items, head, value);
+
 export default {
   _id,
   id,
@@ -167,6 +172,8 @@ export default {
   ownerId,
   userId,
   options,
+  selected,
+  value,
   source1: Object.assign(source1, {
     htmlUrl: source1HtmlUrl,
   }),
@@ -248,6 +255,11 @@ export default {
   types: Object.assign(types, {
     head: Object.assign(typesHead, {
       value: typesHeadValue,
+    }),
+  }),
+  items: Object.assign(items, {
+    head: Object.assign(itemsHead, {
+      value: itemsHeadValue,
     }),
   }),
 };

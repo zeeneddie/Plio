@@ -3,4 +3,4 @@ export * from './object-relation';
 export * from './filter';
 export * from './sort';
 
-export { default as lenses } from './lenses';
+export { default as lenses, viewOr } from './lenses';

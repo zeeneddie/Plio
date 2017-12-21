@@ -1,7 +1,14 @@
 import React, { PropTypes } from 'react';
 import { CardBlock } from 'reactstrap';
 
-import { FormInput, FormField, SelectInput, Select, Magnitudes } from '../../components';
+import {
+  FormInput,
+  FormField,
+  SelectInput,
+  Select,
+  Magnitudes,
+  SelectMultiInput,
+} from '../../components';
 
 const AddNewRiskSubcard = ({
   title,
@@ -18,6 +25,7 @@ const AddNewRiskSubcard = ({
   onChangeTypeId,
   users,
   types,
+  standards,
   guidelines,
 }) => (
   <CardBlock>
@@ -74,6 +82,13 @@ const AddNewRiskSubcard = ({
         value={typeId}
         onChange={onChangeTypeId}
         options={types}
+      />
+    </FormField>
+    <FormField>
+      Standards
+      <SelectMultiInput
+        items={standards}
+        input={{ placeholder: 'Link to standard(s)' }}
       />
     </FormField>
   </CardBlock>

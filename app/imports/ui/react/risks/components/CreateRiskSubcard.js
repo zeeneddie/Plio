@@ -51,6 +51,7 @@ const enhance = compose(
 const CreateRiskSubcard = enhance(({
   users,
   types,
+  standards,
   id,
   isNew,
   isSaving,
@@ -88,6 +89,7 @@ const CreateRiskSubcard = enhance(({
         {...{
           users,
           types,
+          standards,
           title,
           description,
           originatorId,
