@@ -9,6 +9,7 @@ import CreateRiskSubcard from './CreateRiskSubcard';
 const RisksSubcard = ({
   risks = [],
   users = [],
+  types = [],
   userId,
   guidelines,
   isSaving,
@@ -32,6 +33,7 @@ const RisksSubcard = ({
           {...{
             userId,
             users,
+            types,
             isNew,
             isSaving,
             onSave,
@@ -75,6 +77,7 @@ const RisksSubcard = ({
 RisksSubcard.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object).isRequired,
   risks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  types: PropTypes.arrayOf(PropTypes.object).isRequired,
   userId: PropTypes.string.isRequired,
   isSaving: PropTypes.bool,
   isNew: PropTypes.bool,

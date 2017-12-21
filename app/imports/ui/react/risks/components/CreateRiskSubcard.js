@@ -28,6 +28,7 @@ const enhance = compose(
     ),
   ),
   withState('magnitude', 'setMagnitude', propOr('', 'magnitude')),
+  withState('typeId', 'setTypeId', propOr('', 'typeId')),
   withHandlers({
     onChangeTitle: ({ setTitle }) => e => setTitle(e.target.value),
     onChangeDescription: ({ setDescription }) => e => setDescription(e.target.value),
@@ -36,11 +37,13 @@ const enhance = compose(
     onChangeOwnerId: ({ setOwnerId }) => (_, { value }, cb) =>
       setOwnerId(value, cb),
     onChangeMagnitude: ({ setMagnitude }) => e => setMagnitude(e.target.value),
+    onChangeTypeId: ({ setTypeId }) => e => setTypeId(e.target.value),
   }),
 );
 
 const CreateRiskSubcard = enhance(({
   users,
+  types,
   id,
   isNew,
   isSaving,
@@ -49,11 +52,13 @@ const CreateRiskSubcard = enhance(({
   originatorId,
   ownerId,
   magnitude,
+  typeId,
   onChangeTitle,
   onChangeDescription,
   onChangeOriginatorId,
   onChangeOwnerId,
   onChangeMagnitude,
+  onChangeTypeId,
   onSave,
   onDelete,
   guidelines,
@@ -75,16 +80,19 @@ const CreateRiskSubcard = enhance(({
       <AddNewRiskSubcard
         {...{
           users,
+          types,
           title,
           description,
           originatorId,
           ownerId,
           magnitude,
+          typeId,
           onChangeTitle,
           onChangeDescription,
           onChangeOriginatorId,
           onChangeOwnerId,
           onChangeMagnitude,
+          onChangeTypeId,
           guidelines,
         }}
       />
@@ -102,6 +110,7 @@ const CreateRiskSubcard = enhance(({
         originatorId,
         ownerId,
         magnitude,
+        typeId,
       }}
     />
   </Subcard>
