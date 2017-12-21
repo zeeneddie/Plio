@@ -13,6 +13,7 @@ import store from '../../../../client/store';
 import { getUserId } from '../../../../client/store/selectors/global';
 import { getRiskGuidelines } from '../../../../client/store/selectors/organizations/index';
 import { getRiskTypesAsItems } from '../../../../client/store/selectors/riskTypes';
+import { getStandardsAsItems } from '../../../../client/store/selectors/standards';
 
 export default compose(
   withProps(() => ({ store })),
@@ -21,6 +22,7 @@ export default compose(
     users: getSortedUsersByFirstNameAsItems(state),
     guidelines: getRiskGuidelines(state),
     types: getRiskTypesAsItems(state),
+    standards: getStandardsAsItems(state),
   })),
   withHandlers({
     onSave: () => (args, cb) => {
