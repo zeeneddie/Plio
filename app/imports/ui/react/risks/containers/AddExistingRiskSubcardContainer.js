@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, lifecycle, mapProps } from 'recompose';
+import { compose, lifecycle, mapProps, shouldUpdate } from 'recompose';
 import { pluck } from 'ramda';
 import uiState from 'redux-ui';
 
@@ -9,6 +9,10 @@ import { getOrganizationId } from '../../../../client/store/selectors/organizati
 import { getLinkable as getLinkableRisks } from '../../../../api/risks/methods';
 
 export default compose(
+  shouldUpdate((props, nextProps) => (
+    props.risks.length !== nextProps.risks.length ||
+    props.selected !== nextProps.selected
+  )),
   connect(state => ({
     organizationId: getOrganizationId(state),
   })),
