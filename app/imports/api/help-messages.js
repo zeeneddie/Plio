@@ -6,7 +6,7 @@ const StandardsHelp = {
 
 const NonConformitiesHelp = {
   nonConformity: 'A non-conformity (sometimes called an exception) is a deviation from a standard, a legal regulation or an expectation.  To add a non-conformity into Plio, give it a name and fill in the top section below.  Once you\'ve carried out an analysis of the reasons for the non-conformity, go ahead and enter corrective actions or preventative actions to fix the problem or prevent it re-occuring in the future.',
-  costPerOccurance: 'Estimate the approximate cost of each occurrence of this non-conformity.',
+  costPerOccurance: 'Estimate the financial impact of this non-conformity.',
   occurences: 'Often, the same non-conformity can occur multiple times.  Instead of adding a new non-conformity record each time, just add another occurrence of the same non-conformity.',
 };
 

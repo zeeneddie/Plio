@@ -80,7 +80,7 @@ export const mapping = {
       isDefault: true,
     },
     approxCost: {
-      label: 'Approx cost per occurrence?',
+      label: 'Financial impact',
       reference: 'cost',
     },
     occurrences: {
