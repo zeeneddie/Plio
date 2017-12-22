@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import { combineReducers } from 'redux';
+import { reducer as uiReducer } from 'redux-ui';
 import { ORGANIZATION_CHANGED, USER_LOGOUT } from '../actions/types';
 
 import discussion from './discussionReducer';
@@ -33,6 +34,7 @@ const appReducer = combineReducers({
   helpDocs,
   modal,
   dataImport,
+  ui: uiReducer,
 });
 
 const rootReducer = (state, action) => {

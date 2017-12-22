@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { compose, withState, withHandlers } from 'recompose';
 import { propOr, either, view } from 'ramda';
+import ui from 'redux-ui';
 
 import Subcard from '../../components/Subcard';
 import Label from '../../components/Labels/Label';
@@ -51,6 +52,7 @@ const enhance = compose(
       setRiskId(value, cb),
   }),
   withState('activeView', 'setActiveView', propOr(0, 'activeView')),
+  ui(),
 );
 
 const CreateRiskSubcard = enhance(({
@@ -79,6 +81,7 @@ const CreateRiskSubcard = enhance(({
   standard,
   activeView,
   setActiveView,
+  ui: { error },
 }) => (
   <Subcard
     isNew
@@ -87,6 +90,7 @@ const CreateRiskSubcard = enhance(({
       'New risk',
       isNew ? <Label names="primary"> New</Label> : null,
     ]}
+    errorText={error}
   >
     <Subcard.SwitchView
       buttons={[

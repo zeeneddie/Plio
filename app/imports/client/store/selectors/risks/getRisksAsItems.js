@@ -3,7 +3,7 @@ import { map } from 'ramda';
 
 import { getRisks } from './state';
 
-const selector = map(({ _id, sequentialId, title }) => ({
+export const selector = map(({ _id, sequentialId, title }) => ({
   value: _id,
   text: `${sequentialId} ${title}`,
 }));

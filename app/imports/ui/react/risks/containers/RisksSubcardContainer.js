@@ -1,6 +1,8 @@
-import { compose, withHandlers, withProps, withState } from 'recompose';
+import { compose, withHandlers, withContext, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { propOr } from 'ramda';
+import ui from 'redux-ui';
+import { PropTypes } from 'react';
 
 import RisksSubcard from '../components/RisksSubcard';
 import { insert, remove, linkStandard } from '../../../../api/risks/methods';
@@ -50,7 +52,11 @@ const updateExistingDoc = ({ riskId: _id, standardId }, cb) => {
 };
 
 export default compose(
-  withProps(() => ({ store })),
+  // TEMP
+  withContext(
+    { store: PropTypes.object },
+    () => ({ store }),
+  ),
   connect((state, { standardId }) => ({
     userId: getUserId(state),
     users: getSortedUsersByFirstNameAsItems(state),
@@ -59,6 +65,11 @@ export default compose(
     organizationId: getOrganizationId(state),
     standard: state.collections.standardsByIds[standardId],
   })),
+  ui({
+    state: {
+      error: null,
+    },
+  }),
   withState('isSaving', 'setIsSaving', propOr(false, 'isSaving')),
   withHandlers({
     onSave: ({
