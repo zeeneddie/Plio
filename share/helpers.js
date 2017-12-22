@@ -14,7 +14,6 @@ import {
   AllDocumentTypes,
 } from './constants.js';
 import {
-  PotentialGains,
   Actions,
   NonConformities,
   Risks,
@@ -42,7 +41,6 @@ export const getCollectionByName = (colName) => {
   const collections = {
     [CollectionNames.ACTIONS]: Actions,
     [CollectionNames.NCS]: NonConformities,
-    [CollectionNames.POTENTIAL_GAINS]: PotentialGains,
     [CollectionNames.RISKS]: Risks,
     [CollectionNames.STANDARDS]: Standards,
     [CollectionNames.ORGANIZATIONS]: Organizations,
@@ -58,9 +56,6 @@ export const getCollectionByDocType = (docType) => {
 
     case AllDocumentTypes.NON_CONFORMITY:
       return NonConformities;
-
-    case AllDocumentTypes.POTENTIAL_GAIN:
-      return PotentialGains;
 
     case AllDocumentTypes.RISK:
       return Risks;
@@ -82,7 +77,6 @@ export const getCollectionNameByDocType = docType => ({
   [DocumentTypes.STANDARD]: CollectionNames.STANDARDS,
   [DocumentTypes.NON_CONFORMITY]: CollectionNames.NCS,
   [DocumentTypes.RISK]: CollectionNames.RISKS,
-  [DocumentTypes.POTENTIAL_GAIN]: CollectionNames.POTENTIAL_GAINS,
 })[docType];
 
 export const getFormattedDate = (date, stringFormat) => {

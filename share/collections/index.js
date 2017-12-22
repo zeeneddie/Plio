@@ -11,7 +11,6 @@ export * from './non-conformities';
 export * from './notifications';
 export * from './occurrences';
 export * from './organizations';
-export * from './potential-gains';
 export * from './reviews';
 export * from './risk-types';
 export * from './risks';
