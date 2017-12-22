@@ -13,9 +13,11 @@
             documentType="non-conformity"
             onUpdate=onUpdateNotifyUserCb}}
 
-        {{> Subcards_Occurrences_Edit
-            _id=this._id
-            occurrencesIds=this.occurrences}}
+        {{#unless (isPG this)}}
+          {{> Subcards_Occurrences_Edit
+              _id=this._id
+              occurrencesIds=this.occurrences}}
+        {{/unless}}
 
         {{> Subcards_Actions_Edit
             type="CA"
