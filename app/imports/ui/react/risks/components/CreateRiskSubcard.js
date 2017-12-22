@@ -4,9 +4,9 @@ import { propOr, either, view } from 'ramda';
 
 import Subcard from '../../components/Subcard';
 import Label from '../../components/Labels/Label';
-import { lenses, viewOr } from '../../../../client/util';
+import { lenses } from '../../../../client/util';
 import AddNewRiskSubcard from './AddNewRiskSubcard';
-import AddExistingRiskSubcard from './AddExistingRiskSubcard';
+import AddExistingRiskSubcardContainer from '../containers/AddExistingRiskSubcardContainer';
 
 const enhance = compose(
   withState('title', 'setTitle', propOr('', 'title')),
@@ -37,7 +37,7 @@ const enhance = compose(
       view(lenses.types.head.value),
     ),
   ),
-  withState('standardsIds', 'setStandardsIds', viewOr([], lenses.standardsIds)),
+  withState('riskId', 'setRiskId', propOr('', 'riskId')),
   withHandlers({
     onChangeTitle: ({ setTitle }) => e => setTitle(e.target.value),
     onChangeDescription: ({ setDescription }) => e => setDescription(e.target.value),
@@ -47,8 +47,8 @@ const enhance = compose(
       setOwnerId(value, cb),
     onChangeMagnitude: ({ setMagnitude }) => e => setMagnitude(e.target.value),
     onChangeTypeId: ({ setTypeId }) => e => setTypeId(e.target.value),
-    onChangeStandardsIds: ({ setStandardsIds }) => ({ selected }) =>
-      setStandardsIds(selected),
+    onChangeRiskId: ({ setRiskId }) => (_, { value }, cb) =>
+      setRiskId(value, cb),
   }),
   withState('activeView', 'setActiveView', propOr(0, 'activeView')),
 );
@@ -56,7 +56,7 @@ const enhance = compose(
 const CreateRiskSubcard = enhance(({
   users,
   types,
-  standards,
+  risks,
   isNew,
   isSaving,
   title,
@@ -65,14 +65,14 @@ const CreateRiskSubcard = enhance(({
   ownerId,
   magnitude,
   typeId,
-  standardsIds,
+  riskId,
   onChangeTitle,
   onChangeDescription,
   onChangeOriginatorId,
   onChangeOwnerId,
   onChangeMagnitude,
   onChangeTypeId,
-  onChangeStandardsIds,
+  onChangeRiskId,
   onSave,
   onDelete,
   guidelines,
@@ -116,12 +116,10 @@ const CreateRiskSubcard = enhance(({
           standard,
         }}
       />
-      <AddExistingRiskSubcard
-        {...{
-          standards,
-          standardsIds,
-          onChangeStandardsIds,
-        }}
+      <AddExistingRiskSubcardContainer
+        selected={riskId}
+        onChange={onChangeRiskId}
+        {...{ risks }}
       />
     </Subcard.SwitchView>
     <Subcard.Footer
@@ -136,7 +134,7 @@ const CreateRiskSubcard = enhance(({
         ownerId,
         magnitude,
         typeId,
-        standardsIds,
+        riskId,
         activeView,
       }}
     />

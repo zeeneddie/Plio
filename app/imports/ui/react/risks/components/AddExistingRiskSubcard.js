@@ -3,27 +3,30 @@ import { CardBlock } from 'reactstrap';
 
 import {
   FormField,
-  SelectMultiInput,
+  SelectInput,
 } from '../../components';
 
-const AddExistingRiskSubcard = ({ standards, standardsIds, onChangeStandardsIds }) => (
+const AddExistingRiskSubcard = ({ risks, onChange, selected }) => (
   <CardBlock>
     <FormField>
-      Standards
-      <SelectMultiInput
-        items={standards}
-        input={{ placeholder: 'Link to standard(s)' }}
-        onChange={onChangeStandardsIds}
-        selected={standardsIds}
+      Existing risk
+      <SelectInput
+        uncontrolled
+        caret
+        hint
+        items={risks}
+        input={{ placeholder: 'Existing risk' }}
+        onSelect={onChange}
+        {...{ selected }}
       />
     </FormField>
   </CardBlock>
 );
 
 AddExistingRiskSubcard.propTypes = {
-  standards: PropTypes.arrayOf(PropTypes.object).isRequired,
-  standardsIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onChangeStandardsIds: PropTypes.func.isRequired,
+  risks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selected: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default AddExistingRiskSubcard;

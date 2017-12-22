@@ -1,6 +1,7 @@
+import { curry } from 'ramda';
 import { checkDocExistance } from '../../checkers';
 
-export default (getQuery, collection) => (next, args, context) => {
-  checkDocExistance(collection, getQuery(args, context));
-  return next(args, context);
-};
+export default curry((getQuery, collection) => (next, args, context) => {
+  const document = checkDocExistance(collection, getQuery(args, context));
+  return next(args, { ...context, document });
+});

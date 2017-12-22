@@ -1,6 +1,4 @@
-import { checkDocExistance } from '../../checkers';
+import { prop } from 'ramda';
+import checkDocExistance from './checkDocExistance';
 
-export default collection => (next, args, context) => {
-  checkDocExistance(collection, { _id: args._id });
-  return next(args, context);
-};
+export default checkDocExistance(prop('_id'));

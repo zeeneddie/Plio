@@ -257,6 +257,16 @@ export default {
     return this._service.removePermanently({ _id, query });
   },
 
+  linkStandard({ _id, standardId }) {
+    const query = { _id };
+    const modifier = {
+      $addToSet: {
+        standardsIds: standardId,
+      },
+    };
+    this.collection.update(query, modifier);
+  },
+
   unlinkStandard({ _id, standardId }) {
     this.collection.update({ _id }, {
       $pull: { standardsIds: standardId },

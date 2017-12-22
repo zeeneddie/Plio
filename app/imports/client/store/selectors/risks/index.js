@@ -8,3 +8,4 @@ export {
 } from './getSearchedFilteredSortedRisksByFilter';
 export { default as getRiskTypesWithUncategorized } from './getRiskTypesWithUncategorized';
 export { default as getRisksDepartmentsList } from './getRisksDepartmentsList';
+export { default as getRisksAsItems } from './getRisksAsItems';

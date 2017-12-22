@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { propOr } from 'ramda';
 
 import RisksSubcard from '../components/RisksSubcard';
-import { insert, remove } from '../../../../api/risks/methods';
+import { insert, remove, linkStandard } from '../../../../api/risks/methods';
 import _modal_ from '../../../../startup/client/mixins/modal';
 import { swal } from '../../../utils';
 import { ALERT_AUTOHIDE_TIME } from '../../../../api/constants';
@@ -17,7 +17,37 @@ import {
   getOrganizationId,
 } from '../../../../client/store/selectors/organizations';
 import { getRiskTypesAsItems } from '../../../../client/store/selectors/riskTypes';
-import { getStandardsAsItems } from '../../../../client/store/selectors/standards';
+
+const saveNewDoc = ({
+  title,
+  description,
+  originatorId,
+  ownerId,
+  magnitude,
+  typeId,
+  organizationId,
+  standardId,
+}, cb) => {
+  const args = {
+    title,
+    description,
+    originatorId,
+    ownerId,
+    magnitude,
+    typeId,
+    organizationId,
+    standardId,
+    standardsIds: [standardId],
+  };
+  // TEMP
+  // because edit modal is still in blaze
+  return _modal_.modal.callMethod(insert, args, cb);
+};
+
+const updateExistingDoc = ({ riskId: _id, standardId }, cb) => {
+  const args = { _id, standardId };
+  return _modal_.modal.callMethod(linkStandard, args, cb);
+};
 
 export default compose(
   withProps(() => ({ store })),
@@ -26,7 +56,6 @@ export default compose(
     users: getSortedUsersByFirstNameAsItems(state),
     guidelines: getRiskGuidelines(state),
     types: getRiskTypesAsItems(state),
-    standards: getStandardsAsItems(state),
     organizationId: getOrganizationId(state),
     standard: state.collections.standardsByIds[standardId],
   })),
@@ -37,38 +66,26 @@ export default compose(
       setIsSaving,
       standardId,
       active,
-    }) => (props) => {
+    }) => ({ onDelete, ...props }) => {
       setIsSaving(true);
+      const cb = (err, id) => {
+        setIsSaving(false);
+        // remove subcard from ui
+        onDelete();
+      };
 
       if (active === 0) {
-        const {
-          title,
-          description,
-          originatorId,
-          ownerId,
-          magnitude,
-          typeId,
-          onDelete,
-        } = props;
-        const methodArgs = {
-          title,
-          description,
-          originatorId,
-          ownerId,
-          magnitude,
-          typeId,
+        return saveNewDoc({
+          ...props,
           organizationId,
           standardId,
-          standardsIds: [standardId],
-        };
-        // TEMP
-        // because edit modal is still in blaze
-        return _modal_.modal.callMethod(insert, methodArgs, (err, id) => {
-          setIsSaving(false);
-          // remove subcard from ui
-          onDelete();
-        });
+        }, cb);
       }
+
+      return updateExistingDoc({
+        ...props,
+        standardId,
+      }, cb);
     },
     onDelete: ({ setIsSaving }) => ({ risk: { _id, title } }) => {
       swal({
