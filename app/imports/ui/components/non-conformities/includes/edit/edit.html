@@ -4,8 +4,9 @@
       {{#with NC}}
         {{> NC_Card_Edit_Main
             NC=this}}
-
         {{> Subcards_RootCauseAnalysis_Edit
+            prefix=ui.analysis.prefix
+            label=ui.analysis.label
             rootCauseAnalysis=this.rootCauseAnalysis}}
 
         {{> Subcards_Notify_Edit

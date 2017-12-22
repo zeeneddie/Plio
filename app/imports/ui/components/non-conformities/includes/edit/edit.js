@@ -1,13 +1,16 @@
 import { Template } from 'meteor/templating';
-import moment from 'moment-timezone';
 import invoke from 'lodash.invoke';
 
 import {
   update,
   remove,
 } from '/imports/api/non-conformities/methods';
-import { getTzTargetDate } from '/imports/share/helpers';
-import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import {
+  ALERT_AUTOHIDE_TIME,
+  ANALYSIS_FIELD_PREFIXES,
+  ANALYSIS_NAMES,
+} from '../../../../../api/constants';
+
 
 Template.NC_Card_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck', 'router', 'collapsing'],
@@ -19,6 +22,15 @@ Template.NC_Card_Edit.viewmodel({
     return {
       organizationId: this.organizationId(),
       nonConformityId: this._id(),
+    };
+  },
+  ui() {
+    const isPG = this.isPG(this.NC());
+    return {
+      analysis: {
+        label: isPG ? ANALYSIS_NAMES.POTENTIAL_GAIN : ANALYSIS_NAMES.ROOT_CAUSE,
+        prefix: isPG ? ANALYSIS_FIELD_PREFIXES.GAIN : ANALYSIS_FIELD_PREFIXES.CAUSE,
+      },
     };
   },
   onUpdateNotifyUserCb() {

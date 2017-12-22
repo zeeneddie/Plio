@@ -250,3 +250,13 @@ export const KeyMap = {
 };
 
 export const DEPARTMENT_UNCATEGORIZED = 'DEPARTMENTS.UNCATEGORIZED';
+
+export const ANALYSIS_NAMES = {
+  ROOT_CAUSE: 'Root cause analysis',
+  POTENTIAL_GAIN: 'Potential gain analysis',
+};
+
+export const ANALYSIS_FIELD_PREFIXES = {
+  CAUSE: 'Cause',
+  GAIN: 'Gain',
+};

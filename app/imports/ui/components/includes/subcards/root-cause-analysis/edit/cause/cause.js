@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { _ } from 'meteor/underscore';
 
+import { ANALYSIS_FIELD_PREFIXES } from '../../../../../../../api/constants';
 
 Template.RCA_Cause_Edit.viewmodel({
   mixin: 'callWithFocusCheck',
@@ -19,6 +20,7 @@ Template.RCA_Cause_Edit.viewmodel({
   index: '',
   text: '',
   isNew: true,
+  prefix: ANALYSIS_FIELD_PREFIXES.CAUSE,
   loadData(cause) {
     this.load({
       index: cause.index,
@@ -27,7 +29,7 @@ Template.RCA_Cause_Edit.viewmodel({
     });
   },
   label() {
-    return `Cause ${this.index()}`;
+    return `${this.prefix()} ${this.index()}`;
   },
   update(e) {
     const { index, text } = this.getData();
