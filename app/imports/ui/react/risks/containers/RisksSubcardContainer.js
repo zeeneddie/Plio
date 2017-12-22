@@ -20,7 +20,7 @@ import {
 } from '../../../../client/store/selectors/organizations';
 import { getRiskTypesAsItems } from '../../../../client/store/selectors/riskTypes';
 
-const saveNewDoc = ({
+const saveNew = ({
   title,
   description,
   originatorId,
@@ -46,7 +46,7 @@ const saveNewDoc = ({
   return _modal_.modal.callMethod(insert, args, cb);
 };
 
-const updateExistingDoc = ({ riskId: _id, standardId }, cb) => {
+const linkExisting = ({ riskId: _id, standardId }, cb) => {
   const args = { _id, standardId };
   return _modal_.modal.callMethod(linkStandard, args, cb);
 };
@@ -77,28 +77,32 @@ export default compose(
       setIsSaving,
       standardId,
       active,
+      updateUI,
     }) => ({ onDelete, ...props }) => {
       setIsSaving(true);
       const cb = (err, id) => {
         setIsSaving(false);
+
+        if (err) updateUI('error', err.message);
+
         // remove subcard from ui
         onDelete();
       };
 
       if (active === 0) {
-        return saveNewDoc({
+        return saveNew({
           ...props,
           organizationId,
           standardId,
         }, cb);
       }
 
-      return updateExistingDoc({
+      return linkExisting({
         ...props,
         standardId,
       }, cb);
     },
-    onDelete: ({ setIsSaving }) => ({ risk: { _id, title } }) => {
+    onDelete: ({ setIsSaving, updateUI }) => ({ risk: { _id, title } }) => {
       swal({
         title: 'Are you sure?',
         text: `The risk "${title}" will be removed.`,
@@ -112,6 +116,8 @@ export default compose(
         const cb = (err) => {
           setIsSaving(false);
           if (err) {
+            updateUI('error', err.message);
+
             swal.close();
             return;
           }
