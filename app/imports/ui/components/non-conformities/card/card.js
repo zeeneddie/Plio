@@ -44,7 +44,7 @@ Template.NC_Card_Read.viewmodel({
   },
   openEditModal() {
     this.modal().open({
-      _title: 'Non-conformity',
+      _title: 'Nonconformity',
       template: 'NC_Card_Edit',
       helpText: NonConformitiesHelp.nonConformity,
       _id: this.NC() && this.NC()._id,

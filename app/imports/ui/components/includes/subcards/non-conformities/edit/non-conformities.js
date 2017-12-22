@@ -27,9 +27,9 @@ Template.Subcards_NonConformities_Edit.viewmodel({
 
     return {
       items,
-      addText: 'Add a new non-conformity',
+      addText: 'Add a new nonconformity',
       renderContentOnInitial: !(items.length > 5),
-      _lText: 'Non-conformities',
+      _lText: 'Nonconformities',
       _rText: items.length,
       onAdd: this.onAdd({ _id, isStandardsEditable }),
       getSubcardArgs: this.getSubcardArgs.bind(this),
@@ -59,7 +59,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
         isStandardsEditable,
         content: 'NC_Create',
         standardsIds: [_id],
-        _lText: 'New non-conformity',
+        _lText: 'New nonconformity',
         isNew: false,
         insertFn: this.insert.bind(this),
         removeFn: this.remove.bind(this),
@@ -84,7 +84,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
 
     swal({
       title: 'Are you sure?',
-      text: `The non-conformity "${title}" will be removed.`,
+      text: `The nonconformity "${title}" will be removed.`,
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
@@ -100,7 +100,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
 
         swal({
           title: 'Removed!',
-          text: `The non-conformity "${title}" was removed successfully.`,
+          text: `The nonconformity "${title}" was removed successfully.`,
           type: 'success',
           timer: ALERT_AUTOHIDE_TIME,
           showConfirmButton: false,

@@ -5,9 +5,9 @@ const StandardsHelp = {
 };
 
 const NonConformitiesHelp = {
-  nonConformity: 'A non-conformity (sometimes called an exception) is a deviation from a standard, a legal regulation or an expectation.  To add a non-conformity into Plio, give it a name and fill in the top section below.  Once you\'ve carried out an analysis of the reasons for the non-conformity, go ahead and enter corrective actions or preventative actions to fix the problem or prevent it re-occuring in the future.',
-  costPerOccurance: 'Estimate the approximate cost of each occurrence of this non-conformity.',
-  occurences: 'Often, the same non-conformity can occur multiple times.  Instead of adding a new non-conformity record each time, just add another occurrence of the same non-conformity.',
+  nonConformity: 'A nonconformity (sometimes called an exception) is a deviation from a standard, a legal regulation or an expectation.  To add a nonconformity into Plio, give it a name and fill in the top section below.  Once you\'ve carried out an analysis of the reasons for the nonconformity, go ahead and enter corrective actions or preventative actions to fix the problem or prevent it re-occuring in the future.',
+  costPerOccurance: 'Estimate the approximate cost of each occurrence of this nonconformity.',
+  occurences: 'Often, the same nonconformity can occur multiple times.  Instead of adding a new nonconformity record each time, just add another occurrence of the same nonconformity.',
 };
 
 const RisksHelp = {
@@ -27,7 +27,7 @@ const WorkInboxHelp = {
 };
 
 const OrganizationSettingsHelp = {
-  organizationSettings: 'Organization settings is where you can customize the behaviour of the Plio system.  For example, you can customize lists (e.g.  Departments, Standards types, Risk types) and create a section structure for your standards documents. You can also configure whether you want simple (3-step) or full (6-step) workflows for key Plio processes, for example the non-conformity handling process.',
+  organizationSettings: 'Organization settings is where you can customize the behaviour of the Plio system.  For example, you can customize lists (e.g.  Departments, Standards types, Risk types) and create a section structure for your standards documents. You can also configure whether you want simple (3-step) or full (6-step) workflows for key Plio processes, for example the nonconformity handling process.',
   organizationName: 'You can choose to set up all your users within a single organization in Plio, or create different Plio organizations for different business units. Either way, you will need to give your Plio organization a name.  This is usually identical to your company name, or a shortened version of it.',
   organizationOwner: 'The organization owner in Plio is the user who controls the administration of the Plio workspace, and is the designated person for account billing.  You can request to change the organization owner and if this request is accepted by the new owner, he or she will take over administration and billing responsibilities.',
   timeZone: 'Use this setting to set the time that Plio sends out certain notification messages.',
@@ -35,9 +35,9 @@ const OrganizationSettingsHelp = {
   departments: 'Create a list of departments or business sectors for your organization.',
   standardTypes: 'Create a list of standards types for your organization.',
   standardSections: 'Create the section structure for your standards documents.',
-  workflowSteps: 'Indicate whether you want Plio to use simple (3-step) or full (6-step) workflows for your non-conformity and risk-handling processes.  If you wish, you can set simpler workflows for your less critical non-conformities and risks.',
-  workflowReminders: 'Set apppropriate reminder times for actions that become due within your non-conformity and risk-handling processes.   If you wish, you can set shorter reminder times for less critical non-conformities and risks.',
-  nonConformityGuidelines: 'Help users to indicate the magnitude of this non-conformity, by giving them some clear guidelines relating to the estimated cost impact, or impact on customers.',
+  workflowSteps: 'Indicate whether you want Plio to use simple (3-step) or full (6-step) workflows for your nonconformity and risk-handling processes.  If you wish, you can set simpler workflows for your less critical nonconformities and risks.',
+  workflowReminders: 'Set apppropriate reminder times for actions that become due within your nonconformity and risk-handling processes.   If you wish, you can set shorter reminder times for less critical nonconformities and risks.',
+  nonConformityGuidelines: 'Help users to indicate the magnitude of this nonconformity, by giving them some clear guidelines relating to the estimated cost impact, or impact on customers.',
   riskTypes: 'Create a list of standards types for your organization.',
   riskGuidelines: 'Help users to indicate the magnitude of this risk more accurately, by giving them some clear guidelines (e.g by financial impact  minor - under $1,000; major $1k - $10k) in the context of your organization.',
   riskScoringGuidelines: 'Help users to score this risk more accurately, by giving them some clear guidelines on what the various scoring terms (e.g. minor, moderate, significant) mean in the context of your organization.',

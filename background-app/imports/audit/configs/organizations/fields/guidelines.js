@@ -37,9 +37,9 @@ const getGuidelinesConfig = (field, magnitude, relatedDocs) => ({
 });
 
 export default [
-  getGuidelinesConfig('ncGuidelines', 'minor', 'minor non-conformities'),
-  getGuidelinesConfig('ncGuidelines', 'major', 'major non-conformities'),
-  getGuidelinesConfig('ncGuidelines', 'critical', 'critical non-conformities'),
+  getGuidelinesConfig('ncGuidelines', 'minor', 'minor nonconformities'),
+  getGuidelinesConfig('ncGuidelines', 'major', 'major nonconformities'),
+  getGuidelinesConfig('ncGuidelines', 'critical', 'critical nonconformities'),
   getGuidelinesConfig('rkGuidelines', 'minor', 'minor risks'),
   getGuidelinesConfig('rkGuidelines', 'major', 'major risks'),
   getGuidelinesConfig('rkGuidelines', 'critical', 'critical risks'),

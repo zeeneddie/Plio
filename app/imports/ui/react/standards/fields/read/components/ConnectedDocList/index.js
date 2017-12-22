@@ -21,7 +21,7 @@ const ConnectedDocList = (props) => {
 
   const lists = [
     {
-      label: 'Non-conformities',
+      label: 'Nonconformities',
       items: [...ncs],
     },
     {
