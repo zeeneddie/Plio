@@ -41,6 +41,19 @@ const saveNew = ({
     standardId,
     standardsIds: [standardId],
   };
+
+  const invalid = Object.keys(args).some((key) => {
+    if (key !== 'description' && !args[key]) {
+      const message =
+        `The new risk cannot be created without a ${key}. Please enter a key for your risk`;
+      cb({ message });
+      return true;
+    }
+    return false;
+  });
+
+  if (invalid) return invalid;
+
   // TEMP
   // because edit modal is still in blaze
   return _modal_.modal.callMethod(insert, args, cb);
@@ -76,20 +89,21 @@ export default compose(
       organizationId,
       setIsSaving,
       standardId,
-      active,
       updateUI,
-    }) => ({ onDelete, ...props }) => {
+    }) => ({ onDelete, activeView, ...props }) => {
       setIsSaving(true);
       const cb = (err, id) => {
         setIsSaving(false);
 
-        if (err) updateUI('error', err.message);
+        if (err) return updateUI('error', err.message);
+
+        updateUI('error', null);
 
         // remove subcard from ui
-        onDelete();
+        return onDelete();
       };
 
-      if (active === 0) {
+      if (activeView === 0) {
         return saveNew({
           ...props,
           organizationId,
@@ -116,11 +130,12 @@ export default compose(
         const cb = (err) => {
           setIsSaving(false);
           if (err) {
-            updateUI('error', err.message);
-
             swal.close();
+            updateUI('error', err.message);
             return;
           }
+
+          updateUI('error', null);
 
           swal({
             title: 'Removed!',

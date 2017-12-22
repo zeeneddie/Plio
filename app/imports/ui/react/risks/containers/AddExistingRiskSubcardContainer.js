@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { compose, lifecycle, mapProps } from 'recompose';
-import { pluck, propOr } from 'ramda';
+import { pluck } from 'ramda';
 import uiState from 'redux-ui';
 
 import AddExistingRiskSubcard from '../components/AddExistingRiskSubcard';
