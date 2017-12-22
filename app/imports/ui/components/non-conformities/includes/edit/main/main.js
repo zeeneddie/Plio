@@ -22,7 +22,7 @@ import {
 } from '/imports/api/non-conformities/methods';
 
 Template.NC_Card_Edit_Main.viewmodel({
-  mixin: ['organization', 'getChildrenData'],
+  mixin: ['organization', 'getChildrenData', 'nonconformity'],
   onRendered(templateInstance) {
     const doc = templateInstance.data.NC;
     const userId = Meteor.userId();
