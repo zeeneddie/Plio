@@ -23,7 +23,7 @@ Template.Dashboard_Footer.viewmodel({
     DocumentsListSubs.subscribe('standardsList', this.organizationId());
 
     this.modal().open({
-      _title: 'Non-conformity',
+      _title: 'Nonconformity',
       template: 'NC_Create',
       variation: 'save',
     });

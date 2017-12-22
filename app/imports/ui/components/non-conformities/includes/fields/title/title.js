@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
 Template.NC_Title_Edit.viewmodel({
-  label: 'Non-conformity name',
+  label: 'Title',
   title: '',
   sequentialId: '',
   titleArgs() {

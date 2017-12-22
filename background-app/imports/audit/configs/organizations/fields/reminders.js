@@ -90,8 +90,8 @@ const getRemindersConfig = (field, relatedDocs) => {
 };
 
 export default [
-  ...getRemindersConfig('minorNc', 'minor non-conformities/risks'),
-  ...getRemindersConfig('majorNc', 'major non-conformities/risks'),
-  ...getRemindersConfig('criticalNc', 'critical non-conformities/risks'),
+  ...getRemindersConfig('minorNc', 'minor nonconformities/risks'),
+  ...getRemindersConfig('majorNc', 'major nonconformities/risks'),
+  ...getRemindersConfig('criticalNc', 'critical nonconformities/risks'),
   ...getRemindersConfig('improvementPlan', 'improvement plans'),
 ];
