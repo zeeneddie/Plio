@@ -203,7 +203,7 @@ export const DefaultHelpSections = [
   },
   {
     index: 5,
-    title: 'Managing non-conformities',
+    title: 'Managing nonconformities',
   },
   {
     index: 6,
@@ -611,7 +611,7 @@ export const RiskTitles = [
 ];
 
 export const NonConformitiesTitles = [
-  'Non-conformities',
+  'Nonconformities',
   'Exceptions',
 ];
 

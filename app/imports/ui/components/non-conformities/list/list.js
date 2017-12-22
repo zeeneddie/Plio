@@ -129,7 +129,7 @@ Template.NC_List.viewmodel({
   onModalOpen() {
     return () =>
       this.modal().open({
-        _title: 'Non-conformity',
+        _title: 'Nonconformity',
         template: 'NC_Create',
         variation: 'save',
       });

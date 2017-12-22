@@ -164,9 +164,9 @@
     }
   },
   "ncGuidelines" : {
-    "minor" : "Please go to Org Settings to define what a minor non-conformity means in your organization.",
-    "major" : "Please go to Org Settings to define what a major non-conformity means in your organization.",
-    "critical" : "Please go to Org Settings to define what a critical non-conformity means in your organization."
+    "minor" : "Please go to Org Settings to define what a minor nonconformity means in your organization.",
+    "major" : "Please go to Org Settings to define what a major nonconformity means in your organization.",
+    "critical" : "Please go to Org Settings to define what a critical nonconformity means in your organization."
   },
   "rkGuidelines" : {
     "minor" : "Please go to Org Settings to define what a minor risk means in your organization.",

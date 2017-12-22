@@ -8,7 +8,7 @@ import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.UserDirectory_InviteUsers.viewmodel({
   mixin: ['modal', 'organization'],
-  welcomeMessage: 'Hi there.\nWe\'ll be using Plio to share standards documents, to record non-conformities and risks and to track actions. See you soon.',
+  welcomeMessage: 'Hi there.\nWe\'ll be using Plio to share standards documents, to record nonconformities and risks and to track actions. See you soon.',
   usersEntries: _.range(0, 4).map(i => ({ avatarIndex: i })),
 
   save() {

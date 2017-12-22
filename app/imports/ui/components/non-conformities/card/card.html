@@ -4,7 +4,7 @@
       {{#with NC}}
         {{#Card_Read
           isReadOnly=isReadOnly
-          cardTitle="Non-conformity"
+          cardTitle="Nonconformity"
           doc=NC
           collection="NonConformities"
           isReady=isReady
@@ -140,19 +140,19 @@
           {{> PreloaderPage}}
         {{else}} {{#if NCId}}
           {{#CardHeading}}
-            <h5>This non-conformity no longer exists in Plio</h5>
+            <h5>This nonconformity no longer exists in Plio</h5>
           {{/CardHeading}}
         {{/if}} {{/unless}}
       {{/with}}
     {{else}}
       {{#CardHeading}}
         {{#if noSearchResults}}
-          <h5>Your search did not match any non-conformities</h5>
+          <h5>Your search did not match any nonconformities</h5>
         {{else}}
           {{#if isActiveNCFilter 4}}
-            <h5>There are no deleted non-conformities yet.</h5>
+            <h5>There are no deleted nonconformities yet.</h5>
           {{else}}
-            <h5>There are no non-conformities yet! Click on the 'Add' button to create your first non-conformity.</h5>
+            <h5>There are no nonconformities yet! Click on the 'Add' button to create your first nonconformity.</h5>
           {{/if}}
         {{/if}}
       {{/CardHeading}}

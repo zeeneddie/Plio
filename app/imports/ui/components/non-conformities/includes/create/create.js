@@ -16,7 +16,7 @@ Template.NC_Create.viewmodel({
 
     for (const key in data) {
       if (!data[key]) {
-        const errorMessage = `The new non-conformity cannot be created without a ${key}. Please enter a ${key} for your non-conformity.`;
+        const errorMessage = `The new nonconformity cannot be created without a ${key}. Please enter a ${key} for your nonconformity.`;
         return setModalError(errorMessage);
       }
     }
@@ -34,7 +34,7 @@ Template.NC_Create.viewmodel({
 
       open({
         _id,
-        _title: 'Non-conformity',
+        _title: 'Nonconformity',
         template: 'NC_Card_Edit',
       });
     };

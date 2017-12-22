@@ -18,7 +18,7 @@ export default _.extend({}, ProblemsService, {
   _getDoc(_id) {
     const NC = this.collection.findOne({ _id });
     if (!NC) {
-      throw new Meteor.Error(400, 'Non-conformity does not exist');
+      throw new Meteor.Error(400, 'Nonconformity does not exist');
     }
     return NC;
   },
