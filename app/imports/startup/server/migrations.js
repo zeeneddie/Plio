@@ -2,11 +2,11 @@
 
 // import { Migrations } from 'meteor/percolate:migrations';
 //
-// import { NonConformities } from '/imports/share/collections/non-conformities.js';
-// import { Risks } from '/imports/share/collections/risks.js';
-// import { WorkItems } from '/imports/share/collections/work-items.js';
-// import { Standards } from '/imports/share/collections/standards.js';
-// import { Actions } from '/imports/share/collections/actions.js';
+// import { NonConformities } from '/imports/share/collections/non-conformities';
+// import { Risks } from '/imports/share/collections/risks';
+// import { WorkItems } from '/imports/share/collections/work-items';
+// import { Standards } from '/imports/share/collections/standards';
+// import { Actions } from '/imports/share/collections/actions';
 //
 // const workItems = WorkItems.find({});
 // workItems.forEach((workItem) => {
@@ -33,10 +33,11 @@ import { Migrations } from 'meteor/percolate:migrations';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { Organizations } from '/imports/share/collections/organizations';
-import { Discussions } from '/imports/share/collections/discussions.js';
-import DiscussionsService from '/imports/api/discussions/discussions-service.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Discussions } from '/imports/share/collections/discussions';
+import DiscussionsService from '/imports/api/discussions/discussions-service';
+import { Risks } from '/imports/share/collections/risks';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { WorkItems } from '/imports/share/collections/work-items';
 import curry from 'lodash.curry';
 import {
   DocumentTypes,
@@ -263,7 +264,7 @@ Migrations.add({
         { originatorId: { $exists: true } },
       ],
     }, {
-      $unset: { ownerId: '',  originatorId: '' },
+      $unset: { ownerId: '', originatorId: '' },
     }, {
       multi: true,
     }];
@@ -286,9 +287,9 @@ Migrations.add({
     WorkItems.update(query, {
       $set: {
         type: 'complete approval',
-      }
+      },
     }, {
-      multi: true
+      multi: true,
     });
 
     console.log('Work item "complete update of documents" types were migrated to "complete approval"');
@@ -301,10 +302,40 @@ Migrations.add({
     WorkItems.update(query, {
       $set: {
         type: 'complete update of documents',
-      }
+      },
     });
 
     console.log('Work item "complete update of documents" types were restored');
+  },
+});
+
+Migrations.add({
+  version: 9,
+  name: 'Migrate home screen title for nonconformities to "Nonconformities & gains"',
+  up() {
+    Organizations.update(
+      { 'homeScreenTitles.nonConformities': 'Non-conformities' },
+      {
+        $set: {
+          'homeScreenTitles.nonConformities': 'Nonconformities & gains',
+        },
+      },
+      { multi: true },
+    );
+
+    console.log('Home screen title for nonconformities changed to "Nonconformities & gains"');
+  },
+  down() {
+    Organizations.update(
+      { 'homeScreenTitles.nonConformities': 'Nonconformities & gains' },
+      {
+        $set: {
+          'homeScreenTitles.nonConformities': 'Non-conformities',
+        },
+      },
+    );
+
+    console.log('Home screen title for nonconformities changed to "Non-conformities"');
   },
 });
 
