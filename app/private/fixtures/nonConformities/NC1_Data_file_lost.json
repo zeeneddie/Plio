@@ -1,6 +1,7 @@
 {
   "_id" : "fNcP9ifXiqK6MqYoC",
   "organizationId" : "KwKXz5RefrE5hjWJ2",
+  "type": "non-conformity",
   "serialNumber" : 1,
   "sequentialId" : "NC1",
   "title" : "Data file lost",

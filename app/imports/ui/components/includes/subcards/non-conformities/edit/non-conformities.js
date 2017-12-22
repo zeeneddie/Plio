@@ -7,6 +7,7 @@ import {
 import { getTzTargetDate } from '/imports/share/helpers';
 import { inspire } from '/imports/api/helpers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { ProblemTypes } from '../../../../../../share/constants';
 
 Template.Subcards_NonConformities_Edit.viewmodel({
   mixin: ['nonconformity', 'organization', 'modal'],
@@ -68,8 +69,9 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   },
   insert({ ...args }, cb) {
     const organizationId = this.organizationId();
+    const type = ProblemTypes.NON_CONFORMITY;
 
-    this.modal().callMethod(insert, { ...args, organizationId }, cb);
+    this.modal().callMethod(insert, { ...args, organizationId, type }, cb);
   },
   update({ _id, ...args }, cb = () => {}) {
     this.modal().callMethod(update, { _id, ...args }, cb);

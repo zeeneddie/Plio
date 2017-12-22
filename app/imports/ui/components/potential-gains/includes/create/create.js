@@ -1,7 +1,8 @@
 import { Template } from 'meteor/templating';
 
-import { create } from '../../../../../api/potential-gains/methods';
+import { insert } from '../../../../../api/non-conformities/methods';
 import { setModalError } from '../../../../../api/helpers';
+import { ProblemTypes } from '../../../../../share/constants';
 
 Template.PG_Create.viewmodel({
   mixin: ['organization', 'router', 'getChildrenData'],
@@ -32,6 +33,7 @@ Template.PG_Create.viewmodel({
       const args = {
         ...data,
         organizationId,
+        type: ProblemTypes.POTENTIAL_GAIN,
       };
       const cb = (_id, open) => {
         this.goToNC(_id, false);
@@ -43,7 +45,7 @@ Template.PG_Create.viewmodel({
         });
       };
 
-      return this.card.insert(create, args, cb);
+      return this.card.insert(insert, args, cb);
     }
 
     return null;

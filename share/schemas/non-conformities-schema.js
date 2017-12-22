@@ -19,10 +19,11 @@ const RequiredSchema = new SimpleSchema([
   BaseProblemsRequiredSchema,
   {
     type: {
-      type: Number,
-      defaultValue: ProblemTypes.NON_CONFORMITY,
-      optional: true,
-      allowedValues: Object.values(ProblemTypes),
+      type: String,
+      allowedValues: [
+        ProblemTypes.NON_CONFORMITY,
+        ProblemTypes.POTENTIAL_GAIN,
+      ],
     },
   },
 ]);
