@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { CardBlock, Row, Col } from 'reactstrap';
 
 import CardBlockCollapse from '/imports/ui/react/components/CardBlockCollapse';

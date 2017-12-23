@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { compose, withState, lifecycle, branch, renameProp } from 'recompose';
 import property from 'lodash.property';
 import { Input } from 'reactstrap';

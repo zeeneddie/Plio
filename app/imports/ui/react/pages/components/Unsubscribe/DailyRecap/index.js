@@ -1,5 +1,6 @@
 import { compose, withProps, lifecycle } from 'recompose';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import { handleMethodResult } from '/imports/api/helpers';
 import { unsubscribeFromDailyRecap } from '/imports/api/organizations/methods';

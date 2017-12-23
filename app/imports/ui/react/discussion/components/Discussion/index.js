@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-pascal-case */
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 
 import PreloaderPage from '../../../components/PreloaderPage';
 import MessagesListWrapperContainer from '../../containers/MessagesListWrapperContainer';

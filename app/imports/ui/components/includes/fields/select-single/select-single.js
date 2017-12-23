@@ -23,7 +23,7 @@ Template.Select_Single.viewmodel({
       }
     },
     function () {
-      const selected = this.selected()
+      const selected = this.selected();
 
       if (!this.loading() && !this.focused() && _.isFunction(this.getAllItems)) {
         const selectedItem = this.getAllItems().find(({ _id }) => _id === selected);

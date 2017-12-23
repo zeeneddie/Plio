@@ -1,6 +1,7 @@
 import { compose, mapProps, setPropTypes, branch, renderNothing } from 'recompose';
 import { connect } from 'react-redux';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import property from 'lodash.property';
 
 import { length, pickFrom, assoc, slice, mapC, identity } from '/imports/api/helpers';

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { DropdownItem } from 'reactstrap';
 import Button from '../Buttons/Button';
 import Icon from '../Icons/Icon';

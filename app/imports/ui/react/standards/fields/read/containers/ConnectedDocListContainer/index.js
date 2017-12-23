@@ -1,6 +1,6 @@
 import { compose, setPropTypes, mapProps } from 'recompose';
 import { connect } from 'react-redux';
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import property from 'lodash.property';
 
 import {

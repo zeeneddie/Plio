@@ -1,6 +1,8 @@
 /* eslint-disable no-new */
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
 import Clipboard from 'clipboard';

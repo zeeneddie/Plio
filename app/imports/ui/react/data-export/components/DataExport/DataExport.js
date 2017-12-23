@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Button from 'reactstrap/lib/Button';
 import CardBlock from 'reactstrap/lib/CardBlock';
 import IconLoading from '/imports/ui/react/components/Icons/IconLoading';
