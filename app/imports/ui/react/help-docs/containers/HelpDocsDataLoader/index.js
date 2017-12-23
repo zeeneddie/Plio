@@ -6,7 +6,7 @@ import {
   withHandlers,
 } from 'recompose';
 import { connect } from 'react-redux';
-import { composeWithTracker, compose as kompose } from 'react-komposer';
+import { composeWithTracker, compose as kompose } from '@storybook/react-komposer';
 import get from 'lodash.get';
 
 import { pickC, pickDeep } from '/imports/api/helpers';

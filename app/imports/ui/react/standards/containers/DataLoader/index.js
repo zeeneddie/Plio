@@ -1,4 +1,4 @@
-import { composeWithTracker, compose as kompose } from 'react-komposer';
+import { composeWithTracker, compose as kompose } from '@storybook/react-komposer';
 import {
   compose,
   lifecycle,

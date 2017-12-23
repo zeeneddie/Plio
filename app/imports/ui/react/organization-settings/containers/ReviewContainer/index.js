@@ -8,7 +8,7 @@ import {
   branch,
   renderNothing,
 } from 'recompose';
-import { composeWithTracker } from 'react-komposer';
+import { composeWithTracker } from '@storybook/react-komposer';
 import property from 'lodash.property';
 
 import store from '/imports/client/store';

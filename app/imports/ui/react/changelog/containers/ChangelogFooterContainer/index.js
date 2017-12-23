@@ -1,5 +1,5 @@
 import { compose, mapProps, withHandlers, shouldUpdate } from 'recompose';
-import { composeWithTracker } from 'react-komposer';
+import { composeWithTracker } from '@storybook/react-komposer';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 

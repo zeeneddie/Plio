@@ -1,5 +1,5 @@
 import { Tracker } from 'meteor/tracker';
-import { compose } from 'ramda';
+import { compose } from '@storybook/react-komposer';
 
 function getTrackerLoader(loaderFunc) {
   return (props, onData, env) => {

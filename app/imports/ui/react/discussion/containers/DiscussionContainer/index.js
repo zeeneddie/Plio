@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { composeWithTracker } from 'react-komposer';
+import { composeWithTracker } from '@storybook/react-komposer';
 import { compose, lifecycle, withProps, withHandlers } from 'recompose';
 import get from 'lodash.get';
 import { FlowRouter } from 'meteor/kadira:flow-router';

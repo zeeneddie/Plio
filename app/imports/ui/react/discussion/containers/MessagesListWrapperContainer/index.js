@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
-import { composeWithTracker } from 'react-komposer';
+import { composeWithTracker } from '@storybook/react-komposer';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';

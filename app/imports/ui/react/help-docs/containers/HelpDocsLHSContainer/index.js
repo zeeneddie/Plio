@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { compose, shallowEqual, withHandlers, withProps } from 'recompose';
-import { compose as kompose } from 'react-komposer';
+import { compose as kompose } from '@storybook/react-komposer';
 
 import { pickDeep, getSearchMatchText } from '/imports/api/helpers';
 import { canChangeHelpDocs } from '/imports/api/checkers';

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { connect } from 'react-redux';
 import { compose, withProps, withState, withHandlers } from 'recompose';
-import { composeWithTracker } from 'react-komposer';
+import { composeWithTracker } from '@storybook/react-komposer';
 
 import store from '/imports/client/store';
 import { callMethod } from '/imports/client/store/actions/modalActions';

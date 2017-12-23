@@ -1,5 +1,5 @@
 import { compose, mapProps } from 'recompose';
-import { composeWithTracker } from 'react-komposer';
+import { composeWithTracker } from '@storybook/react-komposer';
 import { connect } from 'react-redux';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';

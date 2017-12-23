@@ -1,4 +1,4 @@
-import { composeWithTracker } from 'react-komposer';
+import { composeWithTracker } from '@storybook/react-komposer';
 import {
   branch,
   compose,

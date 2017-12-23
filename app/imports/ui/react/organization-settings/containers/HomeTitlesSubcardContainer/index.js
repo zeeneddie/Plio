@@ -1,7 +1,7 @@
 import { changeTitle } from '/imports/api/organizations/methods';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
-import { composeWithTracker } from 'react-komposer';
+import { composeWithTracker } from '@storybook/react-komposer';
 
 import store from '/imports/client/store';
 import HomeTitlesSubcard from '../../components/HomeTitlesSubcard';

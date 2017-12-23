@@ -1,11 +1,12 @@
 import { compose, mapProps, shouldUpdate, withHandlers } from 'recompose';
-import { compose as kompose } from 'react-komposer';
+import { compose as kompose } from '@storybook/react-komposer';
 import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
 import { Tracker } from 'meteor/tracker';
 
 import { AuditLogsSubs } from '/imports/startup/client/subsmanagers';
-import {
+import {import { compose } from "react-komposer";
+
   setChangelogCollapsed,
   setLoadingLastLogs,
   setLastLogsLoaded,

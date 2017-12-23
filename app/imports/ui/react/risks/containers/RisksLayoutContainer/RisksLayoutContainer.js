@@ -9,7 +9,7 @@ import {
   shouldUpdate,
 } from 'recompose';
 import { connect } from 'react-redux';
-import { composeWithTracker, compose as kompose } from 'react-komposer';
+import { composeWithTracker, compose as kompose } from '@storybook/react-komposer';
 import { setInitializing } from '/imports/client/store/actions/risksActions';
 import { mapC, invokeStop, identity } from '/imports/api/helpers';
 import { RiskFilters, RiskFilterIndexes } from '/imports/api/constants';
