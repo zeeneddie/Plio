@@ -66,7 +66,7 @@ const LHS = ({
               uncontrolled
               value={searchText}
               disabled={animating}
-              getRef={input => (searchInput = input)}
+              innerRef={input => (searchInput = input)}
               placeholder="Search..."
             />
           </ClearField>

@@ -47,7 +47,7 @@
     "react-mounter": "^1.2.0",
     "react-portal": "^3.0.0",
     "react-redux": "^5.0.1",
-    "reactstrap": "^4.8.0",
+    "reactstrap": "^5.0.0-alpha.4",
     "recompose": "^0.26.0",
     "redux": "^3.6.0",
     "redux-batched-actions": "^0.1.3",

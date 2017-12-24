@@ -191,9 +191,9 @@ class MessagesListWrapper extends React.Component {
     const {
       discussion, messages, loading, userId, users,
     } = this.props;
-    const loader = getRef => (
+    const loader = innerRef => (
       <InfiniteLoader
-        {...{ getRef }}
+        {...{ innerRef }}
         loading
         className={cx('text-xs-center', { invisible: !loading })}
       />
