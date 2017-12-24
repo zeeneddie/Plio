@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, shallowEqual, withHandlers, withProps } from 'recompose';
+import { compose, withHandlers, withProps } from 'recompose';
 import { compose as kompose } from '@storybook/react-komposer';
 
 import { pickDeep, getSearchMatchText } from '/imports/api/helpers';
@@ -35,9 +35,7 @@ const HelpDocsLHSContainer = compose(
     'helpDocs.helpDocsFiltered',
   ])),
 
-  kompose(onSearchTextChanged, null, null, {
-    shouldResubscribe: (props, nextProps) => !shallowEqual(props, nextProps),
-  }),
+  kompose(onSearchTextChanged),
 
   connect(pickDeep([
     'global.animating',
