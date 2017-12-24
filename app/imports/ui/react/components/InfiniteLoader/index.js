@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Preloader from '../Preloader';
 import cx from 'classnames';
+import Preloader from '../Preloader';
 
 const InfiniteLoader = ({
   loading = false,
