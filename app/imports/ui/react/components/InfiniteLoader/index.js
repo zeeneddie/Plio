@@ -8,9 +8,9 @@ const InfiniteLoader = ({
   size = 1,
   invisible = false,
   className,
-  getRef,
+  innerRef,
 }) => loading && (
-  <div ref={getRef} className={cx('text-xs-center', { invisible }, className)}>
+  <div ref={innerRef} className={cx('text-xs-center', { invisible }, className)}>
     <Preloader {...{ size }} />
   </div>
 );
