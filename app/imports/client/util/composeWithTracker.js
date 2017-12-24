@@ -20,7 +20,11 @@ function getTrackerLoader(loaderFunc) {
 
 function composeWithTracker(loadFunc) {
   return function (component) {
-    return compose(getTrackerLoader(loadFunc))(component);
+    // explicitly pass { withRef: false }
+    // otherwise react will throw error
+    // that the component tries to access
+    // a ref of the stateless component
+    return compose(getTrackerLoader(loadFunc), { withRef: false })(component);
   };
 }
 

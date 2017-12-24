@@ -1,16 +1,16 @@
 import { connect } from 'react-redux';
-import { composeWithTracker } from '@storybook/react-komposer';
 import { compose, lifecycle, withProps, withHandlers } from 'recompose';
 import get from 'lodash.get';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { pickDeep, handleMethodResult, equals, getId, find } from '/imports/api/helpers';
 import { DiscussionSubs } from '/imports/startup/client/subsmanagers';
-import Discussion from '../../components/Discussion';
 import { setAt, reset, setDiscussion } from '/imports/client/store/actions/discussionActions';
 import { setShowCard } from '/imports/client/store/actions/mobileActions';
 import { Discussions } from '/imports/share/collections/discussions';
 import { toggleMute } from '/imports/api/discussions/methods';
+import Discussion from '../../components/Discussion';
+import { composeWithTracker } from '../../../../../client/util';
 
 const discussionLoad = ({ dispatch, urlItemId, organizationId }, onData) => {
   const subscription = DiscussionSubs.subscribe(

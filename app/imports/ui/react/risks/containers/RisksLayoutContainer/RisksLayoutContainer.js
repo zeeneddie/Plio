@@ -9,7 +9,7 @@ import {
   shouldUpdate,
 } from 'recompose';
 import { connect } from 'react-redux';
-import { composeWithTracker, compose as kompose } from '@storybook/react-komposer';
+import { compose as kompose } from '@storybook/react-komposer';
 import { setInitializing } from '/imports/client/store/actions/risksActions';
 import { mapC, invokeStop, identity } from '/imports/api/helpers';
 import { RiskFilters, RiskFilterIndexes } from '/imports/api/constants';
@@ -43,6 +43,7 @@ import {
 import { getIsDiscussionOpened } from '../../../../../client/store/selectors/discussion';
 import { getWindowWidth } from '../../../../../client/store/selectors/window';
 import { getMobileShowCard } from '../../../../../client/store/selectors/mobile';
+import { composeWithTracker } from '../../../../../client/util';
 
 const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
   const isDeleted = filter === RiskFilterIndexes.DELETED;

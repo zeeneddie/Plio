@@ -4,9 +4,9 @@ import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
 import { Tracker } from 'meteor/tracker';
 
+import { pickC } from '/imports/api/helpers';
 import { AuditLogsSubs } from '/imports/startup/client/subsmanagers';
-import {import { compose } from "react-komposer";
-
+import {
   setChangelogCollapsed,
   setLoadingLastLogs,
   setLastLogsLoaded,
@@ -18,7 +18,6 @@ import {import { compose } from "react-komposer";
 import { lastLogsLimit } from '../../constants';
 import Changelog from '../../components/Changelog';
 import propTypes from './propTypes';
-import { pickC } from '/imports/api/helpers';
 
 const onPropsChange = (props, onData) => {
   const { dispatch, documentId, collection } = props;

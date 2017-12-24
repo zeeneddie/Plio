@@ -1,4 +1,3 @@
-import { composeWithTracker } from '@storybook/react-komposer';
 import {
   branch,
   compose,
@@ -26,6 +25,7 @@ import loadCardData from '../../../loaders/loadCardData';
 import loadMainData from '../../loaders/loadMainData';
 import loadUsersData from '../../../loaders/loadUsersData';
 import observeOrganizations from '../../observers/observeOrganizations';
+import { composeWithTracker } from '../../../../../client/util';
 
 const getLayoutData = () => loadLayoutData(() => (
   DocumentLayoutSubs.subscribe('customersLayout')

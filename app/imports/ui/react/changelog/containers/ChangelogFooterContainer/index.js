@@ -1,5 +1,4 @@
 import { compose, mapProps, withHandlers, shouldUpdate } from 'recompose';
-import { composeWithTracker } from '@storybook/react-komposer';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 
@@ -14,6 +13,7 @@ import { pickC, shallowCompare } from '/imports/api/helpers';
 import { lastLogsLimit } from '../../constants';
 import ChangelogFooter from '../../components/ChangelogFooter';
 import propTypes from './propTypes';
+import { composeWithTracker } from '../../../../../client/util';
 
 const onPropsChange = (props, onData) => {
   let subscription;

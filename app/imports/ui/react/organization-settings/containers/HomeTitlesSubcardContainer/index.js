@@ -1,13 +1,13 @@
 import { changeTitle } from '/imports/api/organizations/methods';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
-import { composeWithTracker } from '@storybook/react-komposer';
 
+import { pickDeep, getId } from '/imports/api/helpers';
 import store from '/imports/client/store';
 import HomeTitlesSubcard from '../../components/HomeTitlesSubcard';
 import initMainData from '../loaders/initMainData';
+import { composeWithTracker } from '../../../../../client/util';
 
-import { pickDeep, getId } from '/imports/api/helpers';
 
 const enhance = compose(
   withProps({ store }),
