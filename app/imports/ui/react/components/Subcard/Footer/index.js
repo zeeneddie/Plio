@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
-import { CardBlock } from 'reactstrap';
+import { CardBody } from 'reactstrap';
 import { getContext } from 'recompose';
 
 import Button from '../../Buttons/Button';
@@ -33,7 +33,7 @@ const SubcardFooter = enhance(({
   }
 
   return (
-    <CardBlock className="clearfix">
+    <CardBody className="clearfix card-block">
       {showRightButton && (
         <Button
           color="secondary"
@@ -49,7 +49,7 @@ const SubcardFooter = enhance(({
           Delete
         </Button>
       )}
-    </CardBlock>
+    </CardBody>
   );
 });
 

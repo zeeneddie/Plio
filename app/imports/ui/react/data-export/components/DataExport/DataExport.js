@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from 'reactstrap/lib/Button';
-import CardBlock from 'reactstrap/lib/CardBlock';
+import { Button, CardBody } from 'reactstrap';
 import IconLoading from '/imports/ui/react/components/Icons/IconLoading';
 import CardDivider from '/imports/ui/react/components/CardDivider';
 import Form from '/imports/ui/react/forms/components/Form';
@@ -13,17 +12,17 @@ import SelectOptions from '../SelectOptions';
 const DataExportModal = props => (
   <Form onSubmit={props.onSubmit}>
     <div className="relative">
-      <CardBlock>
+      <CardBody class="card-block">
         <SelectOptions {...props} />
-      </CardBlock>
+      </CardBody>
       <CardDivider />
       <CardBlockCollapse leftText="Advanced filters" loading={props.processing}>
-        <CardBlock>
+        <CardBody class="card-block">
           <Filter {...props} />
-        </CardBlock>
+        </CardBody>
       </CardBlockCollapse>
 
-      <CardBlock className="text-xs-center">
+      <CardBody className="text-xs-center card-block">
         <Button color="primary" disabled={props.processing}>
           {props.processing ? ([
             <IconLoading key="download-snippet" margin="right" />,
@@ -32,7 +31,7 @@ const DataExportModal = props => (
             'Download CSV file'
           )}
         </Button>
-      </CardBlock>
+      </CardBody>
     </div>
   </Form>
 );
