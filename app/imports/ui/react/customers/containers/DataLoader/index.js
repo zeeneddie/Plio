@@ -38,12 +38,12 @@ const getCardData = () => loadCardData(({ urlItemId }) => (
 export default compose(
   connect(),
 
-  composeWithTracker(loadInitialData, null, null, {
-    shouldResubscribe: false,
+  composeWithTracker(loadInitialData, {
+    propsToWatch: [],
   }),
 
-  composeWithTracker(getLayoutData(), null, null, {
-    shouldResubscribe: false,
+  composeWithTracker(getLayoutData(), {
+    propsToWatch: [],
   }),
 
   branch(
@@ -52,8 +52,8 @@ export default compose(
     identity,
   ),
 
-  composeWithTracker(loadUsersData, null, null, {
-    shouldResubscribe: false,
+  composeWithTracker(loadUsersData, {
+    propsToWatch: [],
   }),
 
   lifecycle({
@@ -64,9 +64,8 @@ export default compose(
 
   connect(pickDeep(['global.urlItemId'])),
 
-  composeWithTracker(getCardData(), null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.urlItemId !== nextProps.urlItemId,
+  composeWithTracker(getCardData(), {
+    propsToWatch: ['urlItemId'],
   }),
 
   connect(pickDeep(['customers.initializing'])),

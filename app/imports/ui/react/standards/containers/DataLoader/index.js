@@ -8,8 +8,6 @@ import {
   renderComponent,
   withProps,
   onlyUpdateForKeys,
-  wrapDisplayName,
-  setDisplayName,
 } from 'recompose';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
@@ -70,14 +68,9 @@ export default namedCompose('StandardsDataLoader')(
   connect(),
   defaultProps({ filters: StandardFilters }),
   kompose(loadIsDiscussionOpened),
-  composeWithTracker(
-    loadInitialData,
-    null,
-    null,
-    {
-      shouldResubscribe: false,
-    },
-  ),
+  composeWithTracker(loadInitialData, {
+    propsToWatch: [],
+  }),
   connect(state => ({
     filter: getFilter(state),
     orgSerialNumber: getOrgSerialNumber(state),
@@ -88,10 +81,9 @@ export default namedCompose('StandardsDataLoader')(
     withProps(always({ loading: true })),
     composeWithTracker(
       getLayoutData(),
-      null,
-      null,
       {
-        shouldResubscribe: (props, nextProps) => (
+        propsToWatch: ['orgSerialNumber', 'filter'],
+        shouldSubscribe: (props, nextProps) => (
           props.orgSerialNumber !== nextProps.orgSerialNumber ||
           ((props.filter === 1 || props.filter === 2) && nextProps.filter === 3) ||
           (props.filter === 3 && (nextProps.filter === 1 || nextProps.filter === 2))
@@ -121,17 +113,9 @@ export default namedCompose('StandardsDataLoader')(
   })),
   branch(
     view(lenses.organizationId),
-    composeWithTracker(
-      loadCardData,
-      null,
-      null,
-      {
-        shouldResubscribe: (props, nextProps) => !!(
-          props.organizationId !== nextProps.organizationId ||
-          props.urlItemId !== nextProps.urlItemId
-        ),
-      },
-    ),
+    composeWithTracker(loadCardData, {
+      propsToWatch: ['organizationId', 'urlItemId'],
+    }),
     identity,
   ),
   connect(state => ({
@@ -140,16 +124,9 @@ export default namedCompose('StandardsDataLoader')(
   })),
   branch(
     view(lenses.organizationId),
-    composeWithTracker(
-      loadDeps,
-      null,
-      null,
-      {
-        shouldResubscribe: (props, nextProps) =>
-          props.organizationId !== nextProps.organizationId ||
-          props.initializing !== nextProps.initializing,
-      },
-    ),
+    composeWithTracker(loadDeps, {
+      propsToWatch: ['organizationId', 'initializing'],
+    }),
     identity,
   ),
   connect(state => ({

@@ -33,10 +33,12 @@ export default compose(
     'global.urlItemId',
     'discussion.resetCompleted',
   ])),
-  composeWithTracker(discussionLoad, null, null, {
-    shouldResubscribe: (props, nextProps) =>
+  composeWithTracker(discussionLoad, {
+    propsToWatch: ['urlItemId', 'resetCompleted'],
+    shouldSubscribe: (props, nextProps) => !!(
       props.urlItemId !== nextProps.urlItemId ||
-      nextProps.resetCompleted,
+      nextProps.resetCompleted
+    ),
   }),
   connect(({ collections, discussion, global: { userId } }, { organizationId }) => ({
     userId,

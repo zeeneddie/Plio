@@ -36,14 +36,12 @@ export default compose(
 
   connect(pickDeep(['global.urlItemId'])),
 
-  composeWithTracker(loadCardData, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.urlItemId !== nextProps.urlItemId,
+  composeWithTracker(loadCardData, {
+    propsToWatch: ['urlItemId'],
   }),
 
-  composeWithTracker(initFiles, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.helpDocs !== nextProps.helpDocs,
+  composeWithTracker(initFiles, {
+    propsToWatch: ['helpDocs'],
   }),
 
   connect(pickDeep([

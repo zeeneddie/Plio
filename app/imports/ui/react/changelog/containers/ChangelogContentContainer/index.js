@@ -28,11 +28,8 @@ const onPropsChange = (props, onData) => {
 
 const ChangelogContentContainer = compose(
   connect(state => ({ showAll: state.changelog.showAll })),
-
-  composeWithTracker(onPropsChange, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      (props.documentId !== nextProps.documentId)
-      || (props.showAll !== nextProps.showAll),
+  composeWithTracker(onPropsChange, {
+    propsToWatch: ['documentId', 'showAll'],
   }),
 
   connect(state => ({ logs: state.changelog.logs })),

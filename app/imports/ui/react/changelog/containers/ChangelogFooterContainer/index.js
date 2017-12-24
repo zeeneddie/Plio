@@ -51,9 +51,8 @@ const onViewRecentClick = props => () => props.dispatch(setShowAll(false));
 const ChangelogFooterContainer = compose(
   connect(),
 
-  composeWithTracker(onPropsChange, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.documentId !== nextProps.documentId,
+  composeWithTracker(onPropsChange, {
+    propsToWatch: ['documentId'],
   }),
 
   connect(state => pickC([

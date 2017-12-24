@@ -44,7 +44,7 @@ const initInterval = (fn) => {
   return () => Meteor.clearInterval(handle);
 };
 
-const shouldResubscribe = (props, nextProps) => {
+const shouldSubscribe = (props, nextProps) => {
   const pickProps = pickC(['priorLimit', 'followingLimit', 'discussionId', 'sort']);
   return (
     !props.resetCompleted && nextProps.resetCompleted ||
@@ -105,7 +105,11 @@ export default compose(
   connect(pickFromDiscussion([
     'at', 'sort', 'priorLimit', 'followingLimit', 'resetCompleted',
   ])),
-  composeWithTracker(loadMessagesData, PreloaderPage, null, { shouldResubscribe }),
+  composeWithTracker(loadMessagesData, {
+    shouldSubscribe,
+    loadingHandler: PreloaderPage,
+    propsToWatch: ['resetCompleted', 'priorLimit', 'followingLimit', 'discussionId', 'sort'],
+  }),
   connect(state => ({
     userId: state.global.userId,
     ...pickFromDiscussion([

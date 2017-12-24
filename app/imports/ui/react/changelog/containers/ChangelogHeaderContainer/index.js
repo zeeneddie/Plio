@@ -73,9 +73,8 @@ const ChangelogHeaderContainer = compose(
     onData(null, { documentId, collection, dispatch });
   }),
 
-  composeWithTracker(onPropsChange, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.documentId !== nextProps.documentId,
+  composeWithTracker(onPropsChange, {
+    propsToWatch: ['documentId'],
   }),
 
   connect(pickFrom('changelog', [

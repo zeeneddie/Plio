@@ -56,22 +56,16 @@ const enhance = compose(
   connect(),
   defaultProps({ filters: RiskFilters }),
   kompose(loadIsDiscussionOpened),
-  composeWithTracker(loadInitialData, null, null, {
-    shouldResubscribe: false,
+  composeWithTracker(loadInitialData, {
+    propsToWatch: [],
   }),
   connect(state => ({
     filter: getFilter(state),
     orgSerialNumber: getOrgSerialNumber(state),
   })),
-  composeWithTracker(
-    getLayoutData(),
-    null,
-    null,
-    {
-      shouldResubscribe: (props, nextProps) =>
-        props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
-    },
-  ),
+  composeWithTracker(getLayoutData(), {
+    propsToWatch: ['orgSerialNumber', 'filter'],
+  }),
   branch(
     props => props.loading,
     renderComponent(RisksLayout),
@@ -90,19 +84,15 @@ const enhance = compose(
     organizationId: getOrganizationId(state),
     urlItemId: getUrlItemId(state),
   })),
-  composeWithTracker(loadCardData, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      Boolean(props.organizationId !== nextProps.organizationId ||
-        props.urlItemId !== nextProps.urlItemId),
+  composeWithTracker(loadCardData, {
+    propsToWatch: ['organizationId', 'urlItemId'],
   }),
   connect(state => ({
     organizationId: getOrganizationId(state),
     initializing: getRisksInitializing(state),
   })),
-  composeWithTracker(loadDeps, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.organizationId !== nextProps.organizationId ||
-    props.initializing !== nextProps.initializing,
+  composeWithTracker(loadDeps, {
+    propsToWatch: ['initializing', 'organizationId'],
   }),
   connect(state => ({
     dataLoading: getDataLoading(state),
