@@ -9,7 +9,7 @@ import {
   shouldUpdate,
 } from 'recompose';
 import { connect } from 'react-redux';
-import { composeWithTracker, compose as kompose } from 'react-komposer';
+import { compose as kompose } from '@storybook/react-komposer';
 import { setInitializing } from '/imports/client/store/actions/risksActions';
 import { mapC, invokeStop, identity } from '/imports/api/helpers';
 import { RiskFilters, RiskFilterIndexes } from '/imports/api/constants';
@@ -43,6 +43,7 @@ import {
 import { getIsDiscussionOpened } from '../../../../../client/store/selectors/discussion';
 import { getWindowWidth } from '../../../../../client/store/selectors/window';
 import { getMobileShowCard } from '../../../../../client/store/selectors/mobile';
+import { composeWithTracker } from '../../../../../client/util';
 
 const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
   const isDeleted = filter === RiskFilterIndexes.DELETED;
@@ -55,22 +56,16 @@ const enhance = compose(
   connect(),
   defaultProps({ filters: RiskFilters }),
   kompose(loadIsDiscussionOpened),
-  composeWithTracker(loadInitialData, null, null, {
-    shouldResubscribe: false,
+  composeWithTracker(loadInitialData, {
+    propsToWatch: [],
   }),
   connect(state => ({
     filter: getFilter(state),
     orgSerialNumber: getOrgSerialNumber(state),
   })),
-  composeWithTracker(
-    getLayoutData(),
-    null,
-    null,
-    {
-      shouldResubscribe: (props, nextProps) =>
-        props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
-    },
-  ),
+  composeWithTracker(getLayoutData(), {
+    propsToWatch: ['orgSerialNumber', 'filter'],
+  }),
   branch(
     props => props.loading,
     renderComponent(RisksLayout),
@@ -89,19 +84,15 @@ const enhance = compose(
     organizationId: getOrganizationId(state),
     urlItemId: getUrlItemId(state),
   })),
-  composeWithTracker(loadCardData, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      Boolean(props.organizationId !== nextProps.organizationId ||
-        props.urlItemId !== nextProps.urlItemId),
+  composeWithTracker(loadCardData, {
+    propsToWatch: ['organizationId', 'urlItemId'],
   }),
   connect(state => ({
     organizationId: getOrganizationId(state),
     initializing: getRisksInitializing(state),
   })),
-  composeWithTracker(loadDeps, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.organizationId !== nextProps.organizationId ||
-    props.initializing !== nextProps.initializing,
+  composeWithTracker(loadDeps, {
+    propsToWatch: ['initializing', 'organizationId'],
   }),
   connect(state => ({
     dataLoading: getDataLoading(state),

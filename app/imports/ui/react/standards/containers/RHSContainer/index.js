@@ -27,6 +27,7 @@ import {
   getFilteredStandards,
   getSelectedStandard,
 } from '../../../../../client/store/selectors/standards';
+import { namedCompose } from '../../../helpers';
 
 // ({ searchText: String, standardsFiltered: Array }) => Boolean
 const noResultsPred = allPass([
@@ -64,7 +65,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(
+export default namedCompose('StandardsRHSContainer')(
   connect(mapStateToProps),
   branch(
     getStandardsLength,

@@ -31,7 +31,7 @@ Template.Actions_Create.viewmodel({
   toBeCompletedBy() {
     return this.defaultToBeCompletedBy() || this.ownerId();
   },
-  defaultToBeCompletedBy:'',
+  defaultToBeCompletedBy: '',
   verificationTargetDate: '',
   toBeVerifiedBy: '',
   save() {

@@ -57,7 +57,7 @@ shell-server@0.3.0
 # meteorhacks:sikka
 
 percolate:migrations
-react-template-helper
 meteorhacks:aggregate
 dynamic-import@0.2.0
 gadicc:blaze-react-component
+react-template-helper

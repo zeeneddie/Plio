@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { compose, withHandlers, getContext } from 'recompose';
 
 import DropdownItemAdd from '../../../../../components/DropdownItemAdd';

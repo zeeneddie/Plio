@@ -1,9 +1,10 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Row, Col } from 'reactstrap';
 
 import { getFullNameOrEmail } from '/imports/api/users/helpers';
 import { getFormattedDate } from '/imports/share/helpers';
-import { AnalysisStatuses } from '/imports/share/constants.js';
+import { AnalysisStatuses } from '/imports/share/constants';
 import { createReadFields } from '/imports/ui/react/helpers';
 
 const propTypes = {

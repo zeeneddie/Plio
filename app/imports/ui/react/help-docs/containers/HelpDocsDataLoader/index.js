@@ -6,7 +6,7 @@ import {
   withHandlers,
 } from 'recompose';
 import { connect } from 'react-redux';
-import { composeWithTracker, compose as kompose } from 'react-komposer';
+import { compose as kompose } from '@storybook/react-komposer';
 import get from 'lodash.get';
 
 import { pickC, pickDeep } from '/imports/api/helpers';
@@ -18,6 +18,7 @@ import loadCardData from '../../loaders/loadCardData';
 import initHelpSectionsData from '../../loaders/initHelpSectionsData';
 import initFiles from '../../loaders/initFiles';
 import HelpDocsLayout from '../../components/HelpDocsLayout';
+import { composeWithTracker } from '../../../../../client/util';
 
 export default compose(
   connect(),
@@ -35,14 +36,12 @@ export default compose(
 
   connect(pickDeep(['global.urlItemId'])),
 
-  composeWithTracker(loadCardData, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.urlItemId !== nextProps.urlItemId,
+  composeWithTracker(loadCardData, {
+    propsToWatch: ['urlItemId'],
   }),
 
-  composeWithTracker(initFiles, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.helpDocs !== nextProps.helpDocs,
+  composeWithTracker(initFiles, {
+    propsToWatch: ['helpDocs'],
   }),
 
   connect(pickDeep([

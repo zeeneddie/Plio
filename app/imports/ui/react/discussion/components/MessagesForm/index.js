@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { FormGroup, InputGroup, InputGroupButton } from 'reactstrap';
 
 import Button from '../../../components/Buttons/Button';

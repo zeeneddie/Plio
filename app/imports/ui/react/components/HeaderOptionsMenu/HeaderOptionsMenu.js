@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import Icon from '/imports/ui/react/components/Icons/Icon';
 import Nav from 'reactstrap/lib/Nav';

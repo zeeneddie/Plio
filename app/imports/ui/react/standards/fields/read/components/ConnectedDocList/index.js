@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import { ActionTypes } from '/imports/share/constants';
 import { splitActionsByType } from '/imports/api/actions/helpers';
@@ -21,7 +22,7 @@ const ConnectedDocList = (props) => {
 
   const lists = [
     {
-      label: 'Non-conformities',
+      label: 'Nonconformities',
       items: [...ncs],
     },
     {

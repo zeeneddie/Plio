@@ -94,7 +94,7 @@ Migrations.add({
           isPrimary: true,
         });
 
-        console.log(`Discussion for ${nc._id} non-conformity is created!`);
+        console.log(`Discussion for ${nc._id} nonconformity is created!`);
       }
     });
   },
@@ -263,7 +263,7 @@ Migrations.add({
         { originatorId: { $exists: true } },
       ],
     }, {
-      $unset: { ownerId: '',  originatorId: '' },
+      $unset: { ownerId: '', originatorId: '' },
     }, {
       multi: true,
     }];
@@ -286,9 +286,9 @@ Migrations.add({
     WorkItems.update(query, {
       $set: {
         type: 'complete approval',
-      }
+      },
     }, {
-      multi: true
+      multi: true,
     });
 
     console.log('Work item "complete update of documents" types were migrated to "complete approval"');
@@ -301,7 +301,7 @@ Migrations.add({
     WorkItems.update(query, {
       $set: {
         type: 'complete update of documents',
-      }
+      },
     });
 
     console.log('Work item "complete update of documents" types were restored');

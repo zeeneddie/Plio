@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers } from 'recompose';
+import { withHandlers } from 'recompose';
 
 import { getIsModalOpened } from '../../../../../client/store/selectors/dataImport';
 import { getOrganizationId } from '../../../../../client/store/selectors/organizations';
@@ -27,6 +27,7 @@ import {
   getFilteredStandards,
   getSortedStandardsByFilter,
 } from '../../../../../client/store/selectors/standards';
+import { namedCompose } from '../../../helpers';
 
 const mapStateToProps = (state) => {
   const standards = getSortedStandardsByFilter(state);
@@ -46,7 +47,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(
+export default namedCompose('StandardsLHSContainer')(
   connect(mapStateToProps),
   withHandlers({
     onToggleCollapse,

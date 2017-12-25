@@ -8,10 +8,10 @@ import { isOrgMemberBySelector } from '../../api/checkers';
 export const getUsersCursorByIdsAndOrgId = (
   ids,
   organizationId,
-  query
+  query,
 ) => {
   const _query = { _id: { $in: ids }, ...query };
-  let _projection = {
+  const _projection = {
     fields: {
       ...Meteor.users.publicFields,
     },

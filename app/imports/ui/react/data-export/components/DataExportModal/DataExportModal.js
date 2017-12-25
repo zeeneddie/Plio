@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import ModalHandle from '/imports/ui/react/components/ModalHandle';
 import DataExportContainer from '../../containers/DataExportContainer';

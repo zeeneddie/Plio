@@ -17,7 +17,7 @@ Template.NC_Create.viewmodel({
       if (key !== 'description' && !data[key]) {
         valid = false;
         // eslint-disable-next-line max-len
-        const errorMessage = `The new potential gain cannot be created without a ${key}. Please enter a ${key} for your potential gain.`;        
+        const errorMessage = `The new nonconformity cannot be created without a ${key}. Please enter a ${key} for your nonconformity.`;
         setModalError(errorMessage);
       }
     });

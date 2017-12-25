@@ -26,5 +26,5 @@ Template.Standards_Owner_Edit.viewmodel({
   },
   getData() {
     return { owner: this.owner() };
-  }
+  },
 });

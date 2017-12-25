@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
-import { CardBlock } from 'reactstrap';
+import { CardBody } from 'reactstrap';
 
 import Button from '../../Buttons/Button';
 import IconLoading from '../../Icons/IconLoading';
@@ -38,8 +39,8 @@ const SubcardFooter = ({
   }
 
   return (
-    <CardBlock className="clearfix">
-      {!!showRightButton && (
+    <CardBody className="clearfix card-block">
+      {showRightButton && (
         <Button
           color="secondary"
           pull="right"
@@ -63,7 +64,7 @@ const SubcardFooter = ({
           Delete
         </Button>
       )}
-    </CardBlock>
+    </CardBody>
   );
 };
 

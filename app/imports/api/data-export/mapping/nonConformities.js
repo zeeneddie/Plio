@@ -16,12 +16,12 @@ export const mapping = {
   ),
   fields: {
     _id: {
-      label: 'Non-conformity ID',
+      label: 'Nonconformity ID',
       isDefault: true,
       reference: 'sequentialId',
     },
     name: {
-      label: 'Non-conformity name',
+      label: 'Title',
       isDefault: true,
       reference: 'title',
     },
@@ -80,7 +80,7 @@ export const mapping = {
       isDefault: true,
     },
     approxCost: {
-      label: 'Approx cost per occurrence?',
+      label: 'Financial impact',
       reference: 'cost',
     },
     occurrences: {

@@ -39,7 +39,9 @@ Template.NC_Card_Edit.viewmodel({
       query = { _id, ...query };
     }
 
-    const allArgs = { ...args, _id, options, query };
+    const allArgs = {
+      ...args, _id, options, query,
+    };
 
     const updateFn = () => this.modal().callMethod(update, allArgs, cb);
 
@@ -55,7 +57,7 @@ Template.NC_Card_Edit.viewmodel({
 
     swal({
       title: 'Are you sure?',
-      text: `The non-conformity "${title}" will be removed.`,
+      text: `The nonconformity "${title}" will be removed.`,
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
@@ -69,7 +71,7 @@ Template.NC_Card_Edit.viewmodel({
 
         swal({
           title: 'Removed!',
-          text: `The non-conformity "${title}" was removed successfully.`,
+          text: `The nonconformity "${title}" was removed successfully.`,
           type: 'success',
           timer: ALERT_AUTOHIDE_TIME,
           showConfirmButton: false,

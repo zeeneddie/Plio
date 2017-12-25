@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { _ } from 'meteor/underscore';
 import { mapProps } from 'recompose';
 import TextInput from '/imports/ui/react/forms/components/TextInput';

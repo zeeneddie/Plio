@@ -1,5 +1,6 @@
-import React, { PropTypes } from 'react';
-import { CardBlock } from 'reactstrap';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { CardBody } from 'reactstrap';
 
 import { OrganizationSettingsHelp } from '/imports/api/help-messages';
 import withStateCollapsed from '/imports/ui/react/helpers/withStateCollapsed';
@@ -25,7 +26,7 @@ const ITEM_MAP = {
     items: RiskTitles,
   },
   nonConformities: {
-    label: 'Non-conformities',
+    label: 'Nonconformities',
     items: NonConformitiesTitles,
   },
   workInbox: {
@@ -70,9 +71,9 @@ const HomeTitlesSubcard = ({
 
   return (
     <CardBlockCollapse leftText="Workspace titles" {...{ loading }}>
-      <CardBlock>
+      <CardBody className="card-block">
         {fields}
-      </CardBlock>
+      </CardBody>
 
       <HelpPanelEnhanced showIconAlways>
         {OrganizationSettingsHelp.homeScreenTitles}

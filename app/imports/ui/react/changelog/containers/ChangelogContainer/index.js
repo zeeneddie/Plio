@@ -1,9 +1,10 @@
 import { compose, mapProps, shouldUpdate, withHandlers } from 'recompose';
-import { compose as kompose } from 'react-komposer';
+import { compose as kompose } from '@storybook/react-komposer';
 import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
 import { Tracker } from 'meteor/tracker';
 
+import { pickC } from '/imports/api/helpers';
 import { AuditLogsSubs } from '/imports/startup/client/subsmanagers';
 import {
   setChangelogCollapsed,
@@ -17,7 +18,6 @@ import {
 import { lastLogsLimit } from '../../constants';
 import Changelog from '../../components/Changelog';
 import propTypes from './propTypes';
-import { pickC } from '/imports/api/helpers';
 
 const onPropsChange = (props, onData) => {
   const { dispatch, documentId, collection } = props;

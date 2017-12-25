@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { compose, withProps } from 'recompose';
 
 import Form from '/imports/ui/react/forms/components/Form';

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import { getFullNameOrEmail } from '/imports/api/users/helpers';
 import { getFormattedDate } from '/imports/share/helpers';

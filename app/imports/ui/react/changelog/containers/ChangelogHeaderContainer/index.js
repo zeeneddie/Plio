@@ -1,5 +1,5 @@
 import { compose, mapProps, shouldUpdate } from 'recompose';
-import { compose as kompose, composeWithTracker } from 'react-komposer';
+import { compose as kompose } from '@storybook/react-komposer';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 
@@ -15,11 +15,12 @@ import {
   setLastHumanLog,
   setLoadingLastHumanLog,
 } from '/imports/client/store/actions/changelogActions';
+import { getNormalizedDataKey } from '/imports/client/store/lib/collectionsHelpers';
+import { STORE_COLLECTION_NAMES } from '/imports/client/store/lib/constants';
 import { shallowCompare, pickFrom } from '/imports/api/helpers';
 import ChangelogHeader from '../../components/ChangelogHeader';
 import propTypes from './propTypes';
-import { STORE_COLLECTION_NAMES } from '/imports/client/store/lib/constants';
-import { getNormalizedDataKey } from '/imports/client/store/lib/collectionsHelpers';
+import { composeWithTracker } from '../../../../../client/util';
 
 const getPrettyDate = date => getFormattedDate(date, 'DD MMM YYYY');
 
@@ -72,9 +73,8 @@ const ChangelogHeaderContainer = compose(
     onData(null, { documentId, collection, dispatch });
   }),
 
-  composeWithTracker(onPropsChange, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.documentId !== nextProps.documentId,
+  composeWithTracker(onPropsChange, {
+    propsToWatch: ['documentId'],
   }),
 
   connect(pickFrom('changelog', [
