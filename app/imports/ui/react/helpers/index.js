@@ -14,3 +14,4 @@ export { default as handleListCollapse } from './handleListCollapse';
 export { default as handleRedirectAndOpen } from './handleRedirectAndOpen';
 export { default as withRedirectAndOpen } from './withRedirectAndOpen';
 export { default as namedCompose } from './namedCompose';
+export { default as withStateToggle } from './withStateToggle';

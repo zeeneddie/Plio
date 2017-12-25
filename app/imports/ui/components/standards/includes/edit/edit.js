@@ -6,7 +6,6 @@ import { update, remove, updateViewedBy } from '/imports/api/standards/methods';
 import { isViewed } from '/imports/api/checkers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 import RisksSubcardContainer from '../../../../react/risks/containers/RisksSubcardContainer';
-import { PlioSubcard } from '../../../../react/components';
 
 Template.EditStandard.viewmodel({
   mixin: [
@@ -121,5 +120,5 @@ Template.EditStandard.viewmodel({
       });
     });
   },
-  RisksSubcardContainer: () => PlioSubcard,
+  RisksSubcardContainer: () => RisksSubcardContainer,
 });
