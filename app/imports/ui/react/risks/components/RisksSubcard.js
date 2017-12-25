@@ -1,7 +1,8 @@
 import React from 'react';
-import { CardTitle } from 'reactstrap';
-import { Subcard, IconLoading, Pull } from '../../components';
+import { Subcard } from '../../components';
 import { withStateToggle } from '../../helpers';
+import RisksSubcardHeader from './RisksSubcardHeader';
+import RisksSubcardBody from './RisksSubcardBody';
 
 const enhance = withStateToggle(false, 'isOpen', 'toggle');
 
@@ -13,17 +14,10 @@ const RisksSubcard = enhance(({
 }) => (
   <Subcard {...{ isOpen, toggle }}>
     <Subcard.Header>
-      <Pull left>
-        <CardTitle>Risks</CardTitle>
-      </Pull>
-      <Pull right>
-        <CardTitle>
-          {isSaving ? <IconLoading /> : (risks.length || '')}
-        </CardTitle>
-      </Pull>
+      <RisksSubcardHeader length={risks.length} {...{ isSaving }} />
     </Subcard.Header>
     <Subcard.Body>
-      {'Hello World'}
+      <RisksSubcardBody {...{ risks, isSaving }} />
     </Subcard.Body>
   </Subcard>
 ));
