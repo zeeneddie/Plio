@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { compose, withState, withHandlers, mapProps } from 'recompose';
 import { reject, unless, prop, propOr, append, equals } from 'ramda';
 

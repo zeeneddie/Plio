@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { compose, withState, withHandlers } from 'recompose';
 import { propOr, either, view } from 'ramda';
 import ui from 'redux-ui';

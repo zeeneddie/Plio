@@ -1,5 +1,6 @@
-import React, { PropTypes } from 'react';
-import { CardBlock, Card } from 'reactstrap';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { CardBody, Card } from 'reactstrap';
 import { compose, withState, withHandlers } from 'recompose';
 import { propOr, map, identity, reject } from 'ramda';
 import { Random } from 'meteor/random';
@@ -45,7 +46,7 @@ const AddNewDocument = enhance(({
   render,
   renderBtnContent = () => 'Add a new document',
 }) => (
-  <CardBlock>
+  <CardBody className="card-block">
     {children}
     {!!cards && (
       <Card className="new-cards">
@@ -59,7 +60,7 @@ const AddNewDocument = enhance(({
         </Button>
       </div>
     </TextAlign>
-  </CardBlock>
+  </CardBody>
 ));
 
 AddNewDocument.propTypes = {

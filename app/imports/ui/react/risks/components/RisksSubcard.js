@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Card } from 'reactstrap';
 import Blaze from 'meteor/gadicc:blaze-react-component';
 
@@ -6,6 +7,9 @@ import CardBlockCollapse from '../../components/CardBlockCollapse';
 import Subcard from '../../components/Subcard';
 import CreateRiskSubcard from './CreateRiskSubcard';
 import RiskSubcard from './RiskSubcard';
+import { defer } from '../../helpers';
+
+const SubcardAddNewDocumentDeferred = defer(Subcard.AddNewDocument);
 
 const RisksSubcard = ({
   risks = [],
@@ -27,7 +31,7 @@ const RisksSubcard = ({
     rightText={risks.length}
     loading={isSaving}
   >
-    <Subcard.AddNewDocument
+    <SubcardAddNewDocumentDeferred
       renderBtnContent={() => 'Add a new risk'}
       render={card => (
         <CreateRiskSubcard
@@ -68,7 +72,7 @@ const RisksSubcard = ({
           ))}
         </Card>
       )}
-    </Subcard.AddNewDocument>
+    </SubcardAddNewDocumentDeferred>
   </CardBlockCollapse>
 );
 

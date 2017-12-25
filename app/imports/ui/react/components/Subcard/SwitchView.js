@@ -1,5 +1,6 @@
-import React, { PropTypes } from 'react';
-import { CardBlock, ButtonGroup, FormGroup } from 'reactstrap';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { CardBody, ButtonGroup, FormGroup } from 'reactstrap';
 import cx from 'classnames';
 import { equals } from 'ramda';
 
@@ -23,7 +24,7 @@ const SwitchView = ({
   buttons,
 }) => (
   <div>
-    <CardBlock>
+    <CardBody className="card-block">
       <FormGroup className="row">
         <label className="form-control-label col-sm-4 col-xs-12" />
         <div className="col-sm-8 col-xs-12">
@@ -32,7 +33,7 @@ const SwitchView = ({
           </ButtonGroup>
         </div>
       </FormGroup>
-    </CardBlock>
+    </CardBody>
     {children[active]}
   </div>
 );

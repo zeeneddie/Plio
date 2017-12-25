@@ -1,5 +1,6 @@
-import React, { PropTypes } from 'react';
-import { CardBlock } from 'reactstrap';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { CardBody } from 'reactstrap';
 import { shouldUpdate } from 'recompose';
 
 import {
@@ -13,7 +14,7 @@ const enhance = shouldUpdate((props, nextProps) => (
 ));
 
 const AddExistingRiskSubcard = enhance(({ risks, onChange, selected }) => (
-  <CardBlock>
+  <CardBody className="card-block">
     <FormField>
       Existing risk
       <SelectInput
@@ -26,7 +27,7 @@ const AddExistingRiskSubcard = enhance(({ risks, onChange, selected }) => (
         {...{ selected }}
       />
     </FormField>
-  </CardBlock>
+  </CardBody>
 ));
 
 AddExistingRiskSubcard.propTypes = {

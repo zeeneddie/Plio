@@ -1,5 +1,6 @@
-import React, { PropTypes } from 'react';
-import { CardBlock, Input } from 'reactstrap';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { CardBody, Input } from 'reactstrap';
 
 import {
   FormInput,
@@ -27,7 +28,7 @@ const AddNewRiskSubcard = ({
   guidelines,
   standard,
 }) => (
-  <CardBlock>
+  <CardBody className="card-block">
     <FormField>
       Risk name
       <FormInput
@@ -87,7 +88,7 @@ const AddNewRiskSubcard = ({
         options={types}
       />
     </FormField>
-  </CardBlock>
+  </CardBody>
 );
 
 AddNewRiskSubcard.propTypes = {

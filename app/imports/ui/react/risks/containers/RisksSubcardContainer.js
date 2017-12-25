@@ -2,7 +2,7 @@ import { compose, withHandlers, withContext, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { propOr } from 'ramda';
 import ui from 'redux-ui';
-import { PropTypes } from 'react';
+import { PropTypes } from 'prop-types';
 
 import RisksSubcard from '../components/RisksSubcard';
 import { insert, remove, linkStandard } from '../../../../api/risks/methods';
