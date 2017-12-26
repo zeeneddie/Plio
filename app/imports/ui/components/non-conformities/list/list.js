@@ -57,7 +57,7 @@ Template.NC_List.viewmodel({
         array: items,
       };
     });
-    const resulstsFromItems = results(compose(sortByType, flattenMapItems));
+    const resulstsFromItems = results(flattenMapItems);
 
     switch (this.activeNCFilterId()) {
       case 1: {
@@ -87,7 +87,7 @@ Template.NC_List.viewmodel({
 
       return {
         ...m,
-        items,
+        items: sortByType(items),
         unreadMessagesCount: this._getTotalUnreadMessages(items),
       };
     };
