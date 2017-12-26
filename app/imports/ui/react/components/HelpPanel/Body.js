@@ -6,7 +6,7 @@ import Collapse from '../Collapse';
 
 const HelpPanelBody = ({ onToggleCollapse, collapsed, children }) => (
   <Collapse
-    {...{ collapsed }}
+    isOpen={!collapsed}
     className="collapse guidance-panel"
   >
     <div className="card-block">

@@ -5,7 +5,7 @@ import Collapse from '../Collapse';
 import Icon from '../Icons/Icon';
 
 const ErrorSection = ({ errorText, size = '4' }) => (
-  <Collapse className="modal-error-section" collapsed={!errorText}>
+  <Collapse className="modal-error-section" isOpen={errorText}>
     <div className="card-block">
       <Icon {...{ size }} name="exclamation-circle" aria-hidden="true" />
       {errorText}

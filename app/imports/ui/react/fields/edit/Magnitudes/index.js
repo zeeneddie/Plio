@@ -36,7 +36,7 @@ const Magnitudes = enhance(({
     </FormField>
 
     {!!guidelines && (
-      <Collapse {...{ collapsed }}>
+      <Collapse isOpen={!collapsed}>
         <MagnitudeGuidelines {...guidelines} />
       </Collapse>
     )}
