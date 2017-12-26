@@ -8,11 +8,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Approx cost per occurrence set to "{{{newValue}}}"',
+          'Financial impact set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Approx cost per occurrence changed from "{{{oldValue}}}" to "{{{newValue}}}"',
+          'Financial impact changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Approx cost per occurrence removed',
+          'Financial impact removed',
       },
     },
   ],
@@ -20,11 +20,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} set approx cost per occurrence of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
+          '{{{userName}}} set financial impact of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed approx cost per occurrence of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
+          '{{{userName}}} changed financial impact of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{{userName}}} removed approx cost per occurrence of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed financial impact of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

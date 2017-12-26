@@ -45,6 +45,11 @@ export const AnalysisStatuses = {
   1: 'Completed',
 };
 
+export const ANALYSIS_STATUSES = {
+  NOT_COMPLETED: 0,
+  COMPLETED: 1,
+};
+
 export const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/1.png',
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/2.png',
@@ -93,7 +98,6 @@ export const CollectionNames = {
   STANDARDS: 'Standards',
   WORK_ITEMS: 'WorkItems',
   USERS: 'users',
-  POTENTIAL_GAINS: 'PotentialGains',
 };
 
 export const DefaultRiskTypes = [
@@ -199,7 +203,7 @@ export const DefaultHelpSections = [
   },
   {
     index: 5,
-    title: 'Managing non-conformities',
+    title: 'Managing nonconformities',
   },
   {
     index: 6,
@@ -298,6 +302,7 @@ export const DocumentTypesPlural = {
   STANDARDS: 'standards',
   NON_CONFORMITIES: 'non-conformities',
   RISKS: 'risks',
+  POTENTIAL_GAINS: 'potential gains',
 };
 
 export const AllDocumentTypes = {
@@ -608,7 +613,7 @@ export const RiskTitles = [
 ];
 
 export const NonConformitiesTitles = [
-  'Non-conformities',
+  'Nonconformities',
   'Exceptions',
 ];
 

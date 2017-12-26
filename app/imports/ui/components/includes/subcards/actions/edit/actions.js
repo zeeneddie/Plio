@@ -54,7 +54,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       renderContentOnInitial: !(items.length > 5),
       onAdd: this.onAdd.bind(this),
       getSubcardArgs: this.getSubcardArgs.bind(this),
-      textToReplaceAddButton: `To add a ${docType}, go to either the Non-conformities or Risks screen and add it to a Non-conformity or Risk record first`,
+      textToReplaceAddButton: `To add a ${docType}, go to either the Non-conformities or Risks screen and add it to a Nonconformity or Risk record first`,
       ...inspire(['addText', '_lText', '_rText', 'isEditOnly'], this),
     };
   },

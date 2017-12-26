@@ -219,7 +219,7 @@ const configureSlingshot = () => {
 
       const NC = NonConformities.findOne({ _id: metaContext.nonConformityId });
       if (!NC) {
-        throw new Meteor.Error(400, 'Non-conformity does not exist');
+        throw new Meteor.Error(400, 'Nonconformity does not exist');
       }
 
       if (!isOrgMember(this.userId, NC.organizationId)) {

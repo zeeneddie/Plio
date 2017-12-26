@@ -52,6 +52,7 @@ export const renderNcs = renderBlazeComponent(async () => {
   await Promise.all([
     import('../../../ui/layouts/non-conformities-layout'),
     import('../../../ui/pages/non-conformities-page'),
+    import('../../../ui/components/potential-gains'),
   ]);
 
   return 'NC_Layout';

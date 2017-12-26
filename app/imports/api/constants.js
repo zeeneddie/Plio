@@ -3,7 +3,7 @@ export const ALERT_AUTOHIDE_TIME = 1500;
 
 export const DocumentTitles = {
   STANDARD: 'Standard',
-  NC: 'Non-conformity',
+  NC: 'Nonconformity',
   RISK: 'Risk',
 };
 
@@ -176,14 +176,20 @@ export const DepartmentsListProjection = {
 export const AnalysisTitles = {
   rootCauseAnalysis: 'Root cause analysis',
   riskAnalysis: 'Initial risk analysis',
-  updateOfStandards: 'Final approval to close this non-conformity',
+  potentialGainAnalysis: 'Potential gain analysis',
+  updateOfStandards: 'Final approval to close this nonconformity',
   updateOfRiskRecord: 'Final approval to close this risk',
+};
+
+export const AnalysisFieldPrefixes = {
+  CAUSE: 'Cause',
+  GAIN: 'Gain',
 };
 
 export const WorkItemDescriptions = {
   rootCauseAnalysis: 'Complete root cause analysis',
   riskAnalysis: 'Complete initial risk analysis',
-  updateOfStandards: 'Request for approval to close this non-conformity',
+  updateOfStandards: 'Request for approval to close this nonconformity',
   updateOfRiskRecord: 'Request for approval to close this risk',
 };
 
@@ -250,3 +256,4 @@ export const KeyMap = {
 };
 
 export const DEPARTMENT_UNCATEGORIZED = 'DEPARTMENTS.UNCATEGORIZED';
+

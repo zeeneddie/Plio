@@ -251,7 +251,7 @@ export const ImprovementPlanSchema = new SimpleSchema([
   FileIdsSchema,
 ]);
 
-export const getNotifySchema = (fieldNames) => new SimpleSchema({
+export const getNotifySchema = fieldNames => new SimpleSchema({
   notify: {
     type: [String],
     regEx: SimpleSchema.RegEx.Id,

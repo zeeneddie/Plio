@@ -41,7 +41,7 @@ Template.Subcards_Notify_Edit.viewmodel({
         return;
       }
 
-      // TODO need one for Non-conformities, risks, actions
+      // TODO need one for Nonconformities, risks, actions
       if (this.documentType() === 'standard') {
         /* addedToNotifyList.call({
           standardId: this.doc()._id,

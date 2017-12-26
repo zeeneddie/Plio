@@ -96,7 +96,7 @@ Migrations.add({
           isPrimary: true,
         });
 
-        console.log(`Discussion for ${nc._id} non-conformity is created!`);
+        console.log(`Discussion for ${nc._id} nonconformity is created!`);
       }
     });
   },
@@ -312,6 +312,36 @@ Migrations.add({
 
 Migrations.add({
   version: 9,
+  name: 'Migrate home screen title for nonconformities to "Nonconformities & gains"',
+  up() {
+    Organizations.update(
+      { 'homeScreenTitles.nonConformities': 'Non-conformities' },
+      {
+        $set: {
+          'homeScreenTitles.nonConformities': 'Nonconformities & gains',
+        },
+      },
+      { multi: true },
+    );
+
+    console.log('Home screen title for nonconformities changed to "Nonconformities & gains"');
+  },
+  down() {
+    Organizations.update(
+      { 'homeScreenTitles.nonConformities': 'Nonconformities & gains' },
+      {
+        $set: {
+          'homeScreenTitles.nonConformities': 'Non-conformities',
+        },
+      },
+    );
+
+    console.log('Home screen title for nonconformities changed to "Non-conformities"');
+  },
+});
+
+Migrations.add({
+  version: 10,
   name: 'Add type to nonconformities without it',
   up() {
     const query = { type: { $exists: false } };

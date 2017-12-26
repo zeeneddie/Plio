@@ -7,9 +7,26 @@ import {
   FileIdsSchema,
   getNotifySchema,
 } from './schemas';
-import { ProblemsStatuses, RCAMaxCauses, WorkflowTypes, StringLimits } from '../constants';
+import {
+  ProblemsStatuses,
+  RCAMaxCauses,
+  WorkflowTypes,
+  StringLimits,
+  ProblemTypes,
+} from '../constants';
 
-const RequiredSchema = BaseProblemsRequiredSchema;
+const RequiredSchema = new SimpleSchema([
+  BaseProblemsRequiredSchema,
+  {
+    type: {
+      type: String,
+      allowedValues: [
+        ProblemTypes.NON_CONFORMITY,
+        ProblemTypes.POTENTIAL_GAIN,
+      ],
+    },
+  },
+]);
 
 const RootCauseAnalysisSchema = new SimpleSchema([
   {

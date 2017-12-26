@@ -1,6 +1,7 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { NonConformityFilters } from '/imports/api/constants.js';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { NonConformityFilters } from '/imports/api/constants';
+import { ProblemTypes } from '../../../share/constants';
 
 export default {
   NCId() {
@@ -24,6 +25,19 @@ export default {
   currentNC() {
     const _id = this.NCId();
     return NonConformities.findOne({ _id });
+  },
+  getNameByType(doc) {
+    if (this.isPG(doc)) {
+      return 'Potential gain';
+    }
+
+    return 'Nonconformity';
+  },
+  isPG({ type } = {}) {
+    if (type === ProblemTypes.POTENTIAL_GAIN) {
+      return true;
+    }
+    return false;
   },
   _getNCsByQuery({
     isDeleted = { $in: [null, false] },
