@@ -1,17 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Blaze from 'meteor/gadicc:blaze-react-component';
-import { shouldUpdate } from 'recompose';
-import { eqProps } from 'ramda';
 
 import { Subcard } from '../../components';
 
-const enhance = shouldUpdate((props, nextProps) => !!(
-  props.isOpen !== nextProps.isOpen ||
-  !eqProps('risk', props, nextProps)
-));
-
-const RiskSubcard = enhance(({ risk, isOpen, toggle }) => (
+const RiskSubcard = ({ risk, isOpen, toggle }) => (
   <Subcard {...{ isOpen, toggle }}>
     <Subcard.Header>
       <span>
@@ -26,12 +19,12 @@ const RiskSubcard = enhance(({ risk, isOpen, toggle }) => (
       </div>
     </Subcard.Body>
   </Subcard>
-));
+);
 
 RiskSubcard.propTypes = {
   risk: PropTypes.object.isRequired,
-  isOpen: PropTypes.bool,
-  toggle: PropTypes.func,
+  isOpen: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
 };
 
 export default RiskSubcard;

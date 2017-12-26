@@ -4,13 +4,13 @@ import { Card } from 'reactstrap';
 import { map } from 'ramda';
 
 import { CardBlock } from '../../components';
-import RiskSubcard from './RiskSubcard';
+import RiskSubcardContainer from '../containers/RiskSubcardContainer';
 
 const RiskSubcardList = ({ risks }) => (
   <CardBlock>
     {!!risks.length && map(risk => (
       <Card key={risk._id}>
-        <RiskSubcard isOpen={false} toggle={() => null} {...{ risk }} />
+        <RiskSubcardContainer {...{ risk }} />
       </Card>
     ), risks)}
   </CardBlock>

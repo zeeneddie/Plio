@@ -81,6 +81,7 @@ export default compose(
   ui({
     state: {
       error: null,
+      opened: null,
     },
   }),
   withState('isSaving', 'setIsSaving', propOr(false, 'isSaving')),
