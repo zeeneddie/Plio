@@ -10,13 +10,18 @@ export default {
     const organization = Organizations.findOne({ _id: organizationId });
 
     const serialNumber = generateSerialNumber(this.collection, { organizationId });
-    const sequentialId = `${this._abbr}${serialNumber}`;
+    const abbr = this._getAbbr({ organization, magnitude, ...args });
+    const sequentialId = `${abbr}${serialNumber}`;
 
     const workflowType = organization.workflowType(magnitude);
 
     const _id = this.collection.insert({
-      organizationId, serialNumber, sequentialId,
-      workflowType, magnitude, ...args
+      organizationId,
+      serialNumber,
+      sequentialId,
+      workflowType,
+      magnitude,
+      ...args,
     });
 
     if (workflowType === WorkflowTypes.SIX_STEP) {
@@ -31,7 +36,10 @@ export default {
 
       this.setAnalysisDate({
         _id,
-        targetDate: getWorkflowDefaultStepDate({ organization, linkedTo: [{ documentId: _id, documentType: this._docType, }] }),
+        targetDate: getWorkflowDefaultStepDate({
+          organization,
+          linkedTo: [{ documentId: _id, documentType: this._docType }],
+        }),
       }, doc);
     }
 

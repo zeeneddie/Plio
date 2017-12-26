@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import curry from 'lodash.curry';
-import { head, identity, compose } from 'ramda';
+import { head, identity } from 'ramda';
 
 import { Occurrences } from '/imports/share/collections/occurrences';
 import {
