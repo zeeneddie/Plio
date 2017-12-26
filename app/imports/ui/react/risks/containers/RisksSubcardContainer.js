@@ -1,14 +1,11 @@
-import { compose, withHandlers, withContext, withState } from 'recompose';
+import { compose, withHandlers, withContext } from 'recompose';
 import { connect } from 'react-redux';
-import { propOr } from 'ramda';
 import ui from 'redux-ui';
 import { PropTypes } from 'prop-types';
 
 import RisksSubcard from '../components/RisksSubcard';
-import { insert, remove, linkStandard } from '../../../../api/risks/methods';
+import { insert, linkStandard } from '../../../../api/risks/methods';
 import _modal_ from '../../../../startup/client/mixins/modal';
-import { swal } from '../../../utils';
-import { ALERT_AUTOHIDE_TIME } from '../../../../api/constants';
 import {
   getSortedUsersByFirstNameAsItems,
 } from '../../../../client/store/selectors/users';
@@ -82,26 +79,27 @@ export default compose(
     state: {
       error: null,
       opened: null,
+      isSaving: false,
     },
   }),
-  withState('isSaving', 'setIsSaving', propOr(false, 'isSaving')),
   withHandlers({
     onSave: ({
       organizationId,
-      setIsSaving,
-      standardId,
       updateUI,
+      standardId,
     }) => ({ onDelete, activeView, ...props }) => {
-      setIsSaving(true);
+      updateUI('isSaving', true);
       const cb = (err, id) => {
-        setIsSaving(false);
+        updateUI('isSaving', false);
 
         if (err) return updateUI('error', err.message);
 
         updateUI('error', null);
 
         // remove subcard from ui
-        return onDelete();
+        onDelete();
+
+        updateUI('opened', id);
       };
 
       if (activeView === 0) {
@@ -116,41 +114,6 @@ export default compose(
         ...props,
         standardId,
       }, cb);
-    },
-    onDelete: ({ setIsSaving, updateUI }) => ({ risk: { _id, title } }) => {
-      swal({
-        title: 'Are you sure?',
-        text: `The risk "${title}" will be removed.`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Remove',
-        closeOnConfirm: false,
-      }, () => {
-        setIsSaving(true);
-
-        const cb = (err) => {
-          setIsSaving(false);
-          if (err) {
-            swal.close();
-            updateUI('error', err.message);
-            return;
-          }
-
-          updateUI('error', null);
-
-          swal({
-            title: 'Removed!',
-            text: `The risk "${title}" was removed successfully.`,
-            type: 'success',
-            timer: ALERT_AUTOHIDE_TIME,
-            showConfirmButton: false,
-          });
-        };
-
-        // TEMP
-        // because edit modal is still in blaze
-        _modal_.modal.callMethod(remove, { _id }, cb);
-      });
     },
   }),
 )(RisksSubcard);
