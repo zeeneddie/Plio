@@ -8,10 +8,10 @@ export const DocumentTitles = {
 };
 
 export const NonConformityFilters = {
-  1: { title: 'NCs', name: 'magnitude', prepend: 'by' },
-  2: { title: 'NCs', name: 'status', prepend: 'by' },
-  3: { title: 'NCs', name: 'department', prepend: 'by' },
-  4: { title: 'NCs', name: 'deleted' },
+  1: { title: '', name: 'magnitude', prepend: 'by' },
+  2: { title: '', name: 'status', prepend: 'by' },
+  3: { title: '', name: 'department', prepend: 'by' },
+  4: { title: '', name: 'deleted' },
 };
 
 export const RiskFilterIndexes = {
