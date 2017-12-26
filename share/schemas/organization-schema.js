@@ -138,15 +138,15 @@ const OrganizationCurrencySchema = {
 const ncGuidelinesSchema = new SimpleSchema({
   minor: {
     type: String,
-    label: 'Guideline for classifying a minor non-conformity',
+    label: 'Guideline for classifying a minor nonconformity',
   },
   major: {
     type: String,
-    label: 'Guideline for classifying a major non-conformity',
+    label: 'Guideline for classifying a major nonconformity',
   },
   critical: {
     type: String,
-    label: 'Guideline for classifying a critical non-conformity',
+    label: 'Guideline for classifying a critical nonconformity',
   },
 });
 

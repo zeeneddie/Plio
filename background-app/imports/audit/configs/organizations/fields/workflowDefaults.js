@@ -111,7 +111,7 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => [
 ];
 
 export default [
-  ...getWorkflowDefaultsConfig('minorProblem', 'minor non-conformities/risks'),
-  ...getWorkflowDefaultsConfig('majorProblem', 'major non-conformities/risks'),
-  ...getWorkflowDefaultsConfig('criticalProblem', 'critical non-conformities/risks'),
+  ...getWorkflowDefaultsConfig('minorProblem', 'minor nonconformities/risks'),
+  ...getWorkflowDefaultsConfig('majorProblem', 'major nonconformities/risks'),
+  ...getWorkflowDefaultsConfig('criticalProblem', 'critical nonconformities/risks'),
 ];

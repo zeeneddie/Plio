@@ -25,7 +25,7 @@ const ITEM_MAP = {
     items: RiskTitles,
   },
   nonConformities: {
-    label: 'Non-conformities',
+    label: 'Nonconformities',
     items: NonConformitiesTitles,
   },
   workInbox: {

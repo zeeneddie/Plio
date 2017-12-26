@@ -3,15 +3,15 @@ export const ALERT_AUTOHIDE_TIME = 1500;
 
 export const DocumentTitles = {
   STANDARD: 'Standard',
-  NC: 'Non-conformity',
+  NC: 'Nonconformity',
   RISK: 'Risk',
 };
 
 export const NonConformityFilters = {
-  1: { title: 'NCs', name: 'magnitude', prepend: 'by' },
-  2: { title: 'NCs', name: 'status', prepend: 'by' },
-  3: { title: 'NCs', name: 'department', prepend: 'by' },
-  4: { title: 'NCs', name: 'deleted' },
+  1: { title: '', name: 'magnitude', prepend: 'by' },
+  2: { title: '', name: 'status', prepend: 'by' },
+  3: { title: '', name: 'department', prepend: 'by' },
+  4: { title: '', name: 'deleted' },
 };
 
 export const RiskFilterIndexes = {
@@ -176,14 +176,20 @@ export const DepartmentsListProjection = {
 export const AnalysisTitles = {
   rootCauseAnalysis: 'Root cause analysis',
   riskAnalysis: 'Initial risk analysis',
-  updateOfStandards: 'Final approval to close this non-conformity',
+  potentialGainAnalysis: 'Potential gain analysis',
+  updateOfStandards: 'Final approval to close this nonconformity',
   updateOfRiskRecord: 'Final approval to close this risk',
+};
+
+export const AnalysisFieldPrefixes = {
+  CAUSE: 'Cause',
+  GAIN: 'Gain',
 };
 
 export const WorkItemDescriptions = {
   rootCauseAnalysis: 'Complete root cause analysis',
   riskAnalysis: 'Complete initial risk analysis',
-  updateOfStandards: 'Request for approval to close this non-conformity',
+  updateOfStandards: 'Request for approval to close this nonconformity',
   updateOfRiskRecord: 'Request for approval to close this risk',
 };
 
@@ -250,3 +256,4 @@ export const KeyMap = {
 };
 
 export const DEPARTMENT_UNCATEGORIZED = 'DEPARTMENTS.UNCATEGORIZED';
+
