@@ -16,9 +16,9 @@ export default Object.assign({}, ProblemsService, {
 
   _service: new BaseEntityService(Risks),
 
-  _abbr: 'RK',
-
   _docType: ProblemTypes.RISK,
+
+  _getAbbr: () => 'RK',
 
   'scores.insert': function ({ _id, ...args }) {
     const id = Random.id();
