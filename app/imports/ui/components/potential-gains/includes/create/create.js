@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 import { insert } from '../../../../../api/non-conformities/methods';
 import { setModalError } from '../../../../../api/helpers';
 import { ProblemTypes } from '../../../../../share/constants';
+import { PotentialGainsHelp } from '../../../../../api/help-messages';
 
 Template.PG_Create.viewmodel({
   mixin: ['organization', 'router', 'getChildrenData'],
@@ -42,6 +43,7 @@ Template.PG_Create.viewmodel({
           _id,
           _title: 'Potential Gain',
           template: 'NC_Card_Edit',
+          helpText: PotentialGainsHelp.potentialGain,
         });
       };
 
