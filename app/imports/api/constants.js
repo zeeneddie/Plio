@@ -176,8 +176,14 @@ export const DepartmentsListProjection = {
 export const AnalysisTitles = {
   rootCauseAnalysis: 'Root cause analysis',
   riskAnalysis: 'Initial risk analysis',
+  potentialGainAnalysis: 'Potential gain analysis',
   updateOfStandards: 'Final approval to close this nonconformity',
   updateOfRiskRecord: 'Final approval to close this risk',
+};
+
+export const AnalysisFieldPrefixes = {
+  CAUSE: 'Cause',
+  GAIN: 'Gain',
 };
 
 export const WorkItemDescriptions = {
@@ -251,12 +257,3 @@ export const KeyMap = {
 
 export const DEPARTMENT_UNCATEGORIZED = 'DEPARTMENTS.UNCATEGORIZED';
 
-export const ANALYSIS_NAMES = {
-  ROOT_CAUSE: 'Root cause analysis',
-  POTENTIAL_GAIN: 'Potential gain analysis',
-};
-
-export const ANALYSIS_FIELD_PREFIXES = {
-  CAUSE: 'Cause',
-  GAIN: 'Gain',
-};

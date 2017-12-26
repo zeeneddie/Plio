@@ -7,8 +7,8 @@ import {
 } from '/imports/api/non-conformities/methods';
 import {
   ALERT_AUTOHIDE_TIME,
-  ANALYSIS_FIELD_PREFIXES,
-  ANALYSIS_NAMES,
+  AnalysisFieldPrefixes,
+  AnalysisTitles,
 } from '../../../../../api/constants';
 
 
@@ -28,8 +28,8 @@ Template.NC_Card_Edit.viewmodel({
     const isPG = this.isPG(this.NC());
     return {
       analysis: {
-        label: isPG ? ANALYSIS_NAMES.POTENTIAL_GAIN : ANALYSIS_NAMES.ROOT_CAUSE,
-        prefix: isPG ? ANALYSIS_FIELD_PREFIXES.GAIN : ANALYSIS_FIELD_PREFIXES.CAUSE,
+        label: isPG ? AnalysisTitles.potentialGainAnalysis : AnalysisTitles.rootCauseAnalysis,
+        prefix: isPG ? AnalysisFieldPrefixes.GAIN : AnalysisFieldPrefixes.CAUSE,
       },
     };
   },

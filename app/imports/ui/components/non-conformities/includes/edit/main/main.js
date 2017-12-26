@@ -1,8 +1,7 @@
 import { Template } from 'meteor/templating';
 
-import { WorkflowTypes, ProblemIndexes } from '/imports/share/constants.js';
+import { WorkflowTypes, ProblemIndexes } from '/imports/share/constants';
 import { isViewed } from '/imports/api/checkers';
-
 import {
   updateViewedBy,
   setAnalysisExecutor,
@@ -20,6 +19,7 @@ import {
   setStandardsUpdateCompletedDate,
   setStandardsUpdateComments,
 } from '/imports/api/non-conformities/methods';
+import { AnalysisTitles } from '../../../../../../api/constants';
 
 Template.NC_Card_Edit_Main.viewmodel({
   mixin: ['organization', 'getChildrenData', 'nonconformity'],
@@ -32,9 +32,18 @@ Template.NC_Card_Edit_Main.viewmodel({
     }
   },
   isStandardsEditable: true,
-  RCAArgs({ _id, analysis, updateOfStandards, magnitude } = {}) {
+  RCAArgs({
+    _id,
+    analysis,
+    updateOfStandards,
+    magnitude,
+    type,
+  } = {}) {
     const nc = this.NC && this.NC();
     const isApprovalVisible = nc && (nc.status >= ProblemIndexes.ACTIONS_AWAITING_UPDATE);
+    const RCALabel = this.isPG({ type })
+      ? AnalysisTitles.potentialGainAnalysis
+      : AnalysisTitles.rootCauseAnalysis;
 
     return {
       _id,
@@ -42,6 +51,7 @@ Template.NC_Card_Edit_Main.viewmodel({
       updateOfStandards,
       magnitude,
       isApprovalVisible,
+      RCALabel,
       methodRefs: this.methodRefs,
       ...(fn => fn ? { callMethod: fn } : undefined)(this.callMethod),
     };
