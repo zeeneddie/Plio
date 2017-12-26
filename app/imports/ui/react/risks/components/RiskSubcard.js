@@ -8,14 +8,16 @@ import { Subcard } from '../../components';
 const RiskSubcard = ({ risk, isOpen, toggle }) => (
   <Subcard {...{ isOpen, toggle }}>
     <Subcard.Header>
-      <CardTitle>
+      <span>
         <strong>{risk.sequentialId}</strong>
         {' '}
         {risk.title}
-      </CardTitle>
+      </span>
     </Subcard.Header>
     <Subcard.Body>
-      <Blaze template="Risk_Subcard" {...{ risk }} />
+      <div>
+        <Blaze template="Risk_Subcard" {...{ risk }} />
+      </div>
     </Subcard.Body>
   </Subcard>
 );

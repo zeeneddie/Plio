@@ -1,6 +1,5 @@
 import { Template } from 'meteor/templating';
 
-import { create } from '../../../../../api/potential-gains/methods';
 import { setModalError } from '../../../../../api/helpers';
 
 Template.PG_Create.viewmodel({
