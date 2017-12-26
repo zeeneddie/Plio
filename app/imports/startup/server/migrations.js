@@ -45,6 +45,7 @@ import {
   SystemName,
   CustomerTypes,
   OrganizationDefaults,
+  ProblemTypes,
 } from '/imports/share/constants';
 
 Migrations.add({
@@ -336,6 +337,33 @@ Migrations.add({
     );
 
     console.log('Home screen title for nonconformities changed to "Non-conformities"');
+  },
+});
+
+Migrations.add({
+  version: 10,
+  name: 'Add type to nonconformities without it',
+  up() {
+    const query = { type: { $exists: false } };
+    const modifier = {
+      $set: {
+        type: ProblemTypes.NON_CONFORMITY,
+      },
+    };
+    const options = { multi: true };
+    NonConformities.update(query, modifier, options);
+    console.log('Added type to nonconformities without it');
+  },
+  down() {
+    const query = { type: { $exists: true } };
+    const modifier = {
+      $unset: {
+        type: '',
+      },
+    };
+    const options = { multi: true };
+    NonConformities.update(query, modifier, options);
+    console.log('Removed type from nonconformities');
   },
 });
 
