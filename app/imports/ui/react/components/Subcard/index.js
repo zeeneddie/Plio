@@ -4,6 +4,7 @@ import { mapProps } from 'recompose';
 
 import Header from './Header';
 import Body from './Body';
+import New from './New';
 
 const enhance = mapProps(({
   children,
@@ -33,5 +34,6 @@ Subcard.propTypes = {
 
 Subcard.Header = Header;
 Subcard.Body = Body;
+Subcard.New = New;
 
 export default Subcard;
