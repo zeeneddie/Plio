@@ -34,7 +34,7 @@ const CardBlockCollapse = enhance(({
   let rightContent = null;
   const classNames = {
     head: 'card-block card-block-collapse-toggle',
-    body: 'card-block-collapse collapse',
+    body: 'card-block-collapse',
   };
 
   if (loading) rightContent = <IconLoading />;

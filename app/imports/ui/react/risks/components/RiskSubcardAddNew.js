@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CardBody, Input } from 'reactstrap';
+import { equals } from 'ramda';
+import { shouldUpdate } from 'recompose';
 
 import {
   FormInput,
@@ -10,7 +12,20 @@ import {
   Magnitudes,
 } from '../../components';
 
-const AddNewRiskSubcard = ({
+const enhance = shouldUpdate((props, nextProps) => !!(
+  props.title !== nextProps.title ||
+  props.description !== nextProps.description ||
+  props.originatorId !== nextProps.originatorId ||
+  props.ownerId !== nextProps.ownerId ||
+  props.magnitude !== nextProps.magnitude ||
+  props.typeId !== nextProps.typeId ||
+  props.standard.title !== nextProps.standard.title ||
+  !equals(props.users, nextProps.users) ||
+  !equals(props.types, nextProps.types) ||
+  !equals(props.guidelines, nextProps.guidelines)
+));
+
+const RiskSubcardAddNew = enhance(({
   title,
   description,
   originatorId,
@@ -89,9 +104,9 @@ const AddNewRiskSubcard = ({
       />
     </FormField>
   </CardBody>
-);
+));
 
-AddNewRiskSubcard.propTypes = {
+RiskSubcardAddNew.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object).isRequired,
   types: PropTypes.arrayOf(PropTypes.object).isRequired,
   title: PropTypes.string.isRequired,
@@ -111,4 +126,4 @@ AddNewRiskSubcard.propTypes = {
   guidelines: Magnitudes.propTypes.guidelines,
 };
 
-export default AddNewRiskSubcard;
+export default RiskSubcardAddNew;

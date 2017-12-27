@@ -6,13 +6,14 @@ import {
   InputGroup,
   InputGroupButton,
   DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
 } from 'reactstrap';
 
 import { mapC } from '/imports/api/helpers';
 import TextInput from '../../TextInput';
 import Button from '../../../../components/Buttons/Button';
 import Icon from '../../../../components/Icons/Icon';
-import DropdownMenu from '../../../../components/DropdownMenu';
 
 const SelectInputView = (props) => {
   const {
@@ -65,10 +66,16 @@ const SelectInputView = (props) => {
       );
 
       return (
-        <InputGroup>
+        <DropdownToggle
+          className="input-group"
+          tag="div"
+          disabled
+          data-toggle="dropdown"
+          aria-expanded={isOpen}
+        >
           <Input {..._inputProps} />
           {Caret}
-        </InputGroup>
+        </DropdownToggle>
       );
     }
 
@@ -84,14 +91,13 @@ const SelectInputView = (props) => {
       if (renderMenuItem) return renderMenuItem(props, item, i, arr);
 
       return (
-        <DropdownMenu.Item
-          href=""
+        <DropdownItem
           key={`${item.text}-${item.value}`}
           onMouseDown={e => onSelect(e, item)}
           className={cx('pointer', { active: selected === item.value })}
         >
           {item.text}
-        </DropdownMenu.Item>
+        </DropdownItem>
       );
     });
 
@@ -110,7 +116,7 @@ const SelectInputView = (props) => {
     };
 
     return (
-      <DropdownMenu>
+      <DropdownMenu className="dropdown-menu-full">
         {_renderMenuItems(items)}
         {children}
         {_renderNoAvailableHint()}

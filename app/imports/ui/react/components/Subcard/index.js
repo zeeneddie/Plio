@@ -1,35 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { mapProps } from 'recompose';
+import { mapProps, branch, compose } from 'recompose';
+import { prop, identity } from 'ramda';
 
 import Header from './Header';
 import Body from './Body';
 import New from './New';
 
-const enhance = mapProps(({
-  children,
-  isOpen,
-  toggle,
-  ...props
-}) => ({
-  ...props,
-  children: React.Children.map(children, (child) => {
-    switch (child.type) {
-      case Header:
-        return React.cloneElement(child, { isOpen, onClick: toggle });
-      case Body:
-        return React.cloneElement(child, { isOpen });
-      default:
-        return child;
-    }
-  }),
-}));
+const enhance = compose(
+  branch(
+    prop('disabled'),
+    mapProps(props => ({ ...props, isOpen: true, toggle: () => null })),
+    identity,
+  ),
+  mapProps(({
+    children,
+    isOpen,
+    toggle,
+    ...props
+  }) => ({
+    ...props,
+    children: React.Children.map(children, (child) => {
+      switch (child.type) {
+        case Header:
+          return React.cloneElement(child, { isOpen, onClick: toggle });
+        case Body:
+          return React.cloneElement(child, { isOpen });
+        default:
+          return child;
+      }
+    }),
+  })),
+);
 
 const Subcard = enhance(({ children }) => children);
 
 Subcard.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  toggle: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+  toggle: PropTypes.func,
 };
 
 Subcard.Header = Header;
