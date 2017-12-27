@@ -7,13 +7,15 @@ import RiskSubcard from '../components/RiskSubcard';
 import { swal } from '../../../utils';
 import { ALERT_AUTOHIDE_TIME } from '../../../../api/constants';
 import _modal_ from '../../../../startup/client/mixins/modal';
+import { namedCompose } from '../../helpers';
 
-export default compose(
+export default namedCompose('RiskSubcardContainer')(
   connectUI(),
   shouldUpdate((props, nextProps) => !!(
     props.ui.opened !== nextProps.ui.opened ||
     props.isOpen !== nextProps.isOpen ||
-    props.ui.isSaving !== nextProps.ui.isSaving ||
+    (nextProps.opened === nextProps.risk._id &&
+      props.ui.isSaving !== nextProps.ui.isSaving) ||
     !eqProps('risk', props, nextProps)
   )),
   withProps(({ ui: { opened }, risk: { _id } }) => ({ isOpen: opened === _id })),

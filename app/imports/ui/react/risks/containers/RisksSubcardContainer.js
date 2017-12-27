@@ -16,6 +16,7 @@ import {
   getOrganizationId,
 } from '../../../../client/store/selectors/organizations';
 import { getRiskTypesAsItems } from '../../../../client/store/selectors/riskTypes';
+import { getRisksLinkedToStandard } from '../../../../client/store/selectors/risks';
 
 const saveNew = ({
   title,
@@ -74,6 +75,7 @@ export default compose(
     types: getRiskTypesAsItems(state),
     organizationId: getOrganizationId(state),
     standard: state.collections.standardsByIds[standardId],
+    risks: getRisksLinkedToStandard(state, { standardId }),
   })),
   ui({
     state: {

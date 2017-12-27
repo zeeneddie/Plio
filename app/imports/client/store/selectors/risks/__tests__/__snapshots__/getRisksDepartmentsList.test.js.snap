@@ -10,6 +10,9 @@ Array [
         "departmentsIds": Array [
           16,
         ],
+        "standardsIds": Array [
+          1,
+        ],
         "typeId": 15,
       },
       Object {
@@ -17,6 +20,10 @@ Array [
         "departmentsIds": Array [
           16,
           17,
+        ],
+        "standardsIds": Array [
+          1,
+          2,
         ],
         "typeId": 15,
       },
@@ -31,6 +38,10 @@ Array [
           16,
           17,
         ],
+        "standardsIds": Array [
+          1,
+          2,
+        ],
         "typeId": 15,
       },
       Object {
@@ -40,6 +51,9 @@ Array [
           17,
         ],
         "isDeleted": true,
+        "standardsIds": Array [
+          5,
+        ],
         "typeId": 15,
       },
     ],

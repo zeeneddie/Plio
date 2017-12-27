@@ -60,11 +60,13 @@ const risks = [
     _id: 10,
     typeId: 15,
     departmentsIds: [16],
+    standardsIds: [1],
   },
   {
     _id: 11,
     typeId: 15,
     departmentsIds: [16, 17],
+    standardsIds: [1, 2],
   },
   {
     _id: 12,
@@ -72,13 +74,15 @@ const risks = [
     deletedAt: 1513074233019,
     typeId: 15,
     departmentsIds: [17],
+    standardsIds: [5],
   },
   {
     _id: 13,
     isDeleted: true,
     deletedAt: 1513074233018,
+    standardsIds: [1],
   },
-  { _id: 14 },
+  { _id: 14, standardsIds: [2] },
 ];
 const risksByIds = normalize(risks);
 const riskTypes = [{ _id: 15 }];
