@@ -1,4 +1,4 @@
-import { sort } from 'ramda';
+import { sort, filter, propEq } from 'ramda';
 import { ProblemTypes } from '../../share/constants';
 
 export const sortByType = sort((a, b) => {
@@ -9,3 +9,5 @@ export const sortByType = sort((a, b) => {
   }
   return 0;
 });
+
+export const filterNCs = filter(propEq('type', ProblemTypes.NON_CONFORMITY));
