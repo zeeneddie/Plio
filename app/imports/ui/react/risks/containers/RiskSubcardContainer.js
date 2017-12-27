@@ -1,4 +1,4 @@
-import { shouldUpdate, compose, withProps, withHandlers } from 'recompose';
+import { shouldUpdate, withProps, withHandlers } from 'recompose';
 import { eqProps } from 'ramda';
 import connectUI from 'redux-ui';
 
@@ -22,6 +22,7 @@ export default namedCompose('RiskSubcardContainer')(
   withHandlers({
     toggle: ({ updateUI, ui: { opened }, risk: { _id } }) => () =>
       updateUI('opened', opened === _id ? null : _id),
+    onClose: ({ updateUI }) => () => updateUI('opened', null),
     onDelete: ({ updateUI }) => ({ risk: { _id, title } }) => {
       swal({
         title: 'Are you sure?',
