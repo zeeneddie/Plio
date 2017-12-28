@@ -1,22 +1,28 @@
 import { connect } from 'react-redux';
-import { compose, lifecycle, mapProps, shouldUpdate } from 'recompose';
-import { pluck } from 'ramda';
-import uiState from 'redux-ui';
+import { lifecycle, mapProps, shouldUpdate } from 'recompose';
+import { pluck, equals } from 'ramda';
+import connectUI from 'redux-ui';
 
-import AddExistingRiskSubcard from '../components/AddExistingRiskSubcard';
-import { getRisksAsItems } from '../../../../client/store/selectors/risks';
+import RiskSubcardAddExisting from '../components/RiskSubcardAddExisting';
+import {
+  getRisksAsItems,
+  getRisksLinkedToStandard,
+} from '../../../../client/store/selectors/risks';
 import { getOrganizationId } from '../../../../client/store/selectors/organizations';
 import { getLinkable as getLinkableRisks } from '../../../../api/risks/methods';
+import { namedCompose } from '../../helpers';
 
-export default compose(
-  shouldUpdate((props, nextProps) => (
-    props.risks.length !== nextProps.risks.length ||
-    props.selected !== nextProps.selected
-  )),
-  connect(state => ({
+export default namedCompose('RiskSubcardAddExistingContainer')(
+  connect((state, props) => ({
     organizationId: getOrganizationId(state),
+    risks: getRisksLinkedToStandard(state, props),
   })),
-  uiState({
+  shouldUpdate((props, nextProps) => (
+    props.organizationId !== nextProps.organizationId ||
+    props.selected !== nextProps.selected ||
+    !equals(props.risks, nextProps.risks)
+  )),
+  connectUI({
     state: {
       risks: [],
     },
@@ -37,4 +43,4 @@ export default compose(
     ...props,
     risks: ui.risks,
   })),
-)(AddExistingRiskSubcard);
+)(RiskSubcardAddExisting);

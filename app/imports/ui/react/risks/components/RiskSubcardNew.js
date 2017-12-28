@@ -6,6 +6,7 @@ import { equals } from 'ramda';
 import { Subcard, Label, SwitchView, CardBlock, Button, SaveButton } from '../../components';
 import RiskSubcardAddNewContainer from '../containers/RiskSubcardAddNewContainer';
 import { namedCompose } from '../../helpers';
+import RiskSubcardAddExisting from '../containers/RiskSubcardAddExisting';
 
 const enhance = namedCompose('RiskSubcardNew')(
   shouldUpdate((props, nextProps) => !!(
@@ -35,6 +36,7 @@ const RiskSubcardNew = enhance(({
     ownerId,
     magnitude,
     typeId,
+    riskId,
     isSaving,
   },
   onChangeTitle,
@@ -44,6 +46,7 @@ const RiskSubcardNew = enhance(({
   onChangeMagnitude,
   onChangeTypeId,
   onChangeActiveView,
+  onChangeRiskId,
   standardId,
   types,
   onSave,
@@ -80,12 +83,11 @@ const RiskSubcardNew = enhance(({
             standardId,
           }}
         />
-        <span>Hello World</span>
-        {/* <AddExistingRiskSubcardContainer
+        <RiskSubcardAddExisting
           selected={riskId}
           onChange={onChangeRiskId}
-          {...{ risks }}
-        /> */}
+          {...{ standardId }}
+        />
       </SwitchView>
       <CardBlock>
         <SaveButton

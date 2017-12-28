@@ -1,20 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CardBody } from 'reactstrap';
 import { shouldUpdate } from 'recompose';
+import { equals } from 'ramda';
 
 import {
   FormField,
   SelectInput,
+  CardBlock,
 } from '../../components';
 
 const enhance = shouldUpdate((props, nextProps) => (
-  props.risks.length !== nextProps.risks.length ||
-  props.selected !== nextProps.selected
+  props.selected !== nextProps.selected ||
+  !equals(props.risks, nextProps.risks)
 ));
 
-const AddExistingRiskSubcard = enhance(({ risks, onChange, selected }) => (
-  <CardBody className="card-block">
+const RiskSubcardAddExisting = enhance(({ risks, onChange, selected }) => (
+  <CardBlock>
     <FormField>
       Existing risk
       <SelectInput
@@ -27,13 +28,13 @@ const AddExistingRiskSubcard = enhance(({ risks, onChange, selected }) => (
         {...{ selected }}
       />
     </FormField>
-  </CardBody>
+  </CardBlock>
 ));
 
-AddExistingRiskSubcard.propTypes = {
+RiskSubcardAddExisting.propTypes = {
   risks: PropTypes.arrayOf(PropTypes.object).isRequired,
   selected: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };
 
-export default AddExistingRiskSubcard;
+export default RiskSubcardAddExisting;
