@@ -55,7 +55,7 @@ export const onSave = ({
   // otherwise the existing risk is about to be linked
   updateUI('isSaving', true);
   const cb = (err, id) => {
-    updateUI('isSaving', false);
+    setTimeout(() => updateUI('isSaving', false), 1000);
 
     if (err) return updateUI('error', err.message);
 

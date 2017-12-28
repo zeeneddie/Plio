@@ -6,11 +6,13 @@ import { map } from 'ramda';
 import RiskSubcardContainer from '../containers/RiskSubcardContainer';
 
 const RiskSubcardList = ({ risks }) => (
-  !!risks.length && map(risk => (
-    <Card key={risk._id}>
-      <RiskSubcardContainer {...{ risk }} />
+  !!risks.length && (
+    <Card>
+      {map(risk => (
+        <RiskSubcardContainer key={risk._id} {...{ risk }} />
+      ), risks)}
     </Card>
-  ), risks)
+  )
 );
 
 RiskSubcardList.propTypes = {
