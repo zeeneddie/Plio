@@ -53,6 +53,7 @@ export const onSave = ({
 }) => ({ card, activeView, ...props }) => {
   updateUI('isSaving', true);
   const cb = (err, result) => {
+    // hack to set saving state for modal while it's still in blaze
     _modal_.modal.instance().isSaving(false);
     // If active view is 0 it means that the new risk is about to be created
     // otherwise the existing risk is about to be linked

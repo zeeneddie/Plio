@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Blaze from 'meteor/gadicc:blaze-react-component';
 import cx from 'classnames';
 
-import { Subcard, Button, CardBlock } from '../../components';
+import { Subcard, Button, CardBlock, Label } from '../../components';
 
 const RiskSubcard = ({
   risk,
@@ -12,6 +12,7 @@ const RiskSubcard = ({
   onDelete,
   onClose,
   isSaving,
+  isNew,
 }) => (
   <Subcard {...{ isOpen, toggle }}>
     {/* id is needed for scrolling */}
@@ -20,10 +21,14 @@ const RiskSubcard = ({
         <strong>{risk.sequentialId}</strong>
         {' '}
         {risk.title}
+        {isNew && ' '}
+        {isNew && <Label names="primary">New</Label>}
       </span>
     </Subcard.Header>
     <Subcard.Body>
-      <Blaze template="Risk_Subcard" {...{ risk }} />
+      {isOpen && (
+        <Blaze template="Risk_Subcard" {...{ risk }} />
+      )}
       <CardBlock>
         <Button
           color="secondary"
@@ -52,6 +57,7 @@ RiskSubcard.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   isSaving: PropTypes.bool,
+  isNew: PropTypes.bool,
 };
 
 export default RiskSubcard;

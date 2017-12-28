@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { shouldUpdate } from 'recompose';
 import { equals } from 'ramda';
 
-import { Subcard, Label, SwitchView, CardBlock, Button, SaveButton } from '../../components';
+import { Subcard, SwitchView, CardBlock, Button, SaveButton } from '../../components';
 import RiskSubcardAddNewContainer from '../containers/RiskSubcardAddNewContainer';
 import { namedCompose } from '../../helpers';
-import RiskSubcardAddExisting from '../containers/RiskSubcardAddExisting';
+import RiskSubcardAddExistingContainer from '../containers/RiskSubcardAddExistingContainer';
 
 const enhance = namedCompose('RiskSubcardNew')(
   shouldUpdate((props, nextProps) => !!(
@@ -27,7 +27,6 @@ const enhance = namedCompose('RiskSubcardNew')(
 );
 
 const RiskSubcardNew = enhance(({
-  isNew,
   card,
   ui: {
     activeView,
@@ -55,7 +54,6 @@ const RiskSubcardNew = enhance(({
   <Subcard disabled>
     <Subcard.Header isNew>
       New risk
-      {isNew && <Label names="primary"> New</Label>}
     </Subcard.Header>
     <Subcard.Body>
       <SwitchView
@@ -84,7 +82,7 @@ const RiskSubcardNew = enhance(({
             standardId,
           }}
         />
-        <RiskSubcardAddExisting
+        <RiskSubcardAddExistingContainer
           selected={riskId}
           onChange={onChangeRiskId}
           {...{ standardId }}
@@ -120,7 +118,6 @@ const RiskSubcardNew = enhance(({
 ));
 
 RiskSubcardNew.propTypes = {
-  isNew: PropTypes.bool,
   ui: PropTypes.shape({
     activeView: PropTypes.number,
     title: PropTypes.string.isRequired,

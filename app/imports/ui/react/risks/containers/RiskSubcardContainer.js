@@ -1,6 +1,7 @@
 import { shouldUpdate, withProps, withHandlers } from 'recompose';
 import { eqProps } from 'ramda';
 import connectUI from 'redux-ui';
+import { connect } from 'react-redux';
 
 import { remove } from '../../../../api/risks/methods';
 import RiskSubcard from '../components/RiskSubcard';
@@ -8,12 +9,17 @@ import { swal } from '../../../utils';
 import { ALERT_AUTOHIDE_TIME } from '../../../../api/constants';
 import _modal_ from '../../../../startup/client/mixins/modal';
 import { namedCompose } from '../../helpers';
+import { getRiskIsNew } from '../../../../client/store/selectors/risks';
 
 export default namedCompose('RiskSubcardContainer')(
+  connect((state, { risk }) => ({
+    isNew: getRiskIsNew(state, risk),
+  })),
   connectUI(),
   shouldUpdate((props, nextProps) => !!(
     props.ui.opened !== nextProps.ui.opened ||
     props.isOpen !== nextProps.isOpen ||
+    props.isNew !== nextProps.isNew ||
     (nextProps.opened === nextProps.risk._id &&
       props.ui.isSaving !== nextProps.ui.isSaving) ||
     !eqProps('risk', props, nextProps)
