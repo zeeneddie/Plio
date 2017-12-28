@@ -51,22 +51,34 @@ export const onSave = ({
   updateUI,
   standardId,
 }) => ({ card, activeView, ...props }) => {
-  // If active view is 0 it means that the new risk is about to be created
-  // otherwise the existing risk is about to be linked
   updateUI('isSaving', true);
-  const cb = (err, id) => {
-    setTimeout(() => updateUI('isSaving', false), 1000);
+  const cb = (err, result) => {
+    // If active view is 0 it means that the new risk is about to be created
+    // otherwise the existing risk is about to be linked
+    const id = activeView === ACTIVE_VIEW_STATES.NEW ? result : props.riskId;
+
+    updateUI('isSaving', false);
 
     if (err) return updateUI('error', err.message);
 
+    // remove error
     updateUI('error', null);
 
     // remove subcard from ui
     card.onDelete();
 
-    if (activeView === ACTIVE_VIEW_STATES.NEW) return updateUI('opened', id);
+    setTimeout(() => {
+      // scroll to subcard
+      document.getElementById(`subcard-${id}`).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
 
-    return updateUI('opened', props.riskId);
+      // open subcard
+      updateUI('opened', id);
+    }, 1000);
+
+    return id;
   };
 
   if (activeView === ACTIVE_VIEW_STATES.NEW) {

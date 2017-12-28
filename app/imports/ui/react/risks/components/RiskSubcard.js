@@ -14,7 +14,8 @@ const RiskSubcard = ({
   isSaving,
 }) => (
   <Subcard {...{ isOpen, toggle }}>
-    <Subcard.Header>
+    {/* id is needed for scrolling */}
+    <Subcard.Header id={`subcard-${risk._id}`}>
       <span>
         <strong>{risk.sequentialId}</strong>
         {' '}
