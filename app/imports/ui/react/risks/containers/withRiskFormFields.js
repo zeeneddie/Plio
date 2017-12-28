@@ -13,7 +13,6 @@ export default compose(
       magnitude: '',
       typeId: viewOr('', lenses.types.head.value),
       riskId: '',
-      activeView: 0,
     },
   }),
   withHandlers({

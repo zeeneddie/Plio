@@ -1,19 +1,18 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import { mapProps, shouldUpdate } from 'recompose';
-import { equals, compose } from 'ramda';
 import connectUI from 'redux-ui';
-import { Meteor } from 'meteor/meteor';
 
 import RiskSubcardAddExisting from '../components/RiskSubcardAddExisting';
 import {
   getRisksAsItems,
-  getRisksLinkedToStandard,
-  getRisksIds,
 } from '../../../../client/store/selectors/risks';
 import { getOrganizationId } from '../../../../client/store/selectors/organizations';
 import { namedCompose } from '../../helpers';
 import { composeWithTracker } from '../../../../client/util';
 import { Risks } from '../../../../share/collections';
+import { RisksSubs } from '../../../../startup/client/subsmanagers';
+import { PreloaderPage } from '../../components';
 
 export default namedCompose('RiskSubcardAddExistingContainer')(
   connect(state => ({
@@ -30,7 +29,7 @@ export default namedCompose('RiskSubcardAddExistingContainer')(
     },
   }),
   composeWithTracker(({ organizationId, standardId, ...props }, onData) => {
-    const subscription = Meteor.subscribe(
+    const subscription = RisksSubs.subscribe(
       'Risks.getLinkableToStandard',
       { organizationId, standardId },
     );
@@ -53,13 +52,10 @@ export default namedCompose('RiskSubcardAddExistingContainer')(
       risks = getRisksAsItems({ collections: { risks } });
 
       onData(null, { ...props, ui: { risks } });
-    } else {
-      onData(null, props);
     }
-
-    return () => subscription.stop();
   }, {
     propsToWatch: ['organizationId', 'standardId'],
+    loadingHandler: () => <PreloaderPage size={1} />,
   }),
   mapProps(({ ui, ...props }) => ({
     ...props,

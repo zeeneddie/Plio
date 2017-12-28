@@ -10,3 +10,5 @@ export { default as CardBlock } from './CardBlock';
 export { default as Subcard } from './Subcard';
 export { default as Collapse } from './Collapse';
 export { default as SwitchView } from './SwitchView';
+export { default as Preloader } from './Preloader';
+export { default as PreloaderPage } from './PreloaderPage';

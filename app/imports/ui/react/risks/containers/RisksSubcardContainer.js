@@ -6,16 +6,10 @@ import { PropTypes } from 'prop-types';
 import RisksSubcard from '../components/RisksSubcard';
 import { insert, linkStandard } from '../../../../api/risks/methods';
 import _modal_ from '../../../../startup/client/mixins/modal';
-import {
-  getSortedUsersByFirstNameAsItems,
-} from '../../../../client/store/selectors/users';
 import store from '../../../../client/store';
-import { getUserId } from '../../../../client/store/selectors/global';
 import {
-  getRiskGuidelines,
   getOrganizationId,
 } from '../../../../client/store/selectors/organizations';
-import { getRiskTypesAsItems } from '../../../../client/store/selectors/riskTypes';
 import { getRisksLinkedToStandard } from '../../../../client/store/selectors/risks';
 
 const saveNew = ({
@@ -69,12 +63,7 @@ export default compose(
     () => ({ store }),
   ),
   connect((state, { standardId }) => ({
-    userId: getUserId(state),
-    users: getSortedUsersByFirstNameAsItems(state),
-    guidelines: getRiskGuidelines(state),
-    types: getRiskTypesAsItems(state),
     organizationId: getOrganizationId(state),
-    standard: state.collections.standardsByIds[standardId],
     risks: getRisksLinkedToStandard(state, { standardId }),
   })),
   ui({
@@ -82,6 +71,7 @@ export default compose(
       error: null,
       opened: null,
       isSaving: false,
+      activeView: 0,
     },
   }),
   withHandlers({
@@ -89,7 +79,8 @@ export default compose(
       organizationId,
       updateUI,
       standardId,
-    }) => ({ card, activeView, ...props }) => {
+      ui: { activeView },
+    }) => ({ card, ...props }) => {
       updateUI('isSaving', true);
       const cb = (err, id) => {
         updateUI('isSaving', false);
@@ -112,8 +103,10 @@ export default compose(
         }, cb);
       }
 
+      const { riskId } = props;
+
       return linkExisting({
-        ...props,
+        riskId,
         standardId,
       }, cb);
     },

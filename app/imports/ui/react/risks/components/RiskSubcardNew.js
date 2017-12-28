@@ -19,6 +19,7 @@ const enhance = namedCompose('RiskSubcardNew')(
     props.ui.magnitude !== nextProps.ui.magnitude ||
     props.ui.typeId !== nextProps.ui.typeId ||
     props.ui.isSaving !== nextProps.ui.isSaving ||
+    props.ui.riskId !== nextProps.ui.riskId ||
     props.standardId !== nextProps.standardId ||
     !equals(props.types, nextProps.types) ||
     !equals(props.card, nextProps.card)
@@ -99,6 +100,7 @@ const RiskSubcardNew = enhance(({
             ownerId,
             magnitude,
             typeId,
+            riskId,
             activeView,
             card,
           }, e)}
@@ -107,6 +109,7 @@ const RiskSubcardNew = enhance(({
         <Button
           color="secondary"
           pull="left"
+          disabled={isSaving}
           onClick={() => !isSaving && card.onDelete()}
         >
           Delete
@@ -126,6 +129,7 @@ RiskSubcardNew.propTypes = {
     ownerId: PropTypes.string.isRequired,
     magnitude: PropTypes.string.isRequired,
     typeId: PropTypes.string.isRequired,
+    riskId: PropTypes.string.isRequired,
     isSaving: PropTypes.bool,
   }).isRequired,
   card: PropTypes.object.isRequired,
