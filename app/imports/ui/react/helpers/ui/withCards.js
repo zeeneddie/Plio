@@ -26,7 +26,7 @@ export default compose(
           return state.set('cards', cards);
         }
         default:
-          return state;
+          return state || {};
       }
     },
   }),

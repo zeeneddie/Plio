@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, mapProps } from 'recompose';
+import { mapProps } from 'recompose';
 
-import { withCards } from '../../../helpers';
+import { withCards, namedCompose } from '../../../helpers';
 
 import List from './List';
 import Button from './Button';
 
-const enhance = compose(
+const enhance = namedCompose('SubcardNew')(
   withCards,
   mapProps(({
     ui: { cards },
