@@ -45,33 +45,6 @@ export default Object.assign({}, ProblemsService, {
     return this.collection.update(query, options);
   },
 
-  getLinkable({ organizationId, ids }) {
-    const query = {
-      organizationId,
-      _id: {
-        $nin: ids,
-      },
-      isDeleted: {
-        $ne: true,
-      },
-    };
-    const options = {
-      sort: {
-        serialNumber: 1,
-      },
-      fields: {
-        _id: 1,
-        title: 1,
-        sequentialId: 1,
-        serialNumber: 1,
-        organizationId: 1,
-      },
-    };
-    const risks = Risks.find(query, options).fetch();
-
-    return risks;
-  },
-
   _getDoc(_id) {
     const risk = this.collection.findOne({ _id });
     if (!risk) {

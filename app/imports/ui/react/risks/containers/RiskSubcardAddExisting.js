@@ -1,43 +1,65 @@
 import { connect } from 'react-redux';
-import { lifecycle, mapProps, shouldUpdate } from 'recompose';
-import { pluck, equals } from 'ramda';
+import { mapProps, shouldUpdate } from 'recompose';
+import { equals, compose } from 'ramda';
 import connectUI from 'redux-ui';
+import { Meteor } from 'meteor/meteor';
 
 import RiskSubcardAddExisting from '../components/RiskSubcardAddExisting';
 import {
   getRisksAsItems,
   getRisksLinkedToStandard,
+  getRisksIds,
 } from '../../../../client/store/selectors/risks';
 import { getOrganizationId } from '../../../../client/store/selectors/organizations';
-import { getLinkable as getLinkableRisks } from '../../../../api/risks/methods';
 import { namedCompose } from '../../helpers';
+import { composeWithTracker } from '../../../../client/util';
+import { Risks } from '../../../../share/collections';
 
 export default namedCompose('RiskSubcardAddExistingContainer')(
-  connect((state, props) => ({
+  connect(state => ({
     organizationId: getOrganizationId(state),
-    risks: getRisksLinkedToStandard(state, props),
   })),
   shouldUpdate((props, nextProps) => (
     props.organizationId !== nextProps.organizationId ||
     props.selected !== nextProps.selected ||
-    !equals(props.risks, nextProps.risks)
+    props.standardId !== nextProps.standardId
   )),
   connectUI({
     state: {
       risks: [],
     },
   }),
-  lifecycle({
-    async componentDidMount() {
-      const { organizationId, updateUI } = this.props;
-      const ids = pluck('_id', this.props.risks);
-      try {
-        const risks = await getLinkableRisks.callP({ organizationId, ids });
-        updateUI('risks', getRisksAsItems({ collections: { risks } }));
-      } catch (err) {
-        updateUI('error', err.message);
-      }
-    },
+  composeWithTracker(({ organizationId, standardId, ...props }, onData) => {
+    const subscription = Meteor.subscribe(
+      'Risks.getLinkableToStandard',
+      { organizationId, standardId },
+    );
+    if (subscription.ready()) {
+      const query = {
+        organizationId,
+        isDeleted: {
+          $ne: true,
+        },
+        standardsIds: {
+          $ne: standardId,
+        },
+      };
+      const options = {
+        sort: {
+          serialNumber: 1,
+        },
+      };
+      let risks = Risks.find(query, options).fetch();
+      risks = getRisksAsItems({ collections: { risks } });
+
+      onData(null, { ...props, ui: { risks } });
+    } else {
+      onData(null, props);
+    }
+
+    return () => subscription.stop();
+  }, {
+    propsToWatch: ['organizationId', 'standardId'],
   }),
   mapProps(({ ui, ...props }) => ({
     ...props,

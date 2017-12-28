@@ -167,3 +167,40 @@ Meteor.publish('risksNotViewedCount', function (counterName, organizationId) {
 
   return new Counter(counterName, Risks.find(query));
 });
+
+Meteor.publish('Risks.getLinkableToStandard', function ({ organizationId, standardId }) {
+  check(organizationId, String);
+  check(standardId, String);
+
+  const { userId } = this;
+
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  const query = {
+    organizationId,
+    isDeleted: {
+      $ne: true,
+    },
+    standardsIds: {
+      $ne: standardId,
+    },
+  };
+  const options = {
+    sort: {
+      serialNumber: 1,
+    },
+    fields: {
+      _id: 1,
+      title: 1,
+      sequentialId: 1,
+      serialNumber: 1,
+      organizationId: 1,
+      standardsIds: 1,
+    },
+  };
+  const risks = Risks.find(query, options);
+
+  return risks;
+});
