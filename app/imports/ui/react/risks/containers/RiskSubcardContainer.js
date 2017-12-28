@@ -12,8 +12,8 @@ import { namedCompose } from '../../helpers';
 import { getRiskIsNew } from '../../../../client/store/selectors/risks';
 
 export default namedCompose('RiskSubcardContainer')(
-  connect((state, { risk }) => ({
-    isNew: getRiskIsNew(state, risk),
+  connect((state, { risk: { viewedBy = [] } }) => ({
+    isNew: getRiskIsNew(state, { viewedBy }),
   })),
   connectUI(),
   shouldUpdate((props, nextProps) => !!(

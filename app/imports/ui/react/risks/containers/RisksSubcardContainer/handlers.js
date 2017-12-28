@@ -26,9 +26,8 @@ export const saveNewRisk = ({
 
   const invalid = Object.keys(args).some((key) => {
     if (key !== 'description' && !args[key]) {
-      const message =
-        `The new risk cannot be created without a ${key}. Please enter a key for your risk`;
-      cb({ message });
+      // eslint-disable-next-line max-len
+      cb(new Error(`The new risk cannot be created without a ${key}. Please enter a ${key} for your risk`));
       return true;
     }
     return false;
@@ -52,6 +51,7 @@ export const onSave = ({
   standardId,
 }) => ({ card, activeView, ...props }) => {
   updateUI('isSaving', true);
+
   const cb = (err, result) => {
     // hack to set saving state for modal while it's still in blaze
     _modal_.modal.instance().isSaving(false);
@@ -61,7 +61,11 @@ export const onSave = ({
 
     updateUI('isSaving', false);
 
-    if (err) return updateUI('error', err.message);
+    if (err) {
+      updateUI('error', err.reason || err.message);
+      // explicitly return true to prevent blaze modal from scrolling
+      return true;
+    }
 
     // remove error
     updateUI('error', null);
@@ -78,7 +82,7 @@ export const onSave = ({
 
       // open subcard
       updateUI('opened', id);
-    }, 1000);
+    }, 700);
 
     return id;
   };

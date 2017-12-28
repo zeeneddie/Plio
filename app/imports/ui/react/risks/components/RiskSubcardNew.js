@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { shouldUpdate } from 'recompose';
 import { equals } from 'ramda';
 
-import { Subcard, SwitchView, CardBlock, Button, SaveButton } from '../../components';
+import { Subcard, SwitchView, CardBlock, Button, SaveButton, ErrorSection } from '../../components';
 import RiskSubcardAddNewContainer from '../containers/RiskSubcardAddNewContainer';
 import { namedCompose } from '../../helpers';
 import RiskSubcardAddExistingContainer from '../containers/RiskSubcardAddExistingContainer';
@@ -20,6 +20,7 @@ const enhance = namedCompose('RiskSubcardNew')(
     props.ui.typeId !== nextProps.ui.typeId ||
     props.ui.isSaving !== nextProps.ui.isSaving ||
     props.ui.riskId !== nextProps.ui.riskId ||
+    props.ui.error !== nextProps.ui.error ||
     props.standardId !== nextProps.standardId ||
     !equals(props.types, nextProps.types) ||
     !equals(props.card, nextProps.card)
@@ -38,6 +39,7 @@ const RiskSubcardNew = enhance(({
     typeId,
     riskId,
     isSaving,
+    error,
   },
   onChangeTitle,
   onChangeDescription,
@@ -56,6 +58,7 @@ const RiskSubcardNew = enhance(({
       New risk
     </Subcard.Header>
     <Subcard.Body>
+      <ErrorSection errorText={error} />
       <SwitchView
         buttons={[
           <span>New</span>,
