@@ -4,6 +4,9 @@ import Blaze from 'meteor/gadicc:blaze-react-component';
 import cx from 'classnames';
 
 import { Subcard, Button, CardBlock, Label } from '../../components';
+import { defer } from '../../helpers';
+
+const DeferredBlaze = defer(Blaze);
 
 const RiskSubcard = ({
   risk,
@@ -26,9 +29,7 @@ const RiskSubcard = ({
       </span>
     </Subcard.Header>
     <Subcard.Body>
-      {isOpen && (
-        <Blaze template="Risk_Subcard" {...{ risk }} />
-      )}
+      {isOpen && <DeferredBlaze template="Risk_Subcard" {...{ risk }} />}
       <CardBlock>
         <Button
           color="secondary"

@@ -3,11 +3,18 @@ import PropTypes from 'prop-types';
 import { mapProps, branch, compose } from 'recompose';
 import { prop, identity } from 'ramda';
 
+import { defer } from '../../helpers';
+
 import Header from './Header';
 import Body from './Body';
 import New from './New';
 
 const enhance = compose(
+  branch(
+    prop('defer'),
+    defer,
+    identity,
+  ),
   branch(
     prop('disabled'),
     mapProps(props => ({ ...props, isOpen: true, toggle: () => null })),

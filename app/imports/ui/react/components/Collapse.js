@@ -21,7 +21,7 @@ class Collapse extends React.Component {
   }
 
   setCollapsing(collapsing) {
-    this.setState({ collapsing });
+    return () => this.setState({ collapsing });
   }
 
   render() {
@@ -35,10 +35,10 @@ class Collapse extends React.Component {
     return (
       <Collapsible
         className={cx(className, { collapsing, in: isOpen })}
-        onEntering={() => this.setCollapsing(true)}
-        onExiting={() => this.setCollapsing(true)}
-        onEntered={() => this.setCollapsing(false)}
-        onExited={() => this.setCollapsing(false)}
+        onEntering={this.setCollapsing(true)}
+        onExiting={this.setCollapsing(true)}
+        onEntered={this.setCollapsing(false)}
+        onExited={this.setCollapsing(false)}
         {...{ isOpen, ...props }}
       >
         {children}

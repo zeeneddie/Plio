@@ -16,7 +16,7 @@ const RisksSubcard = enhance(({
   standardId,
   onSave,
 }) => (
-  <Subcard {...{ isOpen, toggle }}>
+  <Subcard defer {...{ isOpen, toggle }}>
     <Subcard.Header>
       <RisksSubcardHeader length={risks.length} {...{ isSaving }} />
     </Subcard.Header>
