@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { shouldUpdate } from 'recompose';
 import { equals } from 'ramda';
 
-import { Subcard, Label, SwitchView } from '../../components';
+import { Subcard, Label, SwitchView, CardBlock, Button, SaveButton } from '../../components';
 import RiskSubcardAddNewContainer from '../containers/RiskSubcardAddNewContainer';
 import { namedCompose } from '../../helpers';
 
@@ -17,6 +17,7 @@ const enhance = namedCompose('RiskSubcardNew')(
     props.ui.ownerId !== nextProps.ui.ownerId ||
     props.ui.magnitude !== nextProps.ui.magnitude ||
     props.ui.typeId !== nextProps.ui.typeId ||
+    props.ui.isSaving !== nextProps.ui.isSaving ||
     props.standardId !== nextProps.standardId ||
     !equals(props.types, nextProps.types) ||
     !equals(props.card, nextProps.card)
@@ -34,6 +35,7 @@ const RiskSubcardNew = enhance(({
     ownerId,
     magnitude,
     typeId,
+    isSaving,
   },
   onChangeTitle,
   onChangeDescription,
@@ -44,11 +46,12 @@ const RiskSubcardNew = enhance(({
   onChangeActiveView,
   standardId,
   types,
+  onSave,
 }) => (
   <Subcard disabled>
     <Subcard.Header isNew>
       New risk
-      {isNew && <Label names="primary"> New</Label>},
+      {isNew && <Label names="primary"> New</Label>}
     </Subcard.Header>
     <Subcard.Body>
       <SwitchView
@@ -84,6 +87,29 @@ const RiskSubcardNew = enhance(({
           {...{ risks }}
         /> */}
       </SwitchView>
+      <CardBlock>
+        <SaveButton
+          pull="right"
+          onClick={e => !isSaving && onSave({
+            title,
+            description,
+            originatorId,
+            ownerId,
+            magnitude,
+            typeId,
+            activeView,
+            card,
+          }, e)}
+          {...{ isSaving }}
+        />
+        <Button
+          color="secondary"
+          pull="left"
+          onClick={() => !isSaving && card.onDelete()}
+        >
+          Delete
+        </Button>
+      </CardBlock>
     </Subcard.Body>
   </Subcard>
 ));
@@ -98,6 +124,7 @@ RiskSubcardNew.propTypes = {
     ownerId: PropTypes.string.isRequired,
     magnitude: PropTypes.string.isRequired,
     typeId: PropTypes.string.isRequired,
+    isSaving: PropTypes.bool,
   }).isRequired,
   card: PropTypes.object.isRequired,
   types: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -109,7 +136,6 @@ RiskSubcardNew.propTypes = {
   onChangeMagnitude: PropTypes.func.isRequired,
   onChangeTypeId: PropTypes.func.isRequired,
   onChangeActiveView: PropTypes.func,
-  // eslint-disable-next-line react/no-typos
 };
 
 export default RiskSubcardNew;

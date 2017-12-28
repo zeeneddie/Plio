@@ -21,7 +21,7 @@ const enhance = compose(
     children: React.Children.map(children, (child) => {
       switch (child.type) {
         case List:
-          return React.cloneElement(child, { render, cards, onRemoveCard });
+          return React.cloneElement(child, { render, cards, onDelete: onRemoveCard });
         case Button:
           return React.cloneElement(child, { onClick: onAddCard });
         default:

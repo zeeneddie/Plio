@@ -89,7 +89,7 @@ export default compose(
       organizationId,
       updateUI,
       standardId,
-    }) => ({ onDelete, activeView, ...props }) => {
+    }) => ({ card, activeView, ...props }) => {
       updateUI('isSaving', true);
       const cb = (err, id) => {
         updateUI('isSaving', false);
@@ -99,9 +99,9 @@ export default compose(
         updateUI('error', null);
 
         // remove subcard from ui
-        onDelete();
+        card.onDelete();
 
-        updateUI('opened', id);
+        return updateUI('opened', id);
       };
 
       if (activeView === 0) {

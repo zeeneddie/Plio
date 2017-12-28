@@ -14,6 +14,7 @@ const RisksSubcard = enhance(({
   risks,
   isSaving,
   standardId,
+  onSave,
 }) => (
   <Subcard {...{ isOpen, toggle }}>
     <Subcard.Header>
@@ -26,7 +27,7 @@ const RisksSubcard = enhance(({
           render={card => (
             <RiskSubcardNewContainer
               key={card.id}
-              {...{ card, standardId }}
+              {...{ card, standardId, onSave }}
             />
           )}
         >

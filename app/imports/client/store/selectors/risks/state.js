@@ -20,3 +20,5 @@ export const getRisks = view(lenses.collections.risks);
 export const getRisksByIds = view(lenses.collections.risksByIds);
 
 export const getRisksFromProps = (_, { risks }) => risks;
+
+export const getIsViewed = ({ global: { userId } }, { viewedBy }) => viewedBy.includes(userId);

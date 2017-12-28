@@ -13,19 +13,19 @@ const enhance = branch(
 
 const SubcardNewList = enhance(({
   cards,
-  onRemoveCard,
+  onDelete,
   render,
   className,
   ...props
 }) => (
   <Card className={cx('new-cards', className)} {...props}>
-    {map(card => render({ ...card, onRemoveCard: () => onRemoveCard(card.id) }), cards)}
+    {map(card => render({ ...card, onDelete: () => onDelete(card.id) }), cards)}
   </Card>
 ));
 
 SubcardNewList.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.object),
-  onRemoveCard: PropTypes.func,
+  onDelete: PropTypes.func,
   render: PropTypes.func,
   className: PropTypes.string,
 };
