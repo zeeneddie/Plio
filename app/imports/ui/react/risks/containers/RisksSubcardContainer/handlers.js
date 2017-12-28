@@ -53,6 +53,7 @@ export const onSave = ({
 }) => ({ card, activeView, ...props }) => {
   updateUI('isSaving', true);
   const cb = (err, result) => {
+    _modal_.modal.instance().isSaving(false);
     // If active view is 0 it means that the new risk is about to be created
     // otherwise the existing risk is about to be linked
     const id = activeView === ACTIVE_VIEW_STATES.NEW ? result : props.riskId;
