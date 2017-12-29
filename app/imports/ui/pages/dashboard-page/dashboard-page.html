@@ -7,7 +7,11 @@
   </div>
   <hr>
   <div>
-    {{> React component=DashboardUserStatsContainer orgUsers=organization.users}}
+    {{> React
+        component=DashboardUserStatsContainer
+        orgUsers=organization.users
+        usersPerRow=organization.workspaceDefaults.displayUsers
+    }}
   </div>
   {{> Dashboard_MessageStats}}
   {{> Dashboard_WorkItemStats}}

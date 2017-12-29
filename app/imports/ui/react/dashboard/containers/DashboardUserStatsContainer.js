@@ -1,11 +1,11 @@
-import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { filter, compose, pluck, complement, prop, eqProps } from 'ramda';
+import { filter, compose, pluck, complement, prop, allPass, assoc } from 'ramda';
 import { shouldUpdate } from 'recompose';
+import { Random } from 'meteor/random';
 
-import { DashboardUserStats, PreloaderPage } from '../components';
+import { DashboardUserStats } from '../components';
 
-import { composeWithTracker } from '../../../../client/util';
+import { composeWithTracker, notEqProps } from '../../../../client/util';
 import { namedCompose } from '../../helpers';
 import { UserPresenceStatuses } from '../../../../api/constants';
 
@@ -15,8 +15,11 @@ const getOrgUserIds = compose(
 );
 
 export default namedCompose('DashboardUserStatsContainer')(
-  shouldUpdate(complement(eqProps)('orgUsers')),
-  composeWithTracker(({ orgUsers }, onData) => {
+  shouldUpdate(allPass([
+    notEqProps('orgUsers'),
+    notEqProps('usersPerRow'),
+  ])),
+  composeWithTracker(({ orgUsers, ...props }, onData) => {
     const orgUserIds = getOrgUserIds(orgUsers);
     const query = {
       _id: { $in: orgUserIds },
@@ -37,9 +40,8 @@ export default namedCompose('DashboardUserStatsContainer')(
     };
     const users = Meteor.users.find(query, options).fetch();
 
-    onData(null, { users });
+    onData(null, { users, ...props });
   }, {
     propsToWatch: ['orgUsers'],
-    loadingHandler: () => <PreloaderPage size={2} />,
   }),
 )(DashboardUserStats);

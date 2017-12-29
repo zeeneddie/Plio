@@ -24,7 +24,7 @@ const Button = compose(
     ...other
   }) => {
     const colorCx = color.split(' ').map(t => `btn-${t}`).join(' ');
-    const sizeCx = size && `btn-${size}`;
+    const sizeCx = size && `btn-${sizeMap[size]}`;
     const pullCx = PullMap[pull];
 
     return {

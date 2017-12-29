@@ -176,6 +176,7 @@ export default {
   selected,
   value,
   standardsIds,
+  users,
   source1: Object.assign(source1, {
     htmlUrl: source1HtmlUrl,
   }),

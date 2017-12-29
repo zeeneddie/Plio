@@ -1,26 +1,55 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { map } from 'ramda';
 import pluralize from 'pluralize';
+import { branch } from 'recompose';
+import { converge, gt, prop, identity } from 'ramda';
 
-import { DashboardStats } from '../../components';
-import { getFullNameOrEmail } from '../../../../api/users/helpers';
+import { getUsersLength } from '../../../../client/util';
+import { DashboardStats, Collapse, Button, Icon } from '../../components';
+import DashboardStatsUserList from './DashboardStatsUserList';
+import { withStateToggle, namedCompose } from '../../helpers';
 
-const DashboardUserStats = ({ users }) => !!users.length && (
-  <DashboardStats>
-    <DashboardStats.Title>
-      {pluralize('user', users.length, true)} online
-    </DashboardStats.Title>
-    {map(user => (
-      <DashboardStats.User key={user._id} status={user.status}>
-        {getFullNameOrEmail(user)}
-      </DashboardStats.User>
-    ), users)}
-  </DashboardStats>
+const usersExceedLimit = converge(gt, [
+  getUsersLength,
+  prop('usersPerRow'),
+]);
+
+const enhance = namedCompose('DashboardUserStats')(
+  branch(
+    usersExceedLimit,
+    withStateToggle(false, 'isOpen', 'toggle'),
+    identity,
+  ),
 );
 
+const DashboardUserStats = enhance(({
+  users,
+  isOpen,
+  toggle,
+  usersPerRow,
+}) => !!users.length && (
+  <DashboardStats>
+    <DashboardStats.Title>
+      {!!toggle && (
+        <Button size="1" color="secondary add" onClick={toggle}>
+          <Icon name="plus" />
+        </Button>
+      )}
+      {pluralize('user', users.length, true)} online
+    </DashboardStats.Title>
+    <DashboardStatsUserList users={users.slice(0, usersPerRow)} />
+
+    {!!toggle && (
+      <Collapse {...{ isOpen }}>
+        <DashboardStatsUserList users={users.slice(usersPerRow)} />
+      </Collapse>
+    )}
+  </DashboardStats>
+));
+
 DashboardUserStats.propTypes = {
-  users: PropTypes.arrayOf(PropTypes.object),
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
+  usersPerRow: PropTypes.number.isRequired,
 };
 
 export default DashboardUserStats;
