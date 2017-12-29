@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import { IconUser } from '../../components';
 
-const DashboardUserStats = ({
+const DashboardStatsUser = ({
   tag: Tag = 'span',
   className,
   children,
@@ -17,11 +17,11 @@ const DashboardUserStats = ({
   </Tag>
 );
 
-DashboardUserStats.propTypes = {
+DashboardStatsUser.propTypes = {
   tag: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   className: PropTypes.string,
   children: PropTypes.node,
   status: PropTypes.string,
 };
 
-export default DashboardUserStats;
+export default DashboardStatsUser;

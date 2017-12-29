@@ -5,6 +5,8 @@ import { CountSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers'
 import { updateLastAccessedDate } from '/imports/api/organizations/methods';
 import { getC } from '/imports/api/helpers';
 
+import { DashboardUserStatsContainer } from '../../react/dashboard/containers';
+
 Template.Dashboard_Page.viewmodel({
   mixin: ['organization', { counter: 'counter' }],
   isReady: false,
@@ -94,4 +96,5 @@ Template.Dashboard_Page.viewmodel({
   titles() {
     return getC('homeScreenTitles', this.organization());
   },
+  DashboardUserStatsContainer: () => DashboardUserStatsContainer,
 });

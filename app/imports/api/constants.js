@@ -257,3 +257,8 @@ export const KeyMap = {
 
 export const DEPARTMENT_UNCATEGORIZED = 'DEPARTMENTS.UNCATEGORIZED';
 
+export const UserPresenceStatuses = {
+  ONLINE: 'online',
+  AWAY: 'away',
+  OFFLINE: 'offline',
+};

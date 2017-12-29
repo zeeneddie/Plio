@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import Title from './Title';
+import User from './User';
 
 const DashboardStats = ({ className, children, ...props }) => (
   <div clasName={cx('dashboard-stats', className)} {...props}>
@@ -16,5 +17,6 @@ DashboardStats.propTypes = {
 };
 
 DashboardStats.Title = Title;
+DashboardStats.User = User;
 
 export default DashboardStats;

@@ -2,27 +2,28 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations';
 import { isMobileRes } from '/imports/api/checkers';
 import { flattenObjects } from '/imports/api/helpers';
-import { MyPreferencesHelp } from '/imports/api/help-messages.js';
+import { MyPreferencesHelp } from '/imports/api/help-messages';
 import { userLogout } from '/imports/client/store/actions/globalActions';
+import { UserPresenceStatuses } from '../../../../../api/constants';
 
 const STATUSES = [
   {
     text: 'Online',
     css: 'text-success',
-    status: 'online',
+    status: UserPresenceStatuses.ONLINE,
   },
   {
     text: 'Away',
     css: 'text-warning',
-    status: 'away',
+    status: UserPresenceStatuses.AWAY,
   },
   {
     text: 'Offline',
     css: 'text-danger',
-    status: 'offline',
+    status: UserPresenceStatuses.OFFLINE,
   },
 ];
 
