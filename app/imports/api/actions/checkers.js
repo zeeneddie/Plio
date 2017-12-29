@@ -50,7 +50,10 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
       workflowType: WorkflowTypes.SIX_STEP,
       'analysis.status': 0, // Not completed
     });
-    analysisTitle = AnalysisTitles.rootCauseAnalysis;
+    analysisTitle = docWithUncompletedAnalysis &&
+      docWithUncompletedAnalysis.type === ProblemTypes.POTENTIAL_GAIN
+      ? AnalysisTitles.potentialGainAnalysis
+      : AnalysisTitles.rootCauseAnalysis;
   }
 
 

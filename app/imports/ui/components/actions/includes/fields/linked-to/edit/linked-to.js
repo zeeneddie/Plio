@@ -1,11 +1,8 @@
 import { Template } from 'meteor/templating';
-import { Blaze } from 'meteor/blaze';
-import get from 'lodash.get';
 import invoke from 'lodash.invoke';
 
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { ActionTypes, ProblemTypes } from '/imports/share/constants.js';
+import { ActionTypes, ProblemTypes } from '../../../../../../../share/constants';
+import { filterNCs } from '../../../../../../../api/non-conformities/util';
 
 Template.Actions_LinkedTo_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'risk', 'search', 'utils', 'vmTraverse'],
@@ -39,6 +36,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     return [ncs, risks];
   },
   items() {
+    const type = this.type();
     const searchQuery = this.searchObject('value', [{ name: 'sequentialId' }, { name: 'title' }]);
     let query = { ...searchQuery, _id: { $nin: this.linkedDocsIds() } };
     const standardId = this.standardId();
@@ -47,22 +45,17 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     }
     const options = { sort: { serialNumber: 1 } };
     const [ncs, risks] = this.getDocs(query, options);
-    return this.getDocsByType(this.type(), ncs, risks);
+    return this.getDocsByType(type, ncs, risks);
   },
   getDocsByType(type = '', ncs = [], risks = []) {
     switch (type) {
       case ActionTypes.CORRECTIVE_ACTION:
-        return ncs.concat(risks);
-        break;
       case ActionTypes.PREVENTATIVE_ACTION:
-        return ncs.concat(risks);
-        break;
+        return filterNCs(ncs).concat(risks);
       case ActionTypes.RISK_CONTROL:
         return risks;
-        break;
       default:
         return [];
-        break;
     }
   },
   onLink() {},

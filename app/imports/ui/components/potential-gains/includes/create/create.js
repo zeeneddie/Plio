@@ -1,6 +1,12 @@
 import { Template } from 'meteor/templating';
 
+<<<<<<< HEAD
+=======
+import { insert } from '../../../../../api/non-conformities/methods';
+>>>>>>> 845db1b7557e56ffa454a7d6a448301a621373bd
 import { setModalError } from '../../../../../api/helpers';
+import { ProblemTypes } from '../../../../../share/constants';
+import { PotentialGainsHelp } from '../../../../../api/help-messages';
 
 Template.PG_Create.viewmodel({
   mixin: ['organization', 'router', 'getChildrenData'],
@@ -31,6 +37,7 @@ Template.PG_Create.viewmodel({
       const args = {
         ...data,
         organizationId,
+        type: ProblemTypes.POTENTIAL_GAIN,
       };
       const cb = (_id, open) => {
         this.goToNC(_id, false);
@@ -39,10 +46,11 @@ Template.PG_Create.viewmodel({
           _id,
           _title: 'Potential Gain',
           template: 'NC_Card_Edit',
+          helpText: PotentialGainsHelp.potentialGain,
         });
       };
 
-      return this.card.insert(create, args, cb);
+      return this.card.insert(insert, args, cb);
     }
 
     return null;

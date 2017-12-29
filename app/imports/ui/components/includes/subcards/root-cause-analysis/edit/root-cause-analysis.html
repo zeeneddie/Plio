@@ -2,7 +2,7 @@
   {{#Subcards_Wrapper _lText=label _rText=getTextIndicator}}
     <div class="card-block" id="root-cause-analysis">
       {{#each causesData}}
-        {{> RCA_Cause_Edit cause=this}}
+        {{> RCA_Cause_Edit cause=this prefix=prefix}}
       {{/each}}
 
       {{> RCA_Files_Edit fileIds=fileIds}}

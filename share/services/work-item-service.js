@@ -1,4 +1,4 @@
-import { Actions, NonConformities, Risks, WorkItems, PotentialGains } from '../collections';
+import { Actions, NonConformities, Risks, WorkItems } from '../collections';
 import BaseEntityService from './base-entity-service';
 import { ProblemTypes, WorkItemsStore } from '../constants';
 
@@ -249,7 +249,6 @@ export default {
     const collections = {
       [ProblemTypes.NON_CONFORMITY]: NonConformities,
       [ProblemTypes.RISK]: Risks,
-      [ProblemTypes.POTENTIAL_GAIN]: PotentialGains,
     };
 
     const docCollection = collections[docType];

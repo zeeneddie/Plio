@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { insert } from '/imports/api/non-conformities/methods';
 import { setModalError } from '/imports/api/helpers';
+import { ProblemTypes } from '../../../../../share/constants';
 
 Template.NC_Create.viewmodel({
   mixin: ['organization', 'nonconformity', 'router', 'getChildrenData'],
@@ -32,6 +33,7 @@ Template.NC_Create.viewmodel({
       const args = {
         ...data,
         organizationId,
+        type: ProblemTypes.NON_CONFORMITY,
       };
 
       const cb = (_id, open) => {
