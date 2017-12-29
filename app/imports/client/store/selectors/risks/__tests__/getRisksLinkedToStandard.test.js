@@ -10,6 +10,6 @@ describe('getRisksLinkedToStandard', () => {
     const actual = getRisksLinkedToStandard(state, props);
 
     expect(actual).toHaveLength(3);
-    expect().toMatchSnapshot();
+    expect(actual).toMatchSnapshot();
   });
 });

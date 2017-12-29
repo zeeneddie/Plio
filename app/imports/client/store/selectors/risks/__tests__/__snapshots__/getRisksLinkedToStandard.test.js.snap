@@ -1,3 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`getRisksLinkedToStandard matches snapshot 1`] = `undefined`;
+exports[`getRisksLinkedToStandard matches snapshot 1`] = `
+Array [
+  Object {
+    "_id": 10,
+    "departmentsIds": Array [
+      16,
+    ],
+    "standardsIds": Array [
+      1,
+    ],
+    "typeId": 15,
+  },
+  Object {
+    "_id": 11,
+    "departmentsIds": Array [
+      16,
+      17,
+    ],
+    "standardsIds": Array [
+      1,
+      2,
+    ],
+    "typeId": 15,
+  },
+  Object {
+    "_id": 13,
+    "deletedAt": 1513074233018,
+    "isDeleted": true,
+    "standardsIds": Array [
+      1,
+    ],
+  },
+]
+`;
