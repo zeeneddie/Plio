@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import pluralize from 'pluralize';
 import { branch } from 'recompose';
-import { converge, gt, prop, identity } from 'ramda';
+import { converge, gt, prop, identity, map, splitEvery, reduce } from 'ramda';
 
 import { getUsersLength } from '../../../../client/util';
 import { DashboardStats, Collapse, Button, Icon } from '../../components';
@@ -41,7 +41,11 @@ const DashboardUserStats = enhance(({
 
     {!!toggle && (
       <Collapse {...{ isOpen }}>
-        <DashboardStatsUserList users={users.slice(usersPerRow)} />
+        {map(splitUsers => (
+          <div key={reduce(((acc, { _id }) => `${acc} ${_id}`), '', splitUsers)}>
+            <DashboardStatsUserList users={splitUsers} />
+          </div>
+        ), splitEvery(usersPerRow, users.slice(usersPerRow)))}
       </Collapse>
     )}
   </DashboardStats>
