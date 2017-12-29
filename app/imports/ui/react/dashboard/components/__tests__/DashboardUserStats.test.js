@@ -20,7 +20,7 @@ describe('DashboardUserStats', () => {
     const users = times(genUser, len);
     const usersPerRow = 5;
     const wrapper = mount(<DashboardUserStats {...{ users, usersPerRow }} />);
-    expect(wrapper.contains(Collapse)).toBe(true);
+    expect(wrapper.find(Collapse)).toHaveLength(1);
     expect(wrapper.find(DashboardStatsUserList)).toHaveLength(len / usersPerRow);
   });
 
