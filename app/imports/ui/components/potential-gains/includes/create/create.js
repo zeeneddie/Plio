@@ -1,9 +1,6 @@
 import { Template } from 'meteor/templating';
 
-<<<<<<< HEAD
-=======
 import { insert } from '../../../../../api/non-conformities/methods';
->>>>>>> 845db1b7557e56ffa454a7d6a448301a621373bd
 import { setModalError } from '../../../../../api/helpers';
 import { ProblemTypes } from '../../../../../share/constants';
 import { PotentialGainsHelp } from '../../../../../api/help-messages';
