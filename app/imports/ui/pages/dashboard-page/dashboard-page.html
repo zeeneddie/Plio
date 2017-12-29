@@ -10,7 +10,7 @@
     {{> React
         component=DashboardUserStatsContainer
         orgUsers=organization.users
-        usersPerRow=organization.workspaceDefaults.displayUsers
+        usersPerRow=(get (getWorkspaceDefaults organization) 'usersPerRow')
     }}
   </div>
   {{> Dashboard_MessageStats}}

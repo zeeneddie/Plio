@@ -6,6 +6,7 @@ import { updateLastAccessedDate } from '/imports/api/organizations/methods';
 import { getC } from '/imports/api/helpers';
 
 import { DashboardUserStatsContainer } from '../../react/dashboard/containers';
+import { WORKSPACE_DEFAULTS, WorkspaceDefaultsTypes } from '../../../share/constants';
 
 Template.Dashboard_Page.viewmodel({
   mixin: ['organization', { counter: 'counter' }],
@@ -95,6 +96,13 @@ Template.Dashboard_Page.viewmodel({
   },
   titles() {
     return getC('homeScreenTitles', this.organization());
+  },
+  getWorkspaceDefaults(organization) {
+    const workspaceDefaults = organization[WORKSPACE_DEFAULTS];
+
+    return {
+      usersPerRow: workspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_USERS],
+    };
   },
   DashboardUserStatsContainer: () => DashboardUserStatsContainer,
 });
