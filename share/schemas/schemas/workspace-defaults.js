@@ -1,9 +1,9 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { WorkspaceDefaults, WorkspaceDefaultsTypes } from '../../constants';
+import { WORKSPACE_DEFAULTS, WorkspaceDefaults, WorkspaceDefaultsTypes } from '../../constants';
 
 export default new SimpleSchema({
-  workspaceDefaults: {
+  [WORKSPACE_DEFAULTS]: {
     type: new SimpleSchema({
       [WorkspaceDefaultsTypes.DISPLAY_USERS]: {
         type: Number,
