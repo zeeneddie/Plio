@@ -1,9 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 import Icon from './Icon';
 
-const IconUser = props => (
-  <Icon color="user" {...props} />
+const IconUser = ({ name, ...props }) => (
+  <Icon name={cx('user', name)} {...props} />
 );
+
+IconUser.propTypes = {
+  name: PropTypes.string,
+};
 
 export default IconUser;

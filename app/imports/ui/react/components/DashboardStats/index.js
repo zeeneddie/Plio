@@ -6,7 +6,7 @@ import Title from './Title';
 import User from './User';
 
 const DashboardStats = ({ className, children, ...props }) => (
-  <div clasName={cx('dashboard-stats', className)} {...props}>
+  <div className={cx('dashboard-stats', className)} {...props}>
     {children}
   </div>
 );
