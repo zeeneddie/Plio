@@ -4,7 +4,7 @@ import { mapProps } from 'recompose';
 
 import Icon from '../Icons/Icon';
 import { getSizeClassName } from './constants';
-import { transsoc } from '/imports/api/helpers';
+import { transsoc } from '../../../../api/helpers';
 
 const enhance = mapProps(transsoc({ className: getSizeClassName }));
 

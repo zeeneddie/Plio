@@ -3,14 +3,13 @@ import React from 'react';
 import cx from 'classnames';
 import {
   Dropdown,
-  InputGroup,
   InputGroupButton,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
 } from 'reactstrap';
 
-import { mapC } from '/imports/api/helpers';
+import { mapC } from '../../../../../../api/helpers';
 import TextInput from '../../TextInput';
 import Button from '../../../../components/Buttons/Button';
 import Icon from '../../../../components/Icons/Icon';

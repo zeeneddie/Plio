@@ -1,7 +1,7 @@
 import { _ } from 'meteor/underscore';
 import React from 'react';
 
-import { ReminderTimeUnits } from '/imports/share/constants';
+import { ReminderTimeUnits } from '../../../../../share/constants';
 import TimePicker from '../TimePicker';
 
 const ReminderTimePicker = props => (

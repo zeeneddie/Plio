@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
 
-import { TimeUnits } from '/imports/share/constants';
+import { TimeUnits } from '../../../../../share/constants';
 
 const TimePicker = (props) => {
   const timeUnits = props.timeUnits || _.values(TimeUnits);

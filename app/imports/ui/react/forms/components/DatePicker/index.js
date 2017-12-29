@@ -3,7 +3,7 @@ import React from 'react';
 import { $ } from 'meteor/jquery';
 import cx from 'classnames';
 
-import { getFormattedDate } from '/imports/share/helpers';
+import { getFormattedDate } from '../../../../../share/helpers';
 
 export default class DatePicker extends React.Component {
   static get propTypes() {

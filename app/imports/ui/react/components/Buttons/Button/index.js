@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { compose, componentFromProp, defaultProps, mapProps } from 'recompose';
 
-import { PullMap } from '/imports/api/constants';
+import { PullMap } from '../../../../../api/constants';
 
 const sizeMap = {
   1: 'sm',
