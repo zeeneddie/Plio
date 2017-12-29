@@ -684,3 +684,15 @@ export const MessageTypes = {
   TEXT: 'text',
   FILE: 'file',
 };
+
+export const WorkspaceDefaultsTypes = {
+  DISPLAY_USERS: 'displayUsers',
+  DISPLAY_MESSAGES: 'displayMessages',
+  DISPLAY_ACTIONS: 'displayActions',
+};
+
+export const WorkspaceDefaults = {
+  [WorkspaceDefaultsTypes.DISPLAY_USERS]: 5,
+  [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: 1,
+  [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 4,
+};

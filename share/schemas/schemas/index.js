@@ -6,8 +6,9 @@ import {
   ReminderTimeUnits, DocumentTypes, AnalysisStatuses,
   ReviewStatuses, SystemName, StringLimits,
   StandardStatuses, TimeUnits, ProblemMagnitudes,
-} from '../constants.js';
+} from '../../constants';
 
+export { default as WorkspaceDefaultsSchema } from './workspace-defaults';
 
 export const IdSchema = new SimpleSchema({
   _id: {
