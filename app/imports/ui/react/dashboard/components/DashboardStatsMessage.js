@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import cx from 'classnames';
 
-import { Icon } from '../../components';
+import { Icon, IconFile } from '../../components';
 
 const DashboardStatsMessage = ({
   url,
@@ -9,13 +10,14 @@ const DashboardStatsMessage = ({
   fullName,
   text,
   timeString,
+  className,
 }) => (
   <a
-    className="dashboard-stats-message"
+    className={cx('dashboard-stats-message', className)}
     href={url}
   >
     {extension ? (
-      <Icon name={`file-${extension}-o`} />
+      <IconFile {...{ extension }} />
     ) : (
       <Icon name="comment" />
     )}
@@ -31,6 +33,7 @@ DashboardStatsMessage.propTypes = {
   text: PropTypes.string.isRequired,
   timeString: PropTypes.string.isRequired,
   extension: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default DashboardStatsMessage;
