@@ -252,6 +252,7 @@ exports[`DashboardStatsUnreadMessages matches snapshot 1`] = `
     </span>
     <span>
       (
+      23
        items)
     </span>
   </defaultProps(mapProps(componentFromProp(component)))>

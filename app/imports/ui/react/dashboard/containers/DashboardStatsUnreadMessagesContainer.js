@@ -26,15 +26,14 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
     }).isRequired,
   }),
   flattenProp('organization'),
-  onlyUpdateForKeys(['_id', 'serialNumber', 'workspaceDefaults']),
+  flattenProp('workspaceDefaults'),
+  onlyUpdateForKeys(['_id', 'serialNumber', 'displayMessages']),
   withState('isLimitEnabled', 'setIsLimitEnabled', true),
   composeWithTracker(({
     isLimitEnabled,
     _id: organizationId,
     serialNumber: orgSerialNumber,
-    workspaceDefaults: {
-      displayMessages = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_MESSAGES],
-    } = {},
+    displayMessages = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_MESSAGES],
   }, onData) => {
     const limit = isLimitEnabled ? displayMessages : 0;
     const countSub = Meteor.subscribe(
@@ -55,20 +54,16 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
       };
       const messages = Messages.find(query, options).fetch();
       const count = Counter.get(`unread-messages-count-${organizationId}`);
-      const hasItemsToLoad = count > messages.length;
-      const hiddenCount = count - displayMessages;
       onData(null, {
         messages,
         count,
-        hasItemsToLoad,
-        hiddenCount,
         orgSerialNumber,
       });
     }
 
     return () => countSub.stop();
   }, {
-    propsToWatch: ['isLimitEnabled', '_id', 'serialNumber', 'workspaceDefaults'],
+    propsToWatch: ['isLimitEnabled', '_id', 'serialNumber', 'displayMessages'],
   }),
   withHandlers({
     loadAll: ({ setIsLimitEnabled }) => () => setIsLimitEnabled(false),
