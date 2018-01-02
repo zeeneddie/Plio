@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { times } from 'ramda';
 
-import DashboardUserStats from '../DashboardUserStats';
+import { DashboardUserStats } from '../DashboardUserStats';
 import DashboardStatsUserList from '../DashboardStatsUserList';
 import { Collapse } from '../../../components';
 
@@ -30,5 +30,12 @@ describe('DashboardUserStats', () => {
     const wrapper = mount(<DashboardUserStats {...{ users, usersPerRow }} />);
     expect(wrapper.find(Collapse)).toHaveLength(0);
     expect(wrapper.find(DashboardStatsUserList)).toHaveLength(1);
+  });
+
+  it('matches snapshot', () => {
+    const users = times(genUser, 25);
+    const usersPerRow = 5;
+    const wrapper = mount(<DashboardUserStats {...{ users, usersPerRow }} />);
+    expect(wrapper).toMatchSnapshot();
   });
 });

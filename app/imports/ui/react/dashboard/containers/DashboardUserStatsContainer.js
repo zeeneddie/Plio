@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { filter, compose, pluck, complement, prop, allPass, times } from 'ramda';
+import { filter, compose, pluck, complement, prop, allPass } from 'ramda';
 import { shouldUpdate } from 'recompose';
 
 import { DashboardUserStats } from '../components';

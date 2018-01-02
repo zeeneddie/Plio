@@ -14,7 +14,7 @@ const usersExceedLimit = converge(gt, [
   prop('usersPerRow'),
 ]);
 
-const enhance = namedCompose('DashboardUserStats')(
+export const enhance = namedCompose('DashboardUserStats')(
   branch(
     usersExceedLimit,
     withStateToggle(false, 'isOpen', 'toggle'),
@@ -22,7 +22,7 @@ const enhance = namedCompose('DashboardUserStats')(
   ),
 );
 
-const DashboardUserStats = enhance(({
+export const DashboardUserStats = enhance(({
   users,
   isOpen,
   toggle,
