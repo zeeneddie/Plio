@@ -1,8 +1,8 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import { times } from 'ramda';
 
-import { DashboardUserStats } from '../DashboardUserStats';
+import Component, { DashboardUserStats } from '../DashboardUserStats';
 import DashboardStatsUserList from '../DashboardStatsUserList';
 import { Collapse } from '../../../components';
 
@@ -19,7 +19,7 @@ describe('DashboardUserStats', () => {
     const len = 25;
     const users = times(genUser, len);
     const usersPerRow = 5;
-    const wrapper = mount(<DashboardUserStats {...{ users, usersPerRow }} />);
+    const wrapper = mount(<Component {...{ users, usersPerRow }} />);
     expect(wrapper.find(Collapse)).toHaveLength(1);
     expect(wrapper.find(DashboardStatsUserList)).toHaveLength(len / usersPerRow);
   });
@@ -27,15 +27,23 @@ describe('DashboardUserStats', () => {
   it('does not render collapse when less than 5 users online', () => {
     const users = times(genUser, 4);
     const usersPerRow = 5;
-    const wrapper = mount(<DashboardUserStats {...{ users, usersPerRow }} />);
+    const wrapper = mount(<Component {...{ users, usersPerRow }} />);
     expect(wrapper.find(Collapse)).toHaveLength(0);
     expect(wrapper.find(DashboardStatsUserList)).toHaveLength(1);
   });
 
   it('matches snapshot', () => {
+    const toggle = () => null;
+    const isOpen = false;
     const users = times(genUser, 25);
     const usersPerRow = 5;
-    const wrapper = mount(<DashboardUserStats {...{ users, usersPerRow }} />);
+    const wrapper = shallow(<DashboardUserStats {...{
+      users,
+      usersPerRow,
+      toggle,
+      isOpen,
+    }}
+    />);
     expect(wrapper).toMatchSnapshot();
   });
 });

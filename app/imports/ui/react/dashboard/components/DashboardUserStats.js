@@ -22,7 +22,7 @@ export const enhance = namedCompose('DashboardUserStats')(
   ),
 );
 
-export const DashboardUserStats = enhance(({
+export const DashboardUserStats = ({
   users,
   isOpen,
   toggle,
@@ -49,11 +49,11 @@ export const DashboardUserStats = enhance(({
       </Collapse>
     )}
   </DashboardStats>
-));
+);
 
 DashboardUserStats.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object).isRequired,
   usersPerRow: PropTypes.number.isRequired,
 };
 
-export default DashboardUserStats;
+export default enhance(DashboardUserStats);
