@@ -4,16 +4,18 @@ import { map } from 'ramda';
 import pluralize from 'pluralize';
 
 import { DashboardStats, Button, Icon, IconLoading } from '../../components';
+import { DashboardStatsMessageContainer } from '../containers';
 
-export const DashboardUserStats = ({
+const DashboardStatsUnreadMessages = ({
   messages,
   count,
   markAllAsRead,
   hasItemsToLoad,
   loadAll,
   loadLimited,
-  hiddenUnreadMessagesNumber,
+  hiddenCount,
   loading,
+  orgSerialNumber,
 }) => !!messages.length && (
   <DashboardStats>
     <DashboardStats.Title>
@@ -22,28 +24,11 @@ export const DashboardUserStats = ({
         <Icon name="times-circle" />
       </a>
     </DashboardStats.Title>
-    {map(({
-      _id,
-      url,
-      extension,
-      fullName,
-      text,
-      timeString,
-    }) => (
-      <a
-        key={_id}
-        className="dashboard-stats-message"
-        href={url}
-      >
-        {extension ? (
-          <Icon name={`file-${extension}-o`} />
-        ) : (
-          <Icon name="comment" />
-        )}
-        <strong>{fullName}: </strong>
-        {text}
-        <span className="text-muted">{timeString} ago</span>
-      </a>
+    {map(message => (
+      <DashboardStatsMessageContainer
+        key={message._id}
+        {...{ ...message, orgSerialNumber }}
+      />
     ), messages)}
     {hasItemsToLoad ? (
       <Button color="secondary" onClick={loadAll}>
@@ -51,7 +36,7 @@ export const DashboardUserStats = ({
         {loading ? (
           <IconLoading />
         ) : (
-          <span>({hiddenUnreadMessagesNumber} more)</span>
+          <span>({hiddenCount} more)</span>
         )}
       </Button>
     ) : (
@@ -60,15 +45,23 @@ export const DashboardUserStats = ({
         {loading ? (
           <IconLoading />
         ) : (
-          <span>({hiddenUnreadMessagesNumber} items)</span>
+          <span>({hiddenCount} items)</span>
         )}
       </Button>
     )}
   </DashboardStats>
 );
 
-DashboardUserStats.propTypes = {
-
+DashboardStatsUnreadMessages.propTypes = {
+  messages: PropTypes.arrayOf(PropTypes.object).isRequired,
+  count: PropTypes.number.isRequired,
+  markAllAsRead: PropTypes.func.isRequired,
+  hasItemsToLoad: PropTypes.bool,
+  loadAll: PropTypes.func.isRequired,
+  loadLimited: PropTypes.func.isRequired,
+  hiddenCount: PropTypes.number,
+  loading: PropTypes.bool,
+  orgSerialNumber: PropTypes.number.isRequired,
 };
 
-export default DashboardUserStats;
+export default DashboardStatsUnreadMessages;
