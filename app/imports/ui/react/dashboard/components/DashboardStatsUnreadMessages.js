@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { map } from 'ramda';
+import pluralize from 'pluralize';
 
 import { DashboardStats, Button, Icon, IconLoading } from '../../components';
 
@@ -10,15 +11,15 @@ export const DashboardUserStats = ({
   markAllAsRead,
   hasItemsToLoad,
   loadAll,
-  isReady,
+  loadLimited,
   hiddenUnreadMessagesNumber,
-  enableLimit,
+  loading,
 }) => !!messages.length && (
   <DashboardStats>
     <DashboardStats.Title>
-      {count}
-      <a className="pointer" onClick={markAllAsRead}>
-        <Icon name="times-circle" title="Mark all messages as read" />
+      {pluralize('unread message', count || messages.length, true)}
+      <a className="pointer" title="Mark all messages as read" onClick={markAllAsRead}>
+        <Icon name="times-circle" />
       </a>
     </DashboardStats.Title>
     {map(({
@@ -47,19 +48,19 @@ export const DashboardUserStats = ({
     {hasItemsToLoad ? (
       <Button color="secondary" onClick={loadAll}>
         View all items
-        {isReady ? (
-          <span>({hiddenUnreadMessagesNumber} more)</span>
+        {loading ? (
+          <IconLoading />
         ) : (
-          <IconLoading margin="bottom" />
+          <span>({hiddenUnreadMessagesNumber} more)</span>
         )}
       </Button>
-    ) : enableLimit && (
-      <Button color="secondary" onClick={() => enableLimit(true)}>
+    ) : (
+      <Button color="secondary" onClick={loadLimited}>
         <span>Hide</span>
-        {isReady ? (
-          <span>({hiddenUnreadMessagesNumber} items)</span>
+        {loading ? (
+          <IconLoading />
         ) : (
-          <IconLoading margin="bottom" />
+          <span>({hiddenUnreadMessagesNumber} items)</span>
         )}
       </Button>
     )}

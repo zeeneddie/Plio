@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { setPropTypes } from 'recompose';
+import { setPropTypes, withState, withHandlers } from 'recompose';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import moment from 'moment-timezone';
@@ -9,23 +9,44 @@ import { namedCompose } from '../../helpers';
 import { composeWithTracker } from '../../../../client/util';
 import { MessageSubs } from '../../../../startup/client/subsmanagers';
 import { Messages, Files, Discussions } from '../../../../share/collections';
-import { MessageTypes, DocumentTypes } from '../../../../share/constants';
+import { updateViewedByOrganization } from '../../../../api/discussions/methods';
+import {
+  MessageTypes,
+  DocumentTypes,
+  WorkspaceDefaults,
+  WorkspaceDefaultsTypes,
+} from '../../../../share/constants';
+import Counter from '../../../../api/counter/client';
 import { removeEmails } from '../../../../share/mentions';
 import { getFullNameOrEmail } from '../../../../api/users/helpers';
+import { handleMethodResult } from '../../../../api/helpers';
 
 export default namedCompose('DashboardStatsUnreadMessagesContainer')(
   setPropTypes({
-    organizationId: PropTypes.string.isRequired,
-    orgSerialNumber: PropTypes.number.isRequired,
+    organization: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      serialNumber: PropTypes.number.isRequired,
+      workspaceDefaults: PropTypes.shape({
+        displayMessages: PropTypes.number,
+      }).isRequired,
+    }).isRequired,
   }),
-  composeWithTracker(({ organizationId, orgSerialNumber }, onData) => {
-    let dummy = 0;
-    const limit = 1;
+  withState('isLimitEnabled', 'setIsLimitEnabled', true),
+  composeWithTracker(({
+    isLimitEnabled,
+    organization: {
+      _id: organizationId,
+      serialNumber: orgSerialNumber,
+      workspaceDefaults: {
+        displayMessages = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_MESSAGES],
+      } = {},
+    },
+  }, onData) => {
+    const limit = isLimitEnabled ? displayMessages : 0;
     const countSub = Meteor.subscribe(
       'messagesNotViewedCountTotal',
       `unread-messages-count-${organizationId}`,
       organizationId,
-      ++dummy,
     );
     const subs = [
       MessageSubs.subscribe('unreadMessages', { organizationId, limit }),
@@ -97,10 +118,23 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
 
         return messageData;
       });
-
-      onData(null, { messages });
+      const count = Counter.get(`unread-messages-count-${organizationId}`);
+      const hasItemsToLoad = count > messages.length;
+      const hiddenUnreadMessagesNumber = count - displayMessages;
+      onData(null, {
+        messages,
+        count,
+        hasItemsToLoad,
+        hiddenUnreadMessagesNumber,
+      });
     }
 
     return () => countSub.stop();
+  }),
+  withHandlers({
+    loadAll: ({ setIsLimitEnabled }) => () => setIsLimitEnabled(false),
+    loadLimited: ({ setIsLimitEnabled }) => () => setIsLimitEnabled(true),
+    markAllAsRead: ({ organization: { _id } }) => () =>
+      updateViewedByOrganization.call({ _id }, handleMethodResult()),
   }),
 )(DashboardStatsUnreadMessages);
