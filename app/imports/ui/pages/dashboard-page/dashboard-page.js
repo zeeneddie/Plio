@@ -5,8 +5,11 @@ import { CountSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers'
 import { updateLastAccessedDate } from '/imports/api/organizations/methods';
 import { getC } from '/imports/api/helpers';
 
-import { DashboardUserStatsContainer } from '../../react/dashboard/containers';
 import { WORKSPACE_DEFAULTS, WorkspaceDefaultsTypes } from '../../../share/constants';
+import {
+  DashboardUserStatsContainer,
+  DashboardStatsUnreadMessagesContainer,
+} from '../../react/dashboard/containers';
 
 Template.Dashboard_Page.viewmodel({
   mixin: ['organization', { counter: 'counter' }],
@@ -105,4 +108,5 @@ Template.Dashboard_Page.viewmodel({
     };
   },
   DashboardUserStatsContainer: () => DashboardUserStatsContainer,
+  DashboardStatsUnreadMessagesContainer: () => DashboardStatsUnreadMessagesContainer,
 });

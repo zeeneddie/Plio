@@ -17,24 +17,29 @@ export const DashboardUserStats = ({
   <DashboardStats>
     <DashboardStats.Title>
       {count}
-      <Button onClick={markAllAsRead}>
+      <a className="pointer" onClick={markAllAsRead}>
         <Icon name="times-circle" title="Mark all messages as read" />
-      </Button>
+      </a>
     </DashboardStats.Title>
     {map(({
+      _id,
       url,
       extension,
       fullName,
       text,
       timeString,
     }) => (
-      <a className="dashboard-stats-message" href={url}>
+      <a
+        key={_id}
+        className="dashboard-stats-message"
+        href={url}
+      >
         {extension ? (
           <Icon name={`file-${extension}-o`} />
         ) : (
           <Icon name="comment" />
         )}
-        <strong>{fullName}:</strong>
+        <strong>{fullName}: </strong>
         {text}
         <span className="text-muted">{timeString} ago</span>
       </a>
