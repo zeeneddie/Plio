@@ -1,11 +1,20 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import { times } from 'ramda';
 
 import DashboardStatsUnreadMessages from '../DashboardStatsUnreadMessages';
 import { DashboardStatsMessageContainer } from '../../containers';
 
 describe('DashboardStatsUnreadMessages', () => {
+  const realDate = Date;
+
+  beforeEach(() => {
+    global.Date = jest.fn();
+  });
+  afterEach(() => {
+    global.Date = realDate;
+  });
+
   const len = 24;
   const count = len;
   const markAllAsRead = jest.fn();

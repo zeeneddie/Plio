@@ -1,0 +1,259 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DashboardStatsUnreadMessages matches snapshot 1`] = `
+<DashboardStats>
+  <DashboardStatsTitle>
+    24 unread messages
+    <a
+      className="pointer"
+      onClick={[Function]}
+      title="Mark all messages as read"
+    >
+      <Icon
+        name="times-circle"
+      />
+    </a>
+  </DashboardStatsTitle>
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={0}
+    extension="docx"
+    fullName="John Doe 0"
+    key="0"
+    orgSerialNumber={1}
+    text="Hello World #0"
+    timeString="[object Object]"
+    url="http://example.com/0"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={1}
+    fullName="John Doe 1"
+    key="1"
+    orgSerialNumber={1}
+    text="Hello World #1"
+    timeString="[object Object]"
+    url="http://example.com/1"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={2}
+    extension="docx"
+    fullName="John Doe 2"
+    key="2"
+    orgSerialNumber={1}
+    text="Hello World #2"
+    timeString="[object Object]"
+    url="http://example.com/2"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={3}
+    fullName="John Doe 3"
+    key="3"
+    orgSerialNumber={1}
+    text="Hello World #3"
+    timeString="[object Object]"
+    url="http://example.com/3"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={4}
+    extension="docx"
+    fullName="John Doe 4"
+    key="4"
+    orgSerialNumber={1}
+    text="Hello World #4"
+    timeString="[object Object]"
+    url="http://example.com/4"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={5}
+    fullName="John Doe 5"
+    key="5"
+    orgSerialNumber={1}
+    text="Hello World #5"
+    timeString="[object Object]"
+    url="http://example.com/5"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={6}
+    extension="docx"
+    fullName="John Doe 6"
+    key="6"
+    orgSerialNumber={1}
+    text="Hello World #6"
+    timeString="[object Object]"
+    url="http://example.com/6"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={7}
+    fullName="John Doe 7"
+    key="7"
+    orgSerialNumber={1}
+    text="Hello World #7"
+    timeString="[object Object]"
+    url="http://example.com/7"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={8}
+    extension="docx"
+    fullName="John Doe 8"
+    key="8"
+    orgSerialNumber={1}
+    text="Hello World #8"
+    timeString="[object Object]"
+    url="http://example.com/8"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={9}
+    fullName="John Doe 9"
+    key="9"
+    orgSerialNumber={1}
+    text="Hello World #9"
+    timeString="[object Object]"
+    url="http://example.com/9"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={10}
+    extension="docx"
+    fullName="John Doe 10"
+    key="10"
+    orgSerialNumber={1}
+    text="Hello World #10"
+    timeString="[object Object]"
+    url="http://example.com/10"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={11}
+    fullName="John Doe 11"
+    key="11"
+    orgSerialNumber={1}
+    text="Hello World #11"
+    timeString="[object Object]"
+    url="http://example.com/11"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={12}
+    extension="docx"
+    fullName="John Doe 12"
+    key="12"
+    orgSerialNumber={1}
+    text="Hello World #12"
+    timeString="[object Object]"
+    url="http://example.com/12"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={13}
+    fullName="John Doe 13"
+    key="13"
+    orgSerialNumber={1}
+    text="Hello World #13"
+    timeString="[object Object]"
+    url="http://example.com/13"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={14}
+    extension="docx"
+    fullName="John Doe 14"
+    key="14"
+    orgSerialNumber={1}
+    text="Hello World #14"
+    timeString="[object Object]"
+    url="http://example.com/14"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={15}
+    fullName="John Doe 15"
+    key="15"
+    orgSerialNumber={1}
+    text="Hello World #15"
+    timeString="[object Object]"
+    url="http://example.com/15"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={16}
+    extension="docx"
+    fullName="John Doe 16"
+    key="16"
+    orgSerialNumber={1}
+    text="Hello World #16"
+    timeString="[object Object]"
+    url="http://example.com/16"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={17}
+    fullName="John Doe 17"
+    key="17"
+    orgSerialNumber={1}
+    text="Hello World #17"
+    timeString="[object Object]"
+    url="http://example.com/17"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={18}
+    extension="docx"
+    fullName="John Doe 18"
+    key="18"
+    orgSerialNumber={1}
+    text="Hello World #18"
+    timeString="[object Object]"
+    url="http://example.com/18"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={19}
+    fullName="John Doe 19"
+    key="19"
+    orgSerialNumber={1}
+    text="Hello World #19"
+    timeString="[object Object]"
+    url="http://example.com/19"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={20}
+    extension="docx"
+    fullName="John Doe 20"
+    key="20"
+    orgSerialNumber={1}
+    text="Hello World #20"
+    timeString="[object Object]"
+    url="http://example.com/20"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={21}
+    fullName="John Doe 21"
+    key="21"
+    orgSerialNumber={1}
+    text="Hello World #21"
+    timeString="[object Object]"
+    url="http://example.com/21"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={22}
+    extension="docx"
+    fullName="John Doe 22"
+    key="22"
+    orgSerialNumber={1}
+    text="Hello World #22"
+    timeString="[object Object]"
+    url="http://example.com/22"
+  />
+  <DashboardStatsMessageContainer(DashboardStatsMessage)
+    _id={23}
+    fullName="John Doe 23"
+    key="23"
+    orgSerialNumber={1}
+    text="Hello World #23"
+    timeString="[object Object]"
+    url="http://example.com/23"
+  />
+  <defaultProps(mapProps(componentFromProp(component)))
+    color="secondary"
+    component="a"
+    onClick={[Function]}
+  >
+    <span>
+      Hide
+    </span>
+    <span>
+      (
+       items)
+    </span>
+  </defaultProps(mapProps(componentFromProp(component)))>
+</DashboardStats>
+`;
