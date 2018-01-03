@@ -431,6 +431,13 @@ export const WorkItemsStore = {
   },
 };
 
+export const WorkItemStatuses = {
+  IN_PROGRESS: 0,
+  DUE_TODAY: 1,
+  OVERDUE: 2,
+  COMPLETED: 3,
+};
+
 export const WorkflowTypes = {
   THREE_STEP: '3-step',
   SIX_STEP: '6-step',

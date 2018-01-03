@@ -1,5 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 
+import { Actions, Risks, NonConformities } from '../../share/collections';
+import { WorkItemsStore } from '../../share/constants';
+
 export const getClassByStatus = (status) => {
   switch (status) {
     case 0:
@@ -32,4 +35,21 @@ export const getQueryParams = ({ isCompleted, assigneeId }, currentUserId) => {
 
     return { filter: 2 }; // Team current work
   };
+};
+
+// ({ _id: String, type: String }: Object) => MongoDocument
+export const getLinkedDoc = ({ _id, type }) => {
+  const { LINKED_TYPES } = WorkItemsStore;
+
+  const collections = {
+    [LINKED_TYPES.NON_CONFORMITY]: NonConformities,
+    [LINKED_TYPES.RISK]: Risks,
+    [LINKED_TYPES.CORRECTIVE_ACTION]: Actions,
+    [LINKED_TYPES.PREVENTATIVE_ACTION]: Actions,
+    [LINKED_TYPES.RISK_CONTROL]: Actions,
+  };
+
+  const collection = collections[type];
+
+  return collection ? collection.findOne({ _id }) : undefined;
 };

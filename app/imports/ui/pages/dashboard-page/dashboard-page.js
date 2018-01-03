@@ -9,6 +9,7 @@ import { WORKSPACE_DEFAULTS, WorkspaceDefaultsTypes } from '../../../share/const
 import {
   DashboardUserStatsContainer,
   DashboardStatsUnreadMessagesContainer,
+  DashboardStatsOverdueActionsContainer,
 } from '../../react/dashboard/containers';
 
 Template.Dashboard_Page.viewmodel({
@@ -109,4 +110,5 @@ Template.Dashboard_Page.viewmodel({
   },
   DashboardUserStatsContainer: () => DashboardUserStatsContainer,
   DashboardStatsUnreadMessagesContainer: () => DashboardStatsUnreadMessagesContainer,
+  DashboardStatsOverdueActionsContainer: () => DashboardStatsOverdueActionsContainer,
 });
