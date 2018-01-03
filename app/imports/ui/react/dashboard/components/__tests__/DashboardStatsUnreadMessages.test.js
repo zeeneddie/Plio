@@ -28,7 +28,7 @@ describe('DashboardStatsUnreadMessages', () => {
     text: `Hello World #${n}`,
     timeString: (new Date()).toString(),
   });
-  it('renders messages correctly & does not render show/hide button', () => {
+  it('renders messages correctly', () => {
     const len = 24;
     const messages = times(genMessage, len);
 
@@ -63,22 +63,8 @@ describe('DashboardStatsUnreadMessages', () => {
 
     expect(wrapper1.find(Button)).toHaveLength(0);
     expect(wrapper2.find(Button)).toHaveLength(1);
-  });
 
-  it('matches snapshot', () => {
-    const len = 24;
-    const messages = times(genMessage, len);
-    const wrapper = shallow(<DashboardStatsUnreadMessages
-      {...{
-        messages,
-        markAllAsRead,
-        loadAll,
-        loadLimited,
-        orgSerialNumber,
-        count: len,
-      }}
-    />);
-
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper1).toMatchSnapshot();
+    expect(wrapper2).toMatchSnapshot();
   });
 });
