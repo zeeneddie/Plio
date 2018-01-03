@@ -67,18 +67,6 @@ export default namedCompose('DashboardStatsOverdueActionsContainer')(
       const workItems = WorkItems.find(query, options).fetch();
       const count = Counter.get(counterName);
 
-      // const genWorkItem = n => ({
-      //   _id: n,
-      //   type: n % 2 === 0 ? WorkItemTypes.COMPLETE_ACTION : WorkItemTypes.COMPLETE_ANALYSIS,
-      //   linkedDoc: {
-      //     _id: (n + 1) * 100,
-      //     type: n % 2 === 0 ? DocumentTypes.CORRECTIVE_ACTION : DocumentTypes.RISK,
-      //   },
-      //   targetDate: new Date(),
-      //   isCompleted: false,
-      //   assigneeId: 1,
-      // });
-
       onData(null, {
         workItems,
         itemsPerRow,
@@ -107,8 +95,6 @@ export default namedCompose('DashboardStatsOverdueActionsContainer')(
   }),
   withState('isOpen', 'setIsOpen', false),
   withHandlers({
-    loadAll: ({ setIsLimitEnabled }) => () => setIsLimitEnabled(false),
-    loadLimited: ({ setIsLimitEnabled }) => () => setIsLimitEnabled(true),
     toggle: ({
       isOpen,
       setIsOpen,

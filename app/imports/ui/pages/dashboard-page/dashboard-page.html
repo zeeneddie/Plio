@@ -13,12 +13,14 @@
         usersPerRow=(get (getWorkspaceDefaults organization) 'usersPerRow')
     }}
   </div>
+  <hr>
   <div>
     {{> React
       component=DashboardStatsUnreadMessagesContainer
       organization=organization
   }}
   </div>
+  <hr>
   <div>
     {{> React
       component=DashboardStatsOverdueActionsContainer

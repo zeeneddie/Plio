@@ -12,7 +12,7 @@ import {
 import { DashboardStatsActionContainer } from '../containers';
 import { joinIds } from '../../../../client/util';
 
-const enhance = onlyUpdateForKeys(['count', 'workItems', 'orgSerialNumber', 'itemsPerRow']);
+const enhance = onlyUpdateForKeys(['count', 'workItems', 'orgSerialNumber', 'itemsPerRow', 'isOpen']);
 
 export const DashboardStatsOverdueActions = ({
   count,
