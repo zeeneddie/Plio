@@ -1,7 +1,7 @@
 import { setPropTypes, withState, withHandlers, flattenProp, onlyUpdateForKeys } from 'recompose';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
-import { map, view, compose } from 'ramda';
+import { map, view } from 'ramda';
 
 import { composeWithTracker, lenses } from '../../../../client/util';
 import DashboardStatsOverdueActions from '../components/DashboardStatsOverdueActions';
@@ -15,12 +15,12 @@ import {
 import { WorkItemSubs, CountSubs } from '../../../../startup/client/subsmanagers';
 import Counter from '../../../../api/counter/client';
 import { WorkItems } from '../../../../share/collections';
-import { getLinkedDoc } from '../../../../api/work-items/helpers';
 
 export default namedCompose('DashboardStatsOverdueActionsContainer')(
   setPropTypes({
     organization: PropTypes.shape({
       _id: PropTypes.string.isRequired,
+      serialNumber: PropTypes.number.isRequired,
       [WORKSPACE_DEFAULTS]: PropTypes.shape({
         [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: PropTypes.number,
       }).isRequired,
@@ -33,6 +33,7 @@ export default namedCompose('DashboardStatsOverdueActionsContainer')(
   composeWithTracker(({
     isLimitEnabled,
     _id: organizationId,
+    serialNumber: orgSerialNumber,
     [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]:
       itemsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_ACTIONS],
   }, onData) => {
@@ -54,6 +55,14 @@ export default namedCompose('DashboardStatsOverdueActionsContainer')(
         sort: {
           targetDate: -1, // New overdue items first
         },
+        fields: {
+          _id: 1,
+          linkedDoc: 1,
+          targetDate: 1,
+          type: 1,
+          isCompleted: 1,
+          assigneeId: 1,
+        },
       };
       const workItems = WorkItems.find(query, options).fetch();
       const count = Counter.get(counterName);
@@ -62,6 +71,7 @@ export default namedCompose('DashboardStatsOverdueActionsContainer')(
         workItems,
         itemsPerRow,
         count,
+        orgSerialNumber,
       });
     }
   }, {
@@ -76,10 +86,10 @@ export default namedCompose('DashboardStatsOverdueActionsContainer')(
     ];
 
     if (subs.every(sub => sub.ready())) {
-      const items = map(compose(getLinkedDoc, view(lenses.linkedDoc)), workItems);
-
-      onData(null, { items, ...props });
+      onData(null, { workItems, ...props });
     }
+
+    return () => subs.forEach(sub => sub.stop());
   }, {
     propsToWatch: ['workItems'],
   }),

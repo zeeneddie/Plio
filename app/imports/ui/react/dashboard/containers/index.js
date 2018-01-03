@@ -6,3 +6,4 @@ export { default as DashboardStatsMessageContainer } from './DashboardStatsMessa
 export {
   default as DashboardStatsOverdueActionsContainer,
 } from './DashboardStatsOverdueActionsContainer';
+export { default as DashboardStatsActionContainer } from './DashboardStatsActionContainer';

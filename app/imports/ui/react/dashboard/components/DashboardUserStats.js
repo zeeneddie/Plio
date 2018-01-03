@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import pluralize from 'pluralize';
-import { compose, join, pluck } from 'ramda';
 
 import { DashboardStatsExpandable } from '../../components';
 import DashboardStatsUserList from './DashboardStatsUserList';
+import { joinIds } from '../../../../client/util';
 
 export const DashboardUserStats = ({
   users,
@@ -14,7 +14,7 @@ export const DashboardUserStats = ({
     items={users}
     itemsPerRow={usersPerRow}
     render={({ items }) => (
-      <div key={compose(join(' '), pluck('_id'))(items)}>
+      <div key={joinIds(items)}>
         <DashboardStatsUserList users={items} />
       </div>
     )}
