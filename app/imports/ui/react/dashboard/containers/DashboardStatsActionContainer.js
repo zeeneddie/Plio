@@ -29,7 +29,7 @@ export default namedCompose('DashboardStatsActionContainer')(
     targetDate,
   }, onData) => {
     const userId = Meteor.userId();
-    const { title, sequentialId } = getLinkedDoc(linkedDoc);
+    const { title, sequentialId } = getLinkedDoc(linkedDoc) || {};
     const children = `${title} - ${getTypeText({ type, linkedDoc })} (${sequentialId})`;
     const params = { orgSerialNumber, workItemId: _id };
     const queryParams = getQueryParams({ isCompleted, assigneeId }, userId)(userId);

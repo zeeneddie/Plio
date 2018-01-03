@@ -19,6 +19,8 @@ export const DashboardStatsOverdueActions = ({
   workItems,
   orgSerialNumber,
   itemsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_MESSAGES],
+  toggle,
+  isOpen,
 }) => (
   <DashboardStatsExpandable
     items={workItems}
@@ -30,6 +32,7 @@ export const DashboardStatsOverdueActions = ({
         ), workItems)}
       </div>
     )}
+    {...{ toggle, isOpen }}
   >
     {pluralize('overdue work item', count, true)}
   </DashboardStatsExpandable>
@@ -40,6 +43,8 @@ DashboardStatsOverdueActions.propTypes = {
   itemsPerRow: PropTypes.number.isRequired,
   orgSerialNumber: PropTypes.number.isRequired,
   count: PropTypes.number.isRequired,
+  toggle: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
 };
 
 export default enhance(DashboardStatsOverdueActions);

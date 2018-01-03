@@ -412,13 +412,15 @@ export const UserRolesNames = {
   [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings',
 };
 
+export const WorkItemTypes = {
+  COMPLETE_ACTION: 'complete action',
+  VERIFY_ACTION: 'verify action',
+  COMPLETE_ANALYSIS: 'complete analysis',
+  COMPLETE_UPDATE_OF_DOCUMENTS: 'complete approval',
+};
+
 export const WorkItemsStore = {
-  TYPES: {
-    COMPLETE_ACTION: 'complete action',
-    VERIFY_ACTION: 'verify action',
-    COMPLETE_ANALYSIS: 'complete analysis',
-    COMPLETE_UPDATE_OF_DOCUMENTS: 'complete approval',
-  },
+  TYPES: WorkItemTypes,
   LINKED_TYPES: {
     ...ActionTypes,
     ...ProblemTypes,

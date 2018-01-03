@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { branch } from 'recompose';
-import { converge, gt, prop, identity, map, splitEvery } from 'ramda';
+import { converge, gt, prop, identity, map, splitEvery, tap, compose } from 'ramda';
 
-import { DashboardStats, Collapse, Button, Icon, PlusButton } from './';
+import { DashboardStats, Collapse, PlusButton } from './';
 import { withStateToggle } from '../helpers';
 import { getItemsLength } from '../../../client/util';
 
@@ -13,9 +13,13 @@ const itemsExceedLimit = converge(gt, [
 ]);
 
 export const enhance = branch(
-  itemsExceedLimit,
-  withStateToggle(false, 'isOpen', 'toggle'),
+  prop('toggle'),
   identity,
+  branch(
+    compose(itemsExceedLimit),
+    withStateToggle(false, 'isOpen', 'toggle'),
+    identity,
+  ),
 );
 
 export const DashboardStatsExpandable = ({
