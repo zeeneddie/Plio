@@ -30,15 +30,14 @@ export const DashboardStatsOverdueActions = ({
 }) => (
   <DashboardStatsExpandable
     items={workItems}
-    itemsPerRow={itemsPerRow}
     render={({ items }) => (
       <div key={joinIds(items)}>
         {map(item => (
           <DashboardStatsActionContainer key={item._id} {...{ ...item, orgSerialNumber }} />
-        ), workItems)}
+        ), items)}
       </div>
     )}
-    {...{ toggle, isOpen }}
+    {...{ toggle, isOpen, itemsPerRow }}
   >
     {pluralize('overdue work item', count, true)}
   </DashboardStatsExpandable>

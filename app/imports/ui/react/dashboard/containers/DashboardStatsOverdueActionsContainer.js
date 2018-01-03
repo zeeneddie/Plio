@@ -101,8 +101,8 @@ export default namedCompose('DashboardStatsOverdueActionsContainer')(
       isLimitEnabled,
       setIsLimitEnabled,
     }) => () => {
-      setIsOpen(!isOpen);
       setIsLimitEnabled(!isLimitEnabled);
+      setIsOpen(!isOpen);
     },
   }),
 )(DashboardStatsOverdueActions);
