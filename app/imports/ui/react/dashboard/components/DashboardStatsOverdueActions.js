@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import pluralize from 'pluralize';
 import { map } from 'ramda';
+import { onlyUpdateForKeys } from 'recompose';
 
 import { DashboardStatsExpandable } from '../../components';
 import {
@@ -11,7 +12,9 @@ import {
 import { DashboardStatsActionContainer } from '../containers';
 import { joinIds } from '../../../../client/util';
 
-const DashboardStatsOverdueActions = ({
+const enhance = onlyUpdateForKeys(['count', 'workItems', 'orgSerialNumber', 'itemsPerRow']);
+
+export const DashboardStatsOverdueActions = ({
   count,
   workItems,
   orgSerialNumber,
@@ -39,4 +42,4 @@ DashboardStatsOverdueActions.propTypes = {
   count: PropTypes.number.isRequired,
 };
 
-export default DashboardStatsOverdueActions;
+export default enhance(DashboardStatsOverdueActions);
