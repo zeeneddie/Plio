@@ -367,6 +367,37 @@ Migrations.add({
   },
 });
 
+Migrations.add({
+  version: 11,
+  name: 'Add potential gain guidelines to organizations',
+  up() {
+    const query = {
+      pgGuidelines: {
+        $exists: false,
+      },
+    };
+    const modifier = {
+      $set: {
+        pgGuidelines: OrganizationDefaults.pgGuidelines,
+      },
+    };
+    const options = { multi: true };
+    Organizations.update(query, modifier, options);
+    console.log('Added pg guidelines to organizations');
+  },
+  down() {
+    const query = {};
+    const modifier = {
+      $unset: {
+        pgGuidelines: '',
+      },
+    };
+    const options = { multi: true };
+    Organizations.update(query, modifier, options);
+    console.log('Removed pg guidelines from organizations');
+  },
+});
+
 Meteor.startup(() => {
   Migrations.migrateTo('latest');
 });
