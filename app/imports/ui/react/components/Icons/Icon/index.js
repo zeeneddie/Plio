@@ -3,8 +3,8 @@ import React from 'react';
 import { _ } from 'meteor/underscore';
 import cx from 'classnames';
 
-import { FaSize } from '/imports/ui/react/components/Utility';
-import { MarginMap } from '/imports/api/constants';
+import { FaSize } from '../../Utility';
+import { MarginMap } from '../../../../../api/constants';
 
 const Icon = ({
   margin,

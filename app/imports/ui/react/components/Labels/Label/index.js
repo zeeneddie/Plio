@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
 
-import { MarginMap } from '/imports/api/constants';
+import { MarginMap } from '../../../../../api/constants';
 
 const Label = ({
   names = 'default', className, margin, children,

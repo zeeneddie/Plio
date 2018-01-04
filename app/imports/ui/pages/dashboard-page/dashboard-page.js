@@ -5,6 +5,13 @@ import { CountSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers'
 import { updateLastAccessedDate } from '/imports/api/organizations/methods';
 import { getC } from '/imports/api/helpers';
 
+import { WORKSPACE_DEFAULTS, WorkspaceDefaultsTypes } from '../../../share/constants';
+import {
+  DashboardUserStatsContainer,
+  DashboardStatsUnreadMessagesContainer,
+  DashboardStatsOverdueActionsContainer,
+} from '../../react/dashboard/containers';
+
 Template.Dashboard_Page.viewmodel({
   mixin: ['organization', { counter: 'counter' }],
   isReady: false,
@@ -94,4 +101,14 @@ Template.Dashboard_Page.viewmodel({
   titles() {
     return getC('homeScreenTitles', this.organization());
   },
+  getWorkspaceDefaults(organization) {
+    const workspaceDefaults = organization[WORKSPACE_DEFAULTS];
+
+    return {
+      usersPerRow: workspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_USERS],
+    };
+  },
+  DashboardUserStatsContainer: () => DashboardUserStatsContainer,
+  DashboardStatsUnreadMessagesContainer: () => DashboardStatsUnreadMessagesContainer,
+  DashboardStatsOverdueActionsContainer: () => DashboardStatsOverdueActionsContainer,
 });

@@ -38,7 +38,7 @@ Template.Dashboard_MessageStats.viewmodel({
     let dummy = 0;
     template.autorun(() => {
       this.listener.depend();
-      const limit = this.enableLimit() ? this.limit() : false;
+      const limit = this.enableLimit() ? this.limit() : null;
       const organizationId = this.organizationId();
 
       this._subHandlers([

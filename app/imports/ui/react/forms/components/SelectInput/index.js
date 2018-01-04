@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { _ } from 'meteor/underscore';
+import { omit } from 'ramda';
 
 import {
   searchByRegex,
@@ -8,18 +9,14 @@ import {
   getC,
   propEq,
   invoker,
-  omitC,
-} from '/imports/api/helpers';
+} from '../../../../../api/helpers';
 import SelectInputView from './view';
 
 const getValue = ({ items, selected }) => getC('text', items.find(propEq('value', selected))) || '';
-
 const propTypes = {
   uncontrolled: PropTypes.bool,
   setValue: PropTypes.func,
-  ...omitC([
-    'onChange', 'onFocus', 'onBlur', 'toggle', 'isOpen',
-  ], SelectInputView.propTypes),
+  ...omit(['onChange', 'onFocus', 'onBlur', 'toggle', 'isOpen'], SelectInputView.propTypes),
 };
 
 const childContextTypes = { onSelect: propTypes.onSelect };
