@@ -243,6 +243,7 @@ Meteor.publishComposite('unreadMessages', function ({ organizationId, limit }) {
           },
         };
         const options = {
+          limit,
           sort: {
             createdAt: -1,
           },

@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { setPropTypes, withState, withHandlers, flattenProp, onlyUpdateForKeys } from 'recompose';
-import { Meteor } from 'meteor/meteor';
 
 import DashboardStatsUnreadMessages from '../components/DashboardStatsUnreadMessages';
 import { namedCompose } from '../../helpers';
@@ -15,6 +14,8 @@ import {
 } from '../../../../share/constants';
 import Counter from '../../../../api/counter/client';
 import { handleMethodResult } from '../../../../api/helpers';
+
+export const getCounterName = organizationId => `unread-messages-count-${organizationId}`;
 
 export default namedCompose('DashboardStatsUnreadMessagesContainer')(
   setPropTypes({
@@ -44,11 +45,16 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
     );
     CountSubs.subscribe(
       'messagesNotViewedCountTotal',
-      `unread-messages-count-${organizationId}`,
+      getCounterName(organizationId),
       organizationId,
     );
 
-    const props = { organizationId, orgSerialNumber, limit };
+    const props = {
+      organizationId,
+      orgSerialNumber,
+      isLimitEnabled,
+      limit,
+    };
 
     if (messagesSub.ready()) {
       onData(null, { ...props, loading: false });
@@ -66,8 +72,9 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
   composeWithTracker(({
     organizationId,
     orgSerialNumber,
-    limit,
     loading,
+    isLimitEnabled,
+    limit,
   }, onData) => {
     const query = { organizationId };
     const options = {
@@ -75,12 +82,13 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
       sort: { createdAt: -1 },
     };
     const messages = Messages.find(query, options).fetch();
-    const count = Counter.get(`unread-messages-count-${organizationId}`);
+    const count = Counter.get(getCounterName(organizationId));
     onData(null, {
       messages,
       count,
       orgSerialNumber,
       loading,
+      isLimitEnabled,
     });
   }),
   withHandlers({

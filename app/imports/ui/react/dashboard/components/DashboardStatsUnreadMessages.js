@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { map } from 'ramda';
 import pluralize from 'pluralize';
+import { onlyUpdateForKeys } from 'recompose';
 
 import { DashboardStats, Button, Icon, IconLoading } from '../../components';
 import { DashboardStatsMessageContainer } from '../containers';
@@ -10,7 +11,16 @@ import {
   WorkspaceDefaultsTypes,
 } from '../../../../share/constants';
 
-const DashboardStatsUnreadMessages = ({
+const enhance = onlyUpdateForKeys([
+  'messages',
+  'count',
+  'loading',
+  'orgSerialNumber',
+  'isLimitEnabled',
+  'displayMessages',
+]);
+
+export const DashboardStatsUnreadMessages = ({
   messages,
   count,
   markAllAsRead,
@@ -77,4 +87,4 @@ DashboardStatsUnreadMessages.propTypes = {
   isLimitEnabled: PropTypes.bool,
 };
 
-export default DashboardStatsUnreadMessages;
+export default enhance(DashboardStatsUnreadMessages);

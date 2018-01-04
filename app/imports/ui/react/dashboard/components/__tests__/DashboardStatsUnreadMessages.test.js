@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { times } from 'ramda';
 
-import DashboardStatsUnreadMessages from '../DashboardStatsUnreadMessages';
+import { DashboardStatsUnreadMessages } from '../DashboardStatsUnreadMessages';
 import { DashboardStatsMessageContainer } from '../../containers';
 import { Button } from '../../../components';
 
