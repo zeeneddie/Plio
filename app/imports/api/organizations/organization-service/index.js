@@ -204,6 +204,14 @@ const OrganizationService = {
     });
   },
 
+  setPGGuideline({ _id, type, text }) {
+    return this.collection.update({ _id }, {
+      $set: {
+        [`pgGuidelines.${type}`]: text,
+      },
+    });
+  },
+
   setRKGuideline({ _id, type, text }) {
     const query = { _id };
     const options = {

@@ -24,7 +24,7 @@ import {
   UserIdSchema, TimezoneSchema,
   pwdSchemaObj, idSchemaDoc,
 } from '/imports/share/schemas/schemas';
-import Method from '../method';
+import Method, { MiddlewareMethod } from '../method';
 import { chain, compose } from '/imports/api/helpers';
 import {
   checkOrgMembership,
@@ -44,6 +44,10 @@ import {
 import { USR_EnsurePasswordIsValid, ensureCanChangeRoles } from '/imports/api/users/checkers';
 import { ensureCanUnsubscribeFromDailyRecap, ensureThereIsNoDocuments } from './checkers';
 import { CANNOT_IMPORT_DOCS } from './errors';
+import {
+  checkOrgMembership as checkOrgMembershipMiddleware,
+  checkLoggedIn,
+} from '../middleware';
 
 
 const nameSchema = new SimpleSchema({ name: { type: String } });
@@ -230,6 +234,19 @@ export const setNCGuideline = new Method({
   run({ ...args }) {
     return OrganizationService.setNCGuideline({ ...args });
   },
+});
+
+export const setPGGuideline = new MiddlewareMethod({
+  name: 'Organizations.setPGGuideline',
+  validate: new SimpleSchema([
+    IdSchema,
+    problemGuidelineTypeSchema,
+    {
+      text: { type: String },
+    },
+  ]).validator(),
+  middleware: [checkLoggedIn(), checkOrgMembershipMiddleware('_id')],
+  run: OrganizationService.setPGGuideline.bind(OrganizationService),
 });
 
 export const setRKGuideline = new Method({
