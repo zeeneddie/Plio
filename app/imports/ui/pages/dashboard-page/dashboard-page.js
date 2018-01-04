@@ -11,6 +11,7 @@ import {
   DashboardStatsUnreadMessagesContainer,
   DashboardStatsOverdueItemsContainer,
 } from '../../react/dashboard/containers';
+import { defer } from '../../react/helpers';
 
 Template.Dashboard_Page.viewmodel({
   mixin: ['organization', { counter: 'counter' }],
@@ -108,7 +109,7 @@ Template.Dashboard_Page.viewmodel({
       usersPerRow: workspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_USERS],
     };
   },
-  DashboardUserStatsContainer: () => DashboardUserStatsContainer,
-  DashboardStatsUnreadMessagesContainer: () => DashboardStatsUnreadMessagesContainer,
-  DashboardStatsOverdueItemsContainer: () => DashboardStatsOverdueItemsContainer,
+  DashboardUserStatsContainer: () => defer(DashboardUserStatsContainer),
+  DashboardStatsUnreadMessagesContainer: () => defer(DashboardStatsUnreadMessagesContainer),
+  DashboardStatsOverdueItemsContainer: () => defer(DashboardStatsOverdueItemsContainer),
 });
