@@ -1,3 +1,4 @@
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { onlyUpdateForKeys, mapProps } from 'recompose';
@@ -7,11 +8,11 @@ import { pick } from 'ramda';
 import { namedCompose } from '../../helpers';
 import { DashboardStatsAction } from '../components';
 import { composeWithTracker } from '../../../../client/util';
-import { getLinkedDoc, getTypeText, getQueryParams } from '../../../../api/work-items/helpers';
+import { getLinkedDoc, getQueryParams } from '../../../../api/work-items/helpers';
+import { Label } from '../../components';
 
 export default namedCompose('DashboardStatsActionContainer')(
   onlyUpdateForKeys([
-    'type',
     'linkedDoc',
     'orgSerialNumber',
     '_id',
@@ -20,7 +21,6 @@ export default namedCompose('DashboardStatsActionContainer')(
     'targetDate',
   ]),
   composeWithTracker(({
-    type,
     linkedDoc,
     orgSerialNumber,
     _id,
@@ -30,7 +30,14 @@ export default namedCompose('DashboardStatsActionContainer')(
   }, onData) => {
     const userId = Meteor.userId();
     const { title, sequentialId } = getLinkedDoc(linkedDoc) || {};
-    const children = `${title} - ${getTypeText({ type, linkedDoc })} (${sequentialId})`;
+    const children = (
+      <React.Fragment>
+        <Label names="danger">
+          {sequentialId}
+        </Label>
+        {title}
+      </React.Fragment>
+    );
     const params = { orgSerialNumber, workItemId: _id };
     const queryParams = getQueryParams({ isCompleted, assigneeId }, userId)(userId);
     const href = FlowRouter.path('workInboxItem', params, queryParams);
