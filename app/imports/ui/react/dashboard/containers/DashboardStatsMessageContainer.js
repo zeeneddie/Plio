@@ -3,7 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { mapProps, onlyUpdateForKeys } from 'recompose';
 import moment from 'moment-timezone';
 
-import { namedCompose } from '../../helpers';
+import { namedCompose, withCurrentTime } from '../../helpers';
 import DashboardStatsMessage from '../components/DashboardStatsMessage';
 import { Files, Discussions } from '../../../../share/collections';
 import { MessageTypes, DocumentTypes } from '../../../../share/constants';
@@ -79,6 +79,7 @@ export default namedCompose('DashboardStatsMessageContainer')(
   }, {
     propsToWatch: ['createdBy', 'fileId', 'discussionId', 'type', 'orgSerialNumber'],
   }),
+  withCurrentTime(60 * 1000),
   mapProps(({
     file,
     user,
@@ -87,10 +88,11 @@ export default namedCompose('DashboardStatsMessageContainer')(
     orgSerialNumber,
     text,
     createdAt,
+    currentTime,
   }) => ({
     url: getMessageUrl({ discussion, orgSerialNumber, _id }),
     fullName: getFullNameOrEmail(user) || '',
-    timeString: moment(createdAt).from(new Date(), true),
+    timeString: moment(createdAt).from(currentTime, true),
     ...getMessageTextData({ file, text }),
   })),
 )(DashboardStatsMessage);
