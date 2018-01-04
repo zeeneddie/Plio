@@ -26,7 +26,7 @@ export const getDiscussionPathByDocType = (documentType) => {
 };
 
 // ({ orgSerialNumber: Number, discussionId: String, _id: String }: Object) => String
-export const getMessageUrl = ({ orgSerialNumber, discussion, _id }) => {
+export const getMessageUrl = ({ orgSerialNumber, discussion = {}, _id }) => {
   const { linkedTo, documentType } = discussion;
   const params = { orgSerialNumber, urlItemId: linkedTo };
   const queryParams = { at: _id };

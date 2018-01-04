@@ -4,7 +4,7 @@ import pluralize from 'pluralize';
 import { map } from 'ramda';
 import { onlyUpdateForKeys } from 'recompose';
 
-import { DashboardStatsExpandable } from '../../components';
+import { DashboardStatsExpandable, IconLoading } from '../../components';
 import {
   WorkspaceDefaults,
   WorkspaceDefaultsTypes,
@@ -18,6 +18,7 @@ const enhance = onlyUpdateForKeys([
   'orgSerialNumber',
   'itemsPerRow',
   'isOpen',
+  'loading',
 ]);
 
 export const DashboardStatsOverdueItems = ({
@@ -27,9 +28,11 @@ export const DashboardStatsOverdueItems = ({
   itemsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_MESSAGES],
   toggle,
   isOpen,
+  loading,
 }) => (
   <DashboardStatsExpandable
     items={workItems}
+    renderButton={loading ? () => <IconLoading /> : undefined}
     render={({ items }) => (
       <div key={joinIds(items)}>
         {map(item => (
@@ -50,6 +53,7 @@ DashboardStatsOverdueItems.propTypes = {
   count: PropTypes.number.isRequired,
   toggle: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
+  loading: PropTypes.bool,
 };
 
 export default enhance(DashboardStatsOverdueItems);

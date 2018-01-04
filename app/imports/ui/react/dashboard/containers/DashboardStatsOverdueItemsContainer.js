@@ -16,6 +16,8 @@ import { WorkItemSubs, CountSubs } from '../../../../startup/client/subsmanagers
 import Counter from '../../../../api/counter/client';
 import { WorkItems } from '../../../../share/collections';
 
+export const getCounterName = organizationId => `work-items-overdue-count-${organizationId}`;
+
 export default namedCompose('DashboardStatsOverdueItemsContainer')(
   setPropTypes({
     organization: PropTypes.shape({
@@ -38,44 +40,58 @@ export default namedCompose('DashboardStatsOverdueItemsContainer')(
       itemsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_ACTIONS],
   }, onData) => {
     const limit = isLimitEnabled ? itemsPerRow : 0;
-    const counterName = `work-items-overdue-count-${organizationId}`;
-    const subs = [
-      WorkItemSubs.subscribe('workItemsOverdue', organizationId, limit),
-      CountSubs.subscribe('workItemsOverdueCount', counterName, organizationId),
-    ];
+    const workItemsSub = WorkItemSubs.subscribe('workItemsOverdue', organizationId, limit);
+    CountSubs.subscribe('workItemsOverdueCount', getCounterName(organizationId), organizationId);
 
-    if (subs.every(sub => sub.ready())) {
-      const query = {
-        organizationId,
-        status: WorkItemStatuses.OVERDUE,
-        assigneeId: Meteor.userId(),
-        isDeleted: { $ne: true },
-      };
-      const options = {
-        sort: {
-          targetDate: -1, // New overdue items first
-        },
-        fields: {
-          _id: 1,
-          linkedDoc: 1,
-          targetDate: 1,
-          type: 1,
-          isCompleted: 1,
-          assigneeId: 1,
-        },
-      };
-      const workItems = WorkItems.find(query, options).fetch();
-      const count = Counter.get(counterName);
+    const props = {
+      itemsPerRow,
+      organizationId,
+      orgSerialNumber,
+    };
 
-      onData(null, {
-        workItems,
-        itemsPerRow,
-        count,
-        orgSerialNumber,
-      });
+    if (workItemsSub.ready()) {
+      onData(null, { ...props, loading: false });
+    } else {
+      onData(null, { ...props, loading: true });
     }
   }, {
     propsToWatch: ['isLimitEnabled', '_id', WorkspaceDefaultsTypes.DISPLAY_ACTIONS],
+  }),
+  composeWithTracker(({
+    loading,
+    organizationId,
+    orgSerialNumber,
+    itemsPerRow,
+  }, onData) => {
+    const query = {
+      organizationId,
+      status: WorkItemStatuses.OVERDUE,
+      assigneeId: Meteor.userId(),
+      isDeleted: { $ne: true },
+    };
+    const options = {
+      sort: {
+        targetDate: -1, // New overdue items first
+      },
+      fields: {
+        _id: 1,
+        linkedDoc: 1,
+        targetDate: 1,
+        type: 1,
+        isCompleted: 1,
+        assigneeId: 1,
+      },
+    };
+    const workItems = WorkItems.find(query, options).fetch();
+    const count = Counter.get(getCounterName(organizationId));
+
+    onData(null, {
+      workItems,
+      itemsPerRow,
+      count,
+      orgSerialNumber,
+      loading,
+    });
   }),
   composeWithTracker(({ workItems, ...props }, onData) => {
     const ids = map(view(lenses.linkedDoc._id), workItems);
@@ -85,9 +101,7 @@ export default namedCompose('DashboardStatsOverdueItemsContainer')(
       Meteor.subscribe('actionsByIds', ids),
     ];
 
-    if (subs.every(sub => sub.ready())) {
-      onData(null, { workItems, ...props });
-    }
+    onData(null, { workItems, ...props });
 
     return () => subs.forEach(sub => sub.stop());
   }, {
