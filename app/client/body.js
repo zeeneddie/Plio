@@ -12,7 +12,7 @@ Template.body.viewmodel({
     template.autorun(() => {
       const currentUser = Meteor.user();
       if (currentUser && currentUser.areNotificationsEnabled() && this.organizationId()) {
-        // template.subscribe('organizationMessagesLast', this.organizationId());
+        template.subscribe('organizationMessagesLast', this.organizationId());
       }
     });
   },
