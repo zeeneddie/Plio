@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { filter, compose, pluck, complement, prop } from 'ramda';
+import { filter, compose, pluck, complement, prop, memoize } from 'ramda';
 import { onlyUpdateForKeys } from 'recompose';
 
 import { DashboardUserStats } from '../components';
@@ -8,10 +8,10 @@ import { composeWithTracker } from '../../../../client/util';
 import { namedCompose } from '../../helpers';
 import { UserPresenceStatuses } from '../../../../api/constants';
 
-const getOrgUserIds = compose(
+const getOrgUserIds = memoize(compose(
   pluck('userId'),
   filter(complement(prop)('isRemoved')),
-);
+));
 
 export default namedCompose('DashboardUserStatsContainer')(
   onlyUpdateForKeys(['orgUsers', 'usersPerRow']),
