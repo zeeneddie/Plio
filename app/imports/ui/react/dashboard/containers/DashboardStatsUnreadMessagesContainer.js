@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import DashboardStatsUnreadMessages from '../components/DashboardStatsUnreadMessages';
 import { namedCompose } from '../../helpers';
 import { composeWithTracker } from '../../../../client/util';
-import { MessageSubs } from '../../../../startup/client/subsmanagers';
+import { MessageSubs, CountSubs } from '../../../../startup/client/subsmanagers';
 import { Messages } from '../../../../share/collections';
 import { updateViewedByOrganization } from '../../../../api/discussions/methods';
 import {
@@ -38,32 +38,23 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
       displayMessages = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_MESSAGES],
   }, onData) => {
     const limit = isLimitEnabled ? displayMessages : 0;
-    const countSub = Meteor.subscribe(
+    const messagesSub = MessageSubs.subscribe(
+      'unreadMessages',
+      { organizationId, limit },
+    );
+    CountSubs.subscribe(
       'messagesNotViewedCountTotal',
       `unread-messages-count-${organizationId}`,
       organizationId,
     );
-    const subs = [
-      MessageSubs.subscribe('unreadMessages', { organizationId, limit }),
-      countSub,
-    ];
 
-    if (subs.every(sub => sub.ready())) {
-      const query = { organizationId };
-      const options = {
-        limit,
-        sort: { createdAt: -1 },
-      };
-      const messages = Messages.find(query, options).fetch();
-      const count = Counter.get(`unread-messages-count-${organizationId}`);
-      onData(null, {
-        messages,
-        count,
-        orgSerialNumber,
-      });
+    const props = { organizationId, orgSerialNumber, limit };
+
+    if (messagesSub.ready()) {
+      onData(null, { ...props, loading: false });
+    } else {
+      onData(null, { ...props, loading: true });
     }
-
-    return () => countSub.stop();
   }, {
     propsToWatch: [
       'isLimitEnabled',
@@ -71,6 +62,26 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
       'serialNumber',
       WorkspaceDefaultsTypes.DISPLAY_MESSAGES,
     ],
+  }),
+  composeWithTracker(({
+    organizationId,
+    orgSerialNumber,
+    limit,
+    loading,
+  }, onData) => {
+    const query = { organizationId };
+    const options = {
+      limit,
+      sort: { createdAt: -1 },
+    };
+    const messages = Messages.find(query, options).fetch();
+    const count = Counter.get(`unread-messages-count-${organizationId}`);
+    onData(null, {
+      messages,
+      count,
+      orgSerialNumber,
+      loading,
+    });
   }),
   withHandlers({
     loadAll: ({ setIsLimitEnabled }) => () => setIsLimitEnabled(false),
