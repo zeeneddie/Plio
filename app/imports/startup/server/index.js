@@ -1,19 +1,19 @@
-import './useraccounts.js';
-import './userpresence.js';
+import './useraccounts';
+import './userpresence';
 import './fixtures';
-import './accounts.js';
-import './handlebars-cache.js';
-import './emailtemplates.js';
-import './slingshot.js';
-import './mail.js';
-import './browser-policies.js';
-import './db-indexes.js';
-import './aws.js';
-import './audit.js';
+import './accounts';
+import './handlebars-cache';
+import './emailtemplates';
+import './slingshot';
+import './mail';
+import './browser-policies';
+import './db-indexes';
+import './aws';
+import './audit';
 import './cron';
-import './migrations.js';
-import './default-help-sections.js';
+import './migrations';
+import './default-help-sections';
 
 // This defines all the collections, publications and methods that the application provides
 // as an API to the client.
-import './register-api.js';
+import './register-api';

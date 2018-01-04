@@ -48,6 +48,8 @@ import {
   ProblemTypes,
 } from '/imports/share/constants';
 
+import './11-workspace-defaults';
+
 Migrations.add({
   version: 1,
   name: 'Adds log entry about org creation for orgs with no logs',
