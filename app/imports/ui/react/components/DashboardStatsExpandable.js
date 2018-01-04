@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { branch } from 'recompose';
-import { converge, gt, prop, identity, map, splitEvery, tap, compose } from 'ramda';
+import { converge, gt, prop, identity, map, splitEvery, compose } from 'ramda';
 
 import { DashboardStats, Collapse, PlusButton } from './';
 import { withStateToggle } from '../helpers';
