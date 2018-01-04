@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { Card, ListGroup, ListGroupItem } from 'reactstrap';
 
 import ClearField from '../../fields/read/components/ClearField';
-import AddButton from '../Buttons/AddButton';
+import PlusButton from '../Buttons/PlusButton';
 import TextInput from '../../forms/components/TextInput';
 import Icon from '../Icons/Icon';
 
@@ -39,9 +39,9 @@ const LHS = ({
   onBlur,
   onChange,
   renderAddButton = () => onModalButtonClick && (
-    <AddButton onClick={onModalButtonClick}>
+    <PlusButton onClick={onModalButtonClick} color="primary" icon={{ margin: 'right' }}>
       Add
-    </AddButton>
+    </PlusButton>
   ) || null,
 }) => {
   let searchInput;

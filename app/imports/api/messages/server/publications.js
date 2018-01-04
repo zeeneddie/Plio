@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import get from 'lodash.get';
-import { check } from 'meteor/check';
+import { check, Match } from 'meteor/check';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { _ } from 'meteor/underscore';
 
@@ -213,9 +213,9 @@ Meteor.publish('organizationMessagesLast', function (organizationId) {
 // the messages.
 Meteor.publishComposite('unreadMessages', function ({ organizationId, limit }) {
   check(organizationId, String);
-  check(limit, Number);
+  check(limit, Match.Maybe(Number));
 
-  const userId = this.userId;
+  const { userId } = this;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -249,7 +249,7 @@ Meteor.publishComposite('unreadMessages', function ({ organizationId, limit }) {
         };
 
         // Check if limit is an integer number
-        if (Number(limit) === limit && limit % 1 === 0) {
+        if (limit) {
           options.limit = limit;
         }
 

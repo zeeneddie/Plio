@@ -12,3 +12,5 @@ export * from './momentjs_moment';
 export * from './mongo';
 export * from './natestrauser_publish-performant-counts';
 export * from './kadira_flow-router';
+export * from './meteorhacks_subs-manager';
+export * from './tracker';

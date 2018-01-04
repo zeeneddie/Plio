@@ -9,6 +9,7 @@ import curry from 'lodash.curry';
 
 import { WorkInboxFilters, ORDER } from '/imports/api/constants';
 import { findById, extractIds, propEqId } from '/imports/api/helpers';
+import { getLinkedDoc } from '../../../../api/work-items/helpers';
 
 
 Template.WorkInbox_List.viewmodel({
@@ -133,7 +134,7 @@ Template.WorkInbox_List.viewmodel({
     }).fetch();
 
     return _(workItems)
-      .map(item => ({ linkedDocument: item.getLinkedDoc(), ...item }))
+      .map(item => ({ linkedDocument: getLinkedDoc(item.linkedDoc), ...item }))
       .filter((item) => {
         const searchFields = [{ name: 'title' }, { name: 'sequentialId' }, { name: 'type' }];
         const searchQuery = this.searchObject('searchText', searchFields, this.isPrecise());

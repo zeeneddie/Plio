@@ -1,10 +1,10 @@
 import { Meteor } from 'meteor/meteor';
-import { filter, compose, pluck, complement, prop, allPass } from 'ramda';
-import { shouldUpdate } from 'recompose';
+import { filter, compose, pluck, complement, prop } from 'ramda';
+import { onlyUpdateForKeys } from 'recompose';
 
 import { DashboardUserStats } from '../components';
 
-import { composeWithTracker, notEqProps } from '../../../../client/util';
+import { composeWithTracker } from '../../../../client/util';
 import { namedCompose } from '../../helpers';
 import { UserPresenceStatuses } from '../../../../api/constants';
 
@@ -14,10 +14,7 @@ const getOrgUserIds = compose(
 );
 
 export default namedCompose('DashboardUserStatsContainer')(
-  shouldUpdate(allPass([
-    notEqProps('orgUsers'),
-    notEqProps('usersPerRow'),
-  ])),
+  onlyUpdateForKeys(['orgUsers', 'usersPerRow']),
   composeWithTracker(({ orgUsers, ...props }, onData) => {
     const orgUserIds = getOrgUserIds(orgUsers);
     const query = {
