@@ -10,7 +10,7 @@ Template.PG_Create.viewmodel({
   isStandardsEditable: true,
   standardsIds: [],
   guidelines() {
-    return this.organization().ncGuidelines;
+    return this.organization().pgGuidelines;
   },
   validate(data) {
     let valid = true;

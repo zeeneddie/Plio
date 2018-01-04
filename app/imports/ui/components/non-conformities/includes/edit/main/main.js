@@ -78,8 +78,9 @@ Template.NC_Card_Edit_Main.viewmodel({
     const NC = this.NC && this.NC();
     return NC && (NC.workflowType === WorkflowTypes.SIX_STEP);
   },
-  NCGuidelines() {
-    return this.organization() && this.organization().ncGuidelines;
+  guidelines(nc) {
+    const { ncGuidelines, pgGuidelines } = this.organization();
+    return this.isPG(nc) ? pgGuidelines : ncGuidelines;
   },
   update(...args) {
     this.parent().update(...args);
