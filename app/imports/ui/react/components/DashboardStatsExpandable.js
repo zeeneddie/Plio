@@ -28,8 +28,9 @@ export const DashboardStatsExpandable = ({
   toggle,
   itemsPerRow,
   render,
-  renderButton = () => (
-    <PlusButton size="1" onClick={toggle} />
+  // eslint-disable-next-line react/prop-types
+  renderButton = ({ isOpen: open }) => (
+    <PlusButton size="1" onClick={toggle} minus={open} />
   ),
   children,
 }) => !!items.length && (
