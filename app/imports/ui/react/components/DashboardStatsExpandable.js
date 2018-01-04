@@ -57,8 +57,8 @@ DashboardStatsExpandable.propTypes = {
   itemsPerRow: PropTypes.number.isRequired,
   render: PropTypes.func.isRequired,
   children: PropTypes.node,
-  isOpen: PropTypes.bool.isRequired,
-  toggle: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+  toggle: PropTypes.func,
 };
 
 export default enhance(DashboardStatsExpandable);
