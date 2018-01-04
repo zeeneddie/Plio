@@ -16,7 +16,7 @@ import { WorkItemSubs, CountSubs } from '../../../../startup/client/subsmanagers
 import Counter from '../../../../api/counter/client';
 import { WorkItems } from '../../../../share/collections';
 
-export default namedCompose('DashboardStatsOverdueActionsContainer')(
+export default namedCompose('DashboardStatsOverdueItemsContainer')(
   setPropTypes({
     organization: PropTypes.shape({
       _id: PropTypes.string.isRequired,

@@ -4,6 +4,6 @@ export {
 } from './DashboardStatsUnreadMessagesContainer';
 export { default as DashboardStatsMessageContainer } from './DashboardStatsMessageContainer';
 export {
-  default as DashboardStatsOverdueActionsContainer,
-} from './DashboardStatsOverdueActionsContainer';
+  default as DashboardStatsOverdueItemsContainer,
+} from './DashboardStatsOverdueItemsContainer';
 export { default as DashboardStatsActionContainer } from './DashboardStatsActionContainer';
