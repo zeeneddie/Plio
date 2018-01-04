@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { map, view } from 'ramda';
 
 import { composeWithTracker, lenses } from '../../../../client/util';
-import DashboardStatsOverdueActions from '../components/DashboardStatsOverdueActions';
+import DashboardStatsOverdueItems from '../components/DashboardStatsOverdueItems';
 import { namedCompose } from '../../helpers';
 import {
   WORKSPACE_DEFAULTS,
@@ -105,4 +105,4 @@ export default namedCompose('DashboardStatsOverdueItemsContainer')(
       setIsOpen(!isOpen);
     },
   }),
-)(DashboardStatsOverdueActions);
+)(DashboardStatsOverdueItems);

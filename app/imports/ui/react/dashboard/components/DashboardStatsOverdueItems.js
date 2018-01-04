@@ -20,7 +20,7 @@ const enhance = onlyUpdateForKeys([
   'isOpen',
 ]);
 
-export const DashboardStatsOverdueActions = ({
+export const DashboardStatsOverdueItems = ({
   count,
   workItems,
   orgSerialNumber,
@@ -43,7 +43,7 @@ export const DashboardStatsOverdueActions = ({
   </DashboardStatsExpandable>
 );
 
-DashboardStatsOverdueActions.propTypes = {
+DashboardStatsOverdueItems.propTypes = {
   workItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   itemsPerRow: PropTypes.number.isRequired,
   orgSerialNumber: PropTypes.number.isRequired,
@@ -52,4 +52,4 @@ DashboardStatsOverdueActions.propTypes = {
   isOpen: PropTypes.bool.isRequired,
 };
 
-export default enhance(DashboardStatsOverdueActions);
+export default enhance(DashboardStatsOverdueItems);
