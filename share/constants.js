@@ -548,6 +548,11 @@ export const OrganizationDefaults = {
     major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.NON_CONFORMITY),
     critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.NON_CONFORMITY),
   },
+  pgGuidelines: {
+    minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.POTENTIAL_GAIN),
+    major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.POTENTIAL_GAIN),
+    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.POTENTIAL_GAIN),
+  },
   rkGuidelines: {
     minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.RISK),
     major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.RISK),
