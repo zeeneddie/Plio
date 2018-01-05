@@ -34,14 +34,19 @@ import {
 } from '../../problems/utils';
 import { getPublishCompositeOrganizationUsers } from '/imports/server/helpers/pub-helpers';
 
-const getStandardFiles = (standard) => {
-  const fileIds = standard.improvementPlan && standard.improvementPlan.fileIds || [];
-  const source1FileId = get(standard, 'source1.fileId');
-  const source2FileId = get(standard, 'source2.fileId');
-  if (source1FileId) fileIds.push(source1FileId);
-  if (source2FileId) fileIds.push(source2FileId);
+const getStandardFiles = ({
+  improvementPlan: {
+    fileIds = [],
+  } = {},
+  source1: { fileId: fileId1 } = {},
+  source2: { fileId: fileId2 } = {},
+}) => {
+  let ids = [...fileIds];
 
-  return Files.find({ _id: { $in: fileIds } });
+  if (fileId1) ids = ids.concat(fileId1);
+  if (fileId2) ids = ids.concat(fileId2);
+
+  return Files.find({ _id: { $in: ids } });
 };
 
 const getStandardsLayoutPub = function (userId, serialNumber, isDeleted = false) {
