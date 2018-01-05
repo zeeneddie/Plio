@@ -1,19 +1,17 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Actions } from '/imports/share/collections/actions.js';
-import { WorkItems } from '/imports/share/collections/work-items.js';
+import { Actions } from '/imports/share/collections/actions';
+import { WorkItems } from '/imports/share/collections/work-items';
 import {
   WorkItemsStore,
   ProblemTypes,
   ActionTypes,
-} from '/imports/share/constants.js';
+} from '/imports/share/constants';
 import {
-  AnalysisTitles,
   ActionTitles,
   WorkInboxFilters,
   WorkItemDescriptions,
-} from '/imports/api/constants.js';
+} from '/imports/api/constants';
 import { capitalize, lowercase } from '/imports/share/helpers';
-import { propEq } from '/imports/api/helpers';
 
 const {
   riskAnalysis,
@@ -34,7 +32,7 @@ export default {
           title = linkedDoc.type === ProblemTypes.RISK
             ? riskAnalysis
             : rootCauseAnalysis;
-          return getText(COMPLETE, title);
+          return title;
         case WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
           title = linkedDoc.type === ProblemTypes.RISK
             ? updateOfRiskRecord
