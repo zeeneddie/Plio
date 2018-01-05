@@ -41,9 +41,7 @@ Template.NC_Card_Edit_Main.viewmodel({
   } = {}) {
     const nc = this.NC && this.NC();
     const isApprovalVisible = nc && (nc.status >= ProblemIndexes.ACTIONS_AWAITING_UPDATE);
-    const RCALabel = this.isPG({ type })
-      ? AnalysisTitles.potentialGainAnalysis
-      : AnalysisTitles.rootCauseAnalysis;
+    const RCALabel = this.getAnalysisTitleByType({ type });
 
     return {
       _id,

@@ -1,6 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { NonConformities } from '/imports/share/collections/non-conformities';
-import { NonConformityFilters } from '/imports/api/constants';
+import { NonConformities } from '../../../share/collections';
+import { NonConformityFilters, AnalysisTitles } from '../../../api/constants';
 import { ProblemTypes } from '../../../share/constants';
 
 export default {
@@ -38,6 +38,9 @@ export default {
       return true;
     }
     return false;
+  },
+  getAnalysisTitleByType(doc) {
+    return this.isPG(doc) ? AnalysisTitles.potentialGainAnalysis : AnalysisTitles.rootCauseAnalysis;
   },
   _getNCsByQuery({
     isDeleted = { $in: [null, false] },
