@@ -1,5 +1,6 @@
 import { _ } from 'meteor/underscore';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 
 import { TimeUnits } from '/imports/share/constants';

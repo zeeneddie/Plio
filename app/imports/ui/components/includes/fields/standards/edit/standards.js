@@ -29,7 +29,7 @@ Template.Fields_Standards_Edit.viewmodel({
     this.callUpdate(selectedItemId, selected, '$addToSet');
   },
   callUpdate(selectedItemId, selected, option) {
-    if (selected.length === this.selected().count() &&  selected.every(({ _id:itemId }) => this.selected().fetch().find(({ _id }) => _id === itemId))) return;
+    if (selected.length === this.selected().count() && selected.every(({ _id: itemId }) => this.selected().fetch().find(({ _id }) => _id === itemId))) return;
 
     const standardsIds = selected.map(({ _id }) => _id);
 

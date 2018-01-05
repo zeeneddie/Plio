@@ -1,6 +1,6 @@
 import { lifecycle, setPropTypes, compose } from 'recompose';
 import { Meteor } from 'meteor/meteor';
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import { handleMethodResult } from '../../../api/helpers';
 
 const updater = (method, props) =>

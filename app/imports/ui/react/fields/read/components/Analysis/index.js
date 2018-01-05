@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Row, Col } from 'reactstrap';
 
 import { getFullNameOrEmail } from '/imports/api/users/helpers';

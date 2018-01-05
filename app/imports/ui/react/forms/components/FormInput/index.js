@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { withHandlers } from 'recompose';
 import cx from 'classnames';
 
@@ -24,7 +25,7 @@ const FormInput = enhance(({
         {children}
         <TextInput
           className={cx('form-control', className)}
-          getRef={input => (textInput = input)}
+          innerRef={input => (textInput = input)}
           {...{ ...other, onBlur, value }}
         />
       </div>

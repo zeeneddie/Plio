@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Portal from 'react-portal';
 
 import ModalWindowContainer from '../../containers/ModalWindowContainer';

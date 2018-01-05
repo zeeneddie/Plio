@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 import {
   Dropdown,
@@ -27,7 +28,7 @@ const SelectInputView = (props) => {
     toggle,
     hint,
     uncontrolled,
-    getRef,
+    innerRef,
     onCaretMouseDown,
     Input = TextInput,
     input,
@@ -50,7 +51,7 @@ const SelectInputView = (props) => {
       onChange,
       onFocus,
       onBlur,
-      getRef,
+      innerRef,
       ...input,
     };
 
@@ -145,7 +146,7 @@ SelectInputView.propTypes = {
   onBlur: PropTypes.func.isRequired,
   hint: PropTypes.bool,
   uncontrolled: PropTypes.bool,
-  getRef: PropTypes.func,
+  innerRef: PropTypes.func,
   onCaretMouseDown: PropTypes.func,
   renderInputGroup: PropTypes.func,
   renderMenu: PropTypes.func,

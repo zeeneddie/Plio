@@ -1,1 +1,2 @@
-import './includes.js';
+import 'raf/polyfill';
+import './includes';
