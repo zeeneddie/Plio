@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { DropdownMenu as DropdownMenuBase } from 'reactstrap';
 import { compose, defaultProps, withState, withHandlers, mapProps, withContext } from 'recompose';
 import property from 'lodash.property';

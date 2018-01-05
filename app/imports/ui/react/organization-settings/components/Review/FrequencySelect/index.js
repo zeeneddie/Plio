@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { compose, getContext, withProps } from 'recompose';
 import get from 'lodash.get';
 import pluralize from 'pluralize';

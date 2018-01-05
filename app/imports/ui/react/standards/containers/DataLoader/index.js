@@ -1,4 +1,4 @@
-import { composeWithTracker, compose as kompose } from 'react-komposer';
+import { compose as kompose } from '@storybook/react-komposer';
 import {
   compose,
   lifecycle,
@@ -36,7 +36,7 @@ import {
   observeStandardTypes,
 } from '../../observers';
 import { setInitializing } from '../../../../../client/store/actions/standardsActions';
-import { lenses } from '../../../../../client/util';
+import { lenses, composeWithTracker } from '../../../../../client/util';
 import {
   getFilter,
   getUrlItemId,
@@ -56,6 +56,7 @@ import {
 import { getIsDiscussionOpened } from '../../../../../client/store/selectors/discussion';
 import { getWindowWidth } from '../../../../../client/store/selectors/window';
 import { getMobileShowCard } from '../../../../../client/store/selectors/mobile';
+import { namedCompose } from '../../../helpers';
 
 const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
   const isDeleted = filter === STANDARD_FILTER_MAP.DELETED;
@@ -63,12 +64,12 @@ const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
   return Meteor.subscribe('standardsLayout', orgSerialNumber, isDeleted);
 });
 
-export default compose(
+export default namedCompose('StandardsDataLoader')(
   connect(),
   defaultProps({ filters: StandardFilters }),
   kompose(loadIsDiscussionOpened),
-  composeWithTracker(loadInitialData, null, null, {
-    shouldResubscribe: false,
+  composeWithTracker(loadInitialData, {
+    propsToWatch: [],
   }),
   connect(state => ({
     filter: getFilter(state),
@@ -80,10 +81,9 @@ export default compose(
     withProps(always({ loading: true })),
     composeWithTracker(
       getLayoutData(),
-      null,
-      null,
       {
-        shouldResubscribe: (props, nextProps) => (
+        propsToWatch: ['orgSerialNumber', 'filter'],
+        shouldSubscribe: (props, nextProps) => (
           props.orgSerialNumber !== nextProps.orgSerialNumber ||
           ((props.filter === 1 || props.filter === 2) && nextProps.filter === 3) ||
           (props.filter === 3 && (nextProps.filter === 1 || nextProps.filter === 2))
@@ -113,11 +113,8 @@ export default compose(
   })),
   branch(
     view(lenses.organizationId),
-    composeWithTracker(loadCardData, null, null, {
-      shouldResubscribe: (props, nextProps) => !!(
-        props.organizationId !== nextProps.organizationId ||
-        props.urlItemId !== nextProps.urlItemId
-      ),
+    composeWithTracker(loadCardData, {
+      propsToWatch: ['organizationId', 'urlItemId'],
     }),
     identity,
   ),
@@ -127,10 +124,8 @@ export default compose(
   })),
   branch(
     view(lenses.organizationId),
-    composeWithTracker(loadDeps, null, null, {
-      shouldResubscribe: (props, nextProps) =>
-        props.organizationId !== nextProps.organizationId ||
-        props.initializing !== nextProps.initializing,
+    composeWithTracker(loadDeps, {
+      propsToWatch: ['organizationId', 'initializing'],
     }),
     identity,
   ),

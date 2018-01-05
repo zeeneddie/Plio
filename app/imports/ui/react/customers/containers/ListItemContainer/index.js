@@ -1,6 +1,6 @@
 import { compose, withHandlers, mapProps, shouldUpdate, setPropTypes } from 'recompose';
 import { connect } from 'react-redux';
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 
 import CustomersListItem from '../../components/ListItem';
 import { setUrlItemId } from '/imports/client/store/actions/globalActions';

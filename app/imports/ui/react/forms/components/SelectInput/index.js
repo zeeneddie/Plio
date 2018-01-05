@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { _ } from 'meteor/underscore';
 
 import {
@@ -180,7 +181,7 @@ class SelectInput extends React.Component {
     return (
       <SelectInputView
         {...{ ...this.props, ...this.state }}
-        getRef={input => (this.input = input)}
+        innerRef={input => (this.input = input)}
         onFocus={this.open}
         onBlur={this.close}
         toggle={this.toggle}

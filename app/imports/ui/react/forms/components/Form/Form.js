@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { _ } from 'meteor/underscore';
 import { compose, withContext, withState, defaultProps, lifecycle } from 'recompose';
 import serialize from 'form-serialize';

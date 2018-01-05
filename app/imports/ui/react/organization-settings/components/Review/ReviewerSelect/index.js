@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { compose, getContext, withProps, withState, withHandlers } from 'recompose';
 import { FormGroup } from 'reactstrap';
 

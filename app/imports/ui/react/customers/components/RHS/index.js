@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-pascal-case */
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 
 import RHS from '../../../components/RHS';
 import NotFound from './NotFound';

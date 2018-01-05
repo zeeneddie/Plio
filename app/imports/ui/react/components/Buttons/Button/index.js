@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { compose, componentFromProp, defaultProps, mapProps } from 'recompose';
 
