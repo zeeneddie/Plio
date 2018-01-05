@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 import { Card, ListGroup, ListGroupItem } from 'reactstrap';
 
@@ -65,7 +66,7 @@ const LHS = ({
               uncontrolled
               value={searchText}
               disabled={animating}
-              getRef={input => (searchInput = input)}
+              innerRef={input => (searchInput = input)}
               placeholder="Search..."
             />
           </ClearField>

@@ -1,13 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
-import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
 import { compose, lifecycle, shouldUpdate } from 'recompose';
 import { _ } from 'meteor/underscore';
 
-import MessagesListWrapper from '../../components/MessagesListWrapper';
 import PreloaderPage from '/imports/ui/react/components/PreloaderPage';
 import { Messages } from '/imports/share/collections/messages';
 
@@ -18,11 +16,13 @@ import {
   setResetCompleted,
   markMessagesAsRead,
 } from '/imports/client/store/actions/discussionActions';
+import { getState } from '/imports/client/store';
 import notifications from '/imports/startup/client/mixins/notifications';
 import { pickFromDiscussion, pickC, invoker, notEquals } from '/imports/api/helpers';
 import LastDiscussionMessage from '/imports/client/collections/lastDiscussionMessage';
 import { MESSAGES_PER_PAGE_LIMIT } from '../../constants';
-import { getState } from '/imports/client/store';
+import MessagesListWrapper from '../../components/MessagesListWrapper';
+import { composeWithTracker } from '../../../../../client/util';
 
 const initObservers = () => {
   const handle = LastDiscussionMessage.find().observe({
@@ -44,7 +44,7 @@ const initInterval = (fn) => {
   return () => Meteor.clearInterval(handle);
 };
 
-const shouldResubscribe = (props, nextProps) => {
+const shouldSubscribe = (props, nextProps) => {
   const pickProps = pickC(['priorLimit', 'followingLimit', 'discussionId', 'sort']);
   return (
     !props.resetCompleted && nextProps.resetCompleted ||
@@ -105,7 +105,11 @@ export default compose(
   connect(pickFromDiscussion([
     'at', 'sort', 'priorLimit', 'followingLimit', 'resetCompleted',
   ])),
-  composeWithTracker(loadMessagesData, PreloaderPage, null, { shouldResubscribe }),
+  composeWithTracker(loadMessagesData, {
+    shouldSubscribe,
+    loadingHandler: PreloaderPage,
+    propsToWatch: ['resetCompleted', 'priorLimit', 'followingLimit', 'discussionId', 'sort'],
+  }),
   connect(state => ({
     userId: state.global.userId,
     ...pickFromDiscussion([

@@ -1,5 +1,5 @@
 import { compose, withContext } from 'recompose';
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 
 import withStateCollapsed from './withStateCollapsed';
 

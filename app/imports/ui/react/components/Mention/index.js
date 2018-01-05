@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { _ } from 'meteor/underscore';
 import cx from 'classnames';
 import { Dropdown } from 'reactstrap';
@@ -94,7 +95,7 @@ class Mention extends React.Component {
           return React.cloneElement(child, {
             onChange: this.onInputChange,
             value: this.props.value,
-            getRef: input => (this.input = input),
+            innerRef: input => (this.input = input),
           });
         case Menu:
           return this.state.users.length ? React.cloneElement(child, {

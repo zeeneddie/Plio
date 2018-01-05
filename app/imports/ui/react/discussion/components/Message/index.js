@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { compose, withState, withHandlers } from 'recompose';
 
 import { not } from '/imports/api/helpers';

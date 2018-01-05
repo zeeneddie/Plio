@@ -1,5 +1,4 @@
 import { compose, mapProps } from 'recompose';
-import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
@@ -8,6 +7,7 @@ import { pickDeep } from '/imports/api/helpers';
 import { lastLogsLimit } from '../../constants';
 import ChangelogContent from '../../components/ChangelogContent';
 import propTypes from './propTypes';
+import { composeWithTracker } from '../../../../../client/util';
 
 const onPropsChange = (props, onData) => {
   const {
@@ -28,11 +28,8 @@ const onPropsChange = (props, onData) => {
 
 const ChangelogContentContainer = compose(
   connect(state => ({ showAll: state.changelog.showAll })),
-
-  composeWithTracker(onPropsChange, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      (props.documentId !== nextProps.documentId)
-      || (props.showAll !== nextProps.showAll),
+  composeWithTracker(onPropsChange, {
+    propsToWatch: ['documentId', 'showAll'],
   }),
 
   connect(state => ({ logs: state.changelog.logs })),

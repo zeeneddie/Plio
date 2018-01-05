@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import Button from '../Buttons/Button';
 import Collapse from '../Collapse';

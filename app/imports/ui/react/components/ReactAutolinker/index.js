@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Autolinker from 'autolinker';
 import { $ } from 'meteor/jquery';
 import { Random } from 'meteor/random';

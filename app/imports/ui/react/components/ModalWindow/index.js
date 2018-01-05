@@ -1,6 +1,6 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { $ } from 'meteor/jquery';
-import { pure } from 'recompose';
 import { _ } from 'meteor/underscore';
 
 import Modal from '../Modal';
@@ -36,7 +36,6 @@ const defaultProps = {
   onModalClose: () => null,
 };
 
-@pure
 class ModalWindow extends React.Component {
   constructor(props) {
     super(props);

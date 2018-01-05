@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { compose, mapProps, setPropTypes } from 'recompose';
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 
 import Departments from '../../components/Departments';
 import { pickDeep } from '/imports/api/helpers';

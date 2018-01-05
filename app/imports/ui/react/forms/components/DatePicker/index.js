@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { $ } from 'meteor/jquery';
 import cx from 'classnames';
 
@@ -7,8 +8,8 @@ import { getFormattedDate } from '/imports/share/helpers';
 export default class DatePicker extends React.Component {
   static get propTypes() {
     return {
-      className: React.PropTypes.string,
-      value: React.PropTypes.instanceOf(Date),
+      className: PropTypes.string,
+      value: PropTypes.instanceOf(Date),
       disabled: PropTypes.bool,
       onChange: PropTypes.func,
       placeholder: PropTypes.string,

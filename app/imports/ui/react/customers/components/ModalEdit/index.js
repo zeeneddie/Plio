@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import OrgName from '../../fields/edit/components/OrgName';
 import CustomerTypeSelectContainer from '../../fields/edit/containers/CustomerTypeSelectContainer';

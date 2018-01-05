@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import createReadFields from '/imports/ui/react/helpers';
 import FileProvider from '/imports/ui/react/containers/providers/FileProvider';
