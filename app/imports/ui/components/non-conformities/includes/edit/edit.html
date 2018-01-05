@@ -8,11 +8,6 @@
         {{> Subcards_RootCauseAnalysis_Edit
             rootCauseAnalysis=this.rootCauseAnalysis}}
 
-        {{> Subcards_Notify_Edit
-            doc=this
-            documentType="non-conformity"
-            onUpdate=onUpdateNotifyUserCb}}
-
         {{> Subcards_Occurrences_Edit
             _id=this._id
             occurrencesIds=this.occurrences}}
@@ -41,6 +36,11 @@
             fileIds=this.fileIds
             uploaderMetaContext=uploaderMetaContext
             slingshotDirective=slingshotDirective}}
+
+        {{> Subcards_Notify_Edit
+            doc=this
+            documentType="non-conformity"
+            onUpdate=onUpdateNotifyUserCb}}
       {{/with}}
       <div class="card-block text-xs-center">
         <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
