@@ -8,7 +8,6 @@ import {
 import {
   ALERT_AUTOHIDE_TIME,
   AnalysisFieldPrefixes,
-  AnalysisTitles,
 } from '../../../../../api/constants';
 
 
@@ -28,7 +27,6 @@ Template.NC_Card_Edit.viewmodel({
     const isPG = this.isPG(this.NC());
     return {
       analysis: {
-        label: isPG ? AnalysisTitles.potentialGainAnalysis : AnalysisTitles.rootCauseAnalysis,
         prefix: isPG ? AnalysisFieldPrefixes.GAIN : AnalysisFieldPrefixes.CAUSE,
       },
     };

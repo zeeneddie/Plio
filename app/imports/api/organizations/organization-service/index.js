@@ -51,6 +51,7 @@ const OrganizationService = {
       workflowDefaults,
       reminders,
       ncGuidelines,
+      pgGuidelines,
       rkGuidelines,
       rkScoringGuidelines,
       review,
@@ -68,6 +69,7 @@ const OrganizationService = {
       workflowDefaults,
       reminders,
       ncGuidelines,
+      pgGuidelines,
       rkGuidelines,
       rkScoringGuidelines,
       review,
@@ -198,6 +200,14 @@ const OrganizationService = {
     return this.collection.update({ _id }, {
       $set: {
         [`ncGuidelines.${type}`]: text,
+      },
+    });
+  },
+
+  setPGGuideline({ _id, type, text }) {
+    return this.collection.update({ _id }, {
+      $set: {
+        [`pgGuidelines.${type}`]: text,
       },
     });
   },

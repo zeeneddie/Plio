@@ -106,7 +106,9 @@
           {{> Subcards_AnalysisWrapper_Read
               analysis=this.analysis
               rootCauseAnalysis=this.rootCauseAnalysis
-              updateOfStandards=this.updateOfStandards}}
+              updateOfStandards=this.updateOfStandards
+              RCALabel=(getAnalysisTitleByType this)
+          }}
 
           {{#with notify}}
             {{> Subcards_Notify_Read users=this}}

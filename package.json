@@ -32,7 +32,8 @@
     "pre-commit": "^1.2.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-test-renderer": "^16.2.0"
+    "react-test-renderer": "^16.2.0",
+    "styled-components": "^2.4.0"
   },
   "dependencies": {
     "enzyme": "^3.3.0",
