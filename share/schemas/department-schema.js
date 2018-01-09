@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, OrganizationIdSchema } from './schemas.js';
+import { BaseEntitySchema, OrganizationIdSchema } from './schemas';
 
 
 export const DepartmentSchema = new SimpleSchema([

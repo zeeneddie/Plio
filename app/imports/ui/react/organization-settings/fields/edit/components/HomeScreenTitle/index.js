@@ -3,8 +3,7 @@ import React from 'react';
 import { withState } from 'recompose';
 import { DropdownItem } from 'reactstrap';
 
-import FormField from '../../../../../fields/edit/components/FormField';
-import SelectInput from '../../../../../forms/components/SelectInput';
+import { FormField, SelectInput } from '../../../../../components';
 import HomeScreenTitleAdd from '../HomeScreenTitleAdd';
 
 const enhance = withState('value', 'setValue', '');

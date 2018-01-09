@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { compose, componentFromProp, defaultProps, mapProps } from 'recompose';
 
-import { PullMap } from '/imports/api/constants';
+import { PullMap } from '../../../../../api/constants';
 
 const sizeMap = {
   1: 'sm',
@@ -24,7 +24,7 @@ const Button = compose(
     ...other
   }) => {
     const colorCx = color.split(' ').map(t => `btn-${t}`).join(' ');
-    const sizeCx = size && `btn-${size}`;
+    const sizeCx = size && `btn-${sizeMap[size]}`;
     const pullCx = PullMap[pull];
 
     return {
@@ -37,7 +37,7 @@ const Button = compose(
 )(componentFromProp('component'));
 
 Button.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   onClick: PropTypes.func,
   className: PropTypes.string,
   href: PropTypes.string,

@@ -8,3 +8,4 @@ export {
   makeGetSectionsWithUncategorized,
 } from './getSectionsWithUncategorized';
 export { default as getTypesWithUncategorized } from './getTypesWithUncategorized';
+export { default as getStandardsAsItems } from './getStandardsAsItems';

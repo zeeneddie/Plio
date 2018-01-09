@@ -18,3 +18,16 @@ interface Item {
 (Item, Item) => Boolean
 */
 export const byDeletedAt = ascend(view(lenses.deletedAt));
+
+/*
+interface Profile {
+  firstName: String
+}
+
+interface Item {
+  profile: Profile
+}
+
+(Item, Item) => Boolean
+*/
+export const byProfileFirstName = ascend(view(lenses.profile.firstName));

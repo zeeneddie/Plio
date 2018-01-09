@@ -1,58 +1,54 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import cx from 'classnames';
+import PropTypes from 'prop-types';
+import { mapProps, branch, compose } from 'recompose';
+import { prop, identity } from 'ramda';
 
-import withContextCollapsed from '../../helpers/withContextCollapsed';
-import CollapseBlock from '../CollapseBlock';
-import Label from '../Labels/Label';
-import ErrorSection from '../ErrorSection';
-import Footer from './Footer';
+import { defer } from '../../helpers';
 
-const enhance = withContextCollapsed(({ collapsed = true }) => collapsed);
+import Header from './Header';
+import Body from './Body';
+import New from './New';
 
-const Subcard = enhance(({
-  collapsed,
-  onToggleCollapse,
-  errorText,
-  isNew,
-  leftText,
-  rightText,
-  children,
-}) => {
-  const classNames = {
-    head: cx('card-block card-block-collapse-toggle', {
-      'with-error': errorText,
-      new: isNew,
+const enhance = compose(
+  branch(
+    prop('defer'),
+    defer,
+    identity,
+  ),
+  branch(
+    prop('disabled'),
+    mapProps(props => ({ ...props, isOpen: true, toggle: () => null })),
+    identity,
+  ),
+  mapProps(({
+    children,
+    isOpen,
+    toggle,
+    ...props
+  }) => ({
+    ...props,
+    children: React.Children.map(children, (child) => {
+      switch (child.type) {
+        case Header:
+          return React.cloneElement(child, { isOpen, onClick: toggle });
+        case Body:
+          return React.cloneElement(child, { isOpen });
+        default:
+          return child;
+      }
     }),
-    body: 'card-block-collapse collapse',
-  };
+  })),
+);
 
-  return (
-    <CollapseBlock {...{ collapsed, onToggleCollapse, classNames }} tag="div">
-      <div>
-        <span>{leftText}</span>
-        {isNew && (<Label names="primary">New</Label>)}
-        <span className="pull-xs-right">{rightText}</span>
-      </div>
-      <div>
-        <ErrorSection size="3" {...{ errorText }} />
-        <div className="subcard-content">
-          {children}
-        </div>
-      </div>
-    </CollapseBlock>
-  );
-});
+const Subcard = enhance(({ children }) => children);
 
 Subcard.propTypes = {
-  collapsed: PropTypes.bool,
-  errorText: PropTypes.string,
-  isNew: PropTypes.bool,
-  leftText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  rightText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  children: PropTypes.node,
+  isOpen: PropTypes.bool,
+  toggle: PropTypes.func,
 };
 
-Subcard.Footer = Footer;
+Subcard.Header = Header;
+Subcard.Body = Body;
+Subcard.New = New;
 
 export default Subcard;

@@ -17,7 +17,11 @@ const MessagesForm = ({
             {children}
 
             <Mention dropup {...{ value, setValue, users }}>
-              <Mention.Input placeholder="Add a comment" name="message" autoComplete="off" />
+              <Mention.Input
+                placeholder="Add a comment"
+                name="message"
+                autoComplete="off"
+              />
               <Mention.Menu />
             </Mention>
 

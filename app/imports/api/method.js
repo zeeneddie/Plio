@@ -76,12 +76,26 @@ function applyMiddleware(...middleware) {
 
 export class MiddlewareMethod extends ValidatedMethod {
   constructor({ middleware, ...props }) {
+    const mixins = [function (options) {
+      Object.assign(options, {
+        callP: function callP(args) {
+          return new Promise((resolve, reject) => {
+            this.call(args, (err, res) => {
+              if (err) reject(err);
+              else resolve(res);
+            });
+          });
+        },
+      });
+      return options;
+    }];
+
     const run = async function (args) {
       const { userId } = this;
       const context = { userId };
       return applyMiddleware(...middleware)(props.run.bind(this))(args, context);
     };
 
-    super({ ...props, run });
+    super({ ...props, run, mixins });
   }
 }

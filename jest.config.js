@@ -13,4 +13,5 @@ module.exports = {
     '/^imports\\/.*\\.jsx?$/',
     '/^node_modules/',
   ],
+  setupTestFrameworkScriptFile: '<rootDir>/app/imports/client/util/setupTests.js',
 };

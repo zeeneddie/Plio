@@ -1,6 +1,6 @@
 import { _ } from 'meteor/underscore';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
+import { Organizations } from '../../share/collections';
 import { createOrgQueryWhereUserIsMember } from '../queries';
 
 /**

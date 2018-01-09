@@ -1,4 +1,4 @@
-import { compose, lensProp, curryN, defaultTo, view } from 'ramda';
+import { compose, lensProp, lensIndex, curryN, defaultTo, view } from 'ramda';
 
 export const viewOr = curryN(
   3,
@@ -34,6 +34,7 @@ const standardBookSectionsByIds = lensProp('standardBookSectionsByIds');
 const standardBookSections = lensProp('standardBookSections');
 const standardTypesByIds = lensProp('standardTypesByIds');
 const standardTypes = lensProp('standardTypes');
+const users = lensProp('users');
 const usersByIds = lensProp('usersByIds');
 const isDeleted = lensProp('isDeleted');
 const isInProgress = lensProp('isInProgress');
@@ -57,18 +58,36 @@ const departments = lensProp('departments');
 const departmentsByIds = lensProp('departmentsByIds');
 const departmentsIds = lensProp('departmentsIds');
 const _id = lensProp('_id');
+const id = lensProp('id');
 const workItems = lensProp('workItems');
 const workItemsByIds = lensProp('workItemsByIds');
 const lessons = lensProp('lessons');
 const lessonsByIds = lensProp('lessonsByIds');
 const actions = lensProp('actions');
 const actionsByIds = lensProp('actionsByIds');
+const target = lensProp('target');
+const value = lensProp('value');
+const profile = lensProp('profile');
+const firstName = lensProp('firstName');
+const originatorId = lensProp('originatorId');
+const ownerId = lensProp('ownerId');
+const options = lensProp('options');
+const rkGuidelines = lensProp('rkGuidelines');
+const ncGuidelines = lensProp('ncGuidelines');
+const types = lensProp('types');
+const selected = lensProp('selected');
+const items = lensProp('items');
+const standardsIds = lensProp('standardsIds');
+const linkedDoc = lensProp('linkedDoc');
+
+const head = lensIndex(0);
 
 const collectionsStandards = compose(collections, standards);
 const collectionsStandardsByIds = compose(collections, standardsByIds);
 const collectionsStandardBookSections = compose(collections, standardBookSections);
 const collectionsStandardBookSectionsByIds = compose(collections, standardBookSectionsByIds);
 const collectionsStandardTypesByIds = compose(collections, standardTypesByIds);
+const collectionsUsers = compose(collections, users);
 const collectionsUsersByIds = compose(collections, usersByIds);
 const collectionsStandardTypes = compose(collections, standardTypes);
 const collectionsRisks = compose(collections, risks);
@@ -99,6 +118,8 @@ const globalDataLoading = compose(_global, dataLoading);
 
 const organizationsOrganizationId = compose(organizations, organizationId);
 const organizationsOrganization = compose(organizations, organization);
+const organizationsOrganizationRkGuidelines = compose(organizationsOrganization, rkGuidelines);
+const organizationsOrganizationNcGuidelines = compose(organizationsOrganization, ncGuidelines);
 const organizationsOrgSerialNumber = compose(organizations, orgSerialNumber);
 
 const dataImportIsModalOpened = compose(dataImport, isModalOpened);
@@ -117,8 +138,23 @@ const risksInitializing = compose(risks, initializing);
 const risksAreDepsReady = compose(risks, areDepsReady);
 const risksRisksFiltered = compose(risks, risksFiltered);
 
+const targetValue = compose(target, value);
+
+const profileFirstName = compose(profile, firstName);
+
+const headValue = compose(head, value);
+
+const typesHead = compose(types, head);
+const typesHeadValue = compose(types, head, value);
+
+const itemsHead = compose(items, head);
+const itemsHeadValue = compose(items, head, value);
+
+const linkedDoc_id = compose(linkedDoc, _id);
+
 export default {
   _id,
+  id,
   deletedAt,
   searchText,
   standardsFiltered,
@@ -136,6 +172,14 @@ export default {
   typeId,
   sectionId,
   departmentsIds,
+  originatorId,
+  ownerId,
+  userId,
+  options,
+  selected,
+  value,
+  standardsIds,
+  users,
   source1: Object.assign(source1, {
     htmlUrl: source1HtmlUrl,
   }),
@@ -149,6 +193,7 @@ export default {
     standardBookSectionsByIds: collectionsStandardBookSectionsByIds,
     standardTypes: collectionsStandardTypes,
     standardTypesByIds: collectionsStandardTypesByIds,
+    users: collectionsUsers,
     usersByIds: collectionsUsersByIds,
     risks: collectionsRisks,
     risksByIds: collectionsRisksByIds,
@@ -180,8 +225,11 @@ export default {
   }),
   organizations: Object.assign(organizations, {
     organizationId: organizationsOrganizationId,
-    organization: organizationsOrganization,
     orgSerialNumber: organizationsOrgSerialNumber,
+    organization: Object.assign(organizationsOrganization, {
+      ncGuidelines: organizationsOrganizationNcGuidelines,
+      rkGuidelines: organizationsOrganizationRkGuidelines,
+    }),
   }),
   dataImport: Object.assign(dataImport, {
     isModalOpened: dataImportIsModalOpened,
@@ -200,5 +248,27 @@ export default {
     initializing: risksInitializing,
     areDepsReady: risksAreDepsReady,
     risksFiltered: risksRisksFiltered,
+  }),
+  target: Object.assign(target, {
+    value: targetValue,
+  }),
+  profile: Object.assign(profile, {
+    firstName: profileFirstName,
+  }),
+  head: Object.assign(head, {
+    value: headValue,
+  }),
+  types: Object.assign(types, {
+    head: Object.assign(typesHead, {
+      value: typesHeadValue,
+    }),
+  }),
+  items: Object.assign(items, {
+    head: Object.assign(itemsHead, {
+      value: itemsHeadValue,
+    }),
+  }),
+  linkedDoc: Object.assign(linkedDoc, {
+    _id: linkedDoc_id,
   }),
 };
