@@ -45,7 +45,8 @@
     "react/display-name": 0,
     "func-names": 0,
     "jsx-a11y/anchor-is-valid": 0,
-    "import/no-named-as-default": 0
+    "import/no-named-as-default": 0,
+    "function-paren-newline": 0
   },
   "settings": {
     "import/resolver": "meteor"
