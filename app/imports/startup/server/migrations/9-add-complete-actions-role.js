@@ -6,8 +6,10 @@ import { UserRoles } from '../../../share/constants';
 
 export const up = () => {
   Organizations.find({}).forEach(({ _id: organizationId, users }) => {
-    users.forEach(({ userId }) => {
-      Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ACTIONS], organizationId);
+    users.forEach(({ userId, isRemoved }) => {
+      if (!isRemoved) {
+        Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ACTIONS], organizationId);
+      }
     });
   });
 
