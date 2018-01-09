@@ -6,7 +6,23 @@
     {{> SimpleCard route="workInbox" icon="fa-inbox" title=titles.workInbox notViewedCount=workItemsNotViewedCount text=workInboxMetrics}}
   </div>
   <hr>
-  {{> Dashboard_UserStats}}
-  {{> Dashboard_MessageStats}}
-  {{> Dashboard_WorkItemStats}}
+  <div>
+    {{> React
+        component=DashboardUserStatsContainer
+        organization=organization
+    }}
+  </div>
+  <hr>
+  <div>
+    {{> React
+      component=DashboardStatsUnreadMessagesContainer
+      organization=organization
+  }}
+  </div>
+  <hr>
+  <div>
+    {{> React
+      component=DashboardStatsOverdueItemsContainer
+      organization=organization}}
+  </div>
 </template>

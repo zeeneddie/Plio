@@ -1,4 +1,4 @@
-export { default as AddButton } from './AddButton';
+export { default as PlusButton } from './PlusButton';
 export { default as Button } from './Button';
 export { default as ClearButton } from './ClearButton';
 export { default as DiscussButton } from './DiscussButton';

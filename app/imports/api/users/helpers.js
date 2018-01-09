@@ -1,7 +1,7 @@
 import property from 'lodash.property';
 
-import { SystemName } from '/imports/share/constants';
-import { compose, every, chain, join, either, trim } from '/imports/api/helpers';
+import { SystemName } from '../../share/constants';
+import { compose, every, chain, join, either, trim } from '../helpers';
 
 export const getFirstName = property('profile.firstName');
 

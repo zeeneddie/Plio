@@ -62,5 +62,7 @@
     "smoothscroll-polyfill": "^0.4.0",
     "warning": "^3.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jest-enzyme": "^4.0.2"
+  }
 }

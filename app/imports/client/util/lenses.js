@@ -78,6 +78,7 @@ const types = lensProp('types');
 const selected = lensProp('selected');
 const items = lensProp('items');
 const standardsIds = lensProp('standardsIds');
+const linkedDoc = lensProp('linkedDoc');
 
 const head = lensIndex(0);
 
@@ -149,6 +150,8 @@ const typesHeadValue = compose(types, head, value);
 const itemsHead = compose(items, head);
 const itemsHeadValue = compose(items, head, value);
 
+const linkedDoc_id = compose(linkedDoc, _id);
+
 export default {
   _id,
   id,
@@ -176,6 +179,7 @@ export default {
   selected,
   value,
   standardsIds,
+  users,
   source1: Object.assign(source1, {
     htmlUrl: source1HtmlUrl,
   }),
@@ -263,5 +267,8 @@ export default {
     head: Object.assign(itemsHead, {
       value: itemsHeadValue,
     }),
+  }),
+  linkedDoc: Object.assign(linkedDoc, {
+    _id: linkedDoc_id,
   }),
 };
