@@ -32,7 +32,7 @@ export const DashboardStatsOverdueItems = ({
 }) => (
   <DashboardStatsExpandable
     items={workItems}
-    renderButton={loading ? () => <IconLoading /> : undefined}
+    renderIcon={loading ? () => <IconLoading /> : undefined}
     render={({ items }) => (
       <div key={joinIds(items)}>
         {map(item => (
