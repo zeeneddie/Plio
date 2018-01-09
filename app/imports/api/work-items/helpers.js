@@ -75,7 +75,7 @@ export const getTypeText = ({ type, linkedDoc }) => {
       const title = linkedDoc.type === ProblemTypes.RISK
         ? riskAnalysis
         : rootCauseAnalysis;
-      return getText(COMPLETE, title);
+      return title;
     }
     case WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_DOCUMENTS: {
       const title = linkedDoc.type === ProblemTypes.RISK
