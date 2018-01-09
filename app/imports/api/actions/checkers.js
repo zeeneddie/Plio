@@ -1,3 +1,5 @@
+import { Meteor } from 'meteor/meteor';
+
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
 import { Actions } from '/imports/share/collections/actions';
@@ -106,7 +108,7 @@ export const ACT_OnCompleteChecker = ({ userId }, action) => {
 
   checkAndThrow(
     !canCompleteActions(userId, action.organizationId),
-    new Error(
+    new Meteor.Error(
       403,
       // eslint-disable-next-line max-len
       'You have no rights to complete this action. Ask organization administrator to give you a permission.',
