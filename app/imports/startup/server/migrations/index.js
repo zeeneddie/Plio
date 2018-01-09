@@ -33,10 +33,11 @@ import { Migrations } from 'meteor/percolate:migrations';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { Organizations } from '/imports/share/collections/organizations';
-import { Discussions } from '/imports/share/collections/discussions.js';
-import DiscussionsService from '/imports/api/discussions/discussions-service.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Discussions } from '/imports/share/collections/discussions';
+import DiscussionsService from '/imports/api/discussions/discussions-service';
+import { Risks } from '/imports/share/collections/risks';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { WorkItems } from '/imports/share/collections/work-items';
 import curry from 'lodash.curry';
 import {
   DocumentTypes,
@@ -45,6 +46,8 @@ import {
   CustomerTypes,
   OrganizationDefaults,
 } from '/imports/share/constants';
+
+import './9-add-complete-actions-role';
 
 Migrations.add({
   version: 1,
