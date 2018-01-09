@@ -150,6 +150,21 @@ const ncGuidelinesSchema = new SimpleSchema({
   },
 });
 
+const pgGuidelinesSchema = new SimpleSchema({
+  minor: {
+    type: String,
+    label: 'Guideline for classifying a minor potential gain',
+  },
+  major: {
+    type: String,
+    label: 'Guideline for classifying a major potential gain',
+  },
+  critical: {
+    type: String,
+    label: 'Guideline for classifying a critical potential gain',
+  },
+});
+
 const rkGuidelinesSchema = new SimpleSchema({
   minor: {
     type: String,
@@ -242,6 +257,10 @@ const OrganizationEditableFields = {
   },
   ncGuidelines: {
     type: ncGuidelinesSchema,
+    optional: true,
+  },
+  pgGuidelines: {
+    type: pgGuidelinesSchema,
     optional: true,
   },
   rkGuidelines: {

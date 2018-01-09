@@ -1,4 +1,4 @@
-import { UserMembership } from '/imports/share/constants';
+import { UserMembership } from '../share/constants';
 
 export const createOrgUserMatcher = (userId, matcher) => ({
   userId,

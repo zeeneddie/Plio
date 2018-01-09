@@ -78,6 +78,7 @@ Meteor.publish('currentUserOrganizationBySerialNumber', function (serialNumber) 
     workflowDefaults: 1,
     reminders: 1,
     ncGuidelines: 1,
+    pgGuidelines: 1,
     rkGuidelines: 1,
     rkScoringGuidelines: 1,
     review: 1,

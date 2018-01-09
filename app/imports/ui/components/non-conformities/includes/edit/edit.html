@@ -4,13 +4,16 @@
       {{#with NC}}
         {{> NC_Card_Edit_Main
             NC=this}}
-
         {{> Subcards_RootCauseAnalysis_Edit
+            prefix=ui.analysis.prefix
+            label=(getAnalysisTitleByType this)
             rootCauseAnalysis=this.rootCauseAnalysis}}
 
-        {{> Subcards_Occurrences_Edit
-            _id=this._id
-            occurrencesIds=this.occurrences}}
+        {{#unless (isPG this)}}
+          {{> Subcards_Occurrences_Edit
+              _id=this._id
+              occurrencesIds=this.occurrences}}
+        {{/unless}}
 
         {{> Subcards_Actions_Edit
             type="CA"

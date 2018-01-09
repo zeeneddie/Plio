@@ -1,6 +1,6 @@
 import curry from 'lodash.curry';
 
-import { Organizations } from '/imports/share/collections/organizations';
+import { Organizations } from '../../share/collections/organizations';
 import {
   ORG_CANNOT_CHANGE_SETTINGS,
   ORG_ALREADY_EXISTS,
@@ -27,7 +27,7 @@ import {
   checkOrgMembershipBySelector,
 } from '../checkers';
 import { checkAndThrow, checkAndThrowC, compose, invoker } from '../helpers';
-import { getCollectionByDocType } from '/imports/share/helpers';
+import { getCollectionByDocType } from '../../share/helpers';
 import { DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED, throwExpectedNoDocs } from './errors';
 
 

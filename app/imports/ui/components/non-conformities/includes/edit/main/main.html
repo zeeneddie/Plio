@@ -37,16 +37,18 @@
       {{> Problems_Magnitude_Edit
           _id=this._id
           magnitude=this.magnitude
-          guidelines=NCGuidelines}}
+          guidelines=(guidelines this)}}
 
       {{> NC_Cost_Edit
           _id=this._id
           cost=this.cost}}
 
-      {{> NC_Ref_Edit
-          _id=this._id
-          text=this.ref.text
-          url=this.ref.url}}
+      {{#unless (isPG this)}}
+        {{> NC_Ref_Edit
+            _id=this._id
+            text=this.ref.text
+            url=this.ref.url}}
+      {{/unless}}
     </div>
 
     {{#if showRootCauseAnalysis}}

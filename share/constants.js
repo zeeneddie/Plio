@@ -289,6 +289,7 @@ export const ProblemsStatuses = {
 export const ProblemTypes = {
   NON_CONFORMITY: 'non-conformity',
   RISK: 'risk',
+  POTENTIAL_GAIN: 'potential gain',
 };
 
 export const DocumentTypes = {
@@ -301,6 +302,7 @@ export const DocumentTypesPlural = {
   STANDARDS: 'standards',
   NON_CONFORMITIES: 'non-conformities',
   RISKS: 'risks',
+  POTENTIAL_GAINS: 'potential gains',
 };
 
 export const AllDocumentTypes = {
@@ -545,6 +547,11 @@ export const OrganizationDefaults = {
     minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.NON_CONFORMITY),
     major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.NON_CONFORMITY),
     critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.NON_CONFORMITY),
+  },
+  pgGuidelines: {
+    minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.POTENTIAL_GAIN),
+    major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.POTENTIAL_GAIN),
+    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.POTENTIAL_GAIN),
   },
   rkGuidelines: {
     minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.RISK),

@@ -13,12 +13,14 @@ import {
   DocumentTypesPlural,
   AllDocumentTypes,
 } from './constants.js';
-import { Actions } from './collections/actions.js';
-import { NonConformities } from './collections/non-conformities.js';
-import { Risks } from './collections/risks.js';
-import { Standards } from './collections/standards.js';
-import { Organizations } from './collections/organizations';
-import { Discussions } from './collections/discussions';
+import {
+  Actions,
+  NonConformities,
+  Risks,
+  Standards,
+  Organizations,
+  Discussions,
+} from './collections';
 
 
 export const capitalize = str => `${str}`.charAt(0).toUpperCase() + `${str}`.substring(1);
@@ -87,6 +89,7 @@ export const getDocTypePlural = docType => ({
   [DocumentTypes.STANDARD]: DocumentTypesPlural.STANDARDS,
   [DocumentTypes.RISK]: DocumentTypesPlural.RISKS,
   [DocumentTypes.NON_CONFORMITY]: DocumentTypesPlural.NON_CONFORMITIES,
+  [DocumentTypes.POTENTIAL_GAIN]: DocumentTypesPlural.POTENTIAL_GAINS,
 })[docType];
 
 export const getLinkedDoc = (documentId, documentType) => {
