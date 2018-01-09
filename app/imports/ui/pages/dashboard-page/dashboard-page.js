@@ -102,13 +102,6 @@ Template.Dashboard_Page.viewmodel({
   titles() {
     return getC('homeScreenTitles', this.organization());
   },
-  getWorkspaceDefaults(organization) {
-    const workspaceDefaults = organization[WORKSPACE_DEFAULTS];
-
-    return {
-      usersPerRow: workspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_USERS],
-    };
-  },
   DashboardUserStatsContainer: () => defer(DashboardUserStatsContainer),
   DashboardStatsUnreadMessagesContainer: () => defer(DashboardStatsUnreadMessagesContainer),
   DashboardStatsOverdueItemsContainer: () => defer(DashboardStatsOverdueItemsContainer),

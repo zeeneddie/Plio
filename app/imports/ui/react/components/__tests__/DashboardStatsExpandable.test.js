@@ -6,7 +6,7 @@ import { times } from 'ramda';
 
 import { joinIds } from '../../../../client/util';
 import { DashboardStatsExpandable } from '../DashboardStatsExpandable';
-import { Collapse, DashboardStats, PlusButton } from '../';
+import { Collapse } from '../';
 
 describe('DashboardStatsExpandable', () => {
   it('renders correctly', () => {
@@ -34,13 +34,10 @@ describe('DashboardStatsExpandable', () => {
     expect(wrapper.find(Collapse)).toHaveLength(1);
     expect(wrapper.find(Collapse).find('div')).toHaveLength(len / itemsPerRow - 1);
 
-    const button = wrapper.find(DashboardStats.Title).find(PlusButton);
-    expect(button).toHaveLength(1);
-    button.simulate('click');
+    const title = wrapper.find('DashboardStatsTitle');
+    expect(title).toHaveLength(1);
+    title.simulate('click');
     expect(toggle).toHaveBeenCalled();
-    wrapper.setProps({ isOpen: true });
-    const btn = <PlusButton size="1" onClick={toggle} minus />;
-    expect(wrapper.find(DashboardStats.Title).contains(btn)).toBe(true);
 
     expect(wrapper).toMatchSnapshot();
   });

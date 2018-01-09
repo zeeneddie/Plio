@@ -9,8 +9,7 @@
   <div>
     {{> React
         component=DashboardUserStatsContainer
-        orgUsers=organization.users
-        usersPerRow=(get (getWorkspaceDefaults organization) 'usersPerRow')
+        organization=organization
     }}
   </div>
   <hr>

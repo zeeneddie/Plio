@@ -1,14 +1,18 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import pluralize from 'pluralize';
+import { onlyUpdateForKeys } from 'recompose';
 
-import { DashboardStatsExpandable } from '../../components';
+import { DashboardStatsExpandable, PlusButton } from '../../components';
 import DashboardStatsUserList from './DashboardStatsUserList';
 import { joinIds } from '../../../../client/util';
+
+const enhance = onlyUpdateForKeys(['users', 'usersPerRow']);
 
 export const DashboardUserStats = ({
   users,
   usersPerRow,
+  onInvite,
 }) => (
   <DashboardStatsExpandable
     items={users}
@@ -19,6 +23,7 @@ export const DashboardUserStats = ({
       </div>
     )}
   >
+    <PlusButton size="1" onClick={onInvite} />
     {pluralize('user', users.length, true)} online
   </DashboardStatsExpandable>
 );
@@ -26,6 +31,7 @@ export const DashboardUserStats = ({
 DashboardUserStats.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object).isRequired,
   usersPerRow: PropTypes.number.isRequired,
+  onInvite: PropTypes.func.isRequired,
 };
 
-export default DashboardUserStats;
+export default enhance(DashboardUserStats);

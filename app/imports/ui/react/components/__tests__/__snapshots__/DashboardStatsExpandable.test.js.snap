@@ -2,11 +2,15 @@
 
 exports[`DashboardStatsExpandable renders correctly 1`] = `
 <DashboardStats>
-  <DashboardStatsTitle>
-    <PlusButton
-      minus={true}
-      onClick={[Function]}
-      size="1"
+  <DashboardStatsTitle
+    onClick={[Function]}
+    toggle={[Function]}
+  >
+     
+    <ToggleAngleIcon
+      isOpen={false}
+      name="angle-down"
+      toggle={[Function]}
     />
   </DashboardStatsTitle>
   <div
@@ -15,7 +19,7 @@ exports[`DashboardStatsExpandable renders correctly 1`] = `
     foo
   </div>
   <Collapse
-    isOpen={true}
+    isOpen={false}
   >
     <div
       key="5 6 7 8 9"

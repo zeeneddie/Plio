@@ -209,6 +209,10 @@ exports[`DashboardUserStats matches snapshot 1`] = `
   itemsPerRow={5}
   render={[Function]}
 >
+  <PlusButton
+    onClick={[Function]}
+    size="1"
+  />
   25 users
    online
 </branch(DashboardStatsExpandable)>
