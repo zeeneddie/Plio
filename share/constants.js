@@ -399,6 +399,7 @@ export const UserRoles = {
   DELETE_USERS: 'delete-users',
   EDIT_USER_ROLES: 'edit-user-roles',
   CHANGE_ORG_SETTINGS: 'change-org-settings',
+  COMPLETE_ACTIONS: 'complete-actions',
 };
 
 export const UserRolesNames = {
@@ -408,6 +409,7 @@ export const UserRolesNames = {
   [UserRoles.DELETE_USERS]: 'Delete users',
   [UserRoles.EDIT_USER_ROLES]: 'Edit user superpowers',
   [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings',
+  [UserRoles.COMPLETE_ACTIONS]: 'Can complete any action',
 };
 
 export const WorkItemsStore = {
@@ -441,11 +443,13 @@ export const OrgOwnerRoles = [
   UserRoles.DELETE_USERS,
   UserRoles.EDIT_USER_ROLES,
   UserRoles.CHANGE_ORG_SETTINGS,
+  UserRoles.COMPLETE_ACTIONS,
 ];
 
 export const OrgMemberRoles = [
   UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
   UserRoles.VIEW_TEAM_ACTIONS,
+  UserRoles.COMPLETE_ACTIONS,
 ];
 
 export const OrgCurrencies = {

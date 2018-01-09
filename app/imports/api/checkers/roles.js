@@ -31,3 +31,9 @@ export const canChangeRoles = (userId, organizationId) => Roles.userIsInRole(
   UserRoles.EDIT_USER_ROLES,
   organizationId,
 );
+
+export const canCompleteActions = (userId, organizationId) => Roles.userIsInRole(
+  userId,
+  UserRoles.COMPLETE_ACTIONS,
+  organizationId,
+);
