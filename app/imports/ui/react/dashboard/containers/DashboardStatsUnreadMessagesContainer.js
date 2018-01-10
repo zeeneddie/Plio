@@ -83,6 +83,7 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
     };
     const messages = Messages.find(query, options).fetch();
     const count = Counter.get(getCounterName(organizationId));
+
     onData(null, {
       messages,
       count,
@@ -100,8 +101,10 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
     }) => () => {
       setIsOpen(!isOpen, () => setIsLimitEnabled(!isLimitEnabled));
     },
-    markAllAsRead: ({ organizationId }) => () =>
-      updateViewedByOrganization.call({ _id: organizationId }, handleMethodResult()),
+    markAllAsRead: ({ organizationId }) => (e) => {
+      e.stopPropagation();
+      return updateViewedByOrganization.call({ _id: organizationId }, handleMethodResult());
+    },
   }),
 )(({ messages, ...props }) => !!messages.length && (
   <Fragment>

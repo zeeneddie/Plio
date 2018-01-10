@@ -32,6 +32,7 @@ export const DashboardStatsUnreadMessages = ({
   toggle,
 }) => (
   <DashboardStatsExpandable
+    total={count}
     items={messages}
     itemsPerRow={displayMessages}
     renderIcon={loading ? () => <IconLoading /> : undefined}
