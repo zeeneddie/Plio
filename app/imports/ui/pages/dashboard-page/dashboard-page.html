@@ -5,21 +5,16 @@
     {{> SimpleCard route="nonconformities" icon="fa-exclamation-triangle" title=titles.nonConformities notViewedCount=NCsNotViewedCount text=NCsMetrics}}
     {{> SimpleCard route="workInbox" icon="fa-inbox" title=titles.workInbox notViewedCount=workItemsNotViewedCount text=workInboxMetrics}}
   </div>
-  <hr>
   <div>
     {{> React
         component=DashboardUserStatsContainer
-        organization=organization
-    }}
+        organization=organization}}
   </div>
-  <hr>
   <div>
     {{> React
       component=DashboardStatsUnreadMessagesContainer
-      organization=organization
-  }}
+      organization=organization}}
   </div>
-  <hr>
   <div>
     {{> React
       component=DashboardStatsOverdueItemsContainer

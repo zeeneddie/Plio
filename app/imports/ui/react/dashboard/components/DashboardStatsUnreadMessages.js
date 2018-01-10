@@ -57,7 +57,7 @@ export const DashboardStatsUnreadMessages = ({
     );
   }
 
-  return !!messages.length && (
+  return (
     <DashboardStats>
       <DashboardStats.Title>
         {pluralize('unread message', count || messages.length, true)}

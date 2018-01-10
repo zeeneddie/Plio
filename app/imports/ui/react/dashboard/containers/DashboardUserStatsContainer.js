@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
 import { filter, compose, pluck, complement, prop, memoize } from 'ramda';
 import { onlyUpdateForKeys, withHandlers, setPropTypes, flattenProp } from 'recompose';
 
@@ -87,4 +88,9 @@ export default namedCompose('DashboardUserStatsContainer')(
       });
     },
   }),
-)(DashboardUserStats);
+)(({ users, ...props }) => !!users.length && (
+  <Fragment>
+    <hr />
+    <DashboardUserStats {...{ users, ...props }} />
+  </Fragment>
+));

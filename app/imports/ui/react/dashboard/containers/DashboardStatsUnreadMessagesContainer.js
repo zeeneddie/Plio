@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
 import { setPropTypes, withState, withHandlers, flattenProp, onlyUpdateForKeys } from 'recompose';
 
 import DashboardStatsUnreadMessages from '../components/DashboardStatsUnreadMessages';
@@ -97,4 +98,9 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
     markAllAsRead: ({ organization: { _id } }) => () =>
       updateViewedByOrganization.call({ _id }, handleMethodResult()),
   }),
-)(DashboardStatsUnreadMessages);
+)(({ messages, ...props }) => !!messages.length && (
+  <Fragment>
+    <hr />
+    <DashboardStatsUnreadMessages {...{ messages, ...props }} />
+  </Fragment>
+));

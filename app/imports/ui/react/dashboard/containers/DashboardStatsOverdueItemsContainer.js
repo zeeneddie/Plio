@@ -1,5 +1,6 @@
 import { setPropTypes, withState, withHandlers, flattenProp, onlyUpdateForKeys } from 'recompose';
 import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { map, view } from 'ramda';
 
@@ -119,4 +120,9 @@ export default namedCompose('DashboardStatsOverdueItemsContainer')(
       setIsOpen(!isOpen);
     },
   }),
-)(DashboardStatsOverdueItems);
+)(({ workItems, ...props }) => !!workItems.length && (
+  <Fragment>
+    <hr />
+    <DashboardStatsOverdueItems {...{ workItems, ...props }} />
+  </Fragment>
+));

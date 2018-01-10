@@ -38,7 +38,7 @@ export const DashboardStatsExpandable = ({
   render,
   renderIcon = ToggleAngleIcon,
   children,
-}) => !!items.length && (
+}) => (
   <DashboardStats>
     <StyledDashboardTitle onClick={toggle} {...{ toggle }}>
       {children}
@@ -62,6 +62,7 @@ DashboardStatsExpandable.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   itemsPerRow: PropTypes.number.isRequired,
   render: PropTypes.func.isRequired,
+  renderIcon: PropTypes.func,
   children: PropTypes.node,
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
