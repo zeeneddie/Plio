@@ -55,6 +55,7 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
       orgSerialNumber,
       isLimitEnabled,
       limit,
+      displayMessages,
     };
 
     if (messagesSub.ready()) {
@@ -72,10 +73,8 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
   }),
   composeWithTracker(({
     organizationId,
-    orgSerialNumber,
-    loading,
-    isLimitEnabled,
     limit,
+    ...props
   }, onData) => {
     const query = { organizationId };
     const options = {
@@ -87,16 +86,22 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
     onData(null, {
       messages,
       count,
-      orgSerialNumber,
-      loading,
-      isLimitEnabled,
+      organizationId,
+      ...props,
     });
   }),
+  withState('isOpen', 'setIsOpen', false),
   withHandlers({
-    loadAll: ({ setIsLimitEnabled }) => () => setIsLimitEnabled(false),
-    loadLimited: ({ setIsLimitEnabled }) => () => setIsLimitEnabled(true),
-    markAllAsRead: ({ organization: { _id } }) => () =>
-      updateViewedByOrganization.call({ _id }, handleMethodResult()),
+    toggle: ({
+      isOpen,
+      setIsOpen,
+      isLimitEnabled,
+      setIsLimitEnabled,
+    }) => () => {
+      setIsOpen(!isOpen, () => setIsLimitEnabled(!isLimitEnabled));
+    },
+    markAllAsRead: ({ organizationId }) => () =>
+      updateViewedByOrganization.call({ _id: organizationId }, handleMethodResult()),
   }),
 )(({ messages, ...props }) => !!messages.length && (
   <Fragment>

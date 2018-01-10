@@ -4,77 +4,55 @@ import { map } from 'ramda';
 import pluralize from 'pluralize';
 import { onlyUpdateForKeys } from 'recompose';
 
-import { DashboardStats, Button, Icon, IconLoading } from '../../components';
+import { Icon, IconLoading, DashboardStatsExpandable } from '../../components';
 import { DashboardStatsMessageContainer } from '../containers';
 import {
   WorkspaceDefaults,
   WorkspaceDefaultsTypes,
 } from '../../../../share/constants';
+import { joinIds } from '../../../../client/util';
 
 const enhance = onlyUpdateForKeys([
   'messages',
   'count',
   'loading',
   'orgSerialNumber',
-  'isLimitEnabled',
   'displayMessages',
+  'isOpen',
 ]);
 
 export const DashboardStatsUnreadMessages = ({
   messages,
   count,
   markAllAsRead,
-  loadAll,
-  loadLimited,
   loading,
   orgSerialNumber,
-  isLimitEnabled,
   displayMessages = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_MESSAGES],
-}) => {
-  let button = null;
-
-  if (count > messages.length) {
-    button = (
-      <Button color="secondary" onClick={loadAll}>
-        View all items
-        {loading ? (
-          <IconLoading />
-        ) : (
-          <span>({count - displayMessages} more)</span>
-        )}
-      </Button>
-    );
-  } else if (!isLimitEnabled) {
-    button = (
-      <Button color="secondary" onClick={loadLimited}>
-        <span>Hide</span>
-        {loading ? (
-          <IconLoading />
-        ) : (
-          <span>({count - displayMessages} items)</span>
-        )}
-      </Button>
-    );
-  }
-
-  return (
-    <DashboardStats>
-      <DashboardStats.Title>
-        {pluralize('unread message', count || messages.length, true)}
-        <a className="pointer" title="Mark all messages as read" onClick={markAllAsRead}>
-          <Icon name="times-circle" />
-        </a>
-      </DashboardStats.Title>
-      {map(message => (
-        <DashboardStatsMessageContainer
-          key={message._id}
-          {...{ ...message, orgSerialNumber }}
-        />
-      ), messages)}
-      {button}
-    </DashboardStats>
-  );
-};
+  isOpen,
+  toggle,
+}) => (
+  <DashboardStatsExpandable
+    items={messages}
+    itemsPerRow={displayMessages}
+    renderIcon={loading ? () => <IconLoading /> : undefined}
+    render={({ items }) => (
+      <div key={joinIds(items)}>
+        {map(message => (
+          <DashboardStatsMessageContainer
+            key={message._id}
+            {...{ ...message, orgSerialNumber }}
+          />
+        ), items)}
+      </div>
+    )}
+    {...{ isOpen, toggle }}
+  >
+    {pluralize('unread message', count || messages.length, true)}
+    <a className="pointer" title="Mark all messages as read" onClick={markAllAsRead}>
+      <Icon name="times-circle" />
+    </a>
+  </DashboardStatsExpandable>
+);
 
 DashboardStatsUnreadMessages.propTypes = {
   messages: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -85,6 +63,9 @@ DashboardStatsUnreadMessages.propTypes = {
   loading: PropTypes.bool,
   orgSerialNumber: PropTypes.number.isRequired,
   isLimitEnabled: PropTypes.bool,
+  displayMessages: PropTypes.number.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
 };
 
 export default enhance(DashboardStatsUnreadMessages);
