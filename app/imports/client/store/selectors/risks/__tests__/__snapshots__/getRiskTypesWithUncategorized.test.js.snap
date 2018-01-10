@@ -10,6 +10,9 @@ Array [
         "departmentsIds": Array [
           16,
         ],
+        "standardsIds": Array [
+          1,
+        ],
         "typeId": 15,
       },
       Object {
@@ -17,6 +20,10 @@ Array [
         "departmentsIds": Array [
           16,
           17,
+        ],
+        "standardsIds": Array [
+          1,
+          2,
         ],
         "typeId": 15,
       },
@@ -27,6 +34,9 @@ Array [
           17,
         ],
         "isDeleted": true,
+        "standardsIds": Array [
+          5,
+        ],
         "typeId": 15,
       },
     ],
@@ -39,9 +49,15 @@ Array [
         "_id": 13,
         "deletedAt": 1513074233018,
         "isDeleted": true,
+        "standardsIds": Array [
+          1,
+        ],
       },
       Object {
         "_id": 14,
+        "standardsIds": Array [
+          2,
+        ],
       },
     ],
     "title": "Uncategorized",

@@ -1,4 +1,4 @@
-import { compose, view, equals, curry } from 'ramda';
+import { compose, view, equals, curry, complement, eqProps } from 'ramda';
 import lenses from './lenses';
 
 // ({ isDeleted: Boolean }) => Boolean
@@ -9,3 +9,5 @@ export const lensEq = curry((lens, val, obj) => compose(equals(val), view(lens))
 
 // (lens: Lens, val: Object) => (obj: Object) => Boolean
 export const lensEqById = curry((lens, val) => compose(lensEq(lens), view(lenses._id))(val));
+
+export const notEqProps = complement(eqProps);

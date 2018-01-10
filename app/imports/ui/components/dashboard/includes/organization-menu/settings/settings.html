@@ -32,10 +32,17 @@
 
   {{> OrgSettings_ProblemGuidelines
       label="Nonconformity guidelines"
-      documentType="non-conformity"
+      documentType=DocumentTypes.NON_CONFORMITY
       guidelines=NCGuidelines
       organizationId=organizationId
       method=setNCGuidelineMethod}}
+
+  {{> OrgSettings_ProblemGuidelines
+      label="Gain guidelines"
+      documentType=DocumentTypes.POTENTIAL_GAIN
+      guidelines=PGGuidelines
+      organizationId=organizationId
+      method=setPGGuidelineMethod}}
 
   {{> OrgSettings_RisksTypes
       organizationId=organizationId
@@ -43,7 +50,7 @@
 
   {{> OrgSettings_ProblemGuidelines
       label="Risk guidelines"
-      documentType="risk"
+      documentType=DocumentTypes.RISK
       guidelines=RKGuidelines
       organizationId=organizationId
       method=setRKGuidelineMethod}}

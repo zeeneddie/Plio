@@ -3,54 +3,16 @@ import { Actions } from '/imports/share/collections/actions';
 import { WorkItems } from '/imports/share/collections/work-items';
 import {
   WorkItemsStore,
-  ProblemTypes,
   ActionTypes,
 } from '/imports/share/constants';
 import {
-  ActionTitles,
   WorkInboxFilters,
-  WorkItemDescriptions,
 } from '/imports/api/constants';
-import { capitalize, lowercase } from '/imports/share/helpers';
-
-const {
-  riskAnalysis,
-  rootCauseAnalysis,
-  updateOfRiskRecord,
-  updateOfStandards,
-} = WorkItemDescriptions;
+import { capitalize } from '/imports/share/helpers';
+import { getTypeText } from '../../../api/work-items/helpers';
 
 export default {
-  getTypeText({ type, linkedDoc }) {
-    const result = ((() => {
-      let title;
-      const COMPLETE = 'Complete';
-      const VERIFY = 'Verify';
-      const getText = (action, text) => `${action} ${lowercase(text)}`;
-      switch (linkedDoc && type) {
-        case WorkItemsStore.TYPES.COMPLETE_ANALYSIS:
-          title = linkedDoc.type === ProblemTypes.RISK
-            ? riskAnalysis
-            : rootCauseAnalysis;
-          return title;
-        case WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
-          title = linkedDoc.type === ProblemTypes.RISK
-            ? updateOfRiskRecord
-            : updateOfStandards;
-          return title;
-        case WorkItemsStore.TYPES.COMPLETE_ACTION:
-          title = ActionTitles[linkedDoc.type];
-          return getText(COMPLETE, title);
-        case WorkItemsStore.TYPES.VERIFY_ACTION:
-          title = ActionTitles[linkedDoc.type];
-          return getText(VERIFY, title);
-        default:
-          return type;
-      }
-    })());
-
-    return result;
-  },
+  getTypeText,
   getLinkedDocTypeText({ type, linkedDoc }) {
     const { TYPES } = WorkItemsStore;
 

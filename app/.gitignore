@@ -6,3 +6,4 @@ npm-debug.log
 .jshintrc
 typings
 yarn-error.log
+package-lock.json

@@ -1,6 +1,6 @@
 import { $ } from 'meteor/jquery';
 
-import { MOBILE_BREAKPOINT } from '/imports/api/constants';
+import { MOBILE_BREAKPOINT } from '../constants';
 
 export * from '../actions/checkers';
 

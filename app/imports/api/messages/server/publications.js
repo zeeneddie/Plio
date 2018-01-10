@@ -215,7 +215,7 @@ Meteor.publishComposite('unreadMessages', function ({ organizationId, limit }) {
   check(organizationId, String);
   check(limit, Number);
 
-  const userId = this.userId;
+  const { userId } = this;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -243,15 +243,11 @@ Meteor.publishComposite('unreadMessages', function ({ organizationId, limit }) {
           },
         };
         const options = {
+          limit,
           sort: {
             createdAt: -1,
           },
         };
-
-        // Check if limit is an integer number
-        if (Number(limit) === limit && limit % 1 === 0) {
-          options.limit = limit;
-        }
 
         return Messages.find(query, options);
       },

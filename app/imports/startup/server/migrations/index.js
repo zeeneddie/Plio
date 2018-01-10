@@ -2,11 +2,11 @@
 
 // import { Migrations } from 'meteor/percolate:migrations';
 //
-// import { NonConformities } from '/imports/share/collections/non-conformities.js';
-// import { Risks } from '/imports/share/collections/risks.js';
-// import { WorkItems } from '/imports/share/collections/work-items.js';
-// import { Standards } from '/imports/share/collections/standards.js';
-// import { Actions } from '/imports/share/collections/actions.js';
+// import { NonConformities } from '/imports/share/collections/non-conformities';
+// import { Risks } from '/imports/share/collections/risks';
+// import { WorkItems } from '/imports/share/collections/work-items';
+// import { Standards } from '/imports/share/collections/standards';
+// import { Actions } from '/imports/share/collections/actions';
 //
 // const workItems = WorkItems.find({});
 // workItems.forEach((workItem) => {
@@ -45,9 +45,11 @@ import {
   SystemName,
   CustomerTypes,
   OrganizationDefaults,
+  ProblemTypes,
 } from '/imports/share/constants';
 
-import './9-add-complete-actions-role';
+import './12-add-complete-actions-role';
+import './13-workspace-defaults';
 
 Migrations.add({
   version: 1,
@@ -308,6 +310,94 @@ Migrations.add({
     });
 
     console.log('Work item "complete update of documents" types were restored');
+  },
+});
+
+Migrations.add({
+  version: 9,
+  name: 'Migrate home screen title for nonconformities to "Nonconformities & gains"',
+  up() {
+    Organizations.update(
+      { 'homeScreenTitles.nonConformities': 'Non-conformities' },
+      {
+        $set: {
+          'homeScreenTitles.nonConformities': 'Nonconformities & gains',
+        },
+      },
+      { multi: true },
+    );
+
+    console.log('Home screen title for nonconformities changed to "Nonconformities & gains"');
+  },
+  down() {
+    Organizations.update(
+      { 'homeScreenTitles.nonConformities': 'Nonconformities & gains' },
+      {
+        $set: {
+          'homeScreenTitles.nonConformities': 'Non-conformities',
+        },
+      },
+    );
+
+    console.log('Home screen title for nonconformities changed to "Non-conformities"');
+  },
+});
+
+Migrations.add({
+  version: 10,
+  name: 'Add type to nonconformities without it',
+  up() {
+    const query = { type: { $exists: false } };
+    const modifier = {
+      $set: {
+        type: ProblemTypes.NON_CONFORMITY,
+      },
+    };
+    const options = { multi: true };
+    NonConformities.update(query, modifier, options);
+    console.log('Added type to nonconformities without it');
+  },
+  down() {
+    const query = { type: { $exists: true } };
+    const modifier = {
+      $unset: {
+        type: '',
+      },
+    };
+    const options = { multi: true };
+    NonConformities.update(query, modifier, options);
+    console.log('Removed type from nonconformities');
+  },
+});
+
+Migrations.add({
+  version: 11,
+  name: 'Add potential gain guidelines to organizations',
+  up() {
+    const query = {
+      pgGuidelines: {
+        $exists: false,
+      },
+    };
+    const modifier = {
+      $set: {
+        pgGuidelines: OrganizationDefaults.pgGuidelines,
+      },
+    };
+    const options = { multi: true };
+    Organizations.update(query, modifier, options);
+    console.log('Added pg guidelines to organizations');
+  },
+  down() {
+    const query = {};
+    const modifier = {
+      $unset: {
+        pgGuidelines: '',
+      },
+    };
+    const options = { multi: true };
+    Organizations.update(query, modifier, options);
+    console.log('Removed pg guidelines from organizations');
   },
 });
 

@@ -1,15 +1,12 @@
-import { Actions } from '/imports/share/collections/actions.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { ProblemTypes, WorkflowTypes } from '/imports/share/constants.js';
-import BaseEntityService from '/imports/share/services/base-entity-service.js';
-import WorkItemService from '/imports/share/services/work-item-service.js';
+import { Actions, Organizations, NonConformities, Risks } from '../../share/collections';
+import { WorkflowTypes } from '../../share/constants';
+import BaseEntityService from './base-entity-service';
+import WorkItemService from './work-item-service';
 import {
   getCollectionByDocType,
   getWorkflowDefaultStepDate,
   generateSerialNumber,
-} from '/imports/share/helpers';
+} from '../../share/helpers';
 
 export default {
   collection: Actions,

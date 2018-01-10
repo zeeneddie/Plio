@@ -1,4 +1,4 @@
-import { checkAndThrow } from '/imports/api/helpers';
+import { checkAndThrow } from '../helpers';
 import { canChangeStandards } from '../checkers';
 import { CANNOT_CHANGE_STANDARDS } from '../errors.js';
 

@@ -49,6 +49,7 @@ force-ssl@1.1.0
 force-ssl-common@1.1.0
 fortawesome:fontawesome@4.7.0
 fourseven:scss@3.13.0
+gadicc:blaze-react-component@1.4.0
 geojson-utils@1.0.10
 hot-code-push@1.0.4
 html-tools@1.0.11

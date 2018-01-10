@@ -289,6 +289,7 @@ export const ProblemsStatuses = {
 export const ProblemTypes = {
   NON_CONFORMITY: 'non-conformity',
   RISK: 'risk',
+  POTENTIAL_GAIN: 'potential gain',
 };
 
 export const DocumentTypes = {
@@ -301,6 +302,7 @@ export const DocumentTypesPlural = {
   STANDARDS: 'standards',
   NON_CONFORMITIES: 'non-conformities',
   RISKS: 'risks',
+  POTENTIAL_GAINS: 'potential gains',
 };
 
 export const AllDocumentTypes = {
@@ -412,13 +414,15 @@ export const UserRolesNames = {
   [UserRoles.COMPLETE_ACTIONS]: 'Can complete any action',
 };
 
+export const WorkItemTypes = {
+  COMPLETE_ACTION: 'complete action',
+  VERIFY_ACTION: 'verify action',
+  COMPLETE_ANALYSIS: 'complete analysis',
+  COMPLETE_UPDATE_OF_DOCUMENTS: 'complete approval',
+};
+
 export const WorkItemsStore = {
-  TYPES: {
-    COMPLETE_ACTION: 'complete action',
-    VERIFY_ACTION: 'verify action',
-    COMPLETE_ANALYSIS: 'complete analysis',
-    COMPLETE_UPDATE_OF_DOCUMENTS: 'complete approval',
-  },
+  TYPES: WorkItemTypes,
   LINKED_TYPES: {
     ...ActionTypes,
     ...ProblemTypes,
@@ -429,6 +433,13 @@ export const WorkItemsStore = {
     2: 'overdue',
     3: 'completed',
   },
+};
+
+export const WorkItemStatuses = {
+  IN_PROGRESS: 0,
+  DUE_TODAY: 1,
+  OVERDUE: 2,
+  COMPLETED: 3,
 };
 
 export const WorkflowTypes = {
@@ -549,6 +560,11 @@ export const OrganizationDefaults = {
     minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.NON_CONFORMITY),
     major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.NON_CONFORMITY),
     critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.NON_CONFORMITY),
+  },
+  pgGuidelines: {
+    minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.POTENTIAL_GAIN),
+    major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.POTENTIAL_GAIN),
+    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.POTENTIAL_GAIN),
   },
   rkGuidelines: {
     minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.RISK),
@@ -685,4 +701,18 @@ export const PossibleReviewFrequencies = [
 export const MessageTypes = {
   TEXT: 'text',
   FILE: 'file',
+};
+
+export const WORKSPACE_DEFAULTS = 'workspaceDefaults';
+
+export const WorkspaceDefaultsTypes = {
+  DISPLAY_USERS: 'displayUsers',
+  DISPLAY_MESSAGES: 'displayMessages',
+  DISPLAY_ACTIONS: 'displayActions',
+};
+
+export const WorkspaceDefaults = {
+  [WorkspaceDefaultsTypes.DISPLAY_USERS]: 5,
+  [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: 1,
+  [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 4,
 };

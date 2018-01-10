@@ -1,4 +1,4 @@
-import { view, compose } from 'ramda';
+import { view, compose, pluck, complement } from 'ramda';
 
 import { lenses } from '../../../util';
 
@@ -20,3 +20,12 @@ export const getRisks = view(lenses.collections.risks);
 export const getRisksByIds = view(lenses.collections.risksByIds);
 
 export const getRisksFromProps = (_, { risks }) => risks;
+
+export const getRiskIsViewed = ({ global: { userId } }, { viewedBy }) => viewedBy.includes(userId);
+
+export const getRiskIsNew = complement(getRiskIsViewed);
+
+export const getRisksIds = compose(
+  pluck('_id'),
+  view(lenses.collections.risks),
+);

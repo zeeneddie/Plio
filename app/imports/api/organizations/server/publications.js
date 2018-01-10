@@ -11,7 +11,7 @@ import { getUserOrganizations } from '../utils';
 import { isPlioUser, isOrgMember } from '../../checkers';
 import { makeOptionsFields } from '../../helpers';
 import { createOrgQueryWhereUserIsOwner } from '../../queries';
-
+import { WORKSPACE_DEFAULTS } from '../../../share/constants';
 
 Meteor.publish('invitationInfo', (invitationId) => {
   const sendInternalError = message => this.error(new Meteor.Error(500, message));
@@ -78,6 +78,7 @@ Meteor.publish('currentUserOrganizationBySerialNumber', function (serialNumber) 
     workflowDefaults: 1,
     reminders: 1,
     ncGuidelines: 1,
+    pgGuidelines: 1,
     rkGuidelines: 1,
     rkScoringGuidelines: 1,
     review: 1,
@@ -89,6 +90,7 @@ Meteor.publish('currentUserOrganizationBySerialNumber', function (serialNumber) 
     updatedBy: 1,
     lastAccessedDate: 1,
     transfer: 1,
+    [WORKSPACE_DEFAULTS]: 1,
   };
 
   if (this.userId) {

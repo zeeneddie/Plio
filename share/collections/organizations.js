@@ -1,8 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 
-import { CollectionNames } from '../constants.js';
-import { OrganizationSchema } from '../schemas/organization-schema.js';
-import { UserMembership, ProblemMagnitudes } from '../constants';
+import { OrganizationSchema } from '../schemas/organization-schema';
+import { UserMembership, ProblemMagnitudes, CollectionNames } from '../constants';
 
 
 const Organizations = new Mongo.Collection(CollectionNames.ORGANIZATIONS);

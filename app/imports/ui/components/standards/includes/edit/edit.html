@@ -44,10 +44,11 @@
       {{> Subcards_NonConformities_Edit
           _id=this._id
           _query=_getNCsQuery}}
-
-      {{> Subcards_Risks_Edit
-          _id=this._id
-          _query=_getRisksQuery}}
+      
+      <hr style="margin: 0" />
+      <div>
+        {{> React component=RisksSubcardContainer standardId=standard._id}}
+      </div>
 
       {{> Subcards_Actions_Edit (getActionsArgs 'CA')}}
 

@@ -1,21 +1,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import cx from 'classnames';
 
-import Collapse from '../Collapse';
-import Icon from '../Icons/Icon';
+import { Collapse, CardBlock, Icon } from '../';
 
-const ErrorSection = ({ errorText, size = '4' }) => (
-  <Collapse className="modal-error-section" collapsed={!errorText}>
-    <div className="card-block">
+const ErrorSection = ({ errorText, size = '4', className }) => (
+  <Collapse className={cx('modal-error-section', className)} isOpen={!!errorText}>
+    <CardBlock>
       <Icon {...{ size }} name="exclamation-circle" aria-hidden="true" />
       {errorText}
-    </div>
+    </CardBlock>
   </Collapse>
 );
 
 ErrorSection.propTypes = {
   errorText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   size: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default ErrorSection;

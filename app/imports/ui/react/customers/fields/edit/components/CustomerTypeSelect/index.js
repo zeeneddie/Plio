@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { CustomerTypesNames } from '/imports/share/constants';
-import FormField from '../../../../../fields/edit/components/FormField';
-import Select from '../../../../../forms/components/Select';
+import { FormField, Select } from '../../../../../components';
 import { createCustomerTypeOptions } from './helpers';
 
 const CustomerTypeSelect = ({ onChange, customerType: value }) => (

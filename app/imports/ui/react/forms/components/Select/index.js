@@ -3,12 +3,15 @@ import React from 'react';
 import cx from 'classnames';
 
 const Select = ({
-  value, options, className, onChange,
+  value,
+  options,
+  className,
+  onChange,
 }) => (
   <div className="dropdown">
     <select className={cx('form-control c-select', className)} {...{ value, onChange }}>
-      {options.map((option, i) => (
-        <option key={i} value={option.value}>
+      {options.map(option => (
+        <option key={`${option.value}-${option.text}`} value={option.value}>
           {option.text}
         </option>
       ))}

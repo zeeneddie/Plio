@@ -8,10 +8,10 @@ export const DocumentTitles = {
 };
 
 export const NonConformityFilters = {
-  1: { title: 'NCs', name: 'magnitude', prepend: 'by' },
-  2: { title: 'NCs', name: 'status', prepend: 'by' },
-  3: { title: 'NCs', name: 'department', prepend: 'by' },
-  4: { title: 'NCs', name: 'deleted' },
+  1: { title: '', name: 'magnitude', prepend: 'by' },
+  2: { title: '', name: 'status', prepend: 'by' },
+  3: { title: '', name: 'department', prepend: 'by' },
+  4: { title: '', name: 'deleted' },
 };
 
 export const RiskFilterIndexes = {
@@ -176,8 +176,14 @@ export const DepartmentsListProjection = {
 export const AnalysisTitles = {
   rootCauseAnalysis: 'Root cause analysis',
   riskAnalysis: 'Initial risk analysis',
+  potentialGainAnalysis: 'Potential gain analysis',
   updateOfStandards: 'Final approval to close this nonconformity',
   updateOfRiskRecord: 'Final approval to close this risk',
+};
+
+export const AnalysisFieldPrefixes = {
+  CAUSE: 'Cause',
+  GAIN: 'Gain',
 };
 
 export const WorkItemDescriptions = {
@@ -250,3 +256,9 @@ export const KeyMap = {
 };
 
 export const DEPARTMENT_UNCATEGORIZED = 'DEPARTMENTS.UNCATEGORIZED';
+
+export const UserPresenceStatuses = {
+  ONLINE: 'online',
+  AWAY: 'away',
+  OFFLINE: 'offline',
+};

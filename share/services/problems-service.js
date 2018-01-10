@@ -1,11 +1,8 @@
-import { Meteor } from 'meteor/meteor';
-
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { Actions } from '/imports/share/collections/actions.js';
-import { generateSerialNumber, getWorkflowDefaultStepDate } from '/imports/share/helpers';
-import ActionService from '/imports/share/services/action-service';
-import WorkItemService from '/imports/share/services/work-item-service.js';
-import { WorkItemsStore, WorkflowTypes } from '/imports/share/constants.js';
+import { generateSerialNumber, getWorkflowDefaultStepDate } from '../helpers';
+import { WorkflowTypes } from '../constants';
+import { Organizations, Actions } from '../collections';
+import ActionService from './action-service';
+import WorkItemService from './work-item-service';
 
 export default {
 
@@ -13,13 +10,18 @@ export default {
     const organization = Organizations.findOne({ _id: organizationId });
 
     const serialNumber = generateSerialNumber(this.collection, { organizationId });
-    const sequentialId = `${this._abbr}${serialNumber}`;
+    const abbr = this._getAbbr({ organization, magnitude, ...args });
+    const sequentialId = `${abbr}${serialNumber}`;
 
     const workflowType = organization.workflowType(magnitude);
 
     const _id = this.collection.insert({
-      organizationId, serialNumber, sequentialId,
-      workflowType, magnitude, ...args
+      organizationId,
+      serialNumber,
+      sequentialId,
+      workflowType,
+      magnitude,
+      ...args,
     });
 
     if (workflowType === WorkflowTypes.SIX_STEP) {
@@ -34,7 +36,10 @@ export default {
 
       this.setAnalysisDate({
         _id,
-        targetDate: getWorkflowDefaultStepDate({ organization, linkedTo: [{ documentId: _id, documentType: this._docType, }] }),
+        targetDate: getWorkflowDefaultStepDate({
+          organization,
+          linkedTo: [{ documentId: _id, documentType: this._docType }],
+        }),
       }, doc);
     }
 
@@ -258,6 +263,16 @@ export default {
 
   removePermanently({ _id, query }) {
     return this._service.removePermanently({ _id, query });
+  },
+
+  linkStandard({ _id, standardId }) {
+    const query = { _id };
+    const modifier = {
+      $addToSet: {
+        standardsIds: standardId,
+      },
+    };
+    this.collection.update(query, modifier);
   },
 
   unlinkStandard({ _id, standardId }) {

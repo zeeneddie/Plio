@@ -12,6 +12,10 @@ const NonConformitiesHelp = {
   occurences: 'Often, the same nonconformity can occur multiple times.  Instead of adding a new nonconformity record each time, just add another occurrence of the same nonconformity.',
 };
 
+const PotentialGainsHelp = {
+  potentialGain: 'A Potential Gain is essentially the opposite of a Nonconformity.  It is defined in Plio as an identified opportunity for an improvement in a task or process (contrast this with a Non-conformity which is a deviation from a documented Standard, or from a specification or expectation - in other words, an identified problem in a task or process).',
+};
+
 const RisksHelp = {
   risk: 'Risk is the effect of uncertainty on an organization\'s objectives.  To add a Risk record in Plio, give it a name and fill in the top section below.  Next, carry out an initial risk analysis by scoring the risk, evaluating it and creating a treatment plan. Then you can go ahead and create preventative actions to reduce either the potential impact or probability of occurence.',
   standards: 'Optionally, you can link this risk to one or more of your standards.',
@@ -69,4 +73,5 @@ export {
   WorkInboxHelp,
   MyPreferencesHelp,
   UserProfileHelp,
+  PotentialGainsHelp,
 };

@@ -1,18 +1,14 @@
 import { Template } from 'meteor/templating';
-import { ViewModel } from 'meteor/manuel:viewmodel';
-import { FlowRouter } from 'meteor/kadira:flow-router';
-import get from 'lodash.get';
-import property from 'lodash.property';
+import { Meteor } from 'meteor/meteor';
 import curry from 'lodash.curry';
+import { head, identity } from 'ramda';
 
-import { Occurrences } from '/imports/share/collections/occurrences.js';
-import { Departments } from '/imports/share/collections/departments.js';
-import { ProblemsStatuses } from '/imports/share/constants.js';
+import { Occurrences } from '/imports/share/collections/occurrences';
 import {
-  extractIds, inspire, findById,
+  extractIds, findById,
   lengthItems, flattenMapItems,
 } from '/imports/api/helpers';
-
+import { sortByType } from '../../../../api/non-conformities/util';
 
 Template.NC_List.viewmodel({
   mixin: [
@@ -33,9 +29,9 @@ Template.NC_List.viewmodel({
     }
 
     if (!defaultDoc) {
-      Meteor.setTimeout(() => {
+      Meteor.defer(() => {
         this.goToNCs();
-      }, 0);
+      });
     } else {
       const allNCs = this._getNCsByQuery({
         isDeleted: { $in: [true, false] },
@@ -44,10 +40,10 @@ Template.NC_List.viewmodel({
       if (!NCId || (NCId && findById(NCId, allNCs))) {
         const { _id } = defaultDoc;
 
-        Meteor.setTimeout(() => {
+        Meteor.defer(() => {
           this.goToNC(_id);
           this.expandCollapsed(_id);
-        }, 0);
+        });
       }
     }
   },
@@ -57,32 +53,31 @@ Template.NC_List.viewmodel({
       const items = transformer(array);
       return {
         result: finder(items),
-        first: _.first(items),
+        first: head(items),
         array: items,
       };
     });
     const resulstsFromItems = results(flattenMapItems);
 
     switch (this.activeNCFilterId()) {
-      case 1:
+      case 1: {
         const magnitude = this.magnitude();
         return resulstsFromItems(magnitude);
-        break;
-      case 2:
+      }
+      case 2: {
         const statuses = this.statuses();
         return resulstsFromItems(statuses);
-        break;
-      case 3:
+      }
+      case 3: {
         const departments = this.departments();
         return resulstsFromItems(departments);
-        break;
-      case 4:
+      }
+      case 4: {
         const deleted = this.deleted();
-        return results(_.identity, deleted);
-        break;
+        return results(identity, deleted);
+      }
       default:
         return {};
-        break;
     }
   },
   magnitude() {
@@ -92,7 +87,7 @@ Template.NC_List.viewmodel({
 
       return {
         ...m,
-        items,
+        items: sortByType(items),
         unreadMessagesCount: this._getTotalUnreadMessages(items),
       };
     };
@@ -129,9 +124,9 @@ Template.NC_List.viewmodel({
   onModalOpen() {
     return () =>
       this.modal().open({
-        _title: 'Nonconformity',
-        template: 'NC_Create',
-        variation: 'save',
+        _title: 'Add',
+        template: 'NCs_ChooseTypeModal',
+        variation: 'simple',
       });
   },
 });

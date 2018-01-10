@@ -7,12 +7,17 @@ import {
   StandardsBookSections,
 } from '/imports/share/collections/standards-book-sections.js';
 import { isOrgOwner } from '/imports/api/checkers';
-import { setNCGuideline, setRKGuideline } from '/imports/api/organizations/methods.js';
 
 import HomeTitlesSubcardContainer
   from '/imports/ui/react/organization-settings/containers/HomeTitlesSubcardContainer';
 import ReviewContainer
   from '/imports/ui/react/organization-settings/containers/ReviewContainer';
+import { DocumentTypes } from '../../../../../../share/constants';
+import {
+  setNCGuideline,
+  setPGGuideline,
+  setRKGuideline,
+} from '../../../../../../api/organizations/methods';
 
 Template.OrgSettings.viewmodel({
   mixin: 'organization',
@@ -61,6 +66,10 @@ Template.OrgSettings.viewmodel({
     const { ncGuidelines } = this.organization() || {};
     return ncGuidelines;
   },
+  PGGuidelines() {
+    const { pgGuidelines } = this.organization() || {};
+    return pgGuidelines;
+  },
   RKGuidelines() {
     const { rkGuidelines } = this.organization() || {};
     return rkGuidelines;
@@ -72,6 +81,9 @@ Template.OrgSettings.viewmodel({
   setNCGuidelineMethod() {
     return setNCGuideline;
   },
+  setPGGuidelineMethod() {
+    return setPGGuideline;
+  },
   setRKGuidelineMethod() {
     return setRKGuideline;
   },
@@ -81,4 +93,5 @@ Template.OrgSettings.viewmodel({
   reviewContainer() {
     return ReviewContainer;
   },
+  DocumentTypes: () => DocumentTypes,
 });

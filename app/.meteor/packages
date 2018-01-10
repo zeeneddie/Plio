@@ -59,4 +59,5 @@ shell-server@0.3.0
 percolate:migrations
 meteorhacks:aggregate
 dynamic-import@0.2.0
+gadicc:blaze-react-component
 react-template-helper

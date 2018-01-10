@@ -10,7 +10,7 @@ import {
 import {
   BaseEntitySchema, ReminderTimePeriodSchema,
   TimezoneSchema, TimePeriodSchema,
-  idSchemaDoc,
+  idSchemaDoc, WorkspaceDefaultsSchema,
 } from './schemas';
 
 export const HomeTitlesSchema = new SimpleSchema({
@@ -150,6 +150,21 @@ const ncGuidelinesSchema = new SimpleSchema({
   },
 });
 
+const pgGuidelinesSchema = new SimpleSchema({
+  minor: {
+    type: String,
+    label: 'Guideline for classifying a minor potential gain',
+  },
+  major: {
+    type: String,
+    label: 'Guideline for classifying a major potential gain',
+  },
+  critical: {
+    type: String,
+    label: 'Guideline for classifying a critical potential gain',
+  },
+});
+
 const rkGuidelinesSchema = new SimpleSchema({
   minor: {
     type: String,
@@ -244,6 +259,10 @@ const OrganizationEditableFields = {
     type: ncGuidelinesSchema,
     optional: true,
   },
+  pgGuidelines: {
+    type: pgGuidelinesSchema,
+    optional: true,
+  },
   rkGuidelines: {
     type: rkGuidelinesSchema,
     optional: true,
@@ -287,6 +306,7 @@ const OrganizationSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationEditableFields,
   CustomerTypeSchema,
+  WorkspaceDefaultsSchema,
   {
     homeScreenTitles: {
       type: HomeTitlesSchema,
