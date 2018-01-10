@@ -98,6 +98,7 @@ export const CollectionNames = {
   STANDARDS: 'Standards',
   WORK_ITEMS: 'WorkItems',
   USERS: 'users',
+  GOALS: 'Goals',
 };
 
 export const DefaultRiskTypes = [
