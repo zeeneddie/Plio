@@ -15,6 +15,7 @@ import {
   WorkspaceDefaults,
   WorkspaceDefaultsTypes,
 } from '../../../../share/constants';
+import { canInviteUsers } from '../../../../api/checkers/roles';
 
 const getOrgUserIds = memoize(compose(
   pluck('userId'),
@@ -60,11 +61,13 @@ export default namedCompose('DashboardUserStatsContainer')(
       },
     };
     const users = Meteor.users.find(query, options).fetch();
+    const userId = Meteor.userId();
 
     onData(null, {
       users,
       usersPerRow,
       organizationId,
+      canInviteUsers: canInviteUsers(userId, organizationId),
       ...props,
     });
   }, {
