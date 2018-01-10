@@ -23,6 +23,7 @@ import {
   ACT_CANNOT_VERIFY,
   ACT_VERIFICATION_CANNOT_BE_UNDONE,
   ACT_ANALYSIS_MUST_BE_COMPLETED,
+  ACT_COMPLETE_NO_PERMISSION,
 } from '../errors';
 import { canCompleteActions } from '../checkers/roles';
 
@@ -108,11 +109,7 @@ export const ACT_OnCompleteChecker = ({ userId }, action) => {
 
   checkAndThrow(
     !canCompleteActions(userId, action.organizationId),
-    new Meteor.Error(
-      403,
-      // eslint-disable-next-line max-len
-      'You have no rights to complete this action. Ask organization administrator to give you a permission.',
-    ),
+    ACT_COMPLETE_NO_PERMISSION,
   );
 
   return { action };
@@ -123,6 +120,11 @@ export const ACT_OnUndoCompletionChecker = ({ userId }, action) => {
 
   checkAndThrow(!action.canCompletionBeUndone(), ACT_COMPLETION_CANNOT_BE_UNDONE);
 
+  checkAndThrow(
+    !canCompleteActions(userId, action.organizationId),
+    ACT_COMPLETE_NO_PERMISSION,
+  );
+
   return { action };
 };
 
@@ -131,6 +133,11 @@ export const ACT_OnVerifyChecker = ({ userId }, action) => {
 
   checkAndThrow(!action.canBeVerified(), ACT_CANNOT_VERIFY);
 
+  checkAndThrow(
+    !canCompleteActions(userId, action.organizationId),
+    ACT_COMPLETE_NO_PERMISSION,
+  );
+
   return { action };
 };
 
@@ -138,6 +145,11 @@ export const ACT_OnUndoVerificationChecker = ({ userId }, action) => {
   checkAndThrow(!Object.is(userId, action.verifiedBy), ACT_VERIFICATION_CANNOT_BE_UNDONE);
 
   checkAndThrow(!action.canVerificationBeUndone(), ACT_VERIFICATION_CANNOT_BE_UNDONE);
+
+  checkAndThrow(
+    !canCompleteActions(userId, action.organizationId),
+    ACT_COMPLETE_NO_PERMISSION,
+  );
 
   return { action };
 };
