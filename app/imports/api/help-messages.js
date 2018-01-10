@@ -62,7 +62,7 @@ const UserProfileHelp = {
   [UserRoles.DELETE_USERS]: 'Indicate whether this user can delete other users from your Plio organization',
   [UserRoles.EDIT_USER_ROLES]: 'Indicate whether this user can edit the User Superpowers section in the User profile (you should only grant this power to very few, highly trusted users)',
   [UserRoles.CHANGE_ORG_SETTINGS]: 'Indicate whether this user can edit the Organization settings (you should only grant this power to very few, highly trusted users)',
-  [UserRoles.COMPLETE_ACTIONS]: 'Indicate whether this user can complete any action in your Plio organization',
+  [UserRoles.COMPLETE_ACTIONS]: 'Indicate whether this user can complete/verify any action in your Plio organization',
 };
 
 export {
