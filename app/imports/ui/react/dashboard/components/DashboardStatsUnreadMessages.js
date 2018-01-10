@@ -58,8 +58,6 @@ DashboardStatsUnreadMessages.propTypes = {
   messages: PropTypes.arrayOf(PropTypes.object).isRequired,
   count: PropTypes.number.isRequired,
   markAllAsRead: PropTypes.func.isRequired,
-  loadAll: PropTypes.func.isRequired,
-  loadLimited: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   orgSerialNumber: PropTypes.number.isRequired,
   isLimitEnabled: PropTypes.bool,
