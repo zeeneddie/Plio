@@ -98,6 +98,7 @@ export const CollectionNames = {
   STANDARDS: 'Standards',
   WORK_ITEMS: 'WorkItems',
   USERS: 'users',
+  GOALS: 'Goals',
 };
 
 export const DefaultRiskTypes = [
@@ -237,7 +238,6 @@ export const ProblemMagnitudes = {
   CRITICAL: 'critical',
 };
 
-
 export const ProblemIndexes = {
   REPORTED: 1,
   AWAITING_ANALYSIS: 2,
@@ -363,6 +363,9 @@ export const StringLimits = {
   title: {
     min: 1,
     max: 80,
+  },
+  description: {
+    max: 240,
   },
   url: {
     min: 1,
@@ -712,3 +715,32 @@ export const WorkspaceDefaults = {
   [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: 1,
   [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 4,
 };
+
+export const GoalPriorities = { ...ProblemMagnitudes };
+
+export const GoalStatuses = {
+  AWAITING_COMPLETION: 1,
+  OVERDUE: 2,
+  COMPLETED: 3,
+};
+
+export const GoalStatusesNames = {
+  [GoalStatuses.AWAITING_COMPLETION]: 'Open - awaiting completion',
+  [GoalStatuses.OVERDUE]: 'Open - overdue',
+  [GoalStatuses.COMPLETED]: 'Closed - marked as complete',
+};
+
+export const GoalColors = [
+  '#8cd7e2',
+  '#5681a2',
+  '#8683b3',
+  '#c78282',
+  '#ecb096',
+  '#c5a06d',
+  '#b5b2ac',
+  '#9e898f',
+  '#71866c',
+  '#435860',
+  '#71d2b8',
+  '#88afdd',
+];
