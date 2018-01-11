@@ -1,5 +1,5 @@
 import { useWith, contains, view } from 'ramda';
-import lenses, { viewOr } from '../lenses';
+import { viewOr, lenses } from 'plio-util';
 
 // (department: Object) => (item: Object) => Boolean
 export default useWith(contains, [

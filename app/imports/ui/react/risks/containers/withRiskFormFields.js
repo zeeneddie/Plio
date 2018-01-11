@@ -1,7 +1,6 @@
 import connectUI from 'redux-ui';
 import { compose, withHandlers } from 'recompose';
-
-import { lenses, viewOr } from '../../../../client/util';
+import { lenses, viewOr } from 'plio-util';
 
 export default compose(
   connectUI({

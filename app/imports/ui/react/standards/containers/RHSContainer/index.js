@@ -12,9 +12,10 @@ import {
   identity,
   anyPass,
 } from 'ramda';
+import { lenses } from 'plio-util';
 
 import StandardsRHS from '../../components/RHS';
-import { lenses, getStandardsLength } from '../../../../../client/util';
+import { getStandardsLength } from '../../../../../client/util';
 import {
   getIsFullScreenMode,
   getIsCardReady,

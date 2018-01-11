@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withProps, compose, lifecycle } from 'recompose';
 import { map, values, view } from 'ramda';
+import { lenses } from 'plio-util';
 
 import { Select } from '../../../components';
 import { ProblemMagnitudes } from '../../../../../share/constants';
-import { lenses } from '../../../../../client/util';
 import { capitalize } from '../../../../../share/helpers';
 
 const enhance = compose(

@@ -1,6 +1,5 @@
 import { view, compose, pluck, complement } from 'ramda';
-
-import { lenses } from '../../../util';
+import { lenses } from 'plio-util';
 
 export const getRisksInitializing = view(lenses.risks.initializing);
 

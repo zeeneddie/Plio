@@ -1,6 +1,6 @@
 import { ascend, view } from 'ramda';
+import { lenses } from 'plio-util';
 
-import lenses from './lenses';
 /*
 interface Item {
   sequentialId: ID

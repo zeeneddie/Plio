@@ -1,5 +1,5 @@
 import { compose, view, length } from 'ramda';
-import lenses from './lenses';
+import { lenses } from 'plio-util';
 
 // ({ standards: Array }) => Number | Any
 export const getStandardsLength = compose(length, view(lenses.standards));

@@ -1,5 +1,5 @@
 import { compose, view, equals, curry, complement, eqProps } from 'ramda';
-import lenses from './lenses';
+import { lenses } from 'plio-util';
 
 // ({ isDeleted: Boolean }) => Boolean
 export const isDeleted = compose(equals(true), view(lenses.isDeleted));
