@@ -17,9 +17,9 @@ import {
   ACT_CANNOT_VERIFY,
   ACT_VERIFICATION_CANNOT_BE_UNDONE,
   ACT_ANALYSIS_MUST_BE_COMPLETED,
-  ACT_COMPLETE_NO_PERMISSION,
 } from '../errors';
 import { canCompleteActions } from '../checkers/roles';
+import { canBeCompleted } from './helpers';
 
 export const ACT_Check = function ACT_Check(_id) {
   return checkDocAndMembership(Actions, _id, this.userId);
@@ -100,13 +100,11 @@ export const ACT_OnLinkChecker = ({ documentId, documentType }, action) => {
 };
 
 export const ACT_OnCompleteChecker = ({ userId }, action) => {
-  checkAndThrow(userId !== action.toBeCompletedBy, ACT_CANNOT_COMPLETE);
-
-  checkAndThrow(!action.canBeCompleted(), ACT_CANNOT_COMPLETE);
+  const { organizationId, toBeCompletedBy } = action;
 
   checkAndThrow(
-    !canCompleteActions(userId, action.organizationId),
-    ACT_COMPLETE_NO_PERMISSION,
+    !canBeCompleted({ organizationId, toBeCompletedBy }, userId),
+    ACT_CANNOT_COMPLETE,
   );
 
   return { action };

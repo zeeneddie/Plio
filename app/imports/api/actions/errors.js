@@ -24,11 +24,5 @@ export const ACT_CANNOT_VERIFY = new E(400, 'This action cannot be verified');
 
 export const ACT_VERIFICATION_CANNOT_BE_UNDONE = new E(400, 'Verification of this action cannot be undone');
 
-export const ACT_COMPLETE_NO_PERMISSION = new E(
-  403,
-  // eslint-disable-next-line max-len
-  'You have no rights to complete/verify/undo completion/undo verification of this action. Ask the organization administrator to give you a permission.',
-);
-
 export const ACT_ANALYSIS_MUST_BE_COMPLETED = (title, sequentialId, analysisTitle) =>
   new E(400, `${analysisTitle} for ${sequentialId} "${title}" must be completed first`);
