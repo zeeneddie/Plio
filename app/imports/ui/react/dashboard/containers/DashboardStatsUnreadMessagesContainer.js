@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
 import { setPropTypes, withState, withHandlers, flattenProp, onlyUpdateForKeys } from 'recompose';
 
 import DashboardStatsUnreadMessages from '../components/DashboardStatsUnreadMessages';
@@ -54,6 +55,7 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
       orgSerialNumber,
       isLimitEnabled,
       limit,
+      displayMessages,
     };
 
     if (messagesSub.ready()) {
@@ -71,10 +73,8 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
   }),
   composeWithTracker(({
     organizationId,
-    orgSerialNumber,
-    loading,
-    isLimitEnabled,
     limit,
+    ...props
   }, onData) => {
     const query = { organizationId };
     const options = {
@@ -83,18 +83,32 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
     };
     const messages = Messages.find(query, options).fetch();
     const count = Counter.get(getCounterName(organizationId));
+
     onData(null, {
       messages,
       count,
-      orgSerialNumber,
-      loading,
-      isLimitEnabled,
+      organizationId,
+      ...props,
     });
   }),
+  withState('isOpen', 'setIsOpen', false),
   withHandlers({
-    loadAll: ({ setIsLimitEnabled }) => () => setIsLimitEnabled(false),
-    loadLimited: ({ setIsLimitEnabled }) => () => setIsLimitEnabled(true),
-    markAllAsRead: ({ organization: { _id } }) => () =>
-      updateViewedByOrganization.call({ _id }, handleMethodResult()),
+    toggle: ({
+      isOpen,
+      setIsOpen,
+      isLimitEnabled,
+      setIsLimitEnabled,
+    }) => () => {
+      setIsOpen(!isOpen, () => setIsLimitEnabled(!isLimitEnabled));
+    },
+    markAllAsRead: ({ organizationId }) => (e) => {
+      e.stopPropagation();
+      return updateViewedByOrganization.call({ _id: organizationId }, handleMethodResult());
+    },
   }),
-)(DashboardStatsUnreadMessages);
+)(({ messages, ...props }) => !!messages.length && (
+  <Fragment>
+    <hr />
+    <DashboardStatsUnreadMessages {...{ messages, ...props }} />
+  </Fragment>
+));
