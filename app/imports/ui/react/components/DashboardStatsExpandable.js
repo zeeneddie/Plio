@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { branch } from 'recompose';
-import { converge, gt, prop, identity, map, splitEvery } from 'ramda';
+import { converge, gt, prop, identity, map, splitEvery, either } from 'ramda';
 import styled from 'styled-components';
 
 import { DashboardStats, Collapse, ToggleAngleIcon } from './';
-import { withStateToggle } from '../helpers';
+import { withStateToggle, omitProps } from '../helpers';
 import { getItemsLength } from '../../../client/util';
 
 const StyledDashboardTitle = styled(({ toggle, ...rest }) => <DashboardStats.Title {...rest} />)`
@@ -16,18 +16,18 @@ const StyledDashboardTitle = styled(({ toggle, ...rest }) => <DashboardStats.Tit
 StyledDashboardTitle.displayName = 'DashboardStatsTitle';
 
 const itemsExceedLimit = converge(gt, [
-  getItemsLength,
+  either(prop('total'), getItemsLength),
   prop('itemsPerRow'),
 ]);
 
 export const enhance = branch(
-  prop('toggle'),
-  identity,
+  itemsExceedLimit,
   branch(
-    itemsExceedLimit,
-    withStateToggle(false, 'isOpen', 'toggle'),
+    prop('toggle'),
     identity,
+    withStateToggle(false, 'isOpen', 'toggle'),
   ),
+  omitProps(['toggle', 'isOpen']),
 );
 
 export const DashboardStatsExpandable = ({
@@ -38,7 +38,7 @@ export const DashboardStatsExpandable = ({
   render,
   renderIcon = ToggleAngleIcon,
   children,
-}) => !!items.length && (
+}) => (
   <DashboardStats>
     <StyledDashboardTitle onClick={toggle} {...{ toggle }}>
       {children}
@@ -62,9 +62,11 @@ DashboardStatsExpandable.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   itemsPerRow: PropTypes.number.isRequired,
   render: PropTypes.func.isRequired,
+  renderIcon: PropTypes.func,
   children: PropTypes.node,
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
+  total: PropTypes.number,
 };
 
 export default enhance(DashboardStatsExpandable);
