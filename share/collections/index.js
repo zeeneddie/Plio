@@ -18,3 +18,4 @@ export * from './standards-book-sections';
 export * from './standards-types';
 export * from './standards';
 export * from './work-items';
+export * from './milestones';
