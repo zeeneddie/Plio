@@ -99,7 +99,7 @@ export const CollectionNames = {
   WORK_ITEMS: 'WorkItems',
   USERS: 'users',
   GOALS: 'Goals',
-  MILESTONES: 'milestones',
+  MILESTONES: 'Milestones',
 };
 
 export const DefaultRiskTypes = [

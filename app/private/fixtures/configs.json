@@ -12,5 +12,6 @@
   "WorkItems": "workItems",
   "LessonsLearned": "lessonsLearned",
   "Discussions": "discussions",
-  "Goals": "goals"
+  "Goals": "goals",
+  "Milestones": "milestones"
 }

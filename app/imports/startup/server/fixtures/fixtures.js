@@ -21,6 +21,7 @@ import {
   LessonsLearned,
   Discussions,
   Goals,
+  Milestones,
 } from '../../../share/collections';
 // import { insertMessageFixtures } from './fixtures-messages';
 
@@ -39,6 +40,7 @@ Object.assign(global, {
   LessonsLearned,
   Discussions,
   Goals,
+  Milestones,
 });
 
 // If attrPath is 'Organization' and obj is global, it returns the value of global.Organization
