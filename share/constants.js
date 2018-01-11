@@ -99,6 +99,7 @@ export const CollectionNames = {
   WORK_ITEMS: 'WorkItems',
   USERS: 'users',
   GOALS: 'Goals',
+  MILESTONES: 'milestones',
 };
 
 export const DefaultRiskTypes = [
@@ -751,3 +752,16 @@ export const AllowedActionLinkedDocTypes = [
   // TODO: allow it only for general actions
   DocumentTypes.GOAL,
 ];
+export const AllowedMilestoneLinkedDocTypes = [
+  DocumentTypes.GOAL,
+];
+
+export const MilestoneStatuses = {
+  OPEN: 1,
+  COMPLETED: 2,
+};
+
+export const MilestoneStatusNames = {
+  [MilestoneStatuses.OPEN]: 'Open',
+  [MilestoneStatuses.COMPLETED]: 'Completed',
+};

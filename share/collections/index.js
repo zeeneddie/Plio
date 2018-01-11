@@ -19,3 +19,4 @@ export * from './standards-types';
 export * from './standards';
 export * from './work-items';
 export * from './goals';
+export * from './milestones';
