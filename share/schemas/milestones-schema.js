@@ -2,18 +2,12 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import {
   BaseEntitySchema,
-  ownerIdSchema,
-  standardStatusSchema,
-  issueNumberSchema,
   getNotifySchema,
 } from './schemas';
 import { StringLimits, AllowedMilestoneLinkedDocTypes, MilestoneStatuses } from '../constants';
 
 export const MilestonesSchema = new SimpleSchema([
   BaseEntitySchema,
-  ownerIdSchema,
-  standardStatusSchema,
-  issueNumberSchema,
   getNotifySchema('ownerId'),
   {
     title: {
