@@ -730,6 +730,17 @@ export const GoalStatusesNames = {
   [GoalStatuses.COMPLETED]: 'Closed - marked as complete',
 };
 
-export const GoalColors = {
-  // ?
-};
+export const GoalColors = [
+  '#8cd7e2',
+  '#5681a2',
+  '#8683b3',
+  '#c78282',
+  '#ecb096',
+  '#c5a06d',
+  '#b5b2ac',
+  '#9e898f',
+  '#71866c',
+  '#435860',
+  '#71d2b8',
+  '#88afdd',
+];
