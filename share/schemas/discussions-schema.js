@@ -18,6 +18,7 @@ export const DiscussionsSchema = new SimpleSchema([
   {
     documentType: {
       type: String,
+      // TODO: pick only needed document types
       allowedValues: _.values(DocumentTypes),
     },
     linkedTo: idSchemaDoc,

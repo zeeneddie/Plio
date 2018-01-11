@@ -295,6 +295,7 @@ export const ProblemTypes = {
 
 export const DocumentTypes = {
   STANDARD: 'standard',
+  GOAL: 'goal',
   ...ProblemTypes,
   ...ActionTypes,
 };
@@ -364,6 +365,9 @@ export const StringLimits = {
   title: {
     min: 1,
     max: 80,
+  },
+  description: {
+    max: 240,
   },
   url: {
     min: 1,
@@ -712,4 +716,18 @@ export const WorkspaceDefaults = {
   [WorkspaceDefaultsTypes.DISPLAY_USERS]: 5,
   [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: 1,
   [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 4,
+};
+
+export const AllowedMilestoneLinkedDocTypes = [
+  DocumentTypes.GOAL,
+];
+
+export const MilestoneStatuses = {
+  OPEN: 1,
+  COMPLETED: 2,
+};
+
+export const MilestoneStatusNames = {
+  [MilestoneStatuses.OPEN]: 'Open',
+  [MilestoneStatuses.COMPLETED]: 'Completed',
 };
