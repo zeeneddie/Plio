@@ -3,11 +3,13 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import {
   BaseEntitySchema,
   getNotifySchema,
+  OrganizationIdSchema,
 } from './schemas';
 import { StringLimits, AllowedMilestoneLinkedDocTypes, MilestoneStatuses } from '../constants';
 
 export const MilestonesSchema = new SimpleSchema([
   BaseEntitySchema,
+  OrganizationIdSchema,
   getNotifySchema('ownerId'),
   {
     title: {
