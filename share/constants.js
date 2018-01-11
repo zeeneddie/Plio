@@ -294,6 +294,7 @@ export const ProblemTypes = {
 
 export const DocumentTypes = {
   STANDARD: 'standard',
+  GOAL: 'goal',
   ...ProblemTypes,
   ...ActionTypes,
 };
@@ -712,3 +713,9 @@ export const WorkspaceDefaults = {
   [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: 1,
   [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 4,
 };
+
+export const AllowedActionLinkedDocTypes = [
+  ...Object.values(ProblemTypes),
+  // TODO: allow it only for general actions
+  DocumentTypes.GOAL,
+];
