@@ -1,33 +1,45 @@
 import { Meteor } from 'meteor/meteor';
-
-// Import all collections that should be filled with fixture data here
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { Occurrences } from '/imports/share/collections/occurrences.js';
-import { Standards } from '/imports/share/collections/standards.js';
-import { StandardTypes } from '/imports/share/collections/standards-types.js';
-import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Actions } from '/imports/share/collections/actions.js';
-import { RiskTypes } from '/imports/share/collections/risk-types.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { WorkItems } from '/imports/share/collections/work-items.js';
-import { LessonsLearned } from '/imports/share/collections/lessons.js';
-import { Discussions } from '/imports/share/collections/discussions.js';
-
-import { insertMessageFixtures } from './fixtures-messages.js';
-
-import AuditManager from '/imports/share/utils/audit-manager.js';
-
-// Extend the global object to have a scope of collections
-_.extend(global, {
-  Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, LessonsLearned, Discussions,
-});
-
+import { EJSON } from 'meteor/ejson';
 import path from 'path';
 import fs from 'fs';
-import { EJSON } from 'meteor/ejson';
+import { _ } from 'meteor/underscore';
 
-import { UserRoles } from '/imports/share/constants.js';
+import AuditManager from '/imports/share/utils/audit-manager';
+import { UserRoles } from '/imports/share/constants';
+// Import all collections that should be filled with fixture data here
+import {
+  Organizations,
+  Occurrences,
+  Standards,
+  StandardTypes,
+  StandardsBookSections,
+  NonConformities,
+  Actions,
+  RiskTypes,
+  Risks,
+  WorkItems,
+  LessonsLearned,
+  Discussions,
+  Goals,
+} from '../../../share/collections';
+// import { insertMessageFixtures } from './fixtures-messages';
+
+// Extend the global object to have a scope of collections
+Object.assign(global, {
+  Organizations,
+  Occurrences,
+  Standards,
+  StandardTypes,
+  StandardsBookSections,
+  NonConformities,
+  Actions,
+  RiskTypes,
+  Risks,
+  WorkItems,
+  LessonsLearned,
+  Discussions,
+  Goals,
+});
 
 // If attrPath is 'Organization' and obj is global, it returns the value of global.Organization
 // If attrPath is 'Meteor.users' and obj is this, it returns the value of this.Meteor.users
