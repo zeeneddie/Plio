@@ -6,7 +6,7 @@
   "endDate": { "$date": 1523442822791 },
   "status": 1,
   "priority": "minor",
-  "isCompleted": "false",
+  "isCompleted": false,
   "ownerId": "SQHmBKJ94gJvpLKLt",
   "serialNumber": 1,
   "sequentialId": "KG1",

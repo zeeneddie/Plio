@@ -6,7 +6,7 @@
   "endDate": { "$date": 1570098822791 },
   "status": 1,
   "priority": "major",
-  "isCompleted": "true",
+  "isCompleted": true,
   "completedAt": { "$date": 1515670311424 },
   "completedBy": "SQHmBKJ94gJvpLKLt",
   "ownerId": "SQHmBKJ94gJvpLKLt",
