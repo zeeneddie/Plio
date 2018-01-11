@@ -15,6 +15,7 @@ import {
   ActionStatuses,
   ProblemTypes,
   StringLimits,
+  AllowedActionLinkedDocTypes,
 } from '../constants';
 
 
@@ -33,7 +34,7 @@ const linkedToSchema = new SimpleSchema({
   },
   documentType: {
     type: String,
-    allowedValues: Object.values(ProblemTypes),
+    allowedValues: AllowedActionLinkedDocTypes,
   },
 });
 

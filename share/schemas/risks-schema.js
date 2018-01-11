@@ -1,12 +1,10 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { _ } from 'meteor/underscore';
 
 import {
   BaseEntitySchema,
   BaseProblemsRequiredSchema,
   BaseProblemsOptionalSchema,
   ReviewSchema,
-  ImprovementPlanSchema,
   FileIdsSchema,
   getNotifySchema,
 } from './schemas';
@@ -132,6 +130,11 @@ const RisksSchema = new SimpleSchema([
     workflowType: {
       type: String,
       allowedValues: Object.values(WorkflowTypes),
+    },
+    goalsIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
     },
   },
 ]);

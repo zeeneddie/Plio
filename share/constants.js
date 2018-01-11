@@ -294,6 +294,7 @@ export const ProblemTypes = {
 
 export const DocumentTypes = {
   STANDARD: 'standard',
+  GOAL: 'goal',
   ...ProblemTypes,
   ...ActionTypes,
 };
@@ -743,4 +744,10 @@ export const GoalColors = [
   '#435860',
   '#71d2b8',
   '#88afdd',
+];
+
+export const AllowedActionLinkedDocTypes = [
+  ...Object.values(ProblemTypes),
+  // TODO: allow it only for general actions
+  DocumentTypes.GOAL,
 ];
