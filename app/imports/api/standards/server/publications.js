@@ -11,11 +11,10 @@ import { Departments } from '/imports/share/collections/departments';
 import { Reviews } from '/imports/share/collections/reviews';
 import Counter from '../../counter/server';
 import { ActionTypes, DocumentTypes } from '/imports/share/constants';
-import get from 'lodash.get';
 import { check } from 'meteor/check';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
-import { RiskTypes } from '/imports/share/collections/risk-types.js';
+import { RiskTypes } from '/imports/share/collections/risk-types';
 import {
   makeOptionsFields,
   getCursorNonDeleted,
@@ -33,6 +32,8 @@ import {
   createProblemsTree,
 } from '../../problems/utils';
 import { getPublishCompositeOrganizationUsers } from '/imports/server/helpers/pub-helpers';
+import { publishWithMiddleware } from '../../helpers/server';
+import { checkLoggedIn, checkOrgMembership } from '../../middleware';
 
 const getStandardFiles = ({
   improvementPlan: {
@@ -200,18 +201,16 @@ Meteor.publish('standardsDeps', function (organizationId) {
   ];
 });
 
-Meteor.publish('standardsCount', function (counterName, organizationId) {
-  const userId = this.userId;
-
-  if (!userId || !isOrgMember(userId, organizationId)) {
-    return this.ready();
-  }
-
-  return new Counter(counterName, Standards.find({
+publishWithMiddleware(
+  ({ counterName, organizationId }) => new Counter(counterName, Standards.find({
     organizationId,
     isDeleted: { $in: [false, null] },
-  }));
-});
+  })),
+  {
+    name: 'standardsCount',
+    middleware: [checkLoggedIn(), checkOrgMembership()],
+  },
+);
 
 Meteor.publish('standardsNotViewedCount', function (counterName, organizationId) {
   const userId = this.userId;
