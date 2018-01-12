@@ -1,17 +1,26 @@
 import {
-  is,
   equals,
-  propEq,
   allPass,
   compose,
-  prop,
   complement,
   flip,
   anyPass,
   useWith,
   identity,
+  view,
 } from 'ramda';
 import moment from 'moment-timezone';
+import {
+  isCompleted,
+  isVerified,
+  eqToBeCompletedBy,
+  eqToBeVerifiedBy,
+  eqCompletedBy,
+  eqVerifiedBy,
+  isCompletedAtDate,
+  isVerifiedAtDate,
+} from 'plio-util';
+import { completedAt, verifiedAt, organizationId } from 'plio-util/dist/lenses';
 
 import { ActionTypes, ActionUndoTimeInHours } from '../../share/constants';
 import { canCompleteActions } from '../checkers/roles';
@@ -56,25 +65,16 @@ export const splitActionsByType = (actions) => {
   }, map);
 };
 
-export const isDate = is(Date);
-export const isCompleted = propEq('isCompleted', true);
-export const isVerified = propEq('isVerified', true);
-export const isVerifiedAtDate = compose(isDate, prop('verifiedAt'));
-export const isCompletedAtDate = compose(isDate, prop('completedAt'));
-export const eqCompletedBy = propEq('completedBy');
-export const eqVerifiedBy = propEq('verifiedBy');
-export const eqToBeCompletedBy = propEq('toBeCompletedBy');
-export const eqToBeVerified = propEq('toBeVerified');
 export const isDeadlinePassed = (date) => {
   const undoDeadline = moment(date).add(ActionUndoTimeInHours, 'hours');
 
   return undoDeadline.isAfter(new Date());
 };
-export const isCompletedAtDeadlinePassed = compose(isDeadlinePassed, prop('completedAt'));
-export const isVerifiedAtDeadlinePassed = compose(isDeadlinePassed, prop('verifiedAt'));
+export const isCompletedAtDeadlinePassed = compose(isDeadlinePassed, view(completedAt));
+export const isVerifiedAtDeadlinePassed = compose(isDeadlinePassed, view(verifiedAt));
 // ({ organizationId: String }: Object, userId: String) => Boolean
 export const hasRoleToComplete = useWith(flip(canCompleteActions), [
-  prop('organizationId'),
+  view(organizationId),
   identity,
 ]);
 
@@ -102,7 +102,7 @@ export const canBeVerified = allPass([
   isCompleted,
   complement(isVerified),
   anyPass([
-    flip(eqToBeVerified),
+    flip(eqToBeVerifiedBy),
     hasRoleToComplete,
   ]),
 ]);
