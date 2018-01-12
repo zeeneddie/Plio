@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import pluralize from 'pluralize';
 import { onlyUpdateForKeys } from 'recompose';
+import { joinIds } from 'plio-util';
 
 import { DashboardStatsExpandable, PlusButton } from '../../components';
 import DashboardStatsUserList from './DashboardStatsUserList';
-import { joinIds } from '../../../../client/util';
 
 const enhance = onlyUpdateForKeys(['users', 'usersPerRow', 'canInviteUsers']);
 
