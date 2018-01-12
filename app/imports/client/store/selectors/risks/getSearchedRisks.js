@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
+import { filterBySearchMeta } from 'plio-util';
 
 import { getSearchText } from '../global';
 import { getRisksFiltered, getRisks } from './state';
-import { filterBySearchMeta } from '../../../util';
 
 export default createSelector([
   getSearchText,

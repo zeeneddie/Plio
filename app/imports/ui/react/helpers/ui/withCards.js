@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import { Random } from 'meteor/random';
 import { reject } from 'ramda';
 import { compose, withHandlers } from 'recompose';
-import { lenses } from 'plio-util';
-
-import { lensEq } from '../../../../client/util';
+import { lenses, lensEq } from 'plio-util';
 
 export const UI_ADD_CARD = 'UI_ADD_CARD';
 

@@ -1,6 +1,6 @@
+import { findByIds } from 'plio-util';
 import getSearchedRisks from '../getSearchedRisks';
 import { getInitialState } from '../../../util/tests';
-import { findByIds } from '../../../../util';
 
 describe('getSearchedRisks', () => {
   it('filters searched risks', () => {
