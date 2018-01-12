@@ -47,7 +47,12 @@ describe('DashboardUserStats', () => {
     const users = genUsers(2);
     const usersPerRow = 5;
     const onInvite = () => __modal__.modal.open();
-    const wrapper = shallow(<DashboardUserStats {...{ users, usersPerRow, onInvite }} />);
+    const wrapper = shallow(
+      <DashboardUserStats
+        canInviteUsers
+        {...{ users, usersPerRow, onInvite }}
+      />,
+    );
 
     expect(wrapper.find(PlusButton)).toHaveLength(1);
     wrapper.find(PlusButton).simulate('click');
@@ -58,12 +63,16 @@ describe('DashboardUserStats', () => {
     const users = genUsers(25);
     const usersPerRow = 5;
     const onInvite = jest.fn();
-    const wrapper = shallow(<DashboardUserStats {...{
-      users,
-      usersPerRow,
-      onInvite,
-    }}
-    />);
+    const wrapper = shallow(
+      <DashboardUserStats
+        canInviteUsers
+        {...{
+          users,
+          usersPerRow,
+          onInvite,
+        }}
+      />,
+    );
     expect(wrapper).toMatchSnapshot();
   });
 });

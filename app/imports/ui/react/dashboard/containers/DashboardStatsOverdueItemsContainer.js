@@ -1,5 +1,6 @@
 import { setPropTypes, withState, withHandlers, flattenProp, onlyUpdateForKeys } from 'recompose';
 import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { map, view } from 'ramda';
 import { lenses } from 'plio-util';
@@ -13,7 +14,11 @@ import {
   WorkspaceDefaultsTypes,
   WorkItemStatuses,
 } from '../../../../share/constants';
-import { WorkItemSubs, CountSubs } from '../../../../startup/client/subsmanagers';
+import {
+  WorkItemSubs,
+  CountSubs,
+  BackgroundSubs,
+} from '../../../../startup/client/subsmanagers';
 import Counter from '../../../../api/counter/client';
 import { WorkItems } from '../../../../share/collections';
 
@@ -48,6 +53,7 @@ export default namedCompose('DashboardStatsOverdueItemsContainer')(
       itemsPerRow,
       organizationId,
       orgSerialNumber,
+      limit,
     };
 
     if (workItemsSub.ready()) {
@@ -59,10 +65,9 @@ export default namedCompose('DashboardStatsOverdueItemsContainer')(
     propsToWatch: ['isLimitEnabled', '_id', WorkspaceDefaultsTypes.DISPLAY_ACTIONS],
   }),
   composeWithTracker(({
-    loading,
+    limit,
     organizationId,
-    orgSerialNumber,
-    itemsPerRow,
+    ...props
   }, onData) => {
     const query = {
       organizationId,
@@ -71,6 +76,7 @@ export default namedCompose('DashboardStatsOverdueItemsContainer')(
       isDeleted: { $ne: true },
     };
     const options = {
+      limit,
       sort: {
         targetDate: -1, // New overdue items first
       },
@@ -84,29 +90,29 @@ export default namedCompose('DashboardStatsOverdueItemsContainer')(
       },
     };
     const workItems = WorkItems.find(query, options).fetch();
+    const linkedDocIds = map(view(lenses.linkedDoc._id), workItems);
     const count = Counter.get(getCounterName(organizationId));
 
     onData(null, {
       workItems,
-      itemsPerRow,
+      linkedDocIds,
       count,
-      orgSerialNumber,
-      loading,
+      organizationId,
+      ...props,
     });
   }),
-  composeWithTracker(({ workItems, ...props }, onData) => {
-    const ids = map(view(lenses.linkedDoc._id), workItems);
-    const subs = [
-      Meteor.subscribe('nonConformitiesByIds', ids),
-      Meteor.subscribe('risksByIds', ids),
-      Meteor.subscribe('actionsByIds', ids),
-    ];
+  composeWithTracker(({
+    workItems,
+    linkedDocIds,
+    ...props
+  }, onData) => {
+    BackgroundSubs.subscribe('nonConformitiesByIds', linkedDocIds);
+    BackgroundSubs.subscribe('risksByIds', linkedDocIds);
+    BackgroundSubs.subscribe('actionsByIds', linkedDocIds);
 
     onData(null, { workItems, ...props });
-
-    return () => subs.forEach(sub => sub.stop());
   }, {
-    propsToWatch: ['workItems'],
+    propsToWatch: ['linkedDocIds'],
   }),
   withState('isOpen', 'setIsOpen', false),
   withHandlers({
@@ -115,9 +121,11 @@ export default namedCompose('DashboardStatsOverdueItemsContainer')(
       setIsOpen,
       isLimitEnabled,
       setIsLimitEnabled,
-    }) => () => {
-      setIsLimitEnabled(!isLimitEnabled);
-      setIsOpen(!isOpen);
-    },
+    }) => () => setIsOpen(!isOpen, () => setIsLimitEnabled(!isLimitEnabled)),
   }),
-)(DashboardStatsOverdueItems);
+)(({ workItems, ...props }) => !!workItems.length && (
+  <Fragment>
+    <hr />
+    <DashboardStatsOverdueItems {...{ workItems, ...props }} />
+  </Fragment>
+));

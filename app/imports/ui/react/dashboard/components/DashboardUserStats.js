@@ -7,12 +7,13 @@ import { joinIds } from 'plio-util';
 import { DashboardStatsExpandable, PlusButton } from '../../components';
 import DashboardStatsUserList from './DashboardStatsUserList';
 
-const enhance = onlyUpdateForKeys(['users', 'usersPerRow']);
+const enhance = onlyUpdateForKeys(['users', 'usersPerRow', 'canInviteUsers']);
 
 export const DashboardUserStats = ({
   users,
   usersPerRow,
   onInvite,
+  canInviteUsers,
 }) => (
   <DashboardStatsExpandable
     items={users}
@@ -23,7 +24,7 @@ export const DashboardUserStats = ({
       </div>
     )}
   >
-    <PlusButton size="1" onClick={onInvite} />
+    {!!canInviteUsers && <PlusButton size="1" onClick={onInvite} />}
     {pluralize('user', users.length, true)} online
   </DashboardStatsExpandable>
 );
@@ -32,6 +33,7 @@ DashboardUserStats.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object).isRequired,
   usersPerRow: PropTypes.number.isRequired,
   onInvite: PropTypes.func.isRequired,
+  canInviteUsers: PropTypes.bool,
 };
 
 export default enhance(DashboardUserStats);

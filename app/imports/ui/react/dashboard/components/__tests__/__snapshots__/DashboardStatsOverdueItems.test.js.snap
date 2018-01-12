@@ -172,8 +172,9 @@ exports[`DashboardStatsOverdueItems renders correctly 1`] = `
     itemsPerRow={5}
     render={[Function]}
     toggle={[Function]}
+    total={25}
   >
-    <DashboardStatsExpandable
+    <branch(DashboardStatsExpandable)
       isOpen={false}
       items={
         Array [
@@ -257,135 +258,206 @@ exports[`DashboardStatsOverdueItems renders correctly 1`] = `
       itemsPerRow={5}
       render={[Function]}
       toggle={[Function]}
+      total={25}
     >
-      <DashboardStats>
-        <div
-          className="dashboard-stats"
-        >
-          <DashboardStatsTitle
-            onClick={[Function]}
-            toggle={[Function]}
+      <DashboardStatsExpandable
+        isOpen={false}
+        items={
+          Array [
+            Object {
+              "_id": 0,
+            },
+            Object {
+              "_id": 1,
+            },
+            Object {
+              "_id": 2,
+            },
+            Object {
+              "_id": 3,
+            },
+            Object {
+              "_id": 4,
+            },
+            Object {
+              "_id": 5,
+            },
+            Object {
+              "_id": 6,
+            },
+            Object {
+              "_id": 7,
+            },
+            Object {
+              "_id": 8,
+            },
+            Object {
+              "_id": 9,
+            },
+            Object {
+              "_id": 10,
+            },
+            Object {
+              "_id": 11,
+            },
+            Object {
+              "_id": 12,
+            },
+            Object {
+              "_id": 13,
+            },
+            Object {
+              "_id": 14,
+            },
+            Object {
+              "_id": 15,
+            },
+            Object {
+              "_id": 16,
+            },
+            Object {
+              "_id": 17,
+            },
+            Object {
+              "_id": 18,
+            },
+            Object {
+              "_id": 19,
+            },
+            Object {
+              "_id": 20,
+            },
+            Object {
+              "_id": 21,
+            },
+            Object {
+              "_id": 22,
+            },
+            Object {
+              "_id": 23,
+            },
+            Object {
+              "_id": 24,
+            },
+          ]
+        }
+        itemsPerRow={5}
+        render={[Function]}
+        toggle={[Function]}
+        total={25}
+      >
+        <DashboardStats>
+          <div
+            className="dashboard-stats"
           >
-            <Component
-              className="sc-bwzfXH goQqlY"
+            <DashboardStatsTitle
               onClick={[Function]}
               toggle={[Function]}
             >
-              <DashboardStatsTitle
+              <Component
                 className="sc-bwzfXH goQqlY"
                 onClick={[Function]}
+                toggle={[Function]}
               >
-                <h4
-                  className="dashboard-stats-title sc-bwzfXH goQqlY"
+                <DashboardStatsTitle
+                  className="sc-bwzfXH goQqlY"
                   onClick={[Function]}
                 >
-                  25 overdue work items
-                   
-                  <ToggleAngleIcon
-                    isOpen={false}
-                    name="angle-down"
-                    toggle={[Function]}
+                  <h4
+                    className="dashboard-stats-title sc-bwzfXH goQqlY"
+                    onClick={[Function]}
                   >
-                    <Icon
-                      className="sc-bdVaJa kTCbom"
+                    25 overdue work items
+                     
+                    <ToggleAngleIcon
                       isOpen={false}
                       name="angle-down"
                       toggle={[Function]}
                     >
-                      <FaSize
-                        prefix=""
-                        size={1}
+                      <Icon
+                        className="sc-bdVaJa kTCbom"
+                        isOpen={false}
+                        name="angle-down"
+                        toggle={[Function]}
                       >
-                        <i
-                          className="fa fa-angle-down sc-bdVaJa kTCbom"
-                        />
-                      </FaSize>
-                    </Icon>
-                  </ToggleAngleIcon>
-                </h4>
-              </DashboardStatsTitle>
-            </Component>
-          </DashboardStatsTitle>
-          <div
-            key="0 1 2 3 4"
-          >
-            <DashboardStatsActionContainer(DashboardStatsAction)
-              _id={0}
-              key="0"
-              orgSerialNumber={1}
+                        <FaSize
+                          prefix=""
+                          size={1}
+                        >
+                          <i
+                            className="fa fa-angle-down sc-bdVaJa kTCbom"
+                          />
+                        </FaSize>
+                      </Icon>
+                    </ToggleAngleIcon>
+                  </h4>
+                </DashboardStatsTitle>
+              </Component>
+            </DashboardStatsTitle>
+            <div
+              key="0 1 2 3 4"
             >
-              <Container(mapProps(DashboardStatsAction))
+              <DashboardStatsActionContainer(DashboardStatsAction)
                 _id={0}
+                key="0"
                 orgSerialNumber={1}
-              />
-            </DashboardStatsActionContainer(DashboardStatsAction)>
-            <DashboardStatsActionContainer(DashboardStatsAction)
-              _id={1}
-              key="1"
-              orgSerialNumber={1}
-            >
-              <Container(mapProps(DashboardStatsAction))
+              >
+                <Container(mapProps(DashboardStatsAction))
+                  _id={0}
+                  orgSerialNumber={1}
+                />
+              </DashboardStatsActionContainer(DashboardStatsAction)>
+              <DashboardStatsActionContainer(DashboardStatsAction)
                 _id={1}
+                key="1"
                 orgSerialNumber={1}
-              />
-            </DashboardStatsActionContainer(DashboardStatsAction)>
-            <DashboardStatsActionContainer(DashboardStatsAction)
-              _id={2}
-              key="2"
-              orgSerialNumber={1}
-            >
-              <Container(mapProps(DashboardStatsAction))
+              >
+                <Container(mapProps(DashboardStatsAction))
+                  _id={1}
+                  orgSerialNumber={1}
+                />
+              </DashboardStatsActionContainer(DashboardStatsAction)>
+              <DashboardStatsActionContainer(DashboardStatsAction)
                 _id={2}
+                key="2"
                 orgSerialNumber={1}
-              />
-            </DashboardStatsActionContainer(DashboardStatsAction)>
-            <DashboardStatsActionContainer(DashboardStatsAction)
-              _id={3}
-              key="3"
-              orgSerialNumber={1}
-            >
-              <Container(mapProps(DashboardStatsAction))
+              >
+                <Container(mapProps(DashboardStatsAction))
+                  _id={2}
+                  orgSerialNumber={1}
+                />
+              </DashboardStatsActionContainer(DashboardStatsAction)>
+              <DashboardStatsActionContainer(DashboardStatsAction)
                 _id={3}
+                key="3"
                 orgSerialNumber={1}
-              />
-            </DashboardStatsActionContainer(DashboardStatsAction)>
-            <DashboardStatsActionContainer(DashboardStatsAction)
-              _id={4}
-              key="4"
-              orgSerialNumber={1}
-            >
-              <Container(mapProps(DashboardStatsAction))
+              >
+                <Container(mapProps(DashboardStatsAction))
+                  _id={3}
+                  orgSerialNumber={1}
+                />
+              </DashboardStatsActionContainer(DashboardStatsAction)>
+              <DashboardStatsActionContainer(DashboardStatsAction)
                 _id={4}
+                key="4"
                 orgSerialNumber={1}
-              />
-            </DashboardStatsActionContainer(DashboardStatsAction)>
-          </div>
-          <Collapse
-            isOpen={false}
-          >
+              >
+                <Container(mapProps(DashboardStatsAction))
+                  _id={4}
+                  orgSerialNumber={1}
+                />
+              </DashboardStatsActionContainer(DashboardStatsAction)>
+            </div>
             <Collapse
-              appear={false}
-              className=""
-              enter={true}
-              exit={true}
-              in={false}
               isOpen={false}
-              mountOnEnter={false}
-              onEnter={[Function]}
-              onEntered={[Function]}
-              onEntering={[Function]}
-              onExit={[Function]}
-              onExited={[Function]}
-              onExiting={[Function]}
-              tag="div"
-              timeout={350}
-              unmountOnExit={false}
             >
-              <Transition
+              <Collapse
                 appear={false}
+                className=""
                 enter={true}
                 exit={true}
                 in={false}
+                isOpen={false}
                 mountOnEnter={false}
                 onEnter={[Function]}
                 onEntered={[Function]}
@@ -393,236 +465,253 @@ exports[`DashboardStatsOverdueItems renders correctly 1`] = `
                 onExit={[Function]}
                 onExited={[Function]}
                 onExiting={[Function]}
+                tag="div"
                 timeout={350}
                 unmountOnExit={false}
               >
-                <div
-                  className="collapse"
-                  style={Object {}}
+                <Transition
+                  appear={false}
+                  enter={true}
+                  exit={true}
+                  in={false}
+                  mountOnEnter={false}
+                  onEnter={[Function]}
+                  onEntered={[Function]}
+                  onEntering={[Function]}
+                  onExit={[Function]}
+                  onExited={[Function]}
+                  onExiting={[Function]}
+                  timeout={350}
+                  unmountOnExit={false}
                 >
                   <div
-                    key="5 6 7 8 9"
+                    className="collapse"
+                    style={Object {}}
                   >
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={5}
-                      key="5"
-                      orgSerialNumber={1}
+                    <div
+                      key="5 6 7 8 9"
                     >
-                      <Container(mapProps(DashboardStatsAction))
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={5}
+                        key="5"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={6}
-                      key="6"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={5}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={6}
+                        key="6"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={7}
-                      key="7"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={6}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={7}
+                        key="7"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={8}
-                      key="8"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={7}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={8}
+                        key="8"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={9}
-                      key="9"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={8}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={9}
+                        key="9"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                  </div>
-                  <div
-                    key="10 11 12 13 14"
-                  >
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={10}
-                      key="10"
-                      orgSerialNumber={1}
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={9}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                    </div>
+                    <div
+                      key="10 11 12 13 14"
                     >
-                      <Container(mapProps(DashboardStatsAction))
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={10}
+                        key="10"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={11}
-                      key="11"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={10}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={11}
+                        key="11"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={12}
-                      key="12"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={11}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={12}
+                        key="12"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={13}
-                      key="13"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={12}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={13}
+                        key="13"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={14}
-                      key="14"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={13}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={14}
+                        key="14"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                  </div>
-                  <div
-                    key="15 16 17 18 19"
-                  >
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={15}
-                      key="15"
-                      orgSerialNumber={1}
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={14}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                    </div>
+                    <div
+                      key="15 16 17 18 19"
                     >
-                      <Container(mapProps(DashboardStatsAction))
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={15}
+                        key="15"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={16}
-                      key="16"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={15}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={16}
+                        key="16"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={17}
-                      key="17"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={16}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={17}
+                        key="17"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={18}
-                      key="18"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={17}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={18}
+                        key="18"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={19}
-                      key="19"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={18}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={19}
+                        key="19"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                  </div>
-                  <div
-                    key="20 21 22 23 24"
-                  >
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={20}
-                      key="20"
-                      orgSerialNumber={1}
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={19}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                    </div>
+                    <div
+                      key="20 21 22 23 24"
                     >
-                      <Container(mapProps(DashboardStatsAction))
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={20}
+                        key="20"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={21}
-                      key="21"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={20}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={21}
+                        key="21"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={22}
-                      key="22"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={21}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={22}
+                        key="22"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={23}
-                      key="23"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={22}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={23}
+                        key="23"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
-                    <DashboardStatsActionContainer(DashboardStatsAction)
-                      _id={24}
-                      key="24"
-                      orgSerialNumber={1}
-                    >
-                      <Container(mapProps(DashboardStatsAction))
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={23}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                      <DashboardStatsActionContainer(DashboardStatsAction)
                         _id={24}
+                        key="24"
                         orgSerialNumber={1}
-                      />
-                    </DashboardStatsActionContainer(DashboardStatsAction)>
+                      >
+                        <Container(mapProps(DashboardStatsAction))
+                          _id={24}
+                          orgSerialNumber={1}
+                        />
+                      </DashboardStatsActionContainer(DashboardStatsAction)>
+                    </div>
                   </div>
-                </div>
-              </Transition>
+                </Transition>
+              </Collapse>
             </Collapse>
-          </Collapse>
-        </div>
-      </DashboardStats>
-    </DashboardStatsExpandable>
+          </div>
+        </DashboardStats>
+      </DashboardStatsExpandable>
+    </branch(DashboardStatsExpandable)>
   </branch(DashboardStatsExpandable)>
 </DashboardStatsOverdueItems>
 `;
