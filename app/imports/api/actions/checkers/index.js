@@ -1,12 +1,12 @@
-import { NonConformities } from '../../share/collections/non-conformities';
-import { Risks } from '../../share/collections/risks';
-import { Actions } from '../../share/collections/actions';
-import { ProblemTypes, ActionTypes, WorkflowTypes } from '../../share/constants';
-import { AnalysisTitles } from '../constants';
-import { checkAndThrow } from '../helpers';
-import { capitalize } from '../../share/helpers';
+import { NonConformities } from '../../../share/collections/non-conformities';
+import { Risks } from '../../../share/collections/risks';
+import { Actions } from '../../../share/collections/actions';
+import { ProblemTypes, ActionTypes, WorkflowTypes } from '../../../share/constants';
+import { AnalysisTitles } from '../../constants';
+import { checkAndThrow } from '../../helpers';
+import { capitalize } from '../../../share/helpers';
 
-import { checkDocAndMembership, checkDocAndMembershipAndMore } from '../checkers';
+import { checkDocAndMembership, checkDocAndMembershipAndMore } from '../../checkers';
 import {
   INVALID_DOC_TYPE,
   DOC_NOT_FOUND,
@@ -17,9 +17,18 @@ import {
   ACT_CANNOT_VERIFY,
   ACT_VERIFICATION_CANNOT_BE_UNDONE,
   ACT_ANALYSIS_MUST_BE_COMPLETED,
-} from '../errors';
-import { canCompleteActions } from '../checkers/roles';
-import { canBeCompleted } from './helpers';
+} from '../../errors';
+import { canCompleteActions } from '../../checkers/roles';
+import { canBeCompleted } from './../helpers';
+
+export { default as canBeCompleted } from './canBeCompleted';
+export { default as canBeVerified } from './canBeVerified';
+export { default as canCompletionBeUndone } from './canCompletionBeUndone';
+export { default as hasRoleToComplete } from './hasRoleToComplete';
+export { default as isDeadlinePassed } from './isDeadlinePassed';
+export { default as isCompletedAtDeadlinePassed } from './isCompletedAtDeadlinePassed';
+export { default as isVerifiedAtDeadlinePassed } from './isVerifiedAtDeadlinePassed';
+export { default as canVerificationBeUndone } from './canVerificationBeUndone';
 
 export const ACT_Check = function ACT_Check(_id) {
   return checkDocAndMembership(Actions, _id, this.userId);

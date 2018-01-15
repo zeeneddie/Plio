@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 
-import { canBeCompleted } from '../../../../../../api/actions/helpers';
+import { canBeCompleted } from '../../../../../../api/actions/checkers';
 
 Template.Actions_ToBeCompletedBy.viewmodel({
   mixin: ['search', 'user', 'members'],
