@@ -25,7 +25,7 @@ Migrations.add({
         [WORKSPACE_DEFAULTS]: '',
       },
     };
-    const options = { multi: true };
+    const options = { multi: true, validate: false };
     Organizations.update(query, modifier, options);
     console.log('Removed workspace defaults from organizations');
   },
