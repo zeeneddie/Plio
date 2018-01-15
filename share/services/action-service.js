@@ -118,7 +118,7 @@ export default {
     return ret;
   },
 
-  complete({ _id, userId, completionComments }) {
+  complete({ _id, completionComments }, { userId }) {
     const action = this.collection.findOne({ _id });
     const linkedTo = action.linkedTo || [];
     const organization = Organizations.findOne({ _id: action.organizationId });

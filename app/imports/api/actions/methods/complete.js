@@ -1,5 +1,3 @@
-import { ifElse, compose, tap } from 'ramda';
-
 import { MiddlewareMethod } from '../../method';
 import { CompleteActionSchema } from '../../../share/schemas/schemas';
 import {
@@ -9,8 +7,7 @@ import {
 } from '../../middleware';
 import { Actions } from '../../../share/collections';
 import { ActionService } from '../../../share/services';
-import { canBeCompleted } from '../checkers';
-import { ACT_CANNOT_COMPLETE } from '../errors';
+import { ensureCanBeCompleted } from '../middleware';
 
 export default new MiddlewareMethod({
   name: 'Actions.complete',
@@ -19,13 +16,7 @@ export default new MiddlewareMethod({
     checkLoggedIn(),
     checkDocExistanceById(Actions),
     checkOrgMembershipByDocument(),
-    (next, args, context) => ifElse(
-      (_, { userId, doc }) => canBeCompleted(doc, userId),
-      next,
-      () => {
-        throw ACT_CANNOT_COMPLETE;
-      },
-    )(args, context),
+    ensureCanBeCompleted(),
   ],
   run: ActionService.complete.bind(ActionService),
 });
