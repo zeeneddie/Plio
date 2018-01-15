@@ -126,7 +126,7 @@ export const ACT_OnUndoCompletionChecker = ({ userId }, action) => {
 
   checkAndThrow(
     !canCompleteActions(userId, action.organizationId),
-    ACT_COMPLETE_NO_PERMISSION,
+    ACT_CANNOT_COMPLETE,
   );
 
   return { action };
@@ -139,7 +139,7 @@ export const ACT_OnVerifyChecker = ({ userId }, action) => {
 
   checkAndThrow(
     !canCompleteActions(userId, action.organizationId),
-    ACT_COMPLETE_NO_PERMISSION,
+    ACT_CANNOT_COMPLETE,
   );
 
   return { action };
@@ -152,7 +152,7 @@ export const ACT_OnUndoVerificationChecker = ({ userId }, action) => {
 
   checkAndThrow(
     !canCompleteActions(userId, action.organizationId),
-    ACT_COMPLETE_NO_PERMISSION,
+    ACT_CANNOT_COMPLETE,
   );
 
   return { action };

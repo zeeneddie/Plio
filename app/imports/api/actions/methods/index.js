@@ -3,7 +3,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import ActionService from '/imports/share/services/action-service';
 import { RequiredSchema } from '/imports/share/schemas/action-schema';
 import { Actions } from '/imports/share/collections/actions';
-import { IdSchema, CompleteActionSchema } from '/imports/share/schemas/schemas';
+import { IdSchema } from '/imports/share/schemas/schemas';
 import { ProblemTypes } from '/imports/share/constants';
 import Method, { CheckedMethod } from '../../method';
 import {
@@ -29,6 +29,7 @@ import {
 } from '../../errors';
 
 export { default as update } from './update';
+export { default as complete } from './complete';
 
 const injectACT = inject(Actions);
 
@@ -221,18 +222,6 @@ export const unlinkDocument = new CheckedMethod({
 
   run({ _id, documentId, documentType }) {
     return ActionService.unlinkDocument({ _id, documentId, documentType });
-  },
-});
-
-export const complete = new CheckedMethod({
-  name: 'Actions.complete',
-
-  validate: CompleteActionSchema.validator(),
-
-  check: checker => injectACT(checker)(ACT_OnCompleteChecker),
-
-  run({ _id, ...args }) {
-    return ActionService.complete({ _id, ...args, userId: this.userId });
   },
 });
 
