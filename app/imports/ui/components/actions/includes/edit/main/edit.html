@@ -82,6 +82,9 @@
             {{> Actions_VerifiedOn verifiedAt=this.verifiedAt}}
 
             {{> Actions_VerifiedBy
+                organizationId=this.organizationId
+                isCompleted=this.isCompleted
+                isVerified=this.isVerified
                 verifiedBy=this.verifiedBy
                 verifiedAt=this.verifiedAt
                 onUndo=onUndoVerification}}
