@@ -4,7 +4,7 @@ import { isCompleted, isVerified } from 'plio-util/dist/lenses';
 
 import hasRoleToComplete from './hasRoleToComplete';
 
-// (action: Object, userId: String) => Boolean
+// (Object, String) => Boolean
 export default allPass([
   complement(view(isCompleted)),
   complement(view(isVerified)),

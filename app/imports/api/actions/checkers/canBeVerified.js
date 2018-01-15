@@ -1,12 +1,13 @@
-import { allPass, complement, anyPass, flip } from 'ramda';
+import { allPass, complement, anyPass, flip, view } from 'ramda';
 import { isCompleted, isVerified } from 'plio-util/dist/lenses';
 import { eqToBeVerifiedBy } from 'plio-util';
 
 import hasRoleToComplete from './hasRoleToComplete';
 
+// (Object, String) => Boolean
 export default allPass([
-  isCompleted,
-  complement(isVerified),
+  view(isCompleted),
+  complement(view(isVerified)),
   anyPass([
     flip(eqToBeVerifiedBy),
     hasRoleToComplete,
