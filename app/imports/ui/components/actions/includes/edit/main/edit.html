@@ -48,6 +48,9 @@
             enabled=(isCompletionEditable this)}}
 
         {{> Actions_CompletedBy
+            organizationId=this.organizationId
+            isCompleted=this.isCompleted
+            isVerified=this.isVerified
             completedBy=this.completedBy
             completedAt=this.completedAt
             enabled=(isCompletionEditable this)
