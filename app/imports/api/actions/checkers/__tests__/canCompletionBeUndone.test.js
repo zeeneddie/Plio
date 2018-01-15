@@ -83,7 +83,7 @@ describe('Actions/canCompletionBeUndone', () => {
       completedBy: 2,
       organizationId,
     };
-    Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ACTIONS], organizationId);
+    Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
     expect(canCompletionBeUndone(action, userId)).toBe(true);
   });

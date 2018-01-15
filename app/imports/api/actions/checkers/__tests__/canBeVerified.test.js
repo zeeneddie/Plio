@@ -65,7 +65,7 @@ describe('Actions/canBeVerified', () => {
       toBeCompletedBy: 2,
       organizationId,
     };
-    Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ACTIONS], organizationId);
+    Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
     expect(canBeVerified(action, userId)).toBe(true);
   });

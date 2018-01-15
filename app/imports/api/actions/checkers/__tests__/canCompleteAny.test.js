@@ -14,7 +14,7 @@ describe('Actions/canCompleteAny', () => {
     const userId = 1;
     const organizationId = 2;
 
-    Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ACTIONS], organizationId);
+    Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
     expect(canCompleteAny({ organizationId }, userId)).toBe(true);
   });

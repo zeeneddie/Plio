@@ -6,6 +6,7 @@ import canVerificationBeUndone from '../canVerificationBeUndone';
 
 describe('Actions/canVerificationBeUndone', () => {
   afterEach(() => Roles.__clear());
+
   it('returns false if is not verified', () => {
     const userId = 1;
     const action = {
@@ -67,7 +68,7 @@ describe('Actions/canVerificationBeUndone', () => {
       verifiedBy: 2,
       organizationId,
     };
-    Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ACTIONS], organizationId);
+    Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
     expect(canVerificationBeUndone(action, userId)).toBe(true);
   });

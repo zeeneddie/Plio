@@ -55,7 +55,7 @@ describe('Actions/canBeCompleted', () => {
       toBeCompletedBy: 2,
       organizationId,
     };
-    Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ACTIONS], organizationId);
+    Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
     expect(canBeCompleted(action, userId)).toBe(true);
   });

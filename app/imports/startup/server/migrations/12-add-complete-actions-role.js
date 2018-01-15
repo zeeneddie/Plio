@@ -8,22 +8,22 @@ export const up = () => {
   Organizations.find({}).forEach(({ _id: organizationId, users }) => {
     users.forEach(({ userId, isRemoved }) => {
       if (!isRemoved) {
-        Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ACTIONS], organizationId);
+        Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
       }
     });
   });
 
-  console.log(`Added ${UserRoles.COMPLETE_ACTIONS} to user roles`);
+  console.log(`Added ${UserRoles.COMPLETE_ANY_ACTION} to user roles`);
 };
 
 export const down = () => {
   Organizations.find({}).forEach(({ _id: organizationId, users }) => {
     users.forEach(({ userId }) => {
-      Roles.removeUsersFromRoles(userId, [UserRoles.COMPLETE_ACTIONS], organizationId);
+      Roles.removeUsersFromRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
     });
   });
 
-  console.log(`Removed ${UserRoles.COMPLETE_ACTIONS} from user roles`);
+  console.log(`Removed ${UserRoles.COMPLETE_ANY_ACTION} from user roles`);
 };
 
 Migrations.add({
