@@ -18,6 +18,8 @@ Template.Actions_CompletedBy.viewmodel({
   currentTime: '',
   undoDeadline: '',
   onCreated() {
+    this.currentTime(Date.now());
+
     this.interval = Meteor.setInterval(() => {
       this.currentTime(Date.now());
     }, 10 * 1000);
