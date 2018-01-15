@@ -2,7 +2,11 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { MiddlewareMethod } from '../../method';
 import { idSchemaDoc } from '../../../share/schemas/schemas';
-import { checkOrgMembershipByDocument, checkDocExistanceById } from '../../middleware';
+import {
+  checkLoggedIn,
+  checkDocExistanceById,
+  checkOrgMembershipByDocument,
+} from '../../middleware';
 import { Risks } from '../../../share/collections';
 import { RiskService } from '../../../share/services';
 
@@ -13,6 +17,7 @@ export default new MiddlewareMethod({
     standardId: idSchemaDoc,
   }).validator(),
   middleware: [
+    checkLoggedIn(),
     checkDocExistanceById(Risks),
     checkOrgMembershipByDocument(),
   ],
