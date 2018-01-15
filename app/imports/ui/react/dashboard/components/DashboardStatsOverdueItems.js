@@ -31,6 +31,7 @@ export const DashboardStatsOverdueItems = ({
   loading,
 }) => (
   <DashboardStatsExpandable
+    total={count}
     items={workItems}
     renderIcon={loading ? () => <IconLoading /> : undefined}
     render={({ items }) => (
