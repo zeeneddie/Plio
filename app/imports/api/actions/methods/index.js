@@ -10,12 +10,7 @@ import {
   checkOrgMembership,
   onRemoveChecker,
   onRestoreChecker,
-  ACT_Check,
-  ACT_CheckEverything,
   ACT_OnLinkChecker,
-  ACT_OnUndoCompletionChecker,
-  ACT_OnVerifyChecker,
-  ACT_OnUndoVerificationChecker,
   ACT_LinkedDocsChecker,
 } from '../../checkers';
 import { inject, always, T } from '/imports/api/helpers';
