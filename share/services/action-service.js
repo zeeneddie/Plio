@@ -194,7 +194,7 @@ export default {
     return ret;
   },
 
-  undoVerification({ _id, userId }, { action }) {
+  undoVerification({ _id }, { doc: action }) {
     const query = {
       'updateOfStandards.status': 1, // Completed
       'updateOfStandards.completedAt': { $exists: true },

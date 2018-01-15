@@ -31,6 +31,7 @@ export { default as update } from './update';
 export { default as complete } from './complete';
 export { default as undoCompletion } from './undoCompletion';
 export { default as verify } from './verify';
+export { default as undoVerification } from './undoVerification';
 
 const injectACT = inject(Actions);
 
@@ -223,18 +224,6 @@ export const unlinkDocument = new CheckedMethod({
 
   run({ _id, documentId, documentType }) {
     return ActionService.unlinkDocument({ _id, documentId, documentType });
-  },
-});
-
-export const undoVerification = new CheckedMethod({
-  name: 'Actions.undoVerification',
-
-  validate: IdSchema.validator(),
-
-  check: checker => injectACT(checker)(ACT_OnUndoVerificationChecker),
-
-  run({ _id }, { action }) {
-    return ActionService.undoVerification({ _id, userId: this.userId }, { action });
   },
 });
 
