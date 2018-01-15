@@ -19,7 +19,7 @@ import {
   ACT_ANALYSIS_MUST_BE_COMPLETED,
 } from '../../errors';
 import { canCompleteActions } from '../../checkers/roles';
-import { canBeCompleted } from './../helpers';
+import canBeCompleted from './canBeCompleted';
 
 export { default as canBeCompleted } from './canBeCompleted';
 export { default as canBeVerified } from './canBeVerified';
