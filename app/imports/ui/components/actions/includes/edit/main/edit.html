@@ -70,6 +70,9 @@
           {{#unless isVerified}}
 
             {{> Actions_ToBeVerifiedBy
+                organizationId=this.organizationId
+                isCompleted=this.isCompleted
+                isVerified=this.isVerified
                 toBeVerifiedBy=this.toBeVerifiedBy
                 onUpdate=onUpdateVerificationExecutor
                 onVerify=onVerify}}
