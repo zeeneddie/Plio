@@ -171,7 +171,11 @@ export default {
   },
 
   verify({
-    _id, userId, success, verificationComments,
+    _id,
+    success,
+    verificationComments,
+  }, {
+    userId,
   }) {
     const ret = this.collection.update({
       _id,

@@ -62,7 +62,7 @@ describe('Actions/canBeVerified', () => {
     const action = {
       isCompleted: true,
       isVerified: false,
-      toBeCompletedBy: 2,
+      toBeVerifiedBy: 2,
       organizationId,
     };
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
