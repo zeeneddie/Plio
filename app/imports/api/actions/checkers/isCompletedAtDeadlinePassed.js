@@ -1,5 +1,5 @@
 import { compose, view } from 'ramda';
 import { completedAt } from 'plio-util/dist/lenses';
-import isDeadlinePassed from './isDeadlinePassed';
+import isUndoDeadlineDue from './isUndoDeadlineDue';
 
-export default compose(isDeadlinePassed, view(completedAt));
+export default compose(isUndoDeadlineDue, view(completedAt));

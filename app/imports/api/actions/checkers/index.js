@@ -25,7 +25,7 @@ export { default as canBeCompleted } from './canBeCompleted';
 export { default as canBeVerified } from './canBeVerified';
 export { default as canCompletionBeUndone } from './canCompletionBeUndone';
 export { default as hasRoleToComplete } from './hasRoleToComplete';
-export { default as isDeadlinePassed } from './isDeadlinePassed';
+export { default as isUndoDeadlineDue } from './isUndoDeadlineDue';
 export { default as isCompletedAtDeadlinePassed } from './isCompletedAtDeadlinePassed';
 export { default as isVerifiedAtDeadlinePassed } from './isVerifiedAtDeadlinePassed';
 export { default as canVerificationBeUndone } from './canVerificationBeUndone';
