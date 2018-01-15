@@ -149,7 +149,7 @@ export default {
     return ret;
   },
 
-  undoCompletion({ _id, userId }) {
+  undoCompletion({ _id }) {
     const ret = this.collection.update({
       _id,
     }, {

@@ -108,17 +108,6 @@ export const ACT_OnLinkChecker = ({ documentId, documentType }, action) => {
   };
 };
 
-export const ACT_OnCompleteChecker = ({ userId }, action) => {
-  const { organizationId, toBeCompletedBy } = action;
-
-  checkAndThrow(
-    !canBeCompleted({ organizationId, toBeCompletedBy }, userId),
-    ACT_CANNOT_COMPLETE,
-  );
-
-  return { action };
-};
-
 export const ACT_OnUndoCompletionChecker = ({ userId }, action) => {
   checkAndThrow(userId !== action.completedBy, ACT_COMPLETION_CANNOT_BE_UNDONE);
 

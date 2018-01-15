@@ -13,7 +13,6 @@ import {
   ACT_Check,
   ACT_CheckEverything,
   ACT_OnLinkChecker,
-  ACT_OnCompleteChecker,
   ACT_OnUndoCompletionChecker,
   ACT_OnVerifyChecker,
   ACT_OnUndoVerificationChecker,
@@ -30,6 +29,7 @@ import {
 
 export { default as update } from './update';
 export { default as complete } from './complete';
+export { default as undoCompletion } from './undoCompletion';
 
 const injectACT = inject(Actions);
 
@@ -222,18 +222,6 @@ export const unlinkDocument = new CheckedMethod({
 
   run({ _id, documentId, documentType }) {
     return ActionService.unlinkDocument({ _id, documentId, documentType });
-  },
-});
-
-export const undoCompletion = new CheckedMethod({
-  name: 'Actions.undoCompletion',
-
-  validate: IdSchema.validator(),
-
-  check: checker => injectACT(checker)(ACT_OnUndoCompletionChecker),
-
-  run({ _id }) {
-    return ActionService.undoCompletion({ _id, userId: this.userId });
   },
 });
 
