@@ -61,7 +61,7 @@ describe('Actions/canCompletionBeUndone', () => {
     expect(canCompletionBeUndone(action, userId)).toBe(false);
   });
 
-  it('returns true if toBeCompletedBy equals userId', () => {
+  it('returns true if completedBy equals userId', () => {
     const userId = 1;
     const action = {
       isCompleted: true,
