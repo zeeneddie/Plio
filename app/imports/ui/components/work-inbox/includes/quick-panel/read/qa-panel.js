@@ -1,8 +1,9 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
-import { WorkItemsStore } from '/imports/share/constants.js';
-import { WorkInboxHelp } from '/imports/api/help-messages.js';
+import { WorkItemsStore, ActionTypes } from '../../../../../../share/constants';
+import { WorkInboxHelp } from '../../../../../../api/help-messages';
+import { canCompleteActions } from '../../../../../../api/checkers/roles';
 
 const { TYPES } = WorkItemsStore;
 
@@ -11,8 +12,15 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     'user', 'date', 'utils', 'modal', 'workItemStatus', 'workInbox', 'router', 'organization',
   ],
   doc: '',
-  isCurrentUserAssignee({ assigneeId }) {
-    return Meteor.userId() === assigneeId;
+  canCompleteAction({ assigneeId, organizationId, linkedDoc: { type } = {} }) {
+    const userId = Meteor.userId();
+    let valid = userId === assigneeId;
+
+    if (Object.values(ActionTypes).includes(type)) {
+      valid = valid || canCompleteActions(userId, organizationId);
+    }
+
+    return !!valid;
   },
   getButtonText({ type }) {
     switch (type) {
