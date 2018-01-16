@@ -47,6 +47,14 @@ export default namedCompose('DashboardStatsActionContainer')(
       children,
       time,
     });
+  }, {
+    propsToWatch: [
+      'linkedDoc',
+      'orgSerialNumber',
+      'isCompleted',
+      'assigneeId',
+      'targetDate',
+    ],
   }),
   mapProps(pick(['href', 'children', 'time'])),
 )(DashboardStatsAction);
