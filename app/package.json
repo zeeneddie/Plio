@@ -30,6 +30,7 @@
     "form-serialize": "^0.7.1",
     "graphql": "^0.12.3",
     "graphql-tools": "^2.18.0",
+    "graphql-type-json": "^0.1.4",
     "handlebars": "^4.0.5",
     "i": "^0.3.6",
     "invariant": "^2.2.1",

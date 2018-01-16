@@ -4,14 +4,17 @@ type User {
   createdAt: String!
   # The first user email
   email: String!
+  # User preferences
+  preferences: UserPreferences
   # User profile
   profile: UserProfile
   # List of emails that the user has
   emails: [UserEmail]!
   # The name of the roles the user has
-  roles: [ID]!
-  # Current or last used DDP Connection ID
-  connection: String
+  roles: JSON!
+  # User status (online/offline/away)
+  status: String
+  statusConnection: String
 }
 
 type UserEmail {
@@ -20,8 +23,8 @@ type UserEmail {
 }
 
 type UserProfile {
-  firstname: String
-  lastname: String
+  firstName: String
+  lastName: String
   initials: String
   description: String
   avatar: String
@@ -34,4 +37,10 @@ type PhoneNumber {
   _id: ID!
   type: String
   number: String
+}
+
+type UserPreferences {
+  areNotificationsEnabled: Boolean
+  notificationSound: String
+  areEmailNotificationsEnabled: Boolean
 }
