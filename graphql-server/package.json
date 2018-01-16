@@ -7,7 +7,16 @@
     "start-windows": "cmd /c \"SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&SET MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local&&meteor --port 5000 --settings settings-local.json\""
   },
   "dependencies": {
+    "apollo-cache-inmemory": "^1.1.5",
+    "apollo-client": "^2.2.0",
+    "apollo-link": "^1.0.7",
+    "apollo-link-http": "^1.3.2",
+    "apollo-server-express": "^1.3.2",
     "babel-runtime": "^6.26.0",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "graphql": "^0.12.3",
+    "graphql-tools": "^2.18.0",
     "meteor-node-stubs": "^0.3.2"
   }
 }
