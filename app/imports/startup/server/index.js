@@ -13,6 +13,7 @@ import './audit';
 import './cron';
 import './migrations';
 import './default-help-sections';
+import '../../api/apollo';
 
 // This defines all the collections, publications and methods that the application provides
 // as an API to the client.

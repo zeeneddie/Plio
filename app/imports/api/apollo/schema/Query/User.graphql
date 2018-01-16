@@ -1,0 +1,4 @@
+type Query {
+  # Returns the logged in user
+  me: User!
+}

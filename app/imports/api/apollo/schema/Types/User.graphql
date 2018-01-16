@@ -1,0 +1,37 @@
+type User {
+  _id: ID!
+  # The registration date
+  createdAt: String!
+  # The first user email
+  email: String!
+  # User profile
+  profile: UserProfile
+  # List of emails that the user has
+  emails: [UserEmail]!
+  # The name of the roles the user has
+  roles: [ID]!
+  # Current or last used DDP Connection ID
+  connection: String
+}
+
+type UserEmail {
+  address: String!
+  verified: Boolean!
+}
+
+type UserProfile {
+  firstname: String
+  lastname: String
+  initials: String
+  description: String
+  avatar: String
+  skype: String
+  country: String
+  phoneNumbers: [PhoneNumber]
+}
+
+type PhoneNumber {
+  _id: ID!
+  type: String
+  number: String
+}
