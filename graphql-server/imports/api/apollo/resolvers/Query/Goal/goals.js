@@ -1,3 +1,2 @@
-export default (rootValue, args, { collections: { Goals } }) => {
-  console.log(Goals._name);
-};
+export default async (rootValue, args, { collections: { Goals } }) =>
+  Goals.find().fetch();
