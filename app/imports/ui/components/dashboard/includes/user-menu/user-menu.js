@@ -8,6 +8,7 @@ import { flattenObjects } from '/imports/api/helpers';
 import { MyPreferencesHelp } from '/imports/api/help-messages';
 import { userLogout } from '/imports/client/store/actions/globalActions';
 import { UserPresenceStatuses } from '../../../../../api/constants';
+import { client } from '../../../../../client/apollo';
 
 const STATUSES = [
   {
@@ -138,6 +139,7 @@ Template.UserMenu.viewmodel({
     e.preventDefault();
 
     Meteor.logout(() => {
+      client.resetStore(); // reset apollo store on logout
       this.dispatch(userLogout);
       FlowRouter.go('signIn');
     });
