@@ -1,5 +1,9 @@
+import { loadUserById } from 'plio-util';
+import { userId } from 'plio-util/dist/lenses';
+import { view } from 'ramda';
+
 export default {
   OrganizationUser: {
-    user: async ({ userId }, _, { loaders: { User: { byId } } }) => byId.load(userId),
+    user: loadUserById(view(userId)),
   },
 };
