@@ -1,6 +1,5 @@
 export default {
   OrganizationUser: {
-    user: async ({ userId }, _, { collections: { Users } }) =>
-      Users.findOne({ _id: userId }),
+    user: async ({ userId }, _, { loaders: { User: { byId } } }) => byId.load(userId),
   },
 };
