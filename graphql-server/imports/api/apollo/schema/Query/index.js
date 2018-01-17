@@ -3,5 +3,5 @@ import Organization from './Organization.graphql';
 
 export default [
   User,
-  // Organization,
+  Organization,
 ];

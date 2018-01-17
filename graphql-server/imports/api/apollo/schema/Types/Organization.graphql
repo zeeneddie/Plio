@@ -5,9 +5,21 @@ type Organization {
   updatedAt: Date
   updatedBy: ID
   name: String!
-  workspaceDefaults: WorkspaceDefaults
   serialNumber: Int!
+  workspaceDefaults: WorkspaceDefaults
   users: [OrganizationUser]!
+  timezone: String
+  currency: String
+  # reminders - hide for security reasons?
+  # review - hide for security reasons?
+  ncGuidelines: Guidelines
+  rkGuidelines: Guidelines
+  pgGuidelines: Guidelines
+  rkScoringGuidelines: String
+  # customerType - hide for security reasons?
+  homeScreenTitles: HomeScreenTitles
+  lastAccessedDate: Date
+  workflowDefaults: WorkflowDefaults
 }
 
 type WorkspaceDefaults {
@@ -23,4 +35,33 @@ type OrganizationUser {
   isRemoved: Boolean
   sendDailyRecap: Boolean
   user: User!
+}
+
+type WorkflowDefaults {
+  minorProblem: WorkflowProblem
+  majorProblem: WorkflowProblem
+  criticalProblem: WorkflowProblem
+}
+
+type WorkflowProblem {
+  workflowType: String
+  stepTime: TimePeriod
+}
+
+type TimePeriod {
+  timeValue: Int
+  timeUnit: String
+}
+
+type Guidelines {
+  minor: String
+  major: String
+  critical: String
+}
+
+type HomeScreenTitles {
+  standards: String
+  risks: String
+  nonConformities: String
+  workInbox: String
 }
