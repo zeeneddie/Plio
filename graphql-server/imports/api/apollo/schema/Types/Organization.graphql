@@ -1,0 +1,26 @@
+type Organization {
+  _id: ID!
+  createdAt: Date!
+  createdBy: ID!
+  updatedAt: Date
+  updatedBy: ID
+  name: String!
+  workspaceDefaults: WorkspaceDefaults
+  serialNumber: Int!
+  users: [OrganizationUser]!
+}
+
+type WorkspaceDefaults {
+  displayUsers: Int
+  displayMessages: Int
+  displayActions: Int
+}
+
+type OrganizationUser {
+  joinedAt: Date!
+  userId: ID!
+  role: String!
+  isRemoved: Boolean
+  sendDailyRecap: Boolean
+  user: User!
+}
