@@ -2,13 +2,13 @@ type Goal {
   _id: ID!
   createdAt: Date!
   createdBy: User!
-  updatedAt: Date!
-  updatedBy: User!
+  updatedAt: Date
+  updatedBy: User
   organizationId: ID!
   fileIds: [ID]
   isDeleted: Boolean!
-  deletedAt: Date!
-  deletedBy: User!
+  deletedAt: Date
+  deletedBy: User
   notify: [User]
   title: String!
   description: String
