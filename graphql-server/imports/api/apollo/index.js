@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 import schema from './apiSchema';
-import * as collections from '../../../../share/collections';
+import * as collections from '../../share/collections';
 
 const corsOptions = {
   origin: Meteor.settings.mainApp.url,
