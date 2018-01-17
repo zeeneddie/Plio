@@ -1,8 +1,11 @@
+import { loadUserById } from 'plio-util';
+import { createdBy, updatedBy, completedBy } from 'plio-util/dist/lenses';
+import { view } from 'ramda';
+
 export default {
   Action: {
-    createdBy: async ({ createdBy }, _, { loaders: { User: { byId } } }) => byId.load(createdBy),
-    updatedBy: async ({ updatedBy }, _, { loaders: { User: { byId } } }) => byId.load(updatedBy),
-    completedBy: async ({ completedBy }, _, { loaders: { User: { byId } } }) =>
-      byId.load(completedBy),
+    createdBy: loadUserById(view(createdBy)),
+    updatedBy: loadUserById(view(updatedBy)),
+    completedBy: loadUserById(view(completedBy)),
   },
 };

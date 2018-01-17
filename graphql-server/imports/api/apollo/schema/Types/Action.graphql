@@ -3,6 +3,7 @@ type Action {
   createdAt: Date!
   createdBy: User!
   updatedAt: Date
+  # WARNING: updatedBy may be string 'Plio'. What should we do with that?
   updatedBy: User
   organization: Organization
   serialNumber: Int!

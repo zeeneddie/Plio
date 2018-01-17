@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-node_modules/
-=======
 .meteor/dev_bundle
 .meteor/local
 node_modules/
@@ -10,4 +7,3 @@ settings.json
 settings-local.json
 settings-production.json
 yarn-error.log
->>>>>>> 663-make-graphql-server-a-separate-meteor-app
