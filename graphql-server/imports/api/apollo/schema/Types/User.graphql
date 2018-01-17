@@ -25,6 +25,7 @@ type UserEmail {
 type UserProfile {
   firstName: String
   lastName: String
+  fullName: String
   initials: String
   description: String
   avatar: String
