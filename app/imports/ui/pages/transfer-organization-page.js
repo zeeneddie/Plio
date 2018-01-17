@@ -2,9 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { transferOrganization } from '/imports/api/organizations/methods.js';
-
+import { Organizations } from '/imports/share/collections/organizations';
+import { transferOrganization } from '/imports/api/organizations/methods';
+import { client } from '../../client/apollo';
 
 Template.TransferOrganizationPage.viewmodel({
   mixin: ['router'],
@@ -46,7 +46,9 @@ Template.TransferOrganizationPage.viewmodel({
         onError: (err) => {
           this.error(err.reason);
           if (err.error === 403) {
-            Meteor.logout();
+            Meteor.logout(() => {
+              client.resetStore(); // reset apollo client store on logout
+            });
           }
         },
       });
