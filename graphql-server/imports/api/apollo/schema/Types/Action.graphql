@@ -1,0 +1,40 @@
+type Action {
+  _id: ID!
+  createdAt: Date!
+  createdBy: User!
+  updatedAt: Date
+  # WARNING: updatedBy may be string 'Plio'. What should we do with that?
+  updatedBy: User
+  organization: Organization
+  serialNumber: Int!
+  sequentialId: String!
+  status: Int!
+  isCompleted: Boolean!
+  completedAt: Date
+  completedBy: User
+  completionComments: String
+  completionAssignedBy: User
+  isVerified: Boolean!
+  isVerifiedAsEffective: Boolean!
+  verificationTargetDate: Date
+  toBeVerifiedBy: User
+  verifiedAt: Date
+  verifiedBy: User
+  verificationComments: String
+  verificationAssignedBy: User
+  isDeleted: Boolean!
+  deletedAt: Date
+  deletedBy: User
+  notes: String
+  title: String!
+  description: String
+  type: String!
+  # linkedTo: ?
+  owner: User!
+  planInPlace: String!
+  completionTargetDate: Date!
+  toBeCompletedBy: User!
+  # isViewed: Boolean
+  files: [File]
+  notify: [User]
+}

@@ -4,9 +4,11 @@ import Organization from './Organization.graphql';
 export default [
   User,
   Organization,
+  // TEMP
   `
     type Query {
       organizations: [Organization]
+      actions: [Action]
     }
   `,
 ];
