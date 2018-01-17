@@ -1,0 +1,27 @@
+type Goal {
+  _id: ID!
+  createdAt: Date!
+  createdBy: ID!
+  updatedAt: Date!
+  updatedBy: ID!
+  organizationId: ID!
+  fileIds: [ID]
+  isDeleted: Boolean!
+  deletedAt: Date!
+  deletedBy: ID!
+  notify: [ID]
+  title: String!
+  description: String
+  serialNumber: Int!
+  sequentialId: String!
+  ownerId: ID!
+  startDate: Date!
+  endDate: Date!
+  priority: String!
+  status: Int!
+  statusComments: String
+  isCompleted: Boolean!
+  completedAt: Date
+  completedBy: ID
+  color: Int!
+}
