@@ -1,20 +1,21 @@
 type Goal {
   _id: ID!
   createdAt: Date!
-  createdBy: ID!
+  createdBy: User!
   updatedAt: Date!
-  updatedBy: ID!
+  updatedBy: User!
   organizationId: ID!
   fileIds: [ID]
   isDeleted: Boolean!
   deletedAt: Date!
-  deletedBy: ID!
-  notify: [ID]
+  deletedBy: User!
+  notify: [User]
   title: String!
   description: String
   serialNumber: Int!
   sequentialId: String!
   ownerId: ID!
+  owner: User!
   startDate: Date!
   endDate: Date!
   priority: String!
@@ -22,6 +23,6 @@ type Goal {
   statusComments: String
   isCompleted: Boolean!
   completedAt: Date
-  completedBy: ID
+  completedBy: User
   color: Int!
 }
