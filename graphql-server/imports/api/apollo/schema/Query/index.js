@@ -3,10 +3,5 @@ import Organization from './Organization.graphql';
 
 export default [
   User,
-  `
-    type Query {
-      files: [File]
-    }
-  `,
   Organization,
 ];

@@ -5,7 +5,7 @@ type File {
   updatedAt: Date
   updatedBy: ID
   organizationId: ID!
-  # organization: Organization!
+  organization: Organization!
   name: String!
   extension: String!
   progress: Int
