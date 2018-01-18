@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
 import { filter, compose, pluck, complement, prop, memoize } from 'ramda';
 import { onlyUpdateForKeys, withHandlers, setPropTypes, flattenProp } from 'recompose';
 
@@ -14,6 +15,7 @@ import {
   WorkspaceDefaults,
   WorkspaceDefaultsTypes,
 } from '../../../../share/constants';
+import { canInviteUsers } from '../../../../api/checkers/roles';
 
 const getOrgUserIds = memoize(compose(
   pluck('userId'),
@@ -59,11 +61,13 @@ export default namedCompose('DashboardUserStatsContainer')(
       },
     };
     const users = Meteor.users.find(query, options).fetch();
+    const userId = Meteor.userId();
 
     onData(null, {
       users,
       usersPerRow,
       organizationId,
+      canInviteUsers: canInviteUsers(userId, organizationId),
       ...props,
     });
   }, {
@@ -87,4 +91,9 @@ export default namedCompose('DashboardUserStatsContainer')(
       });
     },
   }),
-)(DashboardUserStats);
+)(({ users, ...props }) => !!users.length && (
+  <Fragment>
+    <hr />
+    <DashboardUserStats {...{ users, ...props }} />
+  </Fragment>
+));
