@@ -1,0 +1,15 @@
+type Lesson {
+  _id: ID!
+  createdAt: Date!
+  createdBy: User!
+  updatedAt: Date
+  updatedBy: User
+  organization: Organization!
+  serialNumber: Int!
+  title: String!
+  date: Date!
+  notes: String!
+  owner: User!
+  # linkedTo: 
+  # isViewed: Boolean
+}
