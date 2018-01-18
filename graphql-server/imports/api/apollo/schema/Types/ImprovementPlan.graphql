@@ -1,12 +1,12 @@
 type ImprovementPlan {
   desiredOutcome: String
   targetDate: Date
-  reviewDates: ImprovementPlanReviewDate
-  files: [File]
+  reviewDates: [ImprovementPlanReviewDate]
+  fileIds: [File]
+  owner: User
 }
 
 type ImprovementPlanReviewDate {
   _id: ID!
   date: Date!
-  owner: User
 }
