@@ -9,6 +9,7 @@ export default [
     type Query {
       organizations: [Organization]
       actions: [Action]
+      risks: [Risk]
     }
   `,
 ];
