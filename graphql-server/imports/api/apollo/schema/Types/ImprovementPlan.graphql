@@ -1,0 +1,12 @@
+type ImprovementPlan {
+  desiredOutcome: String
+  targetDate: Date
+  reviewDates: ImprovementPlanReviewDate
+  files: [File]
+}
+
+type ImprovementPlanReviewDate {
+  _id: ID!
+  date: Date!
+  owner: User
+}
