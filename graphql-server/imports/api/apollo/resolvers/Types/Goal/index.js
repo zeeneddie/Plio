@@ -5,12 +5,13 @@ import {
   loadFilesById,
   loadRisksByGoalIds,
   loadActionsByLinkedDocumentId,
+  loadLessonsByDocumentId,
   lenses,
 } from 'plio-util';
 import { view } from 'ramda';
 
 const {
-  _id: idLens,
+  _id,
   createdBy,
   updatedBy,
   ownerId,
@@ -31,9 +32,8 @@ export default {
     notify: loadUsersById(view(notify)),
     organization: loadOrganizationById(view(organizationId)),
     files: loadFilesById(view(fileIds)),
-    risks: loadRisksByGoalIds(view(idLens)),
-    actions: loadActionsByLinkedDocumentId(view(idLens)),
-    lessons: async ({ _id }, _, { collections: { LessonsLearned } }) =>
-      LessonsLearned.find({ documentId: _id }).fetch(),
+    risks: loadRisksByGoalIds(view(_id)),
+    actions: loadActionsByLinkedDocumentId(view(_id)),
+    lessons: loadLessonsByDocumentId(view(_id)),
   },
 };
