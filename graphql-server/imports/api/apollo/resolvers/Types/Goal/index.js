@@ -33,6 +33,6 @@ export default {
     actions: async ({ _id }, _, { collections: { Actions } }) =>
       Actions.find({ 'linkedTo.documentId': _id }).fetch(),
     lessons: async ({ _id }, _, { collections: { LessonsLearned } }) =>
-      LessonsLearned.find({ 'linkedTo.documentId': _id }),
+      LessonsLearned.find({ 'linkedTo.documentId': _id }).fetch(),
   },
 };
