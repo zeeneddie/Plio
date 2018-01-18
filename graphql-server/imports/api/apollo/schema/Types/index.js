@@ -5,6 +5,7 @@ import Action from './Action.graphql';
 import Risk from './Risk.graphql';
 import Analysis from './Analysis.graphql';
 import ImprovementPlan from './ImprovementPlan.graphql';
+import Lesson from './Lesson.graphql';
 
 export default [
   User,
@@ -14,4 +15,5 @@ export default [
   Risk,
   Analysis,
   ImprovementPlan,
+  Lesson,
 ];
