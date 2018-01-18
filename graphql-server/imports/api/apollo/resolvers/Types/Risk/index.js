@@ -2,6 +2,7 @@ import {
   loadUserById,
   loadUsersById,
   loadOrganizationById,
+  loadFilesById,
   lenses,
 } from 'plio-util';
 import { view } from 'ramda';
@@ -14,6 +15,7 @@ const {
   deletedBy,
   notify,
   organizationId,
+  fileIds,
 } = lenses;
 
 export default {
@@ -25,5 +27,6 @@ export default {
     deletedBy: loadUserById(view(deletedBy)),
     notify: loadUsersById(view(notify)),
     organization: loadOrganizationById(view(organizationId)),
+    files: loadFilesById(view(fileIds)),
   },
 };
