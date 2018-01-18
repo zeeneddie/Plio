@@ -4,8 +4,8 @@ type Goal {
   createdBy: User!
   updatedAt: Date
   updatedBy: User
-  organizationId: ID!
-  fileIds: [ID]
+  organization: Organization!
+  files: [File]
   isDeleted: Boolean!
   deletedAt: Date
   deletedBy: User
@@ -14,7 +14,6 @@ type Goal {
   description: String
   serialNumber: Int!
   sequentialId: String!
-  ownerId: ID!
   owner: User!
   startDate: Date!
   endDate: Date!
