@@ -6,6 +6,7 @@ import Risk from './Risk';
 import Analysis from './Analysis';
 import ImprovementPlan from './ImprovementPlan';
 import Lesson from './Lesson';
+import Goal from './Goal';
 
 export default {
   ...User,
@@ -16,4 +17,5 @@ export default {
   ...Analysis,
   ...ImprovementPlan,
   ...Lesson,
+  ...Goal,
 };
