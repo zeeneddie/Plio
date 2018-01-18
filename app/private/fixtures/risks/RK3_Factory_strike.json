@@ -34,5 +34,6 @@
   "standardsIds": [
     "Mc7jjwYJ9gXPkibS8"
   ],
-  "workflowType" : "6-step"
+  "workflowType" : "6-step",
+  "goalIds": ["sMvzMrhXAyCDwKLBp"]
 }
