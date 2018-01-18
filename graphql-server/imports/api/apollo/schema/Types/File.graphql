@@ -1,10 +1,9 @@
 type File {
   _id: ID!
   createdAt: Date!
-  createdBy: ID!
+  createdBy: User!
   updatedAt: Date
-  updatedBy: ID
-  organizationId: ID!
+  updatedBy: User
   organization: Organization!
   name: String!
   extension: String!
