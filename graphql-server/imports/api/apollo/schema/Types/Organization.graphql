@@ -1,9 +1,9 @@
 type Organization {
   _id: ID!
   createdAt: Date!
-  createdBy: ID!
+  createdBy: User!
   updatedAt: Date
-  updatedBy: ID
+  updatedBy: User
   name: String!
   serialNumber: Int!
   workspaceDefaults: WorkspaceDefaults
@@ -30,7 +30,6 @@ type WorkspaceDefaults {
 
 type OrganizationUser {
   joinedAt: Date!
-  userId: ID!
   role: String!
   isRemoved: Boolean
   sendDailyRecap: Boolean
