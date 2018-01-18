@@ -2,7 +2,7 @@ type ImprovementPlan {
   desiredOutcome: String
   targetDate: Date
   reviewDates: [ImprovementPlanReviewDate]
-  fileIds: [File]
+  files: [File]
   owner: User
 }
 
