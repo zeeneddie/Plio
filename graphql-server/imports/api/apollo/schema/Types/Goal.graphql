@@ -24,4 +24,7 @@ type Goal {
   completedAt: Date
   completedBy: User
   color: Int!
+  # actions: [Action]
+  risks: [Risk]
+  # lessons: [Lesson]
 }

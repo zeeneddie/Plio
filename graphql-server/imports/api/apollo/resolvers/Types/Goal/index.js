@@ -28,5 +28,7 @@ export default {
     notify: loadUsersById(view(notify)),
     organization: loadOrganizationById(view(organizationId)),
     files: loadFilesById(view(fileIds)),
+    risks: async ({ _id }, args, { collections: { Risks } }) =>
+      Risks.find({ goalIds: _id }).fetch(),
   },
 };
