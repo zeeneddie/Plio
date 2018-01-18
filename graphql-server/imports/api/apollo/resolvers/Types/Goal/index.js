@@ -4,6 +4,7 @@ import {
   loadOrganizationById,
   loadFilesById,
   loadRisksByGoalIds,
+  loadActionsByLinkedDocumentId,
   lenses,
 } from 'plio-util';
 import { view } from 'ramda';
@@ -31,9 +32,8 @@ export default {
     organization: loadOrganizationById(view(organizationId)),
     files: loadFilesById(view(fileIds)),
     risks: loadRisksByGoalIds(view(idLens)),
-    actions: async ({ _id }, _, { collections: { Actions } }) =>
-      Actions.find({ 'linkedTo.documentId': _id }).fetch(),
+    actions: loadActionsByLinkedDocumentId(view(idLens)),
     lessons: async ({ _id }, _, { collections: { LessonsLearned } }) =>
-      LessonsLearned.find({ 'linkedTo.documentId': _id }).fetch(),
+      LessonsLearned.find({ documentId: _id }).fetch(),
   },
 };
