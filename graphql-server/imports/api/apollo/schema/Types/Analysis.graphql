@@ -1,0 +1,9 @@
+type Analysis {
+  targetDate: Date
+  executor: User
+  status: Int
+  completionComments: String
+  completedAt: Date
+  completedBy: User
+  assignedBy: User
+}

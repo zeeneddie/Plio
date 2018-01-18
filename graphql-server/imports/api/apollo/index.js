@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import schema from './apiSchema';
 import * as collections from '../../share/collections';
+import { createLoaders } from './loaders';
 
 const corsOptions = {
   origin: Meteor.settings.mainApp.url,
@@ -18,6 +19,7 @@ createApolloServer(() => ({
       ...collections,
       Users: Meteor.users,
     },
+    loaders: createLoaders(),
   },
 }), {
   graphiql: true,
