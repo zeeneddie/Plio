@@ -1,5 +1,12 @@
-import { loadUserById, loadUsersById } from 'plio-util';
 import {
+  loadUserById,
+  loadUsersById,
+  loadOrganizationById,
+  lenses,
+} from 'plio-util';
+import { view } from 'ramda';
+
+const {
   createdBy,
   updatedBy,
   completedBy,
@@ -10,8 +17,8 @@ import {
   toBeVerifiedBy,
   verifiedBy,
   notify,
-} from 'plio-util/dist/lenses';
-import { view } from 'ramda';
+  organizationId,
+} = lenses;
 
 export default {
   Action: {
@@ -25,5 +32,6 @@ export default {
     toBeVerifiedBy: loadUserById(view(toBeVerifiedBy)),
     verifiedBy: loadUserById(view(verifiedBy)),
     notify: loadUsersById(view(notify)),
+    organization: loadOrganizationById(view(organizationId)),
   },
 };
