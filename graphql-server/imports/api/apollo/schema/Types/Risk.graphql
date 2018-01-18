@@ -25,9 +25,9 @@ type Risk {
   # isViewed: Boolean
   files: [File]
   # type: RiskType
-  # improvementPlan: ImprovementPlan
-  # analysis: Analysis
-  # updateOfStandards: Analysis
+  improvementPlan: ImprovementPlan
+  analysis: Analysis
+  updateOfStandards: Analysis
   riskEvaluation: RiskEvaluation
 }
 
