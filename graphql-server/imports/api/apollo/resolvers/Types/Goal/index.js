@@ -28,7 +28,11 @@ export default {
     notify: loadUsersById(view(notify)),
     organization: loadOrganizationById(view(organizationId)),
     files: loadFilesById(view(fileIds)),
-    risks: async ({ _id }, args, { collections: { Risks } }) =>
+    risks: async ({ _id }, _, { collections: { Risks } }) =>
       Risks.find({ goalIds: _id }).fetch(),
+    actions: async ({ _id }, _, { collections: { Actions } }) =>
+      Actions.find({ 'linkedTo.documentId': _id }).fetch(),
+    lessons: async ({ _id }, _, { collections: { LessonsLearned } }) =>
+      LessonsLearned.find({ 'linkedTo.documentId': _id }),
   },
 };
