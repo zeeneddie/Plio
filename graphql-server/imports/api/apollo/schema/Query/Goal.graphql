@@ -1,4 +1,4 @@
 type Query {
   # returns a list of goals
-  goals(organizationId: ID!): [Goal]!
+  goals(organizationId: ID!, limit: Int!): [Goal]!
 }
