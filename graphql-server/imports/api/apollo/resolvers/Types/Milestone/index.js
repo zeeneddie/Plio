@@ -3,8 +3,9 @@ import {
   loadUsersById,
   loadOrganizationById,
   lenses,
+  loadGoalsById,
 } from 'plio-util';
-import { view } from 'ramda';
+import { view, compose, identity, map } from 'ramda';
 
 const {
   createdBy,
@@ -12,6 +13,8 @@ const {
   notify,
   completedBy,
   organizationId,
+  linkedTo,
+  documentId,
 } = lenses;
 
 export default {
@@ -21,5 +24,9 @@ export default {
     organization: loadOrganizationById(view(organizationId)),
     notify: loadUsersById(view(notify)),
     completedBy: loadUserById(view(completedBy)),
+    goals: loadGoalsById(compose(
+      map(view(documentId)),
+      view(linkedTo),
+    )),
   },
 };
