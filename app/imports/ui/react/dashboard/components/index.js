@@ -4,3 +4,4 @@ export { default as DashboardStatsOverdueItems } from './DashboardStatsOverdueIt
 export { default as DashboardStatsUnreadMessages } from './DashboardStatsUnreadMessages';
 export { default as DashboardStatsUserList } from './DashboardStatsUserList';
 export { default as DashboardStatsAction } from './DashboardStatsAction';
+export { default as DashboardGoals } from './DashboardGoals';

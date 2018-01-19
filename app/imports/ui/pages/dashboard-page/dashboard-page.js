@@ -10,6 +10,7 @@ import {
   DashboardUserStatsContainer,
   DashboardStatsUnreadMessagesContainer,
   DashboardStatsOverdueItemsContainer,
+  DashboardGoalsContainer,
 } from '../../react/dashboard/containers';
 import { defer } from '../../react/helpers';
 
@@ -105,4 +106,5 @@ Template.Dashboard_Page.viewmodel({
   DashboardUserStatsContainer: () => defer(DashboardUserStatsContainer),
   DashboardStatsUnreadMessagesContainer: () => defer(DashboardStatsUnreadMessagesContainer),
   DashboardStatsOverdueItemsContainer: () => defer(DashboardStatsOverdueItemsContainer),
+  DashboardGoalsContainer: () => defer(DashboardGoalsContainer),
 });
