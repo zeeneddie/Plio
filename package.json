@@ -2,12 +2,14 @@
   "name": "plio-dev-toolsgit",
   "private": true,
   "scripts": {
-    "lint-app": "./node_modules/.bin/eslint app",
-    "lint-background-app": "./node_modules/.bin/eslint background-app",
+    "lint:app": "./node_modules/.bin/eslint app",
+    "lint:background-app": "./node_modules/.bin/eslint background-app",
+    "lint:graphql-server": "./node_modules/.bin/eslint graphql-server",
     "jest": "./node_modules/.bin/jest",
     "test": "yarn jest"
   },
   "pre-commit": [
+    "lint:graphql-server",
     "test"
   ],
   "devDependencies": {

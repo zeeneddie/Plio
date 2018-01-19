@@ -5,7 +5,7 @@ import {
   lenses,
   loadGoalsById,
 } from 'plio-util';
-import { view, compose, identity, map } from 'ramda';
+import { view, compose, map } from 'ramda';
 
 const {
   createdBy,
