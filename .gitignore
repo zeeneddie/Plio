@@ -8,3 +8,4 @@ deploy
 mup.js
 settings*.json
 npm-debug.log
+.vscode
