@@ -1,3 +1,5 @@
+import { reduce } from 'ramda';
+
 import User from './User';
 import Organization from './Organization';
 import File from './File';
@@ -7,7 +9,7 @@ import Lesson from './Lesson';
 import Milestone from './Milestone';
 import Goal from './Goal';
 
-export const createLoaders = () => ({
+const loaders = {
   User,
   Organization,
   File,
@@ -16,4 +18,18 @@ export const createLoaders = () => ({
   Lesson,
   Milestone,
   Goal,
-});
+};
+
+export const createLoaders = () => reduce(
+  (parentAcc, parentKey) => ({
+    ...parentAcc,
+    [parentKey]: reduce((acc, key) => ({
+      ...acc,
+      [key]: loaders[parentKey][key](),
+    }), {}, Object.keys(loaders[parentKey])),
+  }),
+  {},
+  Object.keys(loaders),
+);
+
+export default loaders;
