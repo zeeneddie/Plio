@@ -7,6 +7,7 @@ import Analysis from './Analysis';
 import ImprovementPlan from './ImprovementPlan';
 import Lesson from './Lesson';
 import Goal from './Goal';
+import Milestone from './Milestone';
 
 export default {
   ...User,
@@ -18,4 +19,5 @@ export default {
   ...ImprovementPlan,
   ...Lesson,
   ...Goal,
+  ...Milestone,
 };

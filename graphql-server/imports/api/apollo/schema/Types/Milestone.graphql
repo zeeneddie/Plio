@@ -1,0 +1,17 @@
+type Milestone {
+  _id: ID!
+  createdAt: Date!
+  createdBy: User!
+  updatedAt: Date
+  updatedBy: User
+  organization: Organization!
+  notify: [User]
+  title: String!
+  description: String
+  status: Int!
+  completionTargetDate: Date!
+  isCompleted: Boolean!
+  completedAt: Date
+  completedBy: User
+  goals: [Goal]
+}

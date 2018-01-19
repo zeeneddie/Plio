@@ -6,6 +6,7 @@ import {
   loadRisksByGoalIds,
   loadActionsByLinkedDocumentId,
   loadLessonsByDocumentId,
+  loadMilestonesByLinkedDocumentId,
   lenses,
 } from 'plio-util';
 import { view } from 'ramda';
@@ -35,5 +36,6 @@ export default {
     risks: loadRisksByGoalIds(view(_id)),
     actions: loadActionsByLinkedDocumentId(view(_id)),
     lessons: loadLessonsByDocumentId(view(_id)),
+    milestones: loadMilestonesByLinkedDocumentId(view(_id)),
   },
 };

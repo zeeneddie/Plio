@@ -27,4 +27,5 @@ type Goal {
   actions: [Action]
   risks: [Risk]
   lessons: [Lesson]
+  milestones: [Milestone]!
 }
