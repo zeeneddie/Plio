@@ -7,6 +7,7 @@ import Analysis from './Analysis.graphql';
 import ImprovementPlan from './ImprovementPlan.graphql';
 import Lesson from './Lesson.graphql';
 import Goal from './Goal.graphql';
+import Milestone from './Milestone.graphql';
 
 export default [
   User,
@@ -18,4 +19,5 @@ export default [
   ImprovementPlan,
   Lesson,
   Goal,
+  Milestone,
 ];
