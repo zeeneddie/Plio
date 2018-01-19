@@ -8,10 +8,10 @@ type Milestone {
   notify: [User]
   title: String!
   description: String
-  linkedTo: [Goal]
   status: Int!
   completionTargetDate: Date!
   isCompleted: Boolean!
   completedAt: Date
   completedBy: User
+  goals: [Goal]
 }
