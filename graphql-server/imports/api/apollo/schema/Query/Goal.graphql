@@ -1,0 +1,4 @@
+type Query {
+  # returns a list of goals
+  goals: [Goal]!
+}

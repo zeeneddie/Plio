@@ -1,3 +1,5 @@
+import { BrowserPolicy } from 'meteor/browser-policy';
+
 BrowserPolicy.content.allowOriginForAll('*.amazonaws.com');
 BrowserPolicy.content.allowOriginForAll('*.stripe.com');
 BrowserPolicy.content.allowOriginForAll('*.microsoft.com');
