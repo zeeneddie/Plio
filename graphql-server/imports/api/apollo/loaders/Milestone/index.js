@@ -1,5 +1,5 @@
-import byLinkedDocumentId from './byLinkedDocumentId';
+import byId from './byId';
 
 export default {
-  byLinkedDocumentId,
+  byId,
 };

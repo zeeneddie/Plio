@@ -5,7 +5,7 @@ import {
   loadFilesById,
   loadActionsByLinkedDocumentId,
   loadLessonsByDocumentId,
-  loadMilestonesByLinkedDocumentId,
+  loadMilestonesById,
   loadRisksById,
   lenses,
 } from 'plio-util';
@@ -22,6 +22,7 @@ const {
   completedBy,
   fileIds,
   riskIds,
+  milestoneIds,
 } = lenses;
 
 export default {
@@ -37,6 +38,6 @@ export default {
     risks: loadRisksById(view(riskIds)),
     actions: loadActionsByLinkedDocumentId(view(_id)),
     lessons: loadLessonsByDocumentId(view(_id)),
-    milestones: loadMilestonesByLinkedDocumentId(view(_id)),
+    milestones: loadMilestonesById(view(milestoneIds)),
   },
 };
