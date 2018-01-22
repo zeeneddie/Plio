@@ -1,0 +1,15 @@
+query DashboardGoals($organizationId: ID!, $limit: Int!) {
+  goals(organizationId: $organizationId, limit: $limit) {
+    _id
+    isDeleted
+    title
+    startDate
+    endDate
+    color
+    milestones {
+      _id
+      title
+      completionTargetDate
+    }
+  }
+}

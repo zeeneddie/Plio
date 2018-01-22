@@ -1,18 +1,24 @@
 import { Template } from 'meteor/templating';
 import pluralize from 'pluralize';
+import Loadable from 'react-loadable';
+import React from 'react';
 
 import { CountSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers';
 import { updateLastAccessedDate } from '/imports/api/organizations/methods';
 import { getC } from '/imports/api/helpers';
 
-import { WORKSPACE_DEFAULTS, WorkspaceDefaultsTypes } from '../../../share/constants';
 import {
   DashboardUserStatsContainer,
   DashboardStatsUnreadMessagesContainer,
   DashboardStatsOverdueItemsContainer,
-  DashboardGoalsContainer,
 } from '../../react/dashboard/containers';
 import { defer } from '../../react/helpers';
+import { PreloaderPage } from '../../react/components';
+
+const LoadableDashboardGoalsContainer = Loadable({
+  loader: () => import('../../react/dashboard/containers/DashboardGoalsContainer'),
+  loading: () => <PreloaderPage size={2} />,
+});
 
 Template.Dashboard_Page.viewmodel({
   mixin: ['organization', { counter: 'counter' }],
@@ -106,5 +112,5 @@ Template.Dashboard_Page.viewmodel({
   DashboardUserStatsContainer: () => defer(DashboardUserStatsContainer),
   DashboardStatsUnreadMessagesContainer: () => defer(DashboardStatsUnreadMessagesContainer),
   DashboardStatsOverdueItemsContainer: () => defer(DashboardStatsOverdueItemsContainer),
-  DashboardGoalsContainer: () => defer(DashboardGoalsContainer),
+  DashboardGoalsContainer: () => defer(LoadableDashboardGoalsContainer),
 });

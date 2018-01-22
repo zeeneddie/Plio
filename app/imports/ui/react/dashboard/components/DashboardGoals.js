@@ -61,7 +61,8 @@ const getScatterData = ({
 ];
 
 const DashboardGoals = ({
-  data: { loading, goals },
+  loading,
+  goals,
   zoomDomain,
   onZoom,
   onLineTap,
