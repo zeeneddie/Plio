@@ -3,7 +3,6 @@ import gql from 'graphql-tag';
 import {
   withContext,
   renameProps,
-  withState,
   flattenProp,
   setPropTypes,
   onlyUpdateForKeys,
@@ -38,10 +37,9 @@ export default namedCompose('DashboardGoalsContainer')(
   flattenProp(WORKSPACE_DEFAULTS),
   renameProps({
     _id: 'organizationId',
-    [WORKSPACE_DEFAULTS.DISPLAY_GOALS]: 'goalsPerRow',
+    [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'goalsPerRow',
   }),
-  onlyUpdateForKeys(['organizationId', 'serialNumber', 'goalsPerRow']),
-  withState('isLimitEnabled', 'setIsLimitEnabled', true),
+  onlyUpdateForKeys(['organizationId', 'goalsPerRow']),
   graphql(gql`${DASHBOARD_GOALS_QUERY}`, {
     props: ({ data: { loading, goals } }) => ({
       loading,
