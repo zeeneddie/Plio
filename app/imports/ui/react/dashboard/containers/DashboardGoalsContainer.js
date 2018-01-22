@@ -60,7 +60,7 @@ export default namedCompose('DashboardGoalsContainer')(
   graphql(query, {
     options: ({
       organizationId,
-      goalsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS] || 5,
+      goalsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
     }) => ({
       variables: {
         organizationId,

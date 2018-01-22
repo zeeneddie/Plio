@@ -14,6 +14,9 @@ export default new SimpleSchema({
       [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: {
         type: Number,
       },
+      [WorkspaceDefaultsTypes.DISPLAY_GOALS]: {
+        type: Number,
+      },
     }),
     defaultValue: WorkspaceDefaults,
   },
