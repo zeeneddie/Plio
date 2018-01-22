@@ -7,10 +7,13 @@ import {
   flattenProp,
   setPropTypes,
   onlyUpdateForKeys,
+  branch,
+  renderNothing,
 } from 'recompose';
 import PropTypes from 'prop-types';
+import { getGoalsLength } from 'plio-util';
 
-import { namedCompose } from '../../helpers';
+import { namedCompose, withHr } from '../../helpers';
 import { DashboardGoals } from '../components';
 import {
   WORKSPACE_DEFAULTS,
@@ -18,24 +21,7 @@ import {
   WorkspaceDefaults,
 } from '../../../../share/constants';
 import { client } from '../../../../client/apollo';
-
-const query = gql`
-  query DashboardGoals($organizationId: ID!, $limit: Int!) {
-    goals(organizationId: $organizationId, limit: $limit) {
-      _id
-      isDeleted
-      title
-      startDate
-      endDate
-      color
-      milestones {
-        _id
-        title
-        completionTargetDate
-      }
-    }
-  }
-`;
+import { DASHBOARD_GOALS_QUERY } from '../../../../api/graphql/query';
 
 export default namedCompose('DashboardGoalsContainer')(
   setPropTypes({
@@ -56,8 +42,11 @@ export default namedCompose('DashboardGoalsContainer')(
   }),
   onlyUpdateForKeys(['organizationId', 'serialNumber', 'goalsPerRow']),
   withState('isLimitEnabled', 'setIsLimitEnabled', true),
-  // TEMP
-  graphql(query, {
+  graphql(gql`${DASHBOARD_GOALS_QUERY}`, {
+    props: ({ data: { loading, goals } }) => ({
+      loading,
+      goals,
+    }),
     options: ({
       organizationId,
       goalsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
@@ -68,4 +57,9 @@ export default namedCompose('DashboardGoalsContainer')(
       },
     }),
   }),
+  branch(
+    getGoalsLength,
+    withHr,
+    renderNothing,
+  ),
 )(DashboardGoals);
