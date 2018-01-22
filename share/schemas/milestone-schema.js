@@ -7,7 +7,7 @@ import {
 } from './schemas';
 import { StringLimits, AllowedMilestoneLinkedDocTypes, MilestoneStatuses } from '../constants';
 
-export const MilestonesSchema = new SimpleSchema([
+export const MilestoneSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
   getNotifySchema('ownerId'),
@@ -58,4 +58,4 @@ export const MilestonesSchema = new SimpleSchema([
   },
 ]);
 
-export default MilestonesSchema;
+export default MilestoneSchema;

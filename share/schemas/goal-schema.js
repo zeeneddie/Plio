@@ -9,7 +9,7 @@ import {
 } from './schemas';
 import { StringLimits, GoalPriorities, GoalStatuses, GoalColors } from '../constants';
 
-const GoalsSchema = new SimpleSchema([
+const GoalSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
   FileIdsSchema,
@@ -79,4 +79,4 @@ const GoalsSchema = new SimpleSchema([
   },
 ]);
 
-export default GoalsSchema;
+export default GoalSchema;
