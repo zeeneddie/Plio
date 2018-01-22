@@ -19,5 +19,6 @@
   "createdAt" : {"$date": 1515670311424},
   "createdBy" : "SQHmBKJ94gJvpLKLt",
   "updatedAt" : {"$date": 1515670311424},
-  "updatedBy" : "SQHmBKJ94gJvpLKLt"
+  "updatedBy" : "SQHmBKJ94gJvpLKLt",
+  "riskIds": ["aqtqWNPrc9fNi6wyp"]
 }

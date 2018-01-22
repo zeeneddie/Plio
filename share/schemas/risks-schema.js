@@ -131,11 +131,6 @@ const RisksSchema = new SimpleSchema([
       type: String,
       allowedValues: Object.values(WorkflowTypes),
     },
-    goalIds: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true,
-    },
   },
 ]);
 
