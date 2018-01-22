@@ -710,12 +710,14 @@ export const WorkspaceDefaultsTypes = {
   DISPLAY_USERS: 'displayUsers',
   DISPLAY_MESSAGES: 'displayMessages',
   DISPLAY_ACTIONS: 'displayActions',
+  DISPLAY_GOALS: 'displayGoals',
 };
 
 export const WorkspaceDefaults = {
   [WorkspaceDefaultsTypes.DISPLAY_USERS]: 5,
   [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: 1,
   [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 4,
+  [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 5,
 };
 
 export const GoalPriorities = { ...ProblemMagnitudes };
