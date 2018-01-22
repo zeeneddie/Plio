@@ -1,10 +1,10 @@
 import { Mongo } from 'meteor/mongo';
 
-import { MilestonesSchema } from '../schemas';
+import { MilestoneSchema } from '../schemas';
 import { CollectionNames } from '../constants';
 
 const Milestones = new Mongo.Collection(CollectionNames.MILESTONES);
 
-Milestones.attachSchema(MilestonesSchema);
+Milestones.attachSchema(MilestoneSchema);
 
 export { Milestones };
