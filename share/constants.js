@@ -752,9 +752,6 @@ export const AllowedActionLinkedDocTypes = [
   // TODO: allow it only for general actions
   DocumentTypes.GOAL,
 ];
-export const AllowedMilestoneLinkedDocTypes = [
-  DocumentTypes.GOAL,
-];
 
 export const MilestoneStatuses = {
   OPEN: 1,

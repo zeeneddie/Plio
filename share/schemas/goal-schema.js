@@ -81,6 +81,11 @@ const GoalSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       optional: true,
     },
+    milestoneIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+    },
   },
 ]);
 
