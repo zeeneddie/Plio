@@ -72,6 +72,7 @@
     "sanitize-html": "^1.16.1",
     "smoothscroll-polyfill": "^0.4.0",
     "styled-components": "^2.4.0",
+    "victory": "^0.24.5",
     "warning": "^3.0.0"
   },
   "devDependencies": {
