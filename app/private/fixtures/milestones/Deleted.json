@@ -2,10 +2,6 @@
   "_id": "6sH5xtkpLBk2zFE5v",
   "organizationId": "KwKXz5RefrE5hjWJ2",
   "title": "Deleted",
-  "linkedTo": [{
-    "documentId": "sMvzMrhXAyCDwKLBp",
-    "documentType": "goal"
-  }],
   "status": 2,
   "completionTargetDate": { "$date": 1516275111424 },
   "isCompleted": "true",

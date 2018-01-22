@@ -20,5 +20,6 @@
   "createdBy" : "SQHmBKJ94gJvpLKLt",
   "updatedAt" : {"$date": 1515670311424},
   "updatedBy" : "SQHmBKJ94gJvpLKLt",
-  "riskIds": ["movmNy9rFvYHshu6X", "aqtqWNPrc9fNi6wyp"]
+  "riskIds": ["movmNy9rFvYHshu6X", "aqtqWNPrc9fNi6wyp"],
+  "milestoneIds": ["ZxF5odsvuPr3SENsP", "rdbFsRoszz5BReiJS"]
 }

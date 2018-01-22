@@ -5,7 +5,7 @@ import {
   getNotifySchema,
   OrganizationIdSchema,
 } from './schemas';
-import { StringLimits, AllowedMilestoneLinkedDocTypes, MilestoneStatuses } from '../constants';
+import { StringLimits, MilestoneStatuses } from '../constants';
 
 export const MilestoneSchema = new SimpleSchema([
   BaseEntitySchema,
@@ -21,18 +21,6 @@ export const MilestoneSchema = new SimpleSchema([
       type: String,
       optional: true,
       max: StringLimits.description.max,
-    },
-    linkedTo: {
-      type: [new SimpleSchema({
-        documentId: {
-          type: String,
-          regEx: SimpleSchema.RegEx.Id,
-        },
-        documentType: {
-          type: String,
-          allowedValues: AllowedMilestoneLinkedDocTypes,
-        },
-      })],
     },
     status: {
       type: Number,

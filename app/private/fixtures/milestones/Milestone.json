@@ -2,10 +2,6 @@
   "_id": "ZxF5odsvuPr3SENsP",
   "organizationId": "KwKXz5RefrE5hjWJ2",
   "title": "Milestone",
-  "linkedTo": [{
-    "documentId": "TDM44nZRTLvRTuQHj",
-    "documentType": "goal"
-  }],
   "status": 1,
   "completionTargetDate": { "$date": 1515670311424 },
   "isCompleted": "false",

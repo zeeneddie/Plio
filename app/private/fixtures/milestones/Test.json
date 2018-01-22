@@ -2,16 +2,6 @@
   "_id": "rdbFsRoszz5BReiJS",
   "organizationId": "KwKXz5RefrE5hjWJ2",
   "title": "Test",
-  "linkedTo": [
-    {
-      "documentId": "84Gypjcdnx7DXyZYY",
-      "documentType": "goal"
-    },
-    {
-      "documentId": "TDM44nZRTLvRTuQHj",
-      "documentType": "goal"
-    }
-  ],
   "status": 1,
   "completionTargetDate": { "$date": 1516275111424 },
   "isCompleted": "false",

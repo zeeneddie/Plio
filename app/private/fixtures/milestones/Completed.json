@@ -2,10 +2,6 @@
   "_id": "vkNfd2yPs8Eg6BQgm",
   "organizationId": "KwKXz5RefrE5hjWJ2",
   "title": "Completed",
-  "linkedTo": [{
-    "documentId": "sMvzMrhXAyCDwKLBp",
-    "documentType": "goal"
-  }],
   "status": 2,
   "completionTargetDate": { "$date": 1516275111424 },
   "isCompleted": "true",
