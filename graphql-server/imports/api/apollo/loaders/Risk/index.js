@@ -1,5 +1,5 @@
-import byGoalIds from './byGoalIds';
+import byId from './byId';
 
 export default {
-  byGoalIds,
+  byId,
 };

@@ -3,10 +3,10 @@ import {
   loadUsersById,
   loadOrganizationById,
   loadFilesById,
-  loadRisksByGoalIds,
   loadActionsByLinkedDocumentId,
   loadLessonsByDocumentId,
   loadMilestonesByLinkedDocumentId,
+  loadRisksById,
   lenses,
 } from 'plio-util';
 import { view } from 'ramda';
@@ -21,6 +21,7 @@ const {
   organizationId,
   completedBy,
   fileIds,
+  riskIds,
 } = lenses;
 
 export default {
@@ -33,7 +34,7 @@ export default {
     notify: loadUsersById(view(notify)),
     organization: loadOrganizationById(view(organizationId)),
     files: loadFilesById(view(fileIds)),
-    risks: loadRisksByGoalIds(view(_id)),
+    risks: loadRisksById(view(riskIds)),
     actions: loadActionsByLinkedDocumentId(view(_id)),
     lessons: loadLessonsByDocumentId(view(_id)),
     milestones: loadMilestonesByLinkedDocumentId(view(_id)),
