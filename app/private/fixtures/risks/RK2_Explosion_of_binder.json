@@ -45,6 +45,5 @@
       "scoredAt": "2016-08-01T21:00:00.000Z"
     }
   ],
-  "workflowType" : "6-step",
-  "goalIds": ["TDM44nZRTLvRTuQHj", "84Gypjcdnx7DXyZYY"]
+  "workflowType" : "6-step"
 }
