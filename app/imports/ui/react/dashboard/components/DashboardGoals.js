@@ -17,10 +17,10 @@ const getLineData = ({
   endDate,
   title,
   milestones = [],
-}, index) => [
-  { x: new Date(startDate), y: index, label: title },
-  { x: new Date(endDate), y: index },
-  ...milestones.map(({ completionTargetDate }, y) => ({
+}, y) => [
+  { x: new Date(startDate), y, label: title },
+  { x: new Date(endDate), y },
+  ...milestones.map(({ completionTargetDate }) => ({
     y,
     x: new Date(completionTargetDate),
   })),
@@ -32,26 +32,26 @@ const getScatterData = ({
   endDate,
   color,
   milestones = [],
-}, index) => [
+}, y) => [
   {
+    y,
     x: new Date(startDate),
-    y: index,
     label: `${title} \n start date: \n ${new Date(startDate).toDateString()}`,
     symbol: 'circle',
     strokeWidth: 7,
     fill: color,
   },
   {
+    y,
     x: new Date(endDate),
-    y: index,
     label: `${title} \n end date: \n ${new Date(endDate).toDateString()}`,
     symbol: 'circle',
     strokeWidth: 7,
     fill: color,
   },
   ...milestones.map(({ completionTargetDate, title: milestoneTitle }) => ({
+    y,
     x: new Date(completionTargetDate),
-    y: index,
     label: milestoneTitle,
     symbol: 'square',
     strokeWidth: 3,
@@ -122,7 +122,7 @@ const DashboardGoals = ({
     />
     {goals.map((goal, index) => (
       <VictoryLine
-        key={index}
+        key={goal._id}
         animate={{ duration: 500 }}
         style={{
           data: {
@@ -149,7 +149,7 @@ const DashboardGoals = ({
     ))}
     {goals.map((goal, index) => (
       <VictoryScatter
-        key={index}
+        key={goal._id}
         style={{
           data: {
             stroke: goal.color,
