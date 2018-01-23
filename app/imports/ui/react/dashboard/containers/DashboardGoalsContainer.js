@@ -42,9 +42,10 @@ export default namedCompose('DashboardGoalsContainer')(
   }),
   onlyUpdateForKeys(['organizationId', 'itemsPerRow']),
   graphql(gql`${DASHBOARD_GOALS_QUERY}`, {
-    props: ({ data: { loading, goals } }) => ({
+    props: ({ data: { loading, goals: { totalCount, goals } = {} } }) => ({
       loading,
       goals,
+      totalCount,
     }),
     options: ({
       organizationId,

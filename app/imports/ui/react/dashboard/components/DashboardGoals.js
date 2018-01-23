@@ -176,7 +176,7 @@ const Chart = ({
 );
 
 const DashboardGoals = ({
-  count,
+  totalCount,
   goals,
   zoomDomain,
   onZoom,
@@ -185,7 +185,7 @@ const DashboardGoals = ({
 }) => (
   <DashboardStatsExpandable
     items={goals}
-    total={goals.length}
+    total={totalCount}
     itemsPerRow={goals.length}
     render={({ items }) => (
       <Chart
@@ -196,12 +196,12 @@ const DashboardGoals = ({
       />
     )}
   >
-    {pluralize('goal', count || goals.length, true)}
+    {pluralize('goal', totalCount || goals.length, true)}
   </DashboardStatsExpandable>
 );
 
 DashboardGoals.propTypes = {
-  count: PropTypes.number.isRequired,
+  totalCount: PropTypes.number.isRequired,
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
   // zoomDomain: ?
   onZoom: PropTypes.func,
