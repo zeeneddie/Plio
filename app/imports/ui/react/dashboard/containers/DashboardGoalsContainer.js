@@ -8,10 +8,11 @@ import {
   onlyUpdateForKeys,
   branch,
   renderNothing,
+  withState,
 } from 'recompose';
 import PropTypes from 'prop-types';
 import { getGoalsLength, lenses } from 'plio-util';
-import { view } from 'ramda';
+import { view, mergeDeepRight } from 'ramda';
 
 import { namedCompose, withHr, withPreloaderPage } from '../../helpers';
 import { DashboardGoals } from '../components';
@@ -41,12 +42,8 @@ export default namedCompose('DashboardGoalsContainer')(
     [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'itemsPerRow',
   }),
   onlyUpdateForKeys(['organizationId', 'itemsPerRow']),
+  withState('isOpen', 'setIsOpen', false),
   graphql(gql`${DASHBOARD_GOALS_QUERY}`, {
-    props: ({ data: { loading, goals: { totalCount, goals } = {} } }) => ({
-      loading,
-      goals,
-      totalCount,
-    }),
     options: ({
       organizationId,
       itemsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
@@ -54,6 +51,38 @@ export default namedCompose('DashboardGoalsContainer')(
       variables: {
         organizationId,
         limit: itemsPerRow,
+      },
+    }),
+    props: ({
+      data: {
+        loading,
+        fetchMore,
+        networkStatus,
+        goals: {
+          totalCount,
+          goals,
+        } = {}
+      },
+      ownProps: {
+        isOpen,
+        setIsOpen,
+      },
+    }) => ({
+      isOpen,
+      loading,
+      goals,
+      totalCount,
+      toggle: async () => {
+        if (!isOpen) {
+          await fetchMore({
+            variables: {
+              limit: 0,
+            },
+            updateQuery: (prev, { fetchMoreResult }) => mergeDeepRight(prev, fetchMoreResult),
+          });
+        }
+
+        setIsOpen(!isOpen);
       },
     }),
   }),

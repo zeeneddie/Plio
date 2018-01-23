@@ -182,6 +182,8 @@ const DashboardGoals = ({
   onZoom,
   onLineTap,
   onScatterTap,
+  toggle,
+  isOpen,
 }) => (
   <DashboardStatsExpandable
     items={goals}
@@ -195,6 +197,7 @@ const DashboardGoals = ({
         }}
       />
     )}
+    {...{ toggle, isOpen }}
   >
     {pluralize('goal', totalCount || goals.length, true)}
   </DashboardStatsExpandable>
