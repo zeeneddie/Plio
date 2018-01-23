@@ -7,7 +7,7 @@ export { default as getChildrenByType } from './getChildrenByType';
 export { default as getListData } from './getListData';
 export { default as getVideoSource } from './getVideoSource';
 export { default as omitProps } from './omitProps';
-export { default as spinnerWhileLoading } from './spinnerWhileLoading';
+export { default as withPreloaderPage } from './withPreloaderPage';
 export { default as withContextCollapsed } from './withContextCollapsed';
 export { default as withStateCollapsed } from './withStateCollapsed';
 export { default as withUpdateViewedBy } from './withUpdateViewedBy';
