@@ -1,6 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
+.c1 {
+  -webkit-transition: all .4s ease;
+  transition: all .4s ease;
+  -webkit-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+
+.c0 {
+  cursor: pointer;
+  text-decoration: none;
+}
+
 <DashboardStatsUnreadMessages
   count={24}
   displayMessages={1}
@@ -825,16 +838,16 @@ exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
               toggle={[Function]}
             >
               <Component
-                className="sc-bwzfXH goQqlY"
+                className="c0"
                 onClick={[Function]}
                 toggle={[Function]}
               >
                 <DashboardStatsTitle
-                  className="sc-bwzfXH goQqlY"
+                  className="c0"
                   onClick={[Function]}
                 >
                   <h4
-                    className="dashboard-stats-title sc-bwzfXH goQqlY"
+                    className="dashboard-stats-title c0"
                     onClick={[Function]}
                   >
                     24 unread messages
@@ -863,7 +876,7 @@ exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
                       toggle={[Function]}
                     >
                       <Icon
-                        className="sc-bdVaJa kTCbom"
+                        className="c1"
                         isOpen={false}
                         name="angle-down"
                         toggle={[Function]}
@@ -873,7 +886,7 @@ exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
                           size={1}
                         >
                           <i
-                            className="fa fa-angle-down sc-bdVaJa kTCbom"
+                            className="fa fa-angle-down c1"
                           />
                         </FaSize>
                       </Icon>

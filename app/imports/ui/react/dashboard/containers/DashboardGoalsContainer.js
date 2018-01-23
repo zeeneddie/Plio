@@ -10,9 +10,10 @@ import {
   renderNothing,
 } from 'recompose';
 import PropTypes from 'prop-types';
-import { getGoalsLength } from 'plio-util';
+import { getGoalsLength, lenses } from 'plio-util';
+import { view } from 'ramda';
 
-import { namedCompose, withHr } from '../../helpers';
+import { namedCompose, withHr, withPreloaderPage } from '../../helpers';
 import { DashboardGoals } from '../components';
 import {
   WORKSPACE_DEFAULTS,
@@ -37,9 +38,9 @@ export default namedCompose('DashboardGoalsContainer')(
   flattenProp(WORKSPACE_DEFAULTS),
   renameProps({
     _id: 'organizationId',
-    [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'goalsPerRow',
+    [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'itemsPerRow',
   }),
-  onlyUpdateForKeys(['organizationId', 'goalsPerRow']),
+  onlyUpdateForKeys(['organizationId', 'itemsPerRow']),
   graphql(gql`${DASHBOARD_GOALS_QUERY}`, {
     props: ({ data: { loading, goals } }) => ({
       loading,
@@ -47,14 +48,18 @@ export default namedCompose('DashboardGoalsContainer')(
     }),
     options: ({
       organizationId,
-      goalsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
+      itemsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
     }) => ({
       variables: {
         organizationId,
-        limit: goalsPerRow,
+        limit: itemsPerRow,
       },
     }),
   }),
+  withPreloaderPage(
+    view(lenses.loading),
+    () => ({ size: 2 }),
+  ),
   branch(
     getGoalsLength,
     withHr,

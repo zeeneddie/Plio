@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import React from 'react';
 import {
   VictoryChart,
@@ -9,6 +9,10 @@ import {
   VictoryScatter,
   VictoryTooltip,
 } from 'victory';
+import pluralize from 'pluralize';
+import { joinIds } from 'plio-util';
+
+import { DashboardStatsExpandable } from '../../components';
 
 const fontFamily = '"Roboto", "Helvetica Neue", Helvetica, sans-serif';
 
@@ -60,14 +64,14 @@ const getScatterData = ({
   })),
 ];
 
-const DashboardGoals = ({
+const Chart = ({
   loading,
   goals,
   zoomDomain,
   onZoom,
   onLineTap,
   onScatterTap,
-}) => !loading && (
+}) => (
   <VictoryChart
     width={1140}
     height={400}
@@ -171,6 +175,38 @@ const DashboardGoals = ({
   </VictoryChart>
 );
 
-DashboardGoals.propTypes = {};
+const DashboardGoals = ({
+  count,
+  goals,
+  zoomDomain,
+  onZoom,
+  onLineTap,
+  onScatterTap,
+}) => (
+  <DashboardStatsExpandable
+    items={goals}
+    total={goals.length}
+    itemsPerRow={goals.length}
+    render={({ items }) => (
+      <Chart
+        key={joinIds(items)}
+        {...{
+          goals: items,
+        }}
+      />
+    )}
+  >
+    {pluralize('goal', count || goals.length, true)}
+  </DashboardStatsExpandable>
+);
+
+DashboardGoals.propTypes = {
+  count: PropTypes.number.isRequired,
+  goals: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // zoomDomain: ?
+  onZoom: PropTypes.func,
+  onLineTap: PropTypes.func,
+  onScatterTap: PropTypes.func,
+};
 
 export default DashboardGoals;
