@@ -1,0 +1,9 @@
+type Mutation {
+  insertGoal(
+    title: String!
+    ownerId: ID!
+    startDate: Date!
+    endDate: Date!
+    color: String
+  ): Goal
+}
