@@ -11,8 +11,9 @@ import {
   withState,
 } from 'recompose';
 import PropTypes from 'prop-types';
-import { getGoalsLength, lenses } from 'plio-util';
-import { view, mergeDeepRight } from 'ramda';
+import { getGoalsLength, lenses, lensNotEq } from 'plio-util';
+import { view, mergeDeepRight, allPass } from 'ramda';
+import { NetworkStatus } from 'apollo-client';
 
 import { namedCompose, withHr, withPreloaderPage } from '../../helpers';
 import { DashboardGoals } from '../components';
@@ -52,6 +53,7 @@ export default namedCompose('DashboardGoalsContainer')(
         organizationId,
         limit: itemsPerRow,
       },
+      notifyOnNetworkStatusChange: true,
     }),
     props: ({
       data: {
@@ -61,7 +63,7 @@ export default namedCompose('DashboardGoalsContainer')(
         goals: {
           totalCount,
           goals,
-        } = {}
+        } = {},
       },
       ownProps: {
         isOpen,
@@ -72,6 +74,7 @@ export default namedCompose('DashboardGoalsContainer')(
       loading,
       goals,
       totalCount,
+      networkStatus,
       toggle: async () => {
         if (!isOpen) {
           await fetchMore({
@@ -87,7 +90,10 @@ export default namedCompose('DashboardGoalsContainer')(
     }),
   }),
   withPreloaderPage(
-    view(lenses.loading),
+    allPass([
+      view(lenses.loading),
+      lensNotEq(lenses.networkStatus, NetworkStatus.fetchMore),
+    ]),
     () => ({ size: 2 }),
   ),
   branch(

@@ -12,7 +12,7 @@ import {
 import pluralize from 'pluralize';
 import { joinIds } from 'plio-util';
 
-import { DashboardStatsExpandable } from '../../components';
+import { DashboardStatsExpandable, IconLoading } from '../../components';
 
 const fontFamily = '"Roboto", "Helvetica Neue", Helvetica, sans-serif';
 
@@ -184,17 +184,17 @@ const DashboardGoals = ({
   onScatterTap,
   toggle,
   isOpen,
+  loading,
 }) => (
   <DashboardStatsExpandable
     items={goals}
     total={totalCount}
     itemsPerRow={goals.length}
+    renderIcon={loading ? () => <IconLoading /> : undefined}
     render={({ items }) => (
       <Chart
         key={joinIds(items)}
-        {...{
-          goals: items,
-        }}
+        goals={items}
       />
     )}
     {...{ toggle, isOpen }}
