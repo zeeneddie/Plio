@@ -12,7 +12,7 @@ export default {
     startDate,
     endDate,
     color,
-    // priority?
+    priority
   }) {
     const serialNumber = generateSerialNumber(this.collection, { organizationId });
     const sequentialId = `${Abbreviations.GOAL}${serialNumber}`;
@@ -26,6 +26,7 @@ export default {
       color,
       serialNumber,
       sequentialId,
+      priority,
     });
   },
 };
