@@ -1,0 +1,11 @@
+{
+  "name": "share",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "plio-util": "https://github.com/Pliohub/plio-util.git",
+    "ramda": "^0.25.0"
+  }
+}
