@@ -12,7 +12,7 @@ import {
 } from 'recompose';
 import PropTypes from 'prop-types';
 import { getGoalsLength, lenses, lensNotEq } from 'plio-util';
-import { view, mergeDeepRight, allPass } from 'ramda';
+import { view, allPass } from 'ramda';
 import { NetworkStatus } from 'apollo-client';
 
 import { namedCompose, withHr, withPreloaderPage } from '../../helpers';
@@ -81,7 +81,13 @@ export default namedCompose('DashboardGoalsContainer')(
             variables: {
               limit: 0,
             },
-            updateQuery: (prev, { fetchMoreResult }) => mergeDeepRight(prev, fetchMoreResult),
+            updateQuery: (prev, { fetchMoreResult }) => ({
+              ...prev,
+              goals: {
+                ...prev.goals,
+                goals: fetchMoreResult.goals.goals,
+              },
+            }),
           });
         }
 
