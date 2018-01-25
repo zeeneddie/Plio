@@ -1,6 +1,8 @@
-// needs protection
-export default async (
-  rootValue,
+import { applyMiddleware } from 'plio-util';
+import { checkLoggedIn, checkOrgMembership } from '../../../../../share/middleware';
+
+export const resolver = async (
+  root,
   {
     organizationId,
     limit,
@@ -25,3 +27,8 @@ export default async (
     goals,
   };
 };
+
+export default applyMiddleware(
+  checkLoggedIn(),
+  checkOrgMembership(),
+)(resolver);
