@@ -1,10 +1,10 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
+import { times } from 'ramda';
 
 import { DashboardUserStats } from '../DashboardUserStats';
 import DashboardStatsUserList from '../DashboardStatsUserList';
 import { Collapse, PlusButton } from '../../../components';
-import { genUsers } from '../../../../../client/util';
 import __modal__ from '../../../../../startup/client/mixins/modal';
 
 jest.mock('../../../../../startup/client/mixins/modal', () => ({
@@ -14,6 +14,16 @@ jest.mock('../../../../../startup/client/mixins/modal', () => ({
 }));
 
 describe('DashboardUserStats', () => {
+  const genUser = n => ({
+    _id: n,
+    status: 'online',
+    profile: {
+      firstName: `John ${n}`,
+      lastName: `Doe ${n}`,
+    },
+  });
+  const genUsers = times(genUser);
+
   it('renders collapse when more than 5 users online', () => {
     const len = 25;
     const users = genUsers(len);

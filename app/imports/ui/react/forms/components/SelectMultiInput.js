@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, withState, withHandlers, mapProps } from 'recompose';
 import { reject, unless, prop, propOr, append, equals } from 'ramda';
+import { filterBy, rejectBy } from 'plio-util';
 
 import SelectInput from './SelectInput';
 import FormButtonList from './FormButtonList';
-import { filterBy, rejectBy } from '../../../../client/util';
 
 const enhance = compose(
   withState('value', 'setValue', propOr('', 'value')),

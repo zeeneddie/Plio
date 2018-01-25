@@ -3,8 +3,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { times } from 'ramda';
+import { joinIds } from 'plio-util';
 
-import { joinIds } from '../../../../client/util';
 import { DashboardStatsExpandable } from '../DashboardStatsExpandable';
 import { Collapse } from '../';
 

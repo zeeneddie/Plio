@@ -1,10 +1,10 @@
 import { setIsCardReady } from '/imports/client/store/actions/globalActions';
 
 export default subscribe => function loadCardData({
-    dispatch,
-    urlItemId,
-    ...props,
-  }, onData) {
+  dispatch,
+  urlItemId,
+  ...props
+}, onData) {
   let subscription;
   let isCardReady = true;
 

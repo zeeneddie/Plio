@@ -12,6 +12,7 @@ import {
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 import { always, view } from 'ramda';
+import { lenses } from 'plio-util';
 
 import StandardsLayout from '../../components/Layout';
 import {
@@ -36,7 +37,7 @@ import {
   observeStandardTypes,
 } from '../../observers';
 import { setInitializing } from '../../../../../client/store/actions/standardsActions';
-import { lenses, composeWithTracker } from '../../../../../client/util';
+import { composeWithTracker } from '../../../../../client/util';
 import {
   getFilter,
   getUrlItemId,

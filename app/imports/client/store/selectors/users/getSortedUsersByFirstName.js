@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { sort } from 'ramda';
+import { byProfileFirstName } from 'plio-util';
 
 import { getUsers } from './state';
-import { byProfileFirstName } from '../../../util';
 
 export default createSelector(getUsers, sort(byProfileFirstName));
