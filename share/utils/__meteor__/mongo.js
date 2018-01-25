@@ -30,7 +30,7 @@ Collection.prototype.attachSchema = jest.fn();
 Collection.prototype.insert = jest.fn(async function insert(doc, ...args) {
   const writeDoc = { _id: faker.random.uuid(), ...doc };
   const { insertedId } = await this.collection.insertOne(writeDoc, ...args);
-  return insertedId.toString();
+  return insertedId;
 });
 Collection.prototype.update = jest.fn(async function update(...args) {
   const { result: { nModified } } = await this.collection.update(...args);
