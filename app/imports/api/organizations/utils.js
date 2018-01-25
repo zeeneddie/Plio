@@ -1,7 +1,7 @@
 import { _ } from 'meteor/underscore';
 
 import { Organizations } from '../../share/collections';
-import { createOrgQueryWhereUserIsMember } from '../queries';
+import { createOrgQueryWhereUserIsMember } from '../../share/mongo/queries';
 
 /**
  * Get the date of joining the user to the organisation:

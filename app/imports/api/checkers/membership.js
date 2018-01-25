@@ -7,7 +7,10 @@ import {
   NOT_AN_ORG_MEMBER,
 } from '../errors';
 import { chain, checkAndThrow } from '../helpers';
-import { createOrgQueryWhereUserIsOwner, createOrgQueryWhereUserIsMember } from '../queries';
+import {
+  createOrgQueryWhereUserIsOwner,
+  createOrgQueryWhereUserIsMember,
+} from '../../share/mongo/queries';
 import { checkDocExistance } from './document';
 
 const userIdOrgIdTester = (userId, organizationId) => _.every([
