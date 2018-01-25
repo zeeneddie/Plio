@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "faker": "^4.1.0",
     "plio-util": "https://github.com/Pliohub/plio-util.git",
     "ramda": "^0.25.0"
   }
