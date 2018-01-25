@@ -1,10 +1,10 @@
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { LoggedInMixin } from 'meteor/tunifight:loggedin-mixin';
 import curry from 'lodash.curry';
+import { applyMiddleware } from 'plio-util';
 
 import { UNAUTHORIZED } from './errors';
 import { checkDocAndMembershipAndMore } from './checkers';
-import { applyMiddleware } from './helpers';
 
 export default class Method extends ValidatedMethod {
   constructor(props) {

@@ -1,8 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { curry } from 'ramda';
 import { check } from 'meteor/check';
-
-import applyMiddleware from '../applyMiddleware';
+import { applyMiddleware } from 'plio-util';
 
 export default curry((handler, { name, middleware = [] }) => {
   check(name, String);
