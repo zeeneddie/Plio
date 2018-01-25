@@ -14,7 +14,6 @@ export default {
     color,
     priority,
   }) {
-    console.log(title);
     const serialNumber = generateSerialNumber(this.collection, { organizationId });
     const sequentialId = `${Abbreviations.GOAL}${serialNumber}`;
 

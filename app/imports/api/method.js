@@ -93,7 +93,9 @@ export class MiddlewareMethod extends ValidatedMethod {
     const run = async function (args) {
       const { userId } = this;
       const context = { userId };
-      return applyMiddleware(...middleware)(props.run.bind(this))(args, context);
+      return applyMiddleware(...middleware)(
+        (root, ...otherArgs) => props.run.apply(this, otherArgs),
+      )({}, args, context);
     };
 
     super({ ...props, run, mixins });
