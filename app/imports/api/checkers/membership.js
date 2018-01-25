@@ -56,6 +56,7 @@ export const isOrgMemberBySelector = (userId, selector) => !!Organizations.findO
   ...createOrgQueryWhereUserIsMember(userId),
 });
 
+// replace all instances by shared one
 export const isOrgMember = (userId, organizationId) => {
   if (!userIdOrgIdTester(userId, organizationId)) return false;
 
