@@ -5,8 +5,6 @@ import { lenses } from 'plio-util';
 import { isOrgMember } from '../../checkers';
 import Errors from '../../errors';
 
-const skipArgs = (n, k, f) => (...args) => f(...remove(n, k, args))
-
 const { userId, organizationId } = lenses;
 
 export default lens => (next, root, args, context) => ifElse(
