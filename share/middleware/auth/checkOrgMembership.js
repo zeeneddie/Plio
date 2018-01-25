@@ -12,7 +12,7 @@ export default lens => (next, args, context) => ifElse(
     view(lens || organizationId),
     view(userId),
   ]),
-  (...args) => next(...args),
+  (...otherArgs) => next(...otherArgs),
   () => {
     throw new Meteor.Error(403, Errors.NOT_ORG_MEMBER);
   },
