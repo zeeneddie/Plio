@@ -6,8 +6,8 @@ import moment from 'moment-timezone';
 import { Organizations } from '/imports/share/collections/organizations';
 import { remove } from '/imports/api/users/methods';
 import { OrgCurrencies } from '/imports/share/constants';
-import { createOrgQueryWhereUserIsMember } from '/imports/api/queries';
 import { getSelectedOrgSerialNumber } from '/imports/api/helpers';
+import { createOrgQueryWhereUserIsMember } from '../../share/mongo/queries';
 
 
 Template.HelloPage.viewmodel({

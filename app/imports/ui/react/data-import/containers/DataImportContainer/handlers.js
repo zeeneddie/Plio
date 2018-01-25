@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 
 import { OrgSubs } from '/imports/startup/client/subsmanagers';
-import { createOrgQueryWhereUserIsOwner } from '/imports/api/queries';
+import { createOrgQueryWhereUserIsOwner } from '../../../../../share/mongo/queries';
 import { Organizations } from '/imports/share/collections/organizations';
 import {
   setOwnOrgs,

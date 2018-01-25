@@ -1,5 +1,5 @@
 import { Organizations } from '../../share/collections/organizations';
-import { createOrgQueryWhereUserIsMember } from '../queries';
+import { createOrgQueryWhereUserIsMember } from '../../share/mongo/queries';
 import { canChangeStandards } from './roles';
 
 export const canChangeHelpDocs = (userId) => {

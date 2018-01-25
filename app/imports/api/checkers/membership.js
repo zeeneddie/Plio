@@ -7,7 +7,10 @@ import {
   NOT_AN_ORG_MEMBER,
 } from '../errors';
 import { chain, checkAndThrow } from '../helpers';
-import { createOrgQueryWhereUserIsOwner, createOrgQueryWhereUserIsMember } from '../queries';
+import {
+  createOrgQueryWhereUserIsOwner,
+  createOrgQueryWhereUserIsMember,
+} from '../../share/mongo/queries';
 import { checkDocExistance } from './document';
 
 const userIdOrgIdTester = (userId, organizationId) => _.every([
@@ -53,6 +56,7 @@ export const isOrgMemberBySelector = (userId, selector) => !!Organizations.findO
   ...createOrgQueryWhereUserIsMember(userId),
 });
 
+// replace all instances by shared one
 export const isOrgMember = (userId, organizationId) => {
   if (!userIdOrgIdTester(userId, organizationId)) return false;
 

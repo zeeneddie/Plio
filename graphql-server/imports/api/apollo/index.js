@@ -4,8 +4,9 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 import schema from './apiSchema';
-import * as collections from '../../share/collections';
 import { createLoaders } from './loaders';
+import * as collections from '../../share/collections';
+import * as services from '../../share/services';
 
 const corsOptions = {
   origin: Meteor.settings.mainApp.url,
@@ -14,13 +15,15 @@ const corsOptions = {
 
 createApolloServer(() => ({
   schema,
-  context: {
+  context: ctx => ({
+    ...ctx,
+    services,
     collections: {
       ...collections,
       Users: Meteor.users,
     },
     loaders: createLoaders(),
-  },
+  }),
 }), {
   graphiql: true,
   configServer: (graphQLServer) => {

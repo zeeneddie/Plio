@@ -6,7 +6,7 @@ import { isPlioUser } from '/imports/api/checkers';
 import { Organizations } from '/imports/share/collections/organizations';
 import { OrgCurrencies } from '/imports/share/constants';
 import { OrganizationSettingsHelp } from '/imports/api/help-messages';
-import { createOrgQueryWhereUserIsMember } from '/imports/api/queries';
+import { createOrgQueryWhereUserIsMember } from '../../../../../share/mongo/queries';
 
 
 Template.Organization_Menu.viewmodel({

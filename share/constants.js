@@ -764,3 +764,8 @@ export const MilestoneStatusNames = {
   [MilestoneStatuses.OPEN]: 'Open',
   [MilestoneStatuses.COMPLETED]: 'Completed',
 };
+
+// fill in other stuff
+export const Abbreviations = {
+  GOAL: 'KG',
+};

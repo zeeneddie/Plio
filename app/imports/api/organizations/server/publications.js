@@ -10,7 +10,7 @@ import { RiskTypes } from '/imports/share/collections/risk-types';
 import { getUserOrganizations } from '../utils';
 import { isPlioUser, isOrgMember } from '../../checkers';
 import { makeOptionsFields } from '../../helpers';
-import { createOrgQueryWhereUserIsOwner } from '../../queries';
+import { createOrgQueryWhereUserIsOwner } from '../../../share/mongo/queries';
 import { WORKSPACE_DEFAULTS } from '../../../share/constants';
 
 Meteor.publish('invitationInfo', (invitationId) => {

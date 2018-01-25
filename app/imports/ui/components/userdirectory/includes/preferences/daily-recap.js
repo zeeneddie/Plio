@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { updateUserSettings } from '/imports/api/organizations/methods';
-import { createOrgQueryWhereUserIsMember } from '/imports/api/queries';
+import { createOrgQueryWhereUserIsMember } from '../../../../../share/mongo/queries';
 
 Template.UserPreferences_DailyRecap.viewmodel({
   mixin: ['modal', 'collapse'],
