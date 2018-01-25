@@ -3,10 +3,13 @@ import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 import moment from 'moment-timezone';
 
-import { ActionUndoTimeInHours } from '/imports/share/constants.js';
-
+import { ActionUndoTimeInHours } from '../../../../../../share/constants';
+import { canCompletionBeUndone } from '../../../../../../api/actions/checkers';
 
 Template.Actions_CompletedBy.viewmodel({
+  organizationId: '',
+  isCompleted: true,
+  isVerified: false,
   completedBy: '',
   completedAt: '',
   placeholder: 'Completed by',
@@ -15,9 +18,11 @@ Template.Actions_CompletedBy.viewmodel({
   currentTime: '',
   undoDeadline: '',
   onCreated() {
+    this.currentTime(Date.now());
+
     this.interval = Meteor.setInterval(() => {
       this.currentTime(Date.now());
-    }, 1000);
+    }, 10 * 1000);
   },
   autorun() {
     const undoDeadline = new Date(this.completedAt().getTime());
@@ -53,15 +58,22 @@ Template.Actions_CompletedBy.viewmodel({
     return (...args) => this.onUndo(...args);
   },
   canBeUndone() {
-    const currentTime = this.currentTime();
-    const undoDeadline = this.undoDeadline();
+    this.currentTime.depend();
 
-    let isTimeLeftToUndo = false;
-    if (_.isDate(undoDeadline) && _.isFinite(currentTime)) {
-      isTimeLeftToUndo = currentTime < undoDeadline;
-    }
-
-    return isTimeLeftToUndo && (this.completedBy() === Meteor.userId()) && this.enabled();
+    const organizationId = this.organizationId();
+    const isCompleted = this.isCompleted();
+    const isVerified = this.isVerified();
+    const completedAt = this.completedAt();
+    const completedBy = this.completedBy();
+    const action = {
+      isCompleted,
+      isVerified,
+      completedAt,
+      completedBy,
+      organizationId,
+    };
+    const userId = Meteor.userId();
+    return this.enabled() && canCompletionBeUndone(action, userId);
   },
   passedFromCompleted() {
     return moment(this.completedAt()).from(this.currentTime());

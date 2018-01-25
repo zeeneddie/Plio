@@ -1,4 +1,6 @@
-import { UserRoles } from '/imports/share/constants.js';
+/* eslint-disable max-len */
+
+import { UserRoles } from '/imports/share/constants';
 
 const StandardsHelp = {
   standard: 'A standard is a document that sets standards for how you do things (policies, processes, etc) in your organization.  To add a standard into Plio, just fill in the card details, and link to a source file which may be a Word document, a URL link to a web document or a video.',
@@ -60,6 +62,7 @@ const UserProfileHelp = {
   [UserRoles.DELETE_USERS]: 'Indicate whether this user can delete other users from your Plio organization',
   [UserRoles.EDIT_USER_ROLES]: 'Indicate whether this user can edit the User Superpowers section in the User profile (you should only grant this power to very few, highly trusted users)',
   [UserRoles.CHANGE_ORG_SETTINGS]: 'Indicate whether this user can edit the Organization settings (you should only grant this power to very few, highly trusted users)',
+  [UserRoles.COMPLETE_ANY_ACTION]: 'Indicate whether this user can complete/verify any action in your Plio organization',
 };
 
 export {

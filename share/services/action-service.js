@@ -118,7 +118,7 @@ export default {
     return ret;
   },
 
-  complete({ _id, userId, completionComments }) {
+  complete({ _id, completionComments }, { userId }) {
     const action = this.collection.findOne({ _id });
     const linkedTo = action.linkedTo || [];
     const organization = Organizations.findOne({ _id: action.organizationId });
@@ -149,7 +149,7 @@ export default {
     return ret;
   },
 
-  undoCompletion({ _id, userId }) {
+  undoCompletion({ _id }) {
     const ret = this.collection.update({
       _id,
     }, {
@@ -171,7 +171,11 @@ export default {
   },
 
   verify({
-    _id, userId, success, verificationComments,
+    _id,
+    success,
+    verificationComments,
+  }, {
+    userId,
   }) {
     const ret = this.collection.update({
       _id,
@@ -190,7 +194,7 @@ export default {
     return ret;
   },
 
-  undoVerification({ _id, userId }, { action }) {
+  undoVerification({ _id }, { doc: action }) {
     const query = {
       'updateOfStandards.status': 1, // Completed
       'updateOfStandards.completedAt': { $exists: true },

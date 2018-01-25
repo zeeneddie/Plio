@@ -5,7 +5,7 @@ import { Organizations } from '../../../share/collections';
 import { WORKSPACE_DEFAULTS, WorkspaceDefaults } from '../../../share/constants';
 
 Migrations.add({
-  version: 11,
+  version: 13,
   name: 'Add workspace defaults to organizations',
   up() {
     const query = { [WORKSPACE_DEFAULTS]: null };
@@ -25,7 +25,7 @@ Migrations.add({
         [WORKSPACE_DEFAULTS]: '',
       },
     };
-    const options = { multi: true };
+    const options = { multi: true, validate: false };
     Organizations.update(query, modifier, options);
     console.log('Removed workspace defaults from organizations');
   },

@@ -2,9 +2,12 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 
+import { canBeCompleted } from '../../../../../../api/actions/checkers';
+
 Template.Actions_ToBeCompletedBy.viewmodel({
   mixin: ['search', 'user', 'members'],
   toBeCompletedBy: '',
+  organizationId: null,
   placeholder: 'To be completed by',
   selectFirstIfNoSelected: false,
   completionComments: '',
@@ -31,7 +34,11 @@ Template.Actions_ToBeCompletedBy.viewmodel({
     };
   },
   canBeCompleted() {
-    return !!this.onComplete && (this.toBeCompletedBy() === Meteor.userId());
+    if (!this.onComplete) return false;
+    const userId = Meteor.userId();
+    const toBeCompletedBy = this.toBeCompletedBy();
+    const organizationId = this.organizationId();
+    return canBeCompleted({ toBeCompletedBy, organizationId }, userId);
   },
   complete() {
     return (viewmodel) => {

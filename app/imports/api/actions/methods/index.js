@@ -3,20 +3,14 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import ActionService from '/imports/share/services/action-service';
 import { RequiredSchema } from '/imports/share/schemas/action-schema';
 import { Actions } from '/imports/share/collections/actions';
-import { IdSchema, CompleteActionSchema } from '/imports/share/schemas/schemas';
+import { IdSchema } from '/imports/share/schemas/schemas';
 import { ProblemTypes } from '/imports/share/constants';
 import Method, { CheckedMethod } from '../../method';
 import {
   checkOrgMembership,
   onRemoveChecker,
   onRestoreChecker,
-  ACT_Check,
-  ACT_CheckEverything,
   ACT_OnLinkChecker,
-  ACT_OnCompleteChecker,
-  ACT_OnUndoCompletionChecker,
-  ACT_OnVerifyChecker,
-  ACT_OnUndoVerificationChecker,
   ACT_LinkedDocsChecker,
 } from '../../checkers';
 import { inject, always, T } from '/imports/api/helpers';
@@ -29,6 +23,10 @@ import {
 } from '../../errors';
 
 export { default as update } from './update';
+export { default as complete } from './complete';
+export { default as undoCompletion } from './undoCompletion';
+export { default as verify } from './verify';
+export { default as undoVerification } from './undoVerification';
 
 const injectACT = inject(Actions);
 
@@ -221,60 +219,6 @@ export const unlinkDocument = new CheckedMethod({
 
   run({ _id, documentId, documentType }) {
     return ActionService.unlinkDocument({ _id, documentId, documentType });
-  },
-});
-
-export const complete = new CheckedMethod({
-  name: 'Actions.complete',
-
-  validate: CompleteActionSchema.validator(),
-
-  check: checker => injectACT(checker)(ACT_OnCompleteChecker),
-
-  run({ _id, ...args }) {
-    return ActionService.complete({ _id, ...args, userId: this.userId });
-  },
-});
-
-export const undoCompletion = new CheckedMethod({
-  name: 'Actions.undoCompletion',
-
-  validate: IdSchema.validator(),
-
-  check: checker => injectACT(checker)(ACT_OnUndoCompletionChecker),
-
-  run({ _id }) {
-    return ActionService.undoCompletion({ _id, userId: this.userId });
-  },
-});
-
-export const verify = new CheckedMethod({
-  name: 'Actions.verify',
-
-  validate: new SimpleSchema([
-    IdSchema,
-    {
-      success: { type: Boolean },
-      verificationComments: { type: String },
-    },
-  ]).validator(),
-
-  check: checker => injectACT(checker)(ACT_OnVerifyChecker),
-
-  run({ _id, ...args }) {
-    return ActionService.verify({ _id, userId: this.userId, ...args });
-  },
-});
-
-export const undoVerification = new CheckedMethod({
-  name: 'Actions.undoVerification',
-
-  validate: IdSchema.validator(),
-
-  check: checker => injectACT(checker)(ACT_OnUndoVerificationChecker),
-
-  run({ _id }, { action }) {
-    return ActionService.undoVerification({ _id, userId: this.userId }, { action });
   },
 });
 

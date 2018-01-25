@@ -1,5 +1,6 @@
-import { ActionTypes } from '/imports/share/constants';
-import { equals } from '/imports/api/helpers';
+import { equals } from 'ramda';
+
+import { ActionTypes } from '../../share/constants';
 
 export const getClassByStatus = (status) => {
   switch (status) {

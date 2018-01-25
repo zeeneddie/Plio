@@ -48,7 +48,8 @@ import {
   ProblemTypes,
 } from '/imports/share/constants';
 
-import './11-workspace-defaults';
+import './12-add-complete-actions-role';
+import './13-workspace-defaults';
 
 Migrations.add({
   version: 1,

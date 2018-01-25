@@ -2,11 +2,15 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 
+import { canBeVerified } from '../../../../../../api/actions/checkers';
 
 Template.Actions_ToBeVerifiedBy.viewmodel({
   toBeVerifiedBy: '',
   placeholder: 'To be verified by',
   selectFirstIfNoSelected: false,
+  isCompleted: true,
+  isVerified: false,
+  organizationId: '',
   selectArgs() {
     const {
       toBeVerifiedBy: value = '',
@@ -28,7 +32,18 @@ Template.Actions_ToBeVerifiedBy.viewmodel({
     };
   },
   canBeVerified() {
-    return !!this.onVerify && (this.toBeVerifiedBy() === Meteor.userId());
+    const organizationId = this.organizationId();
+    const toBeVerifiedBy = this.toBeVerifiedBy();
+    const isCompleted = this.isCompleted();
+    const isVerified = this.isVerified();
+    const action = {
+      organizationId,
+      isCompleted,
+      isVerified,
+      toBeVerifiedBy,
+    };
+    const userId = Meteor.userId();
+    return !!this.onVerify && canBeVerified(action, userId);
   },
   verify() {
     return (viewmodel) => {
