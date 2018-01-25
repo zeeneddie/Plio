@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+faker@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/faker/-/faker-4.1.0.tgz#1e45bbbecc6774b3c195fad2835109c6d748cc3f"
+
 "plio-util@https://github.com/Pliohub/plio-util.git":
   version "0.2.1"
   resolved "https://github.com/Pliohub/plio-util.git#aff0e8f458c847344fa86c87c58e11e559239f03"
