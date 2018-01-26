@@ -750,8 +750,8 @@ pbkdf2@^3.0.3:
     sha.js "^2.4.8"
 
 "plio-util@https://github.com/Pliohub/plio-util.git":
-  version "0.1.1"
-  resolved "https://github.com/Pliohub/plio-util.git#48b81ae73dcb3dbcc78fceb65435710cad68e213"
+  version "0.2.1"
+  resolved "https://github.com/Pliohub/plio-util.git#8ac2ff74b317d838bbef1b1e50df55cf8a77ef6a"
 
 process-nextick-args@~1.0.6:
   version "1.0.7"
