@@ -12,7 +12,7 @@ import {
 import pluralize from 'pluralize';
 import { joinIds } from 'plio-util';
 
-import { DashboardStatsExpandable, IconLoading } from '../../components';
+import { DashboardStatsExpandable, IconLoading, PlusButton } from '../../components';
 
 const fontFamily = '"Roboto", "Helvetica Neue", Helvetica, sans-serif';
 
@@ -185,6 +185,7 @@ const DashboardGoals = ({
   toggle,
   isOpen,
   loading,
+  onGoalAdd,
 }) => (
   <DashboardStatsExpandable
     items={goals}
@@ -199,6 +200,7 @@ const DashboardGoals = ({
     )}
     {...{ toggle, isOpen }}
   >
+    <PlusButton size="1" onClick={onGoalAdd} />
     {pluralize('goal', totalCount || goals.length, true)}
   </DashboardStatsExpandable>
 );
@@ -210,6 +212,7 @@ DashboardGoals.propTypes = {
   onZoom: PropTypes.func,
   onLineTap: PropTypes.func,
   onScatterTap: PropTypes.func,
+  onGoalAdd: PropTypes.func,
 };
 
 export default DashboardGoals;
