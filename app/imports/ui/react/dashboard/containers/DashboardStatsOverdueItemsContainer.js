@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { map, view } from 'ramda';
+import { lenses } from 'plio-util';
 
-import { composeWithTracker, lenses } from '../../../../client/util';
+import { composeWithTracker } from '../../../../client/util';
 import DashboardStatsOverdueItems from '../components/DashboardStatsOverdueItems';
 import { namedCompose } from '../../helpers';
 import {

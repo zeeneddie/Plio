@@ -30,7 +30,10 @@ Template.Dashboard_Page.viewmodel({
       const organizationId = this.organizationId();
 
       this._subHandlers([
-        CountSubs.subscribe('standardsCount', `standards-count-${organizationId}`, organizationId),
+        CountSubs.subscribe('standardsCount', {
+          organizationId,
+          counterName: `standards-count-${organizationId}`,
+        }),
         CountSubs.subscribe('standardsNotViewedCount', `standards-not-viewed-count-${organizationId}`, organizationId),
         CountSubs.subscribe('nonConformitiesCount', `non-conformities-count-${organizationId}`, organizationId),
         CountSubs.subscribe('nonConformitiesNotViewedCount', `non-conformities-not-viewed-count-${organizationId}`, organizationId),

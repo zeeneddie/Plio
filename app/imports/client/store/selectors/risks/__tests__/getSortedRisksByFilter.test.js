@@ -1,10 +1,10 @@
 import { sort, compose, reverse } from 'ramda';
+import { bySequentialId, byDeletedAt } from 'plio-util';
 
 import getSortedRisksByFilter from '../getSortedRisksByFilter';
 import { RiskFilterIndexes } from '../../../../../api/constants';
 import { getInitialState } from '../../../util/tests';
 import sortByTitlePrefix from '../../../../../api/helpers/sortByTitlePrefix';
-import { bySequentialId, byDeletedAt } from '../../../../util';
 
 describe('getSortedRisksByFilter', () => {
   it('sorts by title when is not deleted filter and no searchText entered', () => {

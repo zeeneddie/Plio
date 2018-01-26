@@ -3,6 +3,7 @@ import React from 'react';
 import pluralize from 'pluralize';
 import { map } from 'ramda';
 import { onlyUpdateForKeys } from 'recompose';
+import { joinIds } from 'plio-util';
 
 import { DashboardStatsExpandable, IconLoading } from '../../components';
 import {
@@ -10,7 +11,6 @@ import {
   WorkspaceDefaultsTypes,
 } from '../../../../share/constants';
 import { DashboardStatsActionContainer } from '../containers';
-import { joinIds } from '../../../../client/util';
 
 const enhance = onlyUpdateForKeys([
   'count',

@@ -25,6 +25,7 @@ const getLinkedDocsIds = (linkedDocs, docType) => {
   );
 };
 
+// WARNING: Deprecated. Use app/imports/api/actions/helpers instead
 Actions.helpers({
   getLinkedNCsIds() {
     return getLinkedDocsIds(this.linkedTo, ProblemTypes.NON_CONFORMITY);

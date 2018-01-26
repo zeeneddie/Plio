@@ -3273,8 +3273,8 @@ pify@^3.0.0:
   resolved "https://registry.yarnpkg.com/pify/-/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
 "plio-util@https://github.com/Pliohub/plio-util.git":
-  version "0.2.1"
-  resolved "https://github.com/Pliohub/plio-util.git#aff0e8f458c847344fa86c87c58e11e559239f03"
+  version "0.1.1"
+  resolved "https://github.com/Pliohub/plio-util.git#48b81ae73dcb3dbcc78fceb65435710cad68e213"
 
 pluralize@^2.0.0:
   version "2.0.0"

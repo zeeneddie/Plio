@@ -1,31 +1,28 @@
-import { NonConformities } from '../../share/collections/non-conformities';
-import { Risks } from '../../share/collections/risks';
-import { Actions } from '../../share/collections/actions';
-import { ProblemTypes, ActionTypes, WorkflowTypes } from '../../share/constants';
-import { AnalysisTitles } from '../constants';
-import { checkAndThrow } from '../helpers';
-import { capitalize } from '../../share/helpers';
+import { _ } from 'meteor/underscore';
 
-import { checkDocAndMembership, checkDocAndMembershipAndMore } from '../checkers';
+import { NonConformities } from '../../../share/collections/non-conformities';
+import { Risks } from '../../../share/collections/risks';
+import { ProblemTypes, ActionTypes, WorkflowTypes } from '../../../share/constants';
+import { AnalysisTitles } from '../../constants';
+import { checkAndThrow } from '../../helpers';
+import { capitalize } from '../../../share/helpers';
+
 import {
   INVALID_DOC_TYPE,
   DOC_NOT_FOUND,
   ACT_RK_CANNOT_BE_LINKED_TO_NC,
   ACT_ALREADY_LINKED,
-  ACT_CANNOT_COMPLETE,
-  ACT_COMPLETION_CANNOT_BE_UNDONE,
-  ACT_CANNOT_VERIFY,
-  ACT_VERIFICATION_CANNOT_BE_UNDONE,
   ACT_ANALYSIS_MUST_BE_COMPLETED,
-} from '../errors';
+} from '../../errors';
 
-export const ACT_Check = function ACT_Check(_id) {
-  return checkDocAndMembership(Actions, _id, this.userId);
-};
-
-export const ACT_CheckEverything = function ACT_CheckEverything(_id) {
-  return checkDocAndMembershipAndMore(Actions, _id, this.userId);
-};
+export { default as canBeCompleted } from './canBeCompleted';
+export { default as canBeVerified } from './canBeVerified';
+export { default as canCompletionBeUndone } from './canCompletionBeUndone';
+export { default as canCompleteAny } from './canCompleteAny';
+export { default as isUndoDeadlineDue } from './isUndoDeadlineDue';
+export { default as isCompletedAtDeadlineDue } from './isCompletedAtDeadlineDue';
+export { default as isVerifiedAtDeadlineDue } from './isVerifiedAtDeadlineDue';
+export { default as canVerificationBeUndone } from './canVerificationBeUndone';
 
 export const ACT_LinkedDocsChecker = (linkedTo) => {
   const linkedToByType = _.groupBy(linkedTo, doc => doc.documentType);
@@ -33,8 +30,8 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
   const NCsIds = _.pluck(linkedToByType[ProblemTypes.NON_CONFORMITY], 'documentId');
   const risksIds = _.pluck(linkedToByType[ProblemTypes.RISK], 'documentId');
 
-  let docWithUncompletedAnalysis,
-    analysisTitle;
+  let docWithUncompletedAnalysis;
+  let analysisTitle;
 
   docWithUncompletedAnalysis = Risks.findOne({
     _id: { $in: risksIds },
@@ -95,36 +92,4 @@ export const ACT_OnLinkChecker = ({ documentId, documentType }, action) => {
     collection,
     action,
   };
-};
-
-export const ACT_OnCompleteChecker = ({ userId }, action) => {
-  checkAndThrow(userId !== action.toBeCompletedBy, ACT_CANNOT_COMPLETE);
-
-  checkAndThrow(!action.canBeCompleted(), ACT_CANNOT_COMPLETE);
-
-  return { action };
-};
-
-export const ACT_OnUndoCompletionChecker = ({ userId }, action) => {
-  checkAndThrow(userId !== action.completedBy, ACT_COMPLETION_CANNOT_BE_UNDONE);
-
-  checkAndThrow(!action.canCompletionBeUndone(), ACT_COMPLETION_CANNOT_BE_UNDONE);
-
-  return { action };
-};
-
-export const ACT_OnVerifyChecker = ({ userId }, action) => {
-  checkAndThrow(userId !== action.toBeVerifiedBy, ACT_CANNOT_VERIFY);
-
-  checkAndThrow(!action.canBeVerified(), ACT_CANNOT_VERIFY);
-
-  return { action };
-};
-
-export const ACT_OnUndoVerificationChecker = ({ userId }, action) => {
-  checkAndThrow(!Object.is(userId, action.verifiedBy), ACT_VERIFICATION_CANNOT_BE_UNDONE);
-
-  checkAndThrow(!action.canVerificationBeUndone(), ACT_VERIFICATION_CANNOT_BE_UNDONE);
-
-  return { action };
 };

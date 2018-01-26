@@ -1,5 +1,5 @@
 import { view, compose } from 'ramda';
-import { lenses } from '../../../../client/util';
+import { lenses } from 'plio-util';
 
 export const getStandards = view(lenses.collections.standards);
 

@@ -37,6 +37,7 @@
         {{> Actions_ToBeCompletedBy
             _id=this._id
             toBeCompletedBy=this.toBeCompletedBy
+            organizationId=this.organizationId
             onComplete=onComplete
             onUpdate=onUpdateCompletionExecutor}}
 
@@ -47,6 +48,9 @@
             enabled=(isCompletionEditable this)}}
 
         {{> Actions_CompletedBy
+            organizationId=this.organizationId
+            isCompleted=this.isCompleted
+            isVerified=this.isVerified
             completedBy=this.completedBy
             completedAt=this.completedAt
             enabled=(isCompletionEditable this)
@@ -66,6 +70,9 @@
           {{#unless isVerified}}
 
             {{> Actions_ToBeVerifiedBy
+                organizationId=this.organizationId
+                isCompleted=this.isCompleted
+                isVerified=this.isVerified
                 toBeVerifiedBy=this.toBeVerifiedBy
                 onUpdate=onUpdateVerificationExecutor
                 onVerify=onVerify}}
@@ -75,6 +82,9 @@
             {{> Actions_VerifiedOn verifiedAt=this.verifiedAt}}
 
             {{> Actions_VerifiedBy
+                organizationId=this.organizationId
+                isCompleted=this.isCompleted
+                isVerified=this.isVerified
                 verifiedBy=this.verifiedBy
                 verifiedAt=this.verifiedAt
                 onUndo=onUndoVerification}}

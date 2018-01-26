@@ -1,6 +1,5 @@
 import { view } from 'ramda';
-
-import { lenses } from '../../../util';
+import { lenses } from 'plio-util';
 
 export const getActions = view(lenses.collections.actions);
 

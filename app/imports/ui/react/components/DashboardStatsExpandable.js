@@ -3,10 +3,10 @@ import React from 'react';
 import { branch } from 'recompose';
 import { converge, gt, prop, identity, map, splitEvery, either } from 'ramda';
 import styled from 'styled-components';
+import { getItemsLength } from 'plio-util';
 
 import { DashboardStats, Collapse, ToggleAngleIcon } from './';
 import { withStateToggle, omitProps } from '../helpers';
-import { getItemsLength } from '../../../client/util';
 
 const StyledDashboardTitle = styled(({ toggle, ...rest }) => <DashboardStats.Title {...rest} />)`
   cursor: ${({ toggle }) => toggle ? 'pointer' : 'auto'};
