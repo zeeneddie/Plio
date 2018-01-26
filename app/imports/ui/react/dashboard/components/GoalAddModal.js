@@ -3,8 +3,14 @@ import React from 'react';
 import { ModalBody, CardTitle, Button } from 'reactstrap';
 
 import Modal, { ModalHeader } from '../../components/PlioModal';
+import { ErrorSection } from '../../components';
 
-const GoalAddModal = ({ isOpen, toggle, onSave }) => (
+const GoalAddModal = ({
+  isOpen,
+  toggle,
+  onSave,
+  errorText,
+}) => (
   <Modal {...{ isOpen, toggle }}>
     <ModalHeader
       renderLeftButton={() => <Button onClick={toggle}>Close</Button>}
@@ -16,7 +22,9 @@ const GoalAddModal = ({ isOpen, toggle, onSave }) => (
     >
       <CardTitle>Key Goal</CardTitle>
     </ModalHeader>
-    <ModalBody>Hello</ModalBody>
+    <ModalBody>
+      <ErrorSection {...{ errorText }} />
+    </ModalBody>
   </Modal>
 );
 
