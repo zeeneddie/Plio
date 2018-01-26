@@ -7,7 +7,7 @@ describe('meteor/mongo', async () => {
   beforeEach(async () => __setupDB());
   afterEach(async () => __closeDB());
 
-  test('inserts', async () => {
+  test('insert', async () => {
     const Items = new Mongo.Collection('items');
     const id = await Items.insert({ a: 1 });
 
@@ -58,5 +58,19 @@ describe('meteor/mongo', async () => {
 
     expect(n).toBe(1);
     expect(count).toBe(0);
+  });
+
+  test('predefined collection', async () => {
+    jest.doMock('../../../collections', jest.fn(() => ({
+      Organizations: new Mongo.Collection('organizations'),
+    })));
+    const { Organizations } = require('../../../collections');
+    const obj = { foo: 'bar' };
+
+    await Organizations.insert(obj);
+    const organizations = await Organizations.find(obj).fetch();
+
+    expect(organizations).toHaveLength(1);
+    expect(organizations[0]).toMatchObject(obj);
   });
 });
