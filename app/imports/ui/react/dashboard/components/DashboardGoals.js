@@ -13,6 +13,7 @@ import pluralize from 'pluralize';
 import { joinIds } from 'plio-util';
 
 import { DashboardStatsExpandable, IconLoading, PlusButton } from '../../components';
+import GoalAddModal from './GoalAddModal';
 
 const fontFamily = '"Roboto", "Helvetica Neue", Helvetica, sans-serif';
 
@@ -202,6 +203,7 @@ const DashboardGoals = ({
   >
     <PlusButton size="1" onClick={onGoalAdd} />
     {pluralize('goal', totalCount || goals.length, true)}
+    <GoalAddModal isOpen toggle={() => null} />
   </DashboardStatsExpandable>
 );
 
