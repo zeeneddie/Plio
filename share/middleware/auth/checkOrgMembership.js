@@ -7,7 +7,7 @@ import Errors from '../../errors';
 
 const { userId, organizationId } = lenses;
 
-export default lens => (next, root, args, context) => ifElse(
+export default lens => async (next, root, args, context) => ifElse(
   useWith(isOrgMember, [
     view(lens || organizationId),
     view(userId),
