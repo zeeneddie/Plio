@@ -13,9 +13,11 @@ const Modal = ({
   contentClassName,
   modalTransition,
   backdropTransition,
+  keyboard = false,
   ...props
 }) => (
   <ReactstrapModal
+    backdrop="static"
     className={cx('content-cards', className)}
     contentClassName={cx('card', contentClassName)}
     modalTransition={{
@@ -28,7 +30,12 @@ const Modal = ({
       timeout: TransitionTimeouts.modal,
       ...backdropTransition,
     }}
-    {...{ isOpen, toggle, ...props }}
+    {...{
+      isOpen,
+      toggle,
+      keyboard,
+      ...props,
+    }}
   >
     {children}
   </ReactstrapModal>
@@ -42,6 +49,7 @@ Modal.propTypes = {
   contentClassName: PropTypes.string,
   modalTransition: PropTypes.object,
   backdropTransition: PropTypes.object,
+  keyboard: PropTypes.bool,
 };
 
 export { default as ModalHeader } from './Header';
