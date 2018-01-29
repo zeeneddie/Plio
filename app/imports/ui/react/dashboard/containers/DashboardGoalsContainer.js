@@ -11,7 +11,7 @@ import {
   withState,
 } from 'recompose';
 import PropTypes from 'prop-types';
-import { getGoalsLength, lenses, lensNotEq } from 'plio-util';
+import { getGoalsLength, lenses, lensNotEq, mapUsersToOptions } from 'plio-util';
 import { view, allPass } from 'ramda';
 import { NetworkStatus } from 'apollo-client';
 
@@ -64,6 +64,8 @@ export default namedCompose('DashboardGoalsContainer')(
           totalCount,
           goals,
         } = {},
+        me: { _id: userId } = {},
+        organization: { users = [] } = {},
       },
       ownProps: {
         isOpen,
@@ -75,6 +77,8 @@ export default namedCompose('DashboardGoalsContainer')(
       goals,
       totalCount,
       networkStatus,
+      userId,
+      users: mapUsersToOptions(users),
       toggle: async () => {
         if (!isOpen) {
           await fetchMore({

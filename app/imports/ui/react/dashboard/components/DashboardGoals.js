@@ -23,6 +23,8 @@ const DashboardGoals = ({
   loading,
   isModalOpen,
   toggleModal,
+  userId,
+  users,
 }) => (
   <DashboardStatsExpandable
     items={goals}
@@ -42,6 +44,8 @@ const DashboardGoals = ({
     <GoalAddModalContainer
       isOpen={isModalOpen}
       toggle={toggleModal}
+      ownerId={userId}
+      {...{ users }}
     />
   </DashboardStatsExpandable>
 );
@@ -58,6 +62,8 @@ DashboardGoals.propTypes = {
   isModalOpen: PropTypes.bool.isRequired,
   toggleModal: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  userId: PropTypes.string.isRequired,
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default DashboardGoals;

@@ -10,7 +10,7 @@ export default namedCompose('GoalAddModalContainer')(
     state: {
       title: '',
       description: '',
-      ownerId: null,
+      ownerId: (_, { ownerId }) => ownerId,
       startDate: () => new Date(),
       endDate: null,
       priority: null,
