@@ -1,8 +1,12 @@
-import { applyMiddleware, lenses } from 'plio-util';
+import {
+  applyMiddleware,
+  lenses,
+  loadOrganizationById,
+} from 'plio-util';
+import { compose, view, nthArg } from 'ramda';
 import { checkLoggedIn, checkOrgMembership } from '../../../../../share/middleware';
 
-export const resolver = async (root, { _id }, { collections: { Organizations } }) =>
-  Organizations.findOne({ _id });
+export const resolver = loadOrganizationById(compose(view(lenses._id), nthArg(1)));
 
 export default applyMiddleware(
   checkLoggedIn(),
