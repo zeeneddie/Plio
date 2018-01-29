@@ -2,19 +2,25 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { ModalBody, CardTitle, Button } from 'reactstrap';
 
-import { ErrorSection, Modal, ModalHeader } from '../../components';
+import {
+  ErrorSection,
+  Modal,
+  ModalHeader,
+  CardBlock,
+} from '../../components';
+import GoalForm from './GoalForm';
 
 export const GoalAddModal = ({
   isOpen,
   toggle,
-  onSave,
   errorText,
+  onSubmit,
 }) => (
   <Modal {...{ isOpen, toggle }}>
     <ModalHeader
       renderLeftButton={() => <Button onClick={toggle}>Close</Button>}
       renderRightButton={() => (
-        <Button color="primary" onClick={onSave}>
+        <Button color="primary" onClick={onSubmit}>
           Save
         </Button>
       )}
@@ -23,6 +29,12 @@ export const GoalAddModal = ({
     </ModalHeader>
     <ModalBody>
       <ErrorSection {...{ errorText }} />
+
+      <div>
+        <CardBlock>
+          <GoalForm />
+        </CardBlock>
+      </div>
     </ModalBody>
   </Modal>
 );
@@ -30,7 +42,7 @@ export const GoalAddModal = ({
 GoalAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  onSave: PropTypes.func,
+  onSubmit: PropTypes.func,
   errorText: PropTypes.string,
 };
 
