@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
 
-import { CardHeadingButtons, Pull } from '../';
+import CardHeadingButtons from './CardHeadingButtons';
+import { Pull } from './Utility';
 
 const ModalHeader = ({
   children,
@@ -33,6 +34,11 @@ const ModalHeader = ({
   </div>
 );
 
-ModalHeader.propTypes = {};
+ModalHeader.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+  renderLeftButton: PropTypes.func,
+  renderRightButton: PropTypes.func,
+};
 
 export default ModalHeader;

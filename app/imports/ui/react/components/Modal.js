@@ -3,7 +3,7 @@ import React from 'react';
 import { Modal as ReactstrapModal } from 'reactstrap';
 import cx from 'classnames';
 
-import { TransitionBaseActiveClass, TransitionTimeouts } from '../../../../api/constants';
+import { TransitionBaseActiveClass, TransitionTimeouts } from '../../../api/constants';
 
 const Modal = ({
   isOpen,

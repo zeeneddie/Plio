@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { ModalBody, CardTitle, Button } from 'reactstrap';
 
-import Modal, { ModalHeader } from '../../components/PlioModal';
-import { ErrorSection } from '../../components';
+import { ErrorSection, Modal, ModalHeader } from '../../components';
 
 export const GoalAddModal = ({
   isOpen,

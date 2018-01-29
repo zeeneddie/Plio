@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
 import { _ } from 'meteor/underscore';
-import { PullMap } from '/imports/api/constants';
+import { PullMap } from '../../../../api/constants';
 
 export const ArrowBack = ({
   pull, href = '#', onClick, ...other
