@@ -18,12 +18,18 @@ const FormInput = enhance(({
   onChange,
   debounceTimeout,
   inputRef,
+  containerClassName,
+  inputGroup,
   ...other
 }) => {
   let textInput;
 
   return (
-    <ClearField onClick={e => onClear(e, textInput)}>
+    <ClearField
+      className={cx(containerClassName, { 'input-group': inputGroup })}
+      onClick={e => onClear(e, textInput)}
+    >
+      {children}
       <DebounceInput
         className={cx('form-control', className)}
         inputRef={(input) => {
@@ -50,6 +56,7 @@ FormInput.propTypes = {
   debounceTimeout: PropTypes.number,
   inputRef: PropTypes.func,
   children: PropTypes.node,
+  inputGroup: PropTypes.bool,
 };
 
 export default FormInput;
