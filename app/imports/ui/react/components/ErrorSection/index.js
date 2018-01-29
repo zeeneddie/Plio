@@ -4,8 +4,12 @@ import cx from 'classnames';
 
 import { Collapse, CardBlock, Icon } from '../';
 
-const ErrorSection = ({ errorText, size = '4', className }) => (
-  <Collapse className={cx('modal-error-section', className)} isOpen={!!errorText}>
+const ErrorSection = ({ errorText, size = '4', className, ...props }) => (
+  <Collapse
+    className={cx('modal-error-section', className)}
+    isOpen={!!errorText}
+    {...props}
+  >
     <CardBlock>
       <Icon {...{ size }} name="exclamation-circle" aria-hidden="true" />
       {errorText}

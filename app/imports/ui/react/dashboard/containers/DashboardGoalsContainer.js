@@ -15,7 +15,7 @@ import { getGoalsLength, lenses, lensNotEq } from 'plio-util';
 import { view, allPass } from 'ramda';
 import { NetworkStatus } from 'apollo-client';
 
-import { namedCompose, withHr, withPreloaderPage } from '../../helpers';
+import { namedCompose, withHr, withPreloaderPage, withStateToggle } from '../../helpers';
 import { DashboardGoals } from '../components';
 import {
   WORKSPACE_DEFAULTS,
@@ -107,4 +107,5 @@ export default namedCompose('DashboardGoalsContainer')(
     withHr,
     renderNothing,
   ),
+  withStateToggle(false, 'isModalOpen', 'toggleModal'),
 )(DashboardGoals);

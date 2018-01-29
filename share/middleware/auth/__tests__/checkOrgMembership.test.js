@@ -6,35 +6,38 @@ describe('checkOrgMembership', () => {
   const userId = 2;
   const organizationId = 1;
 
-  beforeEach(async () => {
-    await __setupDB();
+  beforeAll(async () => __setupDB());
+
+  afterAll(async () => __closeDB());
+
+  it('passes', async () => {
     jest.doMock('../../../collections', () => ({
       Organizations: new Mongo.Collection('organizations'),
     }));
     const { Organizations } = require('../../../collections');
+    // jest.resetModules();
+    const checkOrgMembership = require('../checkOrgMembership').default;
+    const next = jest.fn(T);
+    const root = {};
+    const args = { organizationId };
+    const context = { userId };
 
     await Organizations.insert({
       _id: organizationId,
       users: [createOrgQueryWhereUserIsMember(userId)],
     });
-  });
 
-  afterEach(async () => __closeDB());
-
-  it('passes', async () => {
-    const checkOrgMembership = require('../checkOrgMembership').default();
-    const next = jest.fn(T);
-    const root = {};
-    const args = { organizationId };
-    const context = { userId };
-    const actual = await checkOrgMembership(next, root, args, context);
+    const actual = await checkOrgMembership()(next, root, args, context);
 
     expect(actual).toBe(true);
     expect(next).toHaveBeenCalledWith(root, args, context);
   });
 
-  // throws ??????
   // it('throws', async () => {
+  //   jest.doMock('../../../collections', () => ({
+  //     Organizations: new Mongo.Collection('organizations'),
+  //   }));
+  //   const checkOrgMembership = require('../checkOrgMembership').default;
   //   const next = jest.fn(T);
   //   const root = {};
   //   const args = { organizationId };

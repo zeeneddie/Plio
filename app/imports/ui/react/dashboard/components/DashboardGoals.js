@@ -12,7 +12,8 @@ import {
 import pluralize from 'pluralize';
 import { joinIds } from 'plio-util';
 
-import { DashboardStatsExpandable, IconLoading } from '../../components';
+import { DashboardStatsExpandable, IconLoading, PlusButton } from '../../components';
+import GoalAddModal from './GoalAddModal';
 
 const fontFamily = '"Roboto", "Helvetica Neue", Helvetica, sans-serif';
 
@@ -185,6 +186,9 @@ const DashboardGoals = ({
   toggle,
   isOpen,
   loading,
+  onGoalAdd,
+  isModalOpen,
+  toggleModal,
 }) => (
   <DashboardStatsExpandable
     items={goals}
@@ -199,7 +203,12 @@ const DashboardGoals = ({
     )}
     {...{ toggle, isOpen }}
   >
+    <PlusButton size="1" onClick={toggleModal} />
     {pluralize('goal', totalCount || goals.length, true)}
+    <GoalAddModal
+      isOpen={isModalOpen}
+      toggle={toggleModal}
+    />
   </DashboardStatsExpandable>
 );
 
@@ -210,6 +219,12 @@ DashboardGoals.propTypes = {
   onZoom: PropTypes.func,
   onLineTap: PropTypes.func,
   onScatterTap: PropTypes.func,
+  onGoalAdd: PropTypes.func,
+  toggle: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  isModalOpen: PropTypes.bool.isRequired,
+  toggleModal: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 export default DashboardGoals;

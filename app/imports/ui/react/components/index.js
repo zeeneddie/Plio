@@ -1,6 +1,5 @@
 export * from '../forms/components';
 export * from '../fields/edit';
-export * from '../plio/components';
 export * from './Buttons';
 export * from './Icons';
 export * from './Utility';
@@ -15,3 +14,6 @@ export { default as PreloaderPage } from './PreloaderPage';
 export { default as ErrorSection } from './ErrorSection';
 export { default as DashboardStats } from './DashboardStats';
 export { default as DashboardStatsExpandable } from './DashboardStatsExpandable';
+export { default as CardHeadingButtons } from './CardHeadingButtons';
+export { default as Modal } from './Modal';
+export { default as ModalHeader } from './ModalHeader';
