@@ -187,6 +187,8 @@ const DashboardGoals = ({
   isOpen,
   loading,
   onGoalAdd,
+  isModalOpen,
+  toggleModal,
 }) => (
   <DashboardStatsExpandable
     items={goals}
@@ -201,9 +203,12 @@ const DashboardGoals = ({
     )}
     {...{ toggle, isOpen }}
   >
-    <PlusButton size="1" onClick={onGoalAdd} />
+    <PlusButton size="1" onClick={toggleModal} />
     {pluralize('goal', totalCount || goals.length, true)}
-    <GoalAddModal isOpen toggle={() => null} />
+    <GoalAddModal
+      isOpen={isModalOpen}
+      toggle={toggleModal}
+    />
   </DashboardStatsExpandable>
 );
 
@@ -215,6 +220,11 @@ DashboardGoals.propTypes = {
   onLineTap: PropTypes.func,
   onScatterTap: PropTypes.func,
   onGoalAdd: PropTypes.func,
+  toggle: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  isModalOpen: PropTypes.bool.isRequired,
+  toggleModal: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 export default DashboardGoals;
