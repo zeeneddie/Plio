@@ -5,7 +5,7 @@ import { ModalBody, CardTitle, Button } from 'reactstrap';
 import Modal, { ModalHeader } from '../../components/PlioModal';
 import { ErrorSection } from '../../components';
 
-const GoalAddModal = ({
+export const GoalAddModal = ({
   isOpen,
   toggle,
   onSave,
@@ -28,6 +28,11 @@ const GoalAddModal = ({
   </Modal>
 );
 
-GoalAddModal.propTypes = {};
+GoalAddModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
+  onSave: PropTypes.func,
+  errorText: PropTypes.string,
+};
 
 export default GoalAddModal;
