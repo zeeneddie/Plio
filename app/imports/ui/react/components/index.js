@@ -1,9 +1,10 @@
 export * from '../forms/components';
-export * from '../fields/edit';
+export * from '../fields/components';
 export * from './Buttons';
 export * from './Icons';
 export * from './Utility';
 export * from './Labels';
+export * from '../goals/components';
 
 export { default as CardBlock } from './CardBlock';
 export { default as Subcard } from './Subcard';
