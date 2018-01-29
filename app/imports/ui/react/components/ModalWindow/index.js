@@ -3,7 +3,7 @@ import React from 'react';
 import { $ } from 'meteor/jquery';
 import { _ } from 'meteor/underscore';
 
-import Modal from '../Modal';
+import Modal from '../LegacyModal';
 import { setModal, onModalClose } from '/imports/client/store/actions/modalActions';
 
 const propTypes = {
