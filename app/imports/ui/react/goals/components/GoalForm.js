@@ -28,6 +28,7 @@ const enhance = namedCompose('GoalForm')(
     'endDate',
     'priority',
     'color',
+    'users',
   ]),
 );
 
@@ -69,7 +70,7 @@ export const GoalForm = ({
         caret
         hint
         input={{ placeholder: 'Owner' }}
-        selected={ownerId}
+        selected={ownerId || 'saojdnqojdnqwojd'}
         items={users}
         onSelect={onChangeOwnerId}
       />
@@ -109,8 +110,9 @@ GoalForm.propTypes = {
   onChangeEndDate: PropTypes.func.isRequired,
   priority: PropTypes.string,
   onChangePriority: PropTypes.func.isRequired,
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   onChangeColor: PropTypes.func.isRequired,
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default enhance(GoalForm);

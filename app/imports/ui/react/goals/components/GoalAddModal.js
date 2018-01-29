@@ -8,7 +8,7 @@ import {
   ModalHeader,
   CardBlock,
 } from '../../components';
-import GoalForm from './GoalForm';
+import GoalFormContainer from '../containers/GoalFormContainer';
 
 export const GoalAddModal = ({
   isOpen,
@@ -32,7 +32,7 @@ export const GoalAddModal = ({
 
       <div>
         <CardBlock>
-          <GoalForm />
+          <GoalFormContainer />
         </CardBlock>
       </div>
     </ModalBody>

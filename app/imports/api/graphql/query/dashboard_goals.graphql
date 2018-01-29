@@ -19,4 +19,15 @@ query DashboardGoals($organizationId: ID!, $limit: Int!) {
       }
     }
   }
+
+  organization(_id: $organizationId) {
+    users {
+      user {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
 }
