@@ -262,3 +262,9 @@ export const UserPresenceStatuses = {
   AWAY: 'away',
   OFFLINE: 'offline',
 };
+
+export const TransitionTimeouts = {
+  modal: 300,
+};
+
+export const TransitionBaseActiveClass = 'in';
