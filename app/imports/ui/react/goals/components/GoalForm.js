@@ -5,7 +5,7 @@ import connectUI from 'redux-ui';
 import { flattenProp, onlyUpdateForKeys, withHandlers } from 'recompose';
 import { updateInput, updateSelectInput } from 'plio-util';
 
-import { FormField, FormInput, Magnitudes, Status } from '../../components';
+import { FormField, FormInput, Magnitudes, Status, SelectInput } from '../../components';
 import { namedCompose } from '../../helpers';
 
 const enhance = namedCompose('GoalForm')(
@@ -46,6 +46,7 @@ export const GoalForm = ({
   onChangePriority,
   color,
   onChangeColor,
+  users,
 }) => (
   <Fragment>
     <FormField>
@@ -63,7 +64,15 @@ export const GoalForm = ({
     </FormField>
     <FormField>
       Owner
-      <div>...</div>
+      <SelectInput
+        uncontrolled
+        caret
+        hint
+        input={{ placeholder: 'Owner' }}
+        selected={ownerId}
+        items={users}
+        onSelect={onChangeOwnerId}
+      />
     </FormField>
     <FormField>
       Start date
@@ -96,9 +105,9 @@ GoalForm.propTypes = {
   onChangeOwnerId: PropTypes.func.isRequired,
   startDate: PropTypes.instanceOf(Date).isRequired,
   onChangeStartDate: PropTypes.func.isRequired,
-  endDate: PropTypes.instanceOf(Date).isRequired,
+  endDate: PropTypes.instanceOf(Date),
   onChangeEndDate: PropTypes.func.isRequired,
-  priority: PropTypes.string.isRequired,
+  priority: PropTypes.string,
   onChangePriority: PropTypes.func.isRequired,
   color: PropTypes.string.isRequired,
   onChangeColor: PropTypes.func.isRequired,

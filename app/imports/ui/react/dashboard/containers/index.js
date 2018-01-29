@@ -8,4 +8,3 @@ export {
 } from './DashboardStatsOverdueItemsContainer';
 export { default as DashboardStatsActionContainer } from './DashboardStatsActionContainer';
 export { default as DashboardGoalsContainer } from './DashboardGoalsContainer';
-export { default as GoalAddModalContainer } from './GoalAddModalContainer';
