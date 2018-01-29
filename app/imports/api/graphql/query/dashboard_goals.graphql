@@ -1,4 +1,8 @@
 query DashboardGoals($organizationId: ID!, $limit: Int!) {
+  me {
+    _id
+  }
+
   goals(organizationId: $organizationId, limit: $limit) {
     totalCount
     goals {
