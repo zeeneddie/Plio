@@ -1,10 +1,10 @@
 import gql from 'graphql-tag';
-import { lifecycle, withState } from 'recompose';
-import { mapUsersToOptions } from 'plio-util';
+import { graphql } from 'react-apollo';
+import { updateInput, updateSelectInput, mapUsersToOptions } from 'plio-util';
+import connectUI from 'redux-ui';
+import { flattenProp, withHandlers } from 'recompose';
 
 import { namedCompose } from '../../helpers';
-import { client } from '../../../../client/apollo';
-
 import GoalForm from '../components/GoalForm';
 
 export const QUERY = gql`
@@ -27,18 +27,34 @@ export const QUERY = gql`
 `;
 
 export default namedCompose('GoalFormContainer')(
-  withState('users', 'setUsers', []),
-  lifecycle({
-    async componentDidMount() {
-      const { organization, me: { userId } } = await client.readQuery({
-        query: QUERY,
-        variables: {
-          organizationId: 'KwKXz5RefrE5hjWJ2',
-        },
-      });
-      const users = mapUsersToOptions(organization.users);
-
-      this.props.setUsers(users);
-    },
+  connectUI(),
+  flattenProp('ui'),
+  withHandlers({
+    onChangeTitle: updateInput('title'),
+    onChangeDescription: updateInput('description'),
+    onChangeOwnerId: updateSelectInput('ownerId'),
+    onChangeStartDate: () => null,
+    onChangeEndDate: () => null,
+    onChangePriority: updateInput('priority'),
+    onChangeColor: () => null,
+  }),
+  graphql(QUERY, {
+    options: () => ({
+      fetchPolicy: 'cache-only',
+      variables: {
+        organizationId: 'KwKXz5RefrE5hjWJ2', // TEMP
+      },
+    }),
+    props: ({
+      data: {
+        me: { userId },
+        organization: { users },
+      },
+      ownProps,
+    }) => ({
+      ...ownProps,
+      ownerId: userId,
+      users: mapUsersToOptions(users),
+    }),
   }),
 )(GoalForm);

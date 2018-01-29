@@ -1,36 +1,20 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Input } from 'reactstrap';
-import connectUI from 'redux-ui';
-import { flattenProp, onlyUpdateForKeys, withHandlers } from 'recompose';
-import { updateInput, updateSelectInput } from 'plio-util';
+import { onlyUpdateForKeys } from 'recompose';
 
 import { FormField, FormInput, Magnitudes, Status, SelectInput } from '../../components';
-import { namedCompose } from '../../helpers';
 
-const enhance = namedCompose('GoalForm')(
-  connectUI(),
-  flattenProp('ui'),
-  withHandlers({
-    onChangeTitle: updateInput('title'),
-    onChangeDescription: updateInput('description'),
-    onChangeOwnerId: updateSelectInput('ownerId'),
-    onChangeStartDate: () => null,
-    onChangeEndDate: () => null,
-    onChangePriority: updateInput('priority'),
-    onChangeColor: () => null,
-  }),
-  onlyUpdateForKeys([
-    'title',
-    'description',
-    'ownerId',
-    'startDate',
-    'endDate',
-    'priority',
-    'color',
-    'users',
-  ]),
-);
+const enhance = onlyUpdateForKeys([
+  'title',
+  'description',
+  'ownerId',
+  'startDate',
+  'endDate',
+  'priority',
+  'color',
+  'users',
+]);
 
 export const GoalForm = ({
   title,
@@ -70,7 +54,7 @@ export const GoalForm = ({
         caret
         hint
         input={{ placeholder: 'Owner' }}
-        selected={ownerId || 'saojdnqojdnqwojd'}
+        selected={ownerId}
         items={users}
         onSelect={onChangeOwnerId}
       />
