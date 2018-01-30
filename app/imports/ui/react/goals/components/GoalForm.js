@@ -34,6 +34,7 @@ export const GoalForm = ({
   users,
 }) => (
   <Fragment>
+    {console.log(users, ownerId)}
     <FormField>
       Key goal name
       <FormInput placeholder="Key goal name" value={title} onChange={onChangeTitle} />

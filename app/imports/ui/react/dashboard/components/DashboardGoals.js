@@ -24,7 +24,7 @@ const DashboardGoals = ({
   isModalOpen,
   toggleModal,
   userId,
-  users,
+  organizationId,
 }) => (
   <DashboardStatsExpandable
     items={goals}
@@ -45,7 +45,7 @@ const DashboardGoals = ({
       isOpen={isModalOpen}
       toggle={toggleModal}
       ownerId={userId}
-      {...{ users }}
+      {...{ organizationId }}
     />
   </DashboardStatsExpandable>
 );
@@ -63,7 +63,7 @@ DashboardGoals.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   userId: PropTypes.string.isRequired,
-  users: PropTypes.arrayOf(PropTypes.object).isRequired,
+  organizationId: PropTypes.string.isRequired,
 };
 
 export default DashboardGoals;

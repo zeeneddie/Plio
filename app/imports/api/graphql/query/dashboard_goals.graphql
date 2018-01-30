@@ -1,6 +1,6 @@
 query DashboardGoals($organizationId: ID!, $limit: Int!) {
   me {
-    _id
+    userId: _id
   }
 
   goals(organizationId: $organizationId, limit: $limit) {
@@ -16,17 +16,6 @@ query DashboardGoals($organizationId: ID!, $limit: Int!) {
         _id
         title
         completionTargetDate
-      }
-    }
-  }
-
-  organization(_id: $organizationId) {
-    users {
-      user {
-        _id
-        profile {
-          fullName
-        }
       }
     }
   }

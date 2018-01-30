@@ -1,8 +1,11 @@
 import connectUI from 'redux-ui';
 import { withHandlers } from 'recompose';
+import { lenses } from 'plio-util';
+import { view } from 'ramda';
 
 import { namedCompose, withStore } from '../../helpers';
 import GoalAddModal from '../components/GoalAddModal';
+import { GoalPriorities } from '../../../../share/constants';
 
 export default namedCompose('GoalAddModalContainer')(
   withStore,
@@ -10,10 +13,10 @@ export default namedCompose('GoalAddModalContainer')(
     state: {
       title: '',
       description: '',
-      ownerId: (_, { ownerId }) => ownerId,
+      ownerId: view(lenses.ownerId),
       startDate: () => new Date(),
       endDate: null,
-      priority: null,
+      priority: GoalPriorities.MINOR,
       color: null,
     },
   }),

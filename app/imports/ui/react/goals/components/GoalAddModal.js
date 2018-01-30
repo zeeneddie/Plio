@@ -15,6 +15,7 @@ export const GoalAddModal = ({
   toggle,
   errorText,
   onSubmit,
+  organizationId,
 }) => (
   <Modal {...{ isOpen, toggle }}>
     <ModalHeader
@@ -32,7 +33,7 @@ export const GoalAddModal = ({
 
       <div>
         <CardBlock>
-          <GoalFormContainer />
+          <GoalFormContainer {...{ organizationId }} />
         </CardBlock>
       </div>
     </ModalBody>
@@ -44,6 +45,7 @@ GoalAddModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   onSubmit: PropTypes.func,
   errorText: PropTypes.string,
+  organizationId: PropTypes.string.isRequired,
 };
 
 export default GoalAddModal;
