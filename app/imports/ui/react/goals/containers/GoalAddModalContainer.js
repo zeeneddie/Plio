@@ -1,5 +1,5 @@
 import connectUI from 'redux-ui';
-import { withHandlers } from 'recompose';
+import { withHandlers, mapProps } from 'recompose';
 import { lenses } from 'plio-util';
 import { view } from 'ramda';
 
@@ -18,6 +18,7 @@ export default namedCompose('GoalAddModalContainer')(
       endDate: null,
       priority: GoalPriorities.MINOR,
       color: null,
+      errorText: '',
     },
   }),
   withHandlers({
@@ -25,4 +26,8 @@ export default namedCompose('GoalAddModalContainer')(
       console.log(props);
     },
   }),
+  mapProps(({
+    ui: { errorText },
+    ...props
+  }) => ({ errorText, ...props })),
 )(GoalAddModal);
