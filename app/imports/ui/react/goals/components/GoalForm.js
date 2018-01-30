@@ -3,7 +3,13 @@ import React, { Fragment } from 'react';
 import { Input } from 'reactstrap';
 import { onlyUpdateForKeys } from 'recompose';
 
-import { FormField, FormInput, Magnitudes, Status, SelectInput } from '../../components';
+import {
+  FormField,
+  FormInput,
+  Magnitudes,
+  SelectInput,
+  LoadableDatePicker,
+} from '../../components';
 
 const enhance = onlyUpdateForKeys([
   'title',
@@ -34,7 +40,6 @@ export const GoalForm = ({
   users,
 }) => (
   <Fragment>
-    {console.log(users, ownerId)}
     <FormField>
       Key goal name
       <FormInput placeholder="Key goal name" value={title} onChange={onChangeTitle} />
@@ -62,11 +67,21 @@ export const GoalForm = ({
     </FormField>
     <FormField>
       Start date
-      <div>date</div>
+      <LoadableDatePicker
+        selected={startDate}
+        onChange={onChangeStartDate}
+        placeholderText="Start date"
+        className="form-control"
+      />
     </FormField>
     <FormField>
       End date
-      <div>date</div>
+      <LoadableDatePicker
+        selected={endDate}
+        onChange={onChangeEndDate}
+        placeholderText="End date"
+        className="form-control"
+      />
     </FormField>
     <FormField>
       Priority
