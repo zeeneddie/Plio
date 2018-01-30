@@ -738,20 +738,24 @@ export const GoalStatusesNames = {
   [GoalStatuses.COMPLETED]: 'Closed - marked as complete',
 };
 
-export const GoalColors = [
-  '#8cd7e2',
-  '#5681a2',
-  '#8683b3',
-  '#c78282',
-  '#ecb096',
-  '#c5a06d',
-  '#b5b2ac',
-  '#9e898f',
-  '#71866c',
-  '#435860',
-  '#71d2b8',
-  '#88afdd',
-];
+export const GoalColors = {
+  PINK: '#F06292',
+  PLUM: '#9C27B0',
+  PURPLE: '#673AB7',
+  INDIGO: '#3F51B5',
+  BLUE: '#2196F3',
+  LIGHT_BLUE: '#4FC3F7',
+  CYAN: '#00BCD4',
+  TEAL: '#009688',
+  MUTED_PINK: '#F8BBD0',
+  MUTED_PLUM: '#CE93D8',
+  MUTED_PURPLE: '#B39DDB',
+  MUTED_INDIGO: '#9FA8DA',
+  MUTED_BLUE: '#90CAF9',
+  MUTED_LIGHT_BLUE: '#B3E5FC',
+  MUTED_CYAN: '#80DEEA',
+  MUTED_TEAL: '#80CBC4',
+};
 
 export const AllowedActionLinkedDocTypes = [
   ...Object.values(ProblemTypes),

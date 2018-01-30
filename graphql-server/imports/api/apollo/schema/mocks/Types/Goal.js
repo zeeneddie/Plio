@@ -10,6 +10,6 @@ export default {
     endDate: () => date.future(),
     completedAt: () => date.recent(),
     deletedAt: () => date.recent(),
-    color: () => random.arrayElement(GoalColors),
+    color: () => random.arrayElement(Object.values(GoalColors)),
   }),
 };

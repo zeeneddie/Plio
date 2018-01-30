@@ -18,7 +18,7 @@ describe('insertGoal', () => {
       ownerId: 2,
       startDate: new Date(),
       endDate: new Date(),
-      color: GoalColors[0],
+      color: GoalColors.PINK,
       priority: GoalPriorities.MAJOR,
     };
     const context = {
