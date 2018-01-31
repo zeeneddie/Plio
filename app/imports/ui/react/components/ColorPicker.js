@@ -114,24 +114,6 @@ const StyledGithubPicker = styled(GithubPicker)`
   }
 `;
 
-const Div = styled.div`
-  width: 160px;
-  margin: 20% auto;
-
-  > p {
-    border: 1px solid #666;
-    padding: 12px 25px;
-
-    &.email:before {
-      font-family: FontAwesome;
-      display: inline-block;
-      padding-right: 6px;
-      vertical-align: middle;
-      content: "\f095";
-    }
-  }
-`;
-
 const enhance = withStateToggle(false, 'isOpen', 'toggle');
 
 const ColorPicker = ({
