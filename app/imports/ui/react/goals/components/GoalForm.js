@@ -96,6 +96,7 @@ export const GoalForm = ({
     <FormField>
       Color
       <ColorPicker
+        value={color}
         colors={Object.values(GoalColors)}
         onChange={onChangeColor}
       />

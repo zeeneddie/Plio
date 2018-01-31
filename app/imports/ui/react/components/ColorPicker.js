@@ -1,10 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { GithubPicker } from 'react-color';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Popover, PopoverBody } from 'reactstrap';
+import { StyledMixins } from 'plio-util';
+import { defaultTo } from 'ramda';
 
 import { withStateToggle } from '../helpers';
+
+const DESKTOP_SWATCH_SIZE = '40px';
+const MOBILE_SWATCH_SIZE = '30px';
 
 const StyledColorPickerIcon = styled.div`
   width: 33px;
@@ -17,7 +22,7 @@ const StyledColorPickerIcon = styled.div`
   display: block;
   transition: border-color 0.3s ease;
   cursor: pointer;
-  background-color: #F06292;
+  background-color: ${({ value }) => value};
 
   &:before {
     content: '';
@@ -48,19 +53,43 @@ const StyledGithubPicker = styled(GithubPicker)`
   box-shadow: 0 6px 12px rgba(0, 0, 0, .175) !important;
   background-clip: padding-box !important;
 
-  @media (max-width:767px) {
+  ${StyledMixins.media.mobile`
     max-width: 288px;
-  }
+  `};
+
+  ${({ value }) => css`
+    & [title="${defaultTo('', value).toUpperCase()}"] {
+      &::after {
+        margin: 0;
+        line-height: ${DESKTOP_SWATCH_SIZE};
+        display: block;
+        text-align: center;
+
+        ${StyledMixins.media.mobile`
+          line-height: ${MOBILE_SWATCH_SIZE};
+        `}
+      }
+
+      &:after {
+        font-family: FontAwesome;
+        -webkit-font-smoothing: antialiased;
+        content: "\f00c";
+        margin-right: 1px;
+        margin-left: 1px;
+        color: #fff;
+      }
+    }
+  `}
 
   & [title^="#"] {
-    width: 40px !important;
-    height: 40px !important;
+    width: ${DESKTOP_SWATCH_SIZE} !important;
+    height: ${DESKTOP_SWATCH_SIZE} !important;
     margin: 0 5px 5px 0;
 
-    @media (max-width:767px) {
-      width: 30px !important;
-      height: 30px !important;
-    }
+    ${StyledMixins.media.mobile`
+      width: ${MOBILE_SWATCH_SIZE} !important;
+      height: ${MOBILE_SWATCH_SIZE} !important;
+    `}
 
     &:hover {
       border: 1px solid rgba(0,0,0,0.5);
@@ -85,6 +114,24 @@ const StyledGithubPicker = styled(GithubPicker)`
   }
 `;
 
+const Div = styled.div`
+  width: 160px;
+  margin: 20% auto;
+
+  > p {
+    border: 1px solid #666;
+    padding: 12px 25px;
+
+    &.email:before {
+      font-family: FontAwesome;
+      display: inline-block;
+      padding-right: 6px;
+      vertical-align: middle;
+      content: "\f095";
+    }
+  }
+`;
+
 const enhance = withStateToggle(false, 'isOpen', 'toggle');
 
 const ColorPicker = ({
@@ -93,10 +140,15 @@ const ColorPicker = ({
   colors,
   width = 368,
   triangle = 'hide',
+  value,
   ...props
 }) => (
   <Fragment>
-    <StyledColorPickerIcon id="colorpicker" onClick={toggle} />
+    <StyledColorPickerIcon
+      id="colorpicker"
+      onClick={toggle}
+      {...{ value }}
+    />
     <Popover
       placement="bottom-start"
       target="colorpicker"
@@ -108,6 +160,7 @@ const ColorPicker = ({
             colors,
             width,
             triangle,
+            value,
             ...props,
           }}
         />
@@ -122,6 +175,7 @@ ColorPicker.propTypes = {
   colors: PropTypes.arrayOf(PropTypes.string).isRequired,
   width: PropTypes.number,
   triangle: PropTypes.string,
+  value: PropTypes.string,
 };
 
 export default enhance(ColorPicker);

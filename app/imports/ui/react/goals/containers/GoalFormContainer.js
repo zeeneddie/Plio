@@ -41,6 +41,6 @@ export default namedCompose('GoalFormContainer')(
     onChangeStartDate: updateDatePicker('startDate'),
     onChangeEndDate: updateDatePicker('endDate'),
     onChangePriority: updateInput('priority'),
-    onChangeColor: ({ updateUI }) => color => console.log(color) || updateUI('color', color),
+    onChangeColor: ({ updateUI }) => ({ hex }) => updateUI('color', hex),
   }),
 )(GoalForm);
