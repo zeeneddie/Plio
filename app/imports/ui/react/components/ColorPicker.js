@@ -48,19 +48,18 @@ const StyledGithubPicker = styled(GithubPicker)`
   box-shadow: 0 6px 12px rgba(0, 0, 0, .175) !important;
   background-clip: padding-box !important;
 
-  @include mobile {
+  @media (max-width:767px) {
     max-width: 288px;
   }
 
   & [title^="#"] {
-    border: 1px solid rgba(0, 0, 0, 0.5); 
     width: 40px !important;
     height: 40px !important;
     margin: 0 5px 5px 0;
 
-    @include mobile {
-      width: 30px;
-      height: 30px;
+    @media (max-width:767px) {
+      width: 30px !important;
+      height: 30px !important;
     }
 
     &:hover {
@@ -68,9 +67,21 @@ const StyledGithubPicker = styled(GithubPicker)`
     }
   }
 
+  & > span {
+    &:hover {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+
   & > span > div {
     width: auto !important;
     height: auto !important;
+
+    &:hover {
+      outline: none !important;
+      box-shadow: none !important;
+    }
   }
 `;
 
