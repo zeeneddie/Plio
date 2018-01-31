@@ -48,11 +48,24 @@ const StyledGithubPicker = styled(GithubPicker)`
   box-shadow: 0 6px 12px rgba(0, 0, 0, .175) !important;
   background-clip: padding-box !important;
 
+  @include mobile {
+    max-width: 288px;
+  }
+
   & [title^="#"] {
     border: 1px solid rgba(0, 0, 0, 0.5); 
     width: 40px !important;
     height: 40px !important;
     margin: 0 5px 5px 0;
+
+    @include mobile {
+      width: 30px;
+      height: 30px;
+    }
+
+    &:hover {
+      border: 1px solid rgba(0,0,0,0.5);
+    }
   }
 
   & > span > div {
@@ -67,6 +80,8 @@ const ColorPicker = ({
   isOpen,
   toggle,
   colors,
+  width = 368,
+  triangle = 'hide',
   ...props
 }) => (
   <Fragment>
@@ -78,9 +93,12 @@ const ColorPicker = ({
     >
       <PopoverBody>
         <StyledGithubPicker
-          triangle="hide"
-          width={368}
-          {...{ colors, props }}
+          {...{
+            colors,
+            width,
+            triangle,
+            ...props,
+          }}
         />
       </PopoverBody>
     </Popover>
@@ -91,6 +109,8 @@ ColorPicker.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   colors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  width: PropTypes.number,
+  triangle: PropTypes.string,
 };
 
 export default enhance(ColorPicker);
