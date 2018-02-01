@@ -8,6 +8,7 @@ export default {
   async insert({
     organizationId,
     title,
+    description,
     ownerId,
     startDate,
     endDate,
@@ -20,6 +21,7 @@ export default {
     return this.collection.insert({
       organizationId,
       title,
+      description,
       ownerId,
       startDate,
       endDate,
