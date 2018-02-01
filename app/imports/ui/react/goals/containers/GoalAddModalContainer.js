@@ -8,12 +8,23 @@ import { graphql } from 'react-apollo';
 import { namedCompose, withStore } from '../../helpers';
 import GoalAddModal from '../components/GoalAddModal';
 import { GoalPriorities } from '../../../../share/constants';
+import { DASHBOARD_GOALS_QUERY } from '../../../../api/graphql/query';
 
 const MUTATION = `
   mutation insertGoal($input: InsertGoalInput!) {
     insertGoal(input: $input) {
       goal {
         _id
+        isDeleted
+        title
+        startDate
+        endDate
+        color
+        milestones {
+          _id
+          title
+          completionTargetDate
+        }
       }
     }
   }
@@ -46,7 +57,7 @@ export default namedCompose('GoalAddModalContainer')(
           startDate,
           endDate,
           priority,
-          color,
+          color = '',
         },
       },
     }) => ({
@@ -63,7 +74,22 @@ export default namedCompose('GoalAddModalContainer')(
             color: color.toUpperCase(),
           },
         },
-      }).then(console.log).catch(({ message }) => updateUI('errorText', message)),
+        update: (proxy, { data: { insertGoal: { goal } } }) => {
+          const data = proxy.readQuery({
+            query: DASHBOARD_GOALS_QUERY,
+            variables: { organizationId },
+          });
+
+          data.goals.totalCount += 1;
+          data.goals.goals.push(goal);
+
+          return proxy.writeQuery({
+            data,
+            query: DASHBOARD_GOALS_QUERY,
+            variables: { organizationId },
+          });
+        },
+      }).catch(({ message }) => updateUI('errorText', message)),
     }),
   }),
   mapProps(({

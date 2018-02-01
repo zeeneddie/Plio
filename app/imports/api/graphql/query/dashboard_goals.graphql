@@ -3,7 +3,10 @@ query DashboardGoals($organizationId: ID!, $limit: Int!) {
     userId: _id
   }
 
-  goals(organizationId: $organizationId, limit: $limit) {
+  goals(organizationId: $organizationId, limit: $limit) @connection(
+    key: "goals",
+    filter: ["organizationId"]
+  ) {
     totalCount
     goals {
       _id
