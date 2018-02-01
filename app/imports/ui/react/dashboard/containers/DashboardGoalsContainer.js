@@ -9,6 +9,7 @@ import {
   branch,
   renderNothing,
   withState,
+  withHandlers,
 } from 'recompose';
 import PropTypes from 'prop-types';
 import { getGoalsLength, lenses, lensNotEq } from 'plio-util';
@@ -112,4 +113,11 @@ export default namedCompose('DashboardGoalsContainer')(
     renderNothing,
   ),
   withStateToggle(false, 'isModalOpen', 'toggleModal'),
+  withHandlers({
+    openModal: ({ toggleModal }) => (e) => {
+      e.stopPropagation();
+
+      toggleModal();
+    },
+  }),
 )(DashboardGoals);
