@@ -4,9 +4,11 @@ import { GithubPicker } from 'react-color';
 import styled, { css } from 'styled-components';
 import { Popover, PopoverBody } from 'reactstrap';
 import { StyledMixins } from 'plio-util';
-import { defaultTo } from 'ramda';
+import { defaultTo, compose, prop, identity } from 'ramda';
+import { withHandlers, branch } from 'recompose';
 
-import { withStateToggle } from '../helpers';
+
+import withStateToggle from '../helpers/withStateToggle';
 
 const DESKTOP_SWATCH_SIZE = '40px';
 const MOBILE_SWATCH_SIZE = '30px';
@@ -114,7 +116,19 @@ const StyledGithubPicker = styled(GithubPicker)`
   }
 `;
 
-const enhance = withStateToggle(false, 'isOpen', 'toggle');
+const enhance = compose(
+  branch(
+    prop('toggle'),
+    identity,
+    withStateToggle(false, 'isOpen', 'toggle'),
+  ),
+  withHandlers({
+    onChange: ({ onChange, toggle }) => (...args) => {
+      toggle();
+      return onChange(...args);
+    },
+  }),
+);
 
 const ColorPicker = ({
   isOpen,
@@ -123,6 +137,7 @@ const ColorPicker = ({
   width = 368,
   triangle = 'hide',
   value,
+  onChange,
   ...props
 }) => (
   <Fragment>
@@ -143,6 +158,7 @@ const ColorPicker = ({
             width,
             triangle,
             value,
+            onChange,
             ...props,
           }}
         />
@@ -158,6 +174,7 @@ ColorPicker.propTypes = {
   width: PropTypes.number,
   triangle: PropTypes.string,
   value: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default enhance(ColorPicker);

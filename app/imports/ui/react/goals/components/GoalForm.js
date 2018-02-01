@@ -12,7 +12,6 @@ import {
   ColorPicker,
 } from '../../components';
 import { GoalColors } from '../../../../share/constants';
-import { withStateToggle } from '../../helpers';
 
 const enhance = onlyUpdateForKeys([
   'title',
