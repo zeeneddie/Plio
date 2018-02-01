@@ -1,21 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 
 import Button from './Button';
 import { IconLoading } from '../Icons';
 
 const SaveButton = ({
-  color = 'secondary',
-  className,
+  color = 'primary',
   isSaving,
   ...props
 }) => (
   <Button
-    color={color}
-    className={cx({ disabled: isSaving }, className)}
     disabled={isSaving}
-    {...props}
+    {...{ color, ...props }}
   >
     {isSaving && <IconLoading />}
     {isSaving ? 'Saving...' : 'Save'}

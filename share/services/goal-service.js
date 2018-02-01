@@ -17,6 +17,8 @@ export default {
     const serialNumber = generateSerialNumber(this.collection, { organizationId });
     const sequentialId = `${Abbreviations.GOAL}${serialNumber}`;
 
+    Meteor._sleepForMs(3000);
+
     return this.collection.insert({
       organizationId,
       title,

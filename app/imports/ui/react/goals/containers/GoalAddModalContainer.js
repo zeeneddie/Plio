@@ -47,6 +47,7 @@ export default namedCompose('GoalAddModalContainer')(
       priority: GoalPriorities.MINOR,
       color: '',
       errorText: '',
+      isSaving: false,
     },
   }),
   graphql(gql`${INSERT_GOAL_MUTATION}`, {
@@ -68,37 +69,46 @@ export default namedCompose('GoalAddModalContainer')(
         },
       },
     }) => ({
-      onSubmit: () => mutate({
-        variables: {
-          input: {
-            organizationId,
-            title,
-            description,
-            ownerId,
-            startDate,
-            endDate,
-            priority,
-            color: color.toUpperCase(),
-          },
-        },
-        update: (proxy, { data: { insertGoal: { goal } } }) => {
-          const data = addGoal(goal, proxy.readQuery({
-            query: DASHBOARD_GOALS_QUERY,
-            variables: { organizationId },
-          }));
+      onSubmit: () => {
+        updateUI('isSaving', true);
 
-          return proxy.writeQuery({
-            data,
-            query: DASHBOARD_GOALS_QUERY,
-            variables: { organizationId },
-          });
-        },
-      }).then(() => isOpen && toggle())
-        .catch(({ message }) => updateUI('errorText', message)),
+        return mutate({
+          variables: {
+            input: {
+              organizationId,
+              title,
+              description,
+              ownerId,
+              startDate,
+              endDate,
+              priority,
+              color: color.toUpperCase(),
+            },
+          },
+          update: (proxy, { data: { insertGoal: { goal } } }) => {
+            const data = addGoal(goal, proxy.readQuery({
+              query: DASHBOARD_GOALS_QUERY,
+              variables: { organizationId },
+            }));
+
+            return proxy.writeQuery({
+              data,
+              query: DASHBOARD_GOALS_QUERY,
+              variables: { organizationId },
+            });
+          },
+        }).then(() => {
+          updateUI('isSaving', false);
+          return isOpen && toggle();
+        }).catch(({ message }) => updateUI({
+          errorText: message,
+          isSaving: false,
+        }));
+      },
     }),
   }),
   mapProps(({
-    ui: { errorText },
+    ui: { errorText, isSaving },
     ...props
-  }) => ({ errorText, ...props })),
+  }) => ({ errorText, isSaving, ...props })),
 )(GoalAddModal);
