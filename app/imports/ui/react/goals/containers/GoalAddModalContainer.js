@@ -55,6 +55,8 @@ export default namedCompose('GoalAddModalContainer')(
       ownProps: {
         updateUI,
         organizationId,
+        toggle,
+        isOpen,
         ui: {
           title,
           description,
@@ -91,7 +93,8 @@ export default namedCompose('GoalAddModalContainer')(
             variables: { organizationId },
           });
         },
-      }).catch(({ message }) => updateUI('errorText', message)),
+      }).then(() => isOpen && toggle())
+        .catch(({ message }) => updateUI('errorText', message)),
     }),
   }),
   mapProps(({
