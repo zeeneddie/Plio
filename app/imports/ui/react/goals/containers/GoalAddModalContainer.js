@@ -8,8 +8,7 @@ import { graphql } from 'react-apollo';
 import { namedCompose, withStore } from '../../helpers';
 import GoalAddModal from '../components/GoalAddModal';
 import { GoalPriorities } from '../../../../share/constants';
-import { DASHBOARD_GOALS_QUERY } from '../../../../api/graphql/query';
-import { DASHBOARD_GOAL_FRAGMENT } from '../../../../api/graphql/Fragment';
+import { Query, Fragment } from '../../../../client/graphql';
 
 const addGoal = (goal, data) => compose(
   over(lenses.goals.goals, append(goal)),
@@ -24,7 +23,7 @@ const INSERT_GOAL_MUTATION = gql`
       }
     }
   }
-  ${DASHBOARD_GOAL_FRAGMENT}
+  ${Fragment.DASHBOARD_GOAL}
 `;
 
 export default namedCompose('GoalAddModalContainer')(
@@ -79,13 +78,13 @@ export default namedCompose('GoalAddModalContainer')(
           },
           update: (proxy, { data: { insertGoal: { goal } } }) => {
             const data = addGoal(goal, proxy.readQuery({
-              query: DASHBOARD_GOALS_QUERY,
+              query: Query.DASHBOARD_GOALS,
               variables: { organizationId },
             }));
 
             return proxy.writeQuery({
               data,
-              query: DASHBOARD_GOALS_QUERY,
+              query: Query.DASHBOARD_GOALS,
               variables: { organizationId },
             });
           },

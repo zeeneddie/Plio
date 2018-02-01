@@ -2,14 +2,13 @@ import { updateInput, updateSelectInput, updateDatePicker, mapUsersToOptions } f
 import connectUI from 'redux-ui';
 import { flattenProp, withHandlers, lifecycle } from 'recompose';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 
 import { namedCompose } from '../../helpers';
 import GoalForm from '../components/GoalForm';
-import { ORGANIZATION_USERS_QUERY } from '../../../../api/graphql/query';
+import { Query } from '../../../../client/graphql';
 
 export default namedCompose('GoalFormContainer')(
-  graphql(gql`${ORGANIZATION_USERS_QUERY}`, {
+  graphql(Query.ORGANIZATION_USERS, {
     options: ({ organizationId }) => ({
       variables: { organizationId },
     }),

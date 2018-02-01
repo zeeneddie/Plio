@@ -1,5 +1,4 @@
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import {
   withContext,
   renameProps,
@@ -24,7 +23,7 @@ import {
   WorkspaceDefaults,
 } from '../../../../share/constants';
 import { client } from '../../../../client/apollo';
-import { DASHBOARD_GOALS_QUERY } from '../../../../api/graphql/query';
+import { Query } from '../../../../client/graphql';
 
 export default namedCompose('DashboardGoalsContainer')(
   setPropTypes({
@@ -45,7 +44,7 @@ export default namedCompose('DashboardGoalsContainer')(
   }),
   onlyUpdateForKeys(['organizationId', 'itemsPerRow']),
   withState('isOpen', 'setIsOpen', false),
-  graphql(DASHBOARD_GOALS_QUERY, {
+  graphql(Query.DASHBOARD_GOALS, {
     options: ({
       organizationId,
       itemsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
