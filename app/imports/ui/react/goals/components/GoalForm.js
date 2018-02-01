@@ -9,7 +9,10 @@ import {
   Magnitudes,
   SelectInput,
   LoadableDatePicker,
+  ColorPicker,
 } from '../../components';
+import { GoalColors } from '../../../../share/constants';
+import { withStateToggle } from '../../helpers';
 
 const enhance = onlyUpdateForKeys([
   'title',
@@ -92,7 +95,11 @@ export const GoalForm = ({
     </FormField>
     <FormField>
       Color
-      <div />
+      <ColorPicker
+        value={color}
+        colors={Object.values(GoalColors)}
+        onChange={onChangeColor}
+      />
     </FormField>
   </Fragment>
 );

@@ -45,5 +45,7 @@
     "react-test-renderer": "^16.2.0",
     "styled-components": "^2.4.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "plio-util": "https://github.com/Pliohub/plio-util.git"
+  }
 }

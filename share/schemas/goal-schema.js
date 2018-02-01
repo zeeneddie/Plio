@@ -74,7 +74,7 @@ const GoalSchema = new SimpleSchema([
     },
     color: {
       type: Number,
-      allowedValues: Object.keys(GoalColors),
+      allowedValues: Object.values(GoalColors),
     },
     riskIds: {
       type: [String],
