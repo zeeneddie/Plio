@@ -5,7 +5,7 @@ import { Abbreviations } from '../constants';
 export default {
   collection: Goals,
 
-  insert({
+  async insert({
     organizationId,
     title,
     ownerId,
