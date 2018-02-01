@@ -1,11 +1,18 @@
+input InsertGoalInput {
+  organizationId: ID!
+  title: String!
+  description: String
+  ownerId: ID!
+  startDate: DateTime!
+  endDate: DateTime!
+  color: String!
+  priority: String!
+}
+
+type InsertGoalPayload {
+  goal: Goal
+}
+
 type Mutation {
-  insertGoal(
-    organizationId: ID!
-    title: String!
-    ownerId: ID!
-    startDate: Date!
-    endDate: Date!
-    color: String!
-    priority: String!
-  ): Goal
+  insertGoal(input: InsertGoalInput!): InsertGoalPayload
 }
