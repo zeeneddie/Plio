@@ -1,3 +1,5 @@
+#import "../Fragment/DashboardGoal.graphql"
+
 query DashboardGoals($organizationId: ID!, $limit: Int!) {
   me {
     userId: _id
@@ -9,17 +11,7 @@ query DashboardGoals($organizationId: ID!, $limit: Int!) {
   ) {
     totalCount
     goals {
-      _id
-      isDeleted
-      title
-      startDate
-      endDate
-      color
-      milestones {
-        _id
-        title
-        completionTargetDate
-      }
+      ...DashboardGoal
     }
   }
 }

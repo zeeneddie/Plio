@@ -45,7 +45,7 @@ export default namedCompose('DashboardGoalsContainer')(
   }),
   onlyUpdateForKeys(['organizationId', 'itemsPerRow']),
   withState('isOpen', 'setIsOpen', false),
-  graphql(gql`${DASHBOARD_GOALS_QUERY}`, {
+  graphql(DASHBOARD_GOALS_QUERY, {
     options: ({
       organizationId,
       itemsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],

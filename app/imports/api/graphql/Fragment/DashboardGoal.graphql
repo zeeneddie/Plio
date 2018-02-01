@@ -1,0 +1,13 @@
+fragment DashboardGoal on Goal {
+  _id
+  isDeleted
+  title
+  startDate
+  endDate
+  color
+  milestones {
+    _id
+    title
+    completionTargetDate
+  }
+}

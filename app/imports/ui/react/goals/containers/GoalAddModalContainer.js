@@ -9,30 +9,22 @@ import { namedCompose, withStore } from '../../helpers';
 import GoalAddModal from '../components/GoalAddModal';
 import { GoalPriorities } from '../../../../share/constants';
 import { DASHBOARD_GOALS_QUERY } from '../../../../api/graphql/query';
+import { DASHBOARD_GOAL_FRAGMENT } from '../../../../api/graphql/Fragment';
 
 const addGoal = (goal, data) => compose(
   over(lenses.goals.goals, append(goal)),
   over(lenses.goals.totalCount, inc),
 )(data);
 
-const INSERT_GOAL_MUTATION = `
+const INSERT_GOAL_MUTATION = gql`
   mutation insertGoal($input: InsertGoalInput!) {
     insertGoal(input: $input) {
       goal {
-        _id
-        isDeleted
-        title
-        startDate
-        endDate
-        color
-        milestones {
-          _id
-          title
-          completionTargetDate
-        }
+        ...DashboardGoal
       }
     }
   }
+  ${DASHBOARD_GOAL_FRAGMENT}
 `;
 
 export default namedCompose('GoalAddModalContainer')(
@@ -50,7 +42,7 @@ export default namedCompose('GoalAddModalContainer')(
       isSaving: false,
     },
   }),
-  graphql(gql`${INSERT_GOAL_MUTATION}`, {
+  graphql(INSERT_GOAL_MUTATION, {
     props: ({
       mutate,
       ownProps: {
