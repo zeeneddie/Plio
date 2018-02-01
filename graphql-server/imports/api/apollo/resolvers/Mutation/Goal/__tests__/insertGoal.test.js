@@ -24,12 +24,11 @@ describe('insertGoal', () => {
     const context = {
       userId: 2,
       services: { GoalService },
+      collections: { Goals: GoalService.collection },
     };
-    const _id = await resolver(root, args, context);
-    const goal = await GoalService.collection.findOne({ _id });
+    const { goal } = await resolver(root, args, context);
     const { sequentialId } = goal;
 
-    expect(_id).toEqual(expect.any(String));
     expect(goal).toMatchObject(args);
     expect(sequentialId.startsWith(Abbreviations.GOAL)).toBe(true);
   });
