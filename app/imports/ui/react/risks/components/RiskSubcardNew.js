@@ -93,6 +93,7 @@ const RiskSubcardNew = enhance(({
       </SwitchView>
       <CardBlock>
         <SaveButton
+          color="secondary"
           pull="right"
           onClick={e => !isSaving && onSave({
             title,

@@ -1,8 +1,8 @@
 import { __setupDB, __closeDB, Mongo } from 'meteor/mongo';
-import { resolver } from '../insertGoal';
+import { resolver } from '../createGoal';
 import { GoalColors, GoalPriorities, Abbreviations } from '../../../../../../share/constants';
 
-describe('insertGoal', () => {
+describe('createGoal', () => {
   beforeAll(() => __setupDB());
   afterAll(() => __closeDB());
 
@@ -18,18 +18,17 @@ describe('insertGoal', () => {
       ownerId: 2,
       startDate: new Date(),
       endDate: new Date(),
-      color: GoalColors[0],
+      color: GoalColors.PINK,
       priority: GoalPriorities.MAJOR,
     };
     const context = {
       userId: 2,
       services: { GoalService },
+      collections: { Goals: GoalService.collection },
     };
-    const _id = await resolver(root, args, context);
-    const goal = await GoalService.collection.findOne({ _id });
+    const { goal } = await resolver(root, args, context);
     const { sequentialId } = goal;
 
-    expect(_id).toEqual(expect.any(String));
     expect(goal).toMatchObject(args);
     expect(sequentialId.startsWith(Abbreviations.GOAL)).toBe(true);
   });

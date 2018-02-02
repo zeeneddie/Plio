@@ -8,7 +8,7 @@ import { transsoc } from '../../../../api/helpers';
 
 const enhance = mapProps(transsoc({ className: getSizeClassName }));
 
-const Preloader = enhance(({ size, ...other }) => (
+const Preloader = enhance(({ size = 1, ...other }) => (
   <span>
     <Icon name="circle-o-notch spin fw" margin="bottom" {...{ ...other, size }} />
     <br />

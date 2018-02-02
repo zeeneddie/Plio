@@ -1,5 +1,4 @@
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import {
   withContext,
   renameProps,
@@ -9,6 +8,7 @@ import {
   branch,
   renderNothing,
   withState,
+  withHandlers,
 } from 'recompose';
 import PropTypes from 'prop-types';
 import { getGoalsLength, lenses, lensNotEq } from 'plio-util';
@@ -23,7 +23,7 @@ import {
   WorkspaceDefaults,
 } from '../../../../share/constants';
 import { client } from '../../../../client/apollo';
-import { DASHBOARD_GOALS_QUERY } from '../../../../api/graphql/query';
+import { Query } from '../../../../client/graphql';
 
 export default namedCompose('DashboardGoalsContainer')(
   setPropTypes({
@@ -44,7 +44,7 @@ export default namedCompose('DashboardGoalsContainer')(
   }),
   onlyUpdateForKeys(['organizationId', 'itemsPerRow']),
   withState('isOpen', 'setIsOpen', false),
-  graphql(gql`${DASHBOARD_GOALS_QUERY}`, {
+  graphql(Query.DASHBOARD_GOALS, {
     options: ({
       organizationId,
       itemsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
@@ -64,10 +64,12 @@ export default namedCompose('DashboardGoalsContainer')(
           totalCount,
           goals,
         } = {},
+        me: { userId } = {},
       },
       ownProps: {
         isOpen,
         setIsOpen,
+        organizationId,
       },
     }) => ({
       isOpen,
@@ -75,6 +77,8 @@ export default namedCompose('DashboardGoalsContainer')(
       goals,
       totalCount,
       networkStatus,
+      userId,
+      organizationId,
       toggle: async () => {
         if (!isOpen) {
           await fetchMore({
@@ -108,4 +112,11 @@ export default namedCompose('DashboardGoalsContainer')(
     renderNothing,
   ),
   withStateToggle(false, 'isModalOpen', 'toggleModal'),
+  withHandlers({
+    openModal: ({ toggleModal }) => (e) => {
+      e.stopPropagation();
+
+      toggleModal();
+    },
+  }),
 )(DashboardGoals);

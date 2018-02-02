@@ -9,7 +9,7 @@ import {
   PlusButton,
   GoalsChart,
 } from '../../components';
-import { GoalAddModalContainer } from '../../containers';
+import { GoalAddModalContainer } from '../../goals/containers';
 
 const DashboardGoals = ({
   totalCount,
@@ -22,7 +22,10 @@ const DashboardGoals = ({
   isOpen,
   loading,
   isModalOpen,
+  openModal,
   toggleModal,
+  userId,
+  organizationId,
 }) => (
   <DashboardStatsExpandable
     items={goals}
@@ -37,11 +40,13 @@ const DashboardGoals = ({
     )}
     {...{ toggle, isOpen }}
   >
-    <PlusButton size="1" onClick={toggleModal} />
+    <PlusButton size="1" onClick={openModal} />
     {pluralize('goal', totalCount || goals.length, true)}
     <GoalAddModalContainer
       isOpen={isModalOpen}
       toggle={toggleModal}
+      ownerId={userId}
+      {...{ organizationId }}
     />
   </DashboardStatsExpandable>
 );
@@ -57,7 +62,10 @@ DashboardGoals.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isModalOpen: PropTypes.bool.isRequired,
   toggleModal: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  userId: PropTypes.string.isRequired,
+  organizationId: PropTypes.string.isRequired,
 };
 
 export default DashboardGoals;

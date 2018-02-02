@@ -1,0 +1,12 @@
+query OrganizationUsers ($organizationId: ID!) {
+  organization(_id: $organizationId) {
+    users {
+      user {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

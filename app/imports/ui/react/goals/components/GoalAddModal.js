@@ -7,22 +7,24 @@ import {
   Modal,
   ModalHeader,
   CardBlock,
+  SaveButton,
 } from '../../components';
-import GoalForm from './GoalForm';
+import GoalFormContainer from '../containers/GoalFormContainer';
 
 export const GoalAddModal = ({
   isOpen,
   toggle,
   errorText,
+  isSaving,
   onSubmit,
+  organizationId,
+  onClosed,
 }) => (
-  <Modal {...{ isOpen, toggle }}>
+  <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
       renderLeftButton={() => <Button onClick={toggle}>Close</Button>}
       renderRightButton={() => (
-        <Button color="primary" onClick={onSubmit}>
-          Save
-        </Button>
+        <SaveButton onClick={onSubmit} {...{ isSaving }} />
       )}
     >
       <CardTitle>Key Goal</CardTitle>
@@ -32,7 +34,7 @@ export const GoalAddModal = ({
 
       <div>
         <CardBlock>
-          <GoalForm />
+          <GoalFormContainer {...{ organizationId }} />
         </CardBlock>
       </div>
     </ModalBody>
@@ -41,9 +43,12 @@ export const GoalAddModal = ({
 
 GoalAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  isSaving: PropTypes.bool,
   toggle: PropTypes.func.isRequired,
   onSubmit: PropTypes.func,
   errorText: PropTypes.string,
+  organizationId: PropTypes.string.isRequired,
+  onClosed: PropTypes.func,
 };
 
 export default GoalAddModal;

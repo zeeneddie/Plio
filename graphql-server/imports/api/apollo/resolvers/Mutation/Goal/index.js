@@ -1,5 +1,5 @@
-import insertGoal from './insertGoal';
+import createGoal from './createGoal';
 
 export default {
-  insertGoal,
+  createGoal,
 };

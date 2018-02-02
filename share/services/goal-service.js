@@ -5,9 +5,10 @@ import { Abbreviations } from '../constants';
 export default {
   collection: Goals,
 
-  insert({
+  async insert({
     organizationId,
     title,
+    description,
     ownerId,
     startDate,
     endDate,
@@ -20,6 +21,7 @@ export default {
     return this.collection.insert({
       organizationId,
       title,
+      description,
       ownerId,
       startDate,
       endDate,
