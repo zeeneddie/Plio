@@ -9,7 +9,7 @@ import {
   PlusButton,
   GoalsChart,
 } from '../../components';
-import { GoalAddModalContainer } from '../../containers';
+import { GoalAddModalContainer } from '../../goals/containers';
 
 const DashboardGoals = ({
   totalCount,

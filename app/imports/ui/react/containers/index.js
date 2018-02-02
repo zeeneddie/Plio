@@ -1,1 +1,3 @@
-export * from '../goals/containers';
+export {
+  default as OrgUsersSelectInputContainer,
+} from './OrgUsersSelectInputContainer';

@@ -7,10 +7,10 @@ import {
   FormField,
   FormInput,
   Magnitudes,
-  SelectInput,
   LoadableDatePicker,
   ColorPicker,
 } from '../../components';
+import { OrgUsersSelectInputContainer } from '../../containers';
 import { GoalColors } from '../../../../share/constants';
 
 const enhance = onlyUpdateForKeys([
@@ -21,7 +21,7 @@ const enhance = onlyUpdateForKeys([
   'endDate',
   'priority',
   'color',
-  'users',
+  'organizationId',
 ]);
 
 export const GoalForm = ({
@@ -39,7 +39,8 @@ export const GoalForm = ({
   onChangePriority,
   color,
   onChangeColor,
-  users,
+  organizationId,
+  onError,
 }) => (
   <Fragment>
     <FormField>
@@ -57,14 +58,14 @@ export const GoalForm = ({
     </FormField>
     <FormField>
       Owner
-      <SelectInput
+      <OrgUsersSelectInputContainer
         uncontrolled
         caret
         hint
         input={{ placeholder: 'Owner' }}
         selected={ownerId}
-        items={users}
         onSelect={onChangeOwnerId}
+        {...{ organizationId, onError }}
       />
     </FormField>
     <FormField>
@@ -118,7 +119,8 @@ GoalForm.propTypes = {
   onChangePriority: PropTypes.func.isRequired,
   color: PropTypes.string,
   onChangeColor: PropTypes.func.isRequired,
-  users: PropTypes.arrayOf(PropTypes.object).isRequired,
+  organizationId: PropTypes.string.isRequired,
+  onError: PropTypes.func,
 };
 
 export default enhance(GoalForm);
