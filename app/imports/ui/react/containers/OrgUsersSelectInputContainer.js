@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { mapUsersToOptions, lenses } from 'plio-util';
-import { setPropTypes } from 'recompose';
+import { setPropTypes, lifecycle } from 'recompose';
 import { view } from 'ramda';
 
 import { namedCompose, withPreloader, omitProps } from '../helpers';
@@ -29,14 +29,16 @@ export default namedCompose('OrgUsersSelectInputContainer')(
           users = [],
         } = {},
       },
-    }) => {
+    }) => ({
+      loading,
+      error,
+      items: mapUsersToOptions(users),
+      ...props,
+    }),
+  }),
+  lifecycle({
+    componentWillReceiveProps({ error, onError }) {
       if (error && onError) onError(error);
-
-      return {
-        loading,
-        items: mapUsersToOptions(users),
-        ...props,
-      };
     },
   }),
   withPreloader(view(lenses.loading), () => ({ size: 1 })),
