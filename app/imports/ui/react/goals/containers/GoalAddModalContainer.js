@@ -15,9 +15,9 @@ const addGoal = (goal, data) => compose(
   over(lenses.goals.totalCount, inc),
 )(data);
 
-const INSERT_GOAL_MUTATION = gql`
-  mutation insertGoal($input: InsertGoalInput!) {
-    insertGoal(input: $input) {
+const CREATE_GOAL = gql`
+  mutation createGoal($input: CreateGoalInput!) {
+    createGoal(input: $input) {
       goal {
         ...DashboardGoal
       }
@@ -41,7 +41,7 @@ export default namedCompose('GoalAddModalContainer')(
       isSaving: false,
     },
   }),
-  graphql(INSERT_GOAL_MUTATION, {
+  graphql(CREATE_GOAL, {
     props: ({
       mutate,
       ownProps: {
@@ -78,7 +78,7 @@ export default namedCompose('GoalAddModalContainer')(
               color: color.toUpperCase(),
             },
           },
-          update: (proxy, { data: { insertGoal: { goal } } }) => {
+          update: (proxy, { data: { createGoal: { goal } } }) => {
             const data = addGoal(goal, proxy.readQuery({
               query: Query.DASHBOARD_GOALS,
               variables: { organizationId },
