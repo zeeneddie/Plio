@@ -9,6 +9,7 @@ import {
   VictoryScatter,
   VictoryTooltip,
 } from 'victory';
+import { TimelineChart } from '../../components';
 
 const fontFamily = '"Roboto", "Helvetica Neue", Helvetica, sans-serif';
 
@@ -67,11 +68,9 @@ const GoalsChart = ({
   onLineTap,
   onScatterTap,
 }) => (
-  <VictoryChart
+  <TimelineChart
     width={1140}
-    height={400}
-    scale={{ x: 'time' }}
-    domainPadding={{ x: [20, 20] }}
+    height={50 * goals.length}
     domain={{
       x: [
         new Date('01 January 2018'),
@@ -81,19 +80,6 @@ const GoalsChart = ({
         -1,
         goals.length,
       ],
-    }}
-    containerComponent={(
-      <VictoryZoomContainer
-        dimension="x"
-        zoomDomain={zoomDomain}
-        onDomainChange={onZoom}
-      />
-    )}
-    padding={{
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
     }}
   >
     <VictoryAxis
@@ -167,7 +153,7 @@ const GoalsChart = ({
         labelComponent={<VictoryTooltip />}
       />
     ))}
-  </VictoryChart>
+  </TimelineChart>
 );
 
 GoalsChart.propTypes = {

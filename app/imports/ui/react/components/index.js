@@ -20,3 +20,4 @@ export { default as Modal } from './Modal';
 export { default as ModalHeader } from './ModalHeader';
 export { default as LoadableDatePicker } from './LoadableDatePicker';
 export { default as ColorPicker } from './ColorPicker';
+export { default as TimelineChart } from './TimelineChart';
