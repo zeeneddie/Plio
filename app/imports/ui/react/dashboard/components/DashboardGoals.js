@@ -32,7 +32,7 @@ const DashboardGoals = ({
     total={totalCount}
     itemsPerRow={goals.length}
     renderIcon={loading ? () => <IconLoading /> : undefined}
-    render={({ items }) => (
+    render={({ items }) => !!items.length && (
       <GoalsChart
         key={joinIds(items)}
         goals={items}

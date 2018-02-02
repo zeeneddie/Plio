@@ -5,13 +5,11 @@ import {
   flattenProp,
   setPropTypes,
   onlyUpdateForKeys,
-  branch,
-  renderNothing,
   withState,
   withHandlers,
 } from 'recompose';
 import PropTypes from 'prop-types';
-import { getGoalsLength, lenses, lensNotEq } from 'plio-util';
+import { lenses, lensNotEq } from 'plio-util';
 import { view, allPass } from 'ramda';
 import { NetworkStatus } from 'apollo-client';
 
@@ -106,11 +104,6 @@ export default namedCompose('DashboardGoalsContainer')(
     ]),
     () => ({ size: 2 }),
   ),
-  branch(
-    getGoalsLength,
-    withHr,
-    renderNothing,
-  ),
   withStateToggle(false, 'isModalOpen', 'toggleModal'),
   withHandlers({
     openModal: ({ toggleModal }) => (e) => {
@@ -119,4 +112,5 @@ export default namedCompose('DashboardGoalsContainer')(
       toggleModal();
     },
   }),
+  withHr,
 )(DashboardGoals);
