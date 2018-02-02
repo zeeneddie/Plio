@@ -1,8 +1,8 @@
 import { __setupDB, __closeDB, Mongo } from 'meteor/mongo';
-import { resolver } from '../insertGoal';
+import { resolver } from '../createGoal';
 import { GoalColors, GoalPriorities, Abbreviations } from '../../../../../../share/constants';
 
-describe('insertGoal', () => {
+describe('createGoal', () => {
   beforeAll(() => __setupDB());
   afterAll(() => __closeDB());
 

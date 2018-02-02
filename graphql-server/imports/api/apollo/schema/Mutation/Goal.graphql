@@ -1,4 +1,4 @@
-input InsertGoalInput {
+input CreateGoalInput {
   organizationId: ID!
   title: String!
   description: String
@@ -9,10 +9,10 @@ input InsertGoalInput {
   priority: String!
 }
 
-type InsertGoalPayload {
+type CreateGoalPayload {
   goal: Goal
 }
 
 type Mutation {
-  insertGoal(input: InsertGoalInput!): InsertGoalPayload
+  createGoal(input: CreateGoalInput!): CreateGoalPayload
 }
