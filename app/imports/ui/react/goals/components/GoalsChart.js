@@ -9,7 +9,7 @@ import {
   VictoryScatter,
   VictoryTooltip,
 } from 'victory';
-import { TimelineChart } from '../../components';
+import { TimelineChart, HiddenAxis } from '../../components';
 
 const fontFamily = '"Roboto", "Helvetica Neue", Helvetica, sans-serif';
 
@@ -82,19 +82,7 @@ const GoalsChart = ({
       ],
     }}
   >
-    <VictoryAxis
-      style={{
-        axis: {
-          stroke: 'none',
-        },
-        tickLabels: {
-          angle: 0,
-          padding: 30,
-          border: 1,
-          fontFamily,
-        },
-      }}
-    />
+    <HiddenAxis />
     <VictoryLine
       style={{
         data: { stroke: '#888', strokeWidth: 1, fontFamily },
