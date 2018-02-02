@@ -20,3 +20,4 @@ export { default as withStateToggle } from './withStateToggle';
 export { default as withCurrentTime } from './withCurrentTime';
 export { default as withHr } from './withHr';
 export { default as withStore } from './withStore';
+export { default as withPreloader } from './withPreloader';
