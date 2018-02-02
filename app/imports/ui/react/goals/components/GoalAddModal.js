@@ -18,8 +18,9 @@ export const GoalAddModal = ({
   isSaving,
   onSubmit,
   organizationId,
+  onClosed,
 }) => (
-  <Modal {...{ isOpen, toggle }}>
+  <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
       renderLeftButton={() => <Button onClick={toggle}>Close</Button>}
       renderRightButton={() => (
@@ -47,6 +48,7 @@ GoalAddModal.propTypes = {
   onSubmit: PropTypes.func,
   errorText: PropTypes.string,
   organizationId: PropTypes.string.isRequired,
+  onClosed: PropTypes.func,
 };
 
 export default GoalAddModal;

@@ -46,6 +46,7 @@ export default namedCompose('GoalAddModalContainer')(
       mutate,
       ownProps: {
         updateUI,
+        resetUI,
         organizationId,
         toggle,
         isOpen,
@@ -60,6 +61,7 @@ export default namedCompose('GoalAddModalContainer')(
         },
       },
     }) => ({
+      onClosed: resetUI,
       onSubmit: () => {
         updateUI('isSaving', true);
 
