@@ -5,7 +5,7 @@ import { view, over, compose, append, inc } from 'ramda';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 
-import { namedCompose, withStore } from '../../helpers';
+import { namedCompose } from '../../helpers';
 import GoalAddModal from '../components/GoalAddModal';
 import { GoalPriorities } from '../../../../share/constants';
 import { Query, Fragment } from '../../../../client/graphql';
@@ -27,7 +27,6 @@ const CREATE_GOAL = gql`
 `;
 
 export default namedCompose('GoalAddModalContainer')(
-  withStore,
   connectUI({
     state: {
       title: '',
@@ -62,7 +61,7 @@ export default namedCompose('GoalAddModalContainer')(
       },
     }) => ({
       onClosed: resetUI,
-      onSubmit: () => {
+      onSubmit: (e) => {
         updateUI('isSaving', true);
 
         return mutate({
@@ -92,7 +91,7 @@ export default namedCompose('GoalAddModalContainer')(
           },
         }).then(() => {
           updateUI('isSaving', false);
-          return isOpen && toggle();
+          return isOpen && toggle(e);
         }).catch(({ message }) => updateUI({
           errorText: message,
           isSaving: false,

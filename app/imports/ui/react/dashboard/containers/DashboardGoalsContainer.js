@@ -5,15 +5,15 @@ import {
   flattenProp,
   setPropTypes,
   onlyUpdateForKeys,
-  withState,
   withHandlers,
 } from 'recompose';
 import PropTypes from 'prop-types';
 import { lenses, lensNotEq } from 'plio-util';
 import { view, allPass } from 'ramda';
 import { NetworkStatus } from 'apollo-client';
+import connectUI from 'redux-ui';
 
-import { namedCompose, withHr, withPreloaderPage, withStateToggle } from '../../helpers';
+import { namedCompose, withHr, withPreloaderPage, withStore, withApollo } from '../../helpers';
 import { DashboardGoals } from '../components';
 import {
   WORKSPACE_DEFAULTS,
@@ -33,7 +33,8 @@ export default namedCompose('DashboardGoalsContainer')(
       }).isRequired,
     }).isRequired,
   }),
-  withContext({ client: PropTypes.object }, () => ({ client })),
+  withStore,
+  withApollo,
   flattenProp('organization'),
   flattenProp(WORKSPACE_DEFAULTS),
   renameProps({
@@ -41,7 +42,12 @@ export default namedCompose('DashboardGoalsContainer')(
     [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'itemsPerRow',
   }),
   onlyUpdateForKeys(['organizationId', 'itemsPerRow']),
-  withState('isOpen', 'setIsOpen', false),
+  connectUI({
+    state: {
+      isOpen: false,
+      isAddModalOpen: false,
+    },
+  }),
   graphql(Query.DASHBOARD_GOALS, {
     options: ({
       organizationId,
@@ -65,12 +71,16 @@ export default namedCompose('DashboardGoalsContainer')(
         me: { userId } = {},
       },
       ownProps: {
-        isOpen,
-        setIsOpen,
         organizationId,
+        updateUI,
+        ui: {
+          isOpen,
+          isAddModalOpen,
+        },
       },
     }) => ({
       isOpen,
+      isAddModalOpen,
       loading,
       goals,
       totalCount,
@@ -93,7 +103,12 @@ export default namedCompose('DashboardGoalsContainer')(
           });
         }
 
-        setIsOpen(!isOpen);
+        updateUI('isOpen', !isOpen);
+      },
+      toggleAddModal: (e) => {
+        if (!isAddModalOpen) e.stopPropagation();
+
+        updateUI('isAddModalOpen', !isAddModalOpen);
       },
     }),
   }),
@@ -104,13 +119,5 @@ export default namedCompose('DashboardGoalsContainer')(
     ]),
     () => ({ size: 2 }),
   ),
-  withStateToggle(false, 'isModalOpen', 'toggleModal'),
-  withHandlers({
-    openModal: ({ toggleModal }) => (e) => {
-      e.stopPropagation();
-
-      toggleModal();
-    },
-  }),
   withHr,
 )(DashboardGoals);

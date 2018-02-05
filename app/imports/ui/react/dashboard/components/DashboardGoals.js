@@ -14,16 +14,13 @@ import { GoalAddModalContainer } from '../../goals/containers';
 const DashboardGoals = ({
   totalCount,
   goals,
-  zoomDomain,
-  onZoom,
   onLineTap,
   onScatterTap,
   toggle,
   isOpen,
   loading,
-  isModalOpen,
-  openModal,
-  toggleModal,
+  isAddModalOpen,
+  toggleAddModal,
   userId,
   organizationId,
 }) => (
@@ -40,11 +37,11 @@ const DashboardGoals = ({
     )}
     {...{ toggle, isOpen }}
   >
-    <PlusButton size="1" onClick={openModal} />
+    <PlusButton size="1" onClick={toggleAddModal} />
     {pluralize('goal', totalCount || goals.length, true)}
     <GoalAddModalContainer
-      isOpen={isModalOpen}
-      toggle={toggleModal}
+      isOpen={isAddModalOpen}
+      toggle={toggleAddModal}
       ownerId={userId}
       {...{ organizationId }}
     />
@@ -60,9 +57,8 @@ DashboardGoals.propTypes = {
   onScatterTap: PropTypes.func,
   toggle: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  isModalOpen: PropTypes.bool.isRequired,
-  toggleModal: PropTypes.func.isRequired,
-  openModal: PropTypes.func.isRequired,
+  isAddModalOpen: PropTypes.bool.isRequired,
+  toggleAddModal: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   userId: PropTypes.string.isRequired,
   organizationId: PropTypes.string.isRequired,
