@@ -46,6 +46,7 @@ export default namedCompose('DashboardGoalsContainer')(
     state: {
       isOpen: false,
       isAddModalOpen: false,
+      isEditModalOpen: false,
     },
   }),
   graphql(Query.DASHBOARD_GOALS, {
@@ -76,11 +77,13 @@ export default namedCompose('DashboardGoalsContainer')(
         ui: {
           isOpen,
           isAddModalOpen,
+          isEditModalOpen,
         },
       },
     }) => ({
       isOpen,
       isAddModalOpen,
+      isEditModalOpen,
       loading,
       goals,
       totalCount,
@@ -110,6 +113,7 @@ export default namedCompose('DashboardGoalsContainer')(
 
         updateUI('isAddModalOpen', !isAddModalOpen);
       },
+      toggleEditModal: () => updateUI('isEditModalOpen', !isEditModalOpen),
     }),
   }),
   withPreloaderPage(

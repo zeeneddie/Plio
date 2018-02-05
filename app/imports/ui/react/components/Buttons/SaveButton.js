@@ -7,6 +7,7 @@ import { IconLoading } from '../Icons';
 const SaveButton = ({
   color = 'primary',
   isSaving,
+  children = 'Save',
   ...props
 }) => (
   <Button
@@ -14,12 +15,13 @@ const SaveButton = ({
     {...{ color, ...props }}
   >
     {isSaving && <IconLoading />}
-    {isSaving ? 'Saving...' : 'Save'}
+    {isSaving ? 'Saving...' : children}
   </Button>
 );
 
 SaveButton.propTypes = {
   isSaving: PropTypes.bool,
+  children: PropTypes.node,
   ...Button.propTypes,
 };
 

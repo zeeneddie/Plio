@@ -9,13 +9,12 @@ import {
   PlusButton,
   GoalsChart,
 } from '../../components';
-import { GoalAddModalContainer } from '../../goals/containers';
+import { GoalAddModalContainer, GoalEditModalContainer } from '../../goals/containers';
 
 const DashboardGoals = ({
   totalCount,
   goals,
   onLineTap,
-  onScatterTap,
   toggle,
   isOpen,
   loading,
@@ -23,6 +22,8 @@ const DashboardGoals = ({
   toggleAddModal,
   userId,
   organizationId,
+  isEditModalOpen,
+  toggleEditModal,
 }) => (
   <DashboardStatsExpandable
     items={goals}
@@ -33,6 +34,8 @@ const DashboardGoals = ({
       <GoalsChart
         key={joinIds(items)}
         goals={items}
+        onScatterTap={toggleEditModal}
+        {...{ onLineTap }}
       />
     )}
     {...{ toggle, isOpen }}
@@ -43,6 +46,11 @@ const DashboardGoals = ({
       isOpen={isAddModalOpen}
       toggle={toggleAddModal}
       ownerId={userId}
+      {...{ organizationId }}
+    />
+    <GoalEditModalContainer
+      isOpen={isEditModalOpen}
+      toggle={toggleEditModal}
       {...{ organizationId }}
     />
   </DashboardStatsExpandable>
@@ -62,6 +70,8 @@ DashboardGoals.propTypes = {
   loading: PropTypes.bool,
   userId: PropTypes.string.isRequired,
   organizationId: PropTypes.string.isRequired,
+  isEditModalOpen: PropTypes.bool.isRequired,
+  toggleEditModal: PropTypes.func.isRequired,
 };
 
 export default DashboardGoals;
