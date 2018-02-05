@@ -1,17 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  VictoryChart,
-  VictoryZoomContainer,
-  VictoryAxis,
-  VictoryLine,
-  VictoryLabel,
-  VictoryScatter,
-  VictoryTooltip,
-} from 'victory';
-import { TimelineChart, HiddenAxis } from '../../components';
-
-const fontFamily = '"Roboto", "Helvetica Neue", Helvetica, sans-serif';
+  TimelineChart,
+  TimelineCurrentDateLine,
+  TimelineHorizontalLine,
+  TimelinePoint,
+} from '../../components';
 
 const getLineData = ({
   startDate,
@@ -63,91 +57,46 @@ const getScatterData = ({
 
 const GoalsChart = ({
   goals,
-  zoomDomain,
-  onZoom,
   onLineTap,
   onScatterTap,
-}) => (
-  <TimelineChart
-    width={1140}
-    height={50 * goals.length}
-    domain={{
-      x: [
-        new Date('01 January 2018'),
-        new Date('01 January 2019'),
-      ],
-      y: [
-        -1,
-        goals.length,
-      ],
-    }}
-  >
-    <HiddenAxis />
-    <VictoryLine
-      style={{
-        data: { stroke: '#888', strokeWidth: 1, fontFamily },
-        labels: { fill: '#888' },
+}) => {
+  const height = 50 * goals.length + 30;
+
+  return (
+    <TimelineChart
+      width={1140}
+      domain={{
+        x: [
+          new Date('01 January 2018'),
+          new Date('01 January 2019'),
+        ],
+        y: [
+          -1,
+          goals.length,
+        ],
       }}
-      data={[
-        { x: new Date(), y: 0, label: 'today' },
-        { x: new Date(), y: 400 },
-      ]}
-      labelComponent={<VictoryLabel dy={35} />}
-    />
-    {goals.map((goal, index) => (
-      <VictoryLine
-        key={goal._id}
-        animate={{ duration: 500 }}
-        style={{
-          data: {
-            stroke: goal.color,
-            strokeWidth: 4,
-            cursor: 'pointer',
-          },
-          labels: {
-            fontFamily,
-            fill: '#888',
-            fontWeight: 'lighter',
-            textAnchor: 'start',
-          },
-        }}
-        events={[{
-          target: 'data',
-          eventHandlers: {
-            onClick: e => onLineTap(e, goal),
-          },
-        }]}
-        data={getLineData(goal, index)}
-        labelComponent={<VictoryLabel x={450} />}
-      />
-    ))}
-    {goals.map((goal, index) => (
-      <VictoryScatter
-        key={goal._id}
-        style={{
-          data: {
-            stroke: goal.color,
-            cursor: 'pointer',
-          },
-          labels: { fontFamily },
-        }}
-        events={[{
-          target: 'data',
-          eventHandlers: {
-            onClick: onScatterTap,
-          },
-        }]}
-        data={getScatterData(goal, index)}
-        labelComponent={<VictoryTooltip />}
-      />
-    ))}
-  </TimelineChart>
-);
+      {...{ height }}
+    >
+      {/* VictoryChart expects components to be direct children */}
+      {TimelineCurrentDateLine({ height })}
+      {goals.map((goal, index) => TimelineHorizontalLine({
+        key: goal._id,
+        data: getLineData(goal, index),
+        onClick: onLineTap,
+        color: goal.color,
+      }))}
+      {goals.map((goal, index) => TimelinePoint({
+        key: goal._id,
+        color: goal.color,
+        onClick: onScatterTap,
+        data: getScatterData(goal, index),
+      }))}
+    </TimelineChart>
+  );
+};
 
 GoalsChart.propTypes = {
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
-  zoomDomain: PropTypes.object,
-  onZoom: PropTypes.func,
   onLineTap: PropTypes.func,
   onScatterTap: PropTypes.func,
 };
