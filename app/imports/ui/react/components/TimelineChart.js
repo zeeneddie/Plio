@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { VictoryChart } from 'victory';
 
-import HiddenAxis from './HiddenAxis';
+import TimelineAxis from './TimelineAxis';
 
 const TimelineChart = ({
   scale = { x: 'time', y: 'linear' },
@@ -24,7 +24,7 @@ const TimelineChart = ({
       ...props,
     }}
   >
-    {HiddenAxis()}
+    {TimelineAxis()}
     {children}
   </VictoryChart>
 );
