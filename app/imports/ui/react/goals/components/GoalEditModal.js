@@ -10,13 +10,14 @@ import {
   SaveButton,
 } from '../../components';
 
-export const GoalAddModal = ({
+export const GoalEditModal = ({
   isOpen,
   toggle,
   errorText,
   isSaving,
   organizationId,
   onClosed,
+  ...props
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
@@ -27,6 +28,7 @@ export const GoalAddModal = ({
       )}
     >
       <CardTitle>Key Goal</CardTitle>
+      {console.log(props)}
     </ModalHeader>
     <ModalBody>
       <ErrorSection {...{ errorText }} />
@@ -40,13 +42,12 @@ export const GoalAddModal = ({
   </Modal>
 );
 
-GoalAddModal.propTypes = {
+GoalEditModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool,
   toggle: PropTypes.func.isRequired,
   errorText: PropTypes.string,
-  organizationId: PropTypes.string.isRequired,
   onClosed: PropTypes.func,
 };
 
-export default GoalAddModal;
+export default GoalEditModal;
