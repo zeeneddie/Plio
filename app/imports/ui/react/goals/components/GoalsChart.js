@@ -57,7 +57,6 @@ const getScatterData = ({
 
 const GoalsChart = ({
   goals,
-  onLineTap,
   onScatterTap,
 }) => {
   const height = 50 * goals.length + 30;
@@ -82,13 +81,12 @@ const GoalsChart = ({
       {goals.map((goal, index) => TimelineHorizontalLine({
         key: goal._id,
         data: getLineData(goal, index),
-        onClick: onLineTap,
         color: goal.color,
       }))}
       {goals.map((goal, index) => TimelinePoint({
         key: goal._id,
         color: goal.color,
-        onClick: onScatterTap,
+        onClick: (e, ...args) => onScatterTap(e, goal, ...args),
         data: getScatterData(goal, index),
       }))}
     </TimelineChart>
@@ -97,7 +95,6 @@ const GoalsChart = ({
 
 GoalsChart.propTypes = {
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onLineTap: PropTypes.func,
   onScatterTap: PropTypes.func,
 };
 
