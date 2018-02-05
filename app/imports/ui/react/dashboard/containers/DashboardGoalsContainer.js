@@ -1,11 +1,9 @@
 import { graphql } from 'react-apollo';
 import {
-  withContext,
   renameProps,
   flattenProp,
   setPropTypes,
   onlyUpdateForKeys,
-  withHandlers,
 } from 'recompose';
 import PropTypes from 'prop-types';
 import { lenses, lensNotEq } from 'plio-util';
@@ -20,7 +18,6 @@ import {
   WorkspaceDefaultsTypes,
   WorkspaceDefaults,
 } from '../../../../share/constants';
-import { client } from '../../../../client/apollo';
 import { Query } from '../../../../client/graphql';
 
 export default namedCompose('DashboardGoalsContainer')(
@@ -47,6 +44,7 @@ export default namedCompose('DashboardGoalsContainer')(
       isOpen: false,
       isAddModalOpen: false,
       isEditModalOpen: false,
+      activeGoal: null,
     },
   }),
   graphql(Query.DASHBOARD_GOALS, {
@@ -114,6 +112,10 @@ export default namedCompose('DashboardGoalsContainer')(
         updateUI('isAddModalOpen', !isAddModalOpen);
       },
       toggleEditModal: () => updateUI('isEditModalOpen', !isEditModalOpen),
+      onScatterTap: (e, { _id }) => console.log(_id) || updateUI({
+        isEditModalOpen: true,
+        activeGoal: _id,
+      }),
     }),
   }),
   withPreloaderPage(

@@ -14,7 +14,7 @@ import { GoalAddModalContainer, GoalEditModalContainer } from '../../goals/conta
 const DashboardGoals = ({
   totalCount,
   goals,
-  onLineTap,
+  onScatterTap,
   toggle,
   isOpen,
   loading,
@@ -34,8 +34,7 @@ const DashboardGoals = ({
       <GoalsChart
         key={joinIds(items)}
         goals={items}
-        onScatterTap={toggleEditModal}
-        {...{ onLineTap }}
+        {...{ onScatterTap }}
       />
     )}
     {...{ toggle, isOpen }}
@@ -48,20 +47,19 @@ const DashboardGoals = ({
       ownerId={userId}
       {...{ organizationId }}
     />
-    <GoalEditModalContainer
-      isOpen={isEditModalOpen}
-      toggle={toggleEditModal}
-      {...{ organizationId }}
-    />
+    {!!goals.length && (
+      <GoalEditModalContainer
+        isOpen={isEditModalOpen}
+        toggle={toggleEditModal}
+        {...{ organizationId }}
+      />
+    )}
   </DashboardStatsExpandable>
 );
 
 DashboardGoals.propTypes = {
   totalCount: PropTypes.number.isRequired,
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // zoomDomain: ?
-  onZoom: PropTypes.func,
-  onLineTap: PropTypes.func,
   onScatterTap: PropTypes.func,
   toggle: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
