@@ -1,13 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { VictoryChart } from 'victory';
 
-import {
-  VictoryChart,
-  VictoryZoomContainer,
-} from 'victory';
+import HiddenAxis from './HiddenAxis';
 
 const TimelineChart = ({
-  scale = { x: 'time' },
+  scale = { x: 'time', y: 'linear' },
   domainPadding = { x: [20, 20] },
   padding = {
     top: 0,
@@ -19,13 +17,6 @@ const TimelineChart = ({
   ...props
 }) => (
   <VictoryChart
-    containerComponent={(
-      <VictoryZoomContainer
-        dimension="x"
-        // zoomDomain={zoomDomain}
-        // onDomainChange={onZoom}
-      />
-    )}
     {...{
       scale,
       domainPadding,
@@ -33,6 +24,7 @@ const TimelineChart = ({
       ...props,
     }}
   >
+    {HiddenAxis()}
     {children}
   </VictoryChart>
 );
