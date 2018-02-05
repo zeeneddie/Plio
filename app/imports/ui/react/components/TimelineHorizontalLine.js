@@ -26,7 +26,6 @@ const TimelineHorizontalLine = ({
       target: 'data',
       eventHandlers: { onClick },
     }]}
-    scale={{ x: 'time', y: 'linear' }}
     labelComponent={<VictoryLabel dx={20} />}
     {...{ data, ...props }}
   />
