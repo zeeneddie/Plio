@@ -1,17 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { VictoryLabel, VictoryLine } from 'victory';
-// import { byXDesc, lenses } from 'plio-util';
-// import { compose, sort, take, reduce, add, map, view, divide, tap } from 'ramda';
-
-// const calculateX = compose(
-//   divide(2),
-//   reduce(add, 0),
-//   map(compose(Number, view(lenses.x))),
-//   tap(console.log),
-//   take(2),
-//   sort(byXDesc),
-// );
 
 const TimelineHorizontalLine = ({
   color,
