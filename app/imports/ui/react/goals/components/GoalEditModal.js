@@ -16,7 +16,6 @@ export const GoalEditModal = ({
   toggle,
   errorText,
   isSaving,
-  organizationId,
   onClosed,
   goal,
 }) => (
@@ -35,7 +34,7 @@ export const GoalEditModal = ({
 
       <div>
         <CardBlock>
-          <GoalEditContainer {...{ organizationId, goal }} />
+          <GoalEditContainer {...{ goal }} />
         </CardBlock>
       </div>
     </ModalBody>
@@ -48,7 +47,6 @@ GoalEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   errorText: PropTypes.string,
   onClosed: PropTypes.func,
-  organizationId: PropTypes.string.isRequired,
   goal: PropTypes.object.isRequired,
 };
 

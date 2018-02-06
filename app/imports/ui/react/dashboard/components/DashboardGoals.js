@@ -48,7 +48,7 @@ const DashboardGoals = ({
       ownerId={userId}
       {...{ organizationId }}
     />
-    {!!goals.length && activeGoal && (
+    {!!goals.length && (
       <GoalEditModalContainer
         isOpen={isEditModalOpen}
         toggle={toggleEditModal}
@@ -71,7 +71,6 @@ DashboardGoals.propTypes = {
   organizationId: PropTypes.string.isRequired,
   isEditModalOpen: PropTypes.bool.isRequired,
   toggleEditModal: PropTypes.func.isRequired,
-  activeGoal: PropTypes.string,
 };
 
 export default DashboardGoals;

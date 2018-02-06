@@ -89,7 +89,6 @@ export default namedCompose('DashboardGoalsContainer')(
       networkStatus,
       userId,
       organizationId,
-      activeGoal,
       toggle: async () => {
         if (!isOpen) {
           await fetchMore({
