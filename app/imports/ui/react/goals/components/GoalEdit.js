@@ -4,7 +4,7 @@ import React from 'react';
 import GoalForm from './GoalForm';
 
 const GoalEdit = props => (
-  <GoalForm {...props} />
+  <GoalForm debounceTimeout={800} {...props} />
 );
 
 GoalEdit.propTypes = {};

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Input } from 'reactstrap';
 import { onlyUpdateForKeys } from 'recompose';
+import DebounceInput from 'react-debounce-input';
 
 import {
   FormField,
@@ -41,19 +42,27 @@ export const GoalForm = ({
   onChangeColor,
   organizationId,
   onError,
+  debounceTimeout = 300,
 }) => (
   <Fragment>
     <FormField>
       Key goal name
-      <FormInput placeholder="Key goal name" value={title} onChange={onChangeTitle} />
+      <FormInput
+        placeholder="Key goal name"
+        value={title}
+        onChange={onChangeTitle}
+        {...{ debounceTimeout }}
+      />
     </FormField>
     <FormField>
       Description
-      <Input
+      <DebounceInput
+        element={Input}
         type="textarea"
         placeholder="Description"
         value={description}
         onChange={onChangeDescription}
+        {...{ debounceTimeout }}
       />
     </FormField>
     <FormField>
@@ -121,6 +130,7 @@ GoalForm.propTypes = {
   onChangeColor: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   onError: PropTypes.func,
+  debounceTimeout: PropTypes.number,
 };
 
 export default enhance(GoalForm);
