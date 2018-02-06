@@ -1,5 +1,5 @@
 import { applyMiddleware } from 'plio-util';
-import { checkLoggedIn, checkOrgMembership } from '../../../../../share/middleware';
+import { checkLoggedIn, checkOrgMembership, flattenInput } from '../../../../../share/middleware';
 
 export const resolver = async (
   root,
@@ -13,7 +13,7 @@ export const resolver = async (
   .then(goal => ({ goal }));
 
 export default applyMiddleware(
-  async (next, root, { input }, context) => next(root, input, context),
+  flattenInput(),
   checkLoggedIn(),
   checkOrgMembership(),
 )(resolver);

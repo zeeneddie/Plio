@@ -1,5 +1,5 @@
 import { applyMiddleware } from 'plio-util';
-import { checkLoggedIn } from '../../../../../share/middleware';
+import { checkLoggedIn, flattenInput } from '../../../../../share/middleware';
 
 export const resolver = async (
   root,
@@ -10,6 +10,6 @@ export const resolver = async (
 ) => GoalService.updateTitle(args);
 
 export default applyMiddleware(
-  async (next, root, { input }, context) => next(root, input, context),
+  flattenInput(),
   checkLoggedIn(),
 )(resolver);
