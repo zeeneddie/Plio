@@ -1,6 +1,5 @@
 import { __setupDB, __closeDB, Mongo } from 'meteor/mongo';
 import { T } from 'ramda';
-import { createOrgQueryWhereUserIsMember } from '../../../mongo';
 
 describe('checkOrgMembership', () => {
   const userId = 2;
@@ -24,7 +23,10 @@ describe('checkOrgMembership', () => {
 
     await Organizations.insert({
       _id: organizationId,
-      users: [createOrgQueryWhereUserIsMember(userId)],
+      users: [{
+        userId,
+        isRemoved: false,
+      }],
     });
 
     const actual = await checkOrgMembership()(next, root, args, context);
