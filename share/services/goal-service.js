@@ -32,12 +32,16 @@ export default {
     });
   },
 
-  async updateTitle(...args) {
-    return this._updateById('title')(...args);
+  async updateTitle({ _id, title }) {
+    return this._updateById('title')({ _id, title });
   },
 
-  async updateDescription(...args) {
-    return this._updateById('description')(...args);
+  async updateDescription({ _id, description }) {
+    return this._updateById('description')({ _id, description });
+  },
+
+  async updateGoalOwner({ _id, ownerId }) {
+    return this._updateById('ownerId')({ _id, ownerId });
   },
 
   _updateById(key) {

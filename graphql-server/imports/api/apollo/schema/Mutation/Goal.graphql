@@ -23,8 +23,14 @@ input UpdateGoalDescriptionInput {
   description: String!
 }
 
+input UpdateGoalOwnerInput {
+  _id: ID!
+  ownerId: ID!
+}
+
 type Mutation {
   createGoal(input: CreateGoalInput!): GoalPayload
   updateGoalTitle(input: UpdateGoalTitleInput!): GoalPayload
   updateGoalDescription(input: UpdateGoalDescriptionInput!): GoalPayload
+  updateGoalOwner(input: UpdateGoalOwnerInput!): GoalPayload
 }
