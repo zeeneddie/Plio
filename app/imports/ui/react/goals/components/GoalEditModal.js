@@ -9,6 +9,7 @@ import {
   CardBlock,
   SaveButton,
 } from '../../components';
+import GoalEditContainer from '../containers/GoalEditContainer';
 
 export const GoalEditModal = ({
   isOpen,
@@ -17,7 +18,7 @@ export const GoalEditModal = ({
   isSaving,
   organizationId,
   onClosed,
-  ...props
+  goal,
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
@@ -28,14 +29,13 @@ export const GoalEditModal = ({
       )}
     >
       <CardTitle>Key Goal</CardTitle>
-      {console.log(props)}
     </ModalHeader>
     <ModalBody>
       <ErrorSection {...{ errorText }} />
 
       <div>
         <CardBlock>
-          Hello World
+          <GoalEditContainer {...{ organizationId, goal }} />
         </CardBlock>
       </div>
     </ModalBody>
@@ -48,6 +48,8 @@ GoalEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   errorText: PropTypes.string,
   onClosed: PropTypes.func,
+  organizationId: PropTypes.string.isRequired,
+  goal: PropTypes.object.isRequired,
 };
 
 export default GoalEditModal;

@@ -24,6 +24,7 @@ const DashboardGoals = ({
   organizationId,
   isEditModalOpen,
   toggleEditModal,
+  activeGoal,
 }) => (
   <DashboardStatsExpandable
     items={goals}
@@ -47,7 +48,7 @@ const DashboardGoals = ({
       ownerId={userId}
       {...{ organizationId }}
     />
-    {!!goals.length && (
+    {!!goals.length && activeGoal && (
       <GoalEditModalContainer
         isOpen={isEditModalOpen}
         toggle={toggleEditModal}
@@ -70,6 +71,7 @@ DashboardGoals.propTypes = {
   organizationId: PropTypes.string.isRequired,
   isEditModalOpen: PropTypes.bool.isRequired,
   toggleEditModal: PropTypes.func.isRequired,
+  activeGoal: PropTypes.string,
 };
 
 export default DashboardGoals;

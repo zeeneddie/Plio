@@ -76,6 +76,7 @@ export default namedCompose('DashboardGoalsContainer')(
           isOpen,
           isAddModalOpen,
           isEditModalOpen,
+          activeGoal,
         },
       },
     }) => ({
@@ -88,6 +89,7 @@ export default namedCompose('DashboardGoalsContainer')(
       networkStatus,
       userId,
       organizationId,
+      activeGoal,
       toggle: async () => {
         if (!isOpen) {
           await fetchMore({
@@ -112,7 +114,7 @@ export default namedCompose('DashboardGoalsContainer')(
         updateUI('isAddModalOpen', !isAddModalOpen);
       },
       toggleEditModal: () => updateUI('isEditModalOpen', !isEditModalOpen),
-      onScatterTap: (e, { _id }) => console.log(_id) || updateUI({
+      onScatterTap: (e, { _id }) => updateUI({
         isEditModalOpen: true,
         activeGoal: _id,
       }),
