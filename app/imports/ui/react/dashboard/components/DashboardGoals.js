@@ -24,7 +24,6 @@ const DashboardGoals = ({
   organizationId,
   isEditModalOpen,
   toggleEditModal,
-  activeGoal,
 }) => (
   <DashboardStatsExpandable
     items={goals}

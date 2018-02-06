@@ -1,10 +1,12 @@
 import connectUI from 'redux-ui';
 import { onlyUpdateForKeys, branch, renderNothing } from 'recompose';
 import { identity, path } from 'ramda';
+import { graphql } from 'react-apollo';
+import { transformGoal } from 'plio-util';
 
-import { namedCompose, withFragment } from '../../helpers';
+import { namedCompose } from '../../helpers';
 import GoalEditModal from '../components/GoalEditModal';
-import { Fragment } from '../../../../client/graphql';
+import { Query } from '../../../../client/graphql';
 
 export default namedCompose('GoalEditModalContainer')(
   connectUI(),
@@ -13,18 +15,33 @@ export default namedCompose('GoalEditModalContainer')(
     identity,
     renderNothing,
   ),
-  withFragment(Fragment.DASHBOARD_GOAL, {
-    name: 'goal',
-    getFragmentId: ({ ui: { activeGoal } }) => `Goal:${activeGoal}`,
-    props: ({
-      goal,
-      isOpen,
-      toggle,
+  graphql(Query.GOAL_EDIT, {
+    options: ({
+      ui: { activeGoal },
     }) => ({
+      variables: {
+        _id: activeGoal,
+      },
+    }),
+    props: ({
+      data: {
+        loading,
+        goal: {
+          goal,
+        } = {},
+      },
+      ownProps: {
+        isOpen,
+        toggle,
+        organizationId,
+      },
+    }) => ({
+      loading,
       isOpen,
       toggle,
-      goal,
+      organizationId,
+      goal: goal ? transformGoal(goal) : null,
     }),
   }),
-  onlyUpdateForKeys(['isOpen', 'goal']),
+  onlyUpdateForKeys(['isOpen', 'goal', 'organizationId']),
 )(GoalEditModal);

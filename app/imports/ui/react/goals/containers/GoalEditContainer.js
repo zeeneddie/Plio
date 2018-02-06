@@ -22,9 +22,11 @@ export default namedCompose('GoalEditContainer')(
       mutate,
       ownProps: {
         goal,
+        organizationId,
       },
     }) => ({
       goal,
+      organizationId,
       onChangeTitle: e => mutate({
         variables: {
           input: {
@@ -47,6 +49,12 @@ export default namedCompose('GoalEditContainer')(
           });
         },
       }),
+      onChangeDescription: () => null,
+      onChangeOwnerId: () => null,
+      onChangeStartDate: () => null,
+      onChangeEndDate: () => null,
+      onChangePriority: () => null,
+      onChangeColor: () => null,
     }),
   }),
   flattenProp('goal'),

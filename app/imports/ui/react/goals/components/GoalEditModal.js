@@ -8,6 +8,7 @@ import {
   ModalHeader,
   CardBlock,
   SaveButton,
+  PreloaderPage,
 } from '../../components';
 import GoalEditContainer from '../containers/GoalEditContainer';
 
@@ -18,6 +19,8 @@ export const GoalEditModal = ({
   isSaving,
   onClosed,
   goal,
+  organizationId,
+  loading,
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
@@ -34,7 +37,11 @@ export const GoalEditModal = ({
 
       <div>
         <CardBlock>
-          <GoalEditContainer {...{ goal }} />
+          {loading ? (
+            <PreloaderPage size={2} />
+          ) : goal && (
+            <GoalEditContainer {...{ goal, organizationId }} />
+          )}
         </CardBlock>
       </div>
     </ModalBody>
@@ -42,12 +49,14 @@ export const GoalEditModal = ({
 );
 
 GoalEditModal.propTypes = {
+  loading: PropTypes.bool,
   isOpen: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool,
   toggle: PropTypes.func.isRequired,
   errorText: PropTypes.string,
   onClosed: PropTypes.func,
-  goal: PropTypes.object.isRequired,
+  goal: PropTypes.object,
+  organizationId: PropTypes.string.isRequired,
 };
 
 export default GoalEditModal;

@@ -9,31 +9,25 @@ export default (fragment, {
   getFragmentId,
   props: mapOptionsToProps = identity,
 }) => namedCompose('withFragment')(
-  withStateHandlers({
-    [name]: {},
-  }, {
+  withStateHandlers(props => ({
+    [name]: client.readFragment({
+      fragment,
+      id: getFragmentId(props),
+    }),
+  }), {
     setData: ({ [name]: data }) => payload => ({
       [name]: mergeDeepRight(data, Object.assign({}, payload)),
     }),
   }),
   lifecycle({
-    async readFragmentFromCache({
-      setData,
-      ...props
-    }) {
-      const data = await client.readFragment({
-        fragment,
-        id: getFragmentId(props),
-      });
-
-      setData(data);
-    },
-    componentDidMount() {
-      this.readFragmentFromCache(this.props);
-    },
     componentWillReceiveProps(props) {
       if (getFragmentId(this.props) !== getFragmentId(props)) {
-        this.readFragmentFromCache(props);
+        const data = client.readFragment({
+          fragment,
+          id: getFragmentId(props),
+        });
+
+        this.props.setData(data);
       }
     },
   }),
