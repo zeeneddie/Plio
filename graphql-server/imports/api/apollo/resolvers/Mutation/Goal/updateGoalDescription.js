@@ -11,7 +11,7 @@ export const resolver = async (
   {
     services: { GoalService },
   },
-) => GoalService.updateTitle(args);
+) => GoalService.updateDescription(args);
 
 export default applyMiddleware(
   checkLoggedIn(),

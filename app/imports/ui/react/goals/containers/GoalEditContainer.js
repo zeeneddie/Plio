@@ -16,6 +16,16 @@ const UPDATE_GOAL_TITLE = gql`
   }
 `;
 
+const UPDATE_GOAL_DESCRIPTION = gql`
+  mutation updateGoalDescription($input: UpdateGoalDescriptionInput!) {
+    updateGoalDescription(input: $input) {
+      goal {
+        description
+      }
+    }
+  }
+`;
+
 export default namedCompose('GoalEditContainer')(
   graphql(UPDATE_GOAL_TITLE, {
     props: ({
@@ -36,12 +46,14 @@ export default namedCompose('GoalEditContainer')(
         },
         update(proxy, { data: { updateGoalTitle: { goal: { title } } } }) {
           const id = `Goal:${goal._id}`;
-          const fragment = Fragment.DASHBOARD_GOAL;
-          const data = proxy.readFragment({ id, fragment });
+          const fragment = Fragment.GOAL_EDIT;
+          const fragmentName = 'GoalEdit';
+          const data = proxy.readFragment({ id, fragment, fragmentName });
 
           return proxy.writeFragment({
             id,
             fragment,
+            fragmentName,
             data: {
               ...data,
               title,
@@ -49,12 +61,47 @@ export default namedCompose('GoalEditContainer')(
           });
         },
       }),
-      onChangeDescription: () => null,
       onChangeOwnerId: () => null,
       onChangeStartDate: () => null,
       onChangeEndDate: () => null,
       onChangePriority: () => null,
       onChangeColor: () => null,
+    }),
+  }),
+  graphql(UPDATE_GOAL_DESCRIPTION, {
+    props: ({
+      mutate,
+      ownProps: {
+        goal,
+        ...props
+      },
+    }) => ({
+      ...props,
+      goal,
+      onChangeDescription: e => mutate({
+        variables: {
+          input: {
+            _id: goal._id,
+            description: e.target.value,
+          },
+        },
+        update: (proxy, { data: { updateGoalDescription: { goal: { description } } } }) => {
+          const id = `Goal:${goal._id}`;
+          const fragment = Fragment.GOAL_EDIT;
+          const fragmentName = 'GoalEdit';          
+          const data = proxy.readFragment({ id, fragment, fragmentName });
+
+          return proxy.writeFragment({
+            id,
+            fragment,
+            fragmentName,
+            data: {
+              ...data,
+              description,
+            },
+          });
+        },
+      }),
     }),
   }),
   flattenProp('goal'),

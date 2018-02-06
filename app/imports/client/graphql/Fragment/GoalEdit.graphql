@@ -1,0 +1,10 @@
+#import "./DashboardGoal.graphql"
+
+fragment GoalEdit on Goal {
+    owner {
+    _id
+  }
+  description
+  status
+  ...DashboardGoal
+}
