@@ -32,16 +32,26 @@ export default {
     });
   },
 
-  async updateTitle({ _id, title }) {
-    const query = { _id };
-    const modifier = {
-      $set: { title },
+  async updateTitle(...args) {
+    return this._updateById('title')(...args);
+  },
+
+  async updateDescription(...args) {
+    return this._updateById('description')(...args);
+  },
+
+  _updateById(key) {
+    return async ({ _id, ...args }) => {
+      const query = { _id };
+      const modifier = {
+        $set: { [key]: args[key] },
+      };
+
+      await this.collection.update(query, modifier);
+
+      const goal = await this.collection.findOne({ _id });
+
+      return { goal };
     };
-
-    await this.collection.update(query, modifier);
-
-    const goal = await this.collection.findOne({ _id });
-
-    return { goal };
   },
 };

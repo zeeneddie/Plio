@@ -4,7 +4,6 @@ import {
   flattenInput,
   checkGoalAccess,
 } from '../../../../../share/middleware';
-import { Goals } from '../../../../../share/collections';
 
 export const resolver = async (
   root,
@@ -17,5 +16,5 @@ export const resolver = async (
 export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
-  checkGoalAccess(Goals),
+  checkGoalAccess(),
 )(resolver);
