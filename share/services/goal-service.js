@@ -31,4 +31,17 @@ export default {
       priority,
     });
   },
+
+  async updateTitle({ _id, title }) {
+    const query = { _id };
+    const modifier = {
+      $set: { title },
+    };
+
+    await this.collection.update(query, modifier);
+
+    const goal = await this.collection.findOne({ _id });
+
+    return { goal };
+  },
 };
