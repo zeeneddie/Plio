@@ -79,22 +79,44 @@ const UPDATE_GOAL_DESCRIPTION = gql`
   }
 `;
 
+const UPDATE_GOAL_OWNER = gql`
+  mutation updateGoalOwner($input: UpdateGoalOwnerInput!) {
+    updateGoalOwner(input: $input) {
+      goal {
+        _id
+        owner {
+          _id
+        }
+      }
+    }
+  }
+`;
+
+const getUpdateTitleInputArgs = compose(objOf('title'), view(lenses.target.value));
+const getUpdateDescriptionInputArgs = compose(objOf('description'), view(lenses.target.value));
+const getUpdateOwnerInputArgs = compose(objOf('ownerId'), (_, { value }) => value);
+
 export default namedCompose('GoalEditContainer')(
   graphql(UPDATE_GOAL_TITLE, {
-    props: props(compose(objOf('title'), view(lenses.target.value)), {
+    props: props(getUpdateTitleInputArgs, {
       handler: 'onChangeTitle',
       mutation: 'updateGoalTitle',
     }),
   }),
   graphql(UPDATE_GOAL_DESCRIPTION, {
-    props: props(compose(objOf('description'), view(lenses.target.value)), {
+    props: props(getUpdateDescriptionInputArgs, {
       handler: 'onChangeDescription',
       mutation: 'updateGoalDescription',
     }),
   }),
+  graphql(UPDATE_GOAL_OWNER, {
+    props: props(getUpdateOwnerInputArgs, {
+      handler: 'onChangeOwnerId',
+      mutation: 'updateGoalOwner',
+    }),
+  }),
   mapProps(props => ({
     ...props,
-    onChangeOwnerId: () => null,
     onChangeStartDate: () => null,
     onChangeEndDate: () => null,
     onChangePriority: () => null,

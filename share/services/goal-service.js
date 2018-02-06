@@ -40,7 +40,7 @@ export default {
     return this._updateById('description')({ _id, description });
   },
 
-  async updateGoalOwner({ _id, ownerId }) {
+  async updateOwner({ _id, ownerId }) {
     return this._updateById('ownerId')({ _id, ownerId });
   },
 
