@@ -730,12 +730,9 @@ export const GoalStatuses = {
   AWAITING_COMPLETION: 1,
   OVERDUE: 2,
   COMPLETED: 3,
-};
-
-export const GoalStatusesNames = {
-  [GoalStatuses.AWAITING_COMPLETION]: 'Open - awaiting completion',
-  [GoalStatuses.OVERDUE]: 'Open - overdue',
-  [GoalStatuses.COMPLETED]: 'Closed - marked as complete',
+  1: 'Open - awaiting completion',
+  2: 'Open - overdue',
+  3: 'Closed - marked as complete',
 };
 
 export const GoalColors = {
@@ -766,11 +763,8 @@ export const AllowedActionLinkedDocTypes = [
 export const MilestoneStatuses = {
   OPEN: 1,
   COMPLETED: 2,
-};
-
-export const MilestoneStatusNames = {
-  [MilestoneStatuses.OPEN]: 'Open',
-  [MilestoneStatuses.COMPLETED]: 'Completed',
+  1: 'Open',
+  2: 'Completed',
 };
 
 // fill in other stuff
