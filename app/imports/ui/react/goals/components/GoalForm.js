@@ -94,7 +94,6 @@ export const GoalForm = ({
           selected={startDate}
           onChange={onChangeStartDate}
           placeholderText="Start date"
-          className="form-control"
         />
       </FormField>
       <FormField>
@@ -103,7 +102,6 @@ export const GoalForm = ({
           selected={endDate}
           onChange={onChangeEndDate}
           placeholderText="End date"
-          className="form-control"
         />
       </FormField>
       <FormField>
