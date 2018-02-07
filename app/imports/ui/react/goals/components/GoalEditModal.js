@@ -1,14 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { ModalBody, CardTitle } from 'reactstrap';
+import { CardTitle, Button } from 'reactstrap';
 
 import {
   ErrorSection,
   Modal,
   ModalHeader,
+  ModalBody,
   CardBlock,
   SaveButton,
   PreloaderPage,
+  TextAlign,
 } from '../../components';
 import GoalEditContainer from '../containers/GoalEditContainer';
 
@@ -21,6 +23,7 @@ export const GoalEditModal = ({
   goal,
   organizationId,
   loading,
+  onDelete,
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
@@ -43,6 +46,13 @@ export const GoalEditModal = ({
             <GoalEditContainer {...{ goal, organizationId }} />
           )}
         </CardBlock>
+        <TextAlign center>
+          <CardBlock>
+            <Button onClick={onDelete}>
+              Delete
+            </Button>
+          </CardBlock>
+        </TextAlign>
       </div>
     </ModalBody>
   </Modal>
@@ -57,6 +67,7 @@ GoalEditModal.propTypes = {
   onClosed: PropTypes.func,
   goal: PropTypes.object,
   organizationId: PropTypes.string.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default GoalEditModal;
