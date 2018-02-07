@@ -7,6 +7,7 @@ import updateGoalEndDate from './updateGoalEndDate';
 import updateGoalPriority from './updateGoalPriority';
 import updateGoalColor from './updateGoalColor';
 import updateGoalStatusComment from './updateGoalStatusComment';
+import deleteGoal from './deleteGoal';
 
 export default {
   createGoal,
@@ -18,4 +19,5 @@ export default {
   updateGoalPriority,
   updateGoalColor,
   updateGoalStatusComment,
+  deleteGoal,
 };

@@ -67,10 +67,12 @@ export default namedCompose('GoalEditModalContainer')(
       ownProps: {
         organizationId,
         activeGoal,
+        toggle,
         ...props
       },
     }) => ({
       organizationId,
+      toggle,
       ...props,
       onDelete: () => mutate({
         variables: {
@@ -90,7 +92,7 @@ export default namedCompose('GoalEditModalContainer')(
             data: deleteGoal(activeGoal, data),
           });
         },
-      }),
+      }).then(toggle),
     }),
   }),
   onlyUpdateForKeys(['isOpen', 'goal', 'organizationId']),
