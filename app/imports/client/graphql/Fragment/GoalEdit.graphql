@@ -4,9 +4,10 @@ fragment GoalEdit on Goal {
     owner {
     _id
   }
-  description
-  status
-  priority
   sequentialId
+  description
+  priority
+  status
+  statusComment
   ...DashboardGoal
 }

@@ -54,7 +54,7 @@ const GoalSchema = new SimpleSchema([
       allowedValues: Object.values(pickNonInt(GoalStatuses)),
       defaultValue: 1,
     },
-    statusComments: {
+    statusComment: {
       type: String,
       optional: true,
       max: StringLimits.comments.max,

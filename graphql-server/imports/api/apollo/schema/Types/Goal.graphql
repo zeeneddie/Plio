@@ -19,7 +19,7 @@ type Goal {
   endDate: Date!
   priority: String!
   status: Int!
-  statusComments: String
+  statusComment: String
   isCompleted: Boolean!
   completedAt: Date
   completedBy: User

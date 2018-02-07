@@ -12,7 +12,8 @@ import {
   ColorPicker,
 } from '../../components';
 import { OrgUsersSelectInputContainer } from '../../containers';
-import { GoalColors, Abbreviations } from '../../../../share/constants';
+import { GoalColors } from '../../../../share/constants';
+import { DEFAULT_UPDATE_TIMEOUT } from '../../../../api/constants';
 
 const enhance = onlyUpdateForKeys([
   'title',
@@ -45,7 +46,7 @@ export const GoalForm = ({
   onError,
   isEditMode,
 }) => {
-  const debounceTimeout = isEditMode ? 800 : 300;
+  const debounceTimeout = isEditMode ? DEFAULT_UPDATE_TIMEOUT : 300;
 
   return (
     <Fragment>
@@ -124,6 +125,7 @@ export const GoalForm = ({
 };
 
 GoalForm.propTypes = {
+  sequentialId: PropTypes.string,
   title: PropTypes.string.isRequired,
   onChangeTitle: PropTypes.func.isRequired,
   description: PropTypes.string,

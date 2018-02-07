@@ -136,6 +136,17 @@ const UPDATE_GOAL_COLOR = gql`
   }
 `;
 
+const UPDATE_GOAL_STATUS_COMMENT = gql`
+  mutation updateGoalStatusComment($input: UpdateGoalStatusCommentInput!) {
+    updateGoalStatusComment(input: $input) {
+      goal {
+        _id
+        statusComment
+      }
+    }
+  }
+`;
+
 const getUpdateTitleInputArgs = compose(objOf('title'), getTargetValue);
 const getUpdateDescriptionInputArgs = compose(objOf('description'), getTargetValue);
 const getUpdateOwnerInputArgs = compose(objOf('ownerId'), (_, { value }) => value);
@@ -143,6 +154,7 @@ const getUpdateStartDateInputArgs = compose(objOf('startDate'), toDate);
 const getUpdateEndDateInputArgs = compose(objOf('endDate'), toDate);
 const getUpdatePriorityInputArgs = compose(objOf('priority'), getTargetValue);
 const getUpdateColorInputArgs = compose(objOf('color'), toUpper, view(lenses.hex));
+const getUpdateStatusCommentInputArgs = compose(objOf('statusComment'), getTargetValue);
 
 export default namedCompose('GoalEditContainer')(
   graphql(UPDATE_GOAL_TITLE, {
@@ -185,6 +197,12 @@ export default namedCompose('GoalEditContainer')(
     props: props(getUpdateColorInputArgs, {
       handler: 'onChangeColor',
       mutation: 'updateGoalColor',
+    }),
+  }),
+  graphql(UPDATE_GOAL_STATUS_COMMENT, {
+    props: props(getUpdateStatusCommentInputArgs, {
+      handler: 'onChangeStatusComment',
+      mutation: 'updateGoalStatusComment',
     }),
   }),
   flattenProp('goal'),

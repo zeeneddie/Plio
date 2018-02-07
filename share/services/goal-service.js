@@ -60,6 +60,10 @@ export default {
     return this._updateById('color')({ _id, color });
   },
 
+  async updateStatusComment({ _id, statusComment }) {
+    return this._updateById('statusComment')({ _id, statusComment });
+  },
+
   _updateById(key) {
     return async ({ _id, ...args }) => {
       const query = { _id };

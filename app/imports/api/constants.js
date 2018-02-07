@@ -275,3 +275,5 @@ export const StatusColors = {
   RED: 'danger',
   GREEN: 'success',
 };
+
+export const DEFAULT_UPDATE_TIMEOUT = 800;
