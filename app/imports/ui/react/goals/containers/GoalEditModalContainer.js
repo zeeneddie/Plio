@@ -1,6 +1,6 @@
 import connectUI from 'redux-ui';
 import { onlyUpdateForKeys, branch, renderNothing } from 'recompose';
-import { identity, path, over, dropLast, dec, compose } from 'ramda';
+import { identity, path, over, reject, where, equals, dec, compose } from 'ramda';
 import { graphql } from 'react-apollo';
 import { transformGoal, lenses } from 'plio-util';
 import gql from 'graphql-tag';
@@ -9,10 +9,10 @@ import { namedCompose } from '../../helpers';
 import GoalEditModal from '../components/GoalEditModal';
 import { Query } from '../../../../client/graphql';
 
-const deleteGoal = compose(
+const deleteGoal = (_id, data) => compose(
   over(lenses.goals.totalCount, dec),
-  over(lenses.goals.goals, dropLast(1)),
-);
+  over(lenses.goals.goals, reject(where({ _id: equals(_id) }))),
+)(data);
 
 const DELETE_GOAL = gql`
   mutation deleteGoal($input: DeleteGoalInput!) {
@@ -50,8 +50,10 @@ export default namedCompose('GoalEditModalContainer')(
         isOpen,
         toggle,
         organizationId,
+        ui: { activeGoal },
       },
     }) => ({
+      activeGoal,
       loading,
       isOpen,
       toggle,
@@ -63,18 +65,17 @@ export default namedCompose('GoalEditModalContainer')(
     props: ({
       mutate,
       ownProps: {
-        goal,
         organizationId,
+        activeGoal,
         ...props
       },
     }) => ({
-      goal,
       organizationId,
       ...props,
       onDelete: () => mutate({
         variables: {
           input: {
-            _id: goal._id,
+            _id: activeGoal,
           },
         },
         update: (proxy) => {
@@ -86,7 +87,7 @@ export default namedCompose('GoalEditModalContainer')(
           return proxy.writeQuery({
             query: Query.DASHBOARD_GOALS,
             variables: { organizationId },
-            data: deleteGoal(data),
+            data: deleteGoal(activeGoal, data),
           });
         },
       }),
