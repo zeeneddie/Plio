@@ -44,6 +44,22 @@ export default {
     return this._updateById('ownerId')({ _id, ownerId });
   },
 
+  async updateStartDate({ _id, startDate }) {
+    return this._updateById('startDate')({ _id, startDate });
+  },
+
+  async updateEndDate({ _id, endDate }) {
+    return this._updateById('endDate')({ _id, endDate });
+  },
+
+  async updatePriority({ _id, priority }) {
+    return this._updateById('priority')({ _id, priority });
+  },
+
+  async updateColor({ _id, color }) {
+    return this._updateById('color')({ _id, color });
+  },
+
   _updateById(key) {
     return async ({ _id, ...args }) => {
       const query = { _id };

@@ -53,7 +53,7 @@ type Mutation {
   updateGoalTitle(input: UpdateGoalTitleInput!): GoalPayload
   updateGoalDescription(input: UpdateGoalDescriptionInput!): GoalPayload
   updateGoalOwner(input: UpdateGoalOwnerInput!): GoalPayload
-  updateGoalStartDate(input: UpdateGoalStartDate!): GoalPayload
+  updateGoalStartDate(input: UpdateGoalStartDateInput!): GoalPayload
   updateGoalEndDate(input: UpdateGoalEndDateInput!): GoalPayload
   updateGoalPriority(input: UpdateGoalPriorityInput!): GoalPayload
   updateGoalColor(input: UpdateGoalColorInput!): GoalPayload
