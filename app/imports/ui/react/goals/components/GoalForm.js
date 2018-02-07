@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Input } from 'reactstrap';
+import { Input, InputGroupAddon } from 'reactstrap';
 import { onlyUpdateForKeys } from 'recompose';
 import DebounceInput from 'react-debounce-input';
 
@@ -12,7 +12,7 @@ import {
   ColorPicker,
 } from '../../components';
 import { OrgUsersSelectInputContainer } from '../../containers';
-import { GoalColors } from '../../../../share/constants';
+import { GoalColors, Abbreviations } from '../../../../share/constants';
 
 const enhance = onlyUpdateForKeys([
   'title',
@@ -26,6 +26,7 @@ const enhance = onlyUpdateForKeys([
 ]);
 
 export const GoalForm = ({
+  sequentialId,
   title,
   onChangeTitle,
   description,
@@ -42,76 +43,87 @@ export const GoalForm = ({
   onChangeColor,
   organizationId,
   onError,
-  debounceTimeout = 300,
-}) => (
-  <Fragment>
-    <FormField>
-      Key goal name
-      <FormInput
-        placeholder="Key goal name"
-        value={title}
-        onChange={onChangeTitle}
-        {...{ debounceTimeout }}
-      />
-    </FormField>
-    <FormField>
-      Description
-      <DebounceInput
-        element={Input}
-        type="textarea"
-        placeholder="Description"
-        value={description}
-        onChange={onChangeDescription}
-        {...{ debounceTimeout }}
-      />
-    </FormField>
-    <FormField>
-      Owner
-      <OrgUsersSelectInputContainer
-        uncontrolled
-        caret
-        hint
-        input={{ placeholder: 'Owner' }}
-        selected={ownerId}
-        onSelect={onChangeOwnerId}
-        {...{ organizationId, onError }}
-      />
-    </FormField>
-    <FormField>
-      Start date
-      <LoadableDatePicker
-        selected={startDate}
-        onChange={onChangeStartDate}
-        placeholderText="Start date"
-        className="form-control"
-      />
-    </FormField>
-    <FormField>
-      End date
-      <LoadableDatePicker
-        selected={endDate}
-        onChange={onChangeEndDate}
-        placeholderText="End date"
-        className="form-control"
-      />
-    </FormField>
-    <FormField>
-      Priority
-      <Magnitudes.Select
-        value={priority}
-        onChange={onChangePriority}
-      />
-    </FormField>
-    <FormField>
-      Color
-      <ColorPicker
-        value={color}
-        colors={Object.values(GoalColors)}
-        onChange={onChangeColor}
-      />
-    </FormField>
-  </Fragment>
-);
+  isEditMode,
+}) => {
+  const debounceTimeout = isEditMode ? 800 : 300;
+
+  return (
+    <Fragment>
+      <FormField>
+        Key goal name
+        <FormInput
+          inputGroup={!!isEditMode}
+          placeholder="Key goal name"
+          value={title}
+          onChange={onChangeTitle}
+          {...{ debounceTimeout }}
+        >
+          {!!isEditMode && (
+            <InputGroupAddon>
+              {sequentialId}
+            </InputGroupAddon>
+          )}
+        </FormInput>
+      </FormField>
+      <FormField>
+        Description
+        <DebounceInput
+          element={Input}
+          type="textarea"
+          placeholder="Description"
+          value={description}
+          onChange={onChangeDescription}
+          {...{ debounceTimeout }}
+        />
+      </FormField>
+      <FormField>
+        Owner
+        <OrgUsersSelectInputContainer
+          uncontrolled
+          caret
+          hint
+          input={{ placeholder: 'Owner' }}
+          selected={ownerId}
+          onSelect={onChangeOwnerId}
+          {...{ organizationId, onError }}
+        />
+      </FormField>
+      <FormField>
+        Start date
+        <LoadableDatePicker
+          selected={startDate}
+          onChange={onChangeStartDate}
+          placeholderText="Start date"
+          className="form-control"
+        />
+      </FormField>
+      <FormField>
+        End date
+        <LoadableDatePicker
+          selected={endDate}
+          onChange={onChangeEndDate}
+          placeholderText="End date"
+          className="form-control"
+        />
+      </FormField>
+      <FormField>
+        Priority
+        <Magnitudes.Select
+          value={priority}
+          onChange={onChangePriority}
+        />
+      </FormField>
+      <FormField>
+        Color
+        <ColorPicker
+          value={color}
+          colors={Object.values(GoalColors)}
+          onChange={onChangeColor}
+        />
+      </FormField>
+    </Fragment>
+  );
+};
 
 GoalForm.propTypes = {
   title: PropTypes.string.isRequired,
@@ -130,7 +142,7 @@ GoalForm.propTypes = {
   onChangeColor: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   onError: PropTypes.func,
-  debounceTimeout: PropTypes.number,
+  isEditMode: PropTypes.bool,
 };
 
 export default enhance(GoalForm);

@@ -7,5 +7,6 @@ fragment GoalEdit on Goal {
   description
   status
   priority
+  sequentialId
   ...DashboardGoal
 }
