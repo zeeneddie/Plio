@@ -64,6 +64,24 @@ export default {
     return this._updateById('statusComment')({ _id, statusComment });
   },
 
+  async delete({ _id }, { userId }) {
+    // delete all linked documents (goals, lessons, ...)?
+    const query = { _id };
+    const modifier = {
+      $set: {
+        isDeleted: true,
+        deletedBy: userId,
+        deletedAt: new Date().toISOString(),
+      },
+    };
+
+    await this.collection.update(query, modifier);
+
+    const goal = await this.collection.findOne(query);
+
+    return { goal };
+  },
+
   _updateById(key) {
     return async ({ _id, ...args }) => {
       const query = { _id };

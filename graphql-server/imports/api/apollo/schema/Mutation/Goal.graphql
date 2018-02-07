@@ -53,6 +53,10 @@ input UpdateGoalStatusCommentInput {
   statusComment: String!
 }
 
+input DeleteGoalInput {
+  _id: ID!
+}
+
 type Mutation {
   createGoal(input: CreateGoalInput!): GoalPayload
   updateGoalTitle(input: UpdateGoalTitleInput!): GoalPayload
@@ -63,4 +67,5 @@ type Mutation {
   updateGoalPriority(input: UpdateGoalPriorityInput!): GoalPayload
   updateGoalColor(input: UpdateGoalColorInput!): GoalPayload
   updateGoalStatusComment(input: UpdateGoalStatusCommentInput!): GoalPayload
+  deleteGoal(input: DeleteGoalInput!): GoalPayload
 }
