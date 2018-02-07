@@ -30,12 +30,12 @@ input UpdateGoalOwnerInput {
 
 input UpdateGoalStartDateInput {
   _id: ID!
-  startDate: Date!
+  startDate: DateTime!
 }
 
 input UpdateGoalEndDateInput {
   _id: ID!
-  endDate: Date!
+  endDate: DateTime!
 }
 
 input UpdateGoalPriorityInput {

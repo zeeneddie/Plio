@@ -6,5 +6,6 @@ fragment GoalEdit on Goal {
   }
   description
   status
+  priority
   ...DashboardGoal
 }
