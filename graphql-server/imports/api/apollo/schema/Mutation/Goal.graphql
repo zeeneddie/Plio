@@ -28,9 +28,33 @@ input UpdateGoalOwnerInput {
   ownerId: ID!
 }
 
+input UpdateGoalStartDateInput {
+  _id: ID!
+  startDate: Date!
+}
+
+input UpdateGoalEndDateInput {
+  _id: ID!
+  endDate: Date!
+}
+
+input UpdateGoalPriorityInput {
+  _id: ID!
+  priority: String!
+}
+
+input UpdateGoalColorInput {
+  _id: ID!
+  color: String!
+}
+
 type Mutation {
   createGoal(input: CreateGoalInput!): GoalPayload
   updateGoalTitle(input: UpdateGoalTitleInput!): GoalPayload
   updateGoalDescription(input: UpdateGoalDescriptionInput!): GoalPayload
   updateGoalOwner(input: UpdateGoalOwnerInput!): GoalPayload
+  updateGoalStartDate(input: UpdateGoalStartDate!): GoalPayload
+  updateGoalEndDate(input: UpdateGoalEndDateInput!): GoalPayload
+  updateGoalPriority(input: UpdateGoalPriorityInput!): GoalPayload
+  updateGoalColor(input: UpdateGoalColorInput!): GoalPayload
 }
