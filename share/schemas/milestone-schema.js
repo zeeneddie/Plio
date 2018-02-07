@@ -1,4 +1,5 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { pickNonInt } from 'plio-util';
 
 import {
   BaseEntitySchema,
@@ -24,7 +25,7 @@ export const MilestoneSchema = new SimpleSchema([
     },
     status: {
       type: Number,
-      allowedValues: Object.values(MilestoneStatuses),
+      allowedValues: Object.values(pickNonInt(MilestoneStatuses)),
       defaultValue: 1,
     },
     completionTargetDate: {
