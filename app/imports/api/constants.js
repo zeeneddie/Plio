@@ -268,3 +268,10 @@ export const TransitionTimeouts = {
 };
 
 export const TransitionBaseActiveClass = 'in';
+
+export const StatusColors = {
+  DEFAULT: 'default',
+  AMBER: 'warning',
+  RED: 'danger',
+  GREEN: 'success',
+};
