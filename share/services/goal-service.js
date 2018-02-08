@@ -64,10 +64,10 @@ export default {
     return this._updateById({ _id, statusComment });
   },
 
-  async complete({ _id, completionComments }, { userId }) {
+  async complete({ _id, completionComment }, { userId }) {
     return this._updateById({
       _id,
-      completionComments,
+      completionComment,
       isCompleted: true,
       completedBy: userId,
       completedAt: new Date(),
