@@ -72,6 +72,11 @@ const GoalSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       optional: true,
     },
+    completionComment: {
+      type: String,
+      optional: true,
+      max: StringLimits.comments.max,
+    },
     color: {
       type: String,
       allowedValues: Object.values(GoalColors),

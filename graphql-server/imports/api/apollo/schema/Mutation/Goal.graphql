@@ -57,6 +57,11 @@ input DeleteGoalInput {
   _id: ID!
 }
 
+input CompleteGoalInput {
+  _id: ID!
+  completionComment: String
+}
+
 type Mutation {
   createGoal(input: CreateGoalInput!): GoalPayload
   updateGoalTitle(input: UpdateGoalTitleInput!): GoalPayload
@@ -68,4 +73,5 @@ type Mutation {
   updateGoalColor(input: UpdateGoalColorInput!): GoalPayload
   updateGoalStatusComment(input: UpdateGoalStatusCommentInput!): GoalPayload
   deleteGoal(input: DeleteGoalInput!): GoalPayload
+  completeGoal(input: CompleteGoalInput!): GoalPayload
 }

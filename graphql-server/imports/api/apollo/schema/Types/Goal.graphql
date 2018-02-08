@@ -23,6 +23,7 @@ type Goal {
   isCompleted: Boolean!
   completedAt: Date
   completedBy: User
+  completionComment: String
   color: String!
   actions: [Action]
   risks: [Risk]
