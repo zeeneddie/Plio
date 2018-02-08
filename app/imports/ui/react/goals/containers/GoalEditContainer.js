@@ -1,8 +1,8 @@
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { flattenProp } from 'recompose';
-import { lenses, getTargetValue, toDate } from 'plio-util';
-import { view, curry, compose, objOf, toUpper } from 'ramda';
+import { flattenProp, withHandlers, branch } from 'recompose';
+import { lenses, getTargetValue, toDate, updateInput } from 'plio-util';
+import { view, curry, compose, objOf, toUpper, prop, tap } from 'ramda';
 import connectUI from 'redux-ui';
 
 import { namedCompose } from '../../helpers';
@@ -41,39 +41,43 @@ const props = curry((getInputArgs, {
   mutation,
 }) => ({
   mutate,
-  ownProps: {
+  ownProps,
+}) => {
+  const {
     goal,
     organizationId,
     updateUI,
-  },
-}) => ({
-  goal,
-  organizationId,
-  [handler]: (...args) => {
-    updateUI({ loading: true });
+  } = ownProps;
 
-    return mutate({
-      update: update(mutation),
-      variables: {
-        input: {
-          _id: goal._id,
-          ...getInputArgs(...args),
+  return {
+    goal,
+    organizationId,
+    [handler]: (...args) => {
+      updateUI({ loading: true });
+
+      return mutate({
+        update: update(mutation),
+        variables: {
+          input: {
+            _id: goal._id,
+            ...getInputArgs(...args, ownProps),
+          },
         },
-      },
-    }).then((res) => {
-      updateUI({ loading: false });
-      return res;
-    }).catch((error) => {
-      updateUI({ loading: false, error });
+      }).then((res) => {
+        updateUI({ loading: false });
+        return res;
+      }).catch((error) => {
+        updateUI({ loading: false, error });
 
-      setTimeout(() => {
-        updateUI({ error: null });
-      }, ALERT_AUTOHIDE_TIME);
+        setTimeout(() => {
+          updateUI({ error: null });
+        }, ALERT_AUTOHIDE_TIME);
 
-      return error;
-    });
-  },
-}));
+        return error;
+      });
+    },
+  };
+});
 
 const UPDATE_GOAL_TITLE = gql`
   mutation updateGoalTitle($input: UpdateGoalTitleInput!) {
@@ -165,6 +169,29 @@ const UPDATE_GOAL_STATUS_COMMENT = gql`
   }
 `;
 
+const COMPLETE_GOAL = gql`
+  mutation completeGoal($input: CompleteGoalInput!) {
+    completeGoal(input: $input) {
+      goal {
+        _id
+        isCompleted
+        completionComment
+      }
+    }
+  }
+`;
+
+const UPDATE_GOAL_COMPLETION_COMMENT = gql`
+  mutation updateGoalCompletionComment($input: UpdateGoalCompletionCommentInput!) {
+    updateGoalCompletionComment(input: $input) {
+      goal {
+        _id
+        completionComment
+      }
+    }
+  }
+`;
+
 const getUpdateTitleInputArgs = compose(objOf('title'), getTargetValue);
 const getUpdateDescriptionInputArgs = compose(objOf('description'), getTargetValue);
 const getUpdateOwnerInputArgs = compose(objOf('ownerId'), (_, { value }) => value);
@@ -173,9 +200,18 @@ const getUpdateEndDateInputArgs = compose(objOf('endDate'), toDate);
 const getUpdatePriorityInputArgs = compose(objOf('priority'), getTargetValue);
 const getUpdateColorInputArgs = compose(objOf('color'), toUpper, view(lenses.hex));
 const getUpdateStatusCommentInputArgs = compose(objOf('statusComment'), getTargetValue);
+const getCompleteGoalInputArgs = compose(
+  objOf('completionComment'),
+  (_, { ui: { completionComment } }) => completionComment,
+);
+const getUpdateCompletionCommentInputArgs = compose(objOf('completionComment'), getTargetValue);
 
 export default namedCompose('GoalEditContainer')(
-  connectUI(),
+  connectUI({
+    state: {
+      completionComment: '',
+    },
+  }),
   graphql(UPDATE_GOAL_TITLE, {
     props: props(getUpdateTitleInputArgs, {
       handler: 'onChangeTitle',
@@ -224,5 +260,25 @@ export default namedCompose('GoalEditContainer')(
       mutation: 'updateGoalStatusComment',
     }),
   }),
+  branch(
+    prop('isCompleted'),
+    graphql(UPDATE_GOAL_COMPLETION_COMMENT, {
+      props: props(getUpdateCompletionCommentInputArgs, {
+        handler: 'onChangeCompletionComment',
+        mutation: 'updateGoalCompletionComment',
+      }),
+    }),
+    compose(
+      graphql(COMPLETE_GOAL, {
+        props: props(getCompleteGoalInputArgs, {
+          handler: 'onComplete',
+          mutation: 'completeGoal',
+        }),
+      }),
+      withHandlers({
+        onChangeCompletionComment: updateInput('completionComment'),
+      }),
+    ),
+  ),
   flattenProp('goal'),
 )(GoalEdit);

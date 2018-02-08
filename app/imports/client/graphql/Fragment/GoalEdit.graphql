@@ -9,5 +9,14 @@ fragment GoalEdit on Goal {
   priority
   status
   statusComment
+  isCompleted
+  completedAt
+  completedBy {
+    _id
+    profile {
+      fullName
+    }
+  }
+  completionComment
   ...DashboardGoal
 }
