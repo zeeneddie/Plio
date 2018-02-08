@@ -26,7 +26,12 @@ const DELETE_GOAL = gql`
 `;
 
 export default namedCompose('GoalEditModalContainer')(
-  connectUI(),
+  connectUI({
+    state: {
+      loading: false,
+      error: null,
+    },
+  }),
   branch(
     path(['ui', 'activeGoal']),
     identity,
@@ -51,12 +56,14 @@ export default namedCompose('GoalEditModalContainer')(
         isOpen,
         toggle,
         organizationId,
+        ui: { loading: uiLoading, error },
       },
     }) => ({
-      loading,
       isOpen,
       toggle,
       organizationId,
+      error,
+      loading: loading || uiLoading,
       goal: goal ? transformGoal(goal) : null,
     }),
   }),

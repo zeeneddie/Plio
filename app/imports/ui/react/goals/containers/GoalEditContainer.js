@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import { flattenProp } from 'recompose';
 import { lenses, getTargetValue, toDate } from 'plio-util';
 import { view, curry, compose, objOf, toUpper } from 'ramda';
+import connectUI from 'redux-ui';
 
 import { namedCompose } from '../../helpers';
 import GoalEdit from '../components/GoalEdit';
@@ -42,19 +43,30 @@ const props = curry((getInputArgs, {
   ownProps: {
     goal,
     organizationId,
+    updateUI,
   },
 }) => ({
   goal,
   organizationId,
-  [handler]: (...args) => mutate({
-    update: update(mutation),
-    variables: {
-      input: {
-        _id: goal._id,
-        ...getInputArgs(...args),
+  [handler]: (...args) => {
+    updateUI({ loading: true });
+
+    return mutate({
+      update: update(mutation),
+      variables: {
+        input: {
+          _id: goal._id,
+          ...getInputArgs(...args),
+        },
       },
-    },
-  }),
+    }).then((res) => {
+      updateUI({ loading: false });
+      return res;
+    }).catch((error) => {
+      updateUI({ loading: false, error });
+      return error;
+    });
+  },
 }));
 
 const UPDATE_GOAL_TITLE = gql`
@@ -157,6 +169,7 @@ const getUpdateColorInputArgs = compose(objOf('color'), toUpper, view(lenses.hex
 const getUpdateStatusCommentInputArgs = compose(objOf('statusComment'), getTargetValue);
 
 export default namedCompose('GoalEditContainer')(
+  connectUI(),
   graphql(UPDATE_GOAL_TITLE, {
     props: props(getUpdateTitleInputArgs, {
       handler: 'onChangeTitle',

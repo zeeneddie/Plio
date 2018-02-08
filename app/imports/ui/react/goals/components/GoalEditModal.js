@@ -9,7 +9,6 @@ import {
   ModalBody,
   CardBlock,
   SaveButton,
-  PreloaderPage,
   TextAlign,
 } from '../../components';
 import GoalEditContainer from '../containers/GoalEditContainer';
@@ -17,18 +16,17 @@ import GoalEditContainer from '../containers/GoalEditContainer';
 export const GoalEditModal = ({
   isOpen,
   toggle,
-  errorText,
-  isSaving,
   onClosed,
   goal,
   organizationId,
   loading,
+  error,
   onDelete,
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
       renderRightButton={() => (
-        <SaveButton onClick={toggle} {...{ isSaving }}>
+        <SaveButton onClick={toggle} isSaving={loading}>
           Close
         </SaveButton>
       )}
@@ -36,13 +34,11 @@ export const GoalEditModal = ({
       <CardTitle>Key Goal</CardTitle>
     </ModalHeader>
     <ModalBody>
-      <ErrorSection {...{ errorText }} />
+      <ErrorSection errorText={error && error.message} />
 
       <div>
         <CardBlock>
-          {loading ? (
-            <PreloaderPage size={2} />
-          ) : goal && (
+          {goal && (
             <GoalEditContainer {...{ goal, organizationId }} />
           )}
         </CardBlock>
@@ -60,10 +56,9 @@ export const GoalEditModal = ({
 
 GoalEditModal.propTypes = {
   loading: PropTypes.bool,
+  error: PropTypes.object,
   isOpen: PropTypes.bool.isRequired,
-  isSaving: PropTypes.bool,
   toggle: PropTypes.func.isRequired,
-  errorText: PropTypes.string,
   onClosed: PropTypes.func,
   goal: PropTypes.object,
   organizationId: PropTypes.string.isRequired,
