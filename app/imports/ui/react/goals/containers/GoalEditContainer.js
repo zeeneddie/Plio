@@ -8,6 +8,7 @@ import connectUI from 'redux-ui';
 import { namedCompose } from '../../helpers';
 import GoalEdit from '../components/GoalEdit';
 import { Fragment } from '../../../../client/graphql';
+import { ALERT_AUTOHIDE_TIME } from '../../../../api/constants';
 
 const update = name => (proxy, { data: { [name]: { goal: { _id, ...goal } } } }) => {
   const id = `Goal:${_id}`;
@@ -64,6 +65,11 @@ const props = curry((getInputArgs, {
       return res;
     }).catch((error) => {
       updateUI({ loading: false, error });
+
+      setTimeout(() => {
+        updateUI({ error: null });
+      }, ALERT_AUTOHIDE_TIME);
+
       return error;
     });
   },
