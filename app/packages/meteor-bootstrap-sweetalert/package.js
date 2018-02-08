@@ -16,6 +16,7 @@ Package.describe({
 Package.onUse(function(api) {
     api.versionsFrom('1.3.4');
     api.use('ecmascript', 'client');
+    api.export('swal', ['client']);
 
     api.addFiles([
         'dist/sweetalert.css',

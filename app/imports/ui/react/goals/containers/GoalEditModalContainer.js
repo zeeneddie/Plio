@@ -8,6 +8,7 @@ import gql from 'graphql-tag';
 import { namedCompose } from '../../helpers';
 import GoalEditModal from '../components/GoalEditModal';
 import { Query } from '../../../../client/graphql';
+import { swal } from '../../../../client/util';
 
 const deleteGoal = (_id, data) => compose(
   over(lenses.goals.totalCount, dec),
@@ -50,10 +51,8 @@ export default namedCompose('GoalEditModalContainer')(
         isOpen,
         toggle,
         organizationId,
-        ui: { activeGoal },
       },
     }) => ({
-      activeGoal,
       loading,
       isOpen,
       toggle,
@@ -66,18 +65,22 @@ export default namedCompose('GoalEditModalContainer')(
       mutate,
       ownProps: {
         organizationId,
-        activeGoal,
         toggle,
+        goal,
         ...props
       },
     }) => ({
       organizationId,
       toggle,
+      goal,
       ...props,
-      onDelete: () => mutate({
+      onDelete: () => swal.promise({
+        text: `The goal "${goal.title}" will be deleted`,
+        confirmButtonText: 'Delete',
+      }, () => mutate({
         variables: {
           input: {
-            _id: activeGoal,
+            _id: goal._id,
           },
         },
         update: (proxy) => {
@@ -89,10 +92,10 @@ export default namedCompose('GoalEditModalContainer')(
           return proxy.writeQuery({
             query: Query.DASHBOARD_GOALS,
             variables: { organizationId },
-            data: deleteGoal(activeGoal, data),
+            data: deleteGoal(goal._id, data),
           });
         },
-      }).then(toggle),
+      })),
     }),
   }),
   onlyUpdateForKeys(['isOpen', 'goal', 'organizationId']),
