@@ -1,12 +1,12 @@
-import { ifElse } from 'ramda';
-
 import { canVerificationBeUndone } from '../checkers';
 import { ACT_VERIFICATION_CANNOT_BE_UNDONE } from '../errors';
 
-export default () => (next, args, context) => ifElse(
-  (_, { userId, doc }) => canVerificationBeUndone(doc, userId),
-  next,
-  () => {
+export default () => async (next, root, args, context) => {
+  const { doc, userId } = context;
+
+  if (!canVerificationBeUndone(doc, userId)) {
     throw ACT_VERIFICATION_CANNOT_BE_UNDONE;
-  },
-)(args, context);
+  }
+
+  return next(root, args, context);
+};

@@ -5,17 +5,21 @@ import ensureCanUndoVerification from '../ensureCanUndoVerification';
 import { UserRoles } from '../../../../share/constants';
 
 describe('ensureCanUndoVerification', () => {
-  it('throws', () => {
+  it('throws', async () => {
+    const root = {};
     const args = {};
     const context = {
       userId: null,
       doc: {},
     };
 
-    expect(() => ensureCanUndoVerification()(T, args, context)).toThrow();
+    await expect(ensureCanUndoVerification()(T, root, args, context))
+      .rejects
+      .toEqual(expect.any(Error));
   });
 
-  it('passes', () => {
+  it('passes', async () => {
+    const root = {};
     const args = {};
     const userId = 1;
     const organizationId = 3;
@@ -29,7 +33,7 @@ describe('ensureCanUndoVerification', () => {
 
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
-    const actual = ensureCanUndoVerification()(T, args, context);
+    const actual = await ensureCanUndoVerification()(T, root, args, context);
 
     expect(actual).toBe(true);
   });

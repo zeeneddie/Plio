@@ -5,17 +5,19 @@ import ensureCanBeCompleted from '../ensureCanBeCompleted';
 import { UserRoles } from '../../../../share/constants';
 
 describe('ensureCanBeCompleted', () => {
-  it('throws', () => {
+  it('throws', async () => {
+    const root = {};
     const args = {};
     const context = {
       userId: null,
       doc: {},
     };
 
-    expect(() => ensureCanBeCompleted()(T, args, context)).toThrow();
+    await expect(ensureCanBeCompleted()(T, root, args, context)).rejects.toEqual(expect.any(Error));
   });
 
-  it('passes', () => {
+  it('passes', async () => {
+    const root = {};
     const args = {};
     const userId = 1;
     const organizationId = 3;
@@ -29,7 +31,7 @@ describe('ensureCanBeCompleted', () => {
 
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
-    const actual = ensureCanBeCompleted()(T, args, context);
+    const actual = await ensureCanBeCompleted()(T, root, args, context);
 
     expect(actual).toBe(true);
   });

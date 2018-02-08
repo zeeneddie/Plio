@@ -1,12 +1,12 @@
-import { ifElse } from 'ramda';
-
 import { canBeCompleted } from '../checkers';
 import { ACT_CANNOT_COMPLETE } from '../errors';
 
-export default () => (next, args, context) => ifElse(
-  (_, { userId, doc }) => canBeCompleted(doc, userId),
-  next,
-  () => {
+export default () => async (next, root, args, context) => {
+  const { doc, userId } = context;
+
+  if (!canBeCompleted(doc, userId)) {
     throw ACT_CANNOT_COMPLETE;
-  },
-)(args, context);
+  }
+
+  return next(root, args, context);
+};
