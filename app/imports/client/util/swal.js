@@ -65,9 +65,10 @@ swal.promise = ({
   successTitle = 'Success',
   successText = '',
   errorTitle,
+  showLoaderOnConfirm = true,
   ...props
 }, cb) => new Promise((resolve, reject) => {
-  swal(props, () => cb()
+  swal({ showLoaderOnConfirm, ...props }, () => cb()
     .then((res) => {
       swal.success(successTitle, successText);
       resolve(res);
