@@ -1,11 +1,11 @@
 import connectUI from 'redux-ui';
-import { onlyUpdateForKeys, branch, renderNothing } from 'recompose';
-import { identity, path, over, reject, where, equals, dec, compose } from 'ramda';
+import { onlyUpdateForKeys, branch, renderNothing, mapProps } from 'recompose';
+import { identity, path, over, reject, where, equals, dec, compose, tap } from 'ramda';
 import { graphql } from 'react-apollo';
 import { transformGoal, lenses } from 'plio-util';
 import gql from 'graphql-tag';
 
-import { namedCompose } from '../../helpers';
+import { namedCompose, withStateMutation } from '../../helpers';
 import GoalEditModal from '../components/GoalEditModal';
 import { Query } from '../../../../client/graphql';
 import { swal } from '../../../../client/util';
@@ -95,7 +95,7 @@ export default namedCompose('GoalEditModalContainer')(
             data: deleteGoal(goal._id, data),
           });
         },
-      })),
+      }).then(toggle)),
     }),
   }),
   onlyUpdateForKeys(['isOpen', 'goal', 'organizationId']),

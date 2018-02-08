@@ -23,3 +23,4 @@ export { default as withStore } from './withStore';
 export { default as withPreloader } from './withPreloader';
 export { default as withApollo } from './withApollo';
 export { default as withFragment } from './withFragment';
+export { default as withStateMutation } from './withStateMutation';
