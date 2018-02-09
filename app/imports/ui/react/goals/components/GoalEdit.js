@@ -47,52 +47,47 @@ const enhance = onlyUpdateForKeys([
   'organizationId',
 ]);
 
-export const GoalEdit = (props) => {
-  const {
-    status,
-    statusComment,
-    onChangeStatusComment,
-    onComplete,
-    completionComment,
-    onChangeCompletionComment,
-  } = props;
-
-  console.log('updated');
-
-  return (
-    <Fragment>
-      <GoalForm isEditMode {...props} />
-      <FormField>
-        Status
-        <Status color={getStatusColor(status)}>
-          {GoalStatuses[status]}
-        </Status>
-      </FormField>
-      <FormField>
-        Status comment
+export const GoalEdit = ({
+  status,
+  statusComment,
+  onChangeStatusComment,
+  onComplete,
+  completionComment,
+  onChangeCompletionComment,
+  ...props
+}) => (
+  <Fragment>
+    <GoalForm isEditMode {...props} />
+    <FormField>
+      Status
+      <Status color={getStatusColor(status)}>
+        {GoalStatuses[status]}
+      </Status>
+    </FormField>
+    <FormField>
+      Status comment
+      <DebounceTextarea
+        placeholder="Status comment"
+        value={statusComment}
+        onChange={onChangeStatusComment}
+        debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
+      />
+    </FormField>
+    <UncontrolledStyledToggleComplete
+      completeButtonContent="Mark as complete"
+      {...{ onComplete }}
+    >
+      <FormGroup className="margin-top">
         <DebounceTextarea
-          placeholder="Status comment"
-          value={statusComment}
-          onChange={onChangeStatusComment}
+          placeholder="Enter any completion comments"
+          value={completionComment}
+          onChange={onChangeCompletionComment}
           debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
         />
-      </FormField>
-      <UncontrolledStyledToggleComplete
-        completeButtonContent="Mark as complete"
-        {...{ onComplete }}
-      >
-        <FormGroup className="margin-top">
-          <DebounceTextarea
-            placeholder="Enter any completion comments"
-            value={completionComment}
-            onChange={onChangeCompletionComment}
-            debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
-          />
-        </FormGroup>
-      </UncontrolledStyledToggleComplete>
-    </Fragment>
-  );
-};
+      </FormGroup>
+    </UncontrolledStyledToggleComplete>
+  </Fragment>
+);
 
 GoalEdit.propTypes = propTypes;
 

@@ -1,7 +1,7 @@
 import { graphql } from 'react-apollo';
 import { flattenProp, withHandlers, branch, mapProps, onlyUpdateForKeys } from 'recompose';
 import { lenses, getTargetValue, toDate, updateInput } from 'plio-util';
-import { view, curry, compose, objOf, toUpper, prop, pick } from 'ramda';
+import { view, curry, compose, objOf, toUpper, prop, tap } from 'ramda';
 import connectUI from 'redux-ui';
 
 import { namedCompose } from '../../helpers';
@@ -95,6 +95,7 @@ const getCompleteGoalInputArgs = compose(
 const getUpdateCompletionCommentInputArgs = compose(objOf('completionComment'), getTargetValue);
 
 export default namedCompose('GoalEditContainer')(
+  onlyUpdateForKeys(['organizationId', 'goal']),
   connectUI({
     state: {
       completionComment: '',
@@ -175,28 +176,4 @@ export default namedCompose('GoalEditContainer')(
     ),
   ),
   flattenProp('goal'),
-  mapProps(pick([
-    'status',
-    'statusComment',
-    'onChangeStatusComment',
-    'onComplete',
-    'completionComment',
-    'onChangeCompletionComment',
-    'sequentialId',
-    'title',
-    'onChangeTitle',
-    'description',
-    'onChangeDescription',
-    'ownerId',
-    'onChangeOwnerId',
-    'startDate',
-    'onChangeStartDate',
-    'endDate',
-    'onChangeEndDate',
-    'priority',
-    'onChangePriority',
-    'color',
-    'onChangeColor',
-    'organizationId',
-  ])),
 )(GoalEdit);
