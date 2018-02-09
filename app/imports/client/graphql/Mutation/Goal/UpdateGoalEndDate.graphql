@@ -1,0 +1,8 @@
+mutation updateGoalEndDate($input: UpdateGoalEndDateInput!) {
+  updateGoalEndDate(input: $input) {
+    goal {
+      _id
+      endDate
+    }
+  }
+}

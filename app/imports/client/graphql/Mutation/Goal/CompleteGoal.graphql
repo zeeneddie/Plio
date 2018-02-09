@@ -1,0 +1,9 @@
+mutation completeGoal($input: CompleteGoalInput!) {
+  completeGoal(input: $input) {
+    goal {
+      _id
+      isCompleted
+      completionComment
+    }
+  }
+}

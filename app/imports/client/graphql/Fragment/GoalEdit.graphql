@@ -1,7 +1,7 @@
 #import "./DashboardGoal.graphql"
 
 fragment GoalEdit on Goal {
-    owner {
+  owner {
     _id
   }
   sequentialId

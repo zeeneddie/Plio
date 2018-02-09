@@ -1,0 +1,10 @@
+mutation updateGoalOwner($input: UpdateGoalOwnerInput!) {
+  updateGoalOwner(input: $input) {
+    goal {
+      _id
+      owner {
+        _id
+      }
+    }
+  }
+}
