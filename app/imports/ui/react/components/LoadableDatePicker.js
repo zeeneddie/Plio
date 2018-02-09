@@ -37,15 +37,21 @@ const LoadableDatePicker = Loadable.Map({
 // Default display is inline-block
 // Maybe this should be an option?
 export default styled(LoadableDatePicker)`
-  & > div > .react-datepicker-wrapper {
-    display: block;
-
-    & > .react-datepicker__input-container {
+  & > div {
+    & > .react-datepicker-wrapper {
       display: block;
-      & > input[readonly]:not([disabled]) {
-        cursor: pointer;
-        background-color: #fff;
+  
+      & > .react-datepicker__input-container {
+        display: block;
+        & > input[readonly]:not([disabled]) {
+          cursor: pointer;
+          background-color: #fff;
+        }
       }
+    }
+
+    & > .react-datepicker-popper {
+      z-index: 999;
     }
   }
 `;
