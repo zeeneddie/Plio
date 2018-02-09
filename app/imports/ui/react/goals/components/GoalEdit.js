@@ -5,7 +5,7 @@ import DebounceInput from 'react-debounce-input';
 import styled from 'styled-components';
 
 import GoalForm from './GoalForm';
-import { Status, FormField } from '../../components';
+import { Status, FormField, DebounceTextarea } from '../../components';
 import { getStatusColor } from '../../../../api/goals/helpers';
 import { GoalStatuses } from '../../../../share/constants';
 import { DEFAULT_UPDATE_TIMEOUT } from '../../../../api/constants';
@@ -41,9 +41,7 @@ const GoalEdit = (props) => {
       </FormField>
       <FormField>
         Status comment
-        <DebounceInput
-          element={Input}
-          type="textarea"
+        <DebounceTextarea
           placeholder="Status comment"
           value={statusComment}
           onChange={onChangeStatusComment}
@@ -55,14 +53,11 @@ const GoalEdit = (props) => {
         {...{ onComplete }}
       >
         <FormGroup className="margin-top">
-          <DebounceInput
-            element={Input}
-            type="textarea"
+          <DebounceTextarea
             placeholder="Enter any completion comments"
             value={completionComment}
             onChange={onChangeCompletionComment}
             debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
-            rows={3}
           />
         </FormGroup>
       </UncontrolledStyledToggleComplete>

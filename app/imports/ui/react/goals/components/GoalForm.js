@@ -10,6 +10,7 @@ import {
   Magnitudes,
   LoadableDatePicker,
   ColorPicker,
+  DebounceTextarea,
 } from '../../components';
 import { OrgUsersSelectInputContainer } from '../../containers';
 import { GoalColors } from '../../../../share/constants';
@@ -68,9 +69,7 @@ export const GoalForm = ({
       </FormField>
       <FormField>
         Description
-        <DebounceInput
-          element={Input}
-          type="textarea"
+        <DebounceTextarea
           placeholder="Description"
           value={description}
           onChange={onChangeDescription}

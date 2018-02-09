@@ -27,3 +27,4 @@ export { default as TimelineCurrentDateLine } from './TimelineCurrentDateLine';
 export { default as TimelineHorizontalLine } from './TimelineHorizontalLine';
 export { default as TimelinePoint } from './TimelinePoint';
 export { default as ToggleComplete } from './ToggleComplete';
+export { default as DebounceTextarea } from './DebounceTextarea';
