@@ -10,6 +10,8 @@ import updateGoalStatusComment from './updateGoalStatusComment';
 import deleteGoal from './deleteGoal';
 import completeGoal from './completeGoal';
 import updateGoalCompletionComment from './updateGoalCompletionComment';
+import updateGoalCompletedAt from './updateGoalCompletedAt';
+import updateGoalCompletedBy from './updateGoalCompletedBy';
 
 export default {
   createGoal,
@@ -24,4 +26,6 @@ export default {
   deleteGoal,
   completeGoal,
   updateGoalCompletionComment,
+  updateGoalCompletedAt,
+  updateGoalCompletedBy,
 };
