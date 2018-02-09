@@ -77,6 +77,10 @@ input UpdateGoalCompletedByInput {
   completedBy: ID!
 }
 
+input UndoGoalCompletionInput {
+  _id: ID!
+}
+
 type Mutation {
   createGoal(input: CreateGoalInput!): GoalPayload
   updateGoalTitle(input: UpdateGoalTitleInput!): GoalPayload
@@ -92,4 +96,5 @@ type Mutation {
   updateGoalCompletionComment(input: UpdateGoalCompletionCommentInput!): GoalPayload
   updateGoalCompletedAt(input: UpdateGoalCompletedAtInput!): GoalPayload
   updateGoalCompletedBy(input: UpdateGoalCompletedByInput!): GoalPayload
+  undoGoalCompletion(input: UndoGoalCompletionInput!): GoalPayload
 }

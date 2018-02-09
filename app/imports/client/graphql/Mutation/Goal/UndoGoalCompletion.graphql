@@ -1,0 +1,13 @@
+mutation undoGoalCompletion($input: UndoGoalCompletionInput!) {
+  undoGoalCompletion(input: $input) {
+    _id
+    isCompleted
+    completedAt
+    completedBy {
+      _id
+      profile {
+        fullName
+      }
+    }
+  }
+}
