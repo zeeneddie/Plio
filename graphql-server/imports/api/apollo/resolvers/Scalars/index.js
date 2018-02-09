@@ -1,13 +1,19 @@
 import JSON from 'graphql-type-json';
 import {
-  GraphQLDate as Date,
-  GraphQLTime as Time,
-  GraphQLDateTime as DateTime,
+  GraphQLDate,
+  GraphQLTime,
+  GraphQLDateTime,
 } from 'graphql-iso-date';
 
 export default {
   JSON,
-  Date,
-  Time,
-  DateTime,
+  Date: GraphQLDate,
+  Time: GraphQLTime,
+  DateTime: {
+    ...GraphQLDateTime,
+    serialize(value) {
+      const date = GraphQLDateTime.serialize(value);
+      return new Date(date).getTime();
+    },
+  },
 };
