@@ -95,18 +95,12 @@ const getCompleteGoalInputArgs = compose(
 const getUpdateCompletionCommentInputArgs = compose(objOf('completionComment'), getTargetValue);
 
 export default namedCompose('GoalEditContainer')(
-  onlyUpdateForKeys(['organizationId', 'goal']),
   connectUI({
     state: {
       completionComment: '',
     },
   }),
-  flattenProp('ui'),
-  onlyUpdateForKeys([
-    'completionComment',
-    'goal',
-    'organizationId',
-  ]),
+  onlyUpdateForKeys(['organizationId', 'goal', 'completionComment']),
   graphql(Mutation.UPDATE_GOAL_TITLE, {
     props: props(getUpdateTitleInputArgs, {
       handler: 'onChangeTitle',
@@ -155,6 +149,7 @@ export default namedCompose('GoalEditContainer')(
       mutation: 'updateGoalStatusComment',
     }),
   }),
+  flattenProp('goal'),
   branch(
     prop('isCompleted'),
     graphql(Mutation.UPDATE_GOAL_COMPLETION_COMMENT, {
@@ -175,5 +170,4 @@ export default namedCompose('GoalEditContainer')(
       }),
     ),
   ),
-  flattenProp('goal'),
 )(GoalEdit);

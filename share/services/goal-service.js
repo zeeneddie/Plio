@@ -33,39 +33,43 @@ export default {
   },
 
   async updateTitle({ _id, title }) {
-    return this._updateById({ _id, title });
+    return this.update({ _id, title });
   },
 
   async updateDescription({ _id, description }) {
-    return this._updateById({ _id, description });
+    return this.update({ _id, description });
   },
 
   async updateOwner({ _id, ownerId }) {
-    return this._updateById({ _id, ownerId });
+    return this.update({ _id, ownerId });
   },
 
   async updateStartDate({ _id, startDate }) {
-    return this._updateById({ _id, startDate });
+    return this.update({ _id, startDate });
   },
 
   async updateEndDate({ _id, endDate }) {
-    return this._updateById({ _id, endDate });
+    return this.update({ _id, endDate });
   },
 
   async updatePriority({ _id, priority }) {
-    return this._updateById({ _id, priority });
+    return this.update({ _id, priority });
   },
 
   async updateColor({ _id, color }) {
-    return this._updateById({ _id, color });
+    return this.update({ _id, color });
   },
 
   async updateStatusComment({ _id, statusComment }) {
-    return this._updateById({ _id, statusComment });
+    return this.update({ _id, statusComment });
+  },
+
+  async updateCompletionComment({ _id, completionComment }) {
+    return this.update({ _id, completionComment });
   },
 
   async complete({ _id, completionComment }, { userId }) {
-    return this._updateById({
+    return this.update({
       _id,
       completionComment,
       isCompleted: true,
@@ -92,7 +96,7 @@ export default {
     return { goal };
   },
 
-  async _updateById({ _id, ...args }) {
+  async update({ _id, ...args }) {
     const query = { _id };
     const modifier = {
       $set: args,

@@ -9,6 +9,7 @@ import updateGoalColor from './updateGoalColor';
 import updateGoalStatusComment from './updateGoalStatusComment';
 import deleteGoal from './deleteGoal';
 import completeGoal from './completeGoal';
+import updateGoalCompletionComment from './updateGoalCompletionComment';
 
 export default {
   createGoal,
@@ -22,4 +23,5 @@ export default {
   updateGoalStatusComment,
   deleteGoal,
   completeGoal,
+  updateGoalCompletionComment,
 };
