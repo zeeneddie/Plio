@@ -1,9 +1,9 @@
 type Analysis {
-  targetDate: Date
+  targetDate: DateTime
   executor: User
   status: Int
   completionComments: String
-  completedAt: Date
+  completedAt: DateTime
   completedBy: User
   assignedBy: User
 }

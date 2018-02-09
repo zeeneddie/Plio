@@ -1,7 +1,7 @@
 type User {
   _id: ID!
   # The registration date
-  createdAt: Date!
+  createdAt: DateTime!
   # The first user email
   email: String!
   # User preferences
