@@ -4,6 +4,13 @@ mutation completeGoal($input: CompleteGoalInput!) {
       _id
       isCompleted
       completionComment
+      completedAt
+      completedBy {
+        _id
+        profile {
+          fullName
+        }
+      }
     }
   }
 }

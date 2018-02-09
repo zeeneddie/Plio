@@ -37,7 +37,7 @@ export default {
   },
 
   async complete({ _id, completionComment }, { userId }) {
-    return this.update({
+    return this.set({
       _id,
       completionComment,
       isCompleted: true,
@@ -55,7 +55,7 @@ export default {
       $unset: {
         completedBy: '',
         completedAt: '',
-        completionComments: '',
+        completionComment: '',
       },
     };
 
@@ -68,7 +68,7 @@ export default {
       _id,
       isDeleted: true,
       deletedBy: userId,
-      deletedAt: new Date().toISOString(),
+      deletedAt: new Date(),
     });
   },
 

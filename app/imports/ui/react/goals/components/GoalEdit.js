@@ -32,6 +32,7 @@ const propTypes = {
   onChangeCompletedAt: PropTypes.func,
   onChangeCompletedBy: PropTypes.func,
   organizationId: PropTypes.string,
+  onUndoCompletion: PropTypes.func,
 };
 
 const StyledToggleComplete = styled(ToggleComplete)`
@@ -76,6 +77,7 @@ export const GoalEdit = ({
   onChangeCompletedAt,
   onChangeCompletedBy,
   organizationId,
+  onUndoCompletion,
   ...props
 }) => {
   const completionCommentsTextarea = (
@@ -125,7 +127,11 @@ export const GoalEdit = ({
               selected={completedBy._id}
               onSelect={onChangeCompletedBy}
               renderInputGroupAddon={() => (
-                <InputGroupButton color="link" className="margin-left">
+                <InputGroupButton
+                  color="link"
+                  className="margin-left"
+                  onClick={onUndoCompletion}
+                >
                   Undo
                 </InputGroupButton>
               )}

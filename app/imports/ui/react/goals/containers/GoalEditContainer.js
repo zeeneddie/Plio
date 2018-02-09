@@ -173,6 +173,12 @@ export default namedCompose('GoalEditContainer')(
           mutation: 'updateGoalCompletedBy',
         }),
       }),
+      graphql(Mutation.UNDO_GOAL_COMPLETION, {
+        props: props(e => e.stopPropagation(), {
+          handler: 'onUndoCompletion',
+          mutation: 'undoGoalCompletion',
+        }),
+      }),
     ),
     compose(
       graphql(Mutation.COMPLETE_GOAL, {

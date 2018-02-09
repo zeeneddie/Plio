@@ -10,6 +10,7 @@ import COMPLETE_GOAL from './CompleteGoal.graphql';
 import UPDATE_GOAL_COMPLETION_COMMENT from './UpdateGoalCompletionComment.graphql';
 import UPDATE_GOAL_COMPLETED_AT from './UpdateGoalCompletedAt.graphql';
 import UPDATE_GOAL_COMPLETED_BY from './UpdateGoalCompletedBy.graphql';
+import UNDO_GOAL_COMPLETION from './UndoGoalCompletion.graphql';
 
 export default {
   UPDATE_GOAL_TITLE,
@@ -24,4 +25,5 @@ export default {
   UPDATE_GOAL_COMPLETION_COMMENT,
   UPDATE_GOAL_COMPLETED_AT,
   UPDATE_GOAL_COMPLETED_BY,
+  UNDO_GOAL_COMPLETION,
 };
