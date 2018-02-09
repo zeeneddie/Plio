@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Input, InputGroupAddon } from 'reactstrap';
+import { InputGroupAddon } from 'reactstrap';
 import { onlyUpdateForKeys } from 'recompose';
-import DebounceInput from 'react-debounce-input';
 
 import {
   FormField,
@@ -133,9 +132,9 @@ GoalForm.propTypes = {
   onChangeDescription: PropTypes.func.isRequired,
   ownerId: PropTypes.string.isRequired,
   onChangeOwnerId: PropTypes.func.isRequired,
-  startDate: PropTypes.number.isRequired,
+  startDate: PropTypes.oneOfType([PropTypes.number, PropTypes.instanceOf(Date)]).isRequired,
   onChangeStartDate: PropTypes.func.isRequired,
-  endDate: PropTypes.number,
+  endDate: PropTypes.oneOfType([PropTypes.number, PropTypes.instanceOf(Date)]),
   onChangeEndDate: PropTypes.func.isRequired,
   priority: PropTypes.string,
   onChangePriority: PropTypes.func.isRequired,

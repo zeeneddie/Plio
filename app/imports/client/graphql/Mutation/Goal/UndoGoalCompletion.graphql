@@ -1,9 +1,8 @@
-mutation completeGoal($input: CompleteGoalInput!) {
-  completeGoal(input: $input) {
+mutation undoGoalCompletion($input: UndoGoalCompletionInput!) {
+  undoGoalCompletion(input: $input) {
     goal {
       _id
       isCompleted
-      completionComment
       completedAt
       completedBy {
         _id
@@ -11,6 +10,7 @@ mutation completeGoal($input: CompleteGoalInput!) {
           fullName
         }
       }
+      completionComment
     }
   }
 }
