@@ -1,13 +1,12 @@
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
-import { flattenProp, withHandlers, branch } from 'recompose';
+import { flattenProp, withHandlers, branch, mapProps, onlyUpdateForKeys } from 'recompose';
 import { lenses, getTargetValue, toDate, updateInput } from 'plio-util';
-import { view, curry, compose, objOf, toUpper, prop, tap } from 'ramda';
+import { view, curry, compose, objOf, toUpper, prop, pick } from 'ramda';
 import connectUI from 'redux-ui';
 
 import { namedCompose } from '../../helpers';
 import GoalEdit from '../components/GoalEdit';
-import { Fragment } from '../../../../client/graphql';
+import { Fragment, Mutation } from '../../../../client/graphql';
 import { ALERT_AUTOHIDE_TIME } from '../../../../api/constants';
 
 const update = name => (proxy, { data: { [name]: { goal: { _id, ...goal } } } }) => {
@@ -53,6 +52,8 @@ const props = curry((getInputArgs, {
     goal,
     organizationId,
     [handler]: (...args) => {
+      const inputArgs = getInputArgs(...args, ownProps);
+
       updateUI({ loading: true });
 
       return mutate({
@@ -60,7 +61,7 @@ const props = curry((getInputArgs, {
         variables: {
           input: {
             _id: goal._id,
-            ...getInputArgs(...args, ownProps),
+            ...inputArgs,
           },
         },
       }).then((res) => {
@@ -78,119 +79,6 @@ const props = curry((getInputArgs, {
     },
   };
 });
-
-const UPDATE_GOAL_TITLE = gql`
-  mutation updateGoalTitle($input: UpdateGoalTitleInput!) {
-    updateGoalTitle(input: $input) {
-      goal {
-        _id
-        title
-      }
-    }
-  }
-`;
-
-const UPDATE_GOAL_DESCRIPTION = gql`
-  mutation updateGoalDescription($input: UpdateGoalDescriptionInput!) {
-    updateGoalDescription(input: $input) {
-      goal {
-        _id
-        description
-      }
-    }
-  }
-`;
-
-const UPDATE_GOAL_OWNER = gql`
-  mutation updateGoalOwner($input: UpdateGoalOwnerInput!) {
-    updateGoalOwner(input: $input) {
-      goal {
-        _id
-        owner {
-          _id
-        }
-      }
-    }
-  }
-`;
-
-const UPDATE_GOAL_START_DATE = gql`
-  mutation updateGoalStartDate($input: UpdateGoalStartDateInput!) {
-    updateGoalStartDate(input: $input) {
-      goal {
-        _id
-        startDate
-      }
-    }
-  }
-`;
-
-const UPDATE_GOAL_END_DATE = gql`
-  mutation updateGoalEndDate($input: UpdateGoalEndDateInput!) {
-    updateGoalEndDate(input: $input) {
-      goal {
-        _id
-        endDate
-      }
-    }
-  }
-`;
-
-const UPDATE_GOAL_PRIORITY = gql`
-  mutation updateGoalPriority($input: UpdateGoalPriorityInput!) {
-    updateGoalPriority(input: $input) {
-      goal {
-        _id
-        priority
-      }
-    }
-  }
-`;
-
-const UPDATE_GOAL_COLOR = gql`
-  mutation updateGoalColor($input: UpdateGoalColorInput!) {
-    updateGoalColor(input: $input) {
-      goal {
-        _id
-        color
-      }
-    }
-  }
-`;
-
-const UPDATE_GOAL_STATUS_COMMENT = gql`
-  mutation updateGoalStatusComment($input: UpdateGoalStatusCommentInput!) {
-    updateGoalStatusComment(input: $input) {
-      goal {
-        _id
-        statusComment
-      }
-    }
-  }
-`;
-
-const COMPLETE_GOAL = gql`
-  mutation completeGoal($input: CompleteGoalInput!) {
-    completeGoal(input: $input) {
-      goal {
-        _id
-        isCompleted
-        completionComment
-      }
-    }
-  }
-`;
-
-const UPDATE_GOAL_COMPLETION_COMMENT = gql`
-  mutation updateGoalCompletionComment($input: UpdateGoalCompletionCommentInput!) {
-    updateGoalCompletionComment(input: $input) {
-      goal {
-        _id
-        completionComment
-      }
-    }
-  }
-`;
 
 const getUpdateTitleInputArgs = compose(objOf('title'), getTargetValue);
 const getUpdateDescriptionInputArgs = compose(objOf('description'), getTargetValue);
@@ -212,49 +100,55 @@ export default namedCompose('GoalEditContainer')(
       completionComment: '',
     },
   }),
-  graphql(UPDATE_GOAL_TITLE, {
+  flattenProp('ui'),
+  onlyUpdateForKeys([
+    'completionComment',
+    'goal',
+    'organizationId',
+  ]),
+  graphql(Mutation.UPDATE_GOAL_TITLE, {
     props: props(getUpdateTitleInputArgs, {
       handler: 'onChangeTitle',
       mutation: 'updateGoalTitle',
     }),
   }),
-  graphql(UPDATE_GOAL_DESCRIPTION, {
+  graphql(Mutation.UPDATE_GOAL_DESCRIPTION, {
     props: props(getUpdateDescriptionInputArgs, {
       handler: 'onChangeDescription',
       mutation: 'updateGoalDescription',
     }),
   }),
-  graphql(UPDATE_GOAL_OWNER, {
+  graphql(Mutation.UPDATE_GOAL_OWNER, {
     props: props(getUpdateOwnerInputArgs, {
       handler: 'onChangeOwnerId',
       mutation: 'updateGoalOwner',
     }),
   }),
-  graphql(UPDATE_GOAL_START_DATE, {
+  graphql(Mutation.UPDATE_GOAL_START_DATE, {
     props: props(getUpdateStartDateInputArgs, {
       handler: 'onChangeStartDate',
       mutation: 'updateGoalStartDate',
     }),
   }),
-  graphql(UPDATE_GOAL_END_DATE, {
+  graphql(Mutation.UPDATE_GOAL_END_DATE, {
     props: props(getUpdateEndDateInputArgs, {
       handler: 'onChangeEndDate',
       mutation: 'updateGoalEndDate',
     }),
   }),
-  graphql(UPDATE_GOAL_PRIORITY, {
+  graphql(Mutation.UPDATE_GOAL_PRIORITY, {
     props: props(getUpdatePriorityInputArgs, {
       handler: 'onChangePriority',
       mutation: 'updateGoalPriority',
     }),
   }),
-  graphql(UPDATE_GOAL_COLOR, {
+  graphql(Mutation.UPDATE_GOAL_COLOR, {
     props: props(getUpdateColorInputArgs, {
       handler: 'onChangeColor',
       mutation: 'updateGoalColor',
     }),
   }),
-  graphql(UPDATE_GOAL_STATUS_COMMENT, {
+  graphql(Mutation.UPDATE_GOAL_STATUS_COMMENT, {
     props: props(getUpdateStatusCommentInputArgs, {
       handler: 'onChangeStatusComment',
       mutation: 'updateGoalStatusComment',
@@ -262,14 +156,14 @@ export default namedCompose('GoalEditContainer')(
   }),
   branch(
     prop('isCompleted'),
-    graphql(UPDATE_GOAL_COMPLETION_COMMENT, {
+    graphql(Mutation.UPDATE_GOAL_COMPLETION_COMMENT, {
       props: props(getUpdateCompletionCommentInputArgs, {
         handler: 'onChangeCompletionComment',
         mutation: 'updateGoalCompletionComment',
       }),
     }),
     compose(
-      graphql(COMPLETE_GOAL, {
+      graphql(Mutation.COMPLETE_GOAL, {
         props: props(getCompleteGoalInputArgs, {
           handler: 'onComplete',
           mutation: 'completeGoal',
@@ -281,4 +175,28 @@ export default namedCompose('GoalEditContainer')(
     ),
   ),
   flattenProp('goal'),
+  mapProps(pick([
+    'status',
+    'statusComment',
+    'onChangeStatusComment',
+    'onComplete',
+    'completionComment',
+    'onChangeCompletionComment',
+    'sequentialId',
+    'title',
+    'onChangeTitle',
+    'description',
+    'onChangeDescription',
+    'ownerId',
+    'onChangeOwnerId',
+    'startDate',
+    'onChangeStartDate',
+    'endDate',
+    'onChangeEndDate',
+    'priority',
+    'onChangePriority',
+    'color',
+    'onChangeColor',
+    'organizationId',
+  ])),
 )(GoalEdit);
