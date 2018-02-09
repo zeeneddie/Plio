@@ -1,8 +1,8 @@
 type Risk {
   _id: ID!
-  createdAt: Date!
+  createdAt: DateTime!
   createdBy: User!
-  updatedAt: Date
+  updatedAt: DateTime
   # WARNING: updatedBy may be string 'Plio'. What should we do with that?
   updatedBy: User
   organization: Organization!
@@ -15,7 +15,7 @@ type Risk {
   originator: User
   owner: User
   isDeleted: Boolean!
-  deletedAt: Date
+  deletedAt: DateTime
   deletedBy: User
   notify: [User]
   status: Int!

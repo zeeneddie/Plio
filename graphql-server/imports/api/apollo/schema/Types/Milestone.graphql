@@ -1,15 +1,15 @@
 type Milestone {
   _id: ID!
-  createdAt: Date!
+  createdAt: DateTime!
   createdBy: User!
-  updatedAt: Date
+  updatedAt: DateTime
   updatedBy: User
   organization: Organization!
   notify: [User]
   title: String!
   description: String
   status: Int!
-  completionTargetDate: Date!
+  completionTargetDate: DateTime!
   isCompleted: Boolean!
   completedAt: Date
   completedBy: User

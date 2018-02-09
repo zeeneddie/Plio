@@ -1,13 +1,13 @@
 type Lesson {
   _id: ID!
-  createdAt: Date!
+  createdAt: DateTime!
   createdBy: User!
-  updatedAt: Date
+  updatedAt: DateTime
   updatedBy: User
   organization: Organization!
   serialNumber: Int!
   title: String!
-  date: Date!
+  date: DateTime!
   notes: String!
   owner: User!
   # linkedTo: 

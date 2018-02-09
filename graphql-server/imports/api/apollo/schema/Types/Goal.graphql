@@ -1,13 +1,13 @@
 type Goal {
   _id: ID!
-  createdAt: Date!
+  createdAt: DateTime!
   createdBy: User!
-  updatedAt: Date
+  updatedAt: DateTime
   updatedBy: User
   organization: Organization!
   files: [File]
   isDeleted: Boolean!
-  deletedAt: Date
+  deletedAt: DateTime
   deletedBy: User
   notify: [User]
   title: String!
@@ -15,13 +15,13 @@ type Goal {
   serialNumber: Int!
   sequentialId: String!
   owner: User!
-  startDate: Date!
-  endDate: Date!
+  startDate: DateTime!
+  endDate: DateTime!
   priority: String!
   status: Int!
   statusComments: String
   isCompleted: Boolean!
-  completedAt: Date
+  completedAt: DateTime
   completedBy: User
   color: String!
   actions: [Action]
