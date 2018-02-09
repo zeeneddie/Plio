@@ -72,7 +72,7 @@ export const GoalEdit = ({
   onChangeCompletionComment,
   isCompleted,
   completedAt,
-  completedBy,
+  completedBy = {},
   onChangeCompletedAt,
   onChangeCompletedBy,
   organizationId,
