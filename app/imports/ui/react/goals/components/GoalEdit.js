@@ -1,11 +1,17 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { FormGroup } from 'reactstrap';
+import { FormGroup, InputGroupButton } from 'reactstrap';
 import styled from 'styled-components';
 import { onlyUpdateForKeys } from 'recompose';
 
 import GoalForm from './GoalForm';
-import { Status, FormField, DebounceTextarea, LoadableDatePicker } from '../../components';
+import {
+  Status,
+  FormField,
+  DebounceTextarea,
+  LoadableDatePicker,
+  UndoTime,
+} from '../../components';
 import { OrgUsersSelectInputContainer } from '../../containers';
 import { getStatusColor } from '../../../../api/goals/helpers';
 import { GoalStatuses } from '../../../../share/constants';
@@ -118,7 +124,16 @@ export const GoalEdit = ({
               input={{ placeholder: 'Completed by' }}
               selected={completedBy._id}
               onSelect={onChangeCompletedBy}
+              renderInputGroupAddon={() => (
+                <InputGroupButton color="link" className="margin-left">
+                  Undo
+                </InputGroupButton>
+              )}
               {...{ organizationId }}
+            />
+            <UndoTime
+              date={completedAt}
+              render={({ passed, left }) => `Completed ${passed}, ${left} left to undo`}
             />
           </FormField>
           <FormField>

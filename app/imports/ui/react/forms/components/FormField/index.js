@@ -23,7 +23,7 @@ const FormField = ({
       {children[0]}
     </FormLabel>
     <div className={`col-xs-${colXs} col-sm-${colSm}`}>
-      {children[1]}
+      {children.slice(1)}
 
       {helpText && (
         <HelpPanel.Body {...{ collapsed, onToggleCollapse }}>

@@ -38,6 +38,7 @@ const SelectInputView = (props) => {
     renderMenuItem,
     children,
     dropdown: { className: ddcn, ...dropdown } = {},
+    renderInputGroupAddon = () => null,
   } = props;
 
   const _renderInputGroup = () => {
@@ -74,6 +75,7 @@ const SelectInputView = (props) => {
         >
           <Input {..._inputProps} />
           {Caret}
+          {renderInputGroupAddon(props)}
         </DropdownToggle>
       );
     }
@@ -161,6 +163,7 @@ SelectInputView.propTypes = {
   dropdown: PropTypes.object,
   caret: PropTypes.bool,
   children: PropTypes.node,
+  renderInputGroupAddon: PropTypes.func,
 };
 
 export default SelectInputView;
