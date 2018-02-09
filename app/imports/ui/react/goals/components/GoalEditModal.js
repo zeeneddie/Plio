@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { CardTitle, Button } from 'reactstrap';
+import { onlyUpdateForKeys } from 'recompose';
 
 import {
   ErrorSection,
@@ -12,6 +13,17 @@ import {
   TextAlign,
 } from '../../components';
 import GoalEditContainer from '../containers/GoalEditContainer';
+
+const enhance = onlyUpdateForKeys([
+  'isOpen',
+  'toggle',
+  'onClosed',
+  'goal',
+  'organizationId',
+  'loading',
+  'error',
+  'onDelete',
+]);
 
 export const GoalEditModal = ({
   isOpen,
@@ -65,4 +77,4 @@ GoalEditModal.propTypes = {
   onDelete: PropTypes.func.isRequired,
 };
 
-export default GoalEditModal;
+export default enhance(GoalEditModal);

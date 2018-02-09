@@ -17,6 +17,7 @@ import { GoalColors } from '../../../../share/constants';
 import { DEFAULT_UPDATE_TIMEOUT } from '../../../../api/constants';
 
 const enhance = onlyUpdateForKeys([
+  'sequentialId',
   'title',
   'description',
   'ownerId',
@@ -25,6 +26,7 @@ const enhance = onlyUpdateForKeys([
   'priority',
   'color',
   'organizationId',
+  'isEditMode',
 ]);
 
 export const GoalForm = ({

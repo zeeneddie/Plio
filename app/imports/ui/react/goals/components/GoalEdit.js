@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Input, FormGroup } from 'reactstrap';
-import DebounceInput from 'react-debounce-input';
+import { FormGroup } from 'reactstrap';
 import styled from 'styled-components';
+import { onlyUpdateForKeys } from 'recompose';
 
 import GoalForm from './GoalForm';
 import { Status, FormField, DebounceTextarea } from '../../components';
@@ -12,15 +12,42 @@ import { DEFAULT_UPDATE_TIMEOUT } from '../../../../api/constants';
 import { withToggle } from '../../helpers';
 import ToggleComplete from '../../components/ToggleComplete';
 
+const propTypes = {
+  status: PropTypes.number.isRequired,
+  statusComment: PropTypes.string,
+  onChangeStatusComment: PropTypes.func.isRequired,
+  onComplete: PropTypes.func.isRequired,
+  completionComment: PropTypes.string,
+  onChangeCompletionComment: PropTypes.func.isRequired,
+};
+
 const StyledToggleComplete = styled(ToggleComplete)`
   text-align: center;
   & > .form-group {
     text-align: center;
   }
 `;
-const UncontrolledStyledToggleComplete = withToggle()(props => <StyledToggleComplete {...props} />);
 
-const GoalEdit = (props) => {
+const UncontrolledStyledToggleComplete = withToggle()(props => (
+  <StyledToggleComplete {...props} />
+));
+
+const enhance = onlyUpdateForKeys([
+  'status',
+  'statusComment',
+  'completionComment',
+  'sequentialId',
+  'title',
+  'description',
+  'ownerId',
+  'startDate',
+  'endDate',
+  'priority',
+  'color',
+  'organizationId',
+]);
+
+export const GoalEdit = (props) => {
   const {
     status,
     statusComment,
@@ -29,6 +56,8 @@ const GoalEdit = (props) => {
     completionComment,
     onChangeCompletionComment,
   } = props;
+
+  console.log('updated');
 
   return (
     <Fragment>
@@ -65,13 +94,6 @@ const GoalEdit = (props) => {
   );
 };
 
-GoalEdit.propTypes = {
-  status: PropTypes.number.isRequired,
-  statusComment: PropTypes.string,
-  onChangeStatusComment: PropTypes.func.isRequired,
-  onComplete: PropTypes.func.isRequired,
-  completionComment: PropTypes.string,
-  onChangeCompletionComment: PropTypes.func.isRequired,
-};
+GoalEdit.propTypes = propTypes;
 
-export default GoalEdit;
+export default enhance(GoalEdit);
