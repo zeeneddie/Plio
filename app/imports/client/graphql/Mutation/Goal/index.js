@@ -8,6 +8,8 @@ import UPDATE_GOAL_COLOR from './UpdateGoalColor.graphql';
 import UPDATE_GOAL_STATUS_COMMENT from './UpdateGoalStatusComment.graphql';
 import COMPLETE_GOAL from './CompleteGoal.graphql';
 import UPDATE_GOAL_COMPLETION_COMMENT from './UpdateGoalCompletionComment.graphql';
+import UPDATE_GOAL_COMPLETED_AT from './UpdateGoalCompletedAt.graphql';
+import UPDATE_GOAL_COMPLETED_BY from './UpdateGoalCompletedBy.graphql';
 
 export default {
   UPDATE_GOAL_TITLE,
@@ -20,4 +22,6 @@ export default {
   UPDATE_GOAL_STATUS_COMMENT,
   COMPLETE_GOAL,
   UPDATE_GOAL_COMPLETION_COMMENT,
+  UPDATE_GOAL_COMPLETED_AT,
+  UPDATE_GOAL_COMPLETED_BY,
 };
