@@ -71,64 +71,74 @@ export const GoalEdit = ({
   onChangeCompletedBy,
   organizationId,
   ...props
-}) => (
-  <Fragment>
-    <GoalForm isEditMode {...{ organizationId, ...props }} />
-    <FormField>
-      Status
-      <Status color={getStatusColor(status)}>
-        {GoalStatuses[status]}
-      </Status>
-    </FormField>
-    <FormField>
-      Status comment
-      <DebounceTextarea
-        placeholder="Status comment"
-        value={statusComment}
-        onChange={onChangeStatusComment}
-        debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
-      />
-    </FormField>
-    {isCompleted ? (
-      <Fragment>
-        <FormField>
-          Completed date
-          <LoadableDatePicker
-            selected={completedAt}
-            onChange={onChangeCompletedAt}
-            placeholderText="Completed date"
-          />
-        </FormField>
-        <FormField>
-          Completed by
-          <OrgUsersSelectInputContainer
-            uncontrolled
-            caret
-            hint
-            input={{ placeholder: 'Completed by' }}
-            selected={completedBy._id}
-            onSelect={onChangeCompletedBy}
-            {...{ organizationId }}
-          />
-        </FormField>
-      </Fragment>
-    ) : (
-      <UncontrolledStyledToggleComplete
-        completeButtonContent="Mark as complete"
-        {...{ onComplete }}
-      >
-        <FormGroup className="margin-top">
-          <DebounceTextarea
-            placeholder="Enter any completion comments"
-            value={completionComment}
-            onChange={onChangeCompletionComment}
-            debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
-          />
-        </FormGroup>
-      </UncontrolledStyledToggleComplete>
-    )}
-  </Fragment>
-);
+}) => {
+  const completionCommentsTextarea = (
+    <DebounceTextarea
+      placeholder="Enter any completion comments"
+      value={completionComment}
+      onChange={onChangeCompletionComment}
+      debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
+    />
+  );
+
+  return (
+    <Fragment>
+      <GoalForm isEditMode {...{ organizationId, ...props }} />
+      <FormField>
+        Status
+        <Status color={getStatusColor(status)}>
+          {GoalStatuses[status]}
+        </Status>
+      </FormField>
+      <FormField>
+        Status comment
+        <DebounceTextarea
+          placeholder="Status comment"
+          value={statusComment}
+          onChange={onChangeStatusComment}
+          debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
+        />
+      </FormField>
+      {isCompleted ? (
+        <Fragment>
+          <FormField>
+            Completed date
+            <LoadableDatePicker
+              selected={completedAt}
+              onChange={onChangeCompletedAt}
+              placeholderText="Completed date"
+            />
+          </FormField>
+          <FormField>
+            Completed by
+            <OrgUsersSelectInputContainer
+              uncontrolled
+              caret
+              hint
+              input={{ placeholder: 'Completed by' }}
+              selected={completedBy._id}
+              onSelect={onChangeCompletedBy}
+              {...{ organizationId }}
+            />
+          </FormField>
+          <FormField>
+            Completion comments
+            {completionCommentsTextarea}
+          </FormField>
+        </Fragment>
+      ) : (
+        <UncontrolledStyledToggleComplete
+          completeButtonContent="Mark as complete"
+          {...{ onComplete }}
+        >
+          <FormGroup className="margin-top">
+            {completionCommentsTextarea}
+          </FormGroup>
+        </UncontrolledStyledToggleComplete>
+      )}
+    </Fragment>
+  );
+};
 
 GoalEdit.propTypes = propTypes;
 
