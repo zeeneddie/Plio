@@ -6,13 +6,8 @@ import {
   checkNewOwnerOrgMembership,
 } from '../../../../../share/middleware';
 
-export const resolver = async (
-  root,
-  args,
-  {
-    services: { GoalService },
-  },
-) => GoalService.updateOwner(args);
+export const resolver = async (root, args, { services: { GoalService } }) =>
+  GoalService.set(args);
 
 export default applyMiddleware(
   checkLoggedIn(),

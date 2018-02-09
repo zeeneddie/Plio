@@ -6,7 +6,7 @@ import {
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { GoalService } }) =>
-  GoalService.updateColor(args);
+  GoalService.set(args);
 
 export default applyMiddleware(
   checkLoggedIn(),

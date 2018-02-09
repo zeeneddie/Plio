@@ -5,13 +5,8 @@ import {
   checkGoalAccess,
 } from '../../../../../share/middleware';
 
-export const resolver = async (
-  root,
-  args,
-  {
-    services: { GoalService },
-  },
-) => GoalService.updateTitle(args);
+export const resolver = async (root, args, { services: { GoalService } }) =>
+  GoalService.set(args);
 
 export default applyMiddleware(
   checkLoggedIn(),

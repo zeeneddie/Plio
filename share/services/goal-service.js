@@ -18,7 +18,7 @@ export default {
     const serialNumber = generateSerialNumber(this.collection, { organizationId });
     const sequentialId = `${Abbreviations.GOAL}${serialNumber}`;
 
-    return this.collection.insert({
+    const _id = await this.collection.insert({
       organizationId,
       title,
       description,
@@ -30,42 +30,10 @@ export default {
       sequentialId,
       priority,
     });
-  },
 
-  async updateTitle({ _id, title }) {
-    return this.update({ _id, title });
-  },
+    const goal = await this.collection.findOne({ _id });
 
-  async updateDescription({ _id, description }) {
-    return this.update({ _id, description });
-  },
-
-  async updateOwner({ _id, ownerId }) {
-    return this.update({ _id, ownerId });
-  },
-
-  async updateStartDate({ _id, startDate }) {
-    return this.update({ _id, startDate });
-  },
-
-  async updateEndDate({ _id, endDate }) {
-    return this.update({ _id, endDate });
-  },
-
-  async updatePriority({ _id, priority }) {
-    return this.update({ _id, priority });
-  },
-
-  async updateColor({ _id, color }) {
-    return this.update({ _id, color });
-  },
-
-  async updateStatusComment({ _id, statusComment }) {
-    return this.update({ _id, statusComment });
-  },
-
-  async updateCompletionComment({ _id, completionComment }) {
-    return this.update({ _id, completionComment });
+    return { goal };
   },
 
   async complete({ _id, completionComment }, { userId }) {
@@ -78,33 +46,40 @@ export default {
     });
   },
 
-  async delete({ _id }, { userId }) {
-    // delete all linked documents (goals, lessons, ...)?
+  async undoCompletion({ _id }) {
     const query = { _id };
     const modifier = {
       $set: {
-        isDeleted: true,
-        deletedBy: userId,
-        deletedAt: new Date().toISOString(),
+        isCompleted: false,
+      },
+      $unset: {
+        completedBy: '',
+        completedAt: '',
+        completionComments: '',
       },
     };
 
-    await this.collection.update(query, modifier);
-
-    const goal = await this.collection.findOne(query);
-
-    return { goal };
+    return this.update(query, modifier);
   },
 
-  async update({ _id, ...args }) {
-    const query = { _id };
-    const modifier = {
-      $set: args,
-    };
+  async delete({ _id }, { userId }) {
+    // delete all linked documents (goals, lessons, ...)?
+    return this.set({
+      _id,
+      isDeleted: true,
+      deletedBy: userId,
+      deletedAt: new Date().toISOString(),
+    });
+  },
 
-    await this.collection.update(query, modifier);
+  async set({ _id, ...args }) {
+    return this.update({ _id }, { $set: args });
+  },
 
-    const goal = await this.collection.findOne({ _id });
+  async update(query, modifier, options) {
+    await this.collection.update(query, modifier, options);
+
+    const goal = await this.collection.findOne(query);
 
     return { goal };
   },
