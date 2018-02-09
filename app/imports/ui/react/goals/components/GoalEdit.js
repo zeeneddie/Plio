@@ -6,6 +6,7 @@ import { onlyUpdateForKeys } from 'recompose';
 
 import GoalForm from './GoalForm';
 import { Status, FormField, DebounceTextarea, LoadableDatePicker } from '../../components';
+import { OrgUsersSelectInputContainer } from '../../containers';
 import { getStatusColor } from '../../../../api/goals/helpers';
 import { GoalStatuses } from '../../../../share/constants';
 import { DEFAULT_UPDATE_TIMEOUT } from '../../../../api/constants';
@@ -19,6 +20,12 @@ const propTypes = {
   onComplete: PropTypes.func,
   completionComment: PropTypes.string,
   onChangeCompletionComment: PropTypes.func.isRequired,
+  isCompleted: PropTypes.bool.isRequired,
+  completedAt: PropTypes.number,
+  completedBy: PropTypes.object,
+  onChangeCompletedAt: PropTypes.func,
+  onChangeCompletedBy: PropTypes.func,
+  organizationId: PropTypes.string,
 };
 
 const StyledToggleComplete = styled(ToggleComplete)`
@@ -62,10 +69,11 @@ export const GoalEdit = ({
   completedBy,
   onChangeCompletedAt,
   onChangeCompletedBy,
+  organizationId,
   ...props
 }) => (
   <Fragment>
-    <GoalForm isEditMode {...props} />
+    <GoalForm isEditMode {...{ organizationId, ...props }} />
     <FormField>
       Status
       <Status color={getStatusColor(status)}>
@@ -89,6 +97,18 @@ export const GoalEdit = ({
             selected={completedAt}
             onChange={onChangeCompletedAt}
             placeholderText="Completed date"
+          />
+        </FormField>
+        <FormField>
+          Completed by
+          <OrgUsersSelectInputContainer
+            uncontrolled
+            caret
+            hint
+            input={{ placeholder: 'Completed by' }}
+            selected={completedBy._id}
+            onSelect={onChangeCompletedBy}
+            {...{ organizationId }}
           />
         </FormField>
       </Fragment>

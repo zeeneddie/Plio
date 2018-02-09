@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Input, InputGroupAddon } from 'reactstrap';
+import { InputGroupAddon } from 'reactstrap';
 import { onlyUpdateForKeys } from 'recompose';
-import DebounceInput from 'react-debounce-input';
 
 import {
   FormField,
