@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { onlyUpdateForKeys } from 'recompose';
 
 import GoalForm from './GoalForm';
-import { Status, FormField, DebounceTextarea } from '../../components';
+import { Status, FormField, DebounceTextarea, LoadableDatePicker } from '../../components';
 import { getStatusColor } from '../../../../api/goals/helpers';
 import { GoalStatuses } from '../../../../share/constants';
 import { DEFAULT_UPDATE_TIMEOUT } from '../../../../api/constants';
@@ -16,7 +16,7 @@ const propTypes = {
   status: PropTypes.number.isRequired,
   statusComment: PropTypes.string,
   onChangeStatusComment: PropTypes.func.isRequired,
-  onComplete: PropTypes.func.isRequired,
+  onComplete: PropTypes.func,
   completionComment: PropTypes.string,
   onChangeCompletionComment: PropTypes.func.isRequired,
 };
@@ -45,6 +45,9 @@ const enhance = onlyUpdateForKeys([
   'priority',
   'color',
   'organizationId',
+  'isCompleted',
+  'completedBy',
+  'completedAt',
 ]);
 
 export const GoalEdit = ({
@@ -54,6 +57,11 @@ export const GoalEdit = ({
   onComplete,
   completionComment,
   onChangeCompletionComment,
+  isCompleted,
+  completedAt,
+  completedBy,
+  onChangeCompletedAt,
+  onChangeCompletedBy,
   ...props
 }) => (
   <Fragment>
@@ -73,19 +81,32 @@ export const GoalEdit = ({
         debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
       />
     </FormField>
-    <UncontrolledStyledToggleComplete
-      completeButtonContent="Mark as complete"
-      {...{ onComplete }}
-    >
-      <FormGroup className="margin-top">
-        <DebounceTextarea
-          placeholder="Enter any completion comments"
-          value={completionComment}
-          onChange={onChangeCompletionComment}
-          debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
-        />
-      </FormGroup>
-    </UncontrolledStyledToggleComplete>
+    {isCompleted ? (
+      <Fragment>
+        <FormField>
+          Completed date
+          <LoadableDatePicker
+            selected={completedAt}
+            onChange={onChangeCompletedAt}
+            placeholderText="Completed date"
+          />
+        </FormField>
+      </Fragment>
+    ) : (
+      <UncontrolledStyledToggleComplete
+        completeButtonContent="Mark as complete"
+        {...{ onComplete }}
+      >
+        <FormGroup className="margin-top">
+          <DebounceTextarea
+            placeholder="Enter any completion comments"
+            value={completionComment}
+            onChange={onChangeCompletionComment}
+            debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
+          />
+        </FormGroup>
+      </UncontrolledStyledToggleComplete>
+    )}
   </Fragment>
 );
 
