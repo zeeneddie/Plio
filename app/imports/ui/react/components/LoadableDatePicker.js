@@ -19,6 +19,7 @@ const LoadableDatePicker = Loadable.Map({
     selected,
     dateFormat = 'DD MMM YYYY',
     className,
+    readOnly = true,
     ...props
   }) => (
     // trick to get around date picker unable to pass className to input wrapper...
@@ -27,7 +28,7 @@ const LoadableDatePicker = Loadable.Map({
         className="form-control"
         selected={selected ? moment(selected) : null}
         popperClassName={className}
-        {...{ dateFormat, ...props }}
+        {...{ dateFormat, readOnly, ...props }}
       />
     </div>
   ),
@@ -41,6 +42,10 @@ export default styled(LoadableDatePicker)`
 
     & > .react-datepicker__input-container {
       display: block;
+      & > input[readonly]:not([disabled]) {
+        cursor: pointer;
+        background-color: #fff;
+      }
     }
   }
 `;
