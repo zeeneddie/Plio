@@ -1,8 +1,8 @@
 type File {
   _id: ID!
-  createdAt: Date!
+  createdAt: DateTime!
   createdBy: User!
-  updatedAt: Date
+  updatedAt: DateTime
   updatedBy: User
   organization: Organization!
   name: String!

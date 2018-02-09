@@ -1,8 +1,8 @@
 type Organization {
   _id: ID!
-  createdAt: Date!
+  createdAt: DateTime!
   createdBy: User!
-  updatedAt: Date
+  updatedAt: DateTime
   updatedBy: User
   name: String!
   serialNumber: Int!
@@ -18,7 +18,7 @@ type Organization {
   rkScoringGuidelines: String
   # customerType - hide for security reasons?
   homeScreenTitles: HomeScreenTitles
-  lastAccessedDate: Date
+  lastAccessedDate: DateTime
   workflowDefaults: WorkflowDefaults
 }
 
@@ -29,7 +29,7 @@ type WorkspaceDefaults {
 }
 
 type OrganizationUser {
-  joinedAt: Date!
+  joinedAt: DateTime!
   role: String!
   isRemoved: Boolean
   sendDailyRecap: Boolean
