@@ -1,10 +1,33 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
+import { lifecycle, defaultProps, compose } from 'recompose';
 
 import { Collapse, CardBlock, Icon } from '../';
 
-const ErrorSection = ({ errorText, size = '4', className, ...props }) => (
+const enhance = compose(
+  defaultProps({
+    scroll: true,
+  }),
+  lifecycle({
+    componentDidUpdate() {
+      if (this.props.errorText && this.props.scroll) {
+        document.getElementsByClassName('modal-error-section')[0].scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
+    },
+  }),
+);
+
+export const ErrorSection = ({
+  errorText,
+  size = '4',
+  className,
+  scroll, // eslint-disable-line no-unused-vars
+  ...props
+}) => (
   <Collapse
     className={cx('modal-error-section', className)}
     isOpen={!!errorText}
@@ -21,6 +44,7 @@ ErrorSection.propTypes = {
   errorText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   size: PropTypes.string,
   className: PropTypes.string,
+  scroll: PropTypes.bool,
 };
 
-export default ErrorSection;
+export default enhance(ErrorSection);
