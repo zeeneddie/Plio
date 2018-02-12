@@ -31,11 +31,12 @@ export const GoalEditModal = ({
   goal,
   organizationId,
   onDelete,
+  loading,
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
-      renderRightButton={({ loading }) => (
-        <SaveButton onClick={toggle} isSaving={loading}>
+      renderRightButton={props => (
+        <SaveButton onClick={toggle} isSaving={loading || props.loading}>
           Close
         </SaveButton>
       )}
@@ -68,6 +69,7 @@ GoalEditModal.propTypes = {
   goal: PropTypes.object,
   organizationId: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 export default enhance(GoalEditModal);

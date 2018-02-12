@@ -10,14 +10,17 @@ const ModalBody = ({
   children,
   scrollIntoViewOnError = true,
   errorSectionClassName,
-  ...props
-}) => (
-  <ReactstrapModalBody {...{ style, ...props }}>
+  renderErrorSection = () => (
     <ErrorSection
       errorText={error}
       scroll={scrollIntoViewOnError}
       className={errorSectionClassName}
     />
+  ),
+  ...props
+}) => (
+  <ReactstrapModalBody {...{ style, ...props }}>
+    {renderErrorSection({ error, ...props })}
     {children}
   </ReactstrapModalBody>
 );
@@ -28,6 +31,7 @@ ModalBody.propTypes = {
   error: PropTypes.string,
   scrollIntoViewOnError: PropTypes.bool,
   errorSectionClassName: PropTypes.string,
+  renderErrorSection: PropTypes.func,
 };
 
 ModalBody.defaultProps = {

@@ -5,33 +5,63 @@ import cx from 'classnames';
 import connectUI from 'redux-ui';
 import { mapProps, compose } from 'recompose';
 
-import { TransitionBaseActiveClass, TransitionTimeouts } from '../../../api/constants';
+import {
+  TransitionBaseActiveClass,
+  TransitionTimeouts,
+} from '../../../api/constants';
 import ModalHeader from './ModalHeader';
 import ModalBody from './ModalBody';
 
-export const SET_MODAL_LOADING = 'SET_MODAL_LOADING';
-export const SET_MODAL_ERROR = 'SET_MODAL_ERROR';
+export const LOADING = '@@MODAL/LOADING';
+export const ERROR = '@@MODAL/ERROR';
+export const SUCCESS = '@@MODAL/SUCCESS';
+export const setLoading = () => ({ type: LOADING });
+export const setError = payload => ({ type: ERROR, payload });
+export const success = () => ({ type: SUCCESS });
+export const call = asyncAction => (dispatch, getState) => {
+  dispatch(setLoading());
+
+  return dispatch(asyncAction(dispatch, getState))
+    .then((res) => {
+      dispatch(success());
+      return res;
+    })
+    .catch((err) => {
+      dispatch(setError(err.message || 'Internal server error'));
+      return err;
+    });
+};
 
 const enhance = compose(
   connectUI({
     state: {
-      loading: false,
-      error: null,
+      '@@modal/loading': false,
+      '@@modal/error': null,
     },
     reducer: (state, action) => {
+      console.log(action.type);
       switch (action.type) {
-        case SET_MODAL_LOADING:
-          return state.set('loading', action.payload);
-        case SET_MODAL_ERROR:
+        case LOADING:
+          return state.set('loading', true);
+        case ERROR: {
+          state.set('loading', false);
           return state.set('error', action.payload);
+        }
+        case SUCCESS: {
+          state.set('loading', false);
+          return state.set('error', null);
+        }
         default:
           return state;
       }
     },
   }),
   mapProps(({
+    ui: {
+      '@@modal/error': error,
+      '@@modal/loading': loading,
+    },
     children,
-    ui: { error, loading },
     updateUI,
     massUpdateUI,
     setDefaultUI,

@@ -7,7 +7,7 @@ import connectUI from 'redux-ui';
 import { namedCompose } from '../../helpers';
 import GoalEdit from '../components/GoalEdit';
 import { Fragment, Mutation } from '../../../../client/graphql';
-import { ALERT_AUTOHIDE_TIME } from '../../../../api/constants';
+import { call } from '../../components/Modal';
 
 const update = name => (proxy, { data: { [name]: { goal: { _id, ...goal } } } }) => {
   const id = `Goal:${_id}`;
@@ -45,36 +45,23 @@ const props = curry((getInputArgs, {
   const {
     goal,
     organizationId,
-    updateUI,
   } = ownProps;
 
   return {
     goal,
     organizationId,
     [handler]: (...args) => {
-      const inputArgs = getInputArgs(...args, ownProps);
-
-      updateUI({ loading: true });
-
-      return mutate({
-        update: update(mutation),
-        variables: {
-          input: {
-            _id: goal._id,
-            ...inputArgs,
+      return call(() => {
+        const inputArgs = getInputArgs(...args, ownProps);
+        return mutate({
+          update: update(mutation),
+          variables: {
+            input: {
+              _id: goal._id,
+              ...inputArgs,
+            },
           },
-        },
-      }).then((res) => {
-        updateUI({ loading: false });
-        return res;
-      }).catch((error) => {
-        updateUI({ loading: false, error: error.message });
-
-        setTimeout(() => {
-          updateUI({ error: null });
-        }, ALERT_AUTOHIDE_TIME);
-
-        return error;
+        });
       });
     },
   };
