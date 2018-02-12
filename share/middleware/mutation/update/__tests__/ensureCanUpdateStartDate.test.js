@@ -1,8 +1,8 @@
 import { T } from 'ramda';
-import validateUpdateStartDate from '../validateUpdateStartDate';
+import ensureCanUpdateStartDate from '../ensureCanUpdateStartDate';
 import Errors from '../../../../errors';
 
-describe('validateUpdateStartDate', () => {
+describe('ensureCanUpdateStartDate', () => {
   it('throws if start date gte end date', async () => {
     const endDate = new Date();
     const startDate = new Date();
@@ -15,7 +15,7 @@ describe('validateUpdateStartDate', () => {
     const context = {
       doc: { endDate },
     };
-    const promise = validateUpdateStartDate()(next, root, args, context);
+    const promise = ensureCanUpdateStartDate()(next, root, args, context);
 
     await expect(promise).rejects.toEqual(new Error(Errors.START_DATE_GTE_END_DATE));
   });
@@ -27,7 +27,7 @@ describe('validateUpdateStartDate', () => {
     const root = {};
     const args = { startDate };
     const context = { doc: { endDate } };
-    const promise = validateUpdateStartDate()(next, root, args, context);
+    const promise = ensureCanUpdateStartDate()(next, root, args, context);
 
     await expect(promise).resolves.toBe(true);
   });
