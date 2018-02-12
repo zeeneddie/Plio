@@ -10,6 +10,7 @@ const ModalHeader = ({
   className,
   renderLeftButton,
   renderRightButton,
+  loading,
   ...props
 }) => (
   <div
@@ -19,7 +20,7 @@ const ModalHeader = ({
     {renderLeftButton && (
       <Pull left>
         <CardHeadingButtons>
-          {renderLeftButton(props)}
+          {renderLeftButton({ loading, ...props })}
         </CardHeadingButtons>
       </Pull>
     )}
@@ -27,7 +28,7 @@ const ModalHeader = ({
     {renderRightButton && (
       <Pull right>
         <CardHeadingButtons>
-          {renderRightButton(props)}
+          {renderRightButton({ loading, ...props })}
         </CardHeadingButtons>
       </Pull>
     )}
@@ -39,6 +40,7 @@ ModalHeader.propTypes = {
   className: PropTypes.string,
   renderLeftButton: PropTypes.func,
   renderRightButton: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 export default ModalHeader;

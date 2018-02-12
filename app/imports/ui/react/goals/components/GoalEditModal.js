@@ -4,7 +4,6 @@ import { CardTitle, Button } from 'reactstrap';
 import { onlyUpdateForKeys } from 'recompose';
 
 import {
-  ErrorSection,
   Modal,
   ModalHeader,
   ModalBody,
@@ -31,13 +30,11 @@ export const GoalEditModal = ({
   onClosed,
   goal,
   organizationId,
-  loading,
-  error,
   onDelete,
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
-      renderRightButton={() => (
+      renderRightButton={({ loading }) => (
         <SaveButton onClick={toggle} isSaving={loading}>
           Close
         </SaveButton>
@@ -46,8 +43,6 @@ export const GoalEditModal = ({
       <CardTitle>Key Goal</CardTitle>
     </ModalHeader>
     <ModalBody>
-      <ErrorSection errorText={error} />
-
       <div>
         <CardBlock>
           {goal && (
@@ -67,8 +62,6 @@ export const GoalEditModal = ({
 );
 
 GoalEditModal.propTypes = {
-  loading: PropTypes.bool,
-  error: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   onClosed: PropTypes.func,
