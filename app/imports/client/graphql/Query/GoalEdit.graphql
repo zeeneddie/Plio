@@ -1,9 +1,0 @@
-#import "../Fragment/GoalEdit.graphql"
-
-query GoalEdit($_id: ID!) {
-  goal(_id: $_id) {
-    goal {
-      ...GoalEdit
-    }
-  }
-}

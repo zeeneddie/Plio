@@ -1,7 +1,7 @@
 import { graphql } from 'react-apollo';
-import { flattenProp, withHandlers, branch, mapProps, onlyUpdateForKeys } from 'recompose';
+import { flattenProp, withHandlers, branch, onlyUpdateForKeys } from 'recompose';
 import { lenses, getTargetValue, toDate, updateInput } from 'plio-util';
-import { view, curry, compose, objOf, toUpper, prop, tap } from 'ramda';
+import { view, curry, compose, objOf, toUpper, prop } from 'ramda';
 import connectUI from 'redux-ui';
 
 import { namedCompose } from '../../helpers';
@@ -11,8 +11,8 @@ import { ALERT_AUTOHIDE_TIME } from '../../../../api/constants';
 
 const update = name => (proxy, { data: { [name]: { goal: { _id, ...goal } } } }) => {
   const id = `Goal:${_id}`;
-  const fragment = Fragment.GOAL_EDIT;
-  const fragmentName = 'GoalEdit';
+  const fragment = Fragment.GOAL_CARD;
+  const fragmentName = 'GoalCard';
   const data = proxy.readFragment({ id, fragment, fragmentName });
 
   return proxy.writeFragment({

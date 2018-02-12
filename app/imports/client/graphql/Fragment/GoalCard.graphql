@@ -1,6 +1,6 @@
 #import "./DashboardGoal.graphql"
 
-fragment GoalEdit on Goal {
+fragment GoalCard on Goal {
   owner {
     _id
   }

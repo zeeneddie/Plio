@@ -37,7 +37,7 @@ export default namedCompose('GoalEditModalContainer')(
     identity,
     renderNothing,
   ),
-  graphql(Query.GOAL_EDIT, {
+  graphql(Query.GOAL_CARD, {
     options: ({
       ui: { activeGoal },
     }) => ({
