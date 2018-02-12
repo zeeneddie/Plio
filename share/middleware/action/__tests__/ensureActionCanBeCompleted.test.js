@@ -1,10 +1,10 @@
 import { T } from 'ramda';
 import { Roles } from 'meteor/alanning:roles';
 
-import ensureCanBeCompleted from '../ensureCanBeCompleted';
+import ensureActionCanBeCompleted from '../ensureActionCanBeCompleted';
 import { UserRoles } from '../../../../share/constants';
 
-describe('ensureCanBeCompleted', () => {
+describe('ensureActionCanBeCompleted', () => {
   it('throws', async () => {
     const root = {};
     const args = {};
@@ -12,8 +12,9 @@ describe('ensureCanBeCompleted', () => {
       userId: null,
       doc: {},
     };
+    const promise = ensureActionCanBeCompleted()(T, root, args, context);
 
-    await expect(ensureCanBeCompleted()(T, root, args, context)).rejects.toEqual(expect.any(Error));
+    await expect(promise).rejects.toEqual(expect.any(Error));
   });
 
   it('passes', async () => {
@@ -31,7 +32,7 @@ describe('ensureCanBeCompleted', () => {
 
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
-    const actual = await ensureCanBeCompleted()(T, root, args, context);
+    const actual = await ensureActionCanBeCompleted()(T, root, args, context);
 
     expect(actual).toBe(true);
   });
