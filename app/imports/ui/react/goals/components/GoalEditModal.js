@@ -46,7 +46,7 @@ export const GoalEditModal = ({
       <CardTitle>Key Goal</CardTitle>
     </ModalHeader>
     <ModalBody>
-      <ErrorSection errorText={error && error.message} />
+      <ErrorSection errorText={error} />
 
       <div>
         <CardBlock>
@@ -68,7 +68,7 @@ export const GoalEditModal = ({
 
 GoalEditModal.propTypes = {
   loading: PropTypes.bool,
-  error: PropTypes.object,
+  error: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   onClosed: PropTypes.func,

@@ -68,7 +68,7 @@ const props = curry((getInputArgs, {
         updateUI({ loading: false });
         return res;
       }).catch((error) => {
-        updateUI({ loading: false, error });
+        updateUI({ loading: false, error: error.message });
 
         setTimeout(() => {
           updateUI({ error: null });
