@@ -1,10 +1,10 @@
 import { T } from 'ramda';
 import { Roles } from 'meteor/alanning:roles';
 
-import ensureCanBeVerified from '../ensureCanBeVerified';
+import ensureCanUndoActionVerification from '../ensureCanUndoActionVerification';
 import { UserRoles } from '../../../../share/constants';
 
-describe('ensureCanBeVerified', () => {
+describe('ensureCanUndoActionVerification', () => {
   it('throws', async () => {
     const root = {};
     const args = {};
@@ -13,7 +13,9 @@ describe('ensureCanBeVerified', () => {
       doc: {},
     };
 
-    await expect(ensureCanBeVerified()(T, root, args, context)).rejects.toEqual(expect.any(Error));
+    await expect(ensureCanUndoActionVerification()(T, root, args, context))
+      .rejects
+      .toEqual(expect.any(Error));
   });
 
   it('passes', async () => {
@@ -22,16 +24,16 @@ describe('ensureCanBeVerified', () => {
     const userId = 1;
     const organizationId = 3;
     const doc = {
+      isVerified: true,
+      verifiedAt: new Date(),
+      verifiedBy: 2,
       organizationId,
-      isCompleted: true,
-      isVerified: false,
-      toBeVerifiedBy: 2,
     };
     const context = { userId, doc };
 
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
-    const actual = await ensureCanBeVerified()(T, root, args, context);
+    const actual = await ensureCanUndoActionVerification()(T, root, args, context);
 
     expect(actual).toBe(true);
   });

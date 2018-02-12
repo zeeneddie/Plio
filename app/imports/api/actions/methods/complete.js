@@ -6,8 +6,7 @@ import {
 } from '../../middleware';
 import { Actions } from '../../../share/collections';
 import { ActionService } from '../../../share/services';
-import { ensureCanBeCompleted } from '../middleware';
-import { checkLoggedIn } from '../../../share/middleware';
+import { checkLoggedIn, ensureActionCanBeCompleted } from '../../../share/middleware';
 
 export default new MiddlewareMethod({
   name: 'Actions.complete',
@@ -16,7 +15,7 @@ export default new MiddlewareMethod({
     checkLoggedIn(),
     checkDocExistanceById(Actions),
     checkOrgMembershipByDocument(),
-    ensureCanBeCompleted(),
+    ensureActionCanBeCompleted(),
   ],
   run: ActionService.complete.bind(ActionService),
 });

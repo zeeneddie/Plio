@@ -1,16 +1,16 @@
 import { Roles } from 'meteor/alanning:roles';
 
 import { UserRoles } from '../../../../share/constants';
-import canBeVerified from '../canBeVerified';
+import canActionBeVerified from '../canActionBeVerified';
 
-describe('Actions/canBeVerified', () => {
+describe('Actions/canActionBeVerified', () => {
   afterEach(() => Roles.__clear());
 
   it('returns false if is not completed', () => {
     const userId = 1;
     const action = { isCompleted: false };
 
-    expect(canBeVerified(action, userId)).toBe(false);
+    expect(canActionBeVerified(action, userId)).toBe(false);
   });
 
   it('returns false if is verified', () => {
@@ -20,7 +20,7 @@ describe('Actions/canBeVerified', () => {
       isVerified: true,
     };
 
-    expect(canBeVerified(action, userId)).toBe(false);
+    expect(canActionBeVerified(action, userId)).toBe(false);
   });
 
   it('returns false if toBeVerifiedBy does not equal userId', () => {
@@ -31,7 +31,7 @@ describe('Actions/canBeVerified', () => {
       toBeVerifiedBy: 2,
     };
 
-    expect(canBeVerified(action, userId)).toBe(false);
+    expect(canActionBeVerified(action, userId)).toBe(false);
   });
 
   it('returns false if the user does not have a role to complete any action', () => {
@@ -42,7 +42,7 @@ describe('Actions/canBeVerified', () => {
       toBeVerifiedBy: 2,
     };
 
-    expect(canBeVerified(action, userId)).toBe(false);
+    expect(canActionBeVerified(action, userId)).toBe(false);
   });
 
   it('returns true if toBeVerifiedBy equals userId', () => {
@@ -53,7 +53,7 @@ describe('Actions/canBeVerified', () => {
       toBeVerifiedBy: userId,
     };
 
-    expect(canBeVerified(action, userId)).toBe(true);
+    expect(canActionBeVerified(action, userId)).toBe(true);
   });
 
   it('returns true if the user has a role to complete any action', () => {
@@ -67,6 +67,6 @@ describe('Actions/canBeVerified', () => {
     };
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
-    expect(canBeVerified(action, userId)).toBe(true);
+    expect(canActionBeVerified(action, userId)).toBe(true);
   });
 });
