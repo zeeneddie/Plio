@@ -5,4 +5,5 @@ export default {
   USER_NOT_ORG_MEMBER: 'This user is not a member of your organization',
   START_DATE_GTE_END_DATE: '"Start date" cannot be greater than or equal "end date"',
   END_DATE_LTE_START_DATE: '"End date" cannot be less than or equal "start date"',
+  DOC_CANNOT_BE_COMPLETED: 'Document cannot be completed',
 };
