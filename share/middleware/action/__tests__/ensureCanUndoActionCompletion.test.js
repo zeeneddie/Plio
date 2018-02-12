@@ -1,10 +1,10 @@
 import { T } from 'ramda';
 import { Roles } from 'meteor/alanning:roles';
 
-import ensureCanUndoCompletion from '../ensureCanUndoCompletion';
+import ensureCanUndoActionCompletion from '../ensureCanUndoActionCompletion';
 import { UserRoles } from '../../../../share/constants';
 
-describe('ensureCanUndoCompletion', async () => {
+describe('ensureCanUndoActionCompletion', async () => {
   it('throws', async () => {
     const root = {};
     const args = {};
@@ -13,7 +13,7 @@ describe('ensureCanUndoCompletion', async () => {
       doc: {},
     };
 
-    await expect(ensureCanUndoCompletion()(T, root, args, context))
+    await expect(ensureCanUndoActionCompletion()(T, root, args, context))
       .rejects
       .toEqual(expect.any(Error));
   });
@@ -34,7 +34,7 @@ describe('ensureCanUndoCompletion', async () => {
 
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
-    const actual = await ensureCanUndoCompletion()(T, root, args, context);
+    const actual = await ensureCanUndoActionCompletion()(T, root, args, context);
 
     expect(actual).toBe(true);
   });

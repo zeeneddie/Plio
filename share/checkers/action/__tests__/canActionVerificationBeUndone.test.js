@@ -2,9 +2,9 @@ import { Roles } from 'meteor/alanning:roles';
 import moment from 'moment-timezone';
 
 import { UserRoles, ActionUndoTimeInHours } from '../../../../share/constants';
-import canVerificationBeUndone from '../canVerificationBeUndone';
+import canActionVerificationBeUndone from '../canActionVerificationBeUndone';
 
-describe('Actions/canVerificationBeUndone', () => {
+describe('Actions/canActionVerificationBeUndone', () => {
   afterEach(() => Roles.__clear());
 
   it('returns false if is not verified', () => {
@@ -13,7 +13,7 @@ describe('Actions/canVerificationBeUndone', () => {
       isVerified: false,
     };
 
-    expect(canVerificationBeUndone(action, userId)).toBe(false);
+    expect(canActionVerificationBeUndone(action, userId)).toBe(false);
   });
 
   it('returns false if verifiedAt is not a date', () => {
@@ -23,7 +23,7 @@ describe('Actions/canVerificationBeUndone', () => {
       verifiedAt: null,
     };
 
-    expect(canVerificationBeUndone(action, userId)).toBe(false);
+    expect(canActionVerificationBeUndone(action, userId)).toBe(false);
   });
 
   it('returns false if undo deadline is overdue', () => {
@@ -33,7 +33,7 @@ describe('Actions/canVerificationBeUndone', () => {
       verifiedAt: moment(new Date()).subtract(ActionUndoTimeInHours).toDate(),
     };
 
-    expect(canVerificationBeUndone(action, userId)).toBe(false);
+    expect(canActionVerificationBeUndone(action, userId)).toBe(false);
   });
 
   // eslint-disable-next-line max-len
@@ -45,7 +45,7 @@ describe('Actions/canVerificationBeUndone', () => {
       verifiedBy: 2,
     };
 
-    expect(canVerificationBeUndone(action, userId)).toBe(false);
+    expect(canActionVerificationBeUndone(action, userId)).toBe(false);
   });
 
   it('returns true if verifiedBy equals userId', () => {
@@ -56,7 +56,7 @@ describe('Actions/canVerificationBeUndone', () => {
       verifiedBy: userId,
     };
 
-    expect(canVerificationBeUndone(action, userId)).toBe(true);
+    expect(canActionVerificationBeUndone(action, userId)).toBe(true);
   });
 
   it('returns true if the user has a role to complete any action', () => {
@@ -70,6 +70,6 @@ describe('Actions/canVerificationBeUndone', () => {
     };
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
-    expect(canVerificationBeUndone(action, userId)).toBe(true);
+    expect(canActionVerificationBeUndone(action, userId)).toBe(true);
   });
 });

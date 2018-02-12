@@ -1,16 +1,16 @@
 import { Roles } from 'meteor/alanning:roles';
 
 import { UserRoles } from '../../../../share/constants';
-import canBeCompleted from '../canBeCompleted';
+import canActionBeCompleted from '../canActionBeCompleted';
 
-describe('Actions/canBeCompleted', () => {
+describe('Actions/canActionBeCompleted', () => {
   afterEach(() => Roles.__clear());
 
   it('returns false if is already completed or verified', () => {
     const userId = 1;
 
-    expect(canBeCompleted({ isCompleted: true }, userId)).toBe(false);
-    expect(canBeCompleted({ isVerified: true }, userId)).toBe(false);
+    expect(canActionBeCompleted({ isCompleted: true }, userId)).toBe(false);
+    expect(canActionBeCompleted({ isVerified: true }, userId)).toBe(false);
   });
 
   it('returns false if toBeCompletedBy does not equal userId', () => {
@@ -21,7 +21,7 @@ describe('Actions/canBeCompleted', () => {
       toBeCompletedBy: 2,
     };
 
-    expect(canBeCompleted(action, userId)).toBe(false);
+    expect(canActionBeCompleted(action, userId)).toBe(false);
   });
 
   it('returns false if the user does not have a role to complete any action', () => {
@@ -32,7 +32,7 @@ describe('Actions/canBeCompleted', () => {
       toBeCompletedBy: 2,
     };
 
-    expect(canBeCompleted(action, userId)).toBe(false);
+    expect(canActionBeCompleted(action, userId)).toBe(false);
   });
 
   it('returns true if toBeCompletedBy equals userId', () => {
@@ -43,7 +43,7 @@ describe('Actions/canBeCompleted', () => {
       toBeCompletedBy: userId,
     };
 
-    expect(canBeCompleted(action, userId)).toBe(true);
+    expect(canActionBeCompleted(action, userId)).toBe(true);
   });
 
   it('returns true if the user has a role to complete any action', () => {
@@ -57,6 +57,6 @@ describe('Actions/canBeCompleted', () => {
     };
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
-    expect(canBeCompleted(action, userId)).toBe(true);
+    expect(canActionBeCompleted(action, userId)).toBe(true);
   });
 });

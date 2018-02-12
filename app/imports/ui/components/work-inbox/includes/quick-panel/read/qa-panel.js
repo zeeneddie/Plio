@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { WorkItemsStore, ActionTypes } from '../../../../../../share/constants';
 import { WorkInboxHelp } from '../../../../../../api/help-messages';
-import { canCompleteActions } from '../../../../../../api/checkers/roles';
+import { canCompleteActions } from '../../../../../../share/checkers';
 
 const { TYPES } = WorkItemsStore;
 
@@ -17,7 +17,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     let valid = userId === assigneeId;
 
     if (Object.values(ActionTypes).includes(type)) {
-      valid = valid || canCompleteActions(userId, organizationId);
+      valid = valid || canCompleteActions(organizationId, userId);
     }
 
     return !!valid;

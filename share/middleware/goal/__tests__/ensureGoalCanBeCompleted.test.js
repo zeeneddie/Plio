@@ -1,10 +1,11 @@
-import { T } from 'ramda';
 import { Roles } from 'meteor/alanning:roles';
+import { T } from 'ramda';
 
-import ensureCanBeCompleted from '../ensureCanBeCompleted';
+import ensureGoalCanBeCompleted from '../ensureGoalCanBeCompleted';
 import { UserRoles } from '../../../../share/constants';
+import Errors from '../../../errors';
 
-describe('ensureCanBeCompleted', () => {
+describe('ensureGoalCanBeCompleted', () => {
   it('throws', async () => {
     const root = {};
     const args = {};
@@ -12,8 +13,9 @@ describe('ensureCanBeCompleted', () => {
       userId: null,
       doc: {},
     };
+    const promise = ensureGoalCanBeCompleted()(T, root, args, context);
 
-    await expect(ensureCanBeCompleted()(T, root, args, context)).rejects.toEqual(expect.any(Error));
+    await expect(promise).rejects.toEqual(new Error(Errors.DOC_CANNOT_BE_COMPLETED));
   });
 
   it('passes', async () => {
@@ -23,16 +25,14 @@ describe('ensureCanBeCompleted', () => {
     const organizationId = 3;
     const doc = {
       isCompleted: false,
-      isVerified: false,
-      toBeCompletedBy: 2,
       organizationId,
     };
     const context = { userId, doc };
 
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
-    const actual = await ensureCanBeCompleted()(T, root, args, context);
+    const promise = ensureGoalCanBeCompleted()(T, root, args, context);
 
-    expect(actual).toBe(true);
+    await expect(promise).resolves.toBe(true);
   });
 });

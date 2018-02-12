@@ -2,9 +2,9 @@ import { Roles } from 'meteor/alanning:roles';
 import moment from 'moment-timezone';
 
 import { UserRoles, ActionUndoTimeInHours } from '../../../../share/constants';
-import canCompletionBeUndone from '../canCompletionBeUndone';
+import canActionCompletionBeUndone from '../canActionCompletionBeUndone';
 
-describe('Actions/canCompletionBeUndone', () => {
+describe('Actions/canActionCompletionBeUndone', () => {
   afterEach(() => Roles.__clear());
 
   it('returns false if is not completed', () => {
@@ -13,7 +13,7 @@ describe('Actions/canCompletionBeUndone', () => {
       isCompleted: false,
     };
 
-    expect(canCompletionBeUndone(action, userId)).toBe(false);
+    expect(canActionCompletionBeUndone(action, userId)).toBe(false);
   });
 
   it('returns false if is verified', () => {
@@ -23,7 +23,7 @@ describe('Actions/canCompletionBeUndone', () => {
       isVerified: true,
     };
 
-    expect(canCompletionBeUndone(action, userId)).toBe(false);
+    expect(canActionCompletionBeUndone(action, userId)).toBe(false);
   });
 
   it('returns false if completedAt is not a date', () => {
@@ -34,7 +34,7 @@ describe('Actions/canCompletionBeUndone', () => {
       completedAt: null,
     };
 
-    expect(canCompletionBeUndone(action, userId)).toBe(false);
+    expect(canActionCompletionBeUndone(action, userId)).toBe(false);
   });
 
   it('returns false if undo deadline is overdue', () => {
@@ -45,7 +45,7 @@ describe('Actions/canCompletionBeUndone', () => {
       completedAt: moment(new Date()).subtract(ActionUndoTimeInHours).toDate(),
     };
 
-    expect(canCompletionBeUndone(action, userId)).toBe(false);
+    expect(canActionCompletionBeUndone(action, userId)).toBe(false);
   });
 
   // eslint-disable-next-line max-len
@@ -58,7 +58,7 @@ describe('Actions/canCompletionBeUndone', () => {
       completedBy: 2,
     };
 
-    expect(canCompletionBeUndone(action, userId)).toBe(false);
+    expect(canActionCompletionBeUndone(action, userId)).toBe(false);
   });
 
   it('returns true if completedBy equals userId', () => {
@@ -70,7 +70,7 @@ describe('Actions/canCompletionBeUndone', () => {
       completedBy: userId,
     };
 
-    expect(canCompletionBeUndone(action, userId)).toBe(true);
+    expect(canActionCompletionBeUndone(action, userId)).toBe(true);
   });
 
   it('returns true if the user has a role to complete any action', () => {
@@ -85,6 +85,6 @@ describe('Actions/canCompletionBeUndone', () => {
     };
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 
-    expect(canCompletionBeUndone(action, userId)).toBe(true);
+    expect(canActionCompletionBeUndone(action, userId)).toBe(true);
   });
 });
