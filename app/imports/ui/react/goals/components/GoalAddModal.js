@@ -3,7 +3,6 @@ import React from 'react';
 import { ModalBody, CardTitle, Button } from 'reactstrap';
 
 import {
-  ErrorSection,
   Modal,
   ModalHeader,
   CardBlock,
@@ -14,8 +13,6 @@ import GoalFormContainer from '../containers/GoalFormContainer';
 export const GoalAddModal = ({
   isOpen,
   toggle,
-  errorText,
-  isSaving,
   onSubmit,
   organizationId,
   onClosed,
@@ -23,15 +20,13 @@ export const GoalAddModal = ({
   <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
       renderLeftButton={() => <Button onClick={toggle}>Close</Button>}
-      renderRightButton={() => (
-        <SaveButton onClick={onSubmit} {...{ isSaving }} />
+      renderRightButton={({ loading }) => (
+        <SaveButton onClick={onSubmit} isSaving={loading} />
       )}
     >
       <CardTitle>Key Goal</CardTitle>
     </ModalHeader>
     <ModalBody>
-      <ErrorSection {...{ errorText }} />
-
       <div>
         <CardBlock>
           <GoalFormContainer {...{ organizationId }} />
@@ -43,10 +38,8 @@ export const GoalAddModal = ({
 
 GoalAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  isSaving: PropTypes.bool,
   toggle: PropTypes.func.isRequired,
   onSubmit: PropTypes.func,
-  errorText: PropTypes.string,
   organizationId: PropTypes.string.isRequired,
   onClosed: PropTypes.func,
 };

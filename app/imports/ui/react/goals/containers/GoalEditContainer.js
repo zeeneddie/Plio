@@ -3,11 +3,12 @@ import { flattenProp, withHandlers, branch, onlyUpdateForKeys } from 'recompose'
 import { lenses, getTargetValue, toDate, updateInput } from 'plio-util';
 import { view, curry, compose, objOf, toUpper, prop } from 'ramda';
 import connectUI from 'redux-ui';
+import { connect } from 'react-redux';
 
 import { namedCompose } from '../../helpers';
 import GoalEdit from '../components/GoalEdit';
 import { Fragment, Mutation } from '../../../../client/graphql';
-import { ALERT_AUTOHIDE_TIME } from '../../../../api/constants';
+import { callAsync } from '../../components/Modal';
 
 const update = name => (proxy, { data: { [name]: { goal: { _id, ...goal } } } }) => {
   const id = `Goal:${_id}`;
@@ -45,38 +46,21 @@ const props = curry((getInputArgs, {
   const {
     goal,
     organizationId,
-    updateUI,
+    dispatch,
   } = ownProps;
 
   return {
     goal,
     organizationId,
-    [handler]: (...args) => {
-      const inputArgs = getInputArgs(...args, ownProps);
-
-      updateUI({ loading: true });
-
-      return mutate({
-        update: update(mutation),
-        variables: {
-          input: {
-            _id: goal._id,
-            ...inputArgs,
-          },
+    [handler]: (...args) => dispatch(callAsync(() => mutate({
+      update: update(mutation),
+      variables: {
+        input: {
+          _id: goal._id,
+          ...getInputArgs(...args, ownProps),
         },
-      }).then((res) => {
-        updateUI({ loading: false });
-        return res;
-      }).catch((error) => {
-        updateUI({ loading: false, error: error.message });
-
-        setTimeout(() => {
-          updateUI({ error: null });
-        }, ALERT_AUTOHIDE_TIME);
-
-        return error;
-      });
-    },
+      },
+    }))),
   };
 });
 
@@ -102,6 +86,7 @@ export default namedCompose('GoalEditContainer')(
       completionComment: '',
     },
   }),
+  connect(),
   onlyUpdateForKeys(['organizationId', 'goal', 'completionComment']),
   flattenProp('goal'),
   graphql(Mutation.UPDATE_GOAL_TITLE, {
