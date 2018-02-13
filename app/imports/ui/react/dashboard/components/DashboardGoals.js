@@ -41,7 +41,9 @@ const DashboardGoals = ({
     {...{ toggle, isOpen }}
   >
     <PlusButton size="1" onClick={openModal} />
-    {pluralize('goal', totalCount || goals.length, true)}
+    {goals.length
+      ? pluralize('goal', totalCount || goals.length, true)
+      : 'Add a key goal'}
     <GoalAddModalContainer
       isOpen={isModalOpen}
       toggle={toggleModal}
