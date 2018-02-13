@@ -3229,7 +3229,7 @@ pify@^3.0.0:
 
 "plio-util@https://github.com/Pliohub/plio-util.git":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#e6840255610420ec70bd0db3b418bd9c43558c9c"
+  resolved "https://github.com/Pliohub/plio-util.git#c3d46f3b26be8e956c49a63d86cdad84b3f1bd41"
 
 pluralize@^2.0.0:
   version "2.0.0"
