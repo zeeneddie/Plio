@@ -1,5 +1,4 @@
 import connectUI from 'redux-ui';
-import { mapProps } from 'recompose';
 import { lenses } from 'plio-util';
 import { view, over, compose, append, inc } from 'ramda';
 import gql from 'graphql-tag';
@@ -9,6 +8,7 @@ import { namedCompose } from '../../helpers';
 import GoalAddModal from '../components/GoalAddModal';
 import { GoalPriorities } from '../../../../share/constants';
 import { Query, Fragment } from '../../../../client/graphql';
+import { callAsync } from '../../components/Modal';
 
 const addGoal = (goal, data) => compose(
   over(lenses.goals.goals, append(goal)),
@@ -36,15 +36,12 @@ export default namedCompose('GoalAddModalContainer')(
       endDate: null,
       priority: GoalPriorities.MINOR,
       color: '',
-      errorText: '',
-      isSaving: false,
     },
   }),
   graphql(CREATE_GOAL, {
     props: ({
       mutate,
       ownProps: {
-        updateUI,
         resetUI,
         organizationId,
         toggle,
@@ -61,46 +58,32 @@ export default namedCompose('GoalAddModalContainer')(
       },
     }) => ({
       onClosed: resetUI,
-      onSubmit: (e) => {
-        updateUI('isSaving', true);
-
-        return mutate({
-          variables: {
-            input: {
-              organizationId,
-              title,
-              description,
-              ownerId,
-              startDate,
-              endDate,
-              priority,
-              color: color.toUpperCase(),
-            },
+      onSubmit: e => callAsync(() => mutate({
+        variables: {
+          input: {
+            organizationId,
+            title,
+            description,
+            ownerId,
+            startDate,
+            endDate,
+            priority,
+            color: color.toUpperCase(),
           },
-          update: (proxy, { data: { createGoal: { goal } } }) => {
-            const data = addGoal(goal, proxy.readQuery({
-              query: Query.DASHBOARD_GOALS,
-              variables: { organizationId },
-            }));
+        },
+        update: (proxy, { data: { createGoal: { goal } } }) => {
+          const data = addGoal(goal, proxy.readQuery({
+            query: Query.DASHBOARD_GOALS,
+            variables: { organizationId },
+          }));
 
-            return proxy.writeQuery({
-              data,
-              query: Query.DASHBOARD_GOALS,
-              variables: { organizationId },
-            });
-          },
-        }).then(() => {
-          updateUI('isSaving', false);
-          return isOpen && toggle(e);
-        }).catch(({ message }) => updateUI({
-          errorText: message,
-          isSaving: false,
-        }));
-      },
+          return proxy.writeQuery({
+            data,
+            query: Query.DASHBOARD_GOALS,
+            variables: { organizationId },
+          });
+        },
+      }).then(() => isOpen && toggle(e))),
     }),
   }),
-  mapProps(({
-    ui: { errorText, isSaving },
-    ...props
-  }) => ({ errorText, isSaving, ...props })),
 )(GoalAddModal);
