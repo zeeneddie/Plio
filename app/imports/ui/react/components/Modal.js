@@ -18,10 +18,10 @@ export const SUCCESS = '@@MODAL/SUCCESS';
 export const setLoading = () => ({ type: LOADING });
 export const setError = payload => ({ type: ERROR, payload });
 export const success = () => ({ type: SUCCESS });
-export const call = asyncAction => (dispatch, getState) => {
+export const callAsync = asyncAction => (dispatch) => {
   dispatch(setLoading());
 
-  return dispatch(asyncAction(dispatch, getState))
+  return dispatch(asyncAction)
     .then((res) => {
       dispatch(success());
       return res;
@@ -39,18 +39,13 @@ const enhance = compose(
       '@@modal/error': null,
     },
     reducer: (state, action) => {
-      console.log(action.type);
       switch (action.type) {
         case LOADING:
-          return state.set('loading', true);
-        case ERROR: {
-          state.set('loading', false);
-          return state.set('error', action.payload);
-        }
-        case SUCCESS: {
-          state.set('loading', false);
-          return state.set('error', null);
-        }
+          return state.set('@@modal/loading', true);
+        case ERROR:
+          return state.set('@@modal/loading', false).set('@@modal/error', action.payload);
+        case SUCCESS:
+          return state.set('@@modal/loading', false).set('@@modal/error', null);
         default:
           return state;
       }
