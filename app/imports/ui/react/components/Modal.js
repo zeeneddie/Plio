@@ -65,9 +65,15 @@ const enhance = compose(
     uiKey,
     uiPath,
     resetUI,
+    onClosed,
     ...props
   }) => ({
     ...props,
+    onClosed: (...args) => {
+      resetUI();
+
+      return onClosed && onClosed(...args);
+    },
     children: React.Children.map(children, (child) => {
       switch (child.type) {
         case ModalHeader:
