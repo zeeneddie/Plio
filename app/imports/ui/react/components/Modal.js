@@ -35,17 +35,17 @@ export const callAsync = asyncAction => (dispatch) => {
 const enhance = compose(
   connectUI({
     state: {
-      '@@modal/loading': false,
-      '@@modal/error': null,
+      [LOADING]: false,
+      [ERROR]: null,
     },
     reducer: (state, action) => {
       switch (action.type) {
         case LOADING:
-          return state.set('@@modal/loading', true);
+          return state.set(LOADING, true);
         case ERROR:
-          return state.set('@@modal/loading', false).set('@@modal/error', action.payload);
+          return state.set(LOADING, false).set(ERROR, action.payload);
         case SUCCESS:
-          return state.set('@@modal/loading', false).set('@@modal/error', null);
+          return state.set(LOADING, false).set(ERROR, null);
         default:
           return state;
       }
@@ -53,8 +53,8 @@ const enhance = compose(
   }),
   mapProps(({
     ui: {
-      '@@modal/error': error,
-      '@@modal/loading': loading,
+      [ERROR]: error,
+      [LOADING]: loading,
     },
     children,
     updateUI,
