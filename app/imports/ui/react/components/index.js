@@ -29,3 +29,4 @@ export { default as TimelinePoint } from './TimelinePoint';
 export { default as ToggleComplete } from './ToggleComplete';
 export { default as DebounceTextarea } from './DebounceTextarea';
 export { default as UndoTime } from './UndoTime';
+export { default as EntityManagerSubcard } from './EntityManagerSubcard';
