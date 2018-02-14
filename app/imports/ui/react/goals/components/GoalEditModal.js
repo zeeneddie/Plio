@@ -10,18 +10,21 @@ import {
   CardBlock,
   SaveButton,
   TextAlign,
+  GuidanceIcon,
+  GuidancePanel,
 } from '../../components';
 import GoalEditContainer from '../containers/GoalEditContainer';
+import { GoalsHelp } from '../../../../api/help-messages';
 
 const enhance = onlyUpdateForKeys([
   'isOpen',
   'toggle',
-  'onClosed',
   'goal',
   'organizationId',
   'loading',
   'error',
-  'onDelete',
+  'isGuidancePanelOpen',
+  'guidance',
 ]);
 
 export const GoalEditModal = ({
@@ -32,9 +35,15 @@ export const GoalEditModal = ({
   organizationId,
   onDelete,
   loading,
+  isGuidancePanelOpen,
+  toggleGuidancePanel,
+  guidance = GoalsHelp.goal,
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
+      renderLeftButton={() => (
+        <GuidanceIcon isOpen={isGuidancePanelOpen} onClick={toggleGuidancePanel} />
+      )}
       renderRightButton={props => (
         <SaveButton onClick={toggle} isSaving={loading || props.loading}>
           Close
@@ -44,6 +53,12 @@ export const GoalEditModal = ({
       <CardTitle>Key Goal</CardTitle>
     </ModalHeader>
     <ModalBody>
+      <GuidancePanel
+        isOpen={isGuidancePanelOpen}
+        toggle={toggleGuidancePanel}
+      >
+        {guidance}
+      </GuidancePanel>
       <div>
         <CardBlock>
           {goal && (
@@ -70,6 +85,9 @@ GoalEditModal.propTypes = {
   organizationId: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  guidance: PropTypes.node,
+  isGuidancePanelOpen: PropTypes.bool,
+  toggleGuidancePanel: PropTypes.func,
 };
 
 export default enhance(GoalEditModal);
