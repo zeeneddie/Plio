@@ -12,7 +12,6 @@ type Query {
   goals(
     organizationId: ID!,
     limit: Int!,
-    withDeleted: Boolean
   ): GoalsQueryReturnType
   goal(_id: ID!): GoalQueryReturnType
 }
