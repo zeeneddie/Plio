@@ -50,6 +50,7 @@ import {
 
 import './12-add-complete-actions-role';
 import './13-workspace-defaults';
+import './14-add-crud-goals-role';
 
 Migrations.add({
   version: 1,

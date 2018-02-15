@@ -3,6 +3,7 @@ import get from 'lodash.get';
 import moment from 'moment-timezone';
 import { _ } from 'meteor/underscore';
 import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
 
 import {
   AvatarPlaceholders,
@@ -236,3 +237,21 @@ export const getReviewConfig = (organization, documentType) => {
 
   return get(organization, `review.${documentKey}`);
 };
+
+export const forEachOrgsUser = (f) => {
+  Organizations.find({}).forEach(({ users, ...organization }) => {
+    users.forEach(user => f(organization, user));
+  });
+};
+
+export const addRolesToAllUsers = roles =>
+  forEachOrgsUser(({ _id: organizationId }, { userId, isRemoved }) => {
+    if (!isRemoved) {
+      Roles.addUsersToRoles(userId, roles, organizationId);
+    }
+  });
+
+export const removeRolesFromAllUsers = roles =>
+  forEachOrgsUser(({ _id: organizationId }, { userId }) => {
+    Roles.removeUsersFromRoles(userId, roles, organizationId);
+  });
