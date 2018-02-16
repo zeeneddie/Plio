@@ -4,7 +4,7 @@ import Select from 'react-select';
 import styled, { css } from 'styled-components';
 import { prop } from 'ramda';
 import { compose, withState, withHandlers } from 'recompose';
-// import 'react-select/dist/react-select.css';
+import 'react-select/dist/react-select.css';
 
 const SelectWrapper = styled.div`
   .Select {
