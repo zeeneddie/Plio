@@ -6,7 +6,7 @@ import { getFullNameOrEmail } from '../../../../api/users/helpers';
 
 const selector = map(user => ({
   value: user._id,
-  text: getFullNameOrEmail(user),
+  label: getFullNameOrEmail(user),
 }));
 
 export default createSelector(getUsers, selector);

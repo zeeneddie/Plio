@@ -11,3 +11,4 @@ export { default as TextInput } from './TextInput';
 export { default as TimePicker } from './TimePicker';
 export { default as FormField } from './FormField';
 export { default as SelectMultiInput } from './SelectMultiInput';
+export { default as SelectField } from './SelectField';

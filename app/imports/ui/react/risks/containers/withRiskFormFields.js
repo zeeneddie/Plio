@@ -18,13 +18,13 @@ export default compose(
   withHandlers({
     onChangeTitle: ({ updateUI }) => e => updateUI('title', e.target.value),
     onChangeDescription: ({ updateUI }) => e => updateUI('description', e.target.value),
-    onChangeOriginatorId: ({ updateUI }) => (_, { value }, cb) =>
+    onChangeOriginatorId: ({ updateUI }) => ({ value }, cb) =>
       updateUI('originatorId', value, cb),
-    onChangeOwnerId: ({ updateUI }) => (_, { value }, cb) =>
+    onChangeOwnerId: ({ updateUI }) => ({ value }, cb) =>
       updateUI('ownerId', value, cb),
     onChangeMagnitude: ({ updateUI }) => e => updateUI('magnitude', e.target.value),
     onChangeTypeId: ({ updateUI }) => e => updateUI('typeId', e.target.value),
-    onChangeRiskId: ({ updateUI }) => (_, { value }, cb) =>
+    onChangeRiskId: ({ updateUI }) => ({ value }, cb) =>
       updateUI('riskId', value, cb),
     onChangeActiveView: ({ updateUI }) => idx => updateUI('activeView', idx),
   }),
