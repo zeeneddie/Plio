@@ -42,6 +42,16 @@ const StyledToggleComplete = styled(ToggleComplete)`
   }
 `;
 
+const InputGroupWrapper = styled.div`
+  display: flex;
+  & > div:first-child {
+    width: 100%;
+  }
+  .input-group-btn {
+    width: 55px;
+  }
+`;
+
 const UncontrolledStyledToggleComplete = withToggle()(props => (
   <StyledToggleComplete {...props} />
 ));
@@ -119,24 +129,21 @@ export const GoalEdit = ({
           </FormField>
           <FormField>
             Completed by
-            <OrgUsersSelectInputContainer
-              uncontrolled
-              caret
-              hint
-              input={{ placeholder: 'Completed by' }}
-              selected={completedBy._id}
-              onSelect={onChangeCompletedBy}
-              renderInputGroupAddon={() => (
-                <InputGroupButton
-                  color="link"
-                  className="margin-left"
-                  onClick={onUndoCompletion}
-                >
-                  Undo
-                </InputGroupButton>
-              )}
-              {...{ organizationId }}
-            />
+            <InputGroupWrapper>
+              <OrgUsersSelectInputContainer
+                value={completedBy._id}
+                onChange={onChangeCompletedBy}
+                placeholder="Completed by"
+                {...{ organizationId }}
+              />
+              <InputGroupButton
+                color="link"
+                className="margin-left"
+                onClick={onUndoCompletion}
+              >
+                Undo
+              </InputGroupButton>
+            </InputGroupWrapper>
             <UndoTime
               date={completedAt}
               render={({ passed, left }) => `Completed ${passed}, ${left} left to undo`}

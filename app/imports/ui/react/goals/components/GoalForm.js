@@ -80,12 +80,9 @@ export const GoalForm = ({
       <FormField>
         Owner
         <OrgUsersSelectInputContainer
-          uncontrolled
-          caret
-          hint
-          input={{ placeholder: 'Owner' }}
-          selected={ownerId}
-          onSelect={onChangeOwnerId}
+          value={ownerId}
+          onChange={onChangeOwnerId}
+          placeholder="Owner"
           {...{ organizationId, onError }}
         />
       </FormField>

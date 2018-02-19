@@ -5,7 +5,7 @@ import { setPropTypes, lifecycle } from 'recompose';
 import { view } from 'ramda';
 
 import { namedCompose, withPreloader, omitProps } from '../helpers';
-import { SelectInput } from '../components';
+import { SelectField } from '../components';
 import { Query } from '../../../client/graphql';
 
 export default namedCompose('OrgUsersSelectInputContainer')(
@@ -32,7 +32,7 @@ export default namedCompose('OrgUsersSelectInputContainer')(
     }) => ({
       loading,
       error,
-      items: mapUsersToOptions(users),
+      options: mapUsersToOptions(users),
       ...props,
     }),
   }),
@@ -43,4 +43,4 @@ export default namedCompose('OrgUsersSelectInputContainer')(
   }),
   withPreloader(view(lenses.loading), () => ({ size: 1 })),
   omitProps(['loading']),
-)(SelectInput);
+)(SelectField);
