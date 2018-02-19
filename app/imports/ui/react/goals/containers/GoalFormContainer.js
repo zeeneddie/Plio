@@ -7,8 +7,6 @@ import { namedCompose } from '../../helpers';
 import GoalForm from '../components/GoalForm';
 import { setError } from '../../components/Modal';
 
-const updateSelectInput2 = name => ({ updateUI }) => ({ value }, cb) => updateUI(name, value, cb);
-
 export default namedCompose('GoalFormContainer')(
   connectUI(),
   connect(),
@@ -16,7 +14,7 @@ export default namedCompose('GoalFormContainer')(
   withHandlers({
     onChangeTitle: updateInput('title'),
     onChangeDescription: updateInput('description'),
-    onChangeOwnerId: updateSelectInput2('ownerId'),
+    onChangeOwnerId: updateSelectInput('ownerId'),
     onChangeStartDate: updateDatePicker('startDate'),
     onChangeEndDate: updateDatePicker('endDate'),
     onChangePriority: updateInput('priority'),
