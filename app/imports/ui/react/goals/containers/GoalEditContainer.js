@@ -66,7 +66,7 @@ const props = curry((getInputArgs, {
 
 const getUpdateTitleInputArgs = compose(objOf('title'), getTargetValue);
 const getUpdateDescriptionInputArgs = compose(objOf('description'), getTargetValue);
-const getUpdateOwnerInputArgs = compose(objOf('ownerId'), (_, { value }) => value);
+const getUpdateOwnerInputArgs = compose(objOf('ownerId'), ({ value }) => value);
 const getUpdateStartDateInputArgs = compose(objOf('startDate'), toDate);
 const getUpdateEndDateInputArgs = compose(objOf('endDate'), toDate);
 const getUpdatePriorityInputArgs = compose(objOf('priority'), getTargetValue);
@@ -78,7 +78,7 @@ const getCompleteGoalInputArgs = compose(
 );
 const getUpdateCompletionCommentInputArgs = compose(objOf('completionComment'), getTargetValue);
 const getUpdateCompletedAtInputArgs = compose(objOf('completedAt'), toDate);
-const getUpdateCompletedByInputArgs = compose(objOf('completedBy'), (_, { value }) => value);
+const getUpdateCompletedByInputArgs = compose(objOf('completedBy'), ({ value }) => value);
 
 export default namedCompose('GoalEditContainer')(
   connectUI({
