@@ -1,46 +1,68 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { FormGroup, Label, Col } from 'reactstrap';
+import { branch } from 'recompose';
+import { prop, identity } from 'ramda';
+import styled from 'styled-components';
 
-import FormLabel from '../../../components/Labels/FormLabel';
-import HelpPanel from '../../../components/HelpPanel';
-import withStateCollapsed from '../../../helpers/withStateCollapsed';
+import { withStateToggle } from '../../../helpers';
+import FormLabel from '../Form/FormLabel';
+import GuidancePanel from '../../../components/GuidancePanel';
+import GuidanceIcon from '../../../components/GuidanceIcon';
+
+const StyledGuidanceIcon = styled(GuidanceIcon)`
+  float: left;
+  margin: -2px 6px 0 0;
+  width: auto;
+`;
+
+const StyledGuidancePanel = styled(GuidancePanel)`
+  & > .card-block {
+    padding: 12px 0 0 0;
+  }
+`;
+
+const enhance = branch(
+  prop('guidance'),
+  withStateToggle(false, 'isOpen', 'toggle'),
+  identity,
+);
 
 const FormField = ({
-  colXs = 12,
-  colSm = 8,
-  helpText,
-  collapsed = true,
-  onToggleCollapse,
+  xs = 12,
+  sm = 8,
   children,
+  guidance,
+  isOpen,
+  toggle,
+  ...props
 }) => (
-  <div className="form-group row">
-    <FormLabel
-      {...{
-        colXs, collapsed, onToggleCollapse, helpText,
-      }}
-      colSm={12 - parseInt(colSm, 10)}
-    >
+  <FormGroup row {...props}>
+    <FormLabel sm={xs - sm} {...{ xs }}>
+      {guidance && (<StyledGuidanceIcon onClick={toggle} />)}
       {children[0]}
     </FormLabel>
-    <div className={`col-xs-${colXs} col-sm-${colSm}`}>
+    <Col {...{ xs, sm }}>
       {children.slice(1)}
 
-      {helpText && (
-        <HelpPanel.Body {...{ collapsed, onToggleCollapse }}>
-          {helpText}
-        </HelpPanel.Body>
+      {guidance && (
+        <StyledGuidancePanel {...{ isOpen, toggle }}>
+          {guidance}
+        </StyledGuidancePanel>
       )}
-    </div>
-  </div>
+    </Col>
+  </FormGroup>
 );
 
 FormField.propTypes = {
-  colXs: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  colSm: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  helpText: PropTypes.string,
-  collapsed: PropTypes.bool,
-  onToggleCollapse: PropTypes.func,
+  /* eslint-disable react/no-typos */
+  xs: Label.propTypes.xs,
+  sm: Label.propTypes.sm,
+  /* eslint-enable react/no-typos */
+  guidance: PropTypes.node,
+  isOpen: PropTypes.bool,
+  toggle: PropTypes.func,
   children: PropTypes.node,
 };
 
-export default withStateCollapsed(({ collapsed = true } = {}) => collapsed)(FormField);
+export default enhance(FormField);
