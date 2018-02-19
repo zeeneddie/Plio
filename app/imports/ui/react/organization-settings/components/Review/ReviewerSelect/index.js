@@ -5,7 +5,7 @@ import { FormGroup } from 'reactstrap';
 
 import { getId, transsoc } from '/imports/api/helpers';
 import { getFullNameOrEmail } from '/imports/api/users/helpers';
-import { SelectField } from '../../../../forms/components';
+import { SelectInput } from '../../../../forms/components';
 
 const enhance = compose(
   getContext({
@@ -31,7 +31,7 @@ const ReviewReviewerSelect = enhance(({ selected, items, onSelect }) => (
     <label className="form-control-label">
       Reviewer
     </label>
-    <SelectField
+    <SelectInput
       value={selected}
       options={items}
       onChange={onSelect}

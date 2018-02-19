@@ -3,7 +3,7 @@ import React from 'react';
 import { withHandlers } from 'recompose';
 
 import swal from '/imports/ui/utils/swal';
-import { FormField, SelectField } from '../../../../../components';
+import { FormField, SelectInput } from '../../../../../components';
 import { createWorkspaceTitleValue } from '../../../../helpers';
 
 const enhance = withHandlers({
@@ -45,7 +45,7 @@ const HomeScreenTitle = enhance(({
 }) => (
   <FormField>
     <span>{label}</span>
-    <SelectField
+    <SelectInput
       value={selected}
       options={items}
       onChange={onSelect}

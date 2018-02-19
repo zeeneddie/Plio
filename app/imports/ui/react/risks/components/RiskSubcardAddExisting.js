@@ -6,7 +6,7 @@ import { equals } from 'ramda';
 import {
   FormField,
   CardBlock,
-  SelectField,
+  SelectInput,
 } from '../../components';
 
 const enhance = shouldUpdate((props, nextProps) => (
@@ -18,7 +18,7 @@ const RiskSubcardAddExisting = enhance(({ risks, onChange, selected }) => (
   <CardBlock>
     <FormField>
       Existing risk
-      <SelectField
+      <SelectInput
         value={selected}
         options={risks}
         onChange={onChange}

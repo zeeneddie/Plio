@@ -7,7 +7,7 @@ import { shouldUpdate } from 'recompose';
 import {
   FormInput,
   FormField,
-  SelectField,
+  SelectInput,
   Select,
   Magnitudes,
 } from '../../components';
@@ -67,7 +67,7 @@ const RiskSubcardAddNew = enhance(({
     </FormField>
     <FormField>
       Originator
-      <SelectField
+      <SelectInput
         value={originatorId}
         options={users}
         onChange={onChangeOriginatorId}
@@ -76,7 +76,7 @@ const RiskSubcardAddNew = enhance(({
     </FormField>
     <FormField>
       Owner
-      <SelectField
+      <SelectInput
         value={ownerId}
         options={users}
         onChange={onChangeOwnerId}
