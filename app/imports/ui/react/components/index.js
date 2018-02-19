@@ -30,3 +30,5 @@ export { default as ToggleComplete } from './ToggleComplete';
 export { default as DebounceTextarea } from './DebounceTextarea';
 export { default as UndoTime } from './UndoTime';
 export { default as EntityManagerSubcard } from './EntityManagerSubcard';
+export { default as GuidancePanel } from './GuidancePanel';
+export { default as GuidanceIcon } from './GuidanceIcon';

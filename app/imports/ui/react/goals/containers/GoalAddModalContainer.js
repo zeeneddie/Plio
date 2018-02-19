@@ -3,6 +3,7 @@ import { lenses } from 'plio-util';
 import { view, over, compose, append, inc } from 'ramda';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 
 import { namedCompose } from '../../helpers';
 import GoalAddModal from '../components/GoalAddModal';
@@ -27,6 +28,7 @@ const CREATE_GOAL = gql`
 `;
 
 export default namedCompose('GoalAddModalContainer')(
+  connect(),
   connectUI({
     state: {
       title: '',
@@ -46,6 +48,7 @@ export default namedCompose('GoalAddModalContainer')(
         organizationId,
         toggle,
         isOpen,
+        dispatch,
         ui: {
           title,
           description,
@@ -58,7 +61,7 @@ export default namedCompose('GoalAddModalContainer')(
       },
     }) => ({
       onClosed: resetUI,
-      onSubmit: e => callAsync(() => mutate({
+      onSubmit: e => dispatch(callAsync(() => mutate({
         variables: {
           input: {
             organizationId,
@@ -83,7 +86,7 @@ export default namedCompose('GoalAddModalContainer')(
             variables: { organizationId },
           });
         },
-      }).then(() => isOpen && toggle(e))),
+      }).then(() => isOpen && toggle(e)))),
     }),
   }),
 )(GoalAddModal);
