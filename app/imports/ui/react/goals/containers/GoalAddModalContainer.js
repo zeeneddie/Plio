@@ -44,11 +44,6 @@ export default namedCompose('GoalAddModalContainer')(
     props: ({
       mutate,
       ownProps: {
-        resetUI,
-        organizationId,
-        toggle,
-        isOpen,
-        dispatch,
         ui: {
           title,
           description,
@@ -58,9 +53,24 @@ export default namedCompose('GoalAddModalContainer')(
           priority,
           color = '',
         },
+        organizationId,
+        toggle,
+        isOpen,
+        dispatch,
+        updateUI,
+        ...ownProps
       },
     }) => ({
-      onClosed: resetUI,
+      // hack because resetUI throws an error
+      onClosed: () => updateUI({
+        title: '',
+        description: '',
+        ownerId: ownProps.ownerId,
+        startDate: new Date(),
+        endDate: null,
+        priority: GoalPriorities.MINOR,
+        color: '',
+      }),
       onSubmit: e => dispatch(callAsync(() => mutate({
         variables: {
           input: {
