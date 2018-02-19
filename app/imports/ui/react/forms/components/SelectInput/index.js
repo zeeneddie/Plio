@@ -4,7 +4,10 @@ import Select from 'react-select';
 import styled, { css } from 'styled-components';
 import { prop } from 'ramda';
 import { compose, withState, withHandlers } from 'recompose';
+import { Button } from 'reactstrap';
 import 'react-select/dist/react-select.css';
+
+import Icon from '../../../components/Icons/Icon';
 
 const SelectWrapper = styled.div`
   .Select {
@@ -111,9 +114,9 @@ const enhance = compose(
     },
     promptTextCreator: ({ promptTextCreator }) => label => (
       <TextCreatorWrapper>
-        <a className="btn btn-add btn-secondary btn-sm">
-          <i className="fa fa-plus" />
-        </a>
+        <Button color="secondary" size="sm">
+          <Icon name="plus" />
+        </Button>
         {promptTextCreator(label)}
       </TextCreatorWrapper>
     ),
