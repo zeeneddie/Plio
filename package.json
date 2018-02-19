@@ -39,6 +39,7 @@
     "jest": "^21.2.1",
     "jest-styled-components": "^4.11.0-1",
     "jest-transform-graphql": "^2.1.0",
+    "jest-css-modules-transform": "^1.0.5",
     "moment-timezone": "^0.5.14",
     "mongodb": "^3.0.1",
     "mongodb-memory-server": "^1.6.4",
@@ -48,8 +49,5 @@
     "react-dom": "^16.2.0",
     "react-test-renderer": "^16.2.0",
     "styled-components": "^3.1.5"
-  },
-  "dependencies": {
-    "plio-util": "https://github.com/Pliohub/plio-util.git"
   }
 }
