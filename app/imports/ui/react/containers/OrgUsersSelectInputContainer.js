@@ -32,7 +32,7 @@ export default namedCompose('OrgUsersSelectInputContainer')(
     }) => ({
       loading,
       error,
-      items: mapUsersToOptions(users),
+      options: mapUsersToOptions(users),
       ...props,
     }),
   }),

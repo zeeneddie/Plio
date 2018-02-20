@@ -47,13 +47,13 @@ const HomeTitlesSubcard = ({
     const selectedTitle = titles[key];
     const newSelectedTitle = !!titles[key] && !currentItem.items.find(equals(selectedTitle))
       ? [{
-        text: selectedTitle,
+        label: selectedTitle,
         value: createWorkspaceTitleValue(key, selectedTitle),
       }]
       : null;
 
     const items = currentItem.items.map(title => ({
-      text: title,
+      label: title,
       value: createWorkspaceTitleValue(key, title),
     })).concat(newSelectedTitle || []);
 
@@ -64,7 +64,6 @@ const HomeTitlesSubcard = ({
         }}
         id={key}
         selected={createWorkspaceTitleValue(key, selectedTitle)}
-        input={{ placeholder: 'Select a title...' }}
       />
     );
   });

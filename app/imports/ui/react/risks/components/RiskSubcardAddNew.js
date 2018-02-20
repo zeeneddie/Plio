@@ -68,25 +68,19 @@ const RiskSubcardAddNew = enhance(({
     <FormField>
       Originator
       <SelectInput
-        uncontrolled
-        caret
-        hint
-        input={{ placeholder: 'Originator' }}
-        selected={originatorId}
-        items={users}
-        onSelect={onChangeOriginatorId}
+        value={originatorId}
+        options={users}
+        onChange={onChangeOriginatorId}
+        placeholder="Originator"
       />
     </FormField>
     <FormField>
       Owner
       <SelectInput
-        uncontrolled
-        caret
-        hint
-        input={{ placeholder: 'Owner' }}
-        selected={ownerId}
-        items={users}
-        onSelect={onChangeOwnerId}
+        value={ownerId}
+        options={users}
+        onChange={onChangeOwnerId}
+        placeholder="Owner"
       />
     </FormField>
     <Magnitudes {...{ guidelines }}>

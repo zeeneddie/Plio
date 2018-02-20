@@ -15,10 +15,10 @@ const enhance = compose(
   composeWithTracker(initMainData),
   connect(pickDeep(['organizations.organization'])),
   withHandlers({
-    onSelectTitle: ({ organization }) => (e, { text, value }, callback) =>
+    onSelectTitle: ({ organization }) => ({ label, value }, callback) =>
       changeTitle.call({
         fieldName: `${value}`.replace(/\(.*\)/, ''),
-        fieldValue: text,
+        fieldValue: label,
         organizationId: getId(organization),
       }, callback),
   }),
