@@ -36,9 +36,6 @@ const redirectAndOpen = (props) => setTimeout(() => {
   });
 
   let redirectOptions = { selectedStandard, defaultStandard };
-  if (props.searchText) {
-    redirectOptions = { defaultStandard };
-  }
 
   const redirect = () => redirectToStandardOrDefault(redirectOptions);
 
