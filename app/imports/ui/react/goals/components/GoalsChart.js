@@ -57,7 +57,7 @@ const getScatterData = ({
 ];
 
 const GoalsChart = ({ goals }) => {
-  const height = 50 * goals.length + 30;
+  const height = 50 * goals.length + 45;
 
   return (
     <TimelineChart

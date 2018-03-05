@@ -38,7 +38,7 @@ const enhance = compose(
       [LOADING]: false,
       [ERROR]: null,
     },
-    reducer: (state, action) => {
+    reducer: (state = {}, action) => {
       switch (action.type) {
         case LOADING:
           return state.set(LOADING, true);

@@ -1,4 +1,5 @@
 #import "./DashboardGoal.graphql"
+#import "./MilestoneCard.graphql"
 
 fragment GoalCard on Goal {
   owner {
@@ -18,5 +19,8 @@ fragment GoalCard on Goal {
     }
   }
   completionComment
+  milestones {
+    ...MilestoneCard
+  }
   ...DashboardGoal
 }

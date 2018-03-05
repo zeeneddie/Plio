@@ -1,4 +1,4 @@
-import { prop, objOf, compose } from 'ramda';
+import { pick } from 'ramda';
 import checkDocExistance from './checkDocExistance';
 
-export default checkDocExistance(compose(objOf('_id'), prop('_id')));
+export default checkDocExistance(pick(['_id']));

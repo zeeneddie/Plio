@@ -2,6 +2,11 @@ import { curry } from 'ramda';
 import { Cache } from 'plio-util';
 import { Query } from '../../graphql';
 import { updateQueryCache } from './updateQueryCache';
+import updateFragmentCache from './updateFragmentCache';
+
+const TYPE = 'Goal';
+
+export const updateGoalFragment = updateFragmentCache(TYPE);
 
 export const moveGoalWithinCacheAfterDeleting = curry((organizationId, goal, store) => {
   const variables = { organizationId };

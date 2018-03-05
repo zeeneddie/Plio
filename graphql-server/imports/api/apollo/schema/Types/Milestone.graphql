@@ -4,6 +4,9 @@ type Milestone {
   createdBy: User!
   updatedAt: DateTime
   updatedBy: User
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  deletedBy: User
   organization: Organization!
   notify: [User]
   title: String!
@@ -13,5 +16,6 @@ type Milestone {
   isCompleted: Boolean!
   completedAt: Date
   completedBy: User
+  completionComment: String
   goals: [Goal]
 }

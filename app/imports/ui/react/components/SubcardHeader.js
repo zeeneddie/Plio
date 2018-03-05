@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-import { CardBlock } from '../';
+import CardBlock from './CardBlock';
 
 const SubcardHeader = ({
   children,

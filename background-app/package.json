@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.39",
+    "babel-runtime": "^6.26.0",
     "deep-diff": "^0.3.4",
     "handlebars": "^4.0.5",
     "lodash.get": "^4.4.2",

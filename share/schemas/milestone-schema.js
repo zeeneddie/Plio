@@ -5,12 +5,14 @@ import {
   BaseEntitySchema,
   getNotifySchema,
   OrganizationIdSchema,
+  DeletedSchema,
 } from './schemas';
 import { StringLimits, MilestoneStatuses } from '../constants';
 
 export const MilestoneSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
+  DeletedSchema,
   getNotifySchema('ownerId'),
   {
     title: {
@@ -43,6 +45,11 @@ export const MilestoneSchema = new SimpleSchema([
       type: String,
       regEx: SimpleSchema.RegEx.Id,
       optional: true,
+    },
+    completionComment: {
+      type: String,
+      optional: true,
+      max: StringLimits.comments.max,
     },
   },
 ]);

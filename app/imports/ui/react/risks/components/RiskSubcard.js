@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import Blaze from 'meteor/gadicc:blaze-react-component';
 import cx from 'classnames';
 
-import { Subcard, Button, CardBlock, Label } from '../../components';
+import {
+  Subcard,
+  SubcardHeader,
+  SubcardBody,
+  Button,
+  CardBlock,
+  Label,
+} from '../../components';
 import { defer } from '../../helpers';
 
 const DeferredBlaze = defer(Blaze);
@@ -19,7 +26,7 @@ const RiskSubcard = ({
 }) => (
   <Subcard {...{ isOpen, toggle }}>
     {/* id is needed for scrolling */}
-    <Subcard.Header id={`subcard-${risk._id}`}>
+    <SubcardHeader id={`subcard-${risk._id}`}>
       <span>
         <strong>{risk.sequentialId}</strong>
         {' '}
@@ -27,8 +34,8 @@ const RiskSubcard = ({
         {isNew && ' '}
         {isNew && <Label names="primary">New</Label>}
       </span>
-    </Subcard.Header>
-    <Subcard.Body>
+    </SubcardHeader>
+    <SubcardBody>
       {isOpen && <DeferredBlaze template="Risk_Subcard" {...{ risk }} />}
       <CardBlock>
         <Button
@@ -47,7 +54,7 @@ const RiskSubcard = ({
           Delete
         </Button>
       </CardBlock>
-    </Subcard.Body>
+    </SubcardBody>
   </Subcard>
 );
 

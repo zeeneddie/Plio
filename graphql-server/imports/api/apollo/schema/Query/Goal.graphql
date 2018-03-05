@@ -1,5 +1,5 @@
 type GoalsQueryReturnType {
-  totalCount: Int!
+  totalCount: Int
   goals: [Goal]!
 }
 

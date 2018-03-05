@@ -1532,6 +1532,10 @@ fibers@^1.0.13:
   version "1.0.15"
   resolved "https://registry.yarnpkg.com/fibers/-/fibers-1.0.15.tgz#22f039c8f18b856190fbbe4decf056154c1eae9c"
 
+final-form@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.2.1.tgz#f3ec1d871b4b89115bf03c1fcb89455efe7a347d"
+
 finalhandler@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/finalhandler/-/finalhandler-1.1.0.tgz#ce0b6855b45853e791b2fcc680046d88253dd7f5"
@@ -3227,9 +3231,9 @@ pify@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
-"plio-util@https://github.com/Pliohub/plio-util.git#i768-goals-settings":
+"plio-util@https://github.com/Pliohub/plio-util.git#i737-goal-edit-modal-milestones":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#673e7b46a0b6a732f35346538f9da08214dbe7e9"
+  resolved "https://github.com/Pliohub/plio-util.git#71d3ce70288f6a6aa31dced25d42db24ff32b94c"
 
 pluralize@^2.0.0:
   version "2.0.0"
@@ -3508,6 +3512,10 @@ react-dom@^16.2.0:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.0"
+
+react-final-form@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-final-form/-/react-final-form-3.1.0.tgz#79711cd54631354981562cac3f924f786be2c232"
 
 react-input-autosize@^2.1.2:
   version "2.2.1"

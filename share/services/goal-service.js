@@ -1,6 +1,7 @@
 import { Goals } from '../collections';
 import { generateSerialNumber } from '../helpers';
 import { Abbreviations } from '../constants';
+import MilestoneService from './milestone-service';
 
 export default {
   collection: Goals,
@@ -62,13 +63,42 @@ export default {
     return this.update(query, modifier);
   },
 
+  async linkMilestone({ _id, milestoneId }) {
+    const query = { _id };
+    const modifier = {
+      $addToSet: {
+        milestoneIds: milestoneId,
+      },
+    };
+
+    return this.update(query, modifier);
+  },
+
+  async unlinkMilestone({ milestoneId }) {
+    const query = { milestoneIds: milestoneId };
+    const modifier = {
+      $pull: {
+        milestoneIds: milestoneId,
+      },
+    };
+
+    return this.update(query, modifier);
+  },
+
   async delete({ _id }, { userId }) {
-    return this.set({
+    const res = await this.set({
       _id,
       isDeleted: true,
       deletedBy: userId,
       deletedAt: new Date(),
     });
+
+    const { goal: { milestoneIds } } = res;
+
+    await Promise.all(milestoneIds.map(milestoneId =>
+      MilestoneService.delete({ _id: milestoneId }, { userId })));
+
+    return res;
   },
 
   async remove({ _id }, { doc: goal }) {

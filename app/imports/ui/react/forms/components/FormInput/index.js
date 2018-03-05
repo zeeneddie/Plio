@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { withHandlers } from 'recompose';
 import cx from 'classnames';
-import { DebounceInput } from 'react-debounce-input';
+import { Input } from 'reactstrap';
 
 import ClearField from '../../../fields/read/components/ClearField';
 import { onHandleBlur, onHandleClear } from './handlers';
@@ -16,8 +16,7 @@ const FormInput = enhance(({
   onHandleBlur: onBlur,
   onHandleClear: onClear,
   onChange,
-  debounceTimeout,
-  inputRef,
+  innerRef,
   containerClassName,
   inputGroup,
   ...other
@@ -30,17 +29,16 @@ const FormInput = enhance(({
       onClick={e => onClear(e, textInput)}
     >
       {children}
-      <DebounceInput
-        className={cx('form-control', className)}
-        inputRef={(input) => {
+      <Input
+        innerRef={(input) => {
           textInput = input;
-          return inputRef && inputRef(input);
+          return innerRef && innerRef(input);
         }}
         {...{
+          className,
           value,
           onChange,
           onBlur,
-          debounceTimeout,
           ...other,
         }}
       />
@@ -53,8 +51,7 @@ FormInput.propTypes = {
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
   value: PropTypes.string.isRequired,
-  debounceTimeout: PropTypes.number,
-  inputRef: PropTypes.func,
+  innerRef: PropTypes.func,
   children: PropTypes.node,
   inputGroup: PropTypes.bool,
 };

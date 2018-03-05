@@ -10,8 +10,12 @@ const enhance = compose(
     scroll: true,
   }),
   lifecycle({
-    componentDidUpdate() {
-      if (this.props.errorText && this.props.scroll) {
+    componentDidUpdate({ errorText }) {
+      if (
+        this.props.errorText &&
+        this.props.scroll &&
+        this.props.errorText !== errorText
+      ) {
         document.getElementsByClassName('modal-error-section')[0].scrollIntoView({
           behavior: 'smooth',
           block: 'start',

@@ -3,7 +3,16 @@ import PropTypes from 'prop-types';
 import { shouldUpdate } from 'recompose';
 import { equals } from 'ramda';
 
-import { Subcard, SwitchView, CardBlock, Button, SaveButton, ErrorSection } from '../../components';
+import {
+  Subcard,
+  SwitchView,
+  CardBlock,
+  Button,
+  SaveButton,
+  ErrorSection,
+  SubcardHeader,
+  SubcardBody,
+} from '../../components';
 import RiskSubcardAddNewContainer from '../containers/RiskSubcardAddNewContainer';
 import { namedCompose } from '../../helpers';
 import RiskSubcardAddExistingContainer from '../containers/RiskSubcardAddExistingContainer';
@@ -54,10 +63,10 @@ const RiskSubcardNew = enhance(({
   onSave,
 }) => (
   <Subcard disabled>
-    <Subcard.Header isNew>
+    <SubcardHeader isNew>
       New risk
-    </Subcard.Header>
-    <Subcard.Body>
+    </SubcardHeader>
+    <SubcardBody>
       <ErrorSection errorText={error} />
       <SwitchView
         buttons={[
@@ -117,7 +126,7 @@ const RiskSubcardNew = enhance(({
           Delete
         </Button>
       </CardBlock>
-    </Subcard.Body>
+    </SubcardBody>
   </Subcard>
 ));
 

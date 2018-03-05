@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Collapse } from '../';
+import Collapse from './Collapse';
 
 const SubcardBody = ({
   children,

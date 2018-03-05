@@ -2,7 +2,9 @@
 .meteor/local
 node_modules/
 mup.js
+mup-staging.js
 mup.json
+mup-staging.json
 settings.json
 settings-local.json
 settings-production.json

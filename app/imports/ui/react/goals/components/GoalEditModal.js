@@ -60,11 +60,9 @@ export const GoalEditModal = ({
         {guidance}
       </GuidancePanel>
       <div>
-        <CardBlock>
-          {goal && (
-            <GoalEditContainer {...{ goal, organizationId }} />
-          )}
-        </CardBlock>
+        {goal && (
+          <GoalEditContainer {...{ goal, organizationId }} />
+        )}
         <TextAlign center>
           <CardBlock>
             <Button onClick={onDelete}>

@@ -2,9 +2,10 @@
   "name": "plio-dev-toolsgit",
   "private": true,
   "scripts": {
-    "lint:app": "./node_modules/.bin/eslint app",
-    "lint:background-app": "./node_modules/.bin/eslint background-app",
-    "lint:graphql-server": "./node_modules/.bin/eslint graphql-server",
+    "lint": "./node_modules/.bin/eslint --ignore-pattern '**/imports/share'",
+    "lint:app": "yarn lint app",
+    "lint:background-app": "yarn lint background-app",
+    "lint:graphql-server": "yarn lint graphql-server",
     "jest": "./node_modules/.bin/jest",
     "test": "yarn jest"
   },
@@ -40,6 +41,7 @@
     "jest-css-modules-transform": "^1.0.5",
     "jest-styled-components": "^4.11.0-1",
     "jest-transform-graphql": "^2.1.0",
+    "lodash.get": "^4.4.2",
     "moment-timezone": "^0.5.14",
     "mongodb": "^3.0.1",
     "mongodb-memory-server": "^1.6.4",

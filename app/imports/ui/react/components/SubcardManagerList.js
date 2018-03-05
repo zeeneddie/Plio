@@ -11,7 +11,7 @@ const enhance = branch(
   renderNothing,
 );
 
-const SubcardNewList = enhance(({
+const SubcardManagerList = enhance(({
   cards,
   onDelete,
   render,
@@ -23,11 +23,11 @@ const SubcardNewList = enhance(({
   </Card>
 ));
 
-SubcardNewList.propTypes = {
+SubcardManagerList.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.object),
   onDelete: PropTypes.func,
   render: PropTypes.func,
   className: PropTypes.string,
 };
 
-export default SubcardNewList;
+export default SubcardManagerList;

@@ -5,11 +5,10 @@ import {
   loadFilesById,
   loadActionsByLinkedDocumentId,
   loadLessonsByDocumentId,
-  loadMilestonesById,
   loadRisksById,
   lenses,
 } from 'plio-util';
-import { view } from 'ramda';
+import { view, map, flatten } from 'ramda';
 
 const {
   _id,
@@ -22,7 +21,6 @@ const {
   completedBy,
   fileIds,
   riskIds,
-  milestoneIds,
 } = lenses;
 
 export default {
@@ -38,6 +36,10 @@ export default {
     risks: loadRisksById(view(riskIds)),
     actions: loadActionsByLinkedDocumentId(view(_id)),
     lessons: loadLessonsByDocumentId(view(_id)),
-    milestones: loadMilestonesById(view(milestoneIds)),
+    milestones: async ({ milestoneIds }, args, { loaders: { Milestone: { byQuery } } }) =>
+      byQuery.loadMany(map(milestoneId => ({
+        _id: milestoneId,
+        isDeleted: false,
+      }), milestoneIds)).then(flatten),
   },
 };

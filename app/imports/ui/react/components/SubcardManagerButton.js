@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
 
-import { TextAlign, Button } from '../..';
+import { TextAlign } from './Utility';
 
-const SubcardNewButton = ({ onClick, children, ...props }) => (
+const SubcardManagerButton = ({ onClick, children, ...props }) => (
   <TextAlign center>
     <div>
       <Button color="link" {...{ onClick, ...props }}>
@@ -13,9 +14,9 @@ const SubcardNewButton = ({ onClick, children, ...props }) => (
   </TextAlign>
 );
 
-SubcardNewButton.propTypes = {
+SubcardManagerButton.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.node,
 };
 
-export default SubcardNewButton;
+export default SubcardManagerButton;

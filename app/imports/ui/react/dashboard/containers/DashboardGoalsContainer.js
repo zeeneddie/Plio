@@ -7,7 +7,7 @@ import {
 } from 'recompose';
 import PropTypes from 'prop-types';
 import { lenses, lensNotEq } from 'plio-util';
-import { view, allPass } from 'ramda';
+import { view, allPass, propOr } from 'ramda';
 import { NetworkStatus } from 'apollo-client';
 import connectUI from 'redux-ui';
 
@@ -41,21 +41,26 @@ export default namedCompose('DashboardGoalsContainer')(
   }),
   onlyUpdateForKeys(['organizationId', 'itemsPerRow', 'deletedItemsPerRow']),
   connectUI({
+    key: 'DashboardGoalsContainer',
     state: {
       isOpen: false,
       isAddModalOpen: false,
       isEditModalOpen: false,
       activeGoal: null,
+      limit: propOr(
+        WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
+        WorkspaceDefaultsTypes.DISPLAY_GOALS,
+      ),
     },
   }),
   graphql(Query.DASHBOARD_GOALS, {
     options: ({
+      ui: { limit },
       organizationId,
-      itemsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
     }) => ({
       variables: {
         organizationId,
-        limit: itemsPerRow,
+        limit,
       },
       notifyOnNetworkStatusChange: true,
     }),
@@ -71,14 +76,14 @@ export default namedCompose('DashboardGoalsContainer')(
         me: { userId } = {},
       },
       ownProps: {
-        organizationId,
-        updateUI,
         ui: {
           isOpen,
           isAddModalOpen,
           isEditModalOpen,
-          activeGoal,
         },
+        organizationId,
+        updateUI,
+        ...ownProps
       },
     }) => ({
       isOpen,
@@ -104,9 +109,17 @@ export default namedCompose('DashboardGoalsContainer')(
               },
             }),
           });
-        }
 
-        updateUI('isOpen', !isOpen);
+          updateUI({
+            isOpen: !isOpen,
+            limit: 0,
+          });
+        } else {
+          updateUI({
+            isOpen: !isOpen,
+            limit: ownProps[WorkspaceDefaultsTypes.DISPLAY_GOALS],
+          });
+        }
       },
       toggleAddModal: (e) => {
         if (!isAddModalOpen) e.stopPropagation();

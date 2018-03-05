@@ -5,6 +5,7 @@ import DebounceInput from 'react-debounce-input';
 
 const DebounceTextarea = ({ element = Input, rows = 3, ...props }) => (
   <DebounceInput
+    forceNotifyByEnter={false}
     type="textarea"
     {...{ element, rows, ...props }}
   />

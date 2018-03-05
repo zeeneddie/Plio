@@ -1,5 +1,5 @@
-import { updateQueryCache } from './updateQueryCache';
+export * from './milestones';
+export * from './goals';
+export * from './updateQueryCache';
 
-export {
-  updateQueryCache,
-};
+export { default as updateFragmentCache } from './updateFragmentCache';

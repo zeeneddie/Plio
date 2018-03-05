@@ -767,10 +767,12 @@ export const AllowedActionLinkedDocTypes = [
 ];
 
 export const MilestoneStatuses = {
-  OPEN: 1,
-  COMPLETED: 2,
-  1: 'Open',
-  2: 'Completed',
+  AWAITING_COMPLETION: 1,
+  OVERDUE: 2,
+  COMPLETE: 3,
+  1: 'Awaiting completion',
+  2: 'Overdue',
+  3: 'Complete',
 };
 
 // fill in other stuff

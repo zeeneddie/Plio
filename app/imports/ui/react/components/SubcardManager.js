@@ -2,12 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { mapProps } from 'recompose';
 
-import { withCards, namedCompose } from '../../../helpers';
+import { withCards, namedCompose } from '../helpers';
+import SubcardManagerList from './SubcardManagerList';
+import SubcardManagerButton from './SubcardManagerButton';
 
-import List from './List';
-import Button from './Button';
-
-const enhance = namedCompose('SubcardNew')(
+const enhance = namedCompose('SubcardManager')(
   withCards,
   mapProps(({
     ui: { cards },
@@ -20,9 +19,9 @@ const enhance = namedCompose('SubcardNew')(
     ...props,
     children: React.Children.map(children, (child) => {
       switch (child.type) {
-        case List:
+        case SubcardManagerList:
           return React.cloneElement(child, { render, cards, onDelete: onRemoveCard });
-        case Button:
+        case SubcardManagerButton:
           return React.cloneElement(child, { onClick: onAddCard });
         default:
           return child;
@@ -31,14 +30,11 @@ const enhance = namedCompose('SubcardNew')(
   })),
 );
 
-const SubcardNew = enhance(({ children }) => children);
+const SubcardManager = enhance(({ children }) => children);
 
-SubcardNew.propTypes = {
+SubcardManager.propTypes = {
   children: PropTypes.node,
   render: PropTypes.func.isRequired,
 };
 
-SubcardNew.List = List;
-SubcardNew.Button = Button;
-
-export default SubcardNew;
+export default SubcardManager;

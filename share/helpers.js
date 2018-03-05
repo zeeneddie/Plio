@@ -36,7 +36,7 @@ export const deepExtend = (dest, src) => {
     if (_(val).isObject() && _(dest[key]).isObject()) {
       deepExtend(dest[key], val);
     } else {
-      dest[key] = val;
+      dest[key] = val; // eslint-disable-line no-param-reassign
     }
   });
 };
@@ -128,7 +128,7 @@ export const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
       return;
     }
 
-    magnitude = doc.magnitude;
+    magnitude = { doc };
   });
 
   const workflowStepTime = organization.workflowStepTime(magnitude);
@@ -178,6 +178,7 @@ const checkTargetDate = (targetDate, timezone) => {
     return false;
   }
 
+  // eslint-disable-next-line no-param-reassign
   timezone = timezone || moment.tz.guess();
 
   const tzNow = moment().tz(timezone);

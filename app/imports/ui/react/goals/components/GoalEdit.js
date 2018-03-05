@@ -11,6 +11,7 @@ import {
   DebounceTextarea,
   LoadableDatePicker,
   UndoTime,
+  CardBlock,
 } from '../../components';
 import { OrgUsersSelectInputContainer } from '../../containers';
 import { getStatusColor } from '../../../../api/goals/helpers';
@@ -18,8 +19,10 @@ import { GoalStatuses } from '../../../../share/constants';
 import { DEFAULT_UPDATE_TIMEOUT } from '../../../../api/constants';
 import { withToggle } from '../../helpers';
 import ToggleComplete from '../../components/ToggleComplete';
+import GoalMilestonesSubcardContainer from '../containers/GoalMilestonesSubcardContainer';
 
 const propTypes = {
+  ...GoalForm.propTypes,
   status: PropTypes.number.isRequired,
   statusComment: PropTypes.string,
   onChangeStatusComment: PropTypes.func.isRequired,
@@ -33,6 +36,7 @@ const propTypes = {
   onChangeCompletedBy: PropTypes.func,
   organizationId: PropTypes.string,
   onUndoCompletion: PropTypes.func,
+  milestones: PropTypes.arrayOf(PropTypes.object),
 };
 
 const StyledToggleComplete = styled(ToggleComplete)`
@@ -72,24 +76,31 @@ const enhance = onlyUpdateForKeys([
   'isCompleted',
   'completedBy',
   'completedAt',
+  'milestones',
 ]);
 
-export const GoalEdit = ({
-  status,
-  statusComment,
-  onChangeStatusComment,
-  onComplete,
-  completionComment,
-  onChangeCompletionComment,
-  isCompleted,
-  completedAt,
-  completedBy = {},
-  onChangeCompletedAt,
-  onChangeCompletedBy,
-  organizationId,
-  onUndoCompletion,
-  ...props
-}) => {
+export const GoalEdit = (props) => {
+  const {
+    status,
+    statusComment,
+    onChangeStatusComment,
+    onComplete,
+    completionComment,
+    onChangeCompletionComment,
+    isCompleted,
+    completedAt,
+    completedBy = {},
+    onChangeCompletedAt,
+    onChangeCompletedBy,
+    organizationId,
+    onUndoCompletion,
+    milestones,
+    _id,
+    title,
+    sequentialId,
+    color,
+  } = props;
+
   const completionCommentsTextarea = (
     <DebounceTextarea
       placeholder="Enter any completion comments"
@@ -101,69 +112,75 @@ export const GoalEdit = ({
 
   return (
     <Fragment>
-      <GoalForm isEditMode {...{ organizationId, ...props }} />
-      <FormField>
-        Status
-        <Status color={getStatusColor(status)}>
-          {GoalStatuses[status]}
-        </Status>
-      </FormField>
-      <FormField>
-        Status comment
-        <DebounceTextarea
-          placeholder="Status comment"
-          value={statusComment}
-          onChange={onChangeStatusComment}
-          debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
-        />
-      </FormField>
-      {isCompleted ? (
-        <Fragment>
-          <FormField>
-            Completed date
-            <LoadableDatePicker
-              selected={completedAt}
-              onChange={onChangeCompletedAt}
-              placeholderText="Completed date"
-            />
-          </FormField>
-          <FormField>
-            Completed by
-            <InputGroupWrapper>
-              <OrgUsersSelectInputContainer
-                value={completedBy._id}
-                onChange={onChangeCompletedBy}
-                placeholder="Completed by"
-                {...{ organizationId }}
+      <CardBlock>
+        <GoalForm isEditMode {...{ organizationId, ...props }} />
+        <FormField>
+          Status
+          <Status color={getStatusColor(status)}>
+            {GoalStatuses[status]}
+          </Status>
+        </FormField>
+        <FormField>
+          Status comment
+          <DebounceTextarea
+            placeholder="Status comment"
+            value={statusComment}
+            onChange={onChangeStatusComment}
+            debounceTimeout={DEFAULT_UPDATE_TIMEOUT}
+          />
+        </FormField>
+        {isCompleted ? (
+          <Fragment>
+            <FormField>
+              Completed date
+              <LoadableDatePicker
+                selected={completedAt}
+                onChange={onChangeCompletedAt}
+                placeholderText="Completed date"
               />
-              <InputGroupButton
-                color="link"
-                className="margin-left"
-                onClick={onUndoCompletion}
-              >
-                Undo
-              </InputGroupButton>
-            </InputGroupWrapper>
-            <UndoTime
-              date={completedAt}
-              render={({ passed, left }) => `Completed ${passed}, ${left} left to undo`}
-            />
-          </FormField>
-          <FormField>
-            Completion comments
-            {completionCommentsTextarea}
-          </FormField>
-        </Fragment>
-      ) : (
-        <UncontrolledStyledToggleComplete
-          completeButtonContent="Mark as complete"
-          {...{ onComplete }}
-        >
-          <FormGroup className="margin-top">
-            {completionCommentsTextarea}
-          </FormGroup>
-        </UncontrolledStyledToggleComplete>
-      )}
+            </FormField>
+            <FormField>
+              Completed by
+              <InputGroupWrapper>
+                <OrgUsersSelectInputContainer
+                  value={completedBy._id}
+                  onChange={onChangeCompletedBy}
+                  placeholder="Completed by"
+                  {...{ organizationId }}
+                />
+                <InputGroupButton
+                  color="link"
+                  className="margin-left"
+                  onClick={onUndoCompletion}
+                >
+                  Undo
+                </InputGroupButton>
+              </InputGroupWrapper>
+              <UndoTime
+                date={completedAt}
+                render={({ passed, left }) => `Completed ${passed}, ${left} left to undo`}
+              />
+            </FormField>
+            <FormField>
+              Completion comments
+              {completionCommentsTextarea}
+            </FormField>
+          </Fragment>
+        ) : (
+          <UncontrolledStyledToggleComplete
+            completeButtonContent="Mark as complete"
+            {...{ onComplete }}
+          >
+            <FormGroup className="margin-top">
+              {completionCommentsTextarea}
+            </FormGroup>
+          </UncontrolledStyledToggleComplete>
+        )}
+      </CardBlock>
+      <GoalMilestonesSubcardContainer
+        linkedTo={{ _id, title, sequentialId }}
+        {...{ milestones, organizationId, color }}
+      />
     </Fragment>
   );
 };

@@ -3,18 +3,12 @@ import PropTypes from 'prop-types';
 import { mapProps, branch, compose } from 'recompose';
 import { prop, identity } from 'ramda';
 
-import { defer } from '../../helpers';
-
-import Header from './Header';
-import Body from './Body';
-import New from './New';
+import { defer } from '../helpers';
+import SubcardHeader from './SubcardHeader';
+import SubcardBody from './SubcardBody';
 
 const enhance = compose(
-  branch(
-    prop('defer'),
-    defer,
-    identity,
-  ),
+  defer,
   branch(
     prop('disabled'),
     mapProps(props => ({ ...props, isOpen: true, toggle: () => null })),
@@ -29,9 +23,9 @@ const enhance = compose(
     ...props,
     children: React.Children.map(children, (child) => {
       switch (child.type) {
-        case Header:
+        case SubcardHeader:
           return React.cloneElement(child, { isOpen, onClick: toggle });
-        case Body:
+        case SubcardBody:
           return React.cloneElement(child, { isOpen });
         default:
           return child;
@@ -46,9 +40,5 @@ Subcard.propTypes = {
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
 };
-
-Subcard.Header = Header;
-Subcard.Body = Body;
-Subcard.New = New;
 
 export default Subcard;

@@ -1,7 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Subcard, CardBlock } from '../../components';
+import {
+  CardBlock,
+  Subcard,
+  SubcardHeader,
+  SubcardBody,
+  SubcardManager,
+  SubcardManagerButton,
+  SubcardManagerList,
+} from '../../components';
 import { withStateToggle } from '../../helpers';
 import RisksSubcardHeader from './RisksSubcardHeader';
 import RiskSubcardList from './RiskSubcardList';
@@ -16,14 +24,14 @@ const RisksSubcard = enhance(({
   standardId,
   onSave,
 }) => (
-  <Subcard defer {...{ isOpen, toggle }}>
-    <Subcard.Header>
+  <Subcard {...{ isOpen, toggle }}>
+    <SubcardHeader>
       <RisksSubcardHeader length={risks.length} {...{ isSaving }} />
-    </Subcard.Header>
-    <Subcard.Body>
+    </SubcardHeader>
+    <SubcardBody>
       <CardBlock>
         <RiskSubcardList {...{ risks, isSaving }} />
-        <Subcard.New
+        <SubcardManager
           render={card => (
             <RiskSubcardNewContainer
               key={card.id}
@@ -31,13 +39,13 @@ const RisksSubcard = enhance(({
             />
           )}
         >
-          <Subcard.New.List />
-          <Subcard.New.Button>
+          <SubcardManagerList />
+          <SubcardManagerButton>
             Add a new risk
-          </Subcard.New.Button>
-        </Subcard.New>
+          </SubcardManagerButton>
+        </SubcardManager>
       </CardBlock>
-    </Subcard.Body>
+    </SubcardBody>
   </Subcard>
 ));
 

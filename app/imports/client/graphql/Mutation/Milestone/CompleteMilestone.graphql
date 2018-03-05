@@ -1,0 +1,9 @@
+mutation completeMilestone($input: CompleteMilestoneInput!) {
+  completeMilestone(input: $input) {
+    milestone {
+      _id
+      isCompleted
+      completedAt
+    }
+  }
+}
