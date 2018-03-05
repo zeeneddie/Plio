@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { InputGroupAddon } from 'reactstrap';
+import { InputGroupAddon, Input } from 'reactstrap';
 import { onlyUpdateForKeys } from 'recompose';
 
 import {
@@ -9,11 +9,9 @@ import {
   Magnitudes,
   LoadableDatePicker,
   ColorPicker,
-  DebounceTextarea,
 } from '../../components';
 import { OrgUsersSelectInputContainer } from '../../containers';
 import { GoalColors } from '../../../../share/constants';
-import { DEFAULT_UPDATE_TIMEOUT } from '../../../../api/constants';
 
 const enhance = onlyUpdateForKeys([
   'sequentialId',
@@ -47,79 +45,75 @@ export const GoalForm = ({
   organizationId,
   onError,
   isEditMode,
-}) => {
-  const debounceTimeout = isEditMode ? DEFAULT_UPDATE_TIMEOUT : 300;
-
-  return (
-    <Fragment>
-      <FormField>
-        Key goal name
-        <FormInput
-          inputGroup={!!isEditMode}
-          placeholder="Key goal name"
-          value={title}
-          onChange={onChangeTitle}
-          {...{ debounceTimeout }}
-        >
-          {!!isEditMode && (
-            <InputGroupAddon>
-              {sequentialId}
-            </InputGroupAddon>
-          )}
-        </FormInput>
-      </FormField>
-      <FormField>
-        Description
-        <DebounceTextarea
-          placeholder="Description"
-          value={description}
-          onChange={onChangeDescription}
-          {...{ debounceTimeout }}
-        />
-      </FormField>
-      <FormField>
-        Owner
-        <OrgUsersSelectInputContainer
-          value={ownerId}
-          onChange={onChangeOwnerId}
-          placeholder="Owner"
-          {...{ organizationId, onError }}
-        />
-      </FormField>
-      <FormField>
-        Start date
-        <LoadableDatePicker
-          selected={startDate}
-          onChange={onChangeStartDate}
-          placeholderText="Start date"
-        />
-      </FormField>
-      <FormField>
-        End date
-        <LoadableDatePicker
-          selected={endDate}
-          onChange={onChangeEndDate}
-          placeholderText="End date"
-        />
-      </FormField>
-      <FormField>
-        Priority
-        <Magnitudes.Select
-          value={priority}
-          onChange={onChangePriority}
-        />
-      </FormField>
-      <FormField>
-        Color
-        <ColorPicker
-          value={color}
-          colors={Object.values(GoalColors)}
-          onChange={onChangeColor}
-        />
-      </FormField>
-    </Fragment>
-  );
-};
+}) => (
+  <Fragment>
+    <FormField>
+      Key goal name
+      <FormInput
+        inputGroup={!!isEditMode}
+        placeholder="Key goal name"
+        defaultValue={title}
+        onChange={onChangeTitle}
+      >
+        {!!isEditMode && (
+          <InputGroupAddon>
+            {sequentialId}
+          </InputGroupAddon>
+        )}
+      </FormInput>
+    </FormField>
+    <FormField>
+      Description
+      <Input
+        rows={3}
+        type="textarea"
+        placeholder="Description"
+        defaultValue={description}
+        onChange={onChangeDescription}
+      />
+    </FormField>
+    <FormField>
+      Owner
+      <OrgUsersSelectInputContainer
+        value={ownerId}
+        onChange={onChangeOwnerId}
+        placeholder="Owner"
+        {...{ organizationId, onError }}
+      />
+    </FormField>
+    <FormField>
+      Start date
+      <LoadableDatePicker
+        selected={startDate}
+        onChange={onChangeStartDate}
+        placeholderText="Start date"
+      />
+    </FormField>
+    <FormField>
+      End date
+      <LoadableDatePicker
+        selected={endDate}
+        onChange={onChangeEndDate}
+        placeholderText="End date"
+      />
+    </FormField>
+    <FormField>
+      Priority
+      <Magnitudes.Select
+        value={priority}
+        onChange={onChangePriority}
+      />
+    </FormField>
+    <FormField>
+      Color
+      <ColorPicker
+        value={color}
+        colors={Object.values(GoalColors)}
+        onChange={onChangeColor}
+      />
+    </FormField>
+  </Fragment>
+);
 
 GoalForm.propTypes = {
   sequentialId: PropTypes.string,

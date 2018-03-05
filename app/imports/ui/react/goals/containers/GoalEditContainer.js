@@ -9,10 +9,11 @@ import {
   moveGoalWithinCacheAfterDeleting,
   moveGoalWithinCacheAfterRestoring,
 } from '../../../../client/apollo/utils/goals';
-import { namedCompose } from '../../helpers';
+import { namedCompose, debounceHandlers } from '../../helpers';
 import GoalEdit from '../components/GoalEdit';
 import { Fragment, Mutation } from '../../../../client/graphql';
 import { callAsync } from '../../components/Modal';
+import { DEFAULT_UPDATE_TIMEOUT } from '../../../../api/constants';
 
 const update = (name, updateQuery) => (proxy, { data: { [name]: { goal } } }) => {
   const id = `Goal:${goal._id}`;
@@ -188,4 +189,5 @@ export default namedCompose('GoalEditContainer')(
       }),
     ),
   ),
+  debounceHandlers(['onChangeTitle', 'onChangeDescription'], DEFAULT_UPDATE_TIMEOUT),
 )(GoalEdit);
