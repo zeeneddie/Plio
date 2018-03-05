@@ -37,8 +37,9 @@ export default namedCompose('DashboardGoalsContainer')(
   renameProps({
     _id: 'organizationId',
     [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'itemsPerRow',
+    [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'deletedItemsPerRow',
   }),
-  onlyUpdateForKeys(['organizationId', 'itemsPerRow']),
+  onlyUpdateForKeys(['organizationId', 'itemsPerRow', 'deletedItemsPerRow']),
   connectUI({
     state: {
       isOpen: false,

@@ -1,3 +1,5 @@
+#import "../../Fragment/CompletedDeletedGoal.graphql"
+
 mutation completeGoal($input: CompleteGoalInput!) {
   completeGoal(input: $input) {
     goal {
@@ -11,6 +13,7 @@ mutation completeGoal($input: CompleteGoalInput!) {
           fullName
         }
       }
+      ...CompletedDeletedGoal
     }
   }
 }

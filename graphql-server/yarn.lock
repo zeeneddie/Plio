@@ -749,9 +749,9 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-"plio-util@https://github.com/Pliohub/plio-util.git":
+"plio-util@https://github.com/Pliohub/plio-util.git#i768-goals-settings":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#c3d46f3b26be8e956c49a63d86cdad84b3f1bd41"
+  resolved "https://github.com/Pliohub/plio-util.git#673e7b46a0b6a732f35346538f9da08214dbe7e9"
 
 process-nextick-args@~1.0.6:
   version "1.0.7"

@@ -1,29 +1,14 @@
 import connectUI from 'redux-ui';
 import { branch, renderNothing } from 'recompose';
-import { identity, path, over, reject, where, equals, dec, compose } from 'ramda';
+import { identity, path } from 'ramda';
 import { graphql } from 'react-apollo';
-import { transformGoal, lenses } from 'plio-util';
-import gql from 'graphql-tag';
+import { transformGoal } from 'plio-util';
 
+import { moveGoalWithinCacheAfterDeleting } from '../../../../client/apollo/utils/goals';
 import { namedCompose, withStateToggle } from '../../helpers';
 import GoalEditModal from '../components/GoalEditModal';
-import { Query } from '../../../../client/graphql';
+import { Query, Mutation } from '../../../../client/graphql';
 import { swal } from '../../../../client/util';
-
-const deleteGoal = (_id, data) => compose(
-  over(lenses.goals.totalCount, dec),
-  over(lenses.goals.goals, reject(where({ _id: equals(_id) }))),
-)(data);
-
-const DELETE_GOAL = gql`
-  mutation deleteGoal($input: DeleteGoalInput!) {
-    deleteGoal(input: $input) {
-      goal {
-        _id
-      }
-    }
-  }
-`;
 
 export default namedCompose('GoalEditModalContainer')(
   connectUI(),
@@ -62,7 +47,7 @@ export default namedCompose('GoalEditModalContainer')(
       goal: goal ? transformGoal(goal) : null,
     }),
   }),
-  graphql(DELETE_GOAL, {
+  graphql(Mutation.DELETE_GOAL, {
     props: ({
       mutate,
       ownProps: {
@@ -85,17 +70,8 @@ export default namedCompose('GoalEditModalContainer')(
             _id: goal._id,
           },
         },
-        update: (proxy) => {
-          const data = proxy.readQuery({
-            query: Query.DASHBOARD_GOALS,
-            variables: { organizationId },
-          });
-
-          return proxy.writeQuery({
-            query: Query.DASHBOARD_GOALS,
-            variables: { organizationId },
-            data: deleteGoal(goal._id, data),
-          });
+        update: (proxy, { data: { deleteGoal: { goal: removedGoal } } }) => {
+          moveGoalWithinCacheAfterDeleting(organizationId, removedGoal, proxy);
         },
       }).then(toggle)),
     }),

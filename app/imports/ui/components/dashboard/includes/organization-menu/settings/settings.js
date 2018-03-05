@@ -12,6 +12,7 @@ import HomeTitlesSubcardContainer
   from '/imports/ui/react/organization-settings/containers/HomeTitlesSubcardContainer';
 import ReviewContainer
   from '/imports/ui/react/organization-settings/containers/ReviewContainer';
+import KeyGoalsSettingsContainer from '/imports/ui/react/organization-settings/containers/KeyGoals';
 import { DocumentTypes } from '../../../../../../share/constants';
 import {
   setNCGuideline,
@@ -92,6 +93,9 @@ Template.OrgSettings.viewmodel({
   },
   reviewContainer() {
     return ReviewContainer;
+  },
+  keyGoalsSettings() {
+    return KeyGoalsSettingsContainer;
   },
   DocumentTypes: () => DocumentTypes,
 });

@@ -1,3 +1,5 @@
+import { concat } from 'ramda';
+import { mapKeys } from 'plio-util';
 import { check } from 'meteor/check';
 import get from 'lodash.get';
 import moment from 'moment-timezone';
@@ -13,6 +15,7 @@ import {
   SystemName,
   DocumentTypesPlural,
   AllDocumentTypes,
+  WORKSPACE_DEFAULTS,
 } from './constants.js';
 import {
   Actions,
@@ -255,3 +258,5 @@ export const removeRolesFromAllUsers = roles =>
   forEachOrgsUser(({ _id: organizationId }, { userId }) => {
     Roles.removeUsersFromRoles(userId, roles, organizationId);
   });
+
+export const getWorkspaceDefaultsUpdater = mapKeys(concat(`${WORKSPACE_DEFAULTS}.`));

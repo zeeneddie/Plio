@@ -26,6 +26,8 @@ type WorkspaceDefaults {
   displayUsers: Int
   displayMessages: Int
   displayActions: Int
+  displayGoals: Int
+  displayCompletedDeletedGoals: Int
 }
 
 type OrganizationUser {

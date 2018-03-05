@@ -5,18 +5,22 @@ import { view, curry, compose, objOf, toUpper, prop } from 'ramda';
 import connectUI from 'redux-ui';
 import { connect } from 'react-redux';
 
+import {
+  moveGoalWithinCacheAfterDeleting,
+  moveGoalWithinCacheAfterRestoring,
+} from '../../../../client/apollo/utils/goals';
 import { namedCompose } from '../../helpers';
 import GoalEdit from '../components/GoalEdit';
 import { Fragment, Mutation } from '../../../../client/graphql';
 import { callAsync } from '../../components/Modal';
 
-const update = name => (proxy, { data: { [name]: { goal: { _id, ...goal } } } }) => {
-  const id = `Goal:${_id}`;
+const update = (name, updateQuery) => (proxy, { data: { [name]: { goal } } }) => {
+  const id = `Goal:${goal._id}`;
   const fragment = Fragment.GOAL_CARD;
   const fragmentName = 'GoalCard';
   const data = proxy.readFragment({ id, fragment, fragmentName });
 
-  return proxy.writeFragment({
+  proxy.writeFragment({
     id,
     fragment,
     fragmentName,
@@ -25,6 +29,10 @@ const update = name => (proxy, { data: { [name]: { goal: { _id, ...goal } } } })
       ...goal,
     },
   });
+
+  if (updateQuery) {
+    updateQuery(goal, proxy);
+  }
 };
 
 /*
@@ -39,6 +47,7 @@ const update = name => (proxy, { data: { [name]: { goal: { _id, ...goal } } } })
 const props = curry((getInputArgs, {
   handler,
   mutation,
+  updateQuery,
 }) => ({
   mutate,
   ownProps,
@@ -53,7 +62,7 @@ const props = curry((getInputArgs, {
     goal,
     organizationId,
     [handler]: (...args) => dispatch(callAsync(() => mutate({
-      update: update(mutation),
+      update: update(mutation, updateQuery),
       variables: {
         input: {
           _id: goal._id,
@@ -159,18 +168,20 @@ export default namedCompose('GoalEditContainer')(
         }),
       }),
       graphql(Mutation.UNDO_GOAL_COMPLETION, {
-        props: props(e => e.stopPropagation(), {
+        props: propsArg => props(e => e.stopPropagation(), {
           handler: 'onUndoCompletion',
           mutation: 'undoGoalCompletion',
-        }),
+          updateQuery: moveGoalWithinCacheAfterRestoring(propsArg.ownProps.organizationId),
+        })(propsArg),
       }),
     ),
     compose(
       graphql(Mutation.COMPLETE_GOAL, {
-        props: props(getCompleteGoalInputArgs, {
+        props: propsArg => props(getCompleteGoalInputArgs, {
           handler: 'onComplete',
           mutation: 'completeGoal',
-        }),
+          updateQuery: moveGoalWithinCacheAfterDeleting(propsArg.ownProps.organizationId),
+        })(propsArg),
       }),
       withHandlers({
         onChangeCompletionComment: updateInput('completionComment'),

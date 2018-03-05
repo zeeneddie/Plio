@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import pluralize from 'pluralize';
 import { joinIds } from 'plio-util';
 
@@ -9,7 +9,11 @@ import {
   PlusButton,
   GoalsChart,
 } from '../../components';
-import { GoalAddModalContainer, GoalEditModalContainer } from '../../goals/containers';
+import {
+  GoalAddModalContainer,
+  GoalEditModalContainer,
+  CompletedDeletedGoalsContainer,
+} from '../../goals/containers';
 
 const DashboardGoals = ({
   totalCount,
@@ -23,17 +27,28 @@ const DashboardGoals = ({
   organizationId,
   isEditModalOpen,
   toggleEditModal,
+  deletedItemsPerRow,
 }) => (
   <DashboardStatsExpandable
     items={goals}
     total={totalCount}
     itemsPerRow={goals.length}
     renderIcon={loading ? () => <IconLoading /> : undefined}
-    render={({ items }) => !!items.length && (
-      <GoalsChart
-        key={joinIds(items)}
-        goals={items}
-      />
+    render={({ items }) => (
+      <Fragment>
+        {!!items.length && (
+          <GoalsChart
+            key={joinIds(items)}
+            goals={items}
+          />
+        )}
+        <CompletedDeletedGoalsContainer
+          {...{
+            organizationId,
+            deletedItemsPerRow,
+          }}
+        />
+      </Fragment>
     )}
     {...{ toggle, isOpen }}
   >
@@ -67,6 +82,7 @@ DashboardGoals.propTypes = {
   organizationId: PropTypes.string.isRequired,
   isEditModalOpen: PropTypes.bool.isRequired,
   toggleEditModal: PropTypes.func.isRequired,
+  deletedItemsPerRow: PropTypes.number,
 };
 
 export default DashboardGoals;

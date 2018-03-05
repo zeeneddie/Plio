@@ -719,13 +719,15 @@ export const WorkspaceDefaultsTypes = {
   DISPLAY_MESSAGES: 'displayMessages',
   DISPLAY_ACTIONS: 'displayActions',
   DISPLAY_GOALS: 'displayGoals',
+  DISPLAY_COMPLETED_DELETED_GOALS: 'displayCompletedDeletedGoals',
 };
 
 export const WorkspaceDefaults = {
   [WorkspaceDefaultsTypes.DISPLAY_USERS]: 5,
   [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: 1,
   [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 4,
-  [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 5,
+  [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 10,
+  [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 5,
 };
 
 export const GoalPriorities = { ...ProblemMagnitudes };

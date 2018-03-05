@@ -13,6 +13,8 @@ import updateGoalCompletionComment from './updateGoalCompletionComment';
 import updateGoalCompletedAt from './updateGoalCompletedAt';
 import updateGoalCompletedBy from './updateGoalCompletedBy';
 import undoGoalCompletion from './undoGoalCompletion';
+import restoreGoal from './restoreGoal';
+import removeGoal from './removeGoal';
 
 export default {
   createGoal,
@@ -30,4 +32,6 @@ export default {
   updateGoalCompletedAt,
   updateGoalCompletedBy,
   undoGoalCompletion,
+  restoreGoal,
+  removeGoal,
 };

@@ -63,13 +63,33 @@ export default {
   },
 
   async delete({ _id }, { userId }) {
-    // delete all linked documents (goals, lessons, ...)?
     return this.set({
       _id,
       isDeleted: true,
       deletedBy: userId,
       deletedAt: new Date(),
     });
+  },
+
+  async remove({ _id }, { doc: goal }) {
+    // TODO also delete linked milestones, actions, risks, lessons, files
+    await this.collection.remove({ _id });
+
+    return { goal };
+  },
+
+  async restore({ _id }) {
+    const query = { _id };
+    const modifier = {
+      $set: {
+        isDeleted: false,
+      },
+      $unset: {
+        deletedBy: '',
+        deletedAt: '',
+      },
+    };
+    return this.update(query, modifier);
   },
 
   async set({ _id, ...args }) {

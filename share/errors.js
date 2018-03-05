@@ -10,4 +10,5 @@ export default {
   DOC_CANNOT_UNDO_COMPLETION: 'Cannot undo document completion',
   DOC_CANNOT_UNDO_VERIFICATION: 'Cannot undo document verification',
   GOAL_CANNOT_CHANGE: 'Cannot create or change goal (Access denied)',
+  ORG_CANNOT_CHANGE_SETTINGS: 'User is not authorized for editing organization settings',
 };

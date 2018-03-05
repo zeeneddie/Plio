@@ -1,20 +1,16 @@
 import connectUI from 'redux-ui';
-import { lenses } from 'plio-util';
-import { view, over, compose, append, inc } from 'ramda';
+import { lenses, Cache } from 'plio-util';
+import { view } from 'ramda';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 
+import { updateQueryCache } from '../../../../client/apollo/utils';
 import { namedCompose } from '../../helpers';
 import GoalAddModal from '../components/GoalAddModal';
 import { GoalPriorities } from '../../../../share/constants';
 import { Query, Fragment } from '../../../../client/graphql';
 import { callAsync } from '../../components/Modal';
-
-const addGoal = (goal, data) => compose(
-  over(lenses.goals.goals, append(goal)),
-  over(lenses.goals.totalCount, inc),
-)(data);
 
 const CREATE_GOAL = gql`
   mutation createGoal($input: CreateGoalInput!) {
@@ -85,16 +81,10 @@ export default namedCompose('GoalAddModalContainer')(
           },
         },
         update: (proxy, { data: { createGoal: { goal } } }) => {
-          const data = addGoal(goal, proxy.readQuery({
-            query: Query.DASHBOARD_GOALS,
+          updateQueryCache(Cache.addGoal(goal), {
             variables: { organizationId },
-          }));
-
-          return proxy.writeQuery({
-            data,
             query: Query.DASHBOARD_GOALS,
-            variables: { organizationId },
-          });
+          }, proxy);
         },
       }).then(() => isOpen && toggle(e)))),
     }),
