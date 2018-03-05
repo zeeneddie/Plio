@@ -113,10 +113,6 @@ export default namedCompose('DashboardGoalsContainer')(
         updateUI('isAddModalOpen', !isAddModalOpen);
       },
       toggleEditModal: () => updateUI('isEditModalOpen', !isEditModalOpen),
-      onScatterTap: (e, { _id }) => updateUI({
-        isEditModalOpen: true,
-        activeGoal: _id,
-      }),
     }),
   }),
   withPreloaderPage(

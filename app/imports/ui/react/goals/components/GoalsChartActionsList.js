@@ -1,0 +1,53 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import connectUI from 'redux-ui';
+import { ListGroup, ListGroupItem } from 'reactstrap';
+import { compose, withHandlers } from 'recompose';
+import { withStore } from '../../helpers';
+import Icon from '../../components/Icons/Icon';
+
+const StyledListGroup = styled(ListGroup)`
+  border: 1px solid #ddd;
+  border-radius: .25rem;
+  .list-group-item {
+    border: none;
+  }
+`;
+
+const enhance = compose(
+  withStore,
+  connectUI(),
+  withHandlers({
+    onEdit: ({ id, updateUI, togglePopover }) => () => {
+      togglePopover();
+      updateUI({
+        isEditModalOpen: true,
+        activeGoal: id,
+      });
+    },
+  }),
+);
+
+const GoalsChartActionsList = ({ onEdit }) => (
+  <StyledListGroup>
+    <ListGroupItem tag="a" action>
+      <Icon name="check-square-o" margin="right" />
+      Mark as Complete
+    </ListGroupItem>
+    <ListGroupItem tag="a" onClick={onEdit} action>
+      <Icon name="edit" margin="right" />
+      Edit
+    </ListGroupItem>
+    <ListGroupItem tag="a" action>
+      <Icon name="trash-o" margin="right" />
+      Delete
+    </ListGroupItem>
+  </StyledListGroup>
+);
+
+GoalsChartActionsList.propTypes = {
+  onEdit: PropTypes.func,
+};
+
+export default enhance(GoalsChartActionsList);

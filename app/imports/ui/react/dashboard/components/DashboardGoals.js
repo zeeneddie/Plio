@@ -14,7 +14,6 @@ import { GoalAddModalContainer, GoalEditModalContainer } from '../../goals/conta
 const DashboardGoals = ({
   totalCount,
   goals,
-  onScatterTap,
   toggle,
   isOpen,
   loading,
@@ -34,7 +33,6 @@ const DashboardGoals = ({
       <GoalsChart
         key={joinIds(items)}
         goals={items}
-        {...{ onScatterTap }}
       />
     )}
     {...{ toggle, isOpen }}
@@ -60,7 +58,6 @@ const DashboardGoals = ({
 DashboardGoals.propTypes = {
   totalCount: PropTypes.number.isRequired,
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onScatterTap: PropTypes.func,
   toggle: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   isAddModalOpen: PropTypes.bool.isRequired,

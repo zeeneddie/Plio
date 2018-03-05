@@ -1,8 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { VictoryScatter, VictoryTooltip } from 'victory';
+import { VictoryScatter, VictoryTooltip, Point } from 'victory';
+import PopoverPoint from './PopoverPoint';
 
-const TimelinePoint = ({ color, onClick, ...props }) => (
+const TimelinePoint = ({
+  color,
+  onClick,
+  popoverContent,
+  entityId,
+  ...props
+}) => (
   <VictoryScatter
     style={{
       data: {
@@ -10,18 +17,23 @@ const TimelinePoint = ({ color, onClick, ...props }) => (
         cursor: 'pointer',
       },
     }}
-    events={[{
+    events={onClick && [{
       target: 'data',
       eventHandlers: { onClick },
     }]}
     labelComponent={<VictoryTooltip />}
+    dataComponent={
+      popoverContent ? <PopoverPoint id={entityId} {...{ popoverContent }} /> : <Point />
+    }
     {...props}
   />
 );
 
 TimelinePoint.propTypes = {
   color: PropTypes.string,
+  entityId: PropTypes.string,
   onClick: PropTypes.func,
+  popoverContent: PropTypes.func,
 };
 
 export default TimelinePoint;

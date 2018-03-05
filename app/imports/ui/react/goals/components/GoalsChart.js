@@ -6,6 +6,7 @@ import {
   TimelineHorizontalLine,
   TimelinePoint,
 } from '../../components';
+import GoalsChartActionsList from './GoalsChartActionsList';
 
 const getLineData = ({
   startDate,
@@ -55,10 +56,7 @@ const getScatterData = ({
   })),
 ];
 
-const GoalsChart = ({
-  goals,
-  onScatterTap,
-}) => {
+const GoalsChart = ({ goals }) => {
   const height = 50 * goals.length + 30;
 
   return (
@@ -85,9 +83,10 @@ const GoalsChart = ({
       }))}
       {goals.map((goal, index) => TimelinePoint({
         key: goal._id,
+        entityId: goal._id,
         color: goal.color,
-        onClick: (e, ...args) => onScatterTap(e, goal, ...args),
         data: getScatterData(goal, index),
+        popoverContent: GoalsChartActionsList,
       }))}
     </TimelineChart>
   );
@@ -95,7 +94,6 @@ const GoalsChart = ({
 
 GoalsChart.propTypes = {
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onScatterTap: PropTypes.func,
 };
 
 export default GoalsChart;
