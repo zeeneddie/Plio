@@ -720,6 +720,7 @@ export const WorkspaceDefaultsTypes = {
   DISPLAY_ACTIONS: 'displayActions',
   DISPLAY_GOALS: 'displayGoals',
   DISPLAY_COMPLETED_DELETED_GOALS: 'displayCompletedDeletedGoals',
+  TIME_SCALE: 'timeScale',
 };
 
 export const WorkspaceDefaults = {
@@ -728,7 +729,31 @@ export const WorkspaceDefaults = {
   [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 4,
   [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 10,
   [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 5,
+  [WorkspaceDefaultsTypes.TIME_SCALE]: 3,
 };
+
+export const TimeScaleOptions = [
+  {
+    label: '1 month',
+    value: 1,
+  },
+  {
+    label: '3 months',
+    value: 3,
+  },
+  {
+    label: '6 months',
+    value: 6,
+  },
+  {
+    label: '9 months',
+    value: 9,
+  },
+  {
+    label: '12 months',
+    value: 12,
+  },
+];
 
 export const GoalPriorities = { ...ProblemMagnitudes };
 

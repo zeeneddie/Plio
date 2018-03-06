@@ -6,7 +6,7 @@ import TimelineAxis from './TimelineAxis';
 
 const TimelineChart = ({
   scale = { x: 'time', y: 'linear' },
-  domainPadding = { x: [20, 20] },
+  domainPadding = { x: [40, 40] },
   padding = {
     top: 0,
     left: 0,

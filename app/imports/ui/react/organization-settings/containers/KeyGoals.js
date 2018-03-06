@@ -32,12 +32,15 @@ const enhance = compose(
     '_id',
     WorkspaceDefaultsTypes.DISPLAY_GOALS,
     WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS,
+    WorkspaceDefaultsTypes.TIME_SCALE,
   ]),
   defaultProps({
     [WorkspaceDefaultsTypes.DISPLAY_GOALS]:
       WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
     [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]:
       WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS],
+    [WorkspaceDefaultsTypes.TIME_SCALE]:
+      WorkspaceDefaults[WorkspaceDefaultsTypes.TIME_SCALE],
   }),
   graphql(Mutation.UPDATE_ORGANIZATION_WORKSPACE_DEFAULTS, {
     props: ({ mutate, ownProps: { _id } }) => ({

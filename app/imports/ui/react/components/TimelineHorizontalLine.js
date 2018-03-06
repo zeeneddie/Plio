@@ -17,8 +17,7 @@ const TimelineHorizontalLine = ({
         cursor: 'pointer',
       },
       labels: {
-        fill: '#888',
-        fontWeight: 'lighter',
+        fill: '#373a3c',
         textAnchor: 'start',
       },
     }}
@@ -26,7 +25,7 @@ const TimelineHorizontalLine = ({
       target: 'data',
       eventHandlers: { onClick },
     }]}
-    labelComponent={<VictoryLabel dx={20} />}
+    labelComponent={<VictoryLabel dx={5} />}
     {...{ data, ...props }}
   />
 );

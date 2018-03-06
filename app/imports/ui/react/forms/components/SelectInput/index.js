@@ -87,7 +87,8 @@ const TextCreatorWrapper = styled.span`
 const enhance = compose(
   withState('value', 'setValue', prop('value')),
   withHandlers({
-    onChange: ({ setValue, onChange }) => (option) => {
+    onChange: ({ value, setValue, onChange }) => (option) => {
+      if (option.value === value) return;
       setValue(option.value);
       if (onChange) {
         onChange(option);

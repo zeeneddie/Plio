@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import {
   TimelineChart,
   TimelineCurrentDateLine,
@@ -56,17 +57,28 @@ const getScatterData = ({
   })),
 ];
 
-const GoalsChart = ({ goals }) => {
-  const height = 50 * goals.length + 45;
+const getXDomainData = (timeScale) => {
+  const MONTH_DAYS = 30;
+  const DENOMINATOR = 8;
+  const dayTimeScale = timeScale * MONTH_DAYS;
+  const daysBeforeToday = dayTimeScale / DENOMINATOR;
+  const startDate = moment().subtract(daysBeforeToday, 'days');
+  const endDate = moment().add(dayTimeScale - daysBeforeToday, 'days');
+  return [
+    startDate.toDate(),
+    endDate.toDate(),
+  ];
+};
+
+const GoalsChart = ({ goals, timeScale }) => {
+  const height = 55 * goals.length + 45;
+  const domainPadding = { x: [0, 0], y: [0, -35] };
 
   return (
     <TimelineChart
       width={1140}
       domain={{
-        x: [
-          new Date('01 January 2018'),
-          new Date('01 January 2019'),
-        ],
+        x: getXDomainData(timeScale),
         y: [
           -1,
           goals.length,
@@ -80,6 +92,7 @@ const GoalsChart = ({ goals }) => {
         key: goal._id,
         data: getLineData(goal, index),
         color: goal.color,
+        domainPadding,
       }))}
       {goals.map((goal, index) => TimelinePoint({
         key: goal._id,
@@ -87,6 +100,7 @@ const GoalsChart = ({ goals }) => {
         color: goal.color,
         data: getScatterData(goal, index),
         popoverContent: GoalsChartActionsList,
+        domainPadding,
       }))}
     </TimelineChart>
   );
@@ -94,6 +108,7 @@ const GoalsChart = ({ goals }) => {
 
 GoalsChart.propTypes = {
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
+  timeScale: PropTypes.number.isRequired,
 };
 
 export default GoalsChart;

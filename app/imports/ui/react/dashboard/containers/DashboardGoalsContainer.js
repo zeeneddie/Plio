@@ -4,6 +4,7 @@ import {
   flattenProp,
   setPropTypes,
   onlyUpdateForKeys,
+  defaultProps,
 } from 'recompose';
 import PropTypes from 'prop-types';
 import { lenses, lensNotEq } from 'plio-util';
@@ -27,6 +28,8 @@ export default namedCompose('DashboardGoalsContainer')(
       serialNumber: PropTypes.number.isRequired,
       [WORKSPACE_DEFAULTS]: PropTypes.shape({
         [WorkspaceDefaultsTypes.DISPLAY_GOALS]: PropTypes.number,
+        [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: PropTypes.number,
+        [WorkspaceDefaultsTypes.TIME_SCALE]: PropTypes.number,
       }).isRequired,
     }).isRequired,
   }),
@@ -38,8 +41,12 @@ export default namedCompose('DashboardGoalsContainer')(
     _id: 'organizationId',
     [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'itemsPerRow',
     [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'deletedItemsPerRow',
+    [WorkspaceDefaultsTypes.TIME_SCALE]: 'timeScale',
   }),
-  onlyUpdateForKeys(['organizationId', 'itemsPerRow', 'deletedItemsPerRow']),
+  defaultProps({
+    timeScale: WorkspaceDefaults[WorkspaceDefaultsTypes.TIME_SCALE],
+  }),
+  onlyUpdateForKeys(['organizationId', 'itemsPerRow', 'deletedItemsPerRow', 'timeScale']),
   connectUI({
     key: 'DashboardGoalsContainer',
     state: {

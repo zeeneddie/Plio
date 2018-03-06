@@ -28,6 +28,7 @@ const DashboardGoals = ({
   isEditModalOpen,
   toggleEditModal,
   deletedItemsPerRow,
+  timeScale,
 }) => (
   <DashboardStatsExpandable
     items={goals}
@@ -38,6 +39,7 @@ const DashboardGoals = ({
       <Fragment>
         {!!items.length && (
           <GoalsChart
+            {...{ timeScale }}
             key={joinIds(items)}
             goals={items}
           />
@@ -84,6 +86,7 @@ DashboardGoals.propTypes = {
   organizationId: PropTypes.string.isRequired,
   isEditModalOpen: PropTypes.bool.isRequired,
   toggleEditModal: PropTypes.func.isRequired,
+  timeScale: PropTypes.number.isRequired,
   deletedItemsPerRow: PropTypes.number,
 };
 

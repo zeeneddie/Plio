@@ -11,6 +11,7 @@ const TimelineAxis = () => (
         angle: 0,
         padding: 30,
         border: 1,
+        fill: '#999',
       },
     }}
   />

@@ -9,6 +9,7 @@ input UpdateOrganizationWorkspaceDefaultsInput {
   displayActions: Int
   displayGoals: Int
   displayCompletedDeletedGoals: Int
+  timeScale: Int
 }
 
 type Mutation {
