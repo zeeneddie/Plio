@@ -102,8 +102,13 @@ export default {
   },
 
   async remove({ _id }, { doc: goal }) {
-    // TODO also delete linked milestones, actions, risks, lessons, files
+    // TODO also delete actions, risks, lessons, files
     await this.collection.remove({ _id });
+
+    const { milestoneIds } = goal;
+
+    await Promise.all(milestoneIds.map(milestoneId =>
+      MilestoneService.remove({ _id: milestoneId })));
 
     return { goal };
   },
@@ -113,13 +118,24 @@ export default {
     const modifier = {
       $set: {
         isDeleted: false,
+        isCompleted: false,
       },
       $unset: {
         deletedBy: '',
         deletedAt: '',
+        completedBy: '',
+        completedAt: '',
+        completionComment: '',
       },
     };
-    return this.update(query, modifier);
+    const res = await this.update(query, modifier);
+
+    const { goal: { milestoneIds } } = res;
+
+    await Promise.all(milestoneIds.map(milestoneId =>
+      MilestoneService.restore({ _id: milestoneId })));
+
+    return res;
   },
 
   async set({ _id, ...args }) {

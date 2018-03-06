@@ -71,7 +71,9 @@ export default namedCompose('GoalEditModalContainer')(
           },
         },
         update: (proxy, { data: { deleteGoal: { goal: removedGoal } } }) => {
-          moveGoalWithinCacheAfterDeleting(organizationId, removedGoal, proxy);
+          if (!removedGoal.isCompleted) {
+            moveGoalWithinCacheAfterDeleting(organizationId, removedGoal, proxy);
+          }
         },
       }).then(toggle)),
     }),

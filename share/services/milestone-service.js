@@ -35,6 +35,28 @@ export default {
     });
   },
 
+  async remove({ _id }) {
+    return this.collection.remove({ _id });
+  },
+
+  async restore({ _id }) {
+    const query = { _id };
+    const modifier = {
+      $set: {
+        isDeleted: false,
+        isCompleted: false,
+      },
+      $unset: {
+        deletedBy: '',
+        deletedAt: '',
+        completedBy: '',
+        completedAt: '',
+        completionComment: '',
+      },
+    };
+    return this.update(query, modifier);
+  },
+
   async complete({ _id }, { userId }) {
     return this.set({
       _id,
