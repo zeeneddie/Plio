@@ -15,6 +15,8 @@
     "lodash.property": "^4.4.2",
     "meteor-node-stubs": "~0.2.0",
     "moment-timezone": "^0.5.7",
-    "pluralize": "^3.0.0"
+    "pluralize": "^3.0.0",
+    "plio-util": "https://github.com/Pliohub/plio-util.git#devel",
+    "ramda": "^0.25.0"
   }
 }
