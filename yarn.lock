@@ -3660,10 +3660,6 @@ pkg-dir@^1.0.0:
   dependencies:
     find-up "^1.0.0"
 
-"plio-util@https://github.com/Pliohub/plio-util.git#devel":
-  version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#fdd334c1c4c2f7ba02c34e5acfecda75a1b8a8e0"
-
 pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"

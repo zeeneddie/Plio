@@ -63,7 +63,7 @@ const UserProfileHelp = {
   [UserRoles.EDIT_USER_ROLES]: 'Indicate whether this user can edit the User Superpowers section in the User profile (you should only grant this power to very few, highly trusted users)',
   [UserRoles.CHANGE_ORG_SETTINGS]: 'Indicate whether this user can edit the Organization settings (you should only grant this power to very few, highly trusted users)',
   [UserRoles.COMPLETE_ANY_ACTION]: 'Indicate whether this user can complete/verify any action in your Plio organization',
-  [UserRoles.CREATE_UPDATE_DELETE_GOALS]: 'Indicate whether this user can create and edit goals documents',
+  [UserRoles.CREATE_UPDATE_DELETE_GOALS]: 'Indicate whether this user can create and edit key goals',
 };
 
 const GoalsHelp = {
