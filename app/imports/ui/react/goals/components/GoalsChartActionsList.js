@@ -13,9 +13,9 @@ const StyledListGroup = styled(ListGroup)`
   }
 `;
 
-const GoalsChartActionsList = ({ onEdit, onDelete }) => (
+const GoalsChartActionsList = ({ onEdit, onDelete, onComplete }) => (
   <StyledListGroup>
-    <ListGroupItem tag="a" action>
+    <ListGroupItem tag="a" onClick={onComplete} action>
       <Icon name="check-square-o" margin="right" />
       Mark as Complete
     </ListGroupItem>
@@ -33,6 +33,7 @@ const GoalsChartActionsList = ({ onEdit, onDelete }) => (
 GoalsChartActionsList.propTypes = {
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
+  onComplete: PropTypes.func,
 };
 
 export default GoalsChartActionsList;

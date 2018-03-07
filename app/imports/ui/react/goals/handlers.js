@@ -16,3 +16,14 @@ export const onDelete = ({ mutate, ownProps: { organizationId, goal } }, callbac
     }
   },
 }).then(callback));
+
+export const onComplete = ({ mutate, ownProps: { organizationId, goal } }) => mutate({
+  variables: {
+    input: {
+      _id: goal._id,
+    },
+  },
+  update: (proxy, { data: { completeGoal: { goal: completedGoal } } }) => {
+    moveGoalWithinCacheAfterDeleting(organizationId, completedGoal, proxy);
+  },
+});
