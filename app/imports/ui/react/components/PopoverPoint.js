@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Point } from 'victory';
-import { compose, withProps, renameProps } from 'recompose';
+import { compose, withProps } from 'recompose';
 import { Popover } from 'reactstrap';
 import withStateToggle from '../helpers/withStateToggle';
 
@@ -17,20 +17,16 @@ const StyledPopover = styled(Popover)`
 
 const enhance = compose(
   withStateToggle(false, 'isOpen', 'togglePopover'),
-  renameProps({
-    popoverContent: 'PopoverContent',
-  }),
   withProps(({ id, index }) => ({
     pointId: `point-${id}-${index}`,
   })),
 );
 
 const PopoverPoint = ({
-  PopoverContent,
+  renderPopoverContent,
   isOpen,
   pointId,
   togglePopover,
-  id,
   ...props
 }) => (
   <g>
@@ -45,17 +41,16 @@ const PopoverPoint = ({
         target={pointId}
         toggle={togglePopover}
       >
-        {isOpen && <PopoverContent {...{ id, togglePopover }} />}
+        {isOpen && renderPopoverContent({ togglePopover })}
       </StyledPopover>
     </foreignObject>
   </g>
 );
 
 PopoverPoint.propTypes = {
-  PopoverContent: PropTypes.func,
+  renderPopoverContent: PropTypes.func,
   isOpen: PropTypes.bool,
   pointId: PropTypes.string,
-  id: PropTypes.string,
   togglePopover: PropTypes.func,
 };
 

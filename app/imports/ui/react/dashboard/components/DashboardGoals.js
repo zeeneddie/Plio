@@ -39,7 +39,10 @@ const DashboardGoals = ({
       <Fragment>
         {!!items.length && (
           <GoalsChart
-            {...{ timeScale }}
+            {...{
+              timeScale,
+              organizationId,
+            }}
             key={joinIds(items)}
             goals={items}
           />

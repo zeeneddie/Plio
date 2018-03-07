@@ -7,7 +7,7 @@ import {
   TimelineHorizontalLine,
   TimelinePoint,
 } from '../../components';
-import GoalsChartActionsList from './GoalsChartActionsList';
+import GoalsChartActionsListContainer from '../containers/GoalsChartActionsListContainer';
 
 const getLineData = ({
   startDate,
@@ -70,7 +70,7 @@ const getXDomainData = (timeScale) => {
   ];
 };
 
-const GoalsChart = ({ goals, timeScale }) => {
+const GoalsChart = ({ goals, timeScale, organizationId }) => {
   const height = 55 * goals.length + 45;
   const domainPadding = { x: [0, 0], y: [0, -35] };
 
@@ -99,7 +99,8 @@ const GoalsChart = ({ goals, timeScale }) => {
         entityId: goal._id,
         color: goal.color,
         data: getScatterData(goal, index),
-        popoverContent: GoalsChartActionsList,
+        renderPopoverContent: props =>
+          <GoalsChartActionsListContainer {...{ goal, organizationId, ...props }} />,
         domainPadding,
       }))}
     </TimelineChart>
@@ -109,6 +110,7 @@ const GoalsChart = ({ goals, timeScale }) => {
 GoalsChart.propTypes = {
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
   timeScale: PropTypes.number.isRequired,
+  organizationId: PropTypes.string.isRequired,
 };
 
 export default GoalsChart;

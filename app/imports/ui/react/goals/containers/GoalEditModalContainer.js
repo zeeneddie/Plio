@@ -4,11 +4,10 @@ import { identity, path } from 'ramda';
 import { graphql } from 'react-apollo';
 import { transformGoal } from 'plio-util';
 
-import { moveGoalWithinCacheAfterDeleting } from '../../../../client/apollo/utils/goals';
 import { namedCompose, withStateToggle } from '../../helpers';
 import GoalEditModal from '../components/GoalEditModal';
 import { Query, Mutation } from '../../../../client/graphql';
-import { swal } from '../../../../client/util';
+import { onDelete } from '../handlers';
 
 export default namedCompose('GoalEditModalContainer')(
   connectUI(),
@@ -48,34 +47,8 @@ export default namedCompose('GoalEditModalContainer')(
     }),
   }),
   graphql(Mutation.DELETE_GOAL, {
-    props: ({
-      mutate,
-      ownProps: {
-        organizationId,
-        toggle,
-        goal,
-        ...props
-      },
-    }) => ({
-      organizationId,
-      toggle,
-      goal,
-      ...props,
-      onDelete: () => swal.promise({
-        text: `The goal "${goal.title}" will be deleted`,
-        confirmButtonText: 'Delete',
-      }, () => mutate({
-        variables: {
-          input: {
-            _id: goal._id,
-          },
-        },
-        update: (proxy, { data: { deleteGoal: { goal: removedGoal } } }) => {
-          if (!removedGoal.isCompleted) {
-            moveGoalWithinCacheAfterDeleting(organizationId, removedGoal, proxy);
-          }
-        },
-      }).then(toggle)),
+    props: props => ({
+      onDelete: () => onDelete(props, props.ownProps.toggle),
     }),
   }),
   withStateToggle(false, 'isGuidancePanelOpen', 'toggleGuidancePanel'),

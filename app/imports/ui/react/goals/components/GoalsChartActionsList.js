@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import connectUI from 'redux-ui';
 import { ListGroup, ListGroupItem } from 'reactstrap';
-import { compose, withHandlers } from 'recompose';
-import { withStore } from '../../helpers';
+
 import Icon from '../../components/Icons/Icon';
 
 const StyledListGroup = styled(ListGroup)`
@@ -15,21 +13,7 @@ const StyledListGroup = styled(ListGroup)`
   }
 `;
 
-const enhance = compose(
-  withStore,
-  connectUI(),
-  withHandlers({
-    onEdit: ({ id, updateUI, togglePopover }) => () => {
-      togglePopover();
-      updateUI({
-        isEditModalOpen: true,
-        activeGoal: id,
-      });
-    },
-  }),
-);
-
-const GoalsChartActionsList = ({ onEdit }) => (
+const GoalsChartActionsList = ({ onEdit, onDelete }) => (
   <StyledListGroup>
     <ListGroupItem tag="a" action>
       <Icon name="check-square-o" margin="right" />
@@ -39,7 +23,7 @@ const GoalsChartActionsList = ({ onEdit }) => (
       <Icon name="edit" margin="right" />
       Edit
     </ListGroupItem>
-    <ListGroupItem tag="a" action>
+    <ListGroupItem tag="a" onClick={onDelete} action>
       <Icon name="trash-o" margin="right" />
       Delete
     </ListGroupItem>
@@ -48,6 +32,7 @@ const GoalsChartActionsList = ({ onEdit }) => (
 
 GoalsChartActionsList.propTypes = {
   onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
-export default enhance(GoalsChartActionsList);
+export default GoalsChartActionsList;

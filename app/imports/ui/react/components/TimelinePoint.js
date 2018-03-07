@@ -6,7 +6,7 @@ import PopoverPoint from './PopoverPoint';
 const TimelinePoint = ({
   color,
   onClick,
-  popoverContent,
+  renderPopoverContent,
   entityId,
   ...props
 }) => (
@@ -23,7 +23,8 @@ const TimelinePoint = ({
     }]}
     labelComponent={<VictoryTooltip />}
     dataComponent={
-      popoverContent ? <PopoverPoint id={entityId} {...{ popoverContent }} /> : <Point />
+      renderPopoverContent ?
+        <PopoverPoint id={entityId} {...{ renderPopoverContent }} /> : <Point />
     }
     {...props}
   />
@@ -33,7 +34,7 @@ TimelinePoint.propTypes = {
   color: PropTypes.string,
   entityId: PropTypes.string,
   onClick: PropTypes.func,
-  popoverContent: PropTypes.func,
+  renderPopoverContent: PropTypes.func,
 };
 
 export default TimelinePoint;
