@@ -3231,9 +3231,9 @@ pify@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
-"plio-util@https://github.com/Pliohub/plio-util.git#devel":
+"plio-util@https://github.com/Pliohub/plio-util.git#i787-workspace-subcard":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#fdd334c1c4c2f7ba02c34e5acfecda75a1b8a8e0"
+  resolved "https://github.com/Pliohub/plio-util.git#19a2e02ee31258ac23b7c9025a3927cd500dc874"
 
 pluralize@^2.0.0:
   version "2.0.0"

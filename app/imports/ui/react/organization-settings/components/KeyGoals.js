@@ -1,44 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CardBlockCollapse from '/imports/ui/react/components/CardBlockCollapse';
-import LimitNumberField from './LimitNumberField';
+import { CardTitle } from 'reactstrap';
+import { withStateToggle } from '../../helpers';
 import { WorkspaceDefaultsTypes, TimeScaleOptions } from '../../../../share/constants';
-import { SelectInput } from '../../forms/components';
-import { FormField, CardBlock } from '../../components';
+import { CardBlock, Subcard, SubcardHeader, SubcardBody } from '../../components';
+import WorkspaceDefaultsField from './WorkspaceDefaultsField';
 
-const KeyGoalsSettings = ({ changeWorkspaceDefaults, ...restProps }) => (
-  <CardBlockCollapse leftText="Key goals">
-    <CardBlock>
-      <FormField sm="6">
-        Horizontal scale
-        <SelectInput
+const enhance = withStateToggle(false, 'isOpen', 'toggle');
+const KeyGoalsSettings = enhance(({
+  changeWorkspaceDefaults,
+  isOpen,
+  toggle,
+  ...restProps
+}) => (
+  <Subcard {...{ isOpen, toggle }}>
+    <SubcardHeader><CardTitle>Key goals</CardTitle></SubcardHeader>
+    <SubcardBody>
+      <CardBlock>
+        <WorkspaceDefaultsField
+          label="Horizontal scale"
           value={restProps[WorkspaceDefaultsTypes.TIME_SCALE]}
+          valueKey={WorkspaceDefaultsTypes.TIME_SCALE}
+          onChange={changeWorkspaceDefaults}
           options={TimeScaleOptions}
-          onChange={({ value }) =>
-            changeWorkspaceDefaults({ [WorkspaceDefaultsTypes.TIME_SCALE]: value })}
+          sm="6"
         />
-      </FormField>
 
-      <FormField sm="6">
-        Number of key goals
-        <LimitNumberField
+        <WorkspaceDefaultsField
+          label="Number of key goals"
           value={restProps[WorkspaceDefaultsTypes.DISPLAY_GOALS]}
           valueKey={WorkspaceDefaultsTypes.DISPLAY_GOALS}
-          {...{ changeWorkspaceDefaults }}
+          onChange={changeWorkspaceDefaults}
+          sm="6"
         />
-      </FormField>
 
-      <FormField sm="6">
-        Number of completed & deleted goals
-        <LimitNumberField
+        <WorkspaceDefaultsField
+          label="Number of completed & deleted goals"
           value={restProps[WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]}
           valueKey={WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS}
-          {...{ changeWorkspaceDefaults }}
+          onChange={changeWorkspaceDefaults}
+          sm="6"
         />
-      </FormField>
-    </CardBlock>
-  </CardBlockCollapse>
-);
+      </CardBlock>
+    </SubcardBody>
+  </Subcard>
+));
 
 KeyGoalsSettings.propTypes = {
   changeWorkspaceDefaults: PropTypes.func.isRequired,

@@ -1,8 +1,6 @@
 import { graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 import {
   compose,
-  withProps,
   flattenProp,
   onlyUpdateForKeys,
   defaultProps,
@@ -11,21 +9,13 @@ import {
   WORKSPACE_DEFAULTS,
   WorkspaceDefaultsTypes,
   WorkspaceDefaults,
-} from '/imports/share/constants';
-import { Mutation } from '/imports/client/graphql';
-import { pickDeep } from '/imports/api/helpers';
-import store from '/imports/client/store';
+} from '../../../../share/constants';
+import { Mutation } from '../../../../client/graphql';
 import { withApollo } from '../../helpers';
-import { composeWithTracker } from '../../../../client/util';
 import KeyGoalsSettings from '../components/KeyGoals';
-import initMainData from './loaders/initMainData';
 
 const enhance = compose(
   withApollo,
-  withProps({ store }),
-  connect(),
-  composeWithTracker(initMainData),
-  connect(pickDeep(['organizations.organization'])),
   flattenProp('organization'),
   flattenProp(WORKSPACE_DEFAULTS),
   onlyUpdateForKeys([

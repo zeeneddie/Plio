@@ -10,7 +10,7 @@ import {
 const options = {
   type: Number,
   min: 1,
-  max: 99,
+  max: 100,
 };
 
 export default new SimpleSchema({
