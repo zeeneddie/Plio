@@ -21,14 +21,17 @@ const defaultItemsPerRow =
 
 const getRestoreOptions = (handler, mutation) => ({
   props: ({ mutate, ownProps: { organizationId } }) => ({
-    [handler]: goalId => mutate({
-      variables: {
-        input: { _id: goalId },
-      },
+    [handler]: ({ _id, title }) => swal.promise({
+      text: `The key goal "${title}" will be restored!`,
+      confirmButtonText: 'Restore',
+      successTitle: 'Restored!',
+      successText: `The key goal "${title}" was restored successfully.`,
+    }, () => mutate({
+      variables: { input: { _id } },
       update: (store, { data: { [mutation]: { goal } } }) => {
         moveGoalWithinCacheAfterRestoring(organizationId, goal, store);
       },
-    }),
+    })),
   }),
 });
 
@@ -100,17 +103,15 @@ export default namedCompose('CompletedDeletedGoalsContainer')(
   ),
   graphql(Mutation.REMOVE_GOAL, {
     props: ({ mutate, ownProps: { organizationId } }) => ({
-      onRemove: goal => swal.promise({
-        text: `The goal "${goal.title}" will be deleted permanently`,
+      onRemove: ({ _id, title }) => swal.promise({
+        text: `The goal "${title}" will be deleted permanently`,
         confirmButtonText: 'Delete',
         successTitle: 'Deleted!',
-        successText: `The key goal "${goal.title}" was removed successfully.`,
+        successText: `The key goal "${title}" was removed successfully.`,
       }, () => mutate({
-        variables: {
-          input: { _id: goal._id },
-        },
+        variables: { input: { _id } },
         update: (store) => {
-          updateQueryCache(Cache.deleteGoal(goal._id), {
+          updateQueryCache(Cache.deleteGoal(_id), {
             variables: { organizationId },
             query: Query.COMPLETED_DELETED_GOALS,
           }, store);

@@ -23,10 +23,11 @@ const enhance = compose(
   withHandlers({
     onRestore: ({
       _id,
+      title,
       isDeleted,
       onUndoCompletion,
       onRestore,
-    }) => () => isDeleted ? onRestore(_id) : onUndoCompletion(_id),
+    }) => () => isDeleted ? onRestore({ _id, title }) : onUndoCompletion({ _id, title }),
     onRemove: ({ _id, title, onRemove }) => () => onRemove({ _id, title }),
   }),
   withProps(({ canRestore, ...props }) => ({
