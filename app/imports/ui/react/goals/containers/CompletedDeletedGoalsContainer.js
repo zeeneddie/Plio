@@ -103,6 +103,8 @@ export default namedCompose('CompletedDeletedGoalsContainer')(
       onRemove: goal => swal.promise({
         text: `The goal "${goal.title}" will be deleted permanently`,
         confirmButtonText: 'Delete',
+        successTitle: 'Deleted!',
+        successText: `The key goal "${goal.title}" was removed successfully.`,
       }, () => mutate({
         variables: {
           input: { _id: goal._id },
