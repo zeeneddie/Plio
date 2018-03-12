@@ -10,9 +10,16 @@ import {
   WorkspaceDefaultsTypes,
   WorkspaceDefaults,
 } from '../../../../share/constants';
-import { Mutation } from '../../../../client/graphql';
+import { Mutation, Query } from '../../../../client/graphql';
 import { withApollo } from '../../helpers';
 import KeyGoalsSettings from '../components/KeyGoals';
+
+const getWorkspaceDefaultsVariables = (_id, workspaceDefaults) => ({
+  input: {
+    _id,
+    ...workspaceDefaults,
+  },
+});
 
 const enhance = compose(
   withApollo,
@@ -34,13 +41,32 @@ const enhance = compose(
   }),
   graphql(Mutation.UPDATE_ORGANIZATION_WORKSPACE_DEFAULTS, {
     props: ({ mutate, ownProps: { _id } }) => ({
-      changeWorkspaceDefaults: workspaceDefaults => mutate({
-        variables: {
-          input: {
-            _id,
-            ...workspaceDefaults,
+      changeGoalsLimit: workspaceDefaults => mutate({
+        variables: getWorkspaceDefaultsVariables(_id, workspaceDefaults),
+        refetchQueries: [
+          {
+            query: Query.DASHBOARD_GOALS,
+            variables: {
+              organizationId: _id,
+              limit: workspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
+            },
           },
-        },
+        ],
+      }),
+      changeCompletedDeletedGoals: workspaceDefaults => mutate({
+        variables: getWorkspaceDefaultsVariables(_id, workspaceDefaults),
+        refetchQueries: [
+          {
+            query: Query.COMPLETED_DELETED_GOALS,
+            variables: {
+              organizationId: _id,
+              limit: workspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS],
+            },
+          },
+        ],
+      }),
+      changeChartScale: workspaceDefaults => mutate({
+        variables: getWorkspaceDefaultsVariables(_id, workspaceDefaults),
       }),
     }),
   }),

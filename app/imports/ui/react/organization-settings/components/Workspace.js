@@ -14,7 +14,14 @@ import {
 } from '../../../../share/constants';
 import { withStateToggle } from '../../helpers';
 import { createWorkspaceTitleValue } from '../helpers';
-import { CardBlock, Subcard, SubcardHeader, SubcardBody, GuidancePanel, GuidanceIcon } from '../../components';
+import {
+  CardBlock,
+  Subcard,
+  SubcardHeader,
+  SubcardBody,
+  GuidancePanel,
+  GuidanceIcon,
+} from '../../components';
 import WorkspaceDefaultsField from './WorkspaceDefaultsField';
 
 const ITEM_MAP = {

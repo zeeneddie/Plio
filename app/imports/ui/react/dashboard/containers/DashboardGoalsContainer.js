@@ -39,16 +39,14 @@ export default namedCompose('DashboardGoalsContainer')(
   flattenProp(WORKSPACE_DEFAULTS),
   renameProps({
     _id: 'organizationId',
-    [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'itemsPerRow',
     [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'deletedItemsPerRow',
     [WorkspaceDefaultsTypes.TIME_SCALE]: 'timeScale',
   }),
   defaultProps({
     timeScale: WorkspaceDefaults[WorkspaceDefaultsTypes.TIME_SCALE],
   }),
-  onlyUpdateForKeys(['organizationId', 'itemsPerRow', 'deletedItemsPerRow', 'timeScale']),
+  onlyUpdateForKeys(['organizationId', 'deletedItemsPerRow', 'timeScale']),
   connectUI({
-    key: 'DashboardGoalsContainer',
     state: {
       isOpen: false,
       isAddModalOpen: false,

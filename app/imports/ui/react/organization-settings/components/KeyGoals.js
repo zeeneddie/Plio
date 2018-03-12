@@ -8,9 +8,11 @@ import WorkspaceDefaultsField from './WorkspaceDefaultsField';
 
 const enhance = withStateToggle(false, 'isOpen', 'toggle');
 const KeyGoalsSettings = enhance(({
-  changeWorkspaceDefaults,
   isOpen,
   toggle,
+  changeChartScale,
+  changeGoalsLimit,
+  changeCompletedDeletedGoals,
   ...restProps
 }) => (
   <Subcard {...{ isOpen, toggle }}>
@@ -21,7 +23,7 @@ const KeyGoalsSettings = enhance(({
           label="Horizontal scale"
           value={restProps[WorkspaceDefaultsTypes.TIME_SCALE]}
           valueKey={WorkspaceDefaultsTypes.TIME_SCALE}
-          onChange={changeWorkspaceDefaults}
+          onChange={changeChartScale}
           options={TimeScaleOptions}
           sm="6"
         />
@@ -30,7 +32,7 @@ const KeyGoalsSettings = enhance(({
           label="Number of key goals"
           value={restProps[WorkspaceDefaultsTypes.DISPLAY_GOALS]}
           valueKey={WorkspaceDefaultsTypes.DISPLAY_GOALS}
-          onChange={changeWorkspaceDefaults}
+          onChange={changeGoalsLimit}
           sm="6"
         />
 
@@ -38,7 +40,7 @@ const KeyGoalsSettings = enhance(({
           label="Number of completed & deleted goals"
           value={restProps[WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]}
           valueKey={WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS}
-          onChange={changeWorkspaceDefaults}
+          onChange={changeCompletedDeletedGoals}
           sm="6"
         />
       </CardBlock>
@@ -47,7 +49,9 @@ const KeyGoalsSettings = enhance(({
 ));
 
 KeyGoalsSettings.propTypes = {
-  changeWorkspaceDefaults: PropTypes.func.isRequired,
+  changeChartScale: PropTypes.func.isRequired,
+  changeGoalsLimit: PropTypes.func.isRequired,
+  changeCompletedDeletedGoals: PropTypes.func.isRequired,
 };
 
 export default KeyGoalsSettings;
