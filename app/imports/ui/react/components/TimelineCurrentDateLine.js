@@ -12,7 +12,7 @@ const TimelineCurrentDateLine = ({ label = 'Today', height }) => (
       { x: new Date(), y: 0, label },
       { x: new Date(), y: height },
     ]}
-    labelComponent={<VictoryLabel dy={35} />}
+    labelComponent={<VictoryLabel dy={30} />}
   />
 );
 
