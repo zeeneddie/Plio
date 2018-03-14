@@ -1,15 +1,14 @@
 import connectUI from 'redux-ui';
 import { graphql } from 'react-apollo';
-import { compose, withHandlers, onlyUpdateForKeys, flattenProp } from 'recompose';
+import { compose, withHandlers, onlyUpdateForKeys } from 'recompose';
 import { withStore } from '../../helpers';
 import { Mutation } from '../../../../client/graphql';
 import { onDelete, onComplete } from '../handlers';
-import GoalsChartActionsList from '../components/GoalsChartActionsList';
+import ChartActions from '../components/ChartActions';
 
 const enhance = compose(
   withStore,
   connectUI(),
-  flattenProp('goal'),
   onlyUpdateForKeys(['organizationId', '_id', 'title']),
   withHandlers({
     onEdit: ({ _id, updateUI, togglePopover }) => () => {
@@ -38,4 +37,4 @@ const enhance = compose(
   }),
 );
 
-export default enhance(GoalsChartActionsList);
+export default enhance(ChartActions);

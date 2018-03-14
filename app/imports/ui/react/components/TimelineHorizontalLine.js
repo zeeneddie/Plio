@@ -13,6 +13,7 @@ const enhance = withProps(({
   color,
   index,
   points,
+  renderPopover,
 }) => {
   const isStartWithinScale = startDate > scaleDates.start;
   const isEndWithinScale = endDate < scaleDates.end;
@@ -40,6 +41,7 @@ const enhance = withProps(({
         label: 'Start Date',
         symbol: isStartWithinScale ? 'circle' : 'arrowLeft',
         strokeWidth: isStartWithinScale ? 10 : 4,
+        renderPopover,
       },
       {
         y: index,
@@ -51,6 +53,7 @@ const enhance = withProps(({
         label: 'End Date',
         symbol: isEndWithinScale ? 'circle' : 'arrowRight',
         strokeWidth: isEndWithinScale ? 10 : 4,
+        renderPopover,
       },
       ...points.map(point => ({
         y: index,
@@ -58,6 +61,7 @@ const enhance = withProps(({
         strokeWidth: 3,
         size: 5,
         fill: color,
+        renderPopover,
         ...point,
       })),
     ],
@@ -69,7 +73,6 @@ const TimelineHorizontalLine = ({
   onClick,
   lineData,
   entityId,
-  renderPopoverContent,
   pointsData,
   ...props
 }) => {
@@ -101,7 +104,6 @@ const TimelineHorizontalLine = ({
           ...props,
           entityId,
           color,
-          renderPopoverContent,
           domainPadding,
           data: pointsData,
         }}
@@ -114,7 +116,6 @@ TimelineHorizontalLine.propTypes = {
   color: PropTypes.string.isRequired,
   entityId: PropTypes.string,
   onClick: PropTypes.func,
-  renderPopoverContent: PropTypes.func,
   // eslint-disable-next-line react/no-typos
   lineData: VictoryLine.propTypes.data,
   pointsData: VictoryScatter.propTypes.data,

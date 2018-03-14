@@ -6,7 +6,6 @@ import TimelinePoint from './TimelinePoint';
 const HorizontalLinePoints = ({
   color,
   onClick,
-  renderPopoverContent,
   entityId,
   ...props
 }) => (
@@ -35,7 +34,7 @@ const HorizontalLinePoints = ({
         labelComponent={<VictoryLabel style={{ fill: '#fff' }} />}
       />
     }
-    dataComponent={<TimelinePoint id={entityId} {...{ renderPopoverContent }} />}
+    dataComponent={<TimelinePoint id={entityId} />}
   />
 );
 
@@ -43,7 +42,6 @@ HorizontalLinePoints.propTypes = {
   color: PropTypes.string,
   entityId: PropTypes.string,
   onClick: PropTypes.func,
-  renderPopoverContent: PropTypes.func,
 };
 
 export default HorizontalLinePoints;

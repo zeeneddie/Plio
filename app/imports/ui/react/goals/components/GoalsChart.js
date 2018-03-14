@@ -6,12 +6,15 @@ import {
   TimelineCurrentDateLine,
   TimelineHorizontalLine,
 } from '../../components';
-import GoalsChartActionsListContainer from '../containers/GoalsChartActionsListContainer';
+import GoalsChartActionsContainer from '../containers/GoalsChartActionsContainer';
+import MilestoneChartActionsContainer from '../containers/MilestoneChartActionsContainer';
 
-const getChartPoints = ({ milestones }) => (
-  milestones.map(({ completionTargetDate, title: milestoneTitle }) => ({
-    x: new Date(completionTargetDate),
-    label: milestoneTitle,
+const getChartPoints = ({ _id: goalId, milestones }) => (
+  milestones.map(milestone => ({
+    x: new Date(milestone.completionTargetDate),
+    label: milestone.title,
+    renderPopover: props =>
+      <MilestoneChartActionsContainer {...{ ...props, ...milestone, goalId }} />,
   }))
 );
 
@@ -57,8 +60,8 @@ const GoalsChart = ({ goals, timeScale, organizationId }) => {
             startDate: goal.startDate,
             endDate: goal.endDate,
             points: getChartPoints(goal),
-            renderPopoverContent: props =>
-              <GoalsChartActionsListContainer {...{ goal, organizationId, ...props }} />,
+            renderPopover: props =>
+              <GoalsChartActionsContainer {...{ ...props, ...goal, organizationId }} />,
           }}
         />
       ))}

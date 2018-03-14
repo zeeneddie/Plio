@@ -30,8 +30,10 @@ const enhance = compose(
       isStart,
       isEnd,
       startDate,
+      renderPopover,
     },
   }) => ({
+    renderPopover,
     dateLabel: (isStart || isEnd) && moment(title).format('D MMM YYYY'),
     pointId: `point-${id}-${index}`,
     isLabel: isStart || scale.x(x) - scale.x(startDate) > SHORT_LINE_WIDTH,
@@ -46,14 +48,14 @@ const TimelinePoint = ({
   pointId,
   isOpen,
   togglePopover,
-  renderPopoverContent,
+  renderPopover,
   isLabel,
   textAnchor,
   dx,
   ...props
 }) => (
   <g>
-    <g id={pointId} onClick={renderPopoverContent && togglePopover}>
+    <g id={pointId} onClick={renderPopover && togglePopover}>
       <Point {...props} />
     </g>
 
@@ -72,7 +74,7 @@ const TimelinePoint = ({
       />
     )}
 
-    {renderPopoverContent && (
+    {renderPopover && (
       <foreignObject {...props}>
         <StyledPopover
           placement="bottom"
@@ -80,7 +82,7 @@ const TimelinePoint = ({
           target={pointId}
           toggle={togglePopover}
         >
-          {isOpen && renderPopoverContent({ togglePopover })}
+          {isOpen && renderPopover({ togglePopover })}
         </StyledPopover>
       </foreignObject>
     )}
@@ -88,7 +90,7 @@ const TimelinePoint = ({
 );
 
 TimelinePoint.propTypes = {
-  renderPopoverContent: PropTypes.func,
+  renderPopover: PropTypes.func,
   isOpen: PropTypes.bool,
   pointId: PropTypes.string,
   togglePopover: PropTypes.func,
