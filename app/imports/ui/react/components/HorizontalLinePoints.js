@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { VictoryScatter, VictoryTooltip } from 'victory';
+import { VictoryScatter, VictoryTooltip, VictoryLabel } from 'victory';
 import TimelinePoint from './TimelinePoint';
 
 const HorizontalLinePoints = ({
@@ -22,7 +22,19 @@ const HorizontalLinePoints = ({
       target: 'data',
       eventHandlers: { onClick },
     }]}
-    labelComponent={<VictoryTooltip />}
+    labelComponent={
+      <VictoryTooltip
+        cornerRadius={2}
+        style={{
+          fill: '#fff',
+        }}
+        flyoutStyle={{
+          stroke: '#000',
+          fill: '#000',
+        }}
+        labelComponent={<VictoryLabel style={{ fill: '#fff' }} />}
+      />
+    }
     dataComponent={<TimelinePoint id={entityId} {...{ renderPopoverContent }} />}
   />
 );

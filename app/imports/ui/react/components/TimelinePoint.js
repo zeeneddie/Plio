@@ -60,7 +60,8 @@ const TimelinePoint = ({
     {isLabel && dateLabel && (
       <VictoryLabel
         {...{
-          ...props,
+          x: props.x,
+          y: props.y,
           textAnchor,
           dx,
           dy: 10,
@@ -95,6 +96,8 @@ TimelinePoint.propTypes = {
   textAnchor: PropTypes.string,
   dx: PropTypes.number,
   isLabel: PropTypes.bool,
+  x: PropTypes.number,
+  y: PropTypes.number,
 };
 
 export default enhance(TimelinePoint);
