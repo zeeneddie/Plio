@@ -29,6 +29,7 @@ const DashboardGoals = ({
   toggleEditModal,
   deletedItemsPerRow,
   timeScale,
+  canEditGoals,
 }) => (
   <DashboardStatsExpandable
     items={goals}
@@ -40,6 +41,7 @@ const DashboardGoals = ({
         {!!items.length && (
           <GoalsChart
             {...{
+              canEditGoals,
               timeScale,
               organizationId,
             }}
@@ -49,6 +51,7 @@ const DashboardGoals = ({
         )}
         <CompletedDeletedGoalsContainer
           {...{
+            canEditGoals,
             organizationId,
             deletedItemsPerRow,
           }}
@@ -57,7 +60,7 @@ const DashboardGoals = ({
     )}
     {...{ toggle, isOpen }}
   >
-    <PlusButton size="1" onClick={toggleAddModal} />
+    {canEditGoals && <PlusButton size="1" onClick={toggleAddModal} />}
     {goals.length
       ? pluralize('goal', totalCount || goals.length, true)
       : 'Add a key goal'}
@@ -90,6 +93,7 @@ DashboardGoals.propTypes = {
   isEditModalOpen: PropTypes.bool.isRequired,
   toggleEditModal: PropTypes.func.isRequired,
   timeScale: PropTypes.number.isRequired,
+  canEditGoals: PropTypes.bool,
   deletedItemsPerRow: PropTypes.number,
 };
 

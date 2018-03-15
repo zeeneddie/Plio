@@ -10,7 +10,6 @@ const CompletedDeletedGoals = ({
   loadAllDeletedGoals,
   showLatestItems,
   isAllBtn,
-  isLatestBtn,
   moreItemsCount,
   ...restProps
 }) => {
@@ -40,7 +39,7 @@ const CompletedDeletedGoals = ({
           <span className="text-muted"> ({moreItemsCount} more)</span>
         </a>
       )}
-      {isLatestBtn && (
+      {showLatestItems && (
         <a href="" onClick={showLatestItems}>
           View latest items
         </a>
@@ -54,9 +53,8 @@ CompletedDeletedGoals.propTypes = {
   totalCount: PropTypes.number.isRequired,
   moreItemsCount: PropTypes.number.isRequired,
   isAllBtn: PropTypes.bool.isRequired,
-  isLatestBtn: PropTypes.bool.isRequired,
-  loadAllDeletedGoals: PropTypes.func.isRequired,
-  showLatestItems: PropTypes.func.isRequired,
+  loadAllDeletedGoals: PropTypes.func,
+  showLatestItems: PropTypes.func,
 };
 
 export default CompletedDeletedGoals;

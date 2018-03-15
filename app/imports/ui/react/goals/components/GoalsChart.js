@@ -9,12 +9,12 @@ import {
 import GoalsChartActionsContainer from '../containers/GoalsChartActionsContainer';
 import MilestoneChartActionsContainer from '../containers/MilestoneChartActionsContainer';
 
-const getChartPoints = ({ _id: goalId, milestones }) => (
+const getChartPoints = ({ _id: goalId, milestones }, canEditGoals) => (
   milestones.map(milestone => ({
     x: new Date(milestone.completionTargetDate),
     label: milestone.title,
-    renderPopover: props =>
-      <MilestoneChartActionsContainer {...{ ...props, ...milestone, goalId }} />,
+    renderPopover: canEditGoals ? props =>
+      <MilestoneChartActionsContainer {...{ ...props, ...milestone, goalId }} /> : null,
   }))
 );
 
@@ -31,7 +31,7 @@ const getScaleDates = (timeScale) => {
   };
 };
 
-const GoalsChart = ({ goals, timeScale, organizationId }) => {
+const GoalsChart = ({ goals, timeScale, organizationId, canEditGoals }) => {
   const height = 65 * goals.length + 35;
   const scaleDates = getScaleDates(timeScale);
 
@@ -59,9 +59,9 @@ const GoalsChart = ({ goals, timeScale, organizationId }) => {
             title: goal.title,
             startDate: goal.startDate,
             endDate: goal.endDate,
-            points: getChartPoints(goal),
-            renderPopover: props =>
-              <GoalsChartActionsContainer {...{ ...props, goal, organizationId }} />,
+            points: getChartPoints(goal, canEditGoals),
+            renderPopover: canEditGoals ? props =>
+              <GoalsChartActionsContainer {...{ ...props, ...goal, organizationId }} /> : null,
           }}
         />
       ))}

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { compose, withProps, onlyUpdateForKeys, withHandlers } from 'recompose';
+import { compose, withProps, onlyUpdateForKeys, withHandlers, branch } from 'recompose';
 import { Button, ButtonGroup } from 'reactstrap';
 import { getFormattedDate } from '../../../../share/helpers';
 import Label from '../../components/Labels/Label';
@@ -20,21 +20,24 @@ const StyledDeletedGoal = styled.div`
 
 const enhance = compose(
   onlyUpdateForKeys(['_id', 'isDeleted', 'completedAt', 'deletedAt', 'title', 'sequentialId']),
-  withHandlers({
-    onRestore: ({
-      _id,
-      title,
-      isDeleted,
-      onUndoCompletion,
-      onRestore,
-    }) => () => isDeleted ? onRestore({ _id, title }) : onUndoCompletion({ _id, title }),
-    onRemove: ({ _id, title, onRemove }) => () => onRemove({ _id, title }),
-  }),
-  withProps(({ canRestore, ...props }) => ({
-    date: props.isDeleted ? props.deletedAt : props.completedAt,
-    statusText: props.isDeleted ? 'deleted' : 'completed',
-    canRestore: canRestore(props),
+  withProps(({ canRestore, ...restProps }) => ({
+    date: restProps.isDeleted ? restProps.deletedAt : restProps.completedAt,
+    statusText: restProps.isDeleted ? 'deleted' : 'completed',
+    canRestore: canRestore(restProps),
   })),
+  branch(
+    ({ onRemove, onUndoCompletion, onRestore }) => onRemove && onUndoCompletion && onRestore,
+    withHandlers({
+      onRestore: ({
+        _id,
+        title,
+        isDeleted,
+        onUndoCompletion,
+        onRestore,
+      }) => () => isDeleted ? onRestore({ _id, title }) : onUndoCompletion({ _id, title }),
+      onRemove: ({ _id, title, onRemove }) => () => onRemove({ _id, title }),
+    }),
+  ),
 );
 
 const DashboardDeletedItem = ({
@@ -50,10 +53,12 @@ const DashboardDeletedItem = ({
     <Label>{sequentialId}</Label>
     {title}
     <span className="text-muted"> ({statusText} {getFormattedDate(date)})</span>
-    <ButtonGroup size="sm">
-      <Button onClick={onRemove}>Delete</Button>
-      <Button disabled={!canRestore} onClick={onRestore}>Restore</Button>
-    </ButtonGroup>
+    {onRemove && onRestore && (
+      <ButtonGroup size="sm">
+        <Button onClick={onRemove}>Delete</Button>
+        <Button disabled={!canRestore} onClick={onRestore}>Restore</Button>
+      </ButtonGroup>
+    )}
   </StyledDeletedGoal>
 );
 
@@ -62,9 +67,9 @@ DashboardDeletedItem.propTypes = {
   title: PropTypes.string.isRequired,
   statusText: PropTypes.string.isRequired,
   date: PropTypes.number.isRequired,
-  onRestore: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired,
   canRestore: PropTypes.bool.isRequired,
+  onRestore: PropTypes.func,
+  onRemove: PropTypes.func,
 };
 
 export default enhance(DashboardDeletedItem);

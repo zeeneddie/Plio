@@ -1,7 +1,7 @@
 import { graphql } from 'react-apollo';
 import { lenses, byCompletedOrDeletedAt, Cache } from 'plio-util';
-import { view, sort } from 'ramda';
-import { setPropTypes, withState, withProps, withHandlers } from 'recompose';
+import { view, sort, prop, propEq } from 'ramda';
+import { setPropTypes, withState, withProps, withHandlers, branch, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import CompletedDeletedGoals from '../components/CompletedDeletedGoals';
 import { DeletedGoalShowTypes } from '../constants';
@@ -82,41 +82,50 @@ export default namedCompose('CompletedDeletedGoalsContainer')(
     return {
       moreItemsCount,
       isAllBtn: isLatestType && moreItemsCount > 0,
-      isLatestBtn: showType === DeletedGoalShowTypes.ALL,
       goals: newGoalsList,
     };
   }),
   withHandlers({
-    showLatestItems: ({ setShowType }) => () => setShowType(DeletedGoalShowTypes.LATEST),
     canRestore: () => ({ isDeleted, completedAt }) =>
       (!isDeleted ? isActionCompletedAtDeadlineDue({ completedAt }) : true),
   }),
   withPreloader(view(lenses.loading), () => ({ size: 1 })),
   omitProps(['loading']),
-  graphql(
-    Mutation.UNDO_GOAL_COMPLETION,
-    getRestoreOptions('onUndoCompletion', 'undoGoalCompletion'),
-  ),
-  graphql(
-    Mutation.RESTORE_GOAL,
-    getRestoreOptions('onRestore', 'restoreGoal'),
-  ),
-  graphql(Mutation.REMOVE_GOAL, {
-    props: ({ mutate, ownProps: { organizationId } }) => ({
-      onRemove: ({ _id, title }) => swal.promise({
-        text: `The goal "${title}" will be deleted permanently`,
-        confirmButtonText: 'Delete',
-        successTitle: 'Deleted!',
-        successText: `The key goal "${title}" was removed successfully.`,
-      }, () => mutate({
-        variables: { input: { _id } },
-        update: (store) => {
-          updateQueryCache(Cache.deleteGoal(_id), {
-            variables: { organizationId },
-            query: Query.COMPLETED_DELETED_GOALS,
-          }, store);
-        },
-      })),
+  branch(
+    propEq('showType', DeletedGoalShowTypes.ALL),
+    withHandlers({
+      showLatestItems: ({ setShowType }) => () => setShowType(DeletedGoalShowTypes.LATEST),
     }),
-  }),
+  ),
+  branch(
+    prop('canEditGoals'),
+    compose(
+      graphql(
+        Mutation.UNDO_GOAL_COMPLETION,
+        getRestoreOptions('onUndoCompletion', 'undoGoalCompletion'),
+      ),
+      graphql(
+        Mutation.RESTORE_GOAL,
+        getRestoreOptions('onRestore', 'restoreGoal'),
+      ),
+      graphql(Mutation.REMOVE_GOAL, {
+        props: ({ mutate, ownProps: { organizationId } }) => ({
+          onRemove: ({ _id, title }) => swal.promise({
+            text: `The goal "${title}" will be deleted permanently`,
+            confirmButtonText: 'Delete',
+            successTitle: 'Deleted!',
+            successText: `The key goal "${title}" was removed successfully.`,
+          }, () => mutate({
+            variables: { input: { _id } },
+            update: (store) => {
+              updateQueryCache(Cache.deleteGoal(_id), {
+                variables: { organizationId },
+                query: Query.COMPLETED_DELETED_GOALS,
+              }, store);
+            },
+          })),
+        }),
+      }),
+    ),
+  ),
 )(CompletedDeletedGoals);

@@ -5,6 +5,9 @@ import {
   setPropTypes,
   onlyUpdateForKeys,
   defaultProps,
+  withProps,
+  branch,
+  renderNothing,
 } from 'recompose';
 import PropTypes from 'prop-types';
 import { lenses, lensNotEq } from 'plio-util';
@@ -12,6 +15,7 @@ import { view, allPass, propOr } from 'ramda';
 import { NetworkStatus } from 'apollo-client';
 import connectUI from 'redux-ui';
 
+import { canChangeGoals } from '../../../../share/checkers/roles';
 import { namedCompose, withHr, withPreloaderPage, withStore, withApollo } from '../../helpers';
 import { DashboardGoals } from '../components';
 import {
@@ -134,6 +138,10 @@ export default namedCompose('DashboardGoalsContainer')(
       toggleEditModal: () => updateUI('isEditModalOpen', !isEditModalOpen),
     }),
   }),
+  withProps(({ organizationId, userId }) => ({
+    // TODO check role via graphql
+    canEditGoals: canChangeGoals(organizationId, userId),
+  })),
   withPreloaderPage(
     allPass([
       view(lenses.loading),
@@ -141,5 +149,9 @@ export default namedCompose('DashboardGoalsContainer')(
     ]),
     () => ({ size: 2 }),
   ),
-  withHr,
+  branch(
+    ({ goals, canEditGoals }) => !!goals.length || canEditGoals,
+    withHr,
+    renderNothing,
+  ),
 )(DashboardGoals);
