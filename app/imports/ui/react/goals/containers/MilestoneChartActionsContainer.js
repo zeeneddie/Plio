@@ -1,7 +1,8 @@
 import connectUI from 'redux-ui';
 import { graphql } from 'react-apollo';
 import { Cache } from 'plio-util';
-import { compose, withHandlers, onlyUpdateForKeys } from 'recompose';
+import { propEq } from 'ramda';
+import { compose, withHandlers, onlyUpdateForKeys, branch } from 'recompose';
 import { Mutation, Fragment } from '../../../../client/graphql';
 import { withStore } from '../../helpers';
 import { swal } from '../../../../client/util';
@@ -48,6 +49,21 @@ const enhance = compose(
       },
     }),
   }),
+  branch(
+    propEq('isCompleted', false),
+    graphql(Mutation.COMPLETE_MILESTONE, {
+      props: ({ mutate, ownProps: { _id, togglePopover } }) => ({
+        onComplete: () => {
+          togglePopover();
+          mutate({
+            variables: {
+              input: { _id },
+            },
+          });
+        },
+      }),
+    }),
+  ),
 );
 
 export default enhance(ChartActions);

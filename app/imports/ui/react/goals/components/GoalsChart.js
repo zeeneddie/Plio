@@ -61,7 +61,7 @@ const GoalsChart = ({ goals, timeScale, organizationId }) => {
             endDate: goal.endDate,
             points: getChartPoints(goal),
             renderPopover: props =>
-              <GoalsChartActionsContainer {...{ ...props, ...goal, organizationId }} />,
+              <GoalsChartActionsContainer {...{ ...props, goal, organizationId }} />,
           }}
         />
       ))}

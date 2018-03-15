@@ -40,7 +40,7 @@ const enhance = compose(
     textAnchor: isStart ? 'start' : 'end',
     dx: isStart ? -8 : 8,
   })),
-  onlyUpdateForKeys(['pointId', 'dateLabel', 'isOpen', 'isLabel']),
+  onlyUpdateForKeys(['pointId', 'dateLabel', 'isOpen', 'isLabel', 'x']),
 );
 
 const TimelinePoint = ({

@@ -6,8 +6,8 @@ import {
   ensureIsNotCompleted,
 } from '../../../../../share/middleware';
 
-export const resolver = async (root, args, { services: { MilestoneService } }) =>
-  MilestoneService.complete(args);
+export const resolver = async (root, args, { services: { MilestoneService }, ...context }) =>
+  MilestoneService.complete(args, context);
 
 export default applyMiddleware(
   checkLoggedIn(),

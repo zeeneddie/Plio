@@ -9,5 +9,6 @@ fragment DashboardGoal on Goal {
     _id
     title
     completionTargetDate
+    isCompleted
   }
 }

@@ -1,6 +1,6 @@
 import connectUI from 'redux-ui';
 import { graphql } from 'react-apollo';
-import { compose, withHandlers, onlyUpdateForKeys } from 'recompose';
+import { compose, withHandlers, onlyUpdateForKeys, flattenProp } from 'recompose';
 import { withStore } from '../../helpers';
 import { Mutation } from '../../../../client/graphql';
 import { onDelete, onComplete } from '../handlers';
@@ -9,13 +9,14 @@ import ChartActions from '../components/ChartActions';
 const enhance = compose(
   withStore,
   connectUI(),
+  flattenProp('goal'),
   onlyUpdateForKeys(['organizationId', '_id', 'title']),
   withHandlers({
-    onEdit: ({ _id, updateUI, togglePopover }) => () => {
+    onEdit: ({ goal, updateUI, togglePopover }) => () => {
       togglePopover();
       updateUI({
         isEditModalOpen: true,
-        activeGoal: _id,
+        activeGoal: goal._id,
       });
     },
   }),

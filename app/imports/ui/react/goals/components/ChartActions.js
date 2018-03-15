@@ -13,7 +13,11 @@ const StyledListGroup = styled(ListGroup)`
   }
 `;
 
-const ChartActions = ({ onEdit, onDelete, onComplete }) => (
+const ChartActions = ({
+  onEdit,
+  onDelete,
+  onComplete,
+}) => (
   <StyledListGroup>
     {onComplete && (
       <ListGroupItem tag="a" onClick={onComplete} action>
