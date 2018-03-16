@@ -9,11 +9,11 @@ const Point = (props) => {
         {...{
           ...props,
           ...props.events,
-          dy: '4.5',
+          dy: '5',
           dx: '-5',
         }}
       >
-        &#9668;
+        &#9664;
       </text>
     );
     case 'arrowRight': return (
@@ -21,11 +21,11 @@ const Point = (props) => {
         {...{
           ...props,
           ...props.events,
-          dy: '4.5',
+          dy: '5',
           dx: '-7',
         }}
       >
-        &#9658;
+        &#9654;
       </text>
     );
     default: return <VictoryPoint {...props} />;

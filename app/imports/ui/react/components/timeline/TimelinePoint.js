@@ -5,8 +5,9 @@ import moment from 'moment';
 import { VictoryLabel } from 'victory';
 import { compose, withProps, onlyUpdateForKeys } from 'recompose';
 import { Popover } from 'reactstrap';
+import { getTitleDX } from './helpers';
 import Point from './Point';
-import withStateToggle from '../helpers/withStateToggle';
+import withStateToggle from '../../helpers/withStateToggle';
 
 const SHORT_LINE_WIDTH = 125;
 const StyledPopover = styled(Popover)`
@@ -31,14 +32,15 @@ const enhance = compose(
       isEnd,
       startDate,
       renderPopover,
+      titleAnchor,
     },
   }) => ({
+    titleAnchor,
     renderPopover,
     dateLabel: (isStart || isEnd) && moment(title).format('D MMM YYYY'),
     pointId: `point-${id}-${index}`,
     isLabel: isStart || scale.x(x) - scale.x(startDate) > SHORT_LINE_WIDTH,
-    textAnchor: isStart ? 'start' : 'end',
-    dx: isStart ? -8 : 8,
+    dx: getTitleDX(titleAnchor),
   })),
   onlyUpdateForKeys(['pointId', 'dateLabel', 'isOpen', 'isLabel', 'x']),
 );
@@ -50,7 +52,7 @@ const TimelinePoint = ({
   togglePopover,
   renderPopover,
   isLabel,
-  textAnchor,
+  titleAnchor,
   dx,
   ...props
 }) => (
@@ -64,7 +66,7 @@ const TimelinePoint = ({
         {...{
           x: props.x,
           y: props.y,
-          textAnchor,
+          textAnchor: titleAnchor,
           dx,
           dy: 10,
           text: dateLabel,
@@ -95,7 +97,7 @@ TimelinePoint.propTypes = {
   pointId: PropTypes.string,
   togglePopover: PropTypes.func,
   dateLabel: PropTypes.string,
-  textAnchor: PropTypes.string,
+  titleAnchor: PropTypes.string,
   dx: PropTypes.number,
   isLabel: PropTypes.bool,
   x: PropTypes.number,

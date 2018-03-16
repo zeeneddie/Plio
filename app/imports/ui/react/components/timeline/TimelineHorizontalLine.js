@@ -15,32 +15,39 @@ const enhance = withProps(({
   points,
   renderPopover,
 }) => {
-  const isStartWithinScale = startDate > scaleDates.start;
+  const isLineOutOfScaleRight = startDate > scaleDates.end;
+  const isLineOutOfScale = isLineOutOfScaleRight || endDate < scaleDates.start;
+  const isStartWithinScale = !isLineOutOfScaleRight && startDate > scaleDates.start;
   const isEndWithinScale = endDate < scaleDates.end;
-  const start = new Date(isStartWithinScale ? startDate : scaleDates.start);
-  const end = new Date(isEndWithinScale ? endDate : scaleDates.end);
+
+  const start = !isStartWithinScale && (isLineOutOfScaleRight ? scaleDates.end : scaleDates.start);
+  const startSymbol = !isStartWithinScale && (isLineOutOfScaleRight ? 'arrowRight' : 'arrowLeft');
+  const end = isEndWithinScale || isLineOutOfScaleRight ? endDate : scaleDates.end;
+  const lineTitleAnchor = isLineOutOfScale && (isLineOutOfScaleRight ? 'end' : 'start');
   return {
     lineData: [
       {
-        x: start,
+        x: start || startDate,
         y: index,
         label: title,
+        textAnchor: lineTitleAnchor || 'middle',
       },
       {
-        x: end,
+        x: isLineOutOfScale ? start : end,
         y: index,
       },
     ],
     pointsData: [
       {
         y: index,
-        x: start,
+        x: start || startDate,
         title: startDate,
         fill: color,
         isStart: true,
         label: 'Start Date',
-        symbol: isStartWithinScale ? 'circle' : 'arrowLeft',
-        strokeWidth: isStartWithinScale ? 10 : 4,
+        titleAnchor: isLineOutOfScaleRight ? 'end' : 'start',
+        symbol: startSymbol || 'circle',
+        strokeWidth: isStartWithinScale ? 10 : 2,
         renderPopover,
       },
       {
@@ -48,11 +55,12 @@ const enhance = withProps(({
         x: end,
         title: endDate,
         fill: color,
-        startDate: start,
+        startDate: start || startDate,
         isEnd: true,
         label: 'End Date',
+        titleAnchor: 'end',
         symbol: isEndWithinScale ? 'circle' : 'arrowRight',
-        strokeWidth: isEndWithinScale ? 10 : 4,
+        strokeWidth: isEndWithinScale ? 10 : 2,
         renderPopover,
       },
       ...points.map(point => ({
