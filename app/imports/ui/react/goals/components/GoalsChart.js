@@ -31,7 +31,12 @@ const getScaleDates = (timeScale) => {
   };
 };
 
-const GoalsChart = ({ goals, timeScale, organizationId, canEditGoals }) => {
+const GoalsChart = ({
+  goals,
+  timeScale,
+  organizationId,
+  canEditGoals,
+}) => {
   const height = 65 * goals.length + 35;
   const scaleDates = getScaleDates(timeScale);
 
@@ -61,7 +66,7 @@ const GoalsChart = ({ goals, timeScale, organizationId, canEditGoals }) => {
             endDate: goal.endDate,
             points: getChartPoints(goal, canEditGoals),
             renderPopover: canEditGoals ? props =>
-              <GoalsChartActionsContainer {...{ ...props, ...goal, organizationId }} /> : null,
+              <GoalsChartActionsContainer {...{ ...props, goal, organizationId }} /> : null,
           }}
         />
       ))}
@@ -73,6 +78,7 @@ GoalsChart.propTypes = {
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
   timeScale: PropTypes.number.isRequired,
   organizationId: PropTypes.string.isRequired,
+  canEditGoals: PropTypes.bool,
 };
 
 export default GoalsChart;
