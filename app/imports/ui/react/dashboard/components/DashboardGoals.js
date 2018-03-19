@@ -7,13 +7,13 @@ import {
   DashboardStatsExpandable,
   IconLoading,
   PlusButton,
-  GoalsChart,
 } from '../../components';
 import {
+  GoalsChart,
   GoalAddModalContainer,
   GoalEditModalContainer,
   CompletedDeletedGoalsContainer,
-} from '../../goals/containers';
+} from '../../goals';
 
 const DashboardGoals = ({
   totalCount,

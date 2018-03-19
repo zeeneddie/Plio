@@ -4,7 +4,6 @@ export * from './Buttons';
 export * from './Icons';
 export * from './Utility';
 export * from './Labels';
-export * from '../goals/components';
 export * from './timeline';
 
 export { default as CardBlock } from './CardBlock';
