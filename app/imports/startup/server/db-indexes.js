@@ -1,18 +1,23 @@
-import { Departments } from '/imports/share/collections/departments.js';
-import { LessonsLearned } from '/imports/share/collections/lessons.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
-import { StandardTypes } from '/imports/share/collections/standards-types.js';
-import { Standards } from '/imports/share/collections/standards.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Occurrences } from '/imports/share/collections/occurrences.js';
-import { Messages } from '/imports/share/collections/messages.js';
-import { Actions } from '/imports/share/collections/actions';
-import { WorkItems } from '/imports/share/collections/work-items';
-import { Discussions } from '/imports/share/collections/discussions';
-import { AuditLogs } from '/imports/share/collections/audit-logs';
-import { Notifications } from '/imports/share/collections/notifications';
-import { RiskTypes } from '/imports/share/collections/risk-types';
+import {
+  RiskTypes,
+  Notifications,
+  AuditLogs,
+  Discussions,
+  WorkItems,
+  Actions,
+  Messages,
+  Occurrences,
+  NonConformities,
+  Standards,
+  StandardTypes,
+  StandardsBookSections,
+  Organizations,
+  LessonsLearned,
+  Departments,
+  Risks,
+  Goals,
+  Milestones,
+} from '../../share/collections';
 
 
 // indexes for Departments
@@ -330,4 +335,28 @@ Notifications._ensureIndex({
 
 RiskTypes._ensureIndex({
   organizationId: 1,
+});
+
+// Goals indexes
+
+Goals._ensureIndex({
+  organizationId: 1,
+  isDeleted: 1,
+});
+
+Goals._ensureIndex({
+  organizationId: 1,
+  isCompleted: 1,
+});
+
+Goals._ensureIndex({
+  organizationId: 1,
+  isCompleted: 1,
+  isDeleted: 1,
+});
+
+// Milestones indexes
+
+Milestones._ensureIndex({
+  isDeleted: 1,
 });
