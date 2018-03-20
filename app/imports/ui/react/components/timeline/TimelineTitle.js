@@ -5,7 +5,7 @@ import { compose, withProps, onlyUpdateForKeys } from 'recompose';
 import { getTitleDX, getLineCenter } from './helpers';
 
 const enhance = compose(
-  onlyUpdateForKeys(['startDate', 'endDate', 'text', 'textAnchor']),
+  onlyUpdateForKeys(['startDate', 'endDate', 'text', 'textAnchor', 'x']),
   withProps(({ data, datum: { y, textAnchor } }) => {
     const start = new Date(data[0].x).getTime();
     const end = new Date(data[1].x).getTime();

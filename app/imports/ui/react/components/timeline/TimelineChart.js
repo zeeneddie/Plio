@@ -1,8 +1,34 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { prop } from 'ramda';
+import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { VictoryChart } from 'victory';
+import { debounceHandlers } from '../../helpers';
 
 import TimelineAxis from './TimelineAxis';
+
+const enhance = compose(
+  withState('width', 'setWidth', prop('maxWidth')),
+  withHandlers({
+    updateWidth: ({ maxWidth, width, setWidth }) => () => {
+      const windowWidth = window.innerWidth;
+      const newWidth = windowWidth > maxWidth ? maxWidth : windowWidth;
+      if (newWidth !== width) {
+        setWidth(newWidth);
+      }
+    },
+  }),
+  debounceHandlers(['updateWidth'], 200),
+  lifecycle({
+    componentDidMount() {
+      this.props.updateWidth();
+      window.addEventListener('resize', this.props.updateWidth);
+    },
+    componentWillMount() {
+      window.removeEventListener('resize', this.props.updateWidth);
+    },
+  }),
+);
 
 const TimelineChart = ({
   scale = { x: 'time', y: 'linear' },
@@ -34,4 +60,4 @@ TimelineChart.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default TimelineChart;
+export default enhance(TimelineChart);

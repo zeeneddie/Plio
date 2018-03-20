@@ -18,6 +18,12 @@ const getChartPoints = ({ _id: goalId, milestones }, canEditGoals) => (
   }))
 );
 
+const getChartHeight = (goals) => {
+  const ITEM_HEIGHT = 65;
+  const AXIS_HEIGHT = 35;
+  return ITEM_HEIGHT * goals.length + AXIS_HEIGHT;
+};
+
 const getScaleDates = (timeScale) => {
   const MONTH_DAYS = 30;
   const DENOMINATOR = 8;
@@ -37,14 +43,14 @@ const GoalsChart = ({
   organizationId,
   canEditGoals,
 }) => {
-  const height = 65 * goals.length + 35;
+  const height = getChartHeight(goals);
   const scaleDates = getScaleDates(timeScale);
 
   return (
     <TimelineChart
       {...{
         height,
-        width: 1140,
+        maxWidth: 1140,
         domain: {
           x: [scaleDates.start, scaleDates.end],
           y: [-1, goals.length],
