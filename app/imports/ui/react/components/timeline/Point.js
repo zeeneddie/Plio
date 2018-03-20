@@ -13,7 +13,7 @@ const Point = (props) => {
           dx: '-5',
         }}
       >
-        &#9664;
+        &#9668;
       </text>
     );
     case 'arrowRight': return (
@@ -25,7 +25,7 @@ const Point = (props) => {
           dx: '-7',
         }}
       >
-        &#9654;
+        &#9658;
       </text>
     );
     default: return <VictoryPoint {...props} />;
