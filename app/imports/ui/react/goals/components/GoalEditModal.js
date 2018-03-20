@@ -63,13 +63,15 @@ export const GoalEditModal = ({
         {goal && (
           <GoalEditContainer {...{ goal, organizationId }} />
         )}
-        <TextAlign center>
-          <CardBlock>
-            <Button onClick={onDelete}>
-              Delete
-            </Button>
-          </CardBlock>
-        </TextAlign>
+        {onDelete && (
+          <TextAlign center>
+            <CardBlock>
+              <Button onClick={onDelete}>
+                Delete
+              </Button>
+            </CardBlock>
+          </TextAlign>
+        )}
       </div>
     </ModalBody>
   </Modal>
@@ -81,7 +83,7 @@ GoalEditModal.propTypes = {
   onClosed: PropTypes.func,
   goal: PropTypes.object,
   organizationId: PropTypes.string.isRequired,
-  onDelete: PropTypes.func.isRequired,
+  onDelete: PropTypes.func,
   loading: PropTypes.bool,
   guidance: PropTypes.node,
   isGuidancePanelOpen: PropTypes.bool,

@@ -64,17 +64,19 @@ const DashboardGoals = ({
     {goals.length
       ? pluralize('goal', totalCount || goals.length, true)
       : 'Add a key goal'}
-    <GoalAddModalContainer
-      isOpen={isAddModalOpen}
-      toggle={toggleAddModal}
-      ownerId={userId}
-      {...{ organizationId }}
-    />
+    {canEditGoals && (
+      <GoalAddModalContainer
+        isOpen={isAddModalOpen}
+        toggle={toggleAddModal}
+        ownerId={userId}
+        {...{ organizationId }}
+      />
+    )}
     {!!goals.length && (
       <GoalEditModalContainer
         isOpen={isEditModalOpen}
         toggle={toggleEditModal}
-        {...{ organizationId }}
+        {...{ organizationId, canEditGoals }}
       />
     )}
   </DashboardStatsExpandable>

@@ -4,7 +4,6 @@ import {
   flattenInput,
   checkGoalAccess,
   checkNewOwnerOrgMembership,
-  ensureCanChangeGoals,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { GoalService } }) =>
@@ -14,6 +13,5 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkGoalAccess(),
-  ensureCanChangeGoals(),
   checkNewOwnerOrgMembership(),
 )(resolver);

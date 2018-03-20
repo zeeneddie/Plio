@@ -1,6 +1,6 @@
 import connectUI from 'redux-ui';
 import { branch, renderNothing } from 'recompose';
-import { identity, path } from 'ramda';
+import { identity, path, prop } from 'ramda';
 import { graphql } from 'react-apollo';
 import { transformGoal } from 'plio-util';
 
@@ -46,10 +46,13 @@ export default namedCompose('GoalEditModalContainer')(
       goal: goal ? transformGoal(goal) : null,
     }),
   }),
-  graphql(Mutation.DELETE_GOAL, {
-    props: props => ({
-      onDelete: () => onDelete(props, props.ownProps.toggle),
+  branch(
+    prop('canEditGoals'),
+    graphql(Mutation.DELETE_GOAL, {
+      props: props => ({
+        onDelete: () => onDelete(props, props.ownProps.toggle),
+      }),
     }),
-  }),
+  ),
   withStateToggle(false, 'isGuidancePanelOpen', 'toggleGuidancePanel'),
 )(GoalEditModal);

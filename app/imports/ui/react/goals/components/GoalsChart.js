@@ -13,8 +13,8 @@ const getChartPoints = ({ _id: goalId, milestones }, canEditGoals) => (
   milestones.map(milestone => ({
     x: new Date(milestone.completionTargetDate),
     label: milestone.title,
-    renderPopover: canEditGoals ? props =>
-      <MilestoneChartActionsContainer {...{ ...props, ...milestone, goalId }} /> : null,
+    renderPopover: props =>
+      <MilestoneChartActionsContainer {...{ ...props, ...milestone, goalId }} />,
   }))
 );
 
@@ -71,8 +71,16 @@ const GoalsChart = ({
             startDate: goal.startDate,
             endDate: goal.endDate,
             points: getChartPoints(goal, canEditGoals),
-            renderPopover: canEditGoals ? props =>
-              <GoalsChartActionsContainer {...{ ...props, goal, organizationId }} /> : null,
+            renderPopover: props => (
+              <GoalsChartActionsContainer
+                {...{
+                  ...props,
+                  goal,
+                  organizationId,
+                  canEditGoals,
+                }}
+              />
+            ),
           }}
         />
       ))}

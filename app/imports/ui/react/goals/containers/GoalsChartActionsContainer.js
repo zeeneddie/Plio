@@ -1,6 +1,7 @@
 import connectUI from 'redux-ui';
+import { prop } from 'ramda';
 import { graphql } from 'react-apollo';
-import { compose, withHandlers, onlyUpdateForKeys, flattenProp } from 'recompose';
+import { compose, withHandlers, onlyUpdateForKeys, flattenProp, branch } from 'recompose';
 import { withStore } from '../../helpers';
 import { Mutation } from '../../../../client/graphql';
 import { onDelete, onComplete } from '../handlers';
@@ -20,14 +21,6 @@ const enhance = compose(
       });
     },
   }),
-  graphql(Mutation.DELETE_GOAL, {
-    props: props => ({
-      onDelete: () => {
-        props.ownProps.togglePopover();
-        onDelete(props);
-      },
-    }),
-  }),
   graphql(Mutation.COMPLETE_GOAL, {
     props: props => ({
       onComplete: () => {
@@ -36,6 +29,17 @@ const enhance = compose(
       },
     }),
   }),
+  branch(
+    prop('canEditGoals'),
+    graphql(Mutation.DELETE_GOAL, {
+      props: props => ({
+        onDelete: () => {
+          props.ownProps.togglePopover();
+          onDelete(props);
+        },
+      }),
+    }),
+  ),
 );
 
 export default enhance(ChartActions);
