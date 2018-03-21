@@ -1,0 +1,13 @@
+type StandardsQueryPayload {
+  totalCount: Int
+  standards: [Standard]
+}
+
+input StandardsQueryInput {
+  organizationId: ID!
+  isDeleted: Boolean
+}
+
+type Query {
+  standards(input: StandardsQueryInput!): StandardsQueryPayload
+}

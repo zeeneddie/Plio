@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import { Meteor } from 'meteor/meteor';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
@@ -13,22 +15,20 @@ import {
   reviewFrequencySchema,
   reviewAnnualDateSchema,
   reviewReviewerIdSchema,
-} from '/imports/share/schemas/organization-schema';
+} from '../../share/schemas/organization-schema';
 import {
   WorkflowTypes, ProblemMagnitudes, InvitationStatuses,
   DocumentTypes, DocumentTypesPlural,
-} from '/imports/share/constants';
+} from '../../share/constants';
 import {
   IdSchema, ReminderTimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
   UserIdSchema, TimezoneSchema,
   pwdSchemaObj, idSchemaDoc,
-} from '/imports/share/schemas/schemas';
+} from '../../share/schemas/schemas';
 import Method, { MiddlewareMethod } from '../method';
-import { chain, compose } from '/imports/api/helpers';
+import { chain, compose } from '../helpers';
 import {
-  checkOrgMembership,
-  ORG_CheckExistance,
   ORG_EnsureCanChange,
   ORG_EnsureNameIsUnique,
   ORG_EnsureCanInvite,
@@ -41,7 +41,7 @@ import {
   USR_EnsureIsPlioAdmin,
   USR_EnsureIsPlioUser,
 } from '../checkers';
-import { USR_EnsurePasswordIsValid, ensureCanChangeRoles } from '/imports/api/users/checkers';
+import { USR_EnsurePasswordIsValid, ensureCanChangeRoles } from '../users/checkers';
 import { ensureCanUnsubscribeFromDailyRecap, ensureThereIsNoDocuments } from './checkers';
 import { CANNOT_IMPORT_DOCS } from './errors';
 import {
@@ -100,6 +100,8 @@ export const insert = new Method({
         ownerId: this.userId,
       });
     }
+
+    return undefined;
   },
 });
 
@@ -410,7 +412,7 @@ export const inviteUserByEmail = new Method({
 
   run({ organizationId, email, welcomeMessage }) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
@@ -466,7 +468,7 @@ export const inviteMultipleUsersByEmail = new Method({
 
   run({ organizationId, emails, welcomeMessage }) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     const invitedEmails = [];
@@ -550,7 +552,7 @@ export const createOrganizationTransfer = new Method({
 
   run({ organizationId, newOwnerId }) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     return OrganizationService.createTransfer({
@@ -634,7 +636,7 @@ export const deleteOrganization = new Method({
 
   check(checker) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     return checker(chain(
@@ -646,7 +648,7 @@ export const deleteOrganization = new Method({
 
   run({ organizationId }) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     return OrganizationService.deleteOrganization({ organizationId });
@@ -666,7 +668,7 @@ export const deleteCustomerOrganization = new Method({
 
   check(checker) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     return checker(chain(
@@ -678,7 +680,7 @@ export const deleteCustomerOrganization = new Method({
 
   run({ organizationId }) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     return OrganizationService.deleteOrganization({ organizationId });

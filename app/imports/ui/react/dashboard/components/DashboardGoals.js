@@ -23,7 +23,7 @@ const DashboardGoals = ({
   loading,
   isAddModalOpen,
   toggleAddModal,
-  userId,
+  user,
   organizationId,
   isEditModalOpen,
   toggleEditModal,
@@ -68,7 +68,7 @@ const DashboardGoals = ({
       <GoalAddModalContainer
         isOpen={isAddModalOpen}
         toggle={toggleAddModal}
-        ownerId={userId}
+        owner={user}
         {...{ organizationId }}
       />
     )}
@@ -76,7 +76,7 @@ const DashboardGoals = ({
       <GoalEditModalContainer
         isOpen={isEditModalOpen}
         toggle={toggleEditModal}
-        {...{ organizationId, canEditGoals }}
+        {...{ organizationId, canEditGoals, user }}
       />
     )}
   </DashboardStatsExpandable>
@@ -90,7 +90,7 @@ DashboardGoals.propTypes = {
   isAddModalOpen: PropTypes.bool.isRequired,
   toggleAddModal: PropTypes.func.isRequired,
   loading: PropTypes.bool,
-  userId: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
   organizationId: PropTypes.string.isRequired,
   isEditModalOpen: PropTypes.bool.isRequired,
   toggleEditModal: PropTypes.func.isRequired,

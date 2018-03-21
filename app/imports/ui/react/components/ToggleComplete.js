@@ -1,6 +1,19 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { FormGroup, Button } from 'reactstrap';
+import styled from 'styled-components';
+
+import { withToggle, omitProps } from '../helpers';
+
+const StyledFormGroup = styled(omitProps(['content'])(FormGroup))`
+  margin: 0;
+  display: flex;
+  & > button {
+    margin-left: ${({ content }) => content ? '15px' : '0'}
+  }
+`;
+
+const enhance = withToggle();
 
 const ToggleComplete = ({
   isOpen,
@@ -9,7 +22,8 @@ const ToggleComplete = ({
   completeButtonContent = 'Complete',
   cancelButtonContent = 'Cancel',
   onComplete,
-  renderButton = () => (
+  content,
+  button = (
     <Button
       color="success"
       onClick={isOpen ? onComplete : toggle}
@@ -17,33 +31,32 @@ const ToggleComplete = ({
       {completeButtonContent}
     </Button>
   ),
-  renderCancelButton = () => (
+  cancelButton = (
     <Button color="link" onClick={toggle}>{cancelButtonContent}</Button>
   ),
-  render = () => null,
   ...props
 }) => (
   <div {...props}>
-    <FormGroup className="no-margin">
-      {render({ isOpen, toggle })}
-      {isOpen ? renderCancelButton({ isOpen, toggle }) : renderButton({ isOpen, toggle })}
-    </FormGroup>
+    <StyledFormGroup {...{ content }}>
+      {content}
+      {isOpen ? cancelButton : button}
+    </StyledFormGroup>
 
     {isOpen && (
       <Fragment>
         {children}
-        {renderButton({ isOpen, toggle })}
+        {button}
       </Fragment>
     )}
   </div>
 );
 
 ToggleComplete.propTypes = {
+  content: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  renderButton: PropTypes.func,
-  renderCancelButton: PropTypes.func,
-  render: PropTypes.func,
+  button: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  cancelButton: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   completeButtonContent: PropTypes.node,
   cancelButtonContent: PropTypes.node,
   children: PropTypes.node,
@@ -51,4 +64,4 @@ ToggleComplete.propTypes = {
   onComplete: PropTypes.func.isRequired,
 };
 
-export default ToggleComplete;
+export default enhance(ToggleComplete);

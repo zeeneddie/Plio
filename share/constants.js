@@ -296,6 +296,7 @@ export const ProblemTypes = {
 export const DocumentTypes = {
   STANDARD: 'standard',
   GOAL: 'goal',
+  MILESTONE: 'milestone',
   ...ProblemTypes,
   ...ActionTypes,
 };
@@ -803,4 +804,5 @@ export const MilestoneStatuses = {
 // fill in other stuff
 export const Abbreviations = {
   GOAL: 'KG',
+  LESSON: 'LL',
 };

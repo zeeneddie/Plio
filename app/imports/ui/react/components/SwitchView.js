@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { ButtonGroup, FormGroup } from 'reactstrap';
+import { ButtonGroup, FormGroup, Label, Col } from 'reactstrap';
 import cx from 'classnames';
-import { equals } from 'ramda';
+import { equals, prop, identity } from 'ramda';
+import { branch, withStateHandlers } from 'recompose';
 
 import { RadioButton } from './Buttons';
 import CardBlock from './CardBlock';
 
+const enhance = branch(
+  prop('onChange'),
+  identity,
+  withStateHandlers(
+    ({ active = 0 }) => ({ active }),
+    {
+      onChange: () => active => ({ active }),
+    },
+  ),
+);
+
 const renderButtons = ({ active, onChange, buttons }) => buttons.map((button, idx) => (
   <RadioButton
-    // eslint-disable-next-line react/no-array-index-key
-    key={idx}
+    key={`switch-view-button-${button.key}`}
     className={cx(equals(active, idx) && 'active')}
     onClick={() => onChange(idx)}
   >
@@ -24,26 +35,26 @@ const SwitchView = ({
   onChange,
   buttons,
 }) => (
-  <div>
+  <Fragment>
     <CardBlock>
       <FormGroup row>
-        <label className="form-control-label col-sm-4 col-xs-12" />
-        <div className="col-sm-8 col-xs-12">
+        <Label sm="4" xs="12" />
+        <Col sm="8" xs="12">
           <ButtonGroup className="btn-group-nomargin" data-toggle="buttons">
             {renderButtons({ active, onChange, buttons })}
           </ButtonGroup>
-        </div>
+        </Col>
       </FormGroup>
     </CardBlock>
     {children[active]}
-  </div>
+  </Fragment>
 );
 
 SwitchView.propTypes = {
-  active: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  onChange: PropTypes.func.isRequired,
+  active: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onChange: PropTypes.func,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   buttons: PropTypes.arrayOf(PropTypes.node.isRequired).isRequired,
 };
 
-export default SwitchView;
+export default enhance(SwitchView);

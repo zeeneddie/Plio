@@ -3,9 +3,9 @@ import checkDocExistanceById from './checkDocExistanceById';
 import checkOrgMembership from '../auth/checkOrgMembership';
 
 export default (
-  collection,
+  getCollection,
   getOrgId = (root, args, context) => context.doc.organizationId,
 ) => async (next, root, args, context) => applyMiddleware(
-  checkDocExistanceById(collection),
+  checkDocExistanceById(getCollection(root, args, context)),
   checkOrgMembership(getOrgId),
 )(next)(root, args, context);

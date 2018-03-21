@@ -1,0 +1,9 @@
+query RiskList($organizationId: ID!) {
+  risks(organizationId: $organizationId, isDeleted: false) {
+    risks {
+      _id
+      title
+      sequentialId
+    }
+  }
+}

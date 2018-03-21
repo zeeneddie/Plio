@@ -85,6 +85,28 @@ export default {
     return this.update(query, modifier);
   },
 
+  async linkRisk({ _id, riskId }) {
+    const query = { _id };
+    const modifier = {
+      $addToSet: {
+        riskIds: riskId,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
+
+  async unlinkRisk({ riskId }) {
+    const query = { riskIds: riskId };
+    const modifier = {
+      $pull: {
+        riskIds: riskId,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
+
   async delete({ _id }, { userId }) {
     const res = await this.set({
       _id,

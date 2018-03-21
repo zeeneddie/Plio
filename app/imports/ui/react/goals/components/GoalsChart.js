@@ -9,7 +9,7 @@ import {
 import GoalsChartActionsContainer from '../containers/GoalsChartActionsContainer';
 import MilestoneChartActionsContainer from '../containers/MilestoneChartActionsContainer';
 
-const getChartPoints = ({ _id: goalId, milestones }, canEditGoals) => (
+const getChartPoints = ({ _id: goalId, milestones }) => (
   milestones.map(milestone => ({
     x: new Date(milestone.completionTargetDate),
     label: milestone.title,
@@ -70,7 +70,7 @@ const GoalsChart = ({
             title: goal.title,
             startDate: goal.startDate,
             endDate: goal.endDate,
-            points: getChartPoints(goal, canEditGoals),
+            points: getChartPoints(goal),
             renderPopover: props => (
               <GoalsChartActionsContainer
                 {...{

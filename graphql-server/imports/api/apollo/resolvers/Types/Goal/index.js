@@ -5,7 +5,6 @@ import {
   loadFilesById,
   loadActionsByLinkedDocumentId,
   loadLessonsByDocumentId,
-  loadRisksById,
   lenses,
 } from 'plio-util';
 import { view, map, flatten } from 'ramda';
@@ -20,7 +19,6 @@ const {
   organizationId,
   completedBy,
   fileIds,
-  riskIds,
 } = lenses;
 
 export default {
@@ -33,13 +31,26 @@ export default {
     notify: loadUsersById(view(notify)),
     organization: loadOrganizationById(view(organizationId)),
     files: loadFilesById(view(fileIds)),
-    risks: loadRisksById(view(riskIds)),
     actions: loadActionsByLinkedDocumentId(view(_id)),
     lessons: loadLessonsByDocumentId(view(_id)),
-    milestones: async ({ milestoneIds }, args, { loaders: { Milestone: { byQuery } } }) =>
-      byQuery.loadMany(map(milestoneId => ({
+    milestones: async (root, args, context) => {
+      const { milestoneIds } = root;
+      const { loaders: { Milestone: { byQuery } } } = context;
+
+      return byQuery.loadMany(map(milestoneId => ({
         _id: milestoneId,
         isDeleted: false,
-      }), milestoneIds)).then(flatten),
+      }), milestoneIds)).then(flatten);
+    },
+    risks: async (root, args, context) => {
+      const { riskIds } = root;
+      const { isDeleted = false } = args;
+      const { loaders: { Risk: { byQuery } } } = context;
+
+      return byQuery.loadMany(map(riskId => ({
+        _id: riskId,
+        isDeleted,
+      }), riskIds)).then(flatten);
+    },
   },
 };

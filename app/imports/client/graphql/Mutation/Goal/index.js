@@ -14,6 +14,7 @@ import UNDO_GOAL_COMPLETION from './UndoGoalCompletion.graphql';
 import DELETE_GOAL from './DeleteGoal.graphql';
 import RESTORE_GOAL from './RestoreGoal.graphql';
 import REMOVE_GOAL from './RemoveGoal.graphql';
+import LINK_RISK_TO_GOAL from './LinkRiskToGoal.graphql';
 
 export default {
   UPDATE_GOAL_TITLE,
@@ -32,4 +33,5 @@ export default {
   DELETE_GOAL,
   RESTORE_GOAL,
   REMOVE_GOAL,
+  LINK_RISK_TO_GOAL,
 };

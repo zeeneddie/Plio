@@ -1,5 +1,7 @@
 #import "./DashboardGoal.graphql"
 #import "./MilestoneCard.graphql"
+#import "./RiskCard.graphql"
+#import "./LessonCard.graphql"
 
 fragment GoalCard on Goal {
   owner {
@@ -19,8 +21,21 @@ fragment GoalCard on Goal {
     }
   }
   completionComment
+  organization {
+    rkGuidelines {
+      minor
+      major
+      critical
+    }
+  }
   milestones {
     ...MilestoneCard
+  }
+  risks(input: { isDeleted: false }) {
+    ...RiskCard
+  }
+  lessons {
+    ...LessonCard
   }
   ...DashboardGoal
 }

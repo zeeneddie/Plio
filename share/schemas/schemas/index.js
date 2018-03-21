@@ -258,6 +258,7 @@ export const standardsIdsSchema = new SimpleSchema({
   standardsIds: {
     type: [String],
     regEx: SimpleSchema.RegEx.Id,
+    optional: true,
     // maxCount: ?
   },
 });

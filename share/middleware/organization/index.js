@@ -1,1 +1,1 @@
-export { default as ensureIsOrgOwner } from './ensureIsOrgOwner';
+export { default as ensureCanChangeOrgSettings } from './ensureCanChangeOrgSettings';

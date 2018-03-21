@@ -1,17 +1,17 @@
 import User from './User.graphql';
 import Organization from './Organization.graphql';
 import Goal from './Goal.graphql';
+import RiskType from './RiskType.graphql';
+import Risk from './Risk.graphql';
+import Standard from './Standard.graphql';
+import Department from './Department.graphql';
 
 export default [
   User,
   Organization,
   Goal,
-  // TEMP
-  `
-    type Query {
-      organizations: [Organization]
-      actions: [Action]
-      risks: [Risk]
-    }
-  `,
+  RiskType,
+  Risk,
+  Standard,
+  Department,
 ];

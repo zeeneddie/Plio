@@ -80,7 +80,7 @@ export default namedCompose('DashboardGoalsContainer')(
           totalCount,
           goals,
         } = {},
-        me: { userId } = {},
+        me: user = {},
       },
       ownProps: {
         ui: {
@@ -100,7 +100,7 @@ export default namedCompose('DashboardGoalsContainer')(
       goals,
       totalCount,
       networkStatus,
-      userId,
+      user,
       organizationId,
       toggle: async () => {
         if (!isOpen) {
@@ -136,9 +136,9 @@ export default namedCompose('DashboardGoalsContainer')(
       toggleEditModal: () => updateUI('isEditModalOpen', !isEditModalOpen),
     }),
   }),
-  withProps(({ organizationId, userId }) => ({
+  withProps(({ organizationId, user }) => ({
     // TODO check role via graphql
-    canEditGoals: canChangeGoals(organizationId, userId),
+    canEditGoals: canChangeGoals(organizationId, user._id),
   })),
   withPreloaderPage(
     allPass([

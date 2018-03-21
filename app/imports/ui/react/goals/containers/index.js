@@ -6,3 +6,5 @@ export { default as GoalMilestonesSubcardContainer } from './GoalMilestonesSubca
 export { default as GoalMilestoneSubcardContainer } from './GoalMilestoneSubcardContainer';
 export { default as GoalSelectInputContainer } from './GoalSelectInputContainer';
 export { default as CompletedDeletedGoalsContainer } from './CompletedDeletedGoalsContainer';
+export { default as GoalRisksSubcardContainer } from './GoalRisksSubcardContainer';
+export { default as GoalLessonsSubcardContainer } from './GoalLessonsSubcardContainer';

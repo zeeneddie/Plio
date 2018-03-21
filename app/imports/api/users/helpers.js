@@ -1,4 +1,5 @@
 import property from 'lodash.property';
+import { converge, assocPath, identity } from 'ramda';
 
 import { SystemName } from '../../share/constants';
 import { compose, every, chain, join, either, trim } from '../helpers';
@@ -22,3 +23,8 @@ export const getFullName = compose(
 const isUserSystem = user => typeof user === 'string' && user === SystemName && user;
 
 export const getFullNameOrEmail = either(isUserSystem, either(getFullName, getEmail));
+
+export const getUserWithFullName = converge(assocPath(['profile', 'fullName']), [
+  getFullName,
+  identity,
+]);

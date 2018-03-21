@@ -17,7 +17,7 @@ export default namedCompose('GoalMilestonesSubcardContainer')(
         linkedTo,
       },
     }) => ({
-      onSave: (
+      onSave: async (
         {
           title,
           description,
@@ -26,27 +26,41 @@ export default namedCompose('GoalMilestonesSubcardContainer')(
         {
           ownProps: { flush },
         },
-        callback,
-      ) => mutate({
-        variables: {
-          input: {
-            title,
-            description,
-            completionTargetDate,
-            organizationId,
-            linkedTo: linkedTo._id,
-          },
-        },
-        update: (proxy, { data: { createMilestone: { milestone } } }) => updateGoalFragment(
-          Cache.addMilestone(milestone),
-          {
-            id: linkedTo._id,
-            fragment: Fragment.GOAL_CARD,
-          },
-          proxy,
-        ),
-      }).then(({ data: { createMilestone: { milestone } } }) => flush(milestone))
-        .catch(({ message }) => callback({ [FORM_ERROR]: message })),
+      ) => {
+        const errors = [];
+
+        if (!title) errors.push('Title is required');
+        if (!completionTargetDate) errors.push('Completion - target date is required');
+
+        if (errors.length) return { [FORM_ERROR]: errors.join('\n') };
+
+        try {
+          const { data } = await mutate({
+            variables: {
+              input: {
+                title,
+                description,
+                completionTargetDate,
+                organizationId,
+                linkedTo: linkedTo._id,
+              },
+            },
+            update: (proxy, { data: { createMilestone: { milestone } } }) => updateGoalFragment(
+              Cache.addMilestone(milestone),
+              {
+                id: linkedTo._id,
+                fragment: Fragment.GOAL_CARD,
+              },
+              proxy,
+            ),
+          });
+          const { createMilestone: { milestone } } = data;
+
+          return flush(milestone);
+        } catch ({ message }) {
+          return { [FORM_ERROR]: message };
+        }
+      },
     }),
   }),
   graphql(Mutation.DELETE_MILESTONE, {

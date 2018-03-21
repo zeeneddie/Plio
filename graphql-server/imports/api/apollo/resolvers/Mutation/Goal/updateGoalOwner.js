@@ -3,7 +3,7 @@ import {
   checkLoggedIn,
   flattenInput,
   checkGoalAccess,
-  checkNewOwnerOrgMembership,
+  checkUserOrgMembership,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { GoalService } }) =>
@@ -13,5 +13,7 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkGoalAccess(),
-  checkNewOwnerOrgMembership(),
+  checkUserOrgMembership({
+    getUserId: (root, args) => args.ownerId,
+  }),
 )(resolver);

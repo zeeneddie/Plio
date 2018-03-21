@@ -1,5 +1,5 @@
 import connectUI from 'redux-ui';
-import { lenses, Cache } from 'plio-util';
+import { lenses, Cache, getUserOptions } from 'plio-util';
 import { view } from 'ramda';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
@@ -29,7 +29,7 @@ export default namedCompose('GoalAddModalContainer')(
     state: {
       title: '',
       description: '',
-      ownerId: view(lenses.ownerId),
+      ownerId: ({ owner }) => getUserOptions(owner),
       startDate: () => new Date(),
       endDate: null,
       priority: GoalPriorities.MINOR,
@@ -61,7 +61,7 @@ export default namedCompose('GoalAddModalContainer')(
       onClosed: () => updateUI({
         title: '',
         description: '',
-        ownerId: ownProps.ownerId,
+        ownerId: getUserOptions(ownProps.owner),
         startDate: new Date(),
         endDate: null,
         priority: GoalPriorities.MINOR,

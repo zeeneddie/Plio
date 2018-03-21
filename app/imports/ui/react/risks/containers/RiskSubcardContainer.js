@@ -1,68 +1,184 @@
-import { shouldUpdate, withProps, withHandlers } from 'recompose';
-import { eqProps } from 'ramda';
-import connectUI from 'redux-ui';
-import { connect } from 'react-redux';
+import { graphql } from 'react-apollo';
+import { withHandlers, mapProps } from 'recompose';
+import { getTargetValue, getValue, Cache, toDate } from 'plio-util';
+import { mergeDeepLeft, compose, objOf, pluck, identity, always } from 'ramda';
 
-import { remove } from '../../../../api/risks/methods';
 import RiskSubcard from '../components/RiskSubcard';
-import { swal } from '../../../utils';
-import { ALERT_AUTOHIDE_TIME } from '../../../../api/constants';
-import _modal_ from '../../../../startup/client/mixins/modal';
-import { namedCompose } from '../../helpers';
-import { getRiskIsNew } from '../../../../client/store/selectors/risks';
+import { namedCompose, withMutationState } from '../../helpers';
+import { Mutation, Fragment } from '../../../../client/graphql';
+import { updateRiskFragment } from '../../../../client/apollo/utils';
+import { swal } from '../../../../client/util';
+
+const {
+  UPDATE_RISK_TITLE,
+  UPDATE_RISK_DESCRIPTION,
+  UPDATE_RISK_STATUS_COMMENT,
+  UPDATE_RISK_ORIGINATOR,
+  UPDATE_RISK_OWNER,
+  UPDATE_RISK_MAGNITUDE,
+  LINK_RISK_TYPE_TO_RISK,
+  UPDATE_RISK_STANDARDS,
+  UPDATE_RISK_DEPARTMENTS,
+  CREATE_DEPARTMENT,
+  SET_RISK_ANALYSIS_TARGET_DATE,
+  SET_RISK_ANALYSIS_EXECUTOR,
+  COMPLETE_RISK_ANALYSIS,
+  UNDO_RISK_ANALYSIS_COMPLETION,
+  SET_RISK_ANALYSIS_COMPLETED_BY,
+  SET_RISK_ANALYSIS_COMPLETED_AT,
+  SET_RISK_ANALYSIS_COMPLETION_COMMENTS,
+} = Mutation;
+
+const createHandler = (getArgs, mutationName) => ({
+  mutateWithState,
+  [mutationName]: mutate,
+  risk: { _id },
+}) => (...args) => mutateWithState(mutate({
+  variables: {
+    input: {
+      _id,
+      ...getArgs(...args),
+    },
+  },
+  update: (proxy, { data: { [mutationName]: { risk } } }) => updateRiskFragment(
+    mergeDeepLeft(risk),
+    {
+      id: _id,
+      fragment: Fragment.RISK_CARD,
+    },
+    proxy,
+  ),
+}));
 
 export default namedCompose('RiskSubcardContainer')(
-  connect((state, { risk: { viewedBy = [] } }) => ({
-    isNew: getRiskIsNew(state, { viewedBy }),
-  })),
-  connectUI(),
-  shouldUpdate((props, nextProps) => !!(
-    props.ui.opened !== nextProps.ui.opened ||
-    props.isOpen !== nextProps.isOpen ||
-    props.isNew !== nextProps.isNew ||
-    (nextProps.opened === nextProps.risk._id &&
-      props.ui.isSaving !== nextProps.ui.isSaving) ||
-    !eqProps('risk', props, nextProps)
-  )),
-  withProps(({ ui: { opened }, risk: { _id } }) => ({ isOpen: opened === _id })),
-  withHandlers({
-    toggle: ({ updateUI, ui: { opened }, risk: { _id } }) => () =>
-      updateUI('opened', opened === _id ? null : _id),
-    onClose: ({ updateUI }) => () => updateUI('opened', null),
-    onDelete: ({ updateUI }) => ({ risk: { _id, title } }) => {
-      swal({
-        title: 'Are you sure?',
-        text: `The risk "${title}" will be removed.`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Remove',
-        closeOnConfirm: false,
-      }, () => {
-        updateUI('isSaving', true);
-
-        const cb = (err) => {
-          updateUI('isSaving', false);
-          if (err) {
-            swal.close();
-            updateUI('error', err.message);
-            return;
-          }
-
-          updateUI('error', null);
-
-          swal({
-            title: 'Removed!',
-            text: `The risk "${title}" was removed successfully.`,
-            type: 'success',
-            timer: ALERT_AUTOHIDE_TIME,
-            showConfirmButton: false,
-          });
-        };
-
-        // TEMP
-        // because edit modal is still in blaze
-        _modal_.modal.callMethod(remove, { _id }, cb);
-      });
-    },
+  withMutationState(),
+  graphql(UPDATE_RISK_TITLE, { name: UPDATE_RISK_TITLE.name }),
+  graphql(UPDATE_RISK_DESCRIPTION, { name: UPDATE_RISK_DESCRIPTION.name }),
+  graphql(UPDATE_RISK_STATUS_COMMENT, { name: UPDATE_RISK_STATUS_COMMENT.name }),
+  graphql(UPDATE_RISK_ORIGINATOR, { name: UPDATE_RISK_ORIGINATOR.name }),
+  graphql(UPDATE_RISK_OWNER, { name: UPDATE_RISK_OWNER.name }),
+  graphql(UPDATE_RISK_MAGNITUDE, { name: UPDATE_RISK_MAGNITUDE.name }),
+  graphql(LINK_RISK_TYPE_TO_RISK, { name: LINK_RISK_TYPE_TO_RISK.name }),
+  graphql(UPDATE_RISK_STANDARDS, { name: UPDATE_RISK_STANDARDS.name }),
+  graphql(UPDATE_RISK_DEPARTMENTS, { name: UPDATE_RISK_DEPARTMENTS.name }),
+  graphql(CREATE_DEPARTMENT, { name: CREATE_DEPARTMENT.name }),
+  graphql(SET_RISK_ANALYSIS_TARGET_DATE, { name: SET_RISK_ANALYSIS_TARGET_DATE.name }),
+  graphql(SET_RISK_ANALYSIS_EXECUTOR, { name: SET_RISK_ANALYSIS_EXECUTOR.name }),
+  graphql(COMPLETE_RISK_ANALYSIS, { name: COMPLETE_RISK_ANALYSIS.name }),
+  graphql(UNDO_RISK_ANALYSIS_COMPLETION, { name: UNDO_RISK_ANALYSIS_COMPLETION.name }),
+  graphql(SET_RISK_ANALYSIS_COMPLETED_BY, { name: SET_RISK_ANALYSIS_COMPLETED_BY.name }),
+  graphql(SET_RISK_ANALYSIS_COMPLETED_AT, { name: SET_RISK_ANALYSIS_COMPLETED_AT.name }),
+  graphql(SET_RISK_ANALYSIS_COMPLETION_COMMENTS, {
+    name: SET_RISK_ANALYSIS_COMPLETION_COMMENTS.name,
   }),
+  withHandlers({
+    onChangeTitle: createHandler(
+      compose(objOf('title'), getTargetValue),
+      UPDATE_RISK_TITLE.name,
+    ),
+    onChangeDescription: createHandler(
+      compose(objOf('description'), getTargetValue),
+      UPDATE_RISK_DESCRIPTION.name,
+    ),
+    onChangeStatusComment: createHandler(
+      compose(objOf('statusComment'), getTargetValue),
+      UPDATE_RISK_STATUS_COMMENT.name,
+    ),
+    onChangeOriginator: createHandler(
+      compose(objOf('originatorId'), getValue),
+      UPDATE_RISK_ORIGINATOR.name,
+    ),
+    onChangeOwner: createHandler(
+      compose(objOf('ownerId'), getValue),
+      UPDATE_RISK_OWNER.name,
+    ),
+    onChangeMagnitude: createHandler(
+      compose(objOf('magnitude'), getTargetValue),
+      UPDATE_RISK_MAGNITUDE.name,
+    ),
+    onChangeType: createHandler(
+      compose(objOf('typeId'), getTargetValue),
+      LINK_RISK_TYPE_TO_RISK.name,
+    ),
+    onChangeStandards: createHandler(
+      compose(objOf('standardsIds'), pluck('value')),
+      UPDATE_RISK_STANDARDS.name,
+    ),
+    onChangeDepartments: createHandler(
+      compose(objOf('departmentsIds'), pluck('value')),
+      UPDATE_RISK_DEPARTMENTS.name,
+    ),
+    onChangeTargetDate: createHandler(
+      compose(objOf('targetDate'), toDate),
+      SET_RISK_ANALYSIS_TARGET_DATE.name,
+    ),
+    onChangeExecutor: createHandler(
+      compose(objOf('executor'), getValue),
+      SET_RISK_ANALYSIS_EXECUTOR.name,
+    ),
+    onChangeCompletedBy: createHandler(
+      compose(objOf('completedBy'), getValue),
+      SET_RISK_ANALYSIS_COMPLETED_BY.name,
+    ),
+    onChangeCompletedAt: createHandler(
+      compose(objOf('completedAt'), toDate),
+      SET_RISK_ANALYSIS_COMPLETED_AT.name,
+    ),
+    onChangeCompletionComments: createHandler(
+      compose(objOf('completionComments'), getTargetValue),
+      SET_RISK_ANALYSIS_COMPLETION_COMMENTS.name,
+    ),
+    onComplete: createHandler(
+      identity,
+      COMPLETE_RISK_ANALYSIS.name,
+    ),
+    onUndoCompletion: createHandler(
+      always({}),
+      UNDO_RISK_ANALYSIS_COMPLETION.name,
+    ),
+  }),
+  withHandlers({
+    // TODO: don't pass if the user is not authorized for changing org settings
+    onAddDepartment: ({
+      [CREATE_DEPARTMENT.name]: createDepartment,
+      onChangeDepartments,
+      organizationId,
+      risk: { _id, departments },
+    }) => ({ value }) => swal.promise({
+      title: 'Are you sure?',
+      text: `New department/sector "${value}" will be added.`,
+      confirmButtonText: 'Add',
+      successTitle: 'Added!',
+      successText: `New department/sector "${value}" was added successfully`,
+    }, () => {
+      const promise = createDepartment({
+        variables: {
+          input: {
+            organizationId,
+            name: value,
+          },
+        },
+        update: (proxy, { data: { createDepartment: { department } } }) => updateRiskFragment(
+          Cache.addDepartment(department),
+          {
+            id: _id,
+            fragment: Fragment.RISK_CARD,
+          },
+        ),
+      });
+      const linkNewDepartmentToRisk = ({ data: { createDepartment: { department } } }) => {
+        const newDepartments = [...departments, department].map(({ _id: departmentId }) => ({
+          value: departmentId,
+        }));
+        return onChangeDepartments(newDepartments);
+      };
+
+      return promise.then(linkNewDepartmentToRisk);
+    }),
+  }),
+  mapProps(({ ui: { error, loading }, ...rest }) => ({
+    error,
+    loading,
+    ...rest,
+  })),
 )(RiskSubcard);

@@ -15,15 +15,20 @@ const corsOptions = {
 
 createApolloServer(() => ({
   schema,
-  context: ctx => ({
-    ...ctx,
-    services,
-    collections: {
-      ...collections,
-      Users: Meteor.users,
-    },
-    loaders: createLoaders(),
-  }),
+  context: (req) => {
+    const context = {
+      ...req,
+      services,
+      collections: {
+        ...collections,
+        Users: Meteor.users,
+      },
+    };
+    return {
+      ...context,
+      loaders: createLoaders(context),
+    };
+  },
 }), {
   graphiql: true,
   configServer: (graphQLServer) => {

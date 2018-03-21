@@ -1,61 +1,37 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Blaze from 'meteor/gadicc:blaze-react-component';
-import cx from 'classnames';
 
-import {
-  Subcard,
-  SubcardHeader,
-  SubcardBody,
-  Button,
-  CardBlock,
-  Label,
-} from '../../components';
-import { defer } from '../../helpers';
-
-const DeferredBlaze = defer(Blaze);
+import { EntitySubcard } from '../../components';
+import RiskEditForm from './RiskEditForm';
 
 const RiskSubcard = ({
   risk,
   isOpen,
   toggle,
   onDelete,
-  onClose,
-  isSaving,
-  isNew,
+  error,
+  loading,
+  ...props
 }) => (
-  <Subcard {...{ isOpen, toggle }}>
-    {/* id is needed for scrolling */}
-    <SubcardHeader id={`subcard-${risk._id}`}>
-      <span>
+  <EntitySubcard
+    entity={risk}
+    header={() => (
+      <Fragment>
         <strong>{risk.sequentialId}</strong>
         {' '}
         {risk.title}
-        {isNew && ' '}
-        {isNew && <Label names="primary">New</Label>}
-      </span>
-    </SubcardHeader>
-    <SubcardBody>
-      {isOpen && <DeferredBlaze template="Risk_Subcard" {...{ risk }} />}
-      <CardBlock>
-        <Button
-          color="secondary"
-          pull="right"
-          className={cx({ disabled: isSaving })}
-          onClick={e => !isSaving && onClose({ risk, isOpen, toggle }, e)}
-        >
-          Close
-        </Button>
-        <Button
-          color="secondary"
-          pull="left"
-          onClick={e => !isSaving && onDelete({ risk, isOpen, toggle }, e)}
-        >
-          Delete
-        </Button>
-      </CardBlock>
-    </SubcardBody>
-  </Subcard>
+      </Fragment>
+    )}
+    {...{
+      isOpen,
+      toggle,
+      loading,
+      error,
+      onDelete,
+    }}
+  >
+    <RiskEditForm {...{ ...risk, ...props }} />
+  </EntitySubcard>
 );
 
 RiskSubcard.propTypes = {
@@ -63,9 +39,8 @@ RiskSubcard.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-  isSaving: PropTypes.bool,
-  isNew: PropTypes.bool,
+  error: PropTypes.string,
+  loading: PropTypes.bool,
 };
 
 export default RiskSubcard;

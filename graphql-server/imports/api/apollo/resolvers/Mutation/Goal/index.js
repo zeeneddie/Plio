@@ -15,6 +15,7 @@ import updateGoalCompletedBy from './updateGoalCompletedBy';
 import undoGoalCompletion from './undoGoalCompletion';
 import restoreGoal from './restoreGoal';
 import removeGoal from './removeGoal';
+import linkRiskToGoal from './linkRiskToGoal';
 
 export default {
   createGoal,
@@ -34,4 +35,5 @@ export default {
   undoGoalCompletion,
   restoreGoal,
   removeGoal,
+  linkRiskToGoal,
 };

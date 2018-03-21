@@ -24,6 +24,8 @@ import {
   Standards,
   Organizations,
   Discussions,
+  Goals,
+  Milestones,
 } from './collections';
 
 
@@ -71,6 +73,12 @@ export const getCollectionByDocType = (docType) => {
 
     case AllDocumentTypes.DISCUSSION:
       return Discussions;
+
+    case AllDocumentTypes.GOAL:
+      return Goals;
+
+    case AllDocumentTypes.MILESTONE:
+      return Milestones;
 
     default:
       return undefined;
@@ -128,7 +136,7 @@ export const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
       return;
     }
 
-    magnitude = { doc };
+    magnitude = doc.magnitude; // eslint-disable-line prefer-destructuring
   });
 
   const workflowStepTime = organization.workflowStepTime(magnitude);

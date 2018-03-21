@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { InputGroup, InputGroupAddon, Input, Label } from 'reactstrap';
+import { Label } from 'reactstrap';
 import styled from 'styled-components';
 
 import {
@@ -9,6 +9,7 @@ import {
   InputField,
   TextareaField,
   DatePickerField,
+  LinkedEntityInput,
 } from '../../components';
 import MilestoneSymbol from './MilestoneSymbol';
 import { MilestoneStatuses } from '../../../../share/constants';
@@ -52,12 +53,7 @@ const MilestoneForm = ({
     </FormField>
     <FormField>
       Linked to
-      <InputGroup>
-        <InputGroupAddon>
-          {linkedTo.sequentialId}
-        </InputGroupAddon>
-        <Input disabled value={linkedTo.title} />
-      </InputGroup>
+      <LinkedEntityInput {...linkedTo} />
     </FormField>
     {!!status && (
       <FormField>

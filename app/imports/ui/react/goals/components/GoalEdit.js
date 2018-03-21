@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { FormGroup, InputGroupButton } from 'reactstrap';
 import styled from 'styled-components';
-import { onlyUpdateForKeys } from 'recompose';
 
 import GoalForm from './GoalForm';
 import {
@@ -20,6 +19,8 @@ import { DEFAULT_UPDATE_TIMEOUT } from '../../../../api/constants';
 import { withToggle } from '../../helpers';
 import ToggleComplete from '../../components/ToggleComplete';
 import GoalMilestonesSubcardContainer from '../containers/GoalMilestonesSubcardContainer';
+import GoalRisksSubcardContainer from '../containers/GoalRisksSubcardContainer';
+import GoalLessonsSubcardContainer from '../containers/GoalLessonsSubcardContainer';
 
 const propTypes = {
   ...GoalForm.propTypes,
@@ -37,11 +38,14 @@ const propTypes = {
   organizationId: PropTypes.string,
   onUndoCompletion: PropTypes.func,
   milestones: PropTypes.arrayOf(PropTypes.object),
+  user: PropTypes.object,
+  lessons: PropTypes.arrayOf(PropTypes.object),
 };
 
 const StyledToggleComplete = styled(ToggleComplete)`
   text-align: center;
   & > .form-group {
+    display: block;
     text-align: center;
   }
 `;
@@ -60,25 +64,6 @@ const UncontrolledStyledToggleComplete = withToggle()(props => (
   <StyledToggleComplete {...props} />
 ));
 
-const enhance = onlyUpdateForKeys([
-  'status',
-  'statusComment',
-  'completionComment',
-  'sequentialId',
-  'title',
-  'description',
-  'ownerId',
-  'startDate',
-  'endDate',
-  'priority',
-  'color',
-  'organizationId',
-  'isCompleted',
-  'completedBy',
-  'completedAt',
-  'milestones',
-]);
-
 export const GoalEdit = (props) => {
   const {
     status,
@@ -94,12 +79,19 @@ export const GoalEdit = (props) => {
     onChangeCompletedBy,
     organizationId,
     onUndoCompletion,
-    milestones,
     _id,
     title,
     sequentialId,
     color,
+    milestones = [],
+    risks = [],
+    lessons = [],
+    organization: {
+      rkGuidelines = {},
+    } = {},
+    user,
   } = props;
+  const linkedTo = { _id, title, sequentialId };
 
   const completionCommentsTextarea = (
     <DebounceTextarea
@@ -178,8 +170,29 @@ export const GoalEdit = (props) => {
         )}
       </CardBlock>
       <GoalMilestonesSubcardContainer
-        linkedTo={{ _id, title, sequentialId }}
-        {...{ milestones, organizationId, color }}
+        {...{
+          milestones,
+          organizationId,
+          color,
+          linkedTo,
+        }}
+      />
+      <GoalRisksSubcardContainer
+        guidelines={rkGuidelines}
+        {...{
+          organizationId,
+          linkedTo,
+          risks,
+          user,
+        }}
+      />
+      <GoalLessonsSubcardContainer
+        {...{
+          organizationId,
+          linkedTo,
+          lessons,
+          user,
+        }}
       />
     </Fragment>
   );
@@ -187,4 +200,4 @@ export const GoalEdit = (props) => {
 
 GoalEdit.propTypes = propTypes;
 
-export default enhance(GoalEdit);
+export default GoalEdit;

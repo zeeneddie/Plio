@@ -1,0 +1,20 @@
+mutation setRiskAnalysisExecutor($input: SetRiskAnalysisExecutorInput!) {
+  setRiskAnalysisExecutor(input: $input) {
+    risk {
+      analysis {
+        executor {
+          _id
+          profile {
+            fullName
+          }
+        }
+        assignedBy {
+          _id
+          profile {
+            fullName
+          }
+        }
+      }
+    }
+  }
+}

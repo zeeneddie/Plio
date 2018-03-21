@@ -7,10 +7,22 @@ Array [
     "departmentsIds": Array [
       16,
     ],
+    "originator": Object {
+      "profile": Object {
+        "fullName": "",
+      },
+    },
+    "owner": Object {
+      "profile": Object {
+        "fullName": "",
+      },
+    },
     "standardsIds": Array [
       1,
     ],
-    "typeId": 15,
+    "type": Object {
+      "_id": 15,
+    },
   },
   Object {
     "_id": 11,
@@ -18,19 +30,42 @@ Array [
       16,
       17,
     ],
+    "originator": Object {
+      "profile": Object {
+        "fullName": "",
+      },
+    },
+    "owner": Object {
+      "profile": Object {
+        "fullName": "",
+      },
+    },
     "standardsIds": Array [
       1,
       2,
     ],
-    "typeId": 15,
+    "type": Object {
+      "_id": 15,
+    },
   },
   Object {
     "_id": 13,
     "deletedAt": 1513074233018,
     "isDeleted": true,
+    "originator": Object {
+      "profile": Object {
+        "fullName": "",
+      },
+    },
+    "owner": Object {
+      "profile": Object {
+        "fullName": "",
+      },
+    },
     "standardsIds": Array [
       1,
     ],
+    "type": undefined,
   },
 ]
 `;

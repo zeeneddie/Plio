@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import Errors from '../../errors';
 
 export default async (query, collection) => {

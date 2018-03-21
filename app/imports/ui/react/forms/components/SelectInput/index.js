@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import styled, { css } from 'styled-components';
-import { prop } from 'ramda';
-import { compose, withState, withHandlers } from 'recompose';
+import { compose, withHandlers, branch, withStateHandlers } from 'recompose';
 import { Button } from 'reactstrap';
+import { identity, prop } from 'ramda';
 import 'react-select/dist/react-select.css';
 
+import { omitProps } from '../../../helpers';
 import Icon from '../../../components/Icons/Icon';
 
 const SelectWrapper = styled.div`
@@ -85,22 +86,37 @@ const TextCreatorWrapper = styled.span`
 `;
 
 const enhance = compose(
-  withState('value', 'setValue', prop('value')),
+  branch(
+    prop('loadOptionsOnFocus'),
+    compose(
+      withStateHandlers(
+        ({ options = [], isLoading = false }) => ({ options, isLoading }),
+        {
+          startFetchingOptions: () => () => ({ isLoading: true }),
+          endFetchingOptions: () => options => ({ options, isLoading: false }),
+        },
+      ),
+      withHandlers({
+        onFocus: ({
+          startFetchingOptions,
+          endFetchingOptions,
+          onFocus,
+          loadOptions,
+        }) => (e) => {
+          startFetchingOptions();
+
+          loadOptions().then(({ options }) => {
+            endFetchingOptions(options);
+          }).catch(() => endFetchingOptions([]));
+
+          if (onFocus) onFocus(e);
+        },
+      }),
+      omitProps(['loadOptions', 'loadOptionsOnFocus']),
+    ),
+    identity,
+  ),
   withHandlers({
-    onChange: ({ value, setValue, onChange }) => (option) => {
-      if (option.value === value) return;
-      setValue(option.value);
-      if (onChange) {
-        onChange(option);
-      }
-    },
-    onNewOptionClick: ({ setValue, onNewOptionClick }) => (createdTag) => {
-      if (onNewOptionClick) {
-        onNewOptionClick(createdTag, (newOption) => {
-          setValue(newOption.value);
-        });
-      }
-    },
     getSelectComponent: ({ type }) => () => {
       switch (type) {
         case 'creatable': {
@@ -124,11 +140,16 @@ const enhance = compose(
   }),
 );
 
-const SelectInput = ({ getSelectComponent, type, ...props }) => {
+const SelectInput = ({
+  getSelectComponent,
+  type,
+  className,
+  ...props
+}) => {
   const SelectComponent = getSelectComponent();
 
   return (
-    <SelectWrapper type={type}>
+    <SelectWrapper {...{ type, className }}>
       <SelectComponent
         {...props}
         noResultsText="There are no available items..."
@@ -145,6 +166,7 @@ SelectInput.propTypes = {
   getSelectComponent: PropTypes.func,
   clearable: PropTypes.bool,
   type: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default enhance(SelectInput);

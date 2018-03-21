@@ -15,3 +15,4 @@ export * from './kadira_flow-router';
 export * from './meteorhacks_subs-manager';
 export * from './tracker';
 export * from './plio_bootstrap-sweetalert';
+export * from './gadicc_blaze-react-component';

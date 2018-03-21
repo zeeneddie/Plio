@@ -1,51 +1,53 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { branch } from 'recompose';
 import { identity, prop } from 'ramda';
 
 import { FormField, ToggleGuidelinesButton } from '../../../components';
 import Collapse from '../../../components/Collapse';
-import { withStateCollapsed } from '../../../helpers';
+import { withToggle } from '../../../helpers';
 import MagnitudeGuidelines from './MagnitudeGuidelines';
 import MagnitudeSelect from './MagnitudeSelect';
 
 const enhance = branch(
   prop('guidelines'),
-  withStateCollapsed(true),
+  withToggle(),
   identity,
 );
 
 const Magnitudes = enhance(({
-  collapsed,
-  onToggleCollapse,
+  isOpen,
+  toggle,
   guidelines,
   children,
+  label = 'Magnitude',
 }) => (
-  <div>
+  <Fragment>
     <FormField>
-      Magnitude
+      {label}
       <div className="form-group-flex">
         <div className="form-group-flex-flex">
           {children}
         </div>
 
         {!!guidelines && (
-          <ToggleGuidelinesButton onClick={onToggleCollapse} {...{ collapsed }} />
+          <ToggleGuidelinesButton onClick={toggle} {...{ isOpen }} />
         )}
       </div>
     </FormField>
 
     {!!guidelines && (
-      <Collapse isOpen={!collapsed}>
+      <Collapse {...{ isOpen }}>
         <MagnitudeGuidelines {...guidelines} />
       </Collapse>
     )}
-  </div>
+  </Fragment>
 ));
 
 Magnitudes.propTypes = {
   guidelines: PropTypes.shape(MagnitudeGuidelines.propTypes),
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };
 
 Magnitudes.Guidelines = MagnitudeGuidelines;
