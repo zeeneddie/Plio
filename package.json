@@ -3,14 +3,18 @@
   "private": true,
   "scripts": {
     "lint": "./node_modules/.bin/eslint --ignore-pattern '**/imports/share'",
+    "lint:staged": "./node_modules/.bin/lint-staged",
     "lint:app": "yarn lint app",
     "lint:background-app": "yarn lint background-app",
     "lint:graphql-server": "yarn lint graphql-server",
     "jest": "./node_modules/.bin/jest",
     "test": "yarn jest"
   },
+  "lint-staged": {
+    "*.js": ["yarn lint --fix", "git add"]
+  },
   "pre-commit": [
-    "lint:graphql-server",
+    "lint:staged",
     "test"
   ],
   "devDependencies": {
@@ -37,10 +41,12 @@
     "faker": "^4.1.0",
     "graphql": "^0.12.3",
     "graphql-tag": "^2.6.1",
+    "husky": "^0.14.3",
     "jest": "^21.2.1",
     "jest-css-modules-transform": "^1.0.5",
     "jest-styled-components": "^4.11.0-1",
     "jest-transform-graphql": "^2.1.0",
+    "lint-staged": "^7.0.0",
     "lodash.get": "^4.4.2",
     "moment-timezone": "^0.5.14",
     "mongodb": "^3.0.1",
