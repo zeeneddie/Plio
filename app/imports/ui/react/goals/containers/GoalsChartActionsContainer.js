@@ -2,13 +2,11 @@ import connectUI from 'redux-ui';
 import { prop } from 'ramda';
 import { graphql } from 'react-apollo';
 import { compose, withHandlers, onlyUpdateForKeys, flattenProp, branch } from 'recompose';
-import { withStore } from '../../helpers';
 import { Mutation } from '../../../../client/graphql';
 import { onDelete, onComplete } from '../handlers';
 import ChartActions from '../components/ChartActions';
 
 const enhance = compose(
-  withStore,
   connectUI(),
   flattenProp('goal'),
   onlyUpdateForKeys(['organizationId', '_id', 'title']),

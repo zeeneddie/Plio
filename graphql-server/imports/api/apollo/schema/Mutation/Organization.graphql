@@ -12,6 +12,11 @@ input UpdateOrganizationWorkspaceDefaultsInput {
   timeScale: Int
 }
 
+input UpdateOrganizationLastAccessedDateInput {
+  _id: ID!
+}
+
 type Mutation {
   updateOrganizationWorkspaceDefaults(input: UpdateOrganizationWorkspaceDefaultsInput!): OrganizationPayload
+  updateOrganizationLastAccessedDate(input: UpdateOrganizationLastAccessedDateInput!): OrganizationPayload
 }

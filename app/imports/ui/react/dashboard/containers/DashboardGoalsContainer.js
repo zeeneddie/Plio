@@ -16,7 +16,7 @@ import { NetworkStatus } from 'apollo-client';
 import connectUI from 'redux-ui';
 
 import { canChangeGoals } from '../../../../share/checkers/roles';
-import { namedCompose, withHr, withPreloaderPage, withStore, withApollo } from '../../helpers';
+import { namedCompose, withHr, withPreloaderPage } from '../../helpers';
 import { DashboardGoals } from '../components';
 import {
   WORKSPACE_DEFAULTS,
@@ -37,8 +37,6 @@ export default namedCompose('DashboardGoalsContainer')(
       }).isRequired,
     }).isRequired,
   }),
-  withStore,
-  withApollo,
   flattenProp('organization'),
   flattenProp(WORKSPACE_DEFAULTS),
   renameProps({

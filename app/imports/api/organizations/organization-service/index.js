@@ -399,16 +399,6 @@ const OrganizationService = {
 
     return this.collection.update(query, modifier);
   },
-
-  updateLastAccessedDate({ organizationId }) {
-    const query = { _id: organizationId };
-    const modifier = {
-      $set: {
-        lastAccessedDate: new Date(),
-      },
-    };
-    return this.collection.update(query, modifier);
-  },
 };
 
 export default OrganizationService;

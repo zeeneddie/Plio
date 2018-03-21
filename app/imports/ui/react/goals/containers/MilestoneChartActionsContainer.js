@@ -4,13 +4,11 @@ import { Cache } from 'plio-util';
 import { propEq } from 'ramda';
 import { compose, withHandlers, onlyUpdateForKeys, branch } from 'recompose';
 import { Mutation, Fragment } from '../../../../client/graphql';
-import { withStore } from '../../helpers';
 import { swal } from '../../../../client/util';
 import { updateGoalFragment } from '../../../../client/apollo';
 import ChartActions from '../components/ChartActions';
 
 const enhance = compose(
-  withStore,
   connectUI(),
   onlyUpdateForKeys(['_id', 'title', 'goalId']),
   withHandlers({

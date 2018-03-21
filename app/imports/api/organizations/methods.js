@@ -757,30 +757,6 @@ export const unsubscribeFromDailyRecap = new Method({
   },
 });
 
-export const updateLastAccessedDate = new Method({
-  name: 'Organizations.updateLastAccessedDate',
-
-  validate: new SimpleSchema([
-    OrganizationIdSchema,
-  ]).validator(),
-
-  check(checker) {
-    if (this.isSimulation) {
-      return undefined;
-    }
-
-    return checker(({ organizationId }) => checkOrgMembership(this.userId, organizationId));
-  },
-
-  run({ organizationId }) {
-    if (this.isSimulation) {
-      return undefined;
-    }
-
-    return OrganizationService.updateLastAccessedDate({ organizationId });
-  },
-});
-
 export const importDocuments = new Method({
   name: 'Organizations.importDocuments',
 
