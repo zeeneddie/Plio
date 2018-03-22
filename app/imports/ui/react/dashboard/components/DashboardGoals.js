@@ -20,6 +20,7 @@ const DashboardGoals = ({
   goals,
   toggle,
   isOpen,
+  limit,
   loading,
   isAddModalOpen,
   toggleAddModal,
@@ -33,6 +34,7 @@ const DashboardGoals = ({
 }) => (
   <DashboardStatsExpandable
     items={goals}
+    isOpen={!limit}
     total={totalCount}
     itemsPerRow={goals.length}
     renderIcon={loading ? () => <IconLoading /> : undefined}
@@ -61,7 +63,7 @@ const DashboardGoals = ({
     {...{ toggle, isOpen }}
   >
     {canEditGoals && <PlusButton size="1" onClick={toggleAddModal} />}
-    {goals.length
+    {totalCount
       ? pluralize('goal', totalCount || goals.length, true)
       : 'Add a key goal'}
     {canEditGoals && (
@@ -95,6 +97,7 @@ DashboardGoals.propTypes = {
   isEditModalOpen: PropTypes.bool.isRequired,
   toggleEditModal: PropTypes.func.isRequired,
   timeScale: PropTypes.number.isRequired,
+  limit: PropTypes.number,
   canEditGoals: PropTypes.bool,
   deletedItemsPerRow: PropTypes.number,
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import pluralize from 'pluralize';
 import DashboardDeletedItem from '../../dashboard/components/DashboardDeletedItem';
@@ -12,41 +12,35 @@ const CompletedDeletedGoals = ({
   isAllBtn,
   moreItemsCount,
   ...restProps
-}) => {
-  if (totalCount === 0) {
-    return null;
-  }
-  return (
+}) => (
+  <Fragment>
+    <DashboardStats.Title>
+      {totalCount} completed & deleted {pluralize('goal', totalCount)}
+    </DashboardStats.Title>
     <div>
-      <hr />
-      <DashboardStats.Title>
-        {totalCount} completed & deleted {pluralize('goal', totalCount)}
-      </DashboardStats.Title>
-      <div>
-        {goals.map(goal => (
-          <DashboardDeletedItem
-            key={`removed-goal-${goal._id}`}
-            {...{
-              ...goal,
-              ...restProps,
-            }}
-          />
-        ))}
-      </div>
-      {isAllBtn && (
-        <a href="" onClick={loadAllDeletedGoals}>
-          View all items
-          <span className="text-muted"> ({moreItemsCount} more)</span>
-        </a>
-      )}
-      {showLatestItems && (
-        <a href="" onClick={showLatestItems}>
-          View latest items
-        </a>
-      )}
+      {goals.map(goal => (
+        <DashboardDeletedItem
+          key={`removed-goal-${goal._id}`}
+          {...{
+            ...goal,
+            ...restProps,
+          }}
+        />
+      ))}
     </div>
-  );
-};
+    {isAllBtn && (
+      <a href="" onClick={loadAllDeletedGoals}>
+        View all items
+        <span className="text-muted"> ({moreItemsCount} more)</span>
+      </a>
+    )}
+    {showLatestItems && (
+      <a href="" onClick={showLatestItems}>
+        View latest items
+      </a>
+    )}
+  </Fragment>
+);
 
 CompletedDeletedGoals.propTypes = {
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,

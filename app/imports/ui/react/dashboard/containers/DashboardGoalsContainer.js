@@ -78,12 +78,13 @@ export default namedCompose('DashboardGoalsContainer')(
         networkStatus,
         goals: {
           totalCount,
-          goals,
+          goals = [],
         } = {},
         me: user = {},
       },
       ownProps: {
         ui: {
+          limit,
           isOpen,
           isAddModalOpen,
           isEditModalOpen,
@@ -93,29 +94,32 @@ export default namedCompose('DashboardGoalsContainer')(
         ...ownProps
       },
     }) => ({
+      limit,
       isOpen,
       isAddModalOpen,
       isEditModalOpen,
       loading,
-      goals,
       totalCount,
       networkStatus,
       user,
       organizationId,
+      goals: limit ? goals.slice(0, limit) : goals,
       toggle: async () => {
         if (!isOpen) {
-          await fetchMore({
-            variables: {
-              limit: 0,
-            },
-            updateQuery: (prev, { fetchMoreResult }) => ({
-              ...prev,
-              goals: {
-                ...prev.goals,
-                goals: fetchMoreResult.goals.goals,
+          if (goals.length < totalCount) {
+            await fetchMore({
+              variables: {
+                limit: 0,
               },
-            }),
-          });
+              updateQuery: (prev, { fetchMoreResult }) => ({
+                ...prev,
+                goals: {
+                  ...prev.goals,
+                  goals: fetchMoreResult.goals.goals,
+                },
+              }),
+            });
+          }
 
           updateUI({
             isOpen: !isOpen,
@@ -148,7 +152,7 @@ export default namedCompose('DashboardGoalsContainer')(
     () => ({ size: 2 }),
   ),
   branch(
-    ({ goals, canEditGoals }) => !!goals.length || canEditGoals,
+    ({ totalCount, canEditGoals }) => !!totalCount || canEditGoals,
     withHr,
     renderNothing,
   ),

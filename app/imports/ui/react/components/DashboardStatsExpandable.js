@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { branch } from 'recompose';
-import { converge, gt, prop, identity, map, splitEvery, either } from 'ramda';
+import { converge, gt, prop, map, splitEvery, either, or } from 'ramda';
 import styled from 'styled-components';
 import { getItemsLength } from 'plio-util';
 
 import { DashboardStats, Collapse, ToggleAngleIcon } from './';
-import { withStateToggle, omitProps } from '../helpers';
+import { withToggle, omitProps } from '../helpers';
 
 const StyledDashboardTitle = styled(({ toggle, ...rest }) => <DashboardStats.Title {...rest} />)`
   cursor: ${({ toggle }) => toggle ? 'pointer' : 'auto'};
@@ -20,13 +20,14 @@ const itemsExceedLimit = converge(gt, [
   prop('itemsPerRow'),
 ]);
 
-export const enhance = branch(
+const canToggle = converge(or, [
   itemsExceedLimit,
-  branch(
-    prop('toggle'),
-    identity,
-    withStateToggle(false, 'isOpen', 'toggle'),
-  ),
+  prop('isOpen'),
+]);
+
+export const enhance = branch(
+  canToggle,
+  withToggle(),
   omitProps(['toggle', 'isOpen']),
 );
 
@@ -47,7 +48,7 @@ export const DashboardStatsExpandable = ({
     </StyledDashboardTitle>
     {render({ items: items.slice(0, itemsPerRow) })}
 
-    {!!toggle && (
+    {!!toggle && !!itemsPerRow && (
       <Collapse {...{ isOpen }}>
         {map(
           splitItems => render({ items: splitItems }),

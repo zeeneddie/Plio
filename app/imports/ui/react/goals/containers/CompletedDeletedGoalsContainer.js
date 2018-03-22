@@ -1,7 +1,15 @@
 import { graphql } from 'react-apollo';
 import { lenses, byCompletedOrDeletedAt, Cache } from 'plio-util';
 import { view, sort, prop, propEq } from 'ramda';
-import { setPropTypes, withState, withProps, withHandlers, branch, compose } from 'recompose';
+import {
+  setPropTypes,
+  withState,
+  withProps,
+  withHandlers,
+  branch,
+  compose,
+  renderNothing,
+} from 'recompose';
 import PropTypes from 'prop-types';
 import CompletedDeletedGoals from '../components/CompletedDeletedGoals';
 import { DeletedGoalShowTypes } from '../constants';
@@ -12,7 +20,7 @@ import {
   WorkspaceDefaultsTypes,
   WorkspaceDefaults,
 } from '../../../../share/constants';
-import { namedCompose, withPreloader, omitProps } from '../../helpers';
+import { namedCompose, withPreloader, omitProps, withHr } from '../../helpers';
 import { swal } from '../../../../client/util';
 import { updateQueryCache } from '../../../../client/apollo/utils';
 
@@ -127,5 +135,10 @@ export default namedCompose('CompletedDeletedGoalsContainer')(
         }),
       }),
     ),
+  ),
+  branch(
+    prop('totalCount'),
+    withHr,
+    renderNothing,
   ),
 )(CompletedDeletedGoals);
