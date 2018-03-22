@@ -3,8 +3,8 @@ import {
   checkLoggedIn,
   checkOrgMembership,
   flattenInput,
-  checkDocAccess,
   sanitizeNotes,
+  checkDocExistance,
 } from '../../../../../share/middleware';
 import { getCollectionByDocType } from '../../../../../share/helpers';
 
@@ -26,7 +26,11 @@ export default applyMiddleware(
   flattenInput(),
   flattenLinkedTo(),
   checkOrgMembership(),
-  checkDocAccess((root, { documentType }) => getCollectionByDocType(documentType)),
+  checkDocExistance(
+    ({ documentId }) => ({ _id: documentId }),
+    (root, { documentType }) => getCollectionByDocType(documentType),
+  ),
+  checkOrgMembership(),
   sanitizeNotes(),
   afterware(),
 )(resolver);
