@@ -46,7 +46,11 @@ export const GoalEditModal = ({
         <GuidanceIcon isOpen={isGuidancePanelOpen} onClick={toggleGuidancePanel} />
       )}
       renderRightButton={props => (
-        <SaveButton onClick={toggle} isSaving={loading || props.loading}>
+        <SaveButton
+          onClick={toggle}
+          isSaving={loading || props.loading}
+          color="secondary"
+        >
           Close
         </SaveButton>
       )}
