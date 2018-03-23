@@ -1,19 +1,18 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { CardTitle, Card, Form, Button } from 'reactstrap';
 import { Form as FinalForm } from 'react-final-form';
+import arrayMutators from 'final-form-arrays';
+import { FieldArray } from 'react-final-form-arrays';
 
 import { withToggle } from '../helpers';
 import Subcard from './Subcard';
 import SubcardHeader from './SubcardHeader';
 import SubcardBody from './SubcardBody';
-import SubcardManager from './SubcardManager';
-import SubcardManagerList from './SubcardManagerList';
-import SubcardManagerButton from './SubcardManagerButton';
 import CardBlock from './CardBlock';
 import ErrorSection from './ErrorSection';
 import { SaveButton } from './Buttons';
-import { Pull } from './Utility';
+import { Pull, TextAlign } from './Utility';
 
 const FLUSH_TIMEOUT = 700;
 const enhance = withToggle(false);
@@ -28,15 +27,14 @@ class EntityManagerSubcard extends Component {
 
     this.toggleOpen = this.toggleOpen.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.renderNewEntityForm = this.renderNewEntityForm.bind(this);
-    this.renderNewEntitySubcard = this.renderNewEntitySubcard.bind(this);
+    this.renderForms = this.renderForms.bind(this);
     this.renderEntities = this.renderEntities.bind(this);
   }
 
-  onSubmit({ card }) {
+  onSubmit({ fields, index }) {
     const { onSave } = this.props;
     const flush = (entity) => {
-      card.onDelete();
+      fields.remove(index);
 
       setTimeout(() => {
         this.scrollToEntity(entity);
@@ -50,7 +48,6 @@ class EntityManagerSubcard extends Component {
       {
         ...form,
         ownProps: {
-          card,
           flush,
         },
       },
@@ -83,56 +80,84 @@ class EntityManagerSubcard extends Component {
     );
   }
 
-  renderNewEntityForm(card) {
+  renderForms() {
+    const {
+      newEntityTitle,
+      newEntityButtonTitle,
+      renderNewEntity,
+      initialValues,
+    } = this.props;
+
     return (
       <FinalForm
-        {...this.props}
-        key={card.id}
-        onSubmit={this.onSubmit({ card })}
-        render={props => this.renderNewEntitySubcard({ ...props, card })}
-      />
-    );
-  }
-
-  renderNewEntitySubcard(form) {
-    const { renderNewEntity, newEntityTitle } = this.props;
-    const {
-      card,
-      handleSubmit,
-      submitError,
-      submitting,
-    } = form;
-
-    return (
-      <Form onSubmit={handleSubmit}>
-        <Subcard disabled>
-          <SubcardHeader isNew>
-            {newEntityTitle}
-          </SubcardHeader>
-          <SubcardBody>
-            <ErrorSection errorText={submitError && <pre>{submitError}</pre>} />
-            {renderNewEntity({ ...this.props, form })}
-            <CardBlock>
-              <Pull left>
-                <Button
-                  color="secondary"
-                  disabled={submitting}
-                  onClick={() => !submitting && card.onDelete()}
-                >
-                  Delete
+        onSubmit={() => null}
+        subscription={{}}
+        mutators={{ ...arrayMutators }}
+        render={({
+          mutators: { push },
+        }) => (
+          <Fragment>
+            <Card className="new-cards">
+              <FieldArray name="cards" subscription={{}}>
+                {({ fields }) => fields.map((name, index) => (
+                  <FinalForm
+                    {...{ initialValues }}
+                    key={name}
+                    onSubmit={this.onSubmit({ fields, index })}
+                    subscription={{
+                      submitError: true,
+                      submitting: true,
+                      initialValues: true,
+                    }}
+                    render={({
+                      handleSubmit,
+                      submitError,
+                      submitting,
+                    }) => (
+                      <Form onSubmit={handleSubmit}>
+                        <Subcard disabled>
+                          <SubcardHeader isNew>
+                            {newEntityTitle}
+                          </SubcardHeader>
+                          <SubcardBody>
+                            <ErrorSection errorText={submitError && <pre>{submitError}</pre>} />
+                            {renderNewEntity(this.props)}
+                            <CardBlock>
+                              <Pull left>
+                                <Button
+                                  color="secondary"
+                                  disabled={submitting}
+                                  onClick={() => !submitting && fields.remove(index)}
+                                >
+                                  Delete
+                                </Button>
+                              </Pull>
+                              <Pull right>
+                                <SaveButton
+                                  color="secondary"
+                                  type="submit"
+                                  isSaving={submitting}
+                                />
+                              </Pull>
+                            </CardBlock>
+                          </SubcardBody>
+                        </Subcard>
+                      </Form>
+                    )}
+                  />
+                ))}
+              </FieldArray>
+            </Card>
+            <TextAlign center>
+              <div>
+                <Button color="link" onClick={() => push('cards', undefined)}>
+                  {newEntityButtonTitle}
                 </Button>
-              </Pull>
-              <Pull right>
-                <SaveButton
-                  color="secondary"
-                  type="submit"
-                  isSaving={submitting}
-                />
-              </Pull>
-            </CardBlock>
-          </SubcardBody>
-        </Subcard>
-      </Form>
+              </div>
+            </TextAlign>
+          </Fragment>
+        )}
+      />
     );
   }
 
@@ -141,7 +166,6 @@ class EntityManagerSubcard extends Component {
       isOpen,
       toggle,
       title,
-      newEntityButtonTitle,
       entities,
     } = this.props;
 
@@ -160,12 +184,7 @@ class EntityManagerSubcard extends Component {
         <SubcardBody>
           <CardBlock>
             {this.renderEntities()}
-            <SubcardManager render={this.renderNewEntityForm}>
-              <SubcardManagerList />
-              <SubcardManagerButton>
-                {newEntityButtonTitle}
-              </SubcardManagerButton>
-            </SubcardManager>
+            {this.renderForms()}
           </CardBlock>
         </SubcardBody>
       </Subcard>
@@ -184,6 +203,7 @@ EntityManagerSubcard.propTypes = {
   renderNewEntity: PropTypes.func.isRequired,
   open: PropTypes.string,
   onSave: PropTypes.func.isRequired,
+  initialValues: PropTypes.object,
 };
 
 export default enhance(EntityManagerSubcard);

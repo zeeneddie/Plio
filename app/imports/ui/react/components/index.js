@@ -31,8 +31,5 @@ export { default as GuidanceIcon } from './GuidanceIcon';
 export { default as Subcard } from './Subcard';
 export { default as SubcardHeader } from './SubcardHeader';
 export { default as SubcardBody } from './SubcardBody';
-export { default as SubcardManager } from './SubcardManager';
-export { default as SubcardManagerList } from './SubcardManagerList';
-export { default as SubcardManagerButton } from './SubcardManagerButton';
 export { default as Rect } from './Rect';
 export { default as Diamond } from './Diamond';
