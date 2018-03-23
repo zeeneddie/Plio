@@ -16,6 +16,8 @@ import undoGoalCompletion from './undoGoalCompletion';
 import restoreGoal from './restoreGoal';
 import removeGoal from './removeGoal';
 import linkRiskToGoal from './linkRiskToGoal';
+import linkFileToGoal from './linkFileToGoal';
+import unlinkFileFromGoal from './unlinkFileFromGoal';
 
 export default {
   createGoal,
@@ -36,4 +38,6 @@ export default {
   restoreGoal,
   removeGoal,
   linkRiskToGoal,
+  linkFileToGoal,
+  unlinkFileFromGoal,
 };

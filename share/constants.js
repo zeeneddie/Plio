@@ -806,3 +806,17 @@ export const Abbreviations = {
   GOAL: 'KG',
   LESSON: 'LL',
 };
+
+export const AWSDirectives = {
+  DISCUSSION_FILES: 'discussionFiles',
+  USER_AVATARS: 'userAvatars',
+  HTML_ATTACHMENT_PREVIEW: 'htmlAttachmentPreview',
+  STANDARD_FILES: 'standardFiles',
+  IMPROVEMENT_PLAN_FILES: 'improvementPlanFiles',
+  NONCONFORMITY_FILES: 'nonConformityFiles',
+  RISK_FILES: 'riskFiles',
+  ACTION_FILES: 'actionFiles',
+  ROOT_CAUSE_ANALYSIS_FILES: 'rootCauseAnalysisFiles',
+  HELP_DOC_FILES: 'helpDocFiles',
+  GOAL_FILES: 'goalFiles',
+};

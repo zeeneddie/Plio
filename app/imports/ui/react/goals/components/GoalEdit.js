@@ -19,6 +19,7 @@ import { DEFAULT_UPDATE_TIMEOUT } from '../../../../api/constants';
 import { withToggle } from '../../helpers';
 import ToggleComplete from '../../components/ToggleComplete';
 import GoalMilestonesSubcardContainer from '../containers/GoalMilestonesSubcardContainer';
+import GoalFilesSubcardContainer from '../containers/GoalFilesSubcardContainer';
 import GoalRisksSubcardContainer from '../containers/GoalRisksSubcardContainer';
 import GoalLessonsSubcardContainer from '../containers/GoalLessonsSubcardContainer';
 
@@ -193,6 +194,10 @@ export const GoalEdit = (props) => {
           lessons,
           user,
         }}
+      />
+      <GoalFilesSubcardContainer
+        goalId={_id}
+        {...{ organizationId }}
       />
     </Fragment>
   );

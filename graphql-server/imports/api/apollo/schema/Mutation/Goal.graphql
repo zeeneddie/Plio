@@ -98,6 +98,11 @@ input LinkRiskToGoalInput {
   riskId: ID!
 }
 
+input GoalFileInput {
+  _id: ID!
+  fileId: ID!
+}
+
 type Mutation {
   createGoal(input: CreateGoalInput!): GoalPayload
   updateGoalTitle(input: UpdateGoalTitleInput!): GoalPayload
@@ -117,4 +122,6 @@ type Mutation {
   undoGoalCompletion(input: UndoGoalCompletionInput!): GoalPayload
   restoreGoal(input: RestoreGoalInput!): GoalPayload
   linkRiskToGoal(input: LinkRiskToGoalInput!): LinkRiskToGoalPayload
+  linkFileToGoal(input: GoalFileInput!): GoalPayload
+  unlinkFileFromGoal(input: GoalFileInput!): GoalPayload
 }

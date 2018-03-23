@@ -26,4 +26,5 @@ export default {
   ANALYSIS_SHOULD_BE_COMPLETED: 'Analysis should be completed',
   ANALYSIS_SHOULD_BE_INCOMPLETE: 'Analysis should be incomplete',
   ANALYSIS_NOT_AUTHORIZED: 'User is not authorized for updating analysis',
+  UNAUTHORIZED_CANT_UPLOAD: 'Unauthorized user cannot upload files',
 };

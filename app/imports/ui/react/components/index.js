@@ -5,6 +5,7 @@ export * from './Icons';
 export * from './Utility';
 export * from './Labels';
 export * from './timeline';
+export * from './files';
 
 export { default as CardBlock } from './CardBlock';
 export { default as Collapse } from './Collapse';

@@ -107,6 +107,28 @@ export default {
     return this.collection.update(query, modifier);
   },
 
+  async linkFile({ _id, fileId }) {
+    const query = { _id };
+    const modifier = {
+      $addToSet: {
+        fileIds: fileId,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
+
+  async unlinkFile({ _id, fileId }) {
+    const query = { _id };
+    const modifier = {
+      $pull: {
+        fileIds: fileId,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
+
   async delete({ _id }, { userId }) {
     const res = await this.set({
       _id,

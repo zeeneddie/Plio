@@ -3,10 +3,10 @@ import { curry } from 'ramda';
 import { check } from 'meteor/check';
 import { applyMiddleware, unpromisify } from 'plio-util';
 
-export default curry((handler, { name, middleware = [] }) => {
+const createPublisher = fn => curry((handler, { name, middleware = [] }) => {
   check(name, String);
 
-  return Meteor.publish(name, function publicationHandler(...args) {
+  return fn(name, function publicationHandler(...args) {
     const { userId } = this;
     const root = {};
     const context = { userId };
@@ -19,9 +19,16 @@ export default curry((handler, { name, middleware = [] }) => {
           )(root, ...args, context),
         ),
       )();
-    } catch (err) {
-      console.error(`Publication error: ${err.message}`);
-      return this.ready();
+    } catch ({ error = 500, message = 'Internal server error' }) {
+      console.error(`Publication error: ${message}`);
+      return this.error(new Meteor.Error(error, message));
     }
   });
 });
+
+
+export const publishWithMiddleware = createPublisher(Meteor.publish.bind(Meteor.publish));
+
+export const publishCompositeWithMiddleware = createPublisher(
+  Meteor.publishComposite.bind(Meteor.publishComposite),
+);
