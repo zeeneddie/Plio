@@ -402,7 +402,7 @@ export const UserMembership = {
 
 export const UserRoles = {
   CREATE_UPDATE_DELETE_STANDARDS: 'create-update-delete-standards',
-  CREATE_UPDATE_DELETE_GOALS: 'create-update-delete-goals',
+  CREATE_DELETE_GOALS: 'create-delete-goals',
   VIEW_TEAM_ACTIONS: 'view-team-actions',
   INVITE_USERS: 'invite-users',
   DELETE_USERS: 'delete-users',
@@ -413,7 +413,7 @@ export const UserRoles = {
 
 export const UserRolesNames = {
   [UserRoles.CREATE_UPDATE_DELETE_STANDARDS]: 'Create & edit standards documents',
-  [UserRoles.CREATE_UPDATE_DELETE_GOALS]: 'Create & edit Key goals',
+  [UserRoles.CREATE_DELETE_GOALS]: 'Create & delete Key goals',
   [UserRoles.VIEW_TEAM_ACTIONS]: 'View all Team actions',
   [UserRoles.INVITE_USERS]: 'Invite users',
   [UserRoles.DELETE_USERS]: 'Delete users',
@@ -463,14 +463,14 @@ export const OrgOwnerRoles = [
   UserRoles.EDIT_USER_ROLES,
   UserRoles.CHANGE_ORG_SETTINGS,
   UserRoles.COMPLETE_ANY_ACTION,
-  UserRoles.CREATE_UPDATE_DELETE_GOALS,
+  UserRoles.CREATE_DELETE_GOALS,
 ];
 
 export const OrgMemberRoles = [
   UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
   UserRoles.VIEW_TEAM_ACTIONS,
   UserRoles.COMPLETE_ANY_ACTION,
-  UserRoles.CREATE_UPDATE_DELETE_GOALS,
+  UserRoles.CREATE_DELETE_GOALS,
 ];
 
 export const OrgCurrencies = {

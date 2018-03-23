@@ -26,7 +26,7 @@ describe('ensureCanChangeGoals', () => {
     const doc = { organizationId };
     const context = { userId, doc };
 
-    Roles.addUsersToRoles(userId, [UserRoles.CREATE_UPDATE_DELETE_GOALS], organizationId);
+    Roles.addUsersToRoles(userId, [UserRoles.CREATE_DELETE_GOALS], organizationId);
 
     const promise = ensureCanChangeGoals()(T, root, args, context);
 
