@@ -5,6 +5,20 @@ import { withProps } from 'recompose';
 import TimelineTitle from './TimelineTitle';
 import HorizontalLinePoints from './HorizontalLinePoints';
 
+const getStartSymbol = ({ isStartWithinScale, isLineOutOfScaleRight, isLineOutOfScale }) => {
+  if (isLineOutOfScale) {
+    return isLineOutOfScaleRight ? 'arrowRightWithTail' : 'arrowLeftWithTail';
+  }
+  return isStartWithinScale ? 'circle' : 'arrowLeft';
+};
+
+const getEndSymbol = ({ isEndWithinScale, isLineOutOfScale }) => {
+  if (isLineOutOfScale) {
+    return 'arrowRightWithTail';
+  }
+  return isEndWithinScale ? 'circle' : 'arrowRight';
+};
+
 const enhance = withProps(({
   scaleDates,
   startDate,
@@ -21,7 +35,6 @@ const enhance = withProps(({
   const isEndWithinScale = endDate < scaleDates.end;
 
   const start = !isStartWithinScale && (isLineOutOfScaleRight ? scaleDates.end : scaleDates.start);
-  const startSymbol = !isStartWithinScale && (isLineOutOfScaleRight ? 'arrowRight' : 'arrowLeft');
   const end = isEndWithinScale || isLineOutOfScaleRight ? endDate : scaleDates.end;
   const lineTitleAnchor = isLineOutOfScale && (isLineOutOfScaleRight ? 'end' : 'start');
   return {
@@ -46,8 +59,8 @@ const enhance = withProps(({
         isStart: true,
         label: 'Start Date',
         titleAnchor: isLineOutOfScaleRight ? 'end' : 'start',
-        symbol: startSymbol || 'circle',
-        strokeWidth: isStartWithinScale ? 10 : 2,
+        symbol: getStartSymbol({ isStartWithinScale, isLineOutOfScaleRight, isLineOutOfScale }),
+        strokeWidth: isStartWithinScale ? 10 : 5,
         renderPopover,
       },
       {
@@ -59,8 +72,8 @@ const enhance = withProps(({
         isEnd: true,
         label: 'End Date',
         titleAnchor: 'end',
-        symbol: isEndWithinScale ? 'circle' : 'arrowRight',
-        strokeWidth: isEndWithinScale ? 10 : 2,
+        symbol: getEndSymbol({ isEndWithinScale, isLineOutOfScale }),
+        strokeWidth: isEndWithinScale ? 10 : 5,
         renderPopover,
       },
       ...points.map(point => ({

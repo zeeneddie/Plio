@@ -1,5 +1,4 @@
 export { default as HorizontalLinePoints } from './HorizontalLinePoints';
-export { default as Point } from './Point';
 export { default as TimelineAxis } from './TimelineAxis';
 export { default as TimelineChart } from './TimelineChart';
 export { default as TimelineCurrentDateLine } from './TimelineCurrentDateLine';

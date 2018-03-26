@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import moment from 'moment';
-import { VictoryLabel } from 'victory';
+import { VictoryLabel, Point } from 'victory';
 import { compose, withProps, onlyUpdateForKeys } from 'recompose';
 import { Popover } from 'reactstrap';
-import { getTitleDX } from './helpers';
-import Point from './Point';
+import { omit } from 'ramda';
+import { getTitleDX, pathHelpers } from './helpers';
 import withStateToggle from '../../helpers/withStateToggle';
 
 const SHORT_LINE_WIDTH = 125;
@@ -25,6 +25,7 @@ const enhance = compose(
     id,
     index,
     scale,
+    symbol,
     datum: {
       x,
       title,
@@ -34,14 +35,19 @@ const enhance = compose(
       renderPopover,
       titleAnchor,
     },
-  }) => ({
-    titleAnchor,
-    renderPopover,
-    dateLabel: (isStart || isEnd) && moment(title).format('D MMM YYYY'),
-    pointId: `point-${id}-${index}`,
-    isLabel: isStart || scale.x(x) - scale.x(startDate) > SHORT_LINE_WIDTH,
-    dx: getTitleDX(titleAnchor),
-  })),
+  }) => {
+    const getPath = pathHelpers[symbol];
+    return {
+      titleAnchor,
+      renderPopover,
+      getPath,
+      dateLabel: (isStart || isEnd) && moment(title).format('D MMM YYYY'),
+      pointId: `point-${id}-${index}`,
+      isLabel: isStart || scale.x(x) - scale.x(startDate) > SHORT_LINE_WIDTH,
+      dx: getTitleDX(titleAnchor),
+      symbol: !getPath ? symbol : null,
+    };
+  }),
   onlyUpdateForKeys(['pointId', 'dateLabel', 'isOpen', 'isLabel', 'x']),
 );
 
@@ -77,7 +83,7 @@ const TimelinePoint = ({
     )}
 
     {renderPopover && (
-      <foreignObject {...props}>
+      <foreignObject {...omit(['getPath'], props)}>
         <StyledPopover
           placement="bottom"
           isOpen={isOpen}

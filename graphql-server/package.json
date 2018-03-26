@@ -31,7 +31,7 @@
     "lodash.get": "^4.4.2",
     "meteor-node-stubs": "^0.3.2",
     "moment-timezone": "^0.5.14",
-    "plio-util": "https://github.com/Pliohub/plio-util.git#i738-goal-edit-modal-risks",
+    "plio-util": "https://github.com/Pliohub/plio-util.git#devel",
     "ramda": "^0.25.0",
     "react": "^16.2.0",
     "sanitize-html": "^1.18.2",

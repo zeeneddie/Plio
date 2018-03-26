@@ -1376,9 +1376,9 @@ performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
 
-"plio-util@https://github.com/Pliohub/plio-util.git#i738-goal-edit-modal-risks":
+"plio-util@https://github.com/Pliohub/plio-util.git#devel":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#8800479e6c3b9d10690680a7a51ff68c519500fb"
+  resolved "https://github.com/Pliohub/plio-util.git#46b44a97b4bd8ab5023652aa4846030cf3eac672"
 
 postcss-value-parser@^3.3.0:
   version "3.3.0"
