@@ -2,7 +2,6 @@ import connectUI from 'redux-ui';
 import { branch, renderNothing } from 'recompose';
 import { identity, path, prop } from 'ramda';
 import { graphql } from 'react-apollo';
-import { transformGoal } from 'plio-util';
 
 import { namedCompose, withStateToggle } from '../../helpers';
 import GoalEditModal from '../components/GoalEditModal';
@@ -27,17 +26,14 @@ export default namedCompose('GoalEditModalContainer')(
     props: ({
       data: {
         loading,
-        goal: {
-          goal,
-        } = {},
       },
       ownProps: {
-        ui: { error },
+        ui: { error, activeGoal },
       },
     }) => ({
       error,
       loading,
-      goal: goal ? transformGoal(goal) : null,
+      activeGoal,
     }),
   }),
   graphql(Query.RISK_TYPE_LIST, {

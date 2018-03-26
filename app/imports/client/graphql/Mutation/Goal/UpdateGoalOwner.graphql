@@ -4,6 +4,9 @@ mutation updateGoalOwner($input: UpdateGoalOwnerInput!) {
       _id
       owner {
         _id
+        profile {
+          fullName
+        }
       }
     }
   }

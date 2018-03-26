@@ -1,98 +1,75 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { InputGroupAddon, Input } from 'reactstrap';
 import { onlyUpdateForKeys } from 'recompose';
 
 import {
   FormField,
-  FormInput,
+  InputField,
+  TextareaField,
+  SelectInputField,
+  DatePickerField,
   Magnitudes,
-  LoadableDatePicker,
-  ColorPicker,
+  SelectField,
+  ColorPickerField,
+  LinkedEntityInput,
 } from '../../components';
 import { OrgUsersSelectInputContainer } from '../../containers';
 import { GoalColors } from '../../../../share/constants';
 
-const enhance = onlyUpdateForKeys([
-  'sequentialId',
-  'title',
-  'description',
-  'ownerId',
-  'startDate',
-  'endDate',
-  'priority',
-  'color',
-  'organizationId',
-  'isEditMode',
-]);
+const enhance = onlyUpdateForKeys(['sequentialId', 'organizationId', 'isEditMode']);
 
 export const GoalForm = ({
-  sequentialId,
-  title,
-  onChangeTitle,
-  description,
-  onChangeDescription,
-  ownerId,
-  onChangeOwnerId,
-  startDate,
-  onChangeStartDate,
-  endDate,
-  onChangeEndDate,
-  priority,
-  onChangePriority,
-  color,
-  onChangeColor,
   organizationId,
-  onError,
-  isEditMode,
+  sequentialId,
+  onChangeTitle,
+  onChangeDescription,
+  onChangeOwnerId,
+  onChangeStartDate,
+  onChangeEndDate,
+  onChangePriority,
+  onChangeColor,
 }) => (
   <Fragment>
     <FormField>
       Key goal name
-      <FormInput
-        inputGroup={!!isEditMode}
+      <LinkedEntityInput
+        component={InputField}
+        name="title"
         placeholder="Key goal name"
-        defaultValue={title}
-        onChange={onChangeTitle}
-      >
-        {!!isEditMode && (
-          <InputGroupAddon>
-            {sequentialId}
-          </InputGroupAddon>
-        )}
-      </FormInput>
+        onBlur={onChangeTitle}
+        {...{ sequentialId }}
+      />
     </FormField>
     <FormField>
       Description
-      <Input
-        rows={3}
-        type="textarea"
+      <TextareaField
+        name="description"
         placeholder="Description"
-        defaultValue={description}
-        onChange={onChangeDescription}
+        onBlur={onChangeDescription}
       />
     </FormField>
     <FormField>
       Owner
       <OrgUsersSelectInputContainer
-        value={ownerId}
-        onChange={onChangeOwnerId}
+        name="ownerId"
         placeholder="Owner"
-        {...{ organizationId, onError }}
+        component={SelectInputField}
+        onChange={onChangeOwnerId}
+        {...{ organizationId }}
       />
     </FormField>
     <FormField>
       Start date
-      <LoadableDatePicker
-        selected={startDate}
+      <DatePickerField
+        name="startDate"
         onChange={onChangeStartDate}
         placeholderText="Start date"
       />
     </FormField>
     <FormField>
       End date
-      <LoadableDatePicker
-        selected={endDate}
+      <DatePickerField
+        name="endDate"
         onChange={onChangeEndDate}
         placeholderText="End date"
       />
@@ -100,14 +77,15 @@ export const GoalForm = ({
     <FormField>
       Priority
       <Magnitudes.Select
-        value={priority}
+        name="priority"
         onChange={onChangePriority}
+        component={SelectField}
       />
     </FormField>
     <FormField>
       Color
-      <ColorPicker
-        value={color}
+      <ColorPickerField
+        name="color"
         colors={Object.values(GoalColors)}
         onChange={onChangeColor}
       />
@@ -116,24 +94,15 @@ export const GoalForm = ({
 );
 
 GoalForm.propTypes = {
-  sequentialId: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  onChangeTitle: PropTypes.func.isRequired,
-  description: PropTypes.string,
-  onChangeDescription: PropTypes.func.isRequired,
-  ownerId: PropTypes.string.isRequired,
-  onChangeOwnerId: PropTypes.func.isRequired,
-  startDate: PropTypes.oneOfType([PropTypes.number, PropTypes.instanceOf(Date)]).isRequired,
-  onChangeStartDate: PropTypes.func.isRequired,
-  endDate: PropTypes.oneOfType([PropTypes.number, PropTypes.instanceOf(Date)]),
-  onChangeEndDate: PropTypes.func.isRequired,
-  priority: PropTypes.string,
-  onChangePriority: PropTypes.func.isRequired,
-  color: PropTypes.string,
-  onChangeColor: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
-  onError: PropTypes.func,
-  isEditMode: PropTypes.bool,
+  sequentialId: PropTypes.string,
+  onChangeTitle: PropTypes.func,
+  onChangeDescription: PropTypes.func,
+  onChangeOwnerId: PropTypes.func,
+  onChangeStartDate: PropTypes.func,
+  onChangeEndDate: PropTypes.func,
+  onChangePriority: PropTypes.func,
+  onChangeColor: PropTypes.func,
 };
 
 export default enhance(GoalForm);

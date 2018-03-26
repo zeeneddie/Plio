@@ -1,19 +1,18 @@
 import { graphql } from 'react-apollo';
-import { flattenProp, withHandlers, branch, onlyUpdateForKeys } from 'recompose';
-import { lenses, getTargetValue, toDate, updateInput } from 'plio-util';
-import { view, curry, compose, objOf, toUpper, prop } from 'ramda';
-import connectUI from 'redux-ui';
+import { flattenProp, branch, withProps, pure, renderNothing } from 'recompose';
+import { lenses, getTargetValue, toDate, getUserOptions, transformGoal } from 'plio-util';
+import { view, curry, compose, objOf, toUpper, prop, pick, identity } from 'ramda';
 import { connect } from 'react-redux';
 
 import {
   moveGoalWithinCacheAfterDeleting,
   moveGoalWithinCacheAfterRestoring,
 } from '../../../../client/apollo/utils/goals';
-import { namedCompose, debounceHandlers } from '../../helpers';
+import { namedCompose } from '../../helpers';
 import GoalEdit from '../components/GoalEdit';
-import { Fragment, Mutation } from '../../../../client/graphql';
+import { Query, Fragment, Mutation } from '../../../../client/graphql';
 import { callAsync } from '../../components/Modal';
-import { DEFAULT_UPDATE_TIMEOUT } from '../../../../api/constants';
+import { ApolloFetchPolicies } from '../../../../api/constants';
 
 const update = (name, updateQuery) => (proxy, { data: { [name]: { goal } } }) => {
   const id = `Goal:${goal._id}`;
@@ -82,22 +81,34 @@ const getUpdateEndDateInputArgs = compose(objOf('endDate'), toDate);
 const getUpdatePriorityInputArgs = compose(objOf('priority'), getTargetValue);
 const getUpdateColorInputArgs = compose(objOf('color'), toUpper, view(lenses.hex));
 const getUpdateStatusCommentInputArgs = compose(objOf('statusComment'), getTargetValue);
-const getCompleteGoalInputArgs = compose(
-  objOf('completionComment'),
-  (_, { ui: { completionComment } }) => completionComment,
-);
 const getUpdateCompletionCommentInputArgs = compose(objOf('completionComment'), getTargetValue);
 const getUpdateCompletedAtInputArgs = compose(objOf('completedAt'), toDate);
 const getUpdateCompletedByInputArgs = compose(objOf('completedBy'), ({ value }) => value);
+const getCompleteGoalInputArgs = pick(['completionComment']);
 
 export default namedCompose('GoalEditContainer')(
-  connectUI({
-    state: {
-      completionComment: '',
-    },
-  }),
+  pure,
   connect(),
-  onlyUpdateForKeys(['organizationId', 'goal', 'completionComment']),
+  graphql(Query.GOAL_CARD, {
+    options: ({ goalId }) => ({
+      variables: { _id: goalId },
+      fetchPolicy: ApolloFetchPolicies.CACHE_ONLY,
+    }),
+    props: ({
+      data: {
+        goal: {
+          goal,
+        } = {},
+      },
+    }) => ({
+      goal: goal ? transformGoal(goal) : null,
+    }),
+  }),
+  branch(
+    prop('goal'),
+    identity,
+    renderNothing,
+  ),
   flattenProp('goal'),
   graphql(Mutation.UPDATE_GOAL_TITLE, {
     props: props(getUpdateTitleInputArgs, {
@@ -176,18 +187,29 @@ export default namedCompose('GoalEditContainer')(
         })(propsArg),
       }),
     ),
-    compose(
-      graphql(Mutation.COMPLETE_GOAL, {
-        props: propsArg => props(getCompleteGoalInputArgs, {
-          handler: 'onComplete',
-          mutation: 'completeGoal',
-          updateQuery: moveGoalWithinCacheAfterDeleting(propsArg.ownProps.organizationId),
-        })(propsArg),
-      }),
-      withHandlers({
-        onChangeCompletionComment: updateInput('completionComment'),
-      }),
-    ),
+    graphql(Mutation.COMPLETE_GOAL, {
+      props: propsArg => props(getCompleteGoalInputArgs, {
+        handler: 'onComplete',
+        mutation: 'completeGoal',
+        updateQuery: moveGoalWithinCacheAfterDeleting(propsArg.ownProps.organizationId),
+      })(propsArg),
+    }),
   ),
-  debounceHandlers(['onChangeTitle', 'onChangeDescription'], DEFAULT_UPDATE_TIMEOUT),
+  withProps(({ completedBy, owner, goal }) => ({
+    initialValues: {
+      completedBy: completedBy && getUserOptions(completedBy),
+      ownerId: getUserOptions(owner),
+      ...pick([
+        'title',
+        'description',
+        'startDate',
+        'endDate',
+        'priority',
+        'color',
+        'statusComment',
+        'completionComment',
+        'completedAt',
+      ], goal),
+    },
+  })),
 )(GoalEdit);

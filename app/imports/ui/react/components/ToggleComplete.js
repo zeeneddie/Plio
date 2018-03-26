@@ -61,7 +61,7 @@ ToggleComplete.propTypes = {
   cancelButtonContent: PropTypes.node,
   children: PropTypes.node,
   className: PropTypes.string,
-  onComplete: PropTypes.func.isRequired,
+  onComplete: PropTypes.func,
 };
 
 export default enhance(ToggleComplete);

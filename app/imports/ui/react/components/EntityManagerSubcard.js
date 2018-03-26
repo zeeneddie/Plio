@@ -120,7 +120,7 @@ class EntityManagerSubcard extends Component {
                             {newEntityTitle}
                           </SubcardHeader>
                           <SubcardBody>
-                            <ErrorSection errorText={submitError && <pre>{submitError}</pre>} />
+                            <ErrorSection errorText={submitError} />
                             {renderNewEntity(this.props)}
                             <CardBlock>
                               <Pull left>

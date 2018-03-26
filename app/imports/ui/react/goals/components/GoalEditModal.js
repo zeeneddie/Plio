@@ -19,7 +19,6 @@ import { GoalsHelp } from '../../../../api/help-messages';
 const enhance = onlyUpdateForKeys([
   'isOpen',
   'toggle',
-  'goal',
   'organizationId',
   'loading',
   'error',
@@ -31,13 +30,13 @@ export const GoalEditModal = ({
   isOpen,
   toggle,
   onClosed,
-  goal,
   organizationId,
   onDelete,
   loading,
   isGuidancePanelOpen,
   toggleGuidancePanel,
   guidance = GoalsHelp.goal,
+  activeGoal,
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
@@ -64,9 +63,7 @@ export const GoalEditModal = ({
         {guidance}
       </GuidancePanel>
       <div>
-        {goal && (
-          <GoalEditContainer {...{ goal, organizationId }} />
-        )}
+        <GoalEditContainer goalId={activeGoal} {...{ organizationId }} />
         {onDelete && (
           <TextAlign center>
             <CardBlock>
@@ -85,13 +82,13 @@ GoalEditModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   onClosed: PropTypes.func,
-  goal: PropTypes.object,
   organizationId: PropTypes.string.isRequired,
   onDelete: PropTypes.func,
   loading: PropTypes.bool,
   guidance: PropTypes.node,
   isGuidancePanelOpen: PropTypes.bool,
   toggleGuidancePanel: PropTypes.func,
+  activeGoal: PropTypes.string,
 };
 
 export default enhance(GoalEditModal);

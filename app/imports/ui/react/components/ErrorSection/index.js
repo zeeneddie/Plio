@@ -30,6 +30,7 @@ export const ErrorSection = ({
   size = '4',
   className,
   scroll, // eslint-disable-line no-unused-vars
+  tag: Tag = 'pre',
   ...props
 }) => (
   <Collapse
@@ -39,7 +40,7 @@ export const ErrorSection = ({
   >
     <CardBlock>
       <Icon {...{ size }} name="exclamation-circle" aria-hidden="true" />
-      {errorText}
+      {errorText && (<Tag>{errorText}</Tag>)}
     </CardBlock>
   </Collapse>
 );
@@ -49,6 +50,7 @@ ErrorSection.propTypes = {
   size: PropTypes.string,
   className: PropTypes.string,
   scroll: PropTypes.bool,
+  tag: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 };
 
 export default enhance(ErrorSection);

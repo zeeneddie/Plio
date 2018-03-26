@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Label } from 'reactstrap';
 import styled from 'styled-components';
+import { renameKeys } from 'plio-util';
 
 import {
   FormField,
@@ -53,7 +54,7 @@ const MilestoneForm = ({
     </FormField>
     <FormField>
       Linked to
-      <LinkedEntityInput {...linkedTo} />
+      <LinkedEntityInput disabled {...renameKeys({ title: 'value' }, linkedTo)} />
     </FormField>
     {!!status && (
       <FormField>

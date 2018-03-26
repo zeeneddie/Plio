@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
+import { renameKeys } from 'plio-util';
 
 import {
   CardBlock,
@@ -32,7 +33,7 @@ const LessonForm = ({
       </FormField>
       <FormField>
         Linked to
-        <LinkedEntityInput {...linkedTo} />
+        <LinkedEntityInput disabled {...renameKeys({ title: 'value' }, linkedTo)} />
       </FormField>
       <FormField>
         Created date

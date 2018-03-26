@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { pluck } from 'ramda';
+import { renameKeys } from 'plio-util';
 
 import {
   SwitchViewField,
@@ -28,7 +29,7 @@ const NewRiskCard = ({
     <RiskForm {...{ ...props, organizationId }}>
       <FormField>
         Linked to
-        <LinkedEntityInput {...linkedTo} />
+        <LinkedEntityInput disabled {...renameKeys({ title: 'value' }, linkedTo)} />
       </FormField>
     </RiskForm>
     <CardBlock>

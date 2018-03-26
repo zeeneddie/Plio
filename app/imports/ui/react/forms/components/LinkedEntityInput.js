@@ -2,25 +2,32 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import { pure } from 'recompose';
+import styled from 'styled-components';
 
-const LinkedEntityInput = ({ sequentialId, title }) => {
-  const input = <Input disabled value={title} />;
+const StyledInputGroup = styled(InputGroup)`
+  & > .clearable-field-container {
+    min-height: 34px;
+  }
+`;
+
+const LinkedEntityInput = ({ sequentialId, component: Component = Input, ...props }) => {
+  const input = <Component {...props} />;
 
   if (!sequentialId) return input;
 
   return (
-    <InputGroup>
+    <StyledInputGroup>
       <InputGroupAddon>
         {sequentialId}
       </InputGroupAddon>
       {input}
-    </InputGroup>
+    </StyledInputGroup>
   );
 };
 
 LinkedEntityInput.propTypes = {
   sequentialId: PropTypes.string,
-  title: PropTypes.string.isRequired,
+  component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 };
 
 export default pure(LinkedEntityInput);

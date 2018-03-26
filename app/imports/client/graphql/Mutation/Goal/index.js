@@ -17,6 +17,7 @@ import REMOVE_GOAL from './RemoveGoal.graphql';
 import LINK_RISK_TO_GOAL from './LinkRiskToGoal.graphql';
 import LINK_FILE_TO_GOAL from './LinkFileToGoal.graphql';
 import UNLINK_FILE_FROM_GOAL from './UnlinkFileFromGoal.graphql';
+import CREATE_GOAL from './CreateGoal.graphql';
 
 LINK_FILE_TO_GOAL.name = 'linkFileToGoal';
 UNLINK_FILE_FROM_GOAL.name = 'unlinkFileFromGoal';
@@ -41,4 +42,5 @@ export default {
   LINK_RISK_TO_GOAL,
   LINK_FILE_TO_GOAL,
   UNLINK_FILE_FROM_GOAL,
+  CREATE_GOAL,
 };

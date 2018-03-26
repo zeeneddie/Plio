@@ -6,6 +6,9 @@
 fragment GoalCard on Goal {
   owner {
     _id
+    profile {
+      fullName
+    }
   }
   sequentialId
   description

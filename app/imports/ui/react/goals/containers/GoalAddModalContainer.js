@@ -1,92 +1,73 @@
-import connectUI from 'redux-ui';
-import { lenses, Cache, getUserOptions } from 'plio-util';
-import { view } from 'ramda';
-import gql from 'graphql-tag';
+import { Cache, getUserOptions } from 'plio-util';
 import { graphql } from 'react-apollo';
-import { connect } from 'react-redux';
+import { FORM_ERROR } from 'final-form';
+import { withProps } from 'recompose';
 
+import { GoalColors, GoalPriorities } from '../../../../share/constants';
 import { updateQueryCache } from '../../../../client/apollo/utils';
 import { namedCompose } from '../../helpers';
 import GoalAddModal from '../components/GoalAddModal';
-import { GoalPriorities } from '../../../../share/constants';
-import { Query, Fragment } from '../../../../client/graphql';
-import { callAsync } from '../../components/Modal';
-
-const CREATE_GOAL = gql`
-  mutation createGoal($input: CreateGoalInput!) {
-    createGoal(input: $input) {
-      goal {
-        ...DashboardGoal
-      }
-    }
-  }
-  ${Fragment.DASHBOARD_GOAL}
-`;
+import { Query, Mutation } from '../../../../client/graphql';
 
 export default namedCompose('GoalAddModalContainer')(
-  connect(),
-  connectUI({
-    state: {
-      title: '',
-      description: '',
-      ownerId: ({ owner }) => getUserOptions(owner),
-      startDate: () => new Date(),
-      endDate: null,
+  withProps(({ owner }) => ({
+    initialValues: {
+      ownerId: getUserOptions(owner),
+      startDate: new Date(),
       priority: GoalPriorities.MINOR,
-      color: '',
+      color: GoalColors.INDIGO,
     },
-  }),
-  graphql(CREATE_GOAL, {
+  })),
+  graphql(Mutation.CREATE_GOAL, {
     props: ({
       mutate,
       ownProps: {
-        ui: {
-          title,
-          description,
-          ownerId,
-          startDate,
-          endDate,
-          priority,
-          color = '',
-        },
         organizationId,
         toggle,
         isOpen,
-        dispatch,
-        updateUI,
-        ...ownProps
       },
     }) => ({
-      // hack because resetUI throws an error
-      onClosed: () => updateUI({
-        title: '',
-        description: '',
-        ownerId: getUserOptions(ownProps.owner),
-        startDate: new Date(),
-        endDate: null,
-        priority: GoalPriorities.MINOR,
-        color: '',
-      }),
-      onSubmit: e => dispatch(callAsync(() => mutate({
-        variables: {
-          input: {
-            organizationId,
-            title,
-            description,
-            ownerId,
-            startDate,
-            endDate,
-            priority,
-            color: color.toUpperCase(),
-          },
-        },
-        update: (proxy, { data: { createGoal: { goal } } }) => {
-          updateQueryCache(Cache.addGoal(goal), {
-            variables: { organizationId },
-            query: Query.DASHBOARD_GOALS,
-          }, proxy);
-        },
-      }).then(() => isOpen && toggle(e)))),
+      onSubmit: async ({
+        title,
+        description,
+        ownerId,
+        startDate,
+        endDate,
+        priority,
+        color,
+      }) => {
+        const errors = [];
+        if (!title) errors.push('Key goal name is required');
+        if (!endDate) errors.push('End Date is required');
+
+        if (errors.length) return { [FORM_ERROR]: errors.join('\n') };
+
+        try {
+          await mutate({
+            variables: {
+              input: {
+                title,
+                description,
+                startDate,
+                endDate,
+                priority,
+                color,
+                organizationId,
+                ownerId: ownerId.value,
+              },
+            },
+            update: (proxy, { data: { createGoal: { goal } } }) => {
+              updateQueryCache(Cache.addGoal(goal), {
+                variables: { organizationId },
+                query: Query.DASHBOARD_GOALS,
+              }, proxy);
+            },
+          });
+          return isOpen && toggle();
+        } catch ({ message }) {
+          return { [FORM_ERROR]: message };
+        }
+      },
     }),
   }),
 )(GoalAddModal);

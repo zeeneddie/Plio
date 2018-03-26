@@ -20,3 +20,4 @@ export { default as SwitchViewField } from './SwitchViewField';
 export { default as LinkedEntityInput } from './LinkedEntityInput';
 export { default as QuillField } from './QuillField';
 export { default as AnalysisForm } from './AnalysisForm';
+export { default as ColorPickerField } from './ColorPickerField';
