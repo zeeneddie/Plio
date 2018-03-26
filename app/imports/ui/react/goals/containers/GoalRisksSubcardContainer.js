@@ -2,7 +2,7 @@ import { graphql } from 'react-apollo';
 import { Cache, lenses, viewEq, getUserOptions } from 'plio-util';
 import { FORM_ERROR } from 'final-form';
 import { view, ifElse } from 'ramda';
-import { withProps, withHandlers } from 'recompose';
+import { withHandlers, pure } from 'recompose';
 
 import { RisksSubcard } from '../../risks';
 import { Mutation, Fragment, Query } from '../../../../client/graphql';
@@ -10,8 +10,48 @@ import { namedCompose } from '../../helpers';
 import { swal } from '../../../../client/util';
 import { updateGoalFragment } from '../../../../client/apollo';
 import { ProblemMagnitudes } from '../../../../share/constants';
+import { ApolloFetchPolicies } from '../../../../api/constants';
 
 export default namedCompose('GoalRisksSubcardContainer')(
+  pure,
+  graphql(Query.GOAL_RISKS_CARD, {
+    options: ({ goalId, organizationId }) => ({
+      variables: { _id: goalId, organizationId },
+      fetchPolicy: ApolloFetchPolicies.CACHE_ONLY,
+    }),
+    props: ({
+      data: {
+        user,
+        riskTypes = [],
+        goal: {
+          goal: {
+            _id,
+            title,
+            sequentialId,
+            risks = [],
+            organization: { rkGuidelines: guidelines } = {},
+          },
+        } = {},
+      },
+    }) => ({
+      linkedTo: {
+        _id,
+        title,
+        sequentialId,
+      },
+      initialValues: {
+        active: 0,
+        owner: getUserOptions(user),
+        originator: getUserOptions(user),
+        type: view(lenses.head._id, riskTypes),
+        magnitude: ProblemMagnitudes.MAJOR,
+      },
+      risks,
+      guidelines,
+      user,
+      riskTypes,
+    }),
+  }),
   graphql(Mutation.LINK_RISK_TO_GOAL, {
     props: ({
       mutate,
@@ -137,25 +177,4 @@ export default namedCompose('GoalRisksSubcardContainer')(
       })),
     }),
   }),
-  graphql(Query.RISK_TYPE_LIST, {
-    options: ({ organizationId }) => ({
-      variables: { organizationId },
-    }),
-    props: ({
-      data: {
-        riskTypes: {
-          riskTypes = [],
-        } = {},
-      },
-    }) => ({ riskTypes }),
-  }),
-  withProps(({ user, riskTypes }) => ({
-    initialValues: {
-      active: 0,
-      owner: getUserOptions(user),
-      originator: getUserOptions(user),
-      type: view(lenses.head._id, riskTypes),
-      magnitude: ProblemMagnitudes.MAJOR,
-    },
-  })),
 )(RisksSubcard);

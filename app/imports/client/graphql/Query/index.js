@@ -8,6 +8,9 @@ import RISK_LIST from './RiskList.graphql';
 import STANDARD_LIST from './StandardList.graphql';
 import DEPARTMENT_LIST from './DepartmentList.graphql';
 import COUNTS from './Counts.graphql';
+import GOAL_MILESTONES_CARD from './GoalMilestonesCard.graphql';
+import GOAL_LESSONS_CARD from './GoalLessonsCard.graphql';
+import GOAL_RISKS_CARD from './GoalRisksCard.graphql';
 
 export default {
   DASHBOARD_GOALS,
@@ -20,4 +23,7 @@ export default {
   STANDARD_LIST,
   DEPARTMENT_LIST,
   COUNTS,
+  GOAL_MILESTONES_CARD,
+  GOAL_LESSONS_CARD,
+  GOAL_RISKS_CARD,
 };

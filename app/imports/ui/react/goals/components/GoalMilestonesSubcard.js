@@ -7,9 +7,9 @@ import { MilestonesSubcard, MilestoneForm } from '../../milestones';
 import GoalMilestoneSubcardContainer from '../containers/GoalMilestoneSubcardContainer';
 
 const GoalMilestonesSubcard = ({
+  milestones = [],
   onDelete,
   onSave,
-  milestones,
   linkedTo,
   color,
 }) => (
@@ -18,6 +18,7 @@ const GoalMilestonesSubcard = ({
       <Form
         onSubmit={() => null}
         key={entity._id}
+        subscription={{}}
         initialValues={pick([
           'title',
           'description',

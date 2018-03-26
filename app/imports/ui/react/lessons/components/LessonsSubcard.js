@@ -25,6 +25,7 @@ const LessonsSubcard = ({ lessons, onDelete, ...props }) => (
         onSubmit={() => null}
         key={entity._id}
         initialValues={getInitialValues(entity)}
+        subscription={{}}
         render={() => (
           <LessonSubcardContainer
             lesson={entity}

@@ -1,5 +1,5 @@
 import { graphql } from 'react-apollo';
-import { withHandlers, mapProps } from 'recompose';
+import { withHandlers, flattenProp } from 'recompose';
 import { getTargetValue, getValue, Cache, toDate } from 'plio-util';
 import { mergeDeepLeft, compose, objOf, pluck, identity, always } from 'ramda';
 
@@ -51,7 +51,6 @@ const createHandler = (getArgs, mutationName) => ({
 }));
 
 export default namedCompose('RiskSubcardContainer')(
-  withMutationState(),
   graphql(UPDATE_RISK_TITLE, { name: UPDATE_RISK_TITLE.name }),
   graphql(UPDATE_RISK_DESCRIPTION, { name: UPDATE_RISK_DESCRIPTION.name }),
   graphql(UPDATE_RISK_STATUS_COMMENT, { name: UPDATE_RISK_STATUS_COMMENT.name }),
@@ -71,6 +70,7 @@ export default namedCompose('RiskSubcardContainer')(
   graphql(SET_RISK_ANALYSIS_COMPLETION_COMMENTS, {
     name: SET_RISK_ANALYSIS_COMPLETION_COMMENTS.name,
   }),
+  withMutationState(),
   withHandlers({
     onChangeTitle: createHandler(
       compose(objOf('title'), getTargetValue),
@@ -176,9 +176,5 @@ export default namedCompose('RiskSubcardContainer')(
       return promise.then(linkNewDepartmentToRisk);
     }),
   }),
-  mapProps(({ ui: { error, loading }, ...rest }) => ({
-    error,
-    loading,
-    ...rest,
-  })),
+  flattenProp('mutation'),
 )(RiskSubcard);

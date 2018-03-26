@@ -17,7 +17,7 @@ export default namedCompose('GoalMilestoneSubcardContainer')(
     props: ({
       updateCompletionTargetDate,
       ownProps: {
-        ui: { error, loading },
+        mutation: { error, loading },
         milestone: { _id },
         linkedTo: { _id: linkedTo },
         mutateWithState,

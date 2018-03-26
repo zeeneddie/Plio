@@ -22,6 +22,7 @@ fragment GoalCard on Goal {
   }
   completionComment
   organization {
+    _id
     rkGuidelines {
       minor
       major

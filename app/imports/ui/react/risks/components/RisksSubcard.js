@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'react-final-form';
 import { getId, getUserOptions, mapEntitiesToOptions, lenses, spreadProp } from 'plio-util';
-import { compose, pick, over } from 'ramda';
+import { compose, pick, over, defaultTo } from 'ramda';
 
 import EntityManagerSubcard from '../../components/EntityManagerSubcard';
 import RiskSubcardContainer from '../containers/RiskSubcardContainer';
@@ -35,8 +35,8 @@ const getInitialValues = compose(
       'completionComments',
       'completedAt',
     ]),
-    over(lenses.executor, getUserOptions),
-    over(lenses.completedBy, getUserOptions),
+    over(lenses.executor, compose(getUserOptions, defaultTo({}))),
+    over(lenses.completedBy, compose(getUserOptions, defaultTo({}))),
   )),
 );
 
@@ -60,6 +60,7 @@ const RisksSubcard = ({
         key={entity._id}
         onSubmit={() => null}
         initialValues={getInitialValues(entity)}
+        subscription={{}}
         render={() => (
           <RiskSubcardContainer
             risk={entity}

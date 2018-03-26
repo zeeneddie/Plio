@@ -22,7 +22,7 @@ export default namedCompose('LessonSubcardContainer')(
         updateLessonNotes,
         mutateWithState,
         lesson: { _id },
-        ui: { error, loading },
+        mutation: { error, loading },
       },
     }) => {
       const update = name => (proxy, { data: { [name]: { lesson } } }) => updateLessonFragment(

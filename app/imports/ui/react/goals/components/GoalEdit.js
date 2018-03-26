@@ -38,9 +38,6 @@ const propTypes = {
   onChangeCompletedBy: PropTypes.func,
   organizationId: PropTypes.string,
   onUndoCompletion: PropTypes.func,
-  milestones: PropTypes.arrayOf(PropTypes.object),
-  user: PropTypes.object,
-  lessons: PropTypes.arrayOf(PropTypes.object),
 };
 
 const StyledToggleComplete = styled(ToggleComplete)`
@@ -81,18 +78,7 @@ export const GoalEdit = (props) => {
     organizationId,
     onUndoCompletion,
     _id,
-    title,
-    sequentialId,
-    color,
-    milestones = [],
-    risks = [],
-    lessons = [],
-    organization: {
-      rkGuidelines = {},
-    } = {},
-    user,
   } = props;
-  const linkedTo = { _id, title, sequentialId };
 
   const completionCommentsTextarea = (
     <DebounceTextarea
@@ -170,31 +156,9 @@ export const GoalEdit = (props) => {
           </UncontrolledStyledToggleComplete>
         )}
       </CardBlock>
-      <GoalMilestonesSubcardContainer
-        {...{
-          milestones,
-          organizationId,
-          color,
-          linkedTo,
-        }}
-      />
-      <GoalRisksSubcardContainer
-        guidelines={rkGuidelines}
-        {...{
-          organizationId,
-          linkedTo,
-          risks,
-          user,
-        }}
-      />
-      <GoalLessonsSubcardContainer
-        {...{
-          organizationId,
-          linkedTo,
-          lessons,
-          user,
-        }}
-      />
+      <GoalMilestonesSubcardContainer goalId={_id} />
+      <GoalRisksSubcardContainer goalId={_id} {...{ organizationId }} />
+      <GoalLessonsSubcardContainer goalId={_id} />
       <GoalFilesSubcardContainer
         goalId={_id}
         {...{ organizationId }}

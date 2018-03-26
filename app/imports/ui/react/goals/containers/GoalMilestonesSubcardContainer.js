@@ -1,14 +1,48 @@
 import { graphql } from 'react-apollo';
 import { Cache } from 'plio-util';
 import { FORM_ERROR } from 'final-form';
+import { pure } from 'recompose';
 
 import GoalMilestonesSubcard from '../components/GoalMilestonesSubcard';
-import { Mutation, Fragment } from '../../../../client/graphql';
+import { Mutation, Fragment, Query } from '../../../../client/graphql';
 import { namedCompose } from '../../helpers';
 import { swal } from '../../../../client/util';
 import { updateGoalFragment } from '../../../../client/apollo';
+import { ApolloFetchPolicies } from '../../../../api/constants';
+
+const { GOAL_CARD } = Fragment;
 
 export default namedCompose('GoalMilestonesSubcardContainer')(
+  pure,
+  graphql(Query.GOAL_MILESTONES_CARD, {
+    options: ({ goalId }) => ({
+      variables: { _id: goalId },
+      fetchPolicy: ApolloFetchPolicies.CACHE_ONLY,
+    }),
+    props: ({
+      data: {
+        goal: {
+          goal: {
+            _id,
+            title,
+            sequentialId,
+            color,
+            milestones = [],
+            organization: { _id: organizationId } = {},
+          } = {},
+        } = {},
+      },
+    }) => ({
+      linkedTo: {
+        _id,
+        title,
+        sequentialId,
+      },
+      milestones,
+      organizationId,
+      color,
+    }),
+  }),
   graphql(Mutation.CREATE_MILESTONE, {
     props: ({
       mutate,
@@ -49,7 +83,7 @@ export default namedCompose('GoalMilestonesSubcardContainer')(
               Cache.addMilestone(milestone),
               {
                 id: linkedTo._id,
-                fragment: Fragment.GOAL_CARD,
+                fragment: GOAL_CARD,
               },
               proxy,
             ),
@@ -81,7 +115,7 @@ export default namedCompose('GoalMilestonesSubcardContainer')(
         },
         update: updateGoalFragment(Cache.deleteMilestoneById(_id), {
           id: linkedTo._id,
-          fragment: Fragment.GOAL_CARD,
+          fragment: GOAL_CARD,
         }),
       })),
     }),

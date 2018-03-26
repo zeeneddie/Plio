@@ -277,3 +277,7 @@ export const StatusColors = {
 };
 
 export const DEFAULT_UPDATE_TIMEOUT = 1200;
+
+export const ApolloFetchPolicies = {
+  CACHE_ONLY: 'cache-only',
+};

@@ -78,7 +78,7 @@ const DashboardGoals = ({
       <GoalEditModalContainer
         isOpen={isEditModalOpen}
         toggle={toggleEditModal}
-        {...{ organizationId, canEditGoals, user }}
+        {...{ organizationId, canEditGoals }}
       />
     )}
   </DashboardStatsExpandable>

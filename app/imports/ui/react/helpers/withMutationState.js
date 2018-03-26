@@ -1,29 +1,27 @@
-import connectUI from 'redux-ui';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, withState } from 'recompose';
 
 export default ({
   handleError = err => err.message,
 } = {}) => compose(
-  connectUI({
-    state: {
-      loading: false,
-      error: null,
-    },
-  }),
+  withState(
+    'mutation',
+    'setMutationState',
+    ({ error = null, loading = false } = {}) => ({ error, loading }),
+  ),
   withHandlers({
-    mutateWithState: ({ updateUI }) => (promise) => {
-      updateUI('loading', true);
+    mutateWithState: ({ setMutationState }) => (promise) => {
+      setMutationState({ error: null, loading: true });
 
       return promise
         .then((res) => {
-          updateUI({
+          setMutationState({
             loading: false,
             error: null,
           });
           return res;
         })
         .catch((err) => {
-          updateUI({
+          setMutationState({
             loading: false,
             error: handleError(err),
           });

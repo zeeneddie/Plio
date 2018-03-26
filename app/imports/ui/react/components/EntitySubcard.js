@@ -23,7 +23,6 @@ const EntitySubcard = ({
   error,
 }) => (
   <Subcard
-    stateful
     toggle={() => toggle({ entity })}
     {...{ isOpen }}
   >

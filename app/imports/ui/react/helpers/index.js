@@ -20,7 +20,6 @@ export { default as withHr } from './withHr';
 export { default as withStore } from './withStore';
 export { default as withPreloader } from './withPreloader';
 export { default as withApollo } from './withApollo';
-export { default as withFragment } from './withFragment';
 export { default as withToggle } from './withToggle';
 export { default as withMutationState } from './withMutationState';
 export { default as onlyUpdateForKeysDeep } from './onlyUpdateForKeysDeep';

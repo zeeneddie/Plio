@@ -45,7 +45,8 @@ export default namedCompose('GoalFilesSubcardContainer')(
       const uploaderMetaContext = { organizationId, goalId };
       const args = { _id: goalId, documentType: DocumentTypes.GOAL };
       const subscription = Meteor.subscribe('filesByDocument', args, {
-        onStop: ({ error }) => dispatch(setError(`Files subscription error: ${error}`)),
+        onStop: ({ error } = {}) =>
+          error && dispatch(setError(`Files subscription error: ${error}`)),
       });
 
       if (subscription.ready()) {

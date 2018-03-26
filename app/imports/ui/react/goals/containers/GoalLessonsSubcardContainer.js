@@ -1,4 +1,4 @@
-import { withProps } from 'recompose';
+import { pure } from 'recompose';
 import moment from 'moment';
 import { graphql } from 'react-apollo';
 import { FORM_ERROR } from 'final-form';
@@ -6,12 +6,46 @@ import { Cache, toDate, getUserOptions } from 'plio-util';
 
 import { namedCompose } from '../../helpers';
 import { LessonsSubcard } from '../../lessons';
-import { Mutation, Fragment } from '../../../../client/graphql';
+import { Mutation, Fragment, Query } from '../../../../client/graphql';
 import { DocumentTypes } from '../../../../share/constants';
 import { updateGoalFragment } from '../../../../client/apollo/utils';
 import { swal } from '../../../../client/util';
+import { ApolloFetchPolicies } from '../../../../api/constants';
 
 export default namedCompose('GoalLessonsSubcardContainer')(
+  pure,
+  graphql(Query.GOAL_LESSONS_CARD, {
+    options: ({ goalId }) => ({
+      variables: { _id: goalId },
+      fetchPolicy: ApolloFetchPolicies.CACHE_ONLY,
+    }),
+    props: ({
+      data: {
+        user,
+        goal: {
+          goal: {
+            _id,
+            title,
+            sequentialId,
+            lessons = [],
+            organization: { _id: organizationId } = {},
+          },
+        } = {},
+      },
+    }) => ({
+      lessons,
+      organizationId,
+      linkedTo: {
+        _id,
+        title,
+        sequentialId,
+      },
+      initialValues: {
+        owner: getUserOptions(user),
+        date: moment(),
+      },
+    }),
+  }),
   graphql(Mutation.CREATE_LESSON, {
     props: ({
       mutate,
@@ -92,10 +126,4 @@ export default namedCompose('GoalLessonsSubcardContainer')(
       })),
     }),
   }),
-  withProps(({ user }) => ({
-    initialValues: {
-      owner: getUserOptions(user),
-      date: moment(),
-    },
-  })),
 )(LessonsSubcard);

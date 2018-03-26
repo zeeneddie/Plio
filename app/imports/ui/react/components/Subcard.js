@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import { mapProps, branch, compose } from 'recompose';
 import { prop, identity } from 'ramda';
 
-import { defer, withToggle } from '../helpers';
+import { withToggle } from '../helpers';
 import SubcardHeader from './SubcardHeader';
 import SubcardBody from './SubcardBody';
 
 const enhance = compose(
-  defer,
   branch(
     prop('disabled'),
     mapProps(props => ({ ...props, isOpen: true, toggle: () => null })),

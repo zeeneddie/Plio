@@ -32,18 +32,17 @@ export default namedCompose('GoalEditModalContainer')(
         } = {},
       },
       ownProps: {
-        isOpen,
-        toggle,
-        organizationId,
         ui: { error },
       },
     }) => ({
-      isOpen,
-      toggle,
-      organizationId,
       error,
       loading,
       goal: goal ? transformGoal(goal) : null,
+    }),
+  }),
+  graphql(Query.RISK_TYPE_LIST, {
+    options: ({ organizationId }) => ({
+      variables: { organizationId },
     }),
   }),
   branch(

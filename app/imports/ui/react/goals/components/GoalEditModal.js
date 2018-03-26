@@ -38,7 +38,6 @@ export const GoalEditModal = ({
   isGuidancePanelOpen,
   toggleGuidancePanel,
   guidance = GoalsHelp.goal,
-  user,
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
@@ -66,7 +65,7 @@ export const GoalEditModal = ({
       </GuidancePanel>
       <div>
         {goal && (
-          <GoalEditContainer {...{ goal, organizationId, user }} />
+          <GoalEditContainer {...{ goal, organizationId }} />
         )}
         {onDelete && (
           <TextAlign center>
@@ -93,7 +92,6 @@ GoalEditModal.propTypes = {
   guidance: PropTypes.node,
   isGuidancePanelOpen: PropTypes.bool,
   toggleGuidancePanel: PropTypes.func,
-  user: PropTypes.object,
 };
 
 export default enhance(GoalEditModal);
