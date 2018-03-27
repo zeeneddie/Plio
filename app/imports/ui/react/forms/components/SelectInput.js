@@ -2,13 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import styled, { css } from 'styled-components';
-import { compose, withHandlers, branch, withStateHandlers } from 'recompose';
+import {
+  compose,
+  withHandlers,
+  branch,
+  withStateHandlers,
+  withProps,
+} from 'recompose';
 import { Button } from 'reactstrap';
 import { identity, prop } from 'ramda';
 import 'react-select/dist/react-select.css';
 
-import { omitProps } from '../../../helpers';
-import Icon from '../../../components/Icons/Icon';
+import { omitProps } from '../../helpers';
+import Icon from '../../components/Icons/Icon';
+import Chip from '../../components/Chip';
 
 const SelectWrapper = styled.div`
   .Select {
@@ -49,6 +56,66 @@ const SelectWrapper = styled.div`
       background-color: #f8f9fa;
     }
   }
+  .Select--multi {
+    .Select-control {
+      background-color: transparent;
+      border-radius: 0;
+      border: none;
+      overflow: visible;
+      display: block;
+      height: auto;
+    }
+    .Select-multi-value-wrapper {
+      width: calc(100% - 35px);
+      .btn.disabled {
+        padding-right: 14px !important;
+      }
+    }
+    .Select-input {
+      background-color: #fff;
+      border-radius: 4px 0 0 4px;
+      border: 1px solid #ccc;
+      border-right: none;
+      height: 36px;
+      width: 100%;
+      margin-left: 0;
+      padding: 0 10px;
+      ${({ multiPlaceholder }) => multiPlaceholder ? css`
+        &:before {
+          content: '${multiPlaceholder}';
+          position: absolute;
+          line-height: 34px;
+          color: #aaa;
+        }
+      ` : ''}
+    }
+    .Select-arrow-zone {
+      border-radius: 0 4px 4px 0;
+      border: 1px solid #ccc;
+      border-left: none;
+      height: 36px;
+      line-height: 36px;
+      display: inline-block;
+    }
+    &.has-value .Select-input {
+      margin-left: 0;
+    }
+    &.is-open {
+      .Select-input {
+        border-color: #66afe9;
+        border-radius: 4px 0 0 0;
+      }
+      .Select-arrow-zone {
+        border-color: #66afe9;
+        border-radius: 0 4px 0 0;
+      }
+    }
+    &.has-value.is-open {
+      .Select-input:before {
+        content: '';
+      }
+    }
+  }
   ${({ type }) => type === 'creatable' ? css`
     .Select-menu-outer {
       max-height: none;
@@ -85,6 +152,20 @@ const TextCreatorWrapper = styled.span`
   }
 `;
 
+const MultiValue = compose(
+  withProps(({ value }) => ({
+    label: value.label,
+  })),
+  withHandlers({
+    onRemove: ({ value, onRemove, onRemoveMultiValue }) => (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      onRemove(value);
+      if (onRemoveMultiValue) onRemoveMultiValue(value);
+    },
+  }),
+)(Chip);
+
 const enhance = compose(
   branch(
     prop('loadOptionsOnFocus'),
@@ -116,6 +197,23 @@ const enhance = compose(
     ),
     identity,
   ),
+  branch(
+    prop('valueComponent'),
+    identity,
+    withProps(({ multi }) => ({
+      valueComponent: multi && MultiValue,
+    })),
+  ),
+  withProps(({
+    multi,
+    placeholder,
+    valueComponent,
+    onRemoveMultiValue,
+  }) => ({
+    placeholder: !multi ? placeholder : '',
+    multiPlaceholder: multi ? placeholder : '',
+    valueComponent: valueComponent && (props => valueComponent({ onRemoveMultiValue, ...props })),
+  })),
   withHandlers({
     getSelectComponent: ({ type }) => () => {
       switch (type) {
@@ -131,10 +229,10 @@ const enhance = compose(
     },
     promptTextCreator: ({ promptTextCreator }) => label => (
       <TextCreatorWrapper>
-        <Button color="secondary" size="sm">
+        <Button type="button" color="secondary" size="sm">
           <Icon name="plus" />
         </Button>
-        {promptTextCreator(label)}
+        {promptTextCreator ? promptTextCreator(label) : label}
       </TextCreatorWrapper>
     ),
   }),
@@ -144,12 +242,13 @@ const SelectInput = ({
   getSelectComponent,
   type,
   className,
+  multiPlaceholder,
   ...props
 }) => {
   const SelectComponent = getSelectComponent();
 
   return (
-    <SelectWrapper {...{ type, className }}>
+    <SelectWrapper {...{ type, className, multiPlaceholder }}>
       <SelectComponent
         {...props}
         noResultsText="There are no available items..."
@@ -167,6 +266,7 @@ SelectInput.propTypes = {
   clearable: PropTypes.bool,
   type: PropTypes.string,
   className: PropTypes.string,
+  multiPlaceholder: PropTypes.string,
 };
 
 export default enhance(SelectInput);
