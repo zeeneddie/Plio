@@ -103,6 +103,16 @@ input GoalFileInput {
   fileId: ID!
 }
 
+input AddGoalNotifyUserInput {
+  _id: ID!
+  userId: ID!
+}
+
+input RemoveGoalNotifyUserInput {
+  _id: ID!
+  userId: ID!
+}
+
 type Mutation {
   createGoal(input: CreateGoalInput!): GoalPayload
   updateGoalTitle(input: UpdateGoalTitleInput!): GoalPayload
@@ -124,4 +134,6 @@ type Mutation {
   linkRiskToGoal(input: LinkRiskToGoalInput!): LinkRiskToGoalPayload
   linkFileToGoal(input: GoalFileInput!): GoalPayload
   unlinkFileFromGoal(input: GoalFileInput!): GoalPayload
+  addGoalNotifyUser(input: AddGoalNotifyUserInput!): UserPayload
+  removeGoalNotifyUser(input: RemoveGoalNotifyUserInput!): GoalPayload
 }

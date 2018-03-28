@@ -11,6 +11,7 @@ import COUNTS from './Counts.graphql';
 import GOAL_MILESTONES_CARD from './GoalMilestonesCard.graphql';
 import GOAL_LESSONS_CARD from './GoalLessonsCard.graphql';
 import GOAL_RISKS_CARD from './GoalRisksCard.graphql';
+import GOAL_NOTIFY_CARD from './GoalNotifyCard.graphql';
 
 export default {
   DASHBOARD_GOALS,
@@ -26,4 +27,5 @@ export default {
   GOAL_MILESTONES_CARD,
   GOAL_LESSONS_CARD,
   GOAL_RISKS_CARD,
+  GOAL_NOTIFY_CARD,
 };

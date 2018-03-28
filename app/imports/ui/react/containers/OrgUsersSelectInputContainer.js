@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { mapUsersToOptions } from 'plio-util';
 import { withHandlers, setPropTypes, defaultProps, componentFromProp } from 'recompose';
+import { compose, pluck } from 'ramda';
 
 import { namedCompose } from '../helpers';
 import SelectInput from '../forms/components/SelectInput';
@@ -18,7 +19,7 @@ export default namedCompose('OrgUsersSelectInputContainer')(
       query: Query.ORGANIZATION_USERS,
       variables: { organizationId },
     }).then(({ data: { organization: { users } } }) => ({
-      options: mapUsersToOptions(users),
+      options: compose(mapUsersToOptions, pluck('user'))(users),
     })),
   }),
 )(componentFromProp('component'));

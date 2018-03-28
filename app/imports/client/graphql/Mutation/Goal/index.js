@@ -18,9 +18,13 @@ import LINK_RISK_TO_GOAL from './LinkRiskToGoal.graphql';
 import LINK_FILE_TO_GOAL from './LinkFileToGoal.graphql';
 import UNLINK_FILE_FROM_GOAL from './UnlinkFileFromGoal.graphql';
 import CREATE_GOAL from './CreateGoal.graphql';
+import ADD_GOAL_NOTIFY_USER from './AddGoalNotifyUser.graphql';
+import REMOVE_GOAL_NOTIFY_USER from './RemoveGoalNotifyUser.graphql';
 
 LINK_FILE_TO_GOAL.name = 'linkFileToGoal';
 UNLINK_FILE_FROM_GOAL.name = 'unlinkFileFromGoal';
+ADD_GOAL_NOTIFY_USER.name = 'addGoalNotifyUser';
+REMOVE_GOAL_NOTIFY_USER.name = 'removeGoalNotifyUser';
 
 export default {
   UPDATE_GOAL_TITLE,
@@ -43,4 +47,6 @@ export default {
   LINK_FILE_TO_GOAL,
   UNLINK_FILE_FROM_GOAL,
   CREATE_GOAL,
+  ADD_GOAL_NOTIFY_USER,
+  REMOVE_GOAL_NOTIFY_USER,
 };

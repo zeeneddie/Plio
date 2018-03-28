@@ -129,6 +129,28 @@ export default {
     return this.collection.update(query, modifier);
   },
 
+  async addToNotify({ _id, userId }) {
+    const query = { _id };
+    const modifier = {
+      $addToSet: {
+        notify: userId,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
+
+  async removeFromNotify({ _id, userId }) {
+    const query = { _id };
+    const modifier = {
+      $pull: {
+        notify: userId,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
+
   async delete({ _id }, { userId }) {
     const res = await this.set({
       _id,

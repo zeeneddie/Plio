@@ -18,6 +18,8 @@ import removeGoal from './removeGoal';
 import linkRiskToGoal from './linkRiskToGoal';
 import linkFileToGoal from './linkFileToGoal';
 import unlinkFileFromGoal from './unlinkFileFromGoal';
+import addGoalNotifyUser from './addGoalNotifyUser';
+import removeGoalNotifyUser from './removeGoalNotifyUser';
 
 export default {
   createGoal,
@@ -40,4 +42,6 @@ export default {
   linkRiskToGoal,
   linkFileToGoal,
   unlinkFileFromGoal,
+  addGoalNotifyUser,
+  removeGoalNotifyUser,
 };

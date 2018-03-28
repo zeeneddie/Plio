@@ -11,3 +11,4 @@ export * from './standard';
 export * from './lesson';
 export * from './department';
 export * from './analysis';
+export * from './user';

@@ -8,6 +8,7 @@ import GoalMilestonesSubcardContainer from '../containers/GoalMilestonesSubcardC
 import GoalFilesSubcardContainer from '../containers/GoalFilesSubcardContainer';
 import GoalRisksSubcardContainer from '../containers/GoalRisksSubcardContainer';
 import GoalLessonsSubcardContainer from '../containers/GoalLessonsSubcardContainer';
+import GoalNotifySubcardContainer from '../containers/GoalNotifySubcardContainer';
 import GoalEditForm from './GoalEditForm';
 import GoalCompleteForm from './GoalCompleteForm';
 
@@ -42,10 +43,8 @@ export const GoalEdit = (props) => {
       <GoalMilestonesSubcardContainer goalId={_id} />
       <GoalRisksSubcardContainer goalId={_id} {...{ organizationId }} />
       <GoalLessonsSubcardContainer goalId={_id} />
-      <GoalFilesSubcardContainer
-        goalId={_id}
-        {...{ organizationId }}
-      />
+      <GoalFilesSubcardContainer goalId={_id} {...{ organizationId }} />
+      <GoalNotifySubcardContainer goalId={_id} {...{ organizationId }} />
     </Fragment>
   );
 };

@@ -4,6 +4,7 @@ import Organization from './Organization.graphql';
 import Risk from './Risk.graphql';
 import Lesson from './Lesson.graphql';
 import Department from './Department.graphql';
+import User from './User.graphql';
 
 export default [
   Goal,
@@ -12,4 +13,5 @@ export default [
   Risk,
   Lesson,
   Department,
+  User,
 ];
