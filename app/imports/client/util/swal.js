@@ -80,4 +80,4 @@ swal.promise = ({
   );
 });
 
-export default Object.assign(sweetAlert, swal);
+export default Object.assign(swal, sweetAlert);
