@@ -20,7 +20,6 @@ const DashboardGoals = ({
   goals,
   toggle,
   isOpen,
-  limit,
   loading,
   isAddModalOpen,
   toggleAddModal,
@@ -34,7 +33,6 @@ const DashboardGoals = ({
 }) => (
   <DashboardStatsExpandable
     items={goals}
-    isOpen={!limit}
     total={totalCount}
     itemsPerRow={goals.length}
     renderIcon={loading ? () => <IconLoading /> : undefined}

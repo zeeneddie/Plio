@@ -6,13 +6,16 @@ import {
   TimelineCurrentDateLine,
   TimelineHorizontalLine,
 } from '../../components';
+import { MilestoneStatuses } from '../../../../share/constants';
 import GoalsChartActionsContainer from '../containers/GoalsChartActionsContainer';
 import MilestoneChartActionsContainer from '../containers/MilestoneChartActionsContainer';
 
-const getChartPoints = ({ _id: goalId, milestones }) => (
+const getChartPoints = ({ _id: goalId, milestones, color }) => (
   milestones.map(milestone => ({
     x: new Date(milestone.completionTargetDate),
     label: milestone.title,
+    fill: milestone.status === MilestoneStatuses.COMPLETE ? color : '#fff',
+    stroke: milestone.status === MilestoneStatuses.OVERDUE ? '#dc3545' : color,
     renderPopover: props =>
       <MilestoneChartActionsContainer {...{ ...props, ...milestone, goalId }} />,
   }))

@@ -15,37 +15,39 @@ const KeyGoalsSettings = enhance(({
   changeCompletedDeletedGoals,
   ...restProps
 }) => (
-  <Subcard {...{ isOpen, toggle }}>
-    <SubcardHeader><CardTitle>Key goals</CardTitle></SubcardHeader>
-    <SubcardBody>
-      <CardBlock>
-        <WorkspaceDefaultsField
-          label="Horizontal scale"
-          value={restProps[WorkspaceDefaultsTypes.TIME_SCALE]}
-          valueKey={WorkspaceDefaultsTypes.TIME_SCALE}
-          onChange={changeChartScale}
-          options={TimeScaleOptions}
-          sm="6"
-        />
+  <div>
+    <Subcard {...{ isOpen, toggle }}>
+      <SubcardHeader><CardTitle>Key goals</CardTitle></SubcardHeader>
+      <SubcardBody>
+        <CardBlock>
+          <WorkspaceDefaultsField
+            label="Horizontal scale"
+            value={restProps[WorkspaceDefaultsTypes.TIME_SCALE]}
+            valueKey={WorkspaceDefaultsTypes.TIME_SCALE}
+            onChange={changeChartScale}
+            options={TimeScaleOptions}
+            sm="6"
+          />
 
-        <WorkspaceDefaultsField
-          label="Number of key goals"
-          value={restProps[WorkspaceDefaultsTypes.DISPLAY_GOALS]}
-          valueKey={WorkspaceDefaultsTypes.DISPLAY_GOALS}
-          onChange={changeGoalsLimit}
-          sm="6"
-        />
+          <WorkspaceDefaultsField
+            label="Number of key goals"
+            value={restProps[WorkspaceDefaultsTypes.DISPLAY_GOALS]}
+            valueKey={WorkspaceDefaultsTypes.DISPLAY_GOALS}
+            onChange={changeGoalsLimit}
+            sm="6"
+          />
 
-        <WorkspaceDefaultsField
-          label="Number of completed & deleted goals"
-          value={restProps[WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]}
-          valueKey={WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS}
-          onChange={changeCompletedDeletedGoals}
-          sm="6"
-        />
-      </CardBlock>
-    </SubcardBody>
-  </Subcard>
+          <WorkspaceDefaultsField
+            label="Number of completed & deleted goals"
+            value={restProps[WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]}
+            valueKey={WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS}
+            onChange={changeCompletedDeletedGoals}
+            sm="6"
+          />
+        </CardBlock>
+      </SubcardBody>
+    </Subcard>
+  </div>
 ));
 
 KeyGoalsSettings.propTypes = {

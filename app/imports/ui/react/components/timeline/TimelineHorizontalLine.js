@@ -78,9 +78,9 @@ const enhance = withProps(({
       },
       ...points.map(point => ({
         y: index,
-        symbol: 'square',
-        strokeWidth: 3,
-        size: 5,
+        symbol: 'diamond',
+        strokeWidth: 4,
+        size: 7,
         fill: color,
         renderPopover,
         ...point,
@@ -105,7 +105,6 @@ const TimelineHorizontalLine = ({
           ...props,
           domainPadding,
           data: lineData,
-          animate: { duration: 500 },
           style: {
             data: {
               stroke: color,

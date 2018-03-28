@@ -11,7 +11,7 @@ import {
 } from 'recompose';
 import PropTypes from 'prop-types';
 import { lenses, lensNotEq } from 'plio-util';
-import { view, allPass, propOr } from 'ramda';
+import { view, allPass } from 'ramda';
 import { NetworkStatus } from 'apollo-client';
 import connectUI from 'redux-ui';
 
@@ -41,33 +41,32 @@ export default namedCompose('DashboardGoalsContainer')(
   flattenProp(WORKSPACE_DEFAULTS),
   renameProps({
     _id: 'organizationId',
+    [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'limit',
     [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'deletedItemsPerRow',
     [WorkspaceDefaultsTypes.TIME_SCALE]: 'timeScale',
   }),
   defaultProps({
+    limit: WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
     timeScale: WorkspaceDefaults[WorkspaceDefaultsTypes.TIME_SCALE],
   }),
-  onlyUpdateForKeys(['organizationId', 'deletedItemsPerRow', 'timeScale']),
+  onlyUpdateForKeys(['organizationId', 'deletedItemsPerRow', 'timeScale', 'limit']),
   connectUI({
     state: {
       isOpen: false,
       isAddModalOpen: false,
       isEditModalOpen: false,
       activeGoal: null,
-      limit: propOr(
-        WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
-        WorkspaceDefaultsTypes.DISPLAY_GOALS,
-      ),
     },
   }),
   graphql(Query.DASHBOARD_GOALS, {
     options: ({
-      ui: { limit },
+      ui: { isOpen },
+      limit,
       organizationId,
     }) => ({
       variables: {
         organizationId,
-        limit,
+        limit: isOpen ? 0 : limit,
       },
       notifyOnNetworkStatusChange: true,
     }),
@@ -84,17 +83,15 @@ export default namedCompose('DashboardGoalsContainer')(
       },
       ownProps: {
         ui: {
-          limit,
           isOpen,
           isAddModalOpen,
           isEditModalOpen,
         },
         organizationId,
         updateUI,
-        ...ownProps
+        limit,
       },
     }) => ({
-      limit,
       isOpen,
       isAddModalOpen,
       isEditModalOpen,
@@ -103,34 +100,23 @@ export default namedCompose('DashboardGoalsContainer')(
       networkStatus,
       user,
       organizationId,
-      goals: limit ? goals.slice(0, limit) : goals,
+      goals: !isOpen ? goals.slice(0, limit) : goals,
       toggle: async () => {
-        if (!isOpen) {
-          if (goals.length < totalCount) {
-            await fetchMore({
-              variables: {
-                limit: 0,
+        if (!isOpen && goals.length < totalCount) {
+          await fetchMore({
+            variables: {
+              limit: 0,
+            },
+            updateQuery: (prev, { fetchMoreResult }) => ({
+              ...prev,
+              goals: {
+                ...prev.goals,
+                goals: fetchMoreResult.goals.goals,
               },
-              updateQuery: (prev, { fetchMoreResult }) => ({
-                ...prev,
-                goals: {
-                  ...prev.goals,
-                  goals: fetchMoreResult.goals.goals,
-                },
-              }),
-            });
-          }
-
-          updateUI({
-            isOpen: !isOpen,
-            limit: 0,
-          });
-        } else {
-          updateUI({
-            isOpen: !isOpen,
-            limit: ownProps[WorkspaceDefaultsTypes.DISPLAY_GOALS],
+            }),
           });
         }
+        updateUI({ isOpen: !isOpen });
       },
       toggleAddModal: (e) => {
         if (!isAddModalOpen) e.stopPropagation();

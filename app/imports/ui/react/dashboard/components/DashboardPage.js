@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import Loadable from 'react-loadable';
 
 import { PreloaderPage } from '../../components';
@@ -15,7 +15,7 @@ const LoadableDashboardGoalsContainer = Loadable({
 });
 
 const DashboardPage = ({ items = [], organization }) => (
-  <Fragment>
+  <div>
     <div className="dashboard-items">
       {items.map(item => (
         <div key={`${item.title}-${item.href}`}>
@@ -27,7 +27,7 @@ const DashboardPage = ({ items = [], organization }) => (
     <DashboardUserStatsContainer {...{ organization }} />
     <DashboardStatsUnreadMessagesContainer {...{ organization }} />
     <DashboardStatsOverdueItemsContainer {...{ organization }} />
-  </Fragment>
+  </div>
 );
 
 DashboardPage.propTypes = {
