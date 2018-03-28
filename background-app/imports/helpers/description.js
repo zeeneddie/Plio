@@ -1,10 +1,6 @@
-import get from 'lodash.get';
-
 import {
   ActionTypes,
   ProblemTypes,
-  HomeScreenTitlesTypes,
-  DocumentTypes,
 } from '/imports/share/constants';
 
 // actions
@@ -14,11 +10,14 @@ export const getPADesc = () => 'preventative action';
 
 export const getRCDesc = () => 'risk control';
 
+export const getGADesc = () => 'general action';
+
 export const getActionDesc = (docType) => {
   const descFn = {
     [ActionTypes.CORRECTIVE_ACTION]: getCADesc,
     [ActionTypes.PREVENTATIVE_ACTION]: getPADesc,
     [ActionTypes.RISK_CONTROL]: getRCDesc,
+    [ActionTypes.GENERAL_ACTION]: getGADesc,
   }[docType];
 
   return descFn ? descFn() : 'action';

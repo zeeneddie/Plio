@@ -69,6 +69,7 @@ export const getCollectionByDocType = (docType) => {
     case AllDocumentTypes.CORRECTIVE_ACTION:
     case AllDocumentTypes.PREVENTATIVE_ACTION:
     case AllDocumentTypes.RISK_CONTROL:
+    case AllDocumentTypes.GENERAL_ACTION:
       return Actions;
 
     case AllDocumentTypes.DISCUSSION:
@@ -128,6 +129,9 @@ export const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
   _.each(linkedTo, ({ documentId, documentType }) => {
     const collection = getCollectionByDocType(documentType);
     const doc = collection.findOne({ _id: documentId });
+
+    if (!doc || !doc.magnitude) return;
+
     if (magnitude === ProblemMagnitudes.CRITICAL) {
       return;
     }
@@ -199,6 +203,8 @@ const checkTargetDate = (targetDate, timezone) => {
   } else if (tzNow.isBefore(tzTargetDate, 'day')) {
     return -1;
   }
+
+  return undefined;
 };
 
 export const isDueToday = (targetDate, timezone) => checkTargetDate(targetDate, timezone) === 0;

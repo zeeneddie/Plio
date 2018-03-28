@@ -1,5 +1,5 @@
 import { Actions, Organizations, NonConformities, Risks } from '../../share/collections';
-import { WorkflowTypes } from '../../share/constants';
+import { WorkflowTypes, ProblemTypes } from '../../share/constants';
 import BaseEntityService from './base-entity-service';
 import WorkItemService from './work-item-service';
 import {
@@ -75,7 +75,9 @@ export default {
       WorkItemService.actionWorkflowSetToThreeStep(_id);
     }
 
-    if (doc.areStandardsUpdated() && !action.verified()) {
+    if (Object.keys(ProblemTypes).includes(documentType) &&
+        doc.areStandardsUpdated() &&
+        !action.verified()) {
       const docCollection = getCollectionByDocType(documentType);
 
       docCollection.update({ _id: documentId }, {

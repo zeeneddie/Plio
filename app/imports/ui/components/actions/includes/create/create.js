@@ -1,13 +1,11 @@
 import { Template } from 'meteor/templating';
-import { Tracker } from 'meteor/tracker';
+import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 
-import { ActionPlanOptions } from '/imports/share/constants.js';
+import { ActionPlanOptions } from '/imports/share/constants';
 import { insert } from '/imports/api/actions/methods';
-import { Actions } from '/imports/share/collections/actions.js';
 import { getTzTargetDate, getWorkflowDefaultStepDate } from '/imports/share/helpers';
 import { setModalError, inspire } from '/imports/api/helpers';
-import { WorkItems } from '/imports/share/collections/work-items.js';
 
 Template.Actions_Create.viewmodel({
   mixin: ['workInbox', 'organization', 'router', 'getChildrenData'],
@@ -37,6 +35,7 @@ Template.Actions_Create.viewmodel({
   save() {
     const data = this.getData();
 
+    /* eslint-disable */
     for (const key in data) {
       if (!data[key]) {
         const errorMessage = `The new action cannot be created without a ${key}. Please enter a ${key} for your action.`;
@@ -44,6 +43,7 @@ Template.Actions_Create.viewmodel({
         return;
       }
     }
+    /* eslint-enable */
 
     this.insert(data);
   },
@@ -66,7 +66,7 @@ Template.Actions_Create.viewmodel({
       const workItem = this._getWorkItemByQuery({ 'linkedDoc._id': _id });
       const queryParams = this._getQueryParams(workItem)(Meteor.userId());
 
-      workItem && this.goToWorkItem(workItem._id, queryParams);
+      if (workItem) this.goToWorkItem(workItem._id, queryParams);
 
       open({
         _id,

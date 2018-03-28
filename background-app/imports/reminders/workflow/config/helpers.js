@@ -45,6 +45,7 @@ export const getDocName = (doc, docType) => {
     case ReminderDocTypes.CORRECTIVE_ACTION:
     case ReminderDocTypes.PREVENTATIVE_ACTION:
     case ReminderDocTypes.RISK_CONTROL:
+    case ReminderDocTypes.GENERAL_ACTION:
       return getActionName(doc);
     case ReminderDocTypes.STANDARD:
       return getStandardName(doc);

@@ -59,6 +59,7 @@ export const getLinkedDoc = ({ _id, type }) => {
     [LINKED_TYPES.CORRECTIVE_ACTION]: Actions,
     [LINKED_TYPES.PREVENTATIVE_ACTION]: Actions,
     [LINKED_TYPES.RISK_CONTROL]: Actions,
+    [LINKED_TYPES.GENERAL_ACTION]: Actions,
   };
 
   const collection = collections[type];

@@ -53,6 +53,7 @@ export const getReceivers = ({ linkedTo, notify }, user) => {
 export const getLinkedDocAuditConfig = documentType => ({
   [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
   [ProblemTypes.RISK]: RiskAuditConfig,
+  // TODO: [DocumentTypes.GOAL]: GoalAuditConfig,
 }[documentType]);
 
 const getLinkedDoc = (documentId, documentType) => {

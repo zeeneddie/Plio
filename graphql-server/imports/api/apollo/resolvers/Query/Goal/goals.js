@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { applyMiddleware } from 'plio-util';
 import { checkLoggedIn, checkOrgMembership } from '../../../../../share/middleware';
 
-const getGoals = async ({ organizationId, limit }, GoalsCollection) => {
+const getGoals = async ({ organizationId, limit = 0 }, GoalsCollection) => {
   const query = {
     organizationId,
     isDeleted: false,
@@ -18,7 +18,7 @@ const getGoals = async ({ organizationId, limit }, GoalsCollection) => {
   };
 };
 
-const getCompletedDeletedGoals = async ({ organizationId, limit }, GoalsCollection) => {
+const getCompletedDeletedGoals = async ({ organizationId, limit = 0 }, GoalsCollection) => {
   const query = {
     organizationId,
     $or: [

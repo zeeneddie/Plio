@@ -36,6 +36,7 @@ export const ActionTypes = {
   CORRECTIVE_ACTION: 'CA',
   PREVENTATIVE_ACTION: 'PA',
   RISK_CONTROL: 'RC',
+  GENERAL_ACTION: 'GA',
 };
 
 export const ActionUndoTimeInHours = 1;
