@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import pluralize from 'pluralize';
-import { joinIds } from 'plio-util';
 
 import {
   DashboardStatsExpandable,
@@ -45,7 +44,6 @@ const DashboardGoals = ({
               timeScale,
               organizationId,
             }}
-            key={joinIds(items)}
             goals={items}
           />
         )}

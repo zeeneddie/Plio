@@ -24,7 +24,7 @@ const enhance = compose(
       this.props.updateWidth();
       window.addEventListener('resize', this.props.updateWidth);
     },
-    componentWillMount() {
+    componentWillUnmount() {
       window.removeEventListener('resize', this.props.updateWidth);
     },
   }),
