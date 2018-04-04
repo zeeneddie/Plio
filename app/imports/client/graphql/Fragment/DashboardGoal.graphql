@@ -5,6 +5,7 @@ fragment DashboardGoal on Goal {
   startDate
   endDate
   color
+  priority
   milestones {
     _id
     title

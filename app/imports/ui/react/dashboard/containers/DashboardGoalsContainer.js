@@ -10,8 +10,8 @@ import {
   renderNothing,
 } from 'recompose';
 import PropTypes from 'prop-types';
-import { lenses, lensNotEq } from 'plio-util';
-import { view, allPass } from 'ramda';
+import { lenses, lensNotEq, byEndDateDesc, byPriorityDesc } from 'plio-util';
+import { view, allPass, sort, either } from 'ramda';
 import { NetworkStatus } from 'apollo-client';
 import connectUI from 'redux-ui';
 
@@ -24,6 +24,9 @@ import {
   WorkspaceDefaults,
 } from '../../../../share/constants';
 import { Query } from '../../../../client/graphql';
+
+const sortAndSliceGoals = (goals, limit) =>
+  sort(either(byPriorityDesc, byEndDateDesc), goals).slice(-limit);
 
 export default namedCompose('DashboardGoalsContainer')(
   setPropTypes({
@@ -100,7 +103,7 @@ export default namedCompose('DashboardGoalsContainer')(
       networkStatus,
       user,
       organizationId,
-      goals: !isOpen ? goals.slice(0, limit) : goals,
+      goals: sortAndSliceGoals(goals, isOpen ? 0 : limit),
       toggle: async () => {
         if (!isOpen && goals.length < totalCount) {
           await fetchMore({

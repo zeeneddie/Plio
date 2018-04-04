@@ -176,7 +176,8 @@ Migrations.add({
 
     Meteor.users.update(query, modifier, options);
 
-    console.log('Default value for \'areEmailNotificationsEnabled\' was set for all users without it');
+    console.log('Default value for \'areEmailNotificationsEnabled\' ' +
+      'was set for all users without it');
   },
   down() {
     const query = {};
@@ -297,7 +298,8 @@ Migrations.add({
       multi: true,
     });
 
-    console.log('Work item "complete update of documents" types were migrated to "complete approval"');
+    console.log('Work item "complete update of documents" ' +
+      'types were migrated to "complete approval"');
   },
   down() {
     const query = {

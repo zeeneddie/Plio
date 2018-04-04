@@ -353,6 +353,8 @@ Goals._ensureIndex({
   organizationId: 1,
   isCompleted: 1,
   isDeleted: 1,
+  priority: 1,
+  endDate: 1,
 });
 
 // Milestones indexes

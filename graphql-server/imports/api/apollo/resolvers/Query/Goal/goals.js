@@ -8,7 +8,13 @@ const getGoals = async ({ organizationId, limit = 0 }, GoalsCollection) => {
     isDeleted: false,
     isCompleted: false,
   };
-  const options = { limit };
+  const options = {
+    limit,
+    sort: {
+      priority: 1,
+      endDate: 1,
+    },
+  };
   const totalCount = await GoalsCollection.find(query).count();
   const goals = await GoalsCollection.find(query, options).fetch();
 
