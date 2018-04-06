@@ -6,6 +6,7 @@ export * from './Utility';
 export * from './Labels';
 export * from './timeline';
 export * from './subcards';
+export * from './styled';
 
 export { default as CardBlock } from './CardBlock';
 export { default as Collapse } from './Collapse';

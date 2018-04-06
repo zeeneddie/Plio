@@ -1,7 +1,7 @@
 import { graphql } from 'react-apollo';
-import { Cache, lenses, viewEq, getUserOptions } from 'plio-util';
+import { Cache, lenses, viewEq, getUserOptions, bySerialNumber } from 'plio-util';
 import { FORM_ERROR } from 'final-form';
-import { view, ifElse } from 'ramda';
+import { view, ifElse, sort } from 'ramda';
 import { withHandlers, pure } from 'recompose';
 
 import { RisksSubcard } from '../../risks';
@@ -34,6 +34,9 @@ export default namedCompose('GoalRisksSubcardContainer')(
         } = {},
       },
     }) => ({
+      guidelines,
+      user,
+      riskTypes,
       linkedTo: {
         _id,
         title,
@@ -46,10 +49,7 @@ export default namedCompose('GoalRisksSubcardContainer')(
         type: view(lenses.head._id, riskTypes),
         magnitude: ProblemMagnitudes.MAJOR,
       },
-      risks,
-      guidelines,
-      user,
-      riskTypes,
+      risks: sort(bySerialNumber, risks),
     }),
   }),
   graphql(Mutation.LINK_RISK_TO_GOAL, {

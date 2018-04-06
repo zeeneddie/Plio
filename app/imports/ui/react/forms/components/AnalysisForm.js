@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { FormSpy } from 'react-final-form';
-import styled from 'styled-components';
-import { FormGroup, InputGroup, InputGroupButton } from 'reactstrap';
+import { FormGroup, Button } from 'reactstrap';
 import { onlyUpdateForKeys } from 'recompose';
 
 import { AnalysisStatuses, ANALYSIS_STATUSES } from '../../../../share/constants';
@@ -14,17 +13,7 @@ import OrgUsersSelectInputContainer from '../../containers/OrgUsersSelectInputCo
 import SelectInputField from './SelectInputField';
 import ToggleComplete from '../../components/ToggleComplete';
 import TextareaField from './TextareaField';
-
-const StyledOrgUsersSelectInputContainer = styled(OrgUsersSelectInputContainer)`
-  flex: 5;
-`;
-
-const StyledInputGroup = styled(InputGroup)`
-  display: flex;
-  & > .input-group-btn {
-    flex: 1;
-  }
-`;
+import StyledFlexFormGroup from '../../components/styled/StyledFlexFormGroup';
 
 const enhance = onlyUpdateForKeys(['organizationId', 'status', 'userId']);
 
@@ -75,7 +64,7 @@ const AnalysisForm = ({
           <FormSpy subscription={{ values: true }}>
             {({ values: { executor: { value } = {}, completionComments } }) => {
               const component = (
-                <StyledOrgUsersSelectInputContainer
+                <OrgUsersSelectInputContainer
                   name="executor"
                   placeholder="Who will do it?"
                   component={SelectInputField}
@@ -87,13 +76,16 @@ const AnalysisForm = ({
               if (!value || value !== userId) return component;
 
               return (
-                <ToggleComplete
-                  content={component}
-                  onComplete={() => onComplete({ completionComments })}
-                >
+                <ToggleComplete input={component}>
                   <FormGroup className="margin-top">
                     {comments}
                   </FormGroup>
+                  <Button
+                    color="success"
+                    onClick={() => onComplete({ completionComments })}
+                  >
+                    Complete
+                  </Button>
                 </ToggleComplete>
               );
             }}
@@ -113,7 +105,7 @@ const AnalysisForm = ({
             <FormSpy subscription={{ values: true }}>
               {({ values: { completedBy: { value } = {} } }) => {
                 const component = (
-                  <StyledOrgUsersSelectInputContainer
+                  <OrgUsersSelectInputContainer
                     name="completedBy"
                     placeholder="Completed by"
                     component={SelectInputField}
@@ -125,12 +117,12 @@ const AnalysisForm = ({
                 if (!value || value !== userId) return component;
 
                 return (
-                  <StyledInputGroup>
+                  <StyledFlexFormGroup>
                     {component}
-                    <InputGroupButton color="link" onClick={onUndoCompletion}>
-                     Undo
-                    </InputGroupButton>
-                  </StyledInputGroup>
+                    <Button color="link" onClick={onUndoCompletion}>
+                      Undo
+                    </Button>
+                  </StyledFlexFormGroup>
                 );
               }}
             </FormSpy>

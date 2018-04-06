@@ -1,0 +1,16 @@
+mutation verifyAction($input: VerifyActionInput!) {
+  verifyAction(input: $input) {
+    action {
+      verificationComments
+      isVerified
+      isVerifiedAsEffective
+      verifiedAt
+      verifiedBy {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

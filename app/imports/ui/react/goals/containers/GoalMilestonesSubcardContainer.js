@@ -1,7 +1,8 @@
 import { graphql } from 'react-apollo';
-import { Cache } from 'plio-util';
+import { Cache, byCompletionTargetDate } from 'plio-util';
 import { FORM_ERROR } from 'final-form';
 import { pure } from 'recompose';
+import { sort } from 'ramda';
 
 import GoalMilestonesSubcard from '../components/GoalMilestonesSubcard';
 import { Mutation, Fragment, Query } from '../../../../client/graphql';
@@ -33,12 +34,12 @@ export default namedCompose('GoalMilestonesSubcardContainer')(
         } = {},
       },
     }) => ({
+      milestones: sort(byCompletionTargetDate, milestones),
       linkedTo: {
         _id,
         title,
         sequentialId,
       },
-      milestones,
       organizationId,
       color,
     }),

@@ -1,13 +1,11 @@
 import React from 'react';
 import { Field } from 'react-final-form';
 
-import InputAdapter from './InputAdapter';
+import TextareaAdapter from './TextareaAdapter';
 
 const TextareaField = props => (
   <Field
-    type="textarea"
-    rows={3}
-    component={InputAdapter}
+    component={TextareaAdapter}
     {...props}
   />
 );

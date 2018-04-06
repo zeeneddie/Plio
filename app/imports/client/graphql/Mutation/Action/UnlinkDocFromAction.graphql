@@ -1,0 +1,7 @@
+mutation unlinkDocFromAction($input: UnlinkDocFromActionInput!) {
+  unlinkDocFromAction(input: $input) {
+    action {
+      _id
+    }
+  }
+}

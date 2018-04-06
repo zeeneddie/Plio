@@ -4,6 +4,7 @@ import Organization from './Organization';
 import Risk from './Risk';
 import Lesson from './Lesson';
 import Department from './Department';
+import Action from './Action';
 
 export default {
   ...Goal,
@@ -12,4 +13,5 @@ export default {
   ...Risk,
   ...Lesson,
   ...Department,
+  ...Action,
 };

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { defaultProps, componentFromProp, setPropTypes, withHandlers } from 'recompose';
-import { mapEntitiesToOptions, rejectBy } from 'plio-util';
-import { compose } from 'ramda';
+import { mapRejectedEntitiesToOptions } from 'plio-util';
 
 import { namedCompose } from '../../helpers';
 import { SelectInput } from '../../components';
@@ -19,17 +18,17 @@ export default namedCompose('RiskSelectInputContainer')(
     loadOptionsOnFocus: true,
   }),
   withHandlers({
-    loadOptions: ({ organizationId, without }) => () => client.query({
+    loadOptions: ({ organizationId, risks }) => () => client.query({
       query: Query.RISK_LIST,
       variables: { organizationId },
     }).then(({
       data: {
         risks: {
-          risks,
+          risks: resultRisks,
         },
       },
     }) => ({
-      options: compose(mapEntitiesToOptions, rejectBy('_id', without))(risks),
+      options: mapRejectedEntitiesToOptions(risks, resultRisks),
     })),
   }),
 )(componentFromProp('component'));

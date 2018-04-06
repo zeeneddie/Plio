@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pluck } from 'ramda';
 import { renameKeys } from 'plio-util';
 
 import {
@@ -39,8 +38,7 @@ const NewRiskCard = ({
           name="risk"
           component={SelectInputField}
           placeholder="Existing risk"
-          without={pluck('_id', risks)}
-          {...{ organizationId }}
+          {...{ organizationId, risks }}
         />
       </FormField>
     </CardBlock>

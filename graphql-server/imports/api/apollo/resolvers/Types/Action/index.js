@@ -3,8 +3,11 @@ import {
   loadUsersById,
   loadOrganizationById,
   lenses,
+  filterBy,
 } from 'plio-util';
-import { view } from 'ramda';
+import { view, flatten } from 'ramda';
+
+import { DocumentTypes } from '../../../../../share/constants';
 
 const {
   createdBy,
@@ -18,6 +21,7 @@ const {
   verifiedBy,
   notify,
   organizationId,
+  ownerId,
 } = lenses;
 
 export default {
@@ -33,5 +37,15 @@ export default {
     verifiedBy: loadUserById(view(verifiedBy)),
     notify: loadUsersById(view(notify)),
     organization: loadOrganizationById(view(organizationId)),
+    owner: loadUserById(view(ownerId)),
+    goals: async (root, args, context) => {
+      const { linkedTo } = root;
+      const { isDeleted = false } = args;
+      const { loaders: { Goal: { byQuery } } } = context;
+      const linkedGoals = filterBy('documentType', [DocumentTypes.GOAL], linkedTo);
+      const queries = linkedGoals.map(({ documentId }) => ({ _id: documentId, isDeleted }));
+
+      return byQuery.loadMany(queries).then(flatten);
+    },
   },
 };

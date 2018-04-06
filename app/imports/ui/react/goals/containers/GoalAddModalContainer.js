@@ -57,7 +57,7 @@ export default namedCompose('GoalAddModalContainer')(
               },
             },
             update: (proxy, { data: { createGoal: { goal } } }) => {
-              updateQueryCache(Cache.addGoal(goal), {
+              updateQueryCache(Cache.addGoalToQuery(goal), {
                 variables: { organizationId },
                 query: Query.DASHBOARD_GOALS,
               }, proxy);

@@ -1,6 +1,4 @@
 import DataLoader from 'dataloader';
 
-import { Goals } from '../../../../share/collections';
-
-export default () => new DataLoader(async ids =>
-  Promise.all(ids.map(_id => Goals.findOne({ _id }))));
+export default ({ collections: { Goals } }) => new DataLoader(async ids =>
+  Goals.find({ _id: { $in: ids } }).fetch());

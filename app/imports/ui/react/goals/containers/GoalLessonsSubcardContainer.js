@@ -2,7 +2,8 @@ import { pure } from 'recompose';
 import moment from 'moment';
 import { graphql } from 'react-apollo';
 import { FORM_ERROR } from 'final-form';
-import { Cache, toDate, getUserOptions } from 'plio-util';
+import { Cache, toDate, getUserOptions, bySerialNumber } from 'plio-util';
+import { sort } from 'ramda';
 
 import { namedCompose } from '../../helpers';
 import { LessonsSubcard } from '../../lessons';
@@ -33,8 +34,8 @@ export default namedCompose('GoalLessonsSubcardContainer')(
         } = {},
       },
     }) => ({
-      lessons,
       organizationId,
+      lessons: sort(bySerialNumber, lessons),
       linkedTo: {
         _id,
         title,

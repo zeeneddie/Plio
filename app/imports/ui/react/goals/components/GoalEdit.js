@@ -9,6 +9,7 @@ import GoalFilesSubcardContainer from '../containers/GoalFilesSubcardContainer';
 import GoalRisksSubcardContainer from '../containers/GoalRisksSubcardContainer';
 import GoalLessonsSubcardContainer from '../containers/GoalLessonsSubcardContainer';
 import GoalNotifySubcardContainer from '../containers/GoalNotifySubcardContainer';
+import GoalActionsSubcardContainer from '../containers/GoalActionsSubcardContainer';
 import GoalEditForm from './GoalEditForm';
 import GoalCompleteForm from './GoalCompleteForm';
 
@@ -32,7 +33,7 @@ export const GoalEdit = (props) => {
   const {
     onComplete,
     organizationId,
-    _id,
+    _id: goalId,
   } = props;
   return (
     <Fragment>
@@ -40,11 +41,12 @@ export const GoalEdit = (props) => {
         <GoalEditForm {...props} />
         {onComplete && <GoalCompleteForm {...{ onComplete }} />}
       </CardBlock>
-      <GoalMilestonesSubcardContainer goalId={_id} />
-      <GoalRisksSubcardContainer goalId={_id} {...{ organizationId }} />
-      <GoalLessonsSubcardContainer goalId={_id} />
-      <GoalFilesSubcardContainer goalId={_id} {...{ organizationId }} />
-      <GoalNotifySubcardContainer goalId={_id} {...{ organizationId }} />
+      <GoalActionsSubcardContainer {...{ organizationId, goalId }} />
+      <GoalMilestonesSubcardContainer {...{ goalId }} />
+      <GoalRisksSubcardContainer {...{ organizationId, goalId }} />
+      <GoalLessonsSubcardContainer {...{ goalId }} />
+      <GoalFilesSubcardContainer {...{ organizationId, goalId }} />
+      <GoalNotifySubcardContainer {...{ organizationId, goalId }} />
     </Fragment>
   );
 };

@@ -1,5 +1,5 @@
-import byLinkedDocumentId from './byLinkedDocumentId';
+import byQuery from './byQuery';
 
 export default {
-  byLinkedDocumentId,
+  byQuery,
 };

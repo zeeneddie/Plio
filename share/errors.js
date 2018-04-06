@@ -27,4 +27,6 @@ export default {
   ANALYSIS_SHOULD_BE_INCOMPLETE: 'Analysis should be incomplete',
   ANALYSIS_NOT_AUTHORIZED: 'User is not authorized for updating analysis',
   UNAUTHORIZED_CANT_UPLOAD: 'Unauthorized user cannot upload files',
+  ACT_CANNOT_SET_COMPLETION_DATE_FOR_COMPLETED: 'Cannot set completion date for completed action',
+  ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED: 'Cannot set executor for completed action',
 };

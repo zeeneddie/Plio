@@ -6,6 +6,7 @@ query DashboardGoals($organizationId: ID!, $limit: Int!) {
     profile {
       fullName
     }
+    roles(organizationId: $organizationId)
   }
 
   goals(organizationId: $organizationId, limit: $limit) @connection(

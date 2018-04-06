@@ -1,0 +1,14 @@
+type ActionsQueryPayload {
+  totalCount: Int
+  actions: [Action]!
+}
+
+input ActionsQueryInput {
+  organizationId: ID!
+  isDeleted: Boolean
+  type: String
+}
+
+type Query {
+  actions(input: ActionsQueryInput!): ActionsQueryPayload
+}

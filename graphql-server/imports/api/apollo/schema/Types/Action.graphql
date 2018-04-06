@@ -1,3 +1,7 @@
+input ActionGoalsInput {
+  isDeleted: Boolean
+}
+
 type Action {
   _id: ID!
   createdAt: DateTime!
@@ -29,12 +33,11 @@ type Action {
   title: String!
   description: String
   type: String!
-  # linkedTo: ?
   owner: User!
   planInPlace: String!
   completionTargetDate: DateTime!
   toBeCompletedBy: User!
-  # isViewed: Boolean
   files: [File]
   notify: [User]
+  goals(input: ActionGoalsInput): [Goal]
 }

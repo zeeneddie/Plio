@@ -17,7 +17,7 @@ import { omitProps } from '../../helpers';
 import Icon from '../../components/Icons/Icon';
 import Chip from '../../components/Chip';
 
-const SelectWrapper = styled.div`
+export const SelectWrapper = styled.div`
   .Select {
     &.is-focused:not(.is-open) > .Select-control {
       border-color: #ccc;
@@ -259,6 +259,7 @@ const SelectInput = ({
 
 SelectInput.defaultProps = {
   clearable: false,
+  backspaceRemoves: false,
 };
 
 SelectInput.propTypes = {

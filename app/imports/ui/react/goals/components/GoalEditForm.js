@@ -89,10 +89,9 @@ export const GoalEditFrom = (props) => {
                     Undo
                   </InputGroupButton>
                 </InputGroupWrapper>
-                <UndoTime
-                  date={completedAt}
-                  render={({ passed, left }) => `Completed ${passed}, ${left} left to undo`}
-                />
+                <UndoTime date={completedAt}>
+                  {({ passed, left }) => `Completed ${passed}, ${left} left to undo`}
+                </UndoTime>
               </FormField>
               <FormField>
                 Completion comments

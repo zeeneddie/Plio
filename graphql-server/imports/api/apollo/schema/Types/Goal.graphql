@@ -2,6 +2,10 @@ input GoalRisksInput {
   isDeleted: Boolean
 }
 
+input GoalActionsInput {
+  isDeleted: Boolean
+}
+
 type Goal {
   _id: ID!
   createdAt: DateTime!
@@ -29,7 +33,7 @@ type Goal {
   completedBy: User
   completionComment: String
   color: String!
-  actions: [Action]
+  actions(input: GoalActionsInput): [Action]
   risks(input: GoalRisksInput!): [Risk]
   lessons: [Lesson]
   milestones: [Milestone]!

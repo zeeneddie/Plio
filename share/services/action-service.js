@@ -18,7 +18,6 @@ export default {
     completionTargetDate, toBeCompletedBy, ...args
   }) {
     const serialNumber = generateSerialNumber(this.collection, { organizationId, type });
-
     const sequentialId = `${type}${serialNumber}`;
 
     const actionId = this.collection.insert({
@@ -38,19 +37,23 @@ export default {
   },
 
   update({
-    _id, query = {}, options = {}, ...args
+    _id,
+    query = {},
+    options = {},
+    ...args
   }) {
-    if (!_.keys(query).length > 0) {
-      query = { _id };
+    if (!Object.keys(query).length) {
+      Object.assign(query, { _id });
     }
-    if (!_.keys(options).length > 0) {
-      options.$set = args;
+
+    if (!Object.keys(options).length) {
+      Object.assign(options, { $set: args });
     }
 
     return this.collection.update(query, options);
   },
 
-  linkDocument({ _id, documentId, documentType }, { doc, action }) {
+  linkDocument({ _id, documentId, documentType }) {
     const oldAction = this.collection.findOne({ _id });
     const oldWorkflow = oldAction.getWorkflowType();
 
@@ -75,31 +78,32 @@ export default {
       WorkItemService.actionWorkflowSetToThreeStep(_id);
     }
 
-    if (Object.keys(ProblemTypes).includes(documentType) &&
-        doc.areStandardsUpdated() &&
-        !action.verified()) {
-      const docCollection = getCollectionByDocType(documentType);
+    if (Object.keys(ProblemTypes).includes(documentType)) {
+      const collection = getCollectionByDocType(documentType);
+      const doc = collection.findOne({ documentId });
 
-      docCollection.update({ _id: documentId }, {
-        $set: {
-          'updateOfStandards.status': 0, // Not completed
-        },
-        $unset: {
-          'updateOfStandards.completedAt': '',
-          'updateOfStandards.completedBy': '',
-        },
-      });
+      if (doc.areStandardsUpdated() && !oldAction.verified()) {
+        collection.update({ _id: documentId }, {
+          $set: {
+            'updateOfStandards.status': 0, // Not completed
+          },
+          $unset: {
+            'updateOfStandards.completedAt': '',
+            'updateOfStandards.completedBy': '',
+          },
+        });
+      }
     }
 
     return ret;
   },
 
-  unlinkDocument({ _id, documentId, documentType }) {
+  unlinkDocument({ _id, documentId }) {
     const ret = this.collection.update({
       _id,
     }, {
       $pull: {
-        linkedTo: { documentId, documentType },
+        linkedTo: { documentId },
       },
     });
 
@@ -125,9 +129,6 @@ export default {
     const linkedTo = action.linkedTo || [];
     const organization = Organizations.findOne({ _id: action.organizationId });
     const { ownerId } = action;
-
-    // We need to find the owner of the first linked problem to set him as a "To be verified by" user
-    const firstLinkedTo = linkedTo[0];
 
     const set = {
       completionComments,
@@ -217,12 +218,12 @@ export default {
     const linkedRisksIds = action.getLinkedRisksIds();
 
     if (linkedNCsIds.length) {
-      const NCQuery = _.extend({ _id: { $in: linkedNCsIds } }, query);
+      const NCQuery = Object.assign({ _id: { $in: linkedNCsIds } }, query);
       NonConformities.update(NCQuery, modifier, { multi: true });
     }
 
     if (linkedRisksIds.length) {
-      const riskQuery = _.extend({ _id: { $in: linkedRisksIds } }, query);
+      const riskQuery = Object.assign({ _id: { $in: linkedRisksIds } }, query);
       Risks.update(riskQuery, modifier, { multi: true });
     }
 
@@ -329,5 +330,11 @@ export default {
 
   removeSoftly({ _id, query }) {
     return this._service.removeSoftly({ _id, query });
+  },
+
+  async set({ _id, ...args }) {
+    const query = { _id };
+    const options = { $set: args };
+    return this.collection.update(query, options);
   },
 };

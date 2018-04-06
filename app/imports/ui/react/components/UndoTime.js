@@ -7,20 +7,20 @@ import { ActionUndoTimeInHours } from '../../../share/constants';
 const UndoTime = ({
   date,
   currentTime,
-  render = ({ passed, left }) => `${passed} passed, ${left} left to undo`,
+  threshold = ActionUndoTimeInHours,
+  children = ({ passed, left }) => `${passed} passed, ${left} left to undo`,
 }) => {
-  const undoDeadline = new Date(date);
-  undoDeadline.setHours(undoDeadline.getHours() + ActionUndoTimeInHours);
-
+  const undoDeadline = moment(date).add(threshold, 'hours');
   const passed = moment(date).from(currentTime);
   const left = moment(undoDeadline).to(currentTime, true);
+  const isOverdue = undoDeadline.isBefore(currentTime);
 
-  return render({ passed, left });
+  return children({ passed, left, isOverdue });
 };
 
 UndoTime.propTypes = {
-  date: PropTypes.oneOfType([PropTypes.number, PropTypes.instanceOf(Date)]).isRequired,
-  render: PropTypes.func,
+  date: PropTypes.any.isRequired,
+  children: PropTypes.func.isRequired,
 };
 
 export default withCurrentTime()(UndoTime);

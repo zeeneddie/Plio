@@ -126,7 +126,7 @@ export default namedCompose('CompletedDeletedGoalsContainer')(
           }, () => mutate({
             variables: { input: { _id } },
             update: (store) => {
-              updateQueryCache(Cache.deleteGoal(_id), {
+              updateQueryCache(Cache.deleteGoalFromQuery(_id), {
                 variables: { organizationId },
                 query: Query.COMPLETED_DELETED_GOALS,
               }, store);

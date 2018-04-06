@@ -1,0 +1,9 @@
+#import "../../Fragment/ActionCard.graphql"
+
+mutation createAction($input: CreateActionInput!) {
+  createAction(input: $input) {
+    action {
+      ...ActionCard
+    }
+  }
+}

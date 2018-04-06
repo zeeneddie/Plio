@@ -167,19 +167,24 @@ class EntityManagerSubcard extends Component {
       toggle,
       title,
       entities,
+      header,
     } = this.props;
 
     return (
       <Subcard {...{ isOpen, toggle }}>
         <SubcardHeader>
-          <Pull left>
-            <CardTitle>{title}</CardTitle>
-          </Pull>
-          <Pull right>
-            <CardTitle>
-              {entities.length || ''}
-            </CardTitle>
-          </Pull>
+          {header || (
+            <Fragment>
+              <Pull left>
+                <CardTitle>{title}</CardTitle>
+              </Pull>
+              <Pull right>
+                <CardTitle>
+                  {entities.length || ''}
+                </CardTitle>
+              </Pull>
+            </Fragment>
+          )}
         </SubcardHeader>
         <SubcardBody>
           <CardBlock>
@@ -195,7 +200,7 @@ class EntityManagerSubcard extends Component {
 EntityManagerSubcard.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  title: PropTypes.node.isRequired,
+  title: PropTypes.node,
   newEntityTitle: PropTypes.node.isRequired,
   newEntityButtonTitle: PropTypes.node.isRequired,
   entities: PropTypes.array.isRequired,
@@ -204,6 +209,7 @@ EntityManagerSubcard.propTypes = {
   open: PropTypes.string,
   onSave: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
+  header: PropTypes.node,
 };
 
 export default enhance(EntityManagerSubcard);

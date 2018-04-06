@@ -4,6 +4,7 @@ import GOAL_CARD from './GoalCard.graphql';
 import MILESTONE_CARD from './MilestoneCard.graphql';
 import RISK_CARD from './RiskCard.graphql';
 import LESSON_CARD from './LessonCard.graphql';
+import ACTION_CARD from './ActionCard.graphql';
 
 DASHBOARD_GOAL.fragmentName = 'DashboardGoal';
 GOAL_CARD.fragmentName = 'GoalCard';
@@ -11,6 +12,7 @@ MILESTONE_CARD.fragmentName = 'MilestoneCard';
 COMPLETED_DELETED_GOALS.fragmentName = 'CompletedDeletedGoal';
 RISK_CARD.fragmentName = 'RiskCard';
 LESSON_CARD.fragmentName = 'LessonCard';
+ACTION_CARD.fragmentName = 'ActionCard';
 
 export default {
   DASHBOARD_GOAL,
@@ -19,4 +21,5 @@ export default {
   COMPLETED_DELETED_GOALS,
   RISK_CARD,
   LESSON_CARD,
+  ACTION_CARD,
 };

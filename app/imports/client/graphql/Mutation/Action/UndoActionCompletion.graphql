@@ -1,0 +1,22 @@
+mutation undoActionCompletion($input: UndoActionCompletionInput!) {
+  undoActionCompletion(input: $input) {
+    action {
+      isCompleted
+      completedAt
+      completionComments
+      verificationTargetDate
+      completedBy {
+        _id
+        profile {
+          fullName
+        }
+      }
+      toBeVerifiedBy {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

@@ -1,34 +1,26 @@
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
 import { mapEntitiesToOptions } from 'plio-util';
-import { setPropTypes, compose } from 'recompose';
+import { withHandlers, setPropTypes, defaultProps, componentFromProp } from 'recompose';
 
+import { namedCompose } from '../../helpers';
+import { SelectInput } from '../../components';
 import { Query } from '../../../../client/graphql';
-import SelectInput from '../../forms/components/SelectInput';
+import { client } from '../../../../client/apollo';
 
-export default compose(
+export default namedCompose('GoalSelectInputContainer')(
   setPropTypes({
     organizationId: PropTypes.string.isRequired,
   }),
-  graphql(Query.GOAL_LIST, {
-    options: ({ organizationId }) => ({
-      variables: { organizationId },
-    }),
-    props: ({
-      ownProps: {
-        organizationId,
-        ...props
-      },
-      data: {
-        loading,
-        goals: {
-          goals = [],
-        } = {},
-      },
-    }) => ({
-      isLoading: loading,
-      options: mapEntitiesToOptions(goals),
-      ...props,
-    }),
+  defaultProps({
+    component: SelectInput,
+    loadOptionsOnFocus: true,
   }),
-)(SelectInput);
+  withHandlers({
+    loadOptions: ({ organizationId }) => () => client.query({
+      query: Query.GOAL_LIST,
+      variables: { organizationId },
+    }).then(({ data: { goals: { goals } } }) => ({
+      options: mapEntitiesToOptions(goals),
+    })),
+  }),
+)(componentFromProp('component'));

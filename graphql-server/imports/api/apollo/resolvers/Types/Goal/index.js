@@ -3,7 +3,6 @@ import {
   loadUsersById,
   loadOrganizationById,
   loadFilesById,
-  loadActionsByLinkedDocumentId,
   loadLessonsByDocumentId,
   lenses,
 } from 'plio-util';
@@ -31,8 +30,14 @@ export default {
     notify: loadUsersById(view(notify)),
     organization: loadOrganizationById(view(organizationId)),
     files: loadFilesById(view(fileIds)),
-    actions: loadActionsByLinkedDocumentId(view(_id)),
     lessons: loadLessonsByDocumentId(view(_id)),
+    actions: async (root, args, context) => {
+      const { _id: documentId } = root;
+      const { isDeleted = false } = args;
+      const { loaders: { Action: { byQuery } } } = context;
+
+      return byQuery.load({ 'linkedTo.documentId': documentId, isDeleted });
+    },
     milestones: async (root, args, context) => {
       const { milestoneIds } = root;
       const { loaders: { Milestone: { byQuery } } } = context;
