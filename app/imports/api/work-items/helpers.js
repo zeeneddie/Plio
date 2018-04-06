@@ -1,11 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 
 import { Actions, Risks, NonConformities } from '../../share/collections';
-import { WorkItemsStore, ProblemTypes } from '../../share/constants';
-import {
-  ActionTitles,
-  WorkItemDescriptions,
-} from '../../api/constants';
+import { WorkItemsStore, ProblemTypes, ActionTitles } from '../../share/constants';
+import { WorkItemDescriptions } from '../../api/constants';
 import { lowercase } from '../../share/helpers';
 
 const {

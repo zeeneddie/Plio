@@ -39,6 +39,13 @@ export const ActionTypes = {
   GENERAL_ACTION: 'GA',
 };
 
+export const ActionTitles = {
+  [ActionTypes.CORRECTIVE_ACTION]: 'Corrective action',
+  [ActionTypes.PREVENTATIVE_ACTION]: 'Preventative action',
+  [ActionTypes.RISK_CONTROL]: 'Risk control',
+  [ActionTypes.GENERAL_ACTION]: 'General action',
+};
+
 export const ActionUndoTimeInHours = 1;
 
 export const AnalysisStatuses = {

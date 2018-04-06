@@ -193,12 +193,6 @@ export const WorkItemDescriptions = {
   updateOfRiskRecord: 'Request for approval to close this risk',
 };
 
-export const ActionTitles = {
-  CA: 'Corrective action',
-  PA: 'Preventative action',
-  RK: 'Risk control',
-};
-
 export const riskScoreTypes = {
   inherent: {
     id: 'inherent',
