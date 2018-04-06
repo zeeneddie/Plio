@@ -5,9 +5,25 @@ import LinkItem from '../LinkItem';
 
 const LinkItemList = ({ items, label }) => (
   <div>
-    <Field {...{label}}>
-      {items.map(({ _id, href, indicator, title, sequentialId }) => (
-        <LinkItem key={_id} {...{ href, indicator, title, sequentialId }} />
+    <Field {...{ label }}>
+      {items.map(({
+        _id,
+        href,
+        indicator,
+        title,
+        sequentialId,
+        onMouseUp, // temp
+      }) => (
+        <LinkItem
+          key={_id}
+          {...{
+            href,
+            indicator,
+            title,
+            sequentialId,
+            onMouseUp,
+          }}
+        />
       ))}
     </Field>
   </div>

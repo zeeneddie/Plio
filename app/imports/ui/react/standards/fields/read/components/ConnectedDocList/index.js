@@ -1,4 +1,7 @@
 import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { BlazeLayout } from 'meteor/kadira:blaze-layout'; 
 
 import { ActionTypes } from '/imports/share/constants';
 import { splitActionsByType } from '/imports/api/actions/helpers';
@@ -7,11 +10,29 @@ import { getPath } from '../../../../../../utils/router/paths';
 import { getClassByStatus } from '/imports/api/problems/helpers';
 
 const ConnectedDocList = (props) => {
-  const ncs = props.ncs.map(nc => ({
-    ...nc,
-    indicator: getClassByStatus(nc.status),
-    href: getPath('nonconformity')({ urlItemId: nc._id }),
-  }));
+  const ncs = props.ncs.map(({
+    title,
+    sequentialId,
+    status,
+    _id,
+  }) => {
+    const href = getPath('nonconformity')({ urlItemId: _id });
+    return {
+      _id,
+      title,
+      sequentialId,
+      href,
+      indicator: getClassByStatus(status),
+      // when opening nonconformities blaze screen from standards react screen
+      // it just doesn't work the normal way
+      onMouseUp: (e) => {
+        e.preventDefault();
+        ReactDOM.unmountComponentAtNode(document.getElementById('app'));
+        BlazeLayout.reset();
+        FlowRouter.go(href);
+      },
+    };
+  });
   const risks = props.risks.map(risk => ({
     ...risk,
     indicator: getClassByStatus(risk.status),
