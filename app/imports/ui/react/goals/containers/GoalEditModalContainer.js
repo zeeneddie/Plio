@@ -26,6 +26,7 @@ export default namedCompose('GoalEditModalContainer')(
     props: ({
       data: {
         loading,
+        goal: { goal } = {},
       },
       ownProps: {
         ui: { error, activeGoal },
@@ -34,6 +35,7 @@ export default namedCompose('GoalEditModalContainer')(
       error,
       loading,
       activeGoal,
+      goal,
     }),
   }),
   graphql(Query.RISK_TYPE_LIST, {

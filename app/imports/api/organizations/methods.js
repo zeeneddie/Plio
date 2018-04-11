@@ -18,7 +18,7 @@ import {
 } from '../../share/schemas/organization-schema';
 import {
   WorkflowTypes, ProblemMagnitudes, InvitationStatuses,
-  DocumentTypes, DocumentTypesPlural,
+  DocumentTypes, DocumentTypesPlural, OrganizationDefaults,
 } from '../../share/constants';
 import {
   IdSchema, ReminderTimePeriodSchema,
@@ -163,7 +163,8 @@ export const setWorkflowDefaults = new Method({
     {
       type: {
         type: String,
-        allowedValues: ['minorProblem', 'majorProblem', 'criticalProblem'],
+        allowedValues: Object.keys(OrganizationDefaults.workflowDefaults),
+        optional: true,
       },
       workflowType: {
         type: String,
@@ -172,6 +173,10 @@ export const setWorkflowDefaults = new Method({
       },
       stepTime: {
         type: ReminderTimePeriodSchema,
+        optional: true,
+      },
+      isActionsCompletionSimplified: {
+        type: Boolean,
         optional: true,
       },
     },

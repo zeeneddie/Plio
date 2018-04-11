@@ -515,6 +515,7 @@ export const OrganizationDefaults = {
         timeUnit: TimeUnits.DAYS,
       },
     },
+    isActionsCompletionSimplified: true,
   },
   reminders: {
     minorNc: {

@@ -6,3 +6,4 @@ export { default as isActionUndoDeadlineDue } from './isActionUndoDeadlineDue';
 export { default as isActionCompletedAtDeadlineDue } from './isActionCompletedAtDeadlineDue';
 export { default as isActionVerifiedAtDeadlineDue } from './isActionVerifiedAtDeadlineDue';
 export { default as canActionVerificationBeUndone } from './canActionVerificationBeUndone';
+export { default as isActionsCompletionSimplified } from './isActionsCompletionSimplified';

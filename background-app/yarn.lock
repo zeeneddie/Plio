@@ -463,7 +463,7 @@ pbkdf2@^3.0.3:
 
 "plio-util@https://github.com/Pliohub/plio-util.git#devel":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#c871e84079796cd351ea8d6b06c7df4be3ace3d2"
+  resolved "https://github.com/Pliohub/plio-util.git#a0357ea16802e3a33f1c488f675ed3b5b9bd5b50"
 
 pluralize@^3.0.0:
   version "3.1.0"

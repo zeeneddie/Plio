@@ -136,7 +136,8 @@ const OrganizationService = {
     const $set = {};
 
     Object.keys(args).forEach((key) => {
-      $set[`workflowDefaults.${type}.${key}`] = args[key];
+      if (type) $set[`workflowDefaults.${type}.${key}`] = args[key];
+      else $set[`workflowDefaults.${key}`] = args[key];
     });
 
     return this.collection.update({ _id }, { $set });

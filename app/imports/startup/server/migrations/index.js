@@ -51,6 +51,7 @@ import {
 import './12-add-complete-actions-role';
 import './13-workspace-defaults';
 import './14-add-crud-goals-role';
+import './15-enable-simplified-completion-of-actions';
 
 Migrations.add({
   version: 1,

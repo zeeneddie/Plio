@@ -43,6 +43,7 @@ type WorkflowDefaults {
   minorProblem: WorkflowProblem
   majorProblem: WorkflowProblem
   criticalProblem: WorkflowProblem
+  isActionsCompletionSimplified: Boolean
 }
 
 type WorkflowProblem {

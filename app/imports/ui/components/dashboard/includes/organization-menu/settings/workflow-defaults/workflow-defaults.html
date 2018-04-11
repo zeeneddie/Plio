@@ -24,6 +24,16 @@
           type="criticalProblem"
           onWorkflowTypeChange=onWorkflowTypeChangeCb
           onStepTimeChange=onStepTimeChangeCb}}
+
+      {{#FormField label="Simplified completion of own actions"}}
+        <div>
+          {{> React
+              component=Checkbox
+              checked=workflowDefaults.isActionsCompletionSimplified
+              onChange=(callback 'onActionsSimplifiedCompletionChange')
+          }}
+        </div>
+      {{/FormField}}
     </div>
   {{/Subcards_Wrapper}}
 </template>

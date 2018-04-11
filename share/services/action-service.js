@@ -8,6 +8,7 @@ import {
   generateSerialNumber,
   getActionWorkflowType,
 } from '../../share/helpers';
+import { isActionsCompletionSimplified } from '../../share/checkers';
 
 export default {
   collection: Actions,
@@ -127,9 +128,12 @@ export default {
 
   complete({ _id, completionComments }, { userId }) {
     const action = this.collection.findOne({ _id });
-    const linkedTo = action.linkedTo || [];
-    const organization = Organizations.findOne({ _id: action.organizationId });
-    const { ownerId } = action;
+    const {
+      linkedTo = [],
+      organizationId,
+      ownerId,
+    } = action;
+    const organization = Organizations.findOne({ _id: organizationId });
 
     const set = {
       completionComments,
@@ -146,8 +150,18 @@ export default {
     });
 
     WorkItemService.actionCompleted(_id);
-    if (action.getWorkflowType() === WorkflowTypes.SIX_STEP && ownerId) {
-      this.setVerificationExecutor({ _id, userId: ownerId, assignedBy: userId });
+
+    if (action.getWorkflowType() === WorkflowTypes.SIX_STEP) {
+      if (ownerId) this.setVerificationExecutor({ _id, userId: ownerId, assignedBy: userId });
+
+      // Simplified completion of own actions
+      if (isActionsCompletionSimplified(action, userId, organization)) {
+        return this.verify({
+          _id,
+          success: true,
+          verificationComments: '',
+        }, { userId });
+      }
     }
 
     return ret;
