@@ -11,7 +11,10 @@
     "test": "yarn jest"
   },
   "lint-staged": {
-    "*.js": ["yarn lint --fix", "git add"]
+    "*.js": [
+      "yarn lint --fix",
+      "git add"
+    ]
   },
   "pre-commit": [
     "lint:staged",

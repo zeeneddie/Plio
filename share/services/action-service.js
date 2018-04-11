@@ -6,6 +6,7 @@ import {
   getCollectionByDocType,
   getWorkflowDefaultStepDate,
   generateSerialNumber,
+  getActionWorkflowType,
 } from '../../share/helpers';
 
 export default {
@@ -108,7 +109,7 @@ export default {
     });
 
     const newAction = this.collection.findOne({ _id });
-    const newWorkflow = newAction.getWorkflowType();
+    const newWorkflow = getActionWorkflowType(newAction);
 
     if (newWorkflow === WorkflowTypes.THREE_STEP) {
       this.collection.update({ _id }, {

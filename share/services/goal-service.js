@@ -1,3 +1,5 @@
+import { getIds } from 'plio-util';
+
 import { Goals } from '../collections';
 import { generateSerialNumber } from '../helpers';
 import { Abbreviations } from '../constants';
@@ -151,6 +153,38 @@ export default {
     return this.collection.update(query, modifier);
   },
 
+  async deleteMilestones({ milestoneIds = [] }, { userId }) {
+    return Promise.all(milestoneIds.map(milestoneId =>
+      MilestoneService.delete({ _id: milestoneId }, { userId })));
+  },
+
+  async removeMilestones({ milestoneIds = [] }, { collections: { Milestones } }) {
+    return Milestones.remove({ _id: { $in: milestoneIds } });
+  },
+
+  async unlinkActions(
+    { _id: documentId },
+    {
+      collections: { Actions },
+      services: { ActionService },
+    },
+  ) {
+    const query = { 'linkedTo.documentId': documentId };
+    const options = { fields: { _id: 1 } };
+    const actions = await Actions.find(query, options).fetch();
+    const ids = getIds(actions);
+
+    return Promise.all(ids.map(_id => ActionService.unlinkDocument({ _id, documentId })));
+  },
+
+  async removeLessons({ _id }, { collections: { LessonsLearned } }) {
+    return LessonsLearned.remove({ 'linkedTo.documentId': _id });
+  },
+
+  async removeFiles({ fileIds = [] }, { collections: { Files } }) {
+    return Files.remove({ _id: { $in: fileIds } });
+  },
+
   async delete({ _id }, { userId }) {
     const res = await this.set({
       _id,
@@ -158,23 +192,22 @@ export default {
       deletedBy: userId,
       deletedAt: new Date(),
     });
+    const { goal } = res;
 
-    const { goal: { milestoneIds } } = res;
-
-    await Promise.all(milestoneIds.map(milestoneId =>
-      MilestoneService.delete({ _id: milestoneId }, { userId })));
+    await this.deleteMilestones(goal, { userId });
 
     return res;
   },
 
-  async remove({ _id }, { doc: goal }) {
-    // TODO also delete actions, risks, lessons, files
+  async remove({ _id }, { goal, ...context }) {
     await this.collection.remove({ _id });
 
-    const { milestoneIds } = goal;
-
-    await Promise.all(milestoneIds.map(milestoneId =>
-      MilestoneService.remove({ _id: milestoneId })));
+    await Promise.all([
+      this.removeMilestones(goal, context),
+      this.removeLessons(goal, context),
+      this.unlinkActions(goal, context),
+      this.removeFiles(goal, context),
+    ]);
 
     return { goal };
   },

@@ -16,7 +16,7 @@ import {
   DocumentTypesPlural,
   AllDocumentTypes,
   WORKSPACE_DEFAULTS,
-} from './constants.js';
+} from '../constants';
 import {
   Actions,
   NonConformities,
@@ -26,8 +26,9 @@ import {
   Discussions,
   Goals,
   Milestones,
-} from './collections';
+} from '../collections';
 
+export * from './actions';
 
 export const capitalize = str => `${str}`.charAt(0).toUpperCase() + `${str}`.substring(1);
 

@@ -37,7 +37,7 @@ Collection.prototype.update = jest.fn(async function update(...args) {
   return nModified;
 });
 Collection.prototype.remove = jest.fn(async function remove(...args) {
-  const { deletedCount } = await this.collection.deleteOne(...args);
+  const { deletedCount } = await this.collection.deleteMany(...args);
   return deletedCount;
 });
 Collection.prototype.findOne = jest.fn(async function findOne(...args) {
