@@ -5,7 +5,6 @@ import {
   setPropTypes,
   onlyUpdateForKeys,
   defaultProps,
-  withProps,
   branch,
   renderNothing,
 } from 'recompose';
@@ -15,13 +14,13 @@ import { view, allPass, sort, either } from 'ramda';
 import { NetworkStatus } from 'apollo-client';
 import connectUI from 'redux-ui';
 
-import { canChangeGoals } from '../../../../share/checkers/roles';
 import { namedCompose, withHr, withPreloaderPage } from '../../helpers';
 import { DashboardGoals } from '../components';
 import {
   WORKSPACE_DEFAULTS,
   WorkspaceDefaultsTypes,
   WorkspaceDefaults,
+  UserRoles,
 } from '../../../../share/constants';
 import { Query } from '../../../../client/graphql';
 
@@ -82,7 +81,7 @@ export default namedCompose('DashboardGoalsContainer')(
           totalCount,
           goals = [],
         } = {},
-        me: user = {},
+        me: user = { roles: [] },
       },
       ownProps: {
         ui: {
@@ -104,6 +103,7 @@ export default namedCompose('DashboardGoalsContainer')(
       user,
       organizationId,
       goals: sortAndSliceGoals(goals, isOpen ? 0 : limit),
+      canEditGoals: user.roles.includes(UserRoles.CREATE_DELETE_GOALS),
       toggle: async () => {
         if (!isOpen && goals.length < totalCount) {
           await fetchMore({
@@ -129,10 +129,6 @@ export default namedCompose('DashboardGoalsContainer')(
       toggleEditModal: () => updateUI('isEditModalOpen', !isEditModalOpen),
     }),
   }),
-  withProps(({ organizationId, user }) => ({
-    // TODO check role via graphql
-    canEditGoals: canChangeGoals(organizationId, user._id),
-  })),
   withPreloaderPage(
     allPass([
       view(lenses.loading),

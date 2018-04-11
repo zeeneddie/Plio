@@ -22,7 +22,7 @@ export default namedCompose('GoalRisksSubcardContainer')(
     props: ({
       data: {
         user,
-        riskTypes = [],
+        riskTypes: { riskTypes = [] } = {},
         goal: {
           goal: {
             _id,

@@ -24,6 +24,7 @@ const enhance = onlyUpdateForKeys([
   'error',
   'isGuidancePanelOpen',
   'guidance',
+  'canEditGoals',
 ]);
 
 export const GoalEditModal = ({
@@ -37,6 +38,7 @@ export const GoalEditModal = ({
   toggleGuidancePanel,
   guidance = GoalsHelp.goal,
   activeGoal,
+  canEditGoals,
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
     <ModalHeader
@@ -63,7 +65,7 @@ export const GoalEditModal = ({
         {guidance}
       </GuidancePanel>
       <div>
-        <GoalEditContainer goalId={activeGoal} {...{ organizationId }} />
+        <GoalEditContainer goalId={activeGoal} {...{ organizationId, canEditGoals }} />
         {onDelete && (
           <TextAlign center>
             <CardBlock>
@@ -89,6 +91,7 @@ GoalEditModal.propTypes = {
   isGuidancePanelOpen: PropTypes.bool,
   toggleGuidancePanel: PropTypes.func,
   activeGoal: PropTypes.string,
+  canEditGoals: PropTypes.bool,
 };
 
 export default enhance(GoalEditModal);

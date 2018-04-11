@@ -1,6 +1,6 @@
 import { graphql } from 'react-apollo';
 import { flattenProp, branch, withProps, pure, renderNothing } from 'recompose';
-import { lenses, getTargetValue, toDate, getUserOptions, transformGoal } from 'plio-util';
+import { lenses, getTargetValue, toDate, getUserOptions, transformGoal, getValue } from 'plio-util';
 import { view, curry, compose, objOf, toUpper, prop, pick, identity } from 'ramda';
 import { connect } from 'react-redux';
 
@@ -75,7 +75,7 @@ const props = curry((getInputArgs, {
 
 const getUpdateTitleInputArgs = compose(objOf('title'), getTargetValue);
 const getUpdateDescriptionInputArgs = compose(objOf('description'), getTargetValue);
-const getUpdateOwnerInputArgs = compose(objOf('ownerId'), ({ value }) => value);
+const getUpdateOwnerInputArgs = compose(objOf('ownerId'), getValue);
 const getUpdateStartDateInputArgs = compose(objOf('startDate'), toDate);
 const getUpdateEndDateInputArgs = compose(objOf('endDate'), toDate);
 const getUpdatePriorityInputArgs = compose(objOf('priority'), getTargetValue);
@@ -83,7 +83,7 @@ const getUpdateColorInputArgs = compose(objOf('color'), toUpper, view(lenses.hex
 const getUpdateStatusCommentInputArgs = compose(objOf('statusComment'), getTargetValue);
 const getUpdateCompletionCommentInputArgs = compose(objOf('completionComment'), getTargetValue);
 const getUpdateCompletedAtInputArgs = compose(objOf('completedAt'), toDate);
-const getUpdateCompletedByInputArgs = compose(objOf('completedBy'), ({ value }) => value);
+const getUpdateCompletedByInputArgs = compose(objOf('completedBy'), getValue);
 const getCompleteGoalInputArgs = pick(['completionComment']);
 
 export default namedCompose('GoalEditContainer')(

@@ -34,6 +34,7 @@ export const GoalEdit = (props) => {
     onComplete,
     organizationId,
     _id: goalId,
+    canEditGoals,
   } = props;
   return (
     <Fragment>
@@ -43,7 +44,7 @@ export const GoalEdit = (props) => {
       </CardBlock>
       <GoalActionsSubcardContainer {...{ organizationId, goalId }} />
       <GoalMilestonesSubcardContainer {...{ goalId }} />
-      <GoalRisksSubcardContainer {...{ organizationId, goalId }} />
+      {canEditGoals && (<GoalRisksSubcardContainer {...{ organizationId, goalId }} />)}
       <GoalLessonsSubcardContainer {...{ goalId }} />
       <GoalFilesSubcardContainer {...{ organizationId, goalId }} />
       <GoalNotifySubcardContainer {...{ organizationId, goalId }} />
