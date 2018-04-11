@@ -8,6 +8,7 @@ import {
 import { view, flatten } from 'ramda';
 
 import { DocumentTypes } from '../../../../../share/constants';
+import { getActionWorkflowType } from '../../../../../share/helpers';
 
 const {
   createdBy,
@@ -47,5 +48,6 @@ export default {
 
       return byQuery.loadMany(queries).then(flatten);
     },
+    workflowType: getActionWorkflowType,
   },
 };

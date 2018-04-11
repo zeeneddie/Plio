@@ -50,4 +50,5 @@ fragment ActionCard on Action {
     title
     sequentialId
   }
+  workflowType
 }

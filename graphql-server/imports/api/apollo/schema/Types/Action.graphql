@@ -40,4 +40,5 @@ type Action {
   files: [File]
   notify: [User]
   goals(input: ActionGoalsInput): [Goal]
+  workflowType: String
 }
