@@ -10,24 +10,50 @@ export const updateGoalFragment = updateFragmentCache(TYPE);
 
 export const moveGoalWithinCacheAfterDeleting = curry((organizationId, goal, store) => {
   const variables = { organizationId };
-  updateQueryCache(Cache.deleteGoalFromQuery(goal._id), {
+  const deleteGoalFromQueryData = Cache.deleteGoalFromQuery(goal._id);
+
+  updateQueryCache(deleteGoalFromQueryData, {
     variables,
     query: Query.DASHBOARD_GOALS,
   }, store);
   updateQueryCache(Cache.addGoalToQuery(goal), {
     variables,
     query: Query.COMPLETED_DELETED_GOALS,
+  }, store);
+  updateQueryCache(deleteGoalFromQueryData, {
+    variables,
+    query: Query.GOAL_LIST,
   }, store);
 });
 
 export const moveGoalWithinCacheAfterRestoring = curry((organizationId, goal, store) => {
   const variables = { organizationId };
+  const addGoalToQueryData = Cache.addGoalToQuery(goal);
+
   updateQueryCache(Cache.deleteGoalFromQuery(goal._id), {
     variables,
     query: Query.COMPLETED_DELETED_GOALS,
   }, store);
-  updateQueryCache(Cache.addGoalToQuery(goal), {
+  updateQueryCache(addGoalToQueryData, {
     variables,
     query: Query.DASHBOARD_GOALS,
+  }, store);
+  updateQueryCache(addGoalToQueryData, {
+    variables,
+    query: Query.GOAL_LIST,
+  }, store);
+});
+
+export const moveGoalWithinCacheAfterCreating = curry((organizationId, goal, store) => {
+  const variables = { organizationId };
+  const data = Cache.addGoalToQuery(goal);
+
+  updateQueryCache(data, {
+    variables,
+    query: Query.DASHBOARD_GOALS,
+  }, store);
+  updateQueryCache(data, {
+    variables,
+    query: Query.GOAL_LIST,
   }, store);
 });

@@ -1,4 +1,6 @@
-import { sort, filter, propEq } from 'ramda';
+import { sort } from 'ramda';
+import { filterByType } from 'plio-util';
+
 import { ProblemTypes } from '../../share/constants';
 
 export const sortByType = sort((a, b) => {
@@ -9,5 +11,5 @@ export const sortByType = sort((a, b) => {
   }
   return 0;
 });
-
-export const filterNCs = filter(propEq('type', ProblemTypes.NON_CONFORMITY));
+export const filterNCs = filterByType(ProblemTypes.NON_CONFORMITY);
+export const filterPGs = filterByType(ProblemTypes.POTENTIAL_GAIN);

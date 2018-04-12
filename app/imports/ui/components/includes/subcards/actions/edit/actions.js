@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import pluralize from 'pluralize';
 import invoke from 'lodash.invoke';
 import { _ } from 'meteor/underscore';
+import { swal } from 'meteor/plio:bootstrap-sweetalert';
 
 import { ProblemTypes } from '/imports/share/constants.js';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
@@ -45,16 +46,20 @@ Template.Subcards_Actions_Edit.viewmodel({
   mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'workInbox', 'utils'],
   type: '',
   isEditOnly: false,
+  label() {
+    return this._getNameByType(this.type());
+  },
   wrapperArgs() {
     const items = Object.assign([], invoke(this.actions(), 'fetch'));
-    const docType = this.lowercase(this._getNameByType(this.type()));
+    const docType = this.lowercase(this.label());
 
     return {
       items,
       renderContentOnInitial: !(items.length > 5),
       onAdd: this.onAdd.bind(this),
       getSubcardArgs: this.getSubcardArgs.bind(this),
-      textToReplaceAddButton: `To add a ${docType}, go to either the Non-conformities or Risks screen and add it to a Nonconformity or Risk record first`,
+      textToReplaceAddButton: `To add a ${docType}, go to either the Non-conformities or Risks` +
+        'screen and add it to a Nonconformity or Risk record first',
       ...inspire(['addText', '_lText', '_rText', 'isEditOnly'], this),
     };
   },
@@ -72,11 +77,11 @@ Template.Subcards_Actions_Edit.viewmodel({
     };
   },
   addText() {
-    const name = this.lowercase(this._getNameByType(this.type()));
+    const name = this.lowercase(this.label());
     return `Add ${name}`;
   },
   _lText() {
-    return pluralize(this._getNameByType(this.type()));
+    return pluralize(this.label());
   },
   _rText() {
     const actions = this.actions().fetch();
@@ -103,10 +108,10 @@ Template.Subcards_Actions_Edit.viewmodel({
     const indicatorClass = this.getClassByStatus(status);
 
     return `<span class="hidden-xs-down">${date}</span>
-           <i class="fa fa-circle text-${indicatorClass} margin-left"></i>`;
+      <i class="fa fa-circle text-${indicatorClass} margin-left"></i>`;
   },
   newSubcardTitle() {
-    const name = this.lowercase(this._getNameByType(this.type()));
+    const name = this.lowercase(this.label());
     return `New ${name}`;
   },
   actions() {
@@ -152,7 +157,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       'Subcard',
       {
         content: 'Actions_AddSubcard',
-        _lText: `New ${this.lowercase(this._getNameByType(this.type()))}`,
+        _lText: `New ${this.lowercase(this.label())}`,
         isNew: false,
         ..._.pick(getMethods(this), 'insertFn', 'updateFn', 'removeFn'),
         ...inspire(['type'], this),
@@ -186,8 +191,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       let documentType;
 
       if (_.isObject(linkTo)) {
-        documentId = linkTo.documentId;
-        documentType = linkTo.documentType;
+        ({ documentId, documentType } = linkTo);
       } else {
         documentId = this.documentId && this.documentId();
         documentType = this.documentType && this.documentType();
@@ -221,7 +225,8 @@ Template.Subcards_Actions_Edit.viewmodel({
     if (!_id) {
       return viewmodel.destroy();
     }
-    swal({
+
+    return swal({
       title: 'Are you sure?',
       text: `The action "${title}" will be removed.`,
       type: 'warning',
@@ -229,7 +234,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       confirmButtonText: 'Remove',
       closeOnConfirm: false,
     }, () => {
-      const cb = (err, res) => {
+      const cb = (err) => {
         if (!err) {
           viewmodel.destroy();
           swal({

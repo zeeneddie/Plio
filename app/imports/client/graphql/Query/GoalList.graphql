@@ -1,5 +1,5 @@
 query GoalList($organizationId: ID!) {
-  goals(organizationId: $organizationId) @connection(
+  goals(organizationId: $organizationId, isCompletedOrDeleted: false) @connection(
     key: "goalList",
     filter: ["organizationId"]
   ) {

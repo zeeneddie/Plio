@@ -62,6 +62,7 @@ export const getCollectionByDocType = (docType) => {
       return Standards;
 
     case AllDocumentTypes.NON_CONFORMITY:
+    case AllDocumentTypes.POTENTIAL_GAIN:
       return NonConformities;
 
     case AllDocumentTypes.RISK:

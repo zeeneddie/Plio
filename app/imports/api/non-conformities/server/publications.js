@@ -1,20 +1,22 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
-import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
-import { NonConformities } from '/imports/share/collections/non-conformities';
-import { Standards } from '/imports/share/collections/standards';
-import { Occurrences } from '/imports/share/collections/occurrences';
-import { Departments } from '/imports/share/collections/departments';
-import { Risks } from '/imports/share/collections/risks';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils';
+import {
+  NonConformities,
+  Standards,
+  Occurrences,
+  Departments,
+  Risks,
+} from '../../../share/collections';
 import { isOrgMember } from '../../checkers';
-import { ActionTypes } from '/imports/share/constants';
-import Counter from '../../counter/server.js';
+import { ActionTypes } from '../../../share/constants';
+import Counter from '../../counter/server';
 import {
   getCursorNonDeleted,
   makeOptionsFields,
 } from '../../helpers';
-import { getPublishCompositeOrganizationUsers } from '/imports/server/helpers/pub-helpers';
+import { getPublishCompositeOrganizationUsers } from '../../../server/helpers/pub-helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
 import {
   getActionsWithLimitedFields,
@@ -51,7 +53,7 @@ Meteor.publishComposite('nonConformityCard', function ({ _id, organizationId }) 
   check(_id, String);
   check(organizationId, String);
 
-  const userId = this.userId;
+  const { userId } = this;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -63,7 +65,7 @@ Meteor.publishComposite('nonConformityCard', function ({ _id, organizationId }) 
 Meteor.publish('nonConformitiesDeps', function (organizationId) {
   check(organizationId, String);
 
-  const userId = this.userId;
+  const { userId } = this;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -75,6 +77,7 @@ Meteor.publish('nonConformitiesDeps', function (organizationId) {
       $in: [
         ActionTypes.CORRECTIVE_ACTION,
         ActionTypes.PREVENTATIVE_ACTION,
+        ActionTypes.GENERAL_ACTION,
       ],
     },
   };
@@ -113,7 +116,7 @@ Meteor.publishComposite('nonConformitiesByIds', (ids = []) => {
         isDeleted: { $in: [null, false] },
       };
 
-      const userId = this.userId;
+      const { userId } = this;
       const { organizationId } = Object.assign({}, NonConformities.findOne(query));
 
       if (!userId || !isOrgMember(userId, organizationId)) {
@@ -134,7 +137,7 @@ Meteor.publish('nonConformitiesCount', function (counterName, organizationId) {
   check(counterName, String);
   check(organizationId, String);
 
-  const userId = this.userId;
+  const { userId } = this;
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
@@ -149,7 +152,7 @@ Meteor.publish('nonConformitiesNotViewedCount', function (counterName, organizat
   check(counterName, String);
   check(organizationId, String);
 
-  const userId = this.userId;
+  const { userId } = this;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();

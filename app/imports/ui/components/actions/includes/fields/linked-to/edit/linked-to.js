@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
 import { ActionTypes, ProblemTypes, DocumentTypes } from '../../../../../../../share/constants';
-import { filterNCs } from '../../../../../../../api/non-conformities/util';
+import { filterNCs, filterPGs } from '../../../../../../../api/non-conformities/util';
 import { client } from '../../../../../../../client/apollo';
 import { Query } from '../../../../../../../client/graphql';
 import { searchByRegex, createSearchRegex } from '../../../../../../../api/helpers';
@@ -81,7 +81,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
       case ActionTypes.RISK_CONTROL:
         return risks;
       case ActionTypes.GENERAL_ACTION:
-        return goals;
+        return filterPGs(ncs).concat(goals);
       default:
         return [];
     }

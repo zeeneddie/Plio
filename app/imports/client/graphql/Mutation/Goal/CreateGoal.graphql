@@ -3,6 +3,7 @@
 mutation createGoal($input: CreateGoalInput!) {
   createGoal(input: $input) {
     goal {
+      sequentialId
       ...DashboardGoal
     }
   }

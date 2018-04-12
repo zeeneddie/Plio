@@ -1,5 +1,5 @@
 import { swal } from '../../../client/util';
-import { moveGoalWithinCacheAfterDeleting } from '../../../client/apollo/utils/goals';
+import { moveGoalWithinCacheAfterDeleting } from '../../../client/apollo/utils';
 
 export const onDelete = ({ mutate, ownProps: { organizationId, goal } }, callback) => swal.promise({
   text: `The goal "${goal.title}" will be deleted`,

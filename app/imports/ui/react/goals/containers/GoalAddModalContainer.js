@@ -1,13 +1,13 @@
-import { Cache, getUserOptions } from 'plio-util';
+import { getUserOptions } from 'plio-util';
 import { graphql } from 'react-apollo';
 import { FORM_ERROR } from 'final-form';
 import { withProps } from 'recompose';
 
 import { GoalColors, GoalPriorities } from '../../../../share/constants';
-import { updateQueryCache } from '../../../../client/apollo/utils';
+import { moveGoalWithinCacheAfterCreating } from '../../../../client/apollo/utils';
 import { namedCompose } from '../../helpers';
 import GoalAddModal from '../components/GoalAddModal';
-import { Query, Mutation } from '../../../../client/graphql';
+import { Mutation } from '../../../../client/graphql';
 
 export default namedCompose('GoalAddModalContainer')(
   withProps(({ owner }) => ({
@@ -56,12 +56,8 @@ export default namedCompose('GoalAddModalContainer')(
                 ownerId: ownerId.value,
               },
             },
-            update: (proxy, { data: { createGoal: { goal } } }) => {
-              updateQueryCache(Cache.addGoalToQuery(goal), {
-                variables: { organizationId },
-                query: Query.DASHBOARD_GOALS,
-              }, proxy);
-            },
+            update: (proxy, { data: { createGoal: { goal } } }) =>
+              moveGoalWithinCacheAfterCreating(organizationId, goal, proxy),
           });
           return isOpen && toggle();
         } catch ({ message }) {

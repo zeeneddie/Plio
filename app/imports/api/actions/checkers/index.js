@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import { _ } from 'meteor/underscore';
 
 import { Risks, NonConformities, Goals } from '../../../share/collections';
@@ -66,7 +68,8 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
 export const ACT_OnLinkChecker = ({ documentId, documentType }, action) => {
   const collection = ((() => {
     switch (documentType) {
-      case ProblemTypes.NON_CONFORMITY: {
+      case ProblemTypes.NON_CONFORMITY:
+      case ProblemTypes.POTENTIAL_GAIN: {
         if (action.type === ActionTypes.RISK_CONTROL) {
           throw ACT_RK_CANNOT_BE_LINKED_TO_NC;
         }
