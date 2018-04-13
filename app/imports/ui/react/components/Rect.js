@@ -3,16 +3,19 @@ import styled, { css } from 'styled-components';
 
 const Rect = styled.div`
   ${({
-    width = 16,
-    height = 16,
+    size = 16,
+    width = size,
+    height = size,
     strokeWidth = 4,
     fill,
     stroke,
+    inline,
   }) => css`
     width: ${width}px;
     height: ${height}px;
     background: ${fill};
     border: ${stroke ? `${strokeWidth}px solid ${stroke}` : 'none'};
+    display: ${inline ? 'inline-block' : 'block'};
   `}
 `;
 

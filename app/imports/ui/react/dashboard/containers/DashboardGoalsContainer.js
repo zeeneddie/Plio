@@ -9,8 +9,8 @@ import {
   renderNothing,
 } from 'recompose';
 import PropTypes from 'prop-types';
-import { lenses, lensNotEq, byEndDateDesc, byPriorityDesc } from 'plio-util';
-import { view, allPass, sort, either } from 'ramda';
+import { lenses, lensNotEq, byEndDate, byPriority } from 'plio-util';
+import { view, allPass, sort, either, when, always, slice, compose } from 'ramda';
 import { NetworkStatus } from 'apollo-client';
 import connectUI from 'redux-ui';
 
@@ -24,8 +24,10 @@ import {
 } from '../../../../share/constants';
 import { Query } from '../../../../client/graphql';
 
-const sortAndSliceGoals = (goals, limit) =>
-  sort(either(byPriorityDesc, byEndDateDesc), goals).slice(-limit);
+const sortAndSliceGoals = (limit, goals) => compose(
+  when(always(limit), slice(0, limit)),
+  sort(either(byPriority, byEndDate)),
+)(goals);
 
 export default namedCompose('DashboardGoalsContainer')(
   setPropTypes({
@@ -102,7 +104,7 @@ export default namedCompose('DashboardGoalsContainer')(
       networkStatus,
       user,
       organizationId,
-      goals: sortAndSliceGoals(goals, isOpen ? 0 : limit),
+      goals: sortAndSliceGoals(isOpen ? 0 : limit, goals),
       canEditGoals: user.roles.includes(UserRoles.CREATE_DELETE_GOALS),
       toggle: async () => {
         if (!isOpen && goals.length < totalCount) {

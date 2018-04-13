@@ -1,5 +1,5 @@
 type ActionPayload {
-  action: Action  
+  action: Action
 }
 
 input UpdateActionTitleInput {
@@ -125,7 +125,7 @@ input UnlinkDocFromActionInput {
 
 type Mutation {
   createAction(input: CreateActionInput!): ActionPayload
-  deleteAction(input: DeleteActionInput!): ActionPayload  
+  deleteAction(input: DeleteActionInput!): ActionPayload
   updateActionTitle(input: UpdateActionTitleInput!): ActionPayload
   updateActionDescription(input: UpdateActionDescriptionInput!): ActionPayload
   updateActionOwner(input: UpdateActionOwnerInput!): ActionPayload

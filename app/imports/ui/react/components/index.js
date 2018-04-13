@@ -34,3 +34,4 @@ export { default as SubcardHeader } from './SubcardHeader';
 export { default as SubcardBody } from './SubcardBody';
 export { default as Rect } from './Rect';
 export { default as Diamond } from './Diamond';
+export { default as StylessPopover } from './StylessPopover';

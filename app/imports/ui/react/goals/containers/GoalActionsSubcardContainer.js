@@ -14,7 +14,11 @@ import { FORM_ERROR } from 'final-form';
 import moment from 'moment';
 
 import { Query, Mutation, Fragment } from '../../../../client/graphql';
-import { client } from '../../../../client/apollo';
+import {
+  client,
+  deleteActionFromGoalFragment,
+  addActionToGoalFragment,
+} from '../../../../client/apollo';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { swal } from '../../../../client/util';
 import { updateGoalFragment, updateActionFragment } from '../../../../client/apollo/utils';
@@ -192,24 +196,31 @@ export default namedCompose('GoalActionsSubcardContainer')(
       options: mapRejectedEntitiesToOptions(action.goals, goals),
     })),
     onLink: ({ [LINK_DOC_TO_ACTION.name]: mutate }) =>
-      async (options, { _id, goals }) => options.length > goals.length && mutate({
-        variables: {
-          input: {
-            _id,
-            documentId: last(options).value,
-            documentType: DocumentTypes.GOAL,
-          },
-        },
-        update: (proxy, { data: { [LINK_DOC_TO_ACTION.name]: { action } } }) =>
-          updateActionFragment(
-            mergeDeepLeft(action),
-            {
-              id: _id,
-              fragment: Fragment.ACTION_CARD,
+      async (options, { _id, goals }) => {
+        if (options.length > goals.length) {
+          const goalId = last(options).value;
+          mutate({
+            variables: {
+              input: {
+                _id,
+                documentId: goalId,
+                documentType: DocumentTypes.GOAL,
+              },
             },
-            proxy,
-          ),
-      }),
+            update: (proxy, { data: { [LINK_DOC_TO_ACTION.name]: { action } } }) => {
+              updateActionFragment(
+                mergeDeepLeft(action),
+                {
+                  id: _id,
+                  fragment: Fragment.ACTION_CARD,
+                },
+                proxy,
+              );
+              addActionToGoalFragment(goalId, action, proxy);
+            },
+          });
+        }
+      },
     onUnlink: ({ [UNLINK_DOC_FROM_ACTION.name]: mutate }) =>
       async ({ value: goalId }, { _id }) => mutate({
         variables: {
@@ -218,13 +229,17 @@ export default namedCompose('GoalActionsSubcardContainer')(
             documentId: goalId,
           },
         },
-        update: updateActionFragment(
-          Cache.deleteGoal(goalId),
-          {
-            id: _id,
-            fragment: Fragment.ACTION_CARD,
-          },
-        ),
+        update: (proxy) => {
+          updateActionFragment(
+            Cache.deleteGoal(goalId),
+            {
+              id: _id,
+              fragment: Fragment.ACTION_CARD,
+            },
+            proxy,
+          );
+          deleteActionFromGoalFragment(goalId, _id, proxy);
+        },
       }),
   }),
   withHandlers({

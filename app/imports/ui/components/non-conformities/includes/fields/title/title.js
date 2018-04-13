@@ -20,6 +20,9 @@ Template.NC_Title_Edit.viewmodel({
         if (!this._id) return;
 
         invoke(this.parent(), 'update', { title });
+        if (this.onUpdate) {
+          this.onUpdate({ title });
+        }
       },
     };
   },

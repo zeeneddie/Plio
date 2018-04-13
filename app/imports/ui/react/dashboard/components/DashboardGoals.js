@@ -8,7 +8,7 @@ import {
   PlusButton,
 } from '../../components';
 import {
-  GoalsChart,
+  GoalsChartContainer,
   GoalAddModalContainer,
   GoalEditModalContainer,
   CompletedDeletedGoalsContainer,
@@ -38,12 +38,8 @@ const DashboardGoals = ({
     render={({ items }) => (
       <Fragment>
         {!!items.length && (
-          <GoalsChart
-            {...{
-              canEditGoals,
-              timeScale,
-              organizationId,
-            }}
+          <GoalsChartContainer
+            {...{ timeScale }}
             goals={items}
           />
         )}

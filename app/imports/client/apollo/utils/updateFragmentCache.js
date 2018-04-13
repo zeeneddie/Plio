@@ -14,7 +14,14 @@ export default type => curry((
     fragment,
     fragmentName,
   };
-  const data = store.readFragment(args);
+
+  let data;
+  try {
+    data = store.readFragment(args);
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') console.warn(err.message);
+    return;
+  }
 
   store.writeFragment({
     ...args,

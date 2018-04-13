@@ -1,17 +1,18 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import { TimelineColors } from '../../../../api/constants';
 import { MilestoneStatuses } from '../../../../share/constants';
-import { Rect, Diamond } from '../../components';
+import { Diamond } from '../../components';
 
-const MilestoneSymbol = ({ status, color }) => {
+const MilestoneSymbol = ({ status, color, ...props }) => {
   switch (status) {
     case MilestoneStatuses.AWAITING_COMPLETION:
-      return <Diamond fill="white" stroke={color} />;
+      return <Diamond fill={TimelineColors.IN_PROGRESS} {...props} />;
     case MilestoneStatuses.OVERDUE:
-      return <Rect fill="red" />;
+      return <Diamond fill={TimelineColors.OVERDUE} {...props} />;
     case MilestoneStatuses.COMPLETE:
-      return <Rect fill={color} />;
+      return <Diamond fill={color} {...props} />;
     default:
       return null;
   }
@@ -19,6 +20,7 @@ const MilestoneSymbol = ({ status, color }) => {
 
 MilestoneSymbol.propTypes = {
   status: PropTypes.number,
+  size: PropTypes.number,
   color: PropTypes.string,
 };
 

@@ -8,3 +8,4 @@ export { default as GoalFilesSubcardContainer } from './GoalFilesSubcardContaine
 export { default as GoalRisksSubcardContainer } from './GoalRisksSubcardContainer';
 export { default as GoalLessonsSubcardContainer } from './GoalLessonsSubcardContainer';
 export { default as GoalActionsSubcardContainer } from './GoalActionsSubcardContainer';
+export { default as GoalsChartContainer } from './GoalsChartContainer';

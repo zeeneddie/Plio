@@ -1,3 +1,5 @@
+import moment from 'moment';
+import { max, min } from 'ramda';
 import { TAIL_WIDTH } from './constants';
 
 export const getTitleDX = (textAnchor) => {
@@ -9,6 +11,42 @@ export const getTitleDX = (textAnchor) => {
 };
 
 export const getLineCenter = (start, end) => new Date(start + (end - start) / 2);
+
+export const getScaleDates = (timeScale, partOfPastTime) => {
+  const MONTH_DAYS = 30;
+  const dayTimeScale = timeScale * MONTH_DAYS;
+  const daysBeforeToday = dayTimeScale * partOfPastTime;
+  const start = moment().subtract(daysBeforeToday, 'days');
+  const end = moment().add(dayTimeScale - daysBeforeToday, 'days');
+  return {
+    start: start.toDate(),
+    end: end.toDate(),
+  };
+};
+
+export const getTimelineListProps = (scaleDates, start, end) => {
+  const scaleStart = scaleDates.start.getTime();
+  const scaleEnd = scaleDates.end.getTime();
+
+  if (end < scaleStart) {
+    return { float: 'left' };
+  }
+
+  if (start > scaleEnd) {
+    return { float: 'right' };
+  }
+
+  const lineStart = max(start, scaleStart);
+  const lineEnd = min(end, scaleEnd);
+  const scaleInterval = scaleEnd - scaleStart;
+  const lineInterval = lineEnd - lineStart;
+  const intervalToStartOfLine = lineStart - scaleStart;
+
+  return {
+    left: intervalToStartOfLine * 100 / scaleInterval,
+    width: lineInterval * 100 / scaleInterval,
+  };
+};
 
 export const pathHelpers = {
   arrowLeft: (x, y, size, tail = '') => {

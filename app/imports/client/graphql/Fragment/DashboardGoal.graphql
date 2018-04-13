@@ -1,3 +1,5 @@
+#import "../Fragment/DashboardAction.graphql"
+
 fragment DashboardGoal on Goal {
   _id
   isDeleted
@@ -12,5 +14,8 @@ fragment DashboardGoal on Goal {
     completionTargetDate
     isCompleted
     status
+  }
+  actions(input: { isDeleted: false }) {
+    ...DashboardAction
   }
 }

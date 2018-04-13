@@ -135,6 +135,10 @@ export default {
     } = action;
     const organization = Organizations.findOne({ _id: organizationId });
 
+    // We need to find the owner of the first linked
+    // problem to set him as a "To be verified by" user
+    // const firstLinkedTo = linkedTo[0];
+
     const set = {
       completionComments,
       isCompleted: true,

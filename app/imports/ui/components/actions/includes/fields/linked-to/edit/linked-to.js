@@ -4,6 +4,11 @@ import invoke from 'lodash.invoke';
 import { ActionTypes, ProblemTypes, DocumentTypes } from '../../../../../../../share/constants';
 import { filterNCs, filterPGs } from '../../../../../../../api/non-conformities/util';
 import { client } from '../../../../../../../client/apollo';
+import { Actions } from '../../../../../../../share/collections/actions';
+import {
+  deleteActionFromGoalFragment,
+  addActionToGoalFragment,
+} from '../../../../../../../client/apollo/utils';
 import { Query } from '../../../../../../../client/graphql';
 import { searchByRegex, createSearchRegex } from '../../../../../../../api/helpers';
 
@@ -110,6 +115,9 @@ Template.Actions_LinkedTo_Edit.viewmodel({
       if (err) {
         this.linkedTo(linkedTo);
         this.linkedDocs(linkedDocs);
+      } else if (documentType === DocumentTypes.GOAL) {
+        const action = Actions.findOne({ _id: this._id() });
+        addActionToGoalFragment(documentId, action, client);
       }
     };
 
@@ -139,6 +147,8 @@ Template.Actions_LinkedTo_Edit.viewmodel({
       if (err) {
         this.linkedTo(linkedTo);
         this.linkedDocs(linkedDocs);
+      } else if (documentType === DocumentTypes.GOAL) {
+        deleteActionFromGoalFragment(documentId, this._id(), client);
       }
     };
 

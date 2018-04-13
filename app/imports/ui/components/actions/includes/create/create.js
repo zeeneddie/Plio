@@ -2,10 +2,12 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 
-import { ActionPlanOptions } from '/imports/share/constants';
-import { insert } from '/imports/api/actions/methods';
-import { getTzTargetDate, getWorkflowDefaultStepDate } from '/imports/share/helpers';
-import { setModalError, inspire } from '/imports/api/helpers';
+import { ActionPlanOptions, ActionTypes } from '../../../../../share/constants';
+import { insert } from '../../../../../api/actions/methods';
+import { getTzTargetDate, getWorkflowDefaultStepDate } from '../../../../../share/helpers';
+import { setModalError, inspire } from '../../../../../api/helpers';
+import { addActionToGoalFragment } from '../../../../../client/apollo/utils';
+import { client } from '../../../../../client/apollo';
 
 Template.Actions_Create.viewmodel({
   mixin: ['workInbox', 'organization', 'router', 'getChildrenData'],
@@ -73,6 +75,12 @@ Template.Actions_Create.viewmodel({
         _title: action ? this._getNameByType(action.type) : '',
         template: 'Actions_Edit',
       });
+
+      if (type === ActionTypes.GENERAL_ACTION) {
+        allArgs.linkedTo.forEach(({ documentId }) => (
+          addActionToGoalFragment(documentId, action, client)
+        ));
+      }
     };
 
     return invoke(this.card, 'insert', insert, allArgs, cb);

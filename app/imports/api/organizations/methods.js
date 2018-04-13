@@ -44,9 +44,7 @@ import {
 import { USR_EnsurePasswordIsValid, ensureCanChangeRoles } from '../users/checkers';
 import { ensureCanUnsubscribeFromDailyRecap, ensureThereIsNoDocuments } from './checkers';
 import { CANNOT_IMPORT_DOCS } from './errors';
-import {
-  checkOrgMembership as checkOrgMembershipMiddleware,
-} from '../middleware';
+import { checkOrgMembership as checkOrgMembershipMiddleware } from '../middleware';
 import { checkLoggedIn } from '../../share/middleware';
 
 const nameSchema = new SimpleSchema({ name: { type: String } });

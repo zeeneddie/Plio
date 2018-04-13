@@ -17,10 +17,6 @@ const HorizontalLinePoints = ({
         cursor: 'pointer',
       },
     }}
-    events={onClick && [{
-      target: 'data',
-      eventHandlers: { onClick },
-    }]}
     labelComponent={
       <VictoryTooltip
         cornerRadius={2}
@@ -34,7 +30,7 @@ const HorizontalLinePoints = ({
         labelComponent={<VictoryLabel style={{ fill: '#fff' }} />}
       />
     }
-    dataComponent={<TimelinePoint id={entityId} />}
+    dataComponent={<TimelinePoint id={entityId} {...{ onClick }} />}
   />
 );
 

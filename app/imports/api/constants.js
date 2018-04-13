@@ -275,3 +275,26 @@ export const DEFAULT_UPDATE_TIMEOUT = 1200;
 export const ApolloFetchPolicies = {
   CACHE_ONLY: 'cache-only',
 };
+
+export const TimelineColors = {
+  OVERDUE: '#dc3545',
+  IN_PROGRESS: '#ff8c00',
+};
+
+export const SymbolTypes = {
+  DIAMOND: 'diamond',
+  SQUARE: 'square',
+};
+
+export const TimelineSymbols = {
+  MILESTONE: SymbolTypes.DIAMOND,
+  ACTION: SymbolTypes.SQUARE,
+};
+
+export const Timeline = {
+  PART_OF_PAST_TIME: 15 / 100,
+  WIDTH: 1140,
+  LINE_HEIGHT: 25,
+  AXIS_HEIGHT: 20,
+  LIST_ICON_SIZE: 11,
+};

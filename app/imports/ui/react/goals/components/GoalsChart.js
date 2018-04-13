@@ -1,101 +1,47 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import { pick } from 'ramda';
+
 import {
   TimelineChart,
-  TimelineCurrentDateLine,
   TimelineHorizontalLine,
 } from '../../components';
-import { MilestoneStatuses } from '../../../../share/constants';
-import GoalsChartActionsContainer from '../containers/GoalsChartActionsContainer';
-import MilestoneChartActionsContainer from '../containers/MilestoneChartActionsContainer';
+import { Timeline } from '../../../../api/constants';
+import ActionsMilestonesList from './ActionsMilestonesList';
 
-const getChartPoints = ({ _id: goalId, milestones, color }) => (
-  milestones.map(milestone => ({
-    x: new Date(milestone.completionTargetDate),
-    label: milestone.title,
-    fill: milestone.status === MilestoneStatuses.COMPLETE ? color : '#fff',
-    stroke: milestone.status === MilestoneStatuses.OVERDUE ? '#dc3545' : color,
-    renderPopover: props =>
-      <MilestoneChartActionsContainer {...{ ...props, ...milestone, goalId }} />,
-  }))
-);
-
-const getChartHeight = (goals) => {
-  const ITEM_HEIGHT = 65;
-  const AXIS_HEIGHT = 35;
-  return ITEM_HEIGHT * goals.length + AXIS_HEIGHT;
-};
-
-const getScaleDates = (timeScale) => {
-  const MONTH_DAYS = 30;
-  const DENOMINATOR = 8;
-  const dayTimeScale = timeScale * MONTH_DAYS;
-  const daysBeforeToday = dayTimeScale / DENOMINATOR;
-  const start = moment().subtract(daysBeforeToday, 'days');
-  const end = moment().add(dayTimeScale - daysBeforeToday, 'days');
-  return {
-    start: start.toDate(),
-    end: end.toDate(),
-  };
-};
-
-const GoalsChart = ({
-  goals,
-  timeScale,
-  organizationId,
-  canEditGoals,
-}) => {
-  const height = getChartHeight(goals);
-  const scaleDates = getScaleDates(timeScale);
-
-  return (
+const GoalsChart = ({ goals, timeScale, onEdit }) => (
+  <Fragment>
     <TimelineChart
-      {...{
-        height,
-        maxWidth: 1140,
-        domain: {
-          x: [scaleDates.start, scaleDates.end],
-          y: [-1, goals.length],
-        },
-      }}
-    >
-      {/* VictoryChart expects components to be direct children */}
-      {TimelineCurrentDateLine({ height })}
-      {goals.map((goal, index) => (
+      scaleType={timeScale}
+      partOfPastTime={Timeline.PART_OF_PAST_TIME}
+      maxWidth={Timeline.WIDTH}
+      lineHeight={Timeline.LINE_HEIGHT}
+      axisHeight={Timeline.AXIS_HEIGHT}
+      items={goals}
+      renderLine={({ item: goal, scaleDates }) => (
         <TimelineHorizontalLine
           {...{
-            index,
             scaleDates,
-            key: goal._id,
             entityId: goal._id,
-            color: goal.color,
-            title: goal.title,
-            startDate: goal.startDate,
-            endDate: goal.endDate,
-            points: getChartPoints(goal),
-            renderPopover: props => (
-              <GoalsChartActionsContainer
-                {...{
-                  ...props,
-                  goal,
-                  organizationId,
-                  canEditGoals,
-                }}
-              />
-            ),
+            onClickPoints: onEdit,
+            ...pick(['color', 'title', 'startDate', 'endDate', 'points'], goal),
           }}
         />
-      ))}
-    </TimelineChart>
-  );
-};
+      )}
+      renderTimelineList={({ item: goal }) => (
+        <ActionsMilestonesList
+          {...{ goal }}
+          onEditGoal={onEdit}
+        />
+      )}
+    />
+  </Fragment>
+);
 
 GoalsChart.propTypes = {
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
   timeScale: PropTypes.number.isRequired,
-  organizationId: PropTypes.string.isRequired,
-  canEditGoals: PropTypes.bool,
+  onEdit: PropTypes.func,
 };
 
 export default GoalsChart;
