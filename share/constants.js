@@ -146,47 +146,47 @@ export const DefaultStandardSections = [
   },
 ];
 
-export const DefaultStandardTypes = [
-  {
+export const DefaultStandardTypes = {
+  PROCESS: {
     title: 'Process',
     abbreviation: 'PRO',
   },
-  {
+  POLICY: {
     title: 'Policy',
     abbreviation: 'POL',
   },
-  {
+  CHECKLIST: {
     title: 'Checklist',
     abbreviation: 'CHK',
   },
-  {
+  COMPLIANCE_MANAGEMENT_OBJECTIVE: {
     title: 'Compliance management objective',
     abbreviation: 'CMO',
   },
-  {
+  COMPLIANCE_OBLIGATION: {
     title: 'Compliance obligation',
     abbreviation: 'COB',
   },
-  {
+  STANDARD_OPERATING_PROCEDURE: {
     title: 'Standard operating procedure',
     abbreviation: 'SOP',
   },
-  {
+  WORK_INSTRUCTION: {
     title: 'Work instruction',
     abbreviation: 'WORK',
   },
-  {
+  PRODUCT_SPECIFICATION: {
     title: 'Product specification',
     abbreviation: 'SPEC',
   },
-  {
+  RISK_CONTROL: {
     title: 'Risk control',
     abbreviation: 'RSC',
   },
-  {
+  SECTION_HEADER: {
     title: 'Section header',
   },
-];
+};
 
 export const DocChangesKinds = {
   DOC_CREATED: 1,

@@ -86,7 +86,7 @@ const OrganizationService = {
       });
     });
 
-    _.each(DefaultStandardTypes, ({ title, abbreviation }) => {
+    _.each(Object.values(DefaultStandardTypes), ({ title, abbreviation }) => {
       StandardsTypeService.insert({
         title,
         abbreviation,

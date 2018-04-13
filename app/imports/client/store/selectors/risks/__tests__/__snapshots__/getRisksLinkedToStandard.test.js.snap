@@ -4,8 +4,48 @@ exports[`getRisksLinkedToStandard matches snapshot 1`] = `
 Array [
   Object {
     "_id": 10,
-    "departmentsIds": Array [
-      16,
+    "analysis": Object {
+      "completedBy": Object {
+        "_id": 6,
+        "profile": Object {
+          "fullName": "",
+        },
+        "roles": Object {
+          "7": Array [
+            "create-update-delete-standards",
+            "view-team-actions",
+            "invite-users",
+            "delete-users",
+            "edit-user-roles",
+            "change-org-settings",
+            "complete-any-action",
+            "create-delete-goals",
+          ],
+        },
+      },
+      "executor": Object {
+        "_id": 6,
+        "profile": Object {
+          "fullName": "",
+        },
+        "roles": Object {
+          "7": Array [
+            "create-update-delete-standards",
+            "view-team-actions",
+            "invite-users",
+            "delete-users",
+            "edit-user-roles",
+            "change-org-settings",
+            "complete-any-action",
+            "create-delete-goals",
+          ],
+        },
+      },
+    },
+    "departments": Array [
+      Object {
+        "_id": 16,
+      },
     ],
     "originator": Object {
       "profile": Object {
@@ -17,8 +57,12 @@ Array [
         "fullName": "",
       },
     },
-    "standardsIds": Array [
-      1,
+    "standards": Array [
+      Object {
+        "_id": 1,
+        "sectionId": 8,
+        "typeId": 9,
+      },
     ],
     "type": Object {
       "_id": 15,
@@ -26,9 +70,25 @@ Array [
   },
   Object {
     "_id": 11,
-    "departmentsIds": Array [
-      16,
-      17,
+    "analysis": Object {
+      "completedBy": Object {
+        "profile": Object {
+          "fullName": "",
+        },
+      },
+      "executor": Object {
+        "profile": Object {
+          "fullName": "",
+        },
+      },
+    },
+    "departments": Array [
+      Object {
+        "_id": 16,
+      },
+      Object {
+        "_id": 17,
+      },
     ],
     "originator": Object {
       "profile": Object {
@@ -40,9 +100,17 @@ Array [
         "fullName": "",
       },
     },
-    "standardsIds": Array [
-      1,
-      2,
+    "standards": Array [
+      Object {
+        "_id": 1,
+        "sectionId": 8,
+        "typeId": 9,
+      },
+      Object {
+        "_id": 2,
+        "sectionId": 8,
+        "typeId": 9,
+      },
     ],
     "type": Object {
       "_id": 15,
@@ -50,7 +118,20 @@ Array [
   },
   Object {
     "_id": 13,
+    "analysis": Object {
+      "completedBy": Object {
+        "profile": Object {
+          "fullName": "",
+        },
+      },
+      "executor": Object {
+        "profile": Object {
+          "fullName": "",
+        },
+      },
+    },
     "deletedAt": 1513074233018,
+    "departments": Array [],
     "isDeleted": true,
     "originator": Object {
       "profile": Object {
@@ -62,8 +143,12 @@ Array [
         "fullName": "",
       },
     },
-    "standardsIds": Array [
-      1,
+    "standards": Array [
+      Object {
+        "_id": 1,
+        "sectionId": 8,
+        "typeId": 9,
+      },
     ],
     "type": undefined,
   },
