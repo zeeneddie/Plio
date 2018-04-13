@@ -9,6 +9,8 @@
           onWorkflowTypeChange=onWorkflowTypeChangeCb
           onStepTimeChange=onStepTimeChangeCb}}
 
+      <br />
+
       {{> OrgSettings_WorkflowDefault
           title="Major nonconformities, gains & risks"
           workflowType=workflowDefaults.majorProblem.workflowType
@@ -17,6 +19,8 @@
           onWorkflowTypeChange=onWorkflowTypeChangeCb
           onStepTimeChange=onStepTimeChangeCb}}
 
+      <br />
+
       {{> OrgSettings_WorkflowDefault
           title="Critical nonconformities, gains & risks"
           workflowType=workflowDefaults.criticalProblem.workflowType
@@ -24,6 +28,8 @@
           type="criticalProblem"
           onWorkflowTypeChange=onWorkflowTypeChangeCb
           onStepTimeChange=onStepTimeChangeCb}}
+
+      <br />
 
       {{#FormField label="Simplified completion of own actions"}}
         <div>
