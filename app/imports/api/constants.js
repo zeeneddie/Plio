@@ -49,13 +49,22 @@ export const StandardFilters = {
   3: { title: 'Standards', name: 'deleted', prepend: '' },
 };
 
+export const WorkInboxFilterIndexes = {
+  MY_CURRENT: 1,
+  TEAM_CURRENT: 2,
+  MY_COMPLETED: 3,
+  TEAM_COMPLETED: 4,
+  MY_DELETED: 5,
+  TEAM_DELETED: 6,
+};
+
 export const WorkInboxFilters = {
-  1: { title: 'Work', name: 'my current', prepend: '' },
-  2: { title: 'Work', name: 'team current', prepend: '' },
-  3: { title: 'Work', name: 'my completed', prepend: '' },
-  4: { title: 'Work', name: 'team completed', prepend: '' },
-  5: { name: 'My deleted actions' },
-  6: { name: 'Team deleted actions' },
+  [WorkInboxFilterIndexes.MY_CURRENT]: { title: 'Work', name: 'my current', prepend: '' },
+  [WorkInboxFilterIndexes.TEAM_CURRENT]: { title: 'Work', name: 'team current', prepend: '' },
+  [WorkInboxFilterIndexes.MY_COMPLETED]: { title: 'Work', name: 'my completed', prepend: '' },
+  [WorkInboxFilterIndexes.TEAM_COMPLETED]: { title: 'Work', name: 'team completed', prepend: '' },
+  [WorkInboxFilterIndexes.MY_DELETED]: { name: 'My deleted actions' },
+  [WorkInboxFilterIndexes.TEAM_DELETED]: { name: 'Team deleted actions' },
 };
 
 export const STANDARD_FILTER_MAP = {
