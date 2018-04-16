@@ -1,4 +1,5 @@
 import { batchActions } from 'redux-batched-actions';
+import { map, path } from 'ramda';
 
 import { extractIds } from '/imports/api/helpers';
 import {
@@ -22,8 +23,22 @@ import { goTo } from '../../../../utils/router';
 import { getCount } from '../../../../../api/standards/methods';
 import { canChangeRoles } from '../../../../../api/checkers';
 
-const getItems = ({ standards }, search) =>
-  extractIds(search(['title', 'description', 'status'], standards));
+const addTypeAbbrs = (standardTypesByIds = {}, standards = []) => map((standard = {}) => {
+  const { typeId, uniqueNumber = '' } = standard;
+  // allow to search by linked type's abbreviation and/or by unique number
+  const typeAbbr = path([typeId, 'abbreviation'], standardTypesByIds);
+  const typePrefix = `${typeAbbr}${uniqueNumber}`;
+  return {
+    ...standard,
+    typePrefix,
+  };
+}, standards);
+
+const getItems = ({ standards, standardTypesByIds }, search) =>
+  extractIds(search(
+    ['title', 'description', 'status', 'uniqueNumber', 'typePrefix'],
+    addTypeAbbrs(standardTypesByIds, standards)),
+  );
 
 const getActions = ids => [setFilteredStandards(ids)];
 
