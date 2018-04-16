@@ -1,9 +1,24 @@
 import { Template } from 'meteor/templating';
-import invoke from 'lodash.invoke';
+import { Blaze } from 'meteor/blaze';
+import { swal } from 'meteor/plio:bootstrap-sweetalert';
+import { map, T, identity, assoc, cond } from 'ramda';
 
-import { insert, update, remove } from '/imports/api/standards-types/methods.js';
-import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
-import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { insert, update, remove } from '../../../../../../../api/standards-types/methods';
+import {
+  isStandardOperatingProcedure,
+  isSectionHeader,
+} from '../../../../../../../api/standards-types/helpers';
+import { OrganizationSettingsHelp } from '../../../../../../../api/help-messages';
+import { ALERT_AUTOHIDE_TIME } from '../../../../../../../api/constants';
+
+const mapStandardTypes = map(cond([
+  // Disable inputs for standard operating procedure
+  [isStandardOperatingProcedure, assoc('disabled', true)],
+  // Hide abbreviation input for section header
+  [isSectionHeader, assoc('showAbbreviation', false)],
+  // don't do anything
+  [T, identity],
+]));
 
 Template.OrgSettings_StandardTypes.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
@@ -12,11 +27,11 @@ Template.OrgSettings_StandardTypes.viewmodel({
   },
   _lText: 'Standards types',
   _rText() {
-    return invoke(this.standardsTypes(), 'count');
+    return this.standardsTypes().count();
   },
   helpText: OrganizationSettingsHelp.standardTypes,
-
   placeholder: 'Standard type',
+  items: mapStandardTypes,
   onChangeCb() {
     return this.onChange.bind(this);
   },

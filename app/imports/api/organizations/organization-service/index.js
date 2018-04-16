@@ -92,6 +92,7 @@ const OrganizationService = {
         abbreviation,
         organizationId,
         createdBy: ownerId,
+        isDefault: true,
       });
     });
 
