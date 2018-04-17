@@ -173,7 +173,7 @@ const MultiValue = compose(
 
 const enhance = compose(
   branch(
-    prop('loadOptionsOnFocus'),
+    prop('loadOptionsOnOpen'),
     compose(
       withStateHandlers(
         ({ options = [], isLoading = false }) => ({ options, isLoading }),
@@ -183,22 +183,22 @@ const enhance = compose(
         },
       ),
       withHandlers({
-        onFocus: ({
+        onOpen: ({
           startFetchingOptions,
           endFetchingOptions,
-          onFocus,
+          onOpen,
           loadOptions,
-        }) => (e) => {
+        }) => () => {
           startFetchingOptions();
 
           loadOptions().then(({ options }) => {
             endFetchingOptions(options);
           }).catch(() => endFetchingOptions([]));
 
-          if (onFocus) onFocus(e);
+          if (onOpen) onOpen();
         },
       }),
-      omitProps(['loadOptions', 'loadOptionsOnFocus']),
+      omitProps(['loadOptions', 'loadOptionsOnOpen']),
     ),
     identity,
   ),

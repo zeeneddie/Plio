@@ -12,7 +12,7 @@ export default namedCompose('OrgUsersSelectInputContainer')(
   setPropTypes({ organizationId: PropTypes.string.isRequired }),
   defaultProps({
     component: SelectInput,
-    loadOptionsOnFocus: true,
+    loadOptionsOnOpen: true,
   }),
   withHandlers({
     loadOptions: ({ organizationId }) => () => client.query({

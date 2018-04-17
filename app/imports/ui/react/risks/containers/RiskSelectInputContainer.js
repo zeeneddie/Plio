@@ -15,7 +15,7 @@ export default namedCompose('RiskSelectInputContainer')(
   defaultProps({
     component: SelectInput,
     without: [],
-    loadOptionsOnFocus: true,
+    loadOptionsOnOpen: true,
   }),
   withHandlers({
     loadOptions: ({ organizationId, risks }) => () => client.query({

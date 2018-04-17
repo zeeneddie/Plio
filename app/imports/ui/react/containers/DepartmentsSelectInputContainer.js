@@ -11,7 +11,7 @@ export default namedCompose('DepartmentsSelectInputContainer')(
   setPropTypes({ organizationId: PropTypes.string.isRequired }),
   defaultProps({
     component: SelectInput,
-    loadOptionsOnFocus: true,
+    loadOptionsOnOpen: true,
     backspaceRemoves: false,
   }),
   withHandlers({

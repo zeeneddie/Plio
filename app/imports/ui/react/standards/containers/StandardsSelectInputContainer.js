@@ -13,7 +13,7 @@ export default namedCompose('StandardsSelectInputContainer')(
   }),
   defaultProps({
     component: SelectInput,
-    loadOptionsOnFocus: true,
+    loadOptionsOnOpen: true,
     backspaceRemoves: false,
   }),
   withHandlers({

@@ -22,7 +22,7 @@ const ActionEditForm = ({
         Linked to
         <Field
           multi
-          loadOptionsOnFocus
+          loadOptionsOnOpen
           name="linkedTo"
           placeholder="Linked to"
           component={SelectInputAdapter}

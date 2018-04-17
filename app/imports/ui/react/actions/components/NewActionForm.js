@@ -36,7 +36,7 @@ const NewActionForm = ({
       <FormField>
         Existing action
         <Field
-          loadOptionsOnFocus
+          loadOptionsOnOpen
           name="action"
           placeholder="Existing action"
           component={SelectInputAdapter}

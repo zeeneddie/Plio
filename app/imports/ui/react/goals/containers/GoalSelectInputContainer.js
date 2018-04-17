@@ -13,7 +13,7 @@ export default namedCompose('GoalSelectInputContainer')(
   }),
   defaultProps({
     component: SelectInput,
-    loadOptionsOnFocus: true,
+    loadOptionsOnOpen: true,
   }),
   withHandlers({
     loadOptions: ({ organizationId }) => () => client.query({
