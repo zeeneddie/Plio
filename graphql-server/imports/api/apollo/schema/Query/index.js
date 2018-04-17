@@ -6,6 +6,7 @@ import Risk from './Risk.graphql';
 import Standard from './Standard.graphql';
 import Department from './Department.graphql';
 import Action from './Action.graphql';
+import Milestone from './Milestone.graphql';
 
 export default [
   User,
@@ -16,4 +17,5 @@ export default [
   Standard,
   Department,
   Action,
+  Milestone,
 ];

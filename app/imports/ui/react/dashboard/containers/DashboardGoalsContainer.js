@@ -59,7 +59,11 @@ export default namedCompose('DashboardGoalsContainer')(
       isOpen: false,
       isAddModalOpen: false,
       isEditModalOpen: false,
+      isMilestoneModalOpen: false,
+      isActionModalOpen: false,
       activeGoal: null,
+      activeMilestone: null,
+      activeAction: null,
     },
   }),
   graphql(Query.DASHBOARD_GOALS, {
@@ -90,6 +94,8 @@ export default namedCompose('DashboardGoalsContainer')(
           isOpen,
           isAddModalOpen,
           isEditModalOpen,
+          isMilestoneModalOpen,
+          isActionModalOpen,
         },
         organizationId,
         updateUI,
@@ -99,6 +105,8 @@ export default namedCompose('DashboardGoalsContainer')(
       isOpen,
       isAddModalOpen,
       isEditModalOpen,
+      isMilestoneModalOpen,
+      isActionModalOpen,
       loading,
       totalCount,
       networkStatus,
@@ -129,6 +137,10 @@ export default namedCompose('DashboardGoalsContainer')(
         updateUI('isAddModalOpen', !isAddModalOpen);
       },
       toggleEditModal: () => updateUI('isEditModalOpen', !isEditModalOpen),
+      toggleMilestoneModal: () =>
+        updateUI('isMilestoneModalOpen', !isMilestoneModalOpen),
+      toggleActionModal: () =>
+        updateUI('isActionModalOpen', !isActionModalOpen),
     }),
   }),
   withPreloaderPage(

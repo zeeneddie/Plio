@@ -3270,7 +3270,7 @@ pify@^3.0.0:
 
 "plio-util@https://github.com/Pliohub/plio-util.git#i870-goals-actions":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#4154ff63db439032eef22f00d062946783117eda"
+  resolved "https://github.com/Pliohub/plio-util.git#c3a1ca90cb2d40e795cd3dc643bda34492d44dc8"
 
 pluralize@^2.0.0:
   version "2.0.0"

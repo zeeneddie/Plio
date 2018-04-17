@@ -58,7 +58,7 @@ const MilestoneForm = ({
     </FormField>
     {!!status && (
       <FormField>
-        {null}
+        Status
         <StyledLabel>
           <MilestoneSymbol {...{ status, color }} />
           <StyledSpan>{MilestoneStatuses[status]}</StyledSpan>

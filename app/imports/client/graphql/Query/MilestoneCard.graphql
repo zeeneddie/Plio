@@ -1,0 +1,9 @@
+#import "../Fragment/MilestoneCard.graphql"
+
+query MilestoneCard($_id: ID!) {
+  milestone(_id: $_id) {
+    milestone {
+      ...MilestoneCard
+    }
+  }
+}

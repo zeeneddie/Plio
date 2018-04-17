@@ -18,12 +18,8 @@ import {
 } from '../../helpers';
 import { getPublishCompositeOrganizationUsers } from '../../../server/helpers/pub-helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
-import {
-  getActionsWithLimitedFields,
-} from '../../actions/utils';
-import {
-  getProblemsWithLimitedFields,
-} from '../../problems/utils';
+import { getActionsWithLimitedFields } from '../../actions/utils';
+import { getProblemsWithLimitedFields } from '../../problems/utils';
 import {
   createNonConformityCardPublicationTree,
   getNCOtherFiles,

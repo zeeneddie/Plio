@@ -2,7 +2,7 @@ import connectUI from 'redux-ui';
 import { graphql } from 'react-apollo';
 import { Cache } from 'plio-util';
 import { propEq } from 'ramda';
-import { compose, withHandlers, onlyUpdateForKeys, branch } from 'recompose';
+import { compose, withHandlers, onlyUpdateForKeys, branch, withProps } from 'recompose';
 import { Mutation, Fragment } from '../../../../client/graphql';
 import { swal } from '../../../../client/util';
 import { updateGoalFragment } from '../../../../client/apollo';
@@ -11,11 +11,21 @@ import ChartActions from '../components/ChartActions';
 const enhance = compose(
   connectUI(),
   onlyUpdateForKeys(['_id', 'title', 'goalId']),
+  withProps({
+    deleteLabel: 'Delete milestone',
+    editLabel: 'Edit milestone',
+  }),
   withHandlers({
-    onEdit: ({ goalId, updateUI, togglePopover }) => () => {
+    onEdit: ({
+      _id,
+      goalId,
+      updateUI,
+      togglePopover,
+    }) => () => {
       togglePopover();
       updateUI({
-        isEditModalOpen: true,
+        isMilestoneModalOpen: true,
+        activeMilestone: _id,
         activeGoal: goalId,
       });
     },

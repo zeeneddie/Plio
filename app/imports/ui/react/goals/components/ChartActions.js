@@ -17,26 +17,29 @@ const ChartActions = ({
   onEdit,
   onDelete,
   onComplete,
+  editLabel = 'Edit',
+  completeLabel = 'Mark as Complete',
+  deleteLabel = 'Delete',
 }) => (
   <StyledListGroup>
     {onComplete && (
       <ListGroupItem tag="a" onClick={onComplete} action>
         <Icon name="check-square-o" margin="right" />
-        Mark as Complete
+        {completeLabel}
       </ListGroupItem>
     )}
 
     {onEdit && (
       <ListGroupItem tag="a" onClick={onEdit} action>
         <Icon name="edit" margin="right" />
-        Edit
+        {editLabel}
       </ListGroupItem>
     )}
 
     {onDelete && (
       <ListGroupItem tag="a" onClick={onDelete} action>
         <Icon name="trash-o" margin="right" />
-        Delete
+        {deleteLabel}
       </ListGroupItem>
     )}
   </StyledListGroup>
@@ -46,6 +49,9 @@ ChartActions.propTypes = {
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
   onComplete: PropTypes.func,
+  editLabel: PropTypes.string,
+  completeLabel: PropTypes.string,
+  deleteLabel: PropTypes.string,
 };
 
 export default ChartActions;

@@ -1,18 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { reject, view } from 'ramda';
-import { lenses } from 'plio-util';
-import { withProps, compose, withHandlers } from 'recompose';
 import { Collapse, Button } from 'reactstrap';
 import { TimelineListItem, ToggleAngleIcon } from '../../components';
-import withStateToggle from '../../helpers/withStateToggle';
 
 const ToggleButtonWrapper = styled.div`
   text-align: center;
   font-weight: 1000;
   span {
-    cursor: ${({ isClickable }) => isClickable ? 'pointer' : 'auto'};
+    cursor: pointer;
   }
 `;
 
@@ -24,28 +20,19 @@ const ActionPanel = styled.div`
   }
 `;
 
-const enhance = compose(
-  withStateToggle(false, 'isOpen', 'toggle'),
-  withProps(({ goal }) => ({
-    items: reject(view(lenses.isCompleted), goal.points),
-    title: goal.title,
-  })),
-  withHandlers({
-    onEditGoal: ({ onEditGoal, goal }) => () => onEditGoal(goal._id),
-  }),
-);
-
 const ActionsMilestonesList = ({
   items,
   isOpen,
   toggle,
   title,
   onEditGoal,
+  onAddAction,
+  onAddMilestone,
 }) => (
   <Fragment>
-    <ToggleButtonWrapper isClickable={items.length}>
+    <ToggleButtonWrapper>
       <span onClick={toggle}>
-        {title} {!!items.length && <ToggleAngleIcon {...{ isOpen }} />}
+        {title} <ToggleAngleIcon {...{ isOpen }} />
       </span>
     </ToggleButtonWrapper>
 
@@ -55,8 +42,8 @@ const ActionsMilestonesList = ({
       ))}
 
       <ActionPanel>
-        <Button color="link">Add action</Button>
-        <Button color="link">Add milestone</Button>
+        <Button color="link" onClick={onAddAction}>Add action</Button>
+        <Button color="link" onClick={onAddMilestone}>Add milestone</Button>
         <Button color="link" onClick={onEditGoal}>Edit key goal</Button>
       </ActionPanel>
     </Collapse>
@@ -64,11 +51,13 @@ const ActionsMilestonesList = ({
 );
 
 ActionsMilestonesList.propTypes = {
-  onEditGoal: PropTypes.func.isRequired,
   items: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired,
+  onEditGoal: PropTypes.func,
+  onAddAction: PropTypes.func,
+  onAddMilestone: PropTypes.func,
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
 };
 
-export default enhance(ActionsMilestonesList);
+export default ActionsMilestonesList;

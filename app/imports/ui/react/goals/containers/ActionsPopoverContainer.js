@@ -1,7 +1,7 @@
 import connectUI from 'redux-ui';
 import { propEq, mergeDeepLeft } from 'ramda';
 import { graphql } from 'react-apollo';
-import { compose, withHandlers, onlyUpdateForKeys, branch } from 'recompose';
+import { compose, withHandlers, onlyUpdateForKeys, branch, withProps } from 'recompose';
 import { Mutation, Fragment } from '../../../../client/graphql';
 import { swal } from '../../../../client/util';
 import { deleteActionFromGoalFragment } from '../../../../client/apollo';
@@ -16,11 +16,21 @@ const {
 const enhance = compose(
   connectUI(),
   onlyUpdateForKeys(['_id', 'title', 'goalId']),
+  withProps({
+    deleteLabel: 'Delete action',
+    editLabel: 'Edit action',
+  }),
   withHandlers({
-    onEdit: ({ goalId, updateUI, togglePopover }) => () => {
+    onEdit: ({
+      _id,
+      goalId,
+      updateUI,
+      togglePopover,
+    }) => () => {
       togglePopover();
       updateUI({
-        isEditModalOpen: true,
+        isActionModalOpen: true,
+        activeAction: _id,
         activeGoal: goalId,
       });
     },
@@ -62,7 +72,15 @@ const enhance = compose(
             variables: {
               input: { _id },
             },
-            update: (proxy, { data: { [COMPLETE_ACTION.name]: { action } } }) => (
+            update: (proxy, { data: { [COMPLETE_ACTION.name]: { action } } }) => {
+              updateActionFragment(
+                mergeDeepLeft(action),
+                {
+                  id: _id,
+                  fragment: Fragment.ACTION_CARD,
+                },
+                proxy,
+              );
               updateActionFragment(
                 mergeDeepLeft(action),
                 {
@@ -70,8 +88,8 @@ const enhance = compose(
                   fragment: Fragment.DASHBOARD_ACTION,
                 },
                 proxy,
-              )
-            ),
+              );
+            },
           });
         },
       }),

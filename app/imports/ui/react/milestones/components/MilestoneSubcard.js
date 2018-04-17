@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { EntitySubcard } from '../../components';
 import { getFormattedDate } from '../../../../share/helpers';
-import MilestoneForm from './MilestoneForm';
+import MilestoneEditFormContainer from '../containers/MilestoneEditFormContainer';
 import MilestoneSymbol from './MilestoneSymbol';
 
 const StyledHeader = styled.div`
@@ -29,9 +29,7 @@ const MilestoneSubcard = ({
   loading,
   linkedTo,
   color,
-  onChangeTitle,
-  onChangeDescription,
-  onChangeCompletionTargetDate,
+  mutateWithState,
 }) => (
   <EntitySubcard
     entity={milestone}
@@ -55,13 +53,11 @@ const MilestoneSubcard = ({
       error,
     }}
   >
-    <MilestoneForm
-      status={milestone.status}
+    <MilestoneEditFormContainer
       {...{
+        milestone,
+        mutateWithState,
         linkedTo,
-        onChangeTitle,
-        onChangeDescription,
-        onChangeCompletionTargetDate,
         color,
       }}
     />
@@ -78,9 +74,7 @@ MilestoneSubcard.propTypes = {
   error: PropTypes.string,
   linkedTo: PropTypes.object.isRequired,
   color: PropTypes.string,
-  onChangeTitle: PropTypes.func.isRequired,
-  onChangeDescription: PropTypes.func.isRequired,
-  onChangeCompletionTargetDate: PropTypes.func.isRequired,
+  mutateWithState: PropTypes.func,
 };
 
 export default MilestoneSubcard;

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
-import { prop, propOr } from 'ramda';
+import { prop } from 'ramda';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { VictoryChart, VictoryAxis } from 'victory';
 import { debounceHandlers } from '../../helpers';
@@ -13,22 +13,26 @@ const TimelineChartWrapper = styled.div`
   position: relative;
 `;
 
-const CurrentDateLine = styled.div`
+const CurrentDateLine = styled.div.attrs({
+  style: ({ partOfPastTime }) => ({
+    left: `${partOfPastTime * 100}%`,
+  }),
+})`
   height: 100%;
   width: 2px;
   position: absolute;
   background: #d5d5d5;
-  ${({ partOfPastTime }) => css`
-    left: ${partOfPastTime * 100}%
-  `}
 `;
 
-const TimelineListWrapper = styled.div`
+const TimelineListWrapper = styled.div.attrs({
+  style: ({ left, width }) => ({
+    left: `${left || 0}%`,
+    width: width ? `${width}%` : 'auto',
+  }),
+})`
   position: relative;
   white-space: nowrap;
   top: -7px;
-  left: ${propOr(0, 'left')}%;
-  width: ${propOr('auto', 'width')}%;
   ${({ float }) => float && css`
     float: ${float};
     & > div {

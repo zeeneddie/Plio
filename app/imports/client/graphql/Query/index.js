@@ -1,4 +1,5 @@
 import DASHBOARD_GOALS from './DashboardGoals.graphql';
+import DASHBOARD_GOAL from './DashboardGoal.graphql';
 import COMPLETED_DELETED_GOALS from './ComplatedDeletedGoals.graphql';
 import ORGANIZATION_USERS from './OrganizationUsers.graphql';
 import GOAL_CARD from './GoalCard.graphql';
@@ -14,9 +15,12 @@ import GOAL_NOTIFY_CARD from './GoalNotifyCard.graphql';
 import GOAL_ACTIONS_CARD from './GoalActionsCard.graphql';
 import ACTION_LIST from './ActionList.graphql';
 import GOAL_LIST from './GoalList.graphql';
+import MILESTONE_CARD from './MilestoneCard.graphql';
+import ACTION_CARD from './ActionCard.graphql';
 
 export default {
   DASHBOARD_GOALS,
+  DASHBOARD_GOAL,
   COMPLETED_DELETED_GOALS,
   ORGANIZATION_USERS,
   GOAL_CARD,
@@ -32,4 +36,6 @@ export default {
   GOAL_ACTIONS_CARD,
   ACTION_LIST,
   GOAL_LIST,
+  MILESTONE_CARD,
+  ACTION_CARD,
 };

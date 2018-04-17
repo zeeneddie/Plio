@@ -17,6 +17,7 @@ import { Pull, TextAlign } from './Utility';
 const FLUSH_TIMEOUT = 700;
 const enhance = withToggle(false);
 
+// TODO refactoring of new form
 class EntityManagerSubcard extends Component {
   constructor(props, context) {
     super(props, context);

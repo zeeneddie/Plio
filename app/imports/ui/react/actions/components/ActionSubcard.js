@@ -3,7 +3,6 @@ import React, { Fragment } from 'react';
 
 import { getDisplayDate, getClassByStatus } from '../../../../api/actions/helpers';
 import { EntitySubcard, Pull, Icon } from '../../components';
-import ActionEditForm from './ActionEditForm';
 
 const ActionSubcard = ({
   action,
@@ -12,6 +11,7 @@ const ActionSubcard = ({
   onDelete,
   loading,
   error,
+  render,
   ...props
 }) => (
   <EntitySubcard
@@ -43,7 +43,7 @@ const ActionSubcard = ({
       onDelete,
     }}
   >
-    <ActionEditForm {...{ ...props, ...action }} />
+    {render(props)}
   </EntitySubcard>
 );
 
@@ -54,6 +54,7 @@ ActionSubcard.propTypes = {
   onDelete: PropTypes.func,
   loading: PropTypes.bool,
   error: PropTypes.string,
+  render: PropTypes.func,
 };
 
 export default ActionSubcard;

@@ -13,6 +13,8 @@ import {
   GoalEditModalContainer,
   CompletedDeletedGoalsContainer,
 } from '../../goals';
+import { MilestoneModalContainer } from '../../milestones';
+import { GeneralActionModalContainer } from '../../actions';
 
 const DashboardGoals = ({
   totalCount,
@@ -29,6 +31,10 @@ const DashboardGoals = ({
   deletedItemsPerRow,
   timeScale,
   canEditGoals,
+  isMilestoneModalOpen,
+  toggleMilestoneModal,
+  isActionModalOpen,
+  toggleActionModal,
 }) => (
   <DashboardStatsExpandable
     items={goals}
@@ -67,11 +73,23 @@ const DashboardGoals = ({
       />
     )}
     {!!goals.length && (
-      <GoalEditModalContainer
-        isOpen={isEditModalOpen}
-        toggle={toggleEditModal}
-        {...{ organizationId, canEditGoals }}
-      />
+      <Fragment>
+        <GoalEditModalContainer
+          isOpen={isEditModalOpen}
+          toggle={toggleEditModal}
+          {...{ organizationId, canEditGoals }}
+        />
+        <MilestoneModalContainer
+          isOpen={isMilestoneModalOpen}
+          toggle={toggleMilestoneModal}
+          {...{ organizationId }}
+        />
+        <GeneralActionModalContainer
+          isOpen={isActionModalOpen}
+          toggle={toggleActionModal}
+          {...{ organizationId, user }}
+        />
+      </Fragment>
     )}
   </DashboardStatsExpandable>
 );
@@ -89,6 +107,10 @@ DashboardGoals.propTypes = {
   isEditModalOpen: PropTypes.bool.isRequired,
   toggleEditModal: PropTypes.func.isRequired,
   timeScale: PropTypes.number.isRequired,
+  isMilestoneModalOpen: PropTypes.bool.isRequired,
+  toggleMilestoneModal: PropTypes.func.isRequired,
+  isActionModalOpen: PropTypes.bool.isRequired,
+  toggleActionModal: PropTypes.func.isRequired,
   limit: PropTypes.number,
   canEditGoals: PropTypes.bool,
   deletedItemsPerRow: PropTypes.number,

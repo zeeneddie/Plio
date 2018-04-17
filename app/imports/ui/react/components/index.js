@@ -35,3 +35,4 @@ export { default as SubcardBody } from './SubcardBody';
 export { default as Rect } from './Rect';
 export { default as Diamond } from './Diamond';
 export { default as StylessPopover } from './StylessPopover';
+export { default as EntityModal } from './EntityModal';

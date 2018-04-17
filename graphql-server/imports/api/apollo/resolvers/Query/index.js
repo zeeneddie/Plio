@@ -6,6 +6,7 @@ import Risk from './Risk';
 import Standard from './Standard';
 import Department from './Department';
 import Action from './Action';
+import Milestone from './Milestone';
 
 export default {
   ...User,
@@ -16,4 +17,5 @@ export default {
   ...Standard,
   ...Department,
   ...Action,
+  ...Milestone,
 };

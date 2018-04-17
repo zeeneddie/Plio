@@ -3,8 +3,7 @@ import React from 'react';
 import { Form } from 'react-final-form';
 import { pick } from 'ramda';
 
-import { MilestonesSubcard, MilestoneForm } from '../../milestones';
-import GoalMilestoneSubcardContainer from '../containers/GoalMilestoneSubcardContainer';
+import { MilestonesSubcard, MilestoneSubcardContainer, MilestoneForm } from '../../milestones';
 
 const GoalMilestonesSubcard = ({
   milestones = [],
@@ -27,7 +26,7 @@ const GoalMilestonesSubcard = ({
           'completionComment',
         ], entity)}
         render={() => (
-          <GoalMilestoneSubcardContainer
+          <MilestoneSubcardContainer
             milestone={entity}
             {...{
               isOpen,

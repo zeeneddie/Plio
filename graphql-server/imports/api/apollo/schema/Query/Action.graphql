@@ -3,6 +3,10 @@ type ActionsQueryPayload {
   actions: [Action]!
 }
 
+type ActionQueryPayload {
+  action: Action
+}
+
 input ActionsQueryInput {
   organizationId: ID!
   isDeleted: Boolean
@@ -11,4 +15,5 @@ input ActionsQueryInput {
 
 type Query {
   actions(input: ActionsQueryInput!): ActionsQueryPayload
+  action(_id: ID!): ActionQueryPayload
 }

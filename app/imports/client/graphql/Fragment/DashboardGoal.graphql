@@ -8,6 +8,7 @@ fragment DashboardGoal on Goal {
   endDate
   color
   priority
+  sequentialId
   milestones {
     _id
     title

@@ -1,8 +1,8 @@
 import { compose, flattenProp } from 'recompose';
 import { withMutationState } from '../../helpers';
-import ActionSubcard from '../components/ActionSubcard';
+import MilestoneSubcard from '../components/MilestoneSubcard';
 
 export default compose(
   withMutationState(),
   flattenProp('mutation'),
-)(ActionSubcard);
+)(MilestoneSubcard);
