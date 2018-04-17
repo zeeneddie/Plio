@@ -46,6 +46,11 @@ export const SelectWrapper = styled.div`
       border-width: 2.5px 6px 6px;
     }
   }
+  .Select-loading-zone {
+    position: absolute;
+    top: 6px;
+    left: 10px;
+  }
   .Select-option,
   .Select-create-option-placeholder {
     &.is-selected {
