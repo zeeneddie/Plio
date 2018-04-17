@@ -3268,7 +3268,7 @@ pify@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
-"plio-util@https://github.com/Pliohub/plio-util.git#i870-goals-actions":
+"plio-util@https://github.com/Pliohub/plio-util.git#devel":
   version "0.2.2"
   resolved "https://github.com/Pliohub/plio-util.git#c3a1ca90cb2d40e795cd3dc643bda34492d44dc8"
 

@@ -1,13 +1,14 @@
+/* global $ */
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Organizations } from '/imports/share/collections/organizations';
-import { isMobileRes } from '/imports/api/checkers';
-import { flattenObjects } from '/imports/api/helpers';
-import { MyPreferencesHelp } from '/imports/api/help-messages';
-import { userLogout } from '/imports/client/store/actions/globalActions';
-import { UserPresenceStatuses } from '../../../../../api/constants';
+import { Organizations } from '../../../../../share/collections/organizations';
+import { isMobileRes } from '../../../../../api/checkers';
+import { flattenObjects } from '../../../../../api/helpers';
+import { MyPreferencesHelp } from '../../../../../api/help-messages';
+import { userLogout } from '../../../../../client/store/actions/globalActions';
+import { UserPresenceStatuses, SUPPORT_FORUM_URL } from '../../../../../api/constants';
 import { client } from '../../../../../client/apollo';
 
 const STATUSES = [
@@ -60,6 +61,13 @@ Template.UserMenu.viewmodel({
       logout: {
         onClick: this.logout.bind(this),
       },
+      helpCenter: {
+        href: getPath('helpDocs'),
+      },
+      supportForum: {
+        href: SUPPORT_FORUM_URL,
+        target: '_blank',
+      },
     };
 
     const status = (index) => {
@@ -87,9 +95,8 @@ Template.UserMenu.viewmodel({
     const user = Meteor.user();
     const currentStatus = STATUSES[index].text.toLowerCase() ||
                           user.statusDefault;
-    const statusDefault = user.statusDefault;
 
-    return currentStatus === statusDefault;
+    return currentStatus === user.statusDefault;
   },
   getActiveClass() {
     const user = Meteor.user();
@@ -105,13 +112,13 @@ Template.UserMenu.viewmodel({
     e.preventDefault();
 
     const status = $(e.target).text().trim().toLowerCase();
-    if (status != Meteor.user().statusDefault) {
+    if (status !== Meteor.user().statusDefault) {
       Meteor.call('UserPresence:setDefaultStatus', status);
     }
   },
   async onInviteClick(event) {
     event.preventDefault();
-    const orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
+    const orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 0);
     const organizationId = Organizations.findOne({ serialNumber: orgSerialNumber })._id;
 
     await import('../../../userdirectory/includes/invite');

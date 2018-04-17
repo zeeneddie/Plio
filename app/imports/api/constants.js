@@ -310,3 +310,5 @@ export const Timeline = {
 
 export const GQ_ERROR_MESSAGE_PREFIX = 'GraphQL error: ';
 export const DEFAULT_ERROR_MESSAGE = 'Internal server error';
+
+export const SUPPORT_FORUM_URL = 'https://plio.slack.com';
