@@ -11,6 +11,7 @@ import {
 } from '../../../api/constants';
 import ModalHeader from './ModalHeader';
 import ModalBody from './ModalBody';
+import { handleGQError } from '../../../api/handleGQError';
 
 export const LOADING = '@@MODAL/LOADING';
 export const ERROR = '@@MODAL/ERROR';
@@ -27,7 +28,7 @@ export const callAsync = asyncAction => (dispatch) => {
       return res;
     })
     .catch((err) => {
-      dispatch(setError(err.message || 'Internal server error'));
+      dispatch(setError(handleGQError(err)));
       return err;
     });
 };

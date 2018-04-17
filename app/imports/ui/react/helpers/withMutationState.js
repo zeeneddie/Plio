@@ -1,7 +1,8 @@
 import { compose, withHandlers, withState } from 'recompose';
+import { handleGQError } from '../../../api/handleGQError';
 
 export default ({
-  handleError = err => err.message,
+  handleError = handleGQError,
 } = {}) => compose(
   withState(
     'mutation',

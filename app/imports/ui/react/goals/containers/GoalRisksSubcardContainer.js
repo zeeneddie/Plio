@@ -11,6 +11,7 @@ import { swal } from '../../../../client/util';
 import { updateGoalFragment } from '../../../../client/apollo';
 import { ProblemMagnitudes } from '../../../../share/constants';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { handleGQError } from '../../../../api/handleGQError';
 
 export default namedCompose('GoalRisksSubcardContainer')(
   pure,
@@ -87,8 +88,8 @@ export default namedCompose('GoalRisksSubcardContainer')(
           const { linkRiskToGoal: { risk } } = data;
 
           return flush(risk);
-        } catch ({ message }) {
-          return { [FORM_ERROR]: message };
+        } catch (error) {
+          return { [FORM_ERROR]: handleGQError(error) };
         }
       },
     }),
@@ -143,8 +144,8 @@ export default namedCompose('GoalRisksSubcardContainer')(
           const { createRisk: { risk } } = data;
 
           return flush(risk);
-        } catch ({ message }) {
-          return { [FORM_ERROR]: message };
+        } catch (error) {
+          return { [FORM_ERROR]: handleGQError(error) };
         }
       },
     }),

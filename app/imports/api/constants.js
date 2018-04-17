@@ -307,3 +307,6 @@ export const Timeline = {
   AXIS_HEIGHT: 20,
   LIST_ICON_SIZE: 11,
 };
+
+export const GQ_ERROR_MESSAGE_PREFIX = 'GraphQL error: ';
+export const DEFAULT_ERROR_MESSAGE = 'Internal server error';

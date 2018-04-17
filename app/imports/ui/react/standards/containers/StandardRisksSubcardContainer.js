@@ -18,6 +18,7 @@ import { Mutation } from '../../../../client/graphql';
 import { swal } from '../../../../client/util';
 import RisksSubcard from '../../risks/components/RisksSubcard';
 import { getUserWithFullName } from '../../../../api/users/helpers';
+import { handleGQError } from '../../../../api/handleGQError';
 
 const getCurrentUserWithFullName = compose(getUserWithFullName, getCurrentUser);
 
@@ -59,8 +60,8 @@ export default namedCompose('StandardRisksSubcardContainer')(
           const { linkStandardToRisk: { risk } } = data;
 
           return flush(risk);
-        } catch ({ message }) {
-          return { [FORM_ERROR]: message };
+        } catch (error) {
+          return { [FORM_ERROR]: handleGQError(error) };
         }
       },
     }),
@@ -106,8 +107,8 @@ export default namedCompose('StandardRisksSubcardContainer')(
           const { createRisk: { risk } } = data;
 
           return flush(risk);
-        } catch ({ message }) {
-          return { [FORM_ERROR]: message };
+        } catch (error) {
+          return { [FORM_ERROR]: handleGQError(error) };
         }
       },
     }),

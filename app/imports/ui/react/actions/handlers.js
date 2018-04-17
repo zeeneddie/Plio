@@ -6,6 +6,7 @@ import { Mutation, Fragment, Query } from '../../../client/graphql';
 import { updateGoalFragment } from '../../../client/apollo/utils';
 import { client } from '../../../client/apollo';
 import { DocumentTypes, ActionTypes } from '../../../share/constants';
+import { handleGQError } from '../../../api/handleGQError';
 
 const {
   DELETE_ACTION,
@@ -69,12 +70,12 @@ export const createGeneralAction = ({
       return flush(action);
     }
     return data;
-  } catch ({ message }) {
-    return { [FORM_ERROR]: message };
+  } catch (error) {
+    return { [FORM_ERROR]: handleGQError(error) };
   }
 };
 
-export const onDelete = ({ [DELETE_ACTION.name]: mutate, goalId }) => (
+export const onDelete = ({ [DELETE_ACTION.name]: mutate, goalId }) =>
   (e, { entity: { _id, title } }) => (
     swal.promise({
       text: `The action "${title}" will be deleted`,
@@ -90,8 +91,7 @@ export const onDelete = ({ [DELETE_ACTION.name]: mutate, goalId }) => (
         fragment: Fragment.GOAL_CARD,
       }),
     }))
-  )
-);
+  );
 
 export const linkGoalToAction = ({
   goalId,
@@ -133,8 +133,8 @@ export const linkGoalToAction = ({
       return flush(action);
     }
     return data;
-  } catch ({ message }) {
-    return { [FORM_ERROR]: message };
+  } catch (error) {
+    return { [FORM_ERROR]: handleGQError(error) };
   }
 };
 

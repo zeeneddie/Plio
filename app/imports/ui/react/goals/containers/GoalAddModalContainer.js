@@ -8,6 +8,7 @@ import { moveGoalWithinCacheAfterCreating } from '../../../../client/apollo/util
 import { namedCompose } from '../../helpers';
 import GoalAddModal from '../components/GoalAddModal';
 import { Mutation } from '../../../../client/graphql';
+import { handleGQError } from '../../../../api/handleGQError';
 
 export default namedCompose('GoalAddModalContainer')(
   withProps(({ owner }) => ({
@@ -60,8 +61,8 @@ export default namedCompose('GoalAddModalContainer')(
               moveGoalWithinCacheAfterCreating(organizationId, goal, proxy),
           });
           return isOpen && toggle();
-        } catch ({ message }) {
-          return { [FORM_ERROR]: message };
+        } catch (error) {
+          return { [FORM_ERROR]: handleGQError(error) };
         }
       },
     }),

@@ -12,6 +12,7 @@ import { DocumentTypes } from '../../../../share/constants';
 import { updateGoalFragment } from '../../../../client/apollo/utils';
 import { swal } from '../../../../client/util';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { handleGQError } from '../../../../api/handleGQError';
 
 export default namedCompose('GoalLessonsSubcardContainer')(
   pure,
@@ -100,8 +101,8 @@ export default namedCompose('GoalLessonsSubcardContainer')(
           const { createLesson: { lesson } } = data;
 
           return flush(lesson);
-        } catch ({ message }) {
-          return { [FORM_ERROR]: message };
+        } catch (error) {
+          return { [FORM_ERROR]: handleGQError(error) };
         }
       },
     }),
