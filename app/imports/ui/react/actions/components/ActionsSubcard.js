@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { omit } from 'ramda';
 
 import { EntityManagerSubcard } from '../../components';
 import ActionsSubcardHeader from './ActionsSubcardHeader';
@@ -16,7 +17,9 @@ const ActionsSubcard = ({
     newEntityTitle="New action"
     newEntityButtonTitle="Add a new action"
     entities={actions}
-    renderNewEntity={() => <NewActionForm {...{ ...props, actions }} />}
+    renderNewEntity={() => (
+      <NewActionForm {...{ ...omit(['userId', 'canCompleteAnyAction'], props), actions }} />
+    )}
     header={(<ActionsSubcardHeader {...{ actions }} />)}
     {...{ onSave, initialValues, render }}
   />
