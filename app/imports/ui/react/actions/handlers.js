@@ -1,12 +1,12 @@
-import { Cache, toDate, mapRejectedEntitiesToOptions } from 'plio-util';
+import { Cache, toDate, mapRejectedEntitiesToOptions, noop } from 'plio-util';
 import { FORM_ERROR } from 'final-form';
-import { identity } from 'ramda';
+import { identity, tap } from 'ramda';
+
 import { swal } from '../../../client/util';
 import { Mutation, Fragment, Query } from '../../../client/graphql';
 import { updateGoalFragment } from '../../../client/apollo/utils';
 import { client } from '../../../client/apollo';
 import { DocumentTypes, ActionTypes } from '../../../share/constants';
-import { handleGQError } from '../../../api/handleGQError';
 
 const {
   DELETE_ACTION,
@@ -17,62 +17,45 @@ const {
 export const createGeneralAction = ({
   organizationId,
   goalId,
-  onCreate,
+  onCreate = noop,
   [CREATE_ACTION.name]: mutate,
   mutateWithState = identity,
-}) => async (
-  {
-    title,
-    description,
-    completionTargetDate,
-    planInPlace,
-    owner: { value: ownerId },
-    toBeCompletedBy: { value: toBeCompletedBy },
-  },
-  {
-    ownProps: { flush } = {},
-  } = {},
-) => {
+}) => async ({
+  title,
+  description,
+  completionTargetDate,
+  planInPlace,
+  owner: { value: ownerId },
+  toBeCompletedBy: { value: toBeCompletedBy },
+}) => {
   if (!title) return { [FORM_ERROR]: 'Title is required' };
 
-  try {
-    const { data } = await mutateWithState(mutate({
-      variables: {
-        input: {
-          title,
-          description,
-          ownerId,
-          organizationId,
-          planInPlace,
-          toBeCompletedBy,
-          completionTargetDate: toDate(completionTargetDate),
-          type: ActionTypes.GENERAL_ACTION,
-          linkedTo: [{
-            documentId: goalId,
-            documentType: DocumentTypes.GOAL,
-          }],
-        },
+  return mutateWithState(mutate({
+    variables: {
+      input: {
+        title,
+        description,
+        ownerId,
+        organizationId,
+        planInPlace,
+        toBeCompletedBy,
+        completionTargetDate: toDate(completionTargetDate),
+        type: ActionTypes.GENERAL_ACTION,
+        linkedTo: [{
+          documentId: goalId,
+          documentType: DocumentTypes.GOAL,
+        }],
       },
-      update: (proxy, { data: { [CREATE_ACTION.name]: { action } } }) => updateGoalFragment(
-        Cache.addAction(action),
-        {
-          id: goalId,
-          fragment: Fragment.GOAL_CARD,
-        },
-        proxy,
-      ),
-    }));
-
-    if (onCreate) onCreate();
-
-    if (flush) {
-      const { [CREATE_ACTION.name]: { action } } = data;
-      return flush(action);
-    }
-    return data;
-  } catch (error) {
-    return { [FORM_ERROR]: handleGQError(error) };
-  }
+    },
+    update: (proxy, { data: { [CREATE_ACTION.name]: { action } } }) => updateGoalFragment(
+      Cache.addAction(action),
+      {
+        id: goalId,
+        fragment: Fragment.GOAL_CARD,
+      },
+      proxy,
+    ),
+  })).then(tap(onCreate));
 };
 
 export const onDelete = ({ [DELETE_ACTION.name]: mutate, goalId }) =>
@@ -95,47 +78,30 @@ export const onDelete = ({ [DELETE_ACTION.name]: mutate, goalId }) =>
 
 export const linkGoalToAction = ({
   goalId,
-  onCreate,
+  onCreate = noop,
   [LINK_DOC_TO_ACTION.name]: mutate,
   mutateWithState = identity,
-}) => async (
-  { action: { value: actionId } = {} },
-  {
-    ownProps: { flush } = {},
-  } = {},
-) => {
+}) => async ({ action: { value: actionId } = {} }) => {
   if (!actionId) return { [FORM_ERROR]: 'Action is required' };
 
-  try {
-    const { data } = await mutateWithState(mutate({
-      variables: {
-        input: {
-          _id: actionId,
-          documentId: goalId,
-          documentType: DocumentTypes.GOAL,
-        },
+  return mutateWithState(mutate({
+    variables: {
+      input: {
+        _id: actionId,
+        documentId: goalId,
+        documentType: DocumentTypes.GOAL,
       },
-      update: (proxy, { data: { [LINK_DOC_TO_ACTION.name]: { action } } }) =>
-        updateGoalFragment(
-          Cache.addAction(action),
-          {
-            id: goalId,
-            fragment: Fragment.GOAL_CARD,
-          },
-          proxy,
-        ),
-    }));
-
-    if (onCreate) onCreate();
-
-    if (flush) {
-      const { [LINK_DOC_TO_ACTION.name]: { action } } = data;
-      return flush(action);
-    }
-    return data;
-  } catch (error) {
-    return { [FORM_ERROR]: handleGQError(error) };
-  }
+    },
+    update: (proxy, { data: { [LINK_DOC_TO_ACTION.name]: { action } } }) =>
+      updateGoalFragment(
+        Cache.addAction(action),
+        {
+          id: goalId,
+          fragment: Fragment.GOAL_CARD,
+        },
+        proxy,
+      ),
+  })).then(tap(onCreate));
 };
 
 export const loadActions = ({ organizationId, actions }) => () => client.query({

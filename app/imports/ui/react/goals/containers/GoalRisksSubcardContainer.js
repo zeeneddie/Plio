@@ -11,7 +11,6 @@ import { swal } from '../../../../client/util';
 import { updateGoalFragment } from '../../../../client/apollo';
 import { ProblemMagnitudes } from '../../../../share/constants';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { handleGQError } from '../../../../api/handleGQError';
 
 export default namedCompose('GoalRisksSubcardContainer')(
   pure,
@@ -60,37 +59,25 @@ export default namedCompose('GoalRisksSubcardContainer')(
         linkedTo,
       },
     }) => ({
-      linkRiskToGoal: async (
-        { risk: { value: riskId } = {} },
-        {
-          ownProps: { flush },
-        },
-      ) => {
+      linkRiskToGoal: async ({ risk: { value: riskId } = {} }) => {
         if (!riskId) return { [FORM_ERROR]: 'Risk is required' };
 
-        try {
-          const { data } = await mutate({
-            variables: {
-              input: {
-                riskId,
-                _id: linkedTo._id,
-              },
+        return mutate({
+          variables: {
+            input: {
+              riskId,
+              _id: linkedTo._id,
             },
-            update: (proxy, { data: { linkRiskToGoal: { risk } } }) => updateGoalFragment(
-              Cache.addRisk(risk),
-              {
-                id: linkedTo._id,
-                fragment: Fragment.GOAL_CARD,
-              },
-              proxy,
-            ),
-          });
-          const { linkRiskToGoal: { risk } } = data;
-
-          return flush(risk);
-        } catch (error) {
-          return { [FORM_ERROR]: handleGQError(error) };
-        }
+          },
+          update: (proxy, { data: { linkRiskToGoal: { risk } } }) => updateGoalFragment(
+            Cache.addRisk(risk),
+            {
+              id: linkedTo._id,
+              fragment: Fragment.GOAL_CARD,
+            },
+            proxy,
+          ),
+        });
       },
     }),
   }),
@@ -102,51 +89,38 @@ export default namedCompose('GoalRisksSubcardContainer')(
         linkedTo,
       },
     }) => ({
-      createRisk: async (
-        {
-          title,
-          description,
-          originator: { value: originatorId },
-          owner: { value: ownerId },
-          magnitude,
-          type: typeId,
-        },
-        {
-          ownProps: { flush },
-        },
-      ) => {
+      createRisk: async ({
+        title,
+        description,
+        originator: { value: originatorId },
+        owner: { value: ownerId },
+        magnitude,
+        type: typeId,
+      }) => {
         if (!title) return { [FORM_ERROR]: 'Title is required' };
 
-        try {
-          const { data } = await mutate({
-            variables: {
-              input: {
-                title,
-                description,
-                originatorId,
-                ownerId,
-                magnitude,
-                typeId,
-                organizationId,
-                goalId: linkedTo._id,
-              },
+        return mutate({
+          variables: {
+            input: {
+              title,
+              description,
+              originatorId,
+              ownerId,
+              magnitude,
+              typeId,
+              organizationId,
+              goalId: linkedTo._id,
             },
-            update: (proxy, { data: { createRisk: { risk } } }) => updateGoalFragment(
-              Cache.addRisk(risk),
-              {
-                id: linkedTo._id,
-                fragment: Fragment.GOAL_CARD,
-              },
-              proxy,
-            ),
-          });
-
-          const { createRisk: { risk } } = data;
-
-          return flush(risk);
-        } catch (error) {
-          return { [FORM_ERROR]: handleGQError(error) };
-        }
+          },
+          update: (proxy, { data: { createRisk: { risk } } }) => updateGoalFragment(
+            Cache.addRisk(risk),
+            {
+              id: linkedTo._id,
+              fragment: Fragment.GOAL_CARD,
+            },
+            proxy,
+          ),
+        });
       },
     }),
   }),

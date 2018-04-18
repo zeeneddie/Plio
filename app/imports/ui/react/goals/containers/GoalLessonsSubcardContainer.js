@@ -12,7 +12,6 @@ import { DocumentTypes } from '../../../../share/constants';
 import { updateGoalFragment } from '../../../../client/apollo/utils';
 import { swal } from '../../../../client/util';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { handleGQError } from '../../../../api/handleGQError';
 
 export default namedCompose('GoalLessonsSubcardContainer')(
   pure,
@@ -56,17 +55,12 @@ export default namedCompose('GoalLessonsSubcardContainer')(
         organizationId,
       },
     }) => ({
-      onSave: async (
-        {
-          title,
-          date,
-          notes,
-          owner: { value: owner } = {},
-        },
-        {
-          ownProps: { flush },
-        },
-      ) => {
+      onSave: async ({
+        title,
+        date,
+        notes,
+        owner: { value: owner } = {},
+      }) => {
         const errors = [];
 
         if (!title) errors.push('Title is required');
@@ -74,36 +68,29 @@ export default namedCompose('GoalLessonsSubcardContainer')(
 
         if (errors.length) return { [FORM_ERROR]: errors.join('\n') };
 
-        try {
-          const { data } = await mutate({
-            variables: {
-              input: {
-                title,
-                owner,
-                notes,
-                organizationId,
-                date: toDate(date),
-                linkedTo: {
-                  documentId: linkedTo._id,
-                  documentType: DocumentTypes.GOAL,
-                },
+        return mutate({
+          variables: {
+            input: {
+              title,
+              owner,
+              notes,
+              organizationId,
+              date: toDate(date),
+              linkedTo: {
+                documentId: linkedTo._id,
+                documentType: DocumentTypes.GOAL,
               },
             },
-            update: (proxy, { data: { createLesson: { lesson } } }) => updateGoalFragment(
-              Cache.addLesson(lesson),
-              {
-                id: linkedTo._id,
-                fragment: Fragment.GOAL_CARD,
-              },
-              proxy,
-            ),
-          });
-          const { createLesson: { lesson } } = data;
-
-          return flush(lesson);
-        } catch (error) {
-          return { [FORM_ERROR]: handleGQError(error) };
-        }
+          },
+          update: (proxy, { data: { createLesson: { lesson } } }) => updateGoalFragment(
+            Cache.addLesson(lesson),
+            {
+              id: linkedTo._id,
+              fragment: Fragment.GOAL_CARD,
+            },
+            proxy,
+          ),
+        });
       },
     }),
   }),

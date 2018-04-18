@@ -4,7 +4,10 @@ import { CardTitle, Card, Form, Button } from 'reactstrap';
 import { Form as FinalForm } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
+import { FORM_ERROR } from 'final-form';
+import { tap } from 'ramda';
 
+import { handleGQError } from '../../../api/handleGQError';
 import { withToggle } from '../helpers';
 import Subcard from './Subcard';
 import SubcardHeader from './SubcardHeader';
@@ -14,7 +17,6 @@ import ErrorSection from './ErrorSection';
 import { SaveButton } from './Buttons';
 import { Pull, TextAlign } from './Utility';
 
-const FLUSH_TIMEOUT = 700;
 const enhance = withToggle(false);
 
 // TODO refactoring of new form
@@ -34,32 +36,10 @@ class EntityManagerSubcard extends Component {
 
   onSubmit({ fields, index }) {
     const { onSave } = this.props;
-    const flush = (entity) => {
-      fields.remove(index);
 
-      setTimeout(() => {
-        this.scrollToEntity(entity);
-
-        this.toggleOpen({ entity });
-      }, FLUSH_TIMEOUT);
-    };
-
-    return (values, form) => onSave(
-      values,
-      {
-        ...form,
-        ownProps: {
-          flush,
-        },
-      },
-    );
-  }
-
-  scrollToEntity({ _id }) {
-    document.getElementById(`subcard-${_id}`).scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    return (values, form) => onSave(values, form)
+      .then(tap(() => fields.remove(index)))
+      .catch(err => ({ [FORM_ERROR]: handleGQError(err) }));
   }
 
   toggleOpen({ entity }) {

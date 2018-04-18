@@ -18,7 +18,6 @@ import { Mutation } from '../../../../client/graphql';
 import { swal } from '../../../../client/util';
 import RisksSubcard from '../../risks/components/RisksSubcard';
 import { getUserWithFullName } from '../../../../api/users/helpers';
-import { handleGQError } from '../../../../api/handleGQError';
 
 const getCurrentUserWithFullName = compose(getUserWithFullName, getCurrentUser);
 
@@ -40,29 +39,17 @@ export default namedCompose('StandardRisksSubcardContainer')(
         linkedTo,
       },
     }) => ({
-      linkStandardToRisk: async (
-        { risk: { value: riskId } = {} },
-        {
-          ownProps: { flush },
-        },
-      ) => {
+      linkStandardToRisk: async ({ risk: { value: riskId } = {} }) => {
         if (!riskId) return { [FORM_ERROR]: 'Risk is required' };
 
-        try {
-          const { data } = await mutate({
-            variables: {
-              input: {
-                _id: riskId,
-                standardId: linkedTo._id,
-              },
+        return mutate({
+          variables: {
+            input: {
+              _id: riskId,
+              standardId: linkedTo._id,
             },
-          });
-          const { linkStandardToRisk: { risk } } = data;
-
-          return flush(risk);
-        } catch (error) {
-          return { [FORM_ERROR]: handleGQError(error) };
-        }
+          },
+        });
       },
     }),
   }),
@@ -74,42 +61,30 @@ export default namedCompose('StandardRisksSubcardContainer')(
         linkedTo,
       },
     }) => ({
-      createRisk: async (
-        {
-          title,
-          description,
-          magnitude,
-          originator: { value: originatorId },
-          owner: { value: ownerId },
-          type: typeId,
-        },
-        {
-          ownProps: { flush },
-        },
-      ) => {
+      createRisk: async ({
+        title,
+        description,
+        magnitude,
+        originator: { value: originatorId },
+        owner: { value: ownerId },
+        type: typeId,
+      }) => {
         if (!title) return { [FORM_ERROR]: 'Title is required' };
 
-        try {
-          const { data } = await mutate({
-            variables: {
-              input: {
-                title,
-                description,
-                originatorId,
-                ownerId,
-                magnitude,
-                typeId,
-                organizationId,
-                standardsIds: [linkedTo._id],
-              },
+        return mutate({
+          variables: {
+            input: {
+              title,
+              description,
+              originatorId,
+              ownerId,
+              magnitude,
+              typeId,
+              organizationId,
+              standardsIds: [linkedTo._id],
             },
-          });
-          const { createRisk: { risk } } = data;
-
-          return flush(risk);
-        } catch (error) {
-          return { [FORM_ERROR]: handleGQError(error) };
-        }
+          },
+        });
       },
     }),
   }),
