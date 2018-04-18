@@ -10,7 +10,7 @@ import { checkOrgMembership } from '../../checkers';
     context: { doc: Document, ...Object }
   ) => next
 */
-export default () => (next, args, context) => {
+export default () => (next, root, args, context) => {
   checkOrgMembership(context.userId, context.doc.organizationId);
-  return next(args, context);
+  return next(root, args, context);
 };

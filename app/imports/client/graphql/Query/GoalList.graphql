@@ -1,0 +1,12 @@
+query GoalList($organizationId: ID!) {
+  goals(organizationId: $organizationId, isCompletedOrDeleted: false) @connection(
+    key: "goalList",
+    filter: ["organizationId"]
+  ) {
+    goals {
+      _id
+      title
+      sequentialId
+    }
+  }
+}

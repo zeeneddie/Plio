@@ -1,0 +1,9 @@
+#import "../Fragment/GoalCard.graphql"
+
+query GoalCard($_id: ID!) {
+  goal(_id: $_id) {
+    goal {
+      ...GoalCard
+    }
+  }
+}

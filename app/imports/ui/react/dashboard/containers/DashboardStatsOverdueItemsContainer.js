@@ -1,6 +1,6 @@
 import { setPropTypes, withState, withHandlers, flattenProp, onlyUpdateForKeys } from 'recompose';
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { map, view } from 'ramda';
 import { lenses } from 'plio-util';
@@ -124,8 +124,8 @@ export default namedCompose('DashboardStatsOverdueItemsContainer')(
     }) => () => setIsOpen(!isOpen, () => setIsLimitEnabled(!isLimitEnabled)),
   }),
 )(({ workItems, ...props }) => !!workItems.length && (
-  <Fragment>
+  <div>
     <hr />
     <DashboardStatsOverdueItems {...{ workItems, ...props }} />
-  </Fragment>
+  </div>
 ));

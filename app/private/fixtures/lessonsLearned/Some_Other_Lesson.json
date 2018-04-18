@@ -1,0 +1,16 @@
+{
+  "_id": "YZJ4zWBxSb4uddJ5u",
+  "documentId": "TDM44nZRTLvRTuQHj",
+  "documentType": "goal",
+  "title": "Some other lesson",
+  "date": { "$date": 1516287572397 },
+  "owner": "SQHmBKJ94gJvpLKLt",
+  "notes": "<div>Hello World</div>",
+  "organizationId": "KwKXz5RefrE5hjWJ2",
+  "serialNumber": 2,
+  "createdAt": { "$date": 1516287572397 },
+  "createdBy": "SQHmBKJ94gJvpLKLt",
+  "viewedBy": [
+    "SQHmBKJ94gJvpLKLt"
+  ]
+}

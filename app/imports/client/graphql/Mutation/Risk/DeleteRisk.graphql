@@ -1,0 +1,7 @@
+mutation deleteRisk($input: DeleteRiskInput!) {
+  deleteRisk(input: $input) {
+    risk {
+      _id
+    }
+  }
+}

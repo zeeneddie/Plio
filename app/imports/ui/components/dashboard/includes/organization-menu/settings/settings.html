@@ -8,7 +8,7 @@
       isEditable=true}}
 
   <div class="card-divider"></div>
-  <div>{{> React component=homeTitlesSubcard}}</div>
+  <div>{{> React component=workspaceSubcard}}</div>
 
   {{> OrgSettings_Departments
       departments=departments
@@ -68,6 +68,10 @@
     {{> OrgSettings_DangerZone
         organizationId=organizationId}}
   {{/if}}
+
+  <div class="card-divider">
+    <div>{{> React component=keyGoalsSettings organization=organization}}</div>
+  </div>
 
   {{> CardOrgChangelog organization=organization}}
 </template>

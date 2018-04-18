@@ -17,25 +17,27 @@ import {
   OrgMemberRoles,
   UserMembership,
   UserRoles,
-} from '/imports/share/constants';
-import { generateSerialNumber } from '/imports/share/helpers';
+} from '../../../share/constants';
+import { generateSerialNumber } from '../../../share/helpers';
 import OrgNotificationsSender from '../org-notifications-sender';
-import { Actions } from '/imports/share/collections/actions';
-import { AuditLogs } from '/imports/share/collections/audit-logs';
-import { Departments } from '/imports/share/collections/departments';
-import { Discussions } from '/imports/share/collections/discussions';
-import { Files } from '/imports/share/collections/files';
-import { LessonsLearned } from '/imports/share/collections/lessons';
-import { Messages } from '/imports/share/collections/messages';
-import { NonConformities } from '/imports/share/collections/non-conformities';
-import { Occurrences } from '/imports/share/collections/occurrences';
-import { RiskTypes } from '/imports/share/collections/risk-types';
-import { Risks } from '/imports/share/collections/risks';
-import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
-import { StandardTypes } from '/imports/share/collections/standards-types';
-import { Standards } from '/imports/share/collections/standards';
-import { WorkItems } from '/imports/share/collections/work-items';
 import importDocuments from './importDocuments';
+import {
+  Actions,
+  AuditLogs,
+  Departments,
+  Discussions,
+  Files,
+  LessonsLearned,
+  Messages,
+  NonConformities,
+  Occurrences,
+  RiskTypes,
+  Risks,
+  StandardsBookSections,
+  StandardTypes,
+  Standards,
+  WorkItems,
+} from '../../../share/collections';
 
 const OrganizationService = {
   importDocuments,
@@ -84,12 +86,13 @@ const OrganizationService = {
       });
     });
 
-    _.each(DefaultStandardTypes, ({ title, abbreviation }) => {
+    _.each(Object.values(DefaultStandardTypes), ({ title, abbreviation }) => {
       StandardsTypeService.insert({
         title,
         abbreviation,
         organizationId,
         createdBy: ownerId,
+        isDefault: true,
       });
     });
 
@@ -132,9 +135,11 @@ const OrganizationService = {
 
   setWorkflowDefaults({ _id, type, ...args }) {
     const $set = {};
-    for (const key in args) {
-      $set[`workflowDefaults.${type}.${key}`] = args[key];
-    }
+
+    Object.keys(args).forEach((key) => {
+      if (type) $set[`workflowDefaults.${type}.${key}`] = args[key];
+      else $set[`workflowDefaults.${key}`] = args[key];
+    });
 
     return this.collection.update({ _id }, { $set });
   },
@@ -242,8 +247,9 @@ const OrganizationService = {
       },
     });
 
-    Meteor.isServer && Meteor.defer(() =>
-      new OrgNotificationsSender(organizationId).userRemoved(userId, removedBy));
+    if (Meteor.isServer) {
+      Meteor.defer(() => new OrgNotificationsSender(organizationId).userRemoved(userId, removedBy));
+    }
 
     return ret;
   },
@@ -263,11 +269,13 @@ const OrganizationService = {
       },
     });
 
-    Meteor.isServer && Meteor.defer(() =>
-      new OrgNotificationsSender(organizationId).transferCreated(newOwnerId, transferId, currOwnerId));
+    if (Meteor.isServer) {
+      Meteor.defer(() => new OrgNotificationsSender(organizationId)
+        .transferCreated(newOwnerId, transferId, currOwnerId));
+    }
   },
 
-  transfer({ newOwnerId, transferId }, organization) {
+  transfer({ newOwnerId }, organization) {
     const organizationId = organization._id;
     const currOwnerId = organization.ownerId();
 
@@ -301,8 +309,10 @@ const OrganizationService = {
       $unset: { transfer: '' },
     });
 
-    Meteor.isServer && Meteor.defer(() =>
-      new OrgNotificationsSender(organizationId).transferCompleted(newOwnerId, currOwnerId));
+    if (Meteor.isServer) {
+      Meteor.defer(() => new OrgNotificationsSender(organizationId)
+        .transferCompleted(newOwnerId, currOwnerId));
+    }
   },
 
   cancelTransfer({ organizationId }) {
@@ -397,16 +407,6 @@ const OrganizationService = {
       },
     };
 
-    return this.collection.update(query, modifier);
-  },
-
-  updateLastAccessedDate({ organizationId }) {
-    const query = { _id: organizationId };
-    const modifier = {
-      $set: {
-        lastAccessedDate: new Date(),
-      },
-    };
     return this.collection.update(query, modifier);
   },
 };

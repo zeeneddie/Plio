@@ -50,6 +50,8 @@ import {
 
 import './12-add-complete-actions-role';
 import './13-workspace-defaults';
+import './14-add-crud-goals-role';
+import './15-enable-simplified-completion-of-actions';
 
 Migrations.add({
   version: 1,
@@ -175,7 +177,8 @@ Migrations.add({
 
     Meteor.users.update(query, modifier, options);
 
-    console.log('Default value for \'areEmailNotificationsEnabled\' was set for all users without it');
+    console.log('Default value for \'areEmailNotificationsEnabled\' ' +
+      'was set for all users without it');
   },
   down() {
     const query = {};
@@ -296,7 +299,8 @@ Migrations.add({
       multi: true,
     });
 
-    console.log('Work item "complete update of documents" types were migrated to "complete approval"');
+    console.log('Work item "complete update of documents" ' +
+      'types were migrated to "complete approval"');
   },
   down() {
     const query = {

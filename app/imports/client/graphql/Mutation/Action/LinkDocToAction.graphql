@@ -1,0 +1,9 @@
+#import "../../Fragment/ActionCard.graphql"
+
+mutation linkDocToAction($input: LinkDocToActionInput!) {
+  linkDocToAction(input: $input) {
+    action {
+      ...ActionCard
+    }
+  }
+}

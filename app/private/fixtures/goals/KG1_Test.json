@@ -1,0 +1,25 @@
+{
+  "_id": "TDM44nZRTLvRTuQHj",
+  "organizationId": "KwKXz5RefrE5hjWJ2",
+  "title": "Test",
+  "startDate": { "$date": 1515670311424 },
+  "endDate": { "$date": 1523442822791 },
+  "status": 1,
+  "priority": "minor",
+  "isCompleted": false,
+  "ownerId": "SQHmBKJ94gJvpLKLt",
+  "serialNumber": 1,
+  "sequentialId": "KG1",
+  "color": "#8cd7e2",
+  "fileIds": [],
+  "notify" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "isDeleted": false,
+  "createdAt" : {"$date": 1515670311424},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "updatedAt" : {"$date": 1515670311424},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt",
+  "riskIds": ["movmNy9rFvYHshu6X", "aqtqWNPrc9fNi6wyp"],
+  "milestoneIds": ["ZxF5odsvuPr3SENsP", "rdbFsRoszz5BReiJS"]
+}

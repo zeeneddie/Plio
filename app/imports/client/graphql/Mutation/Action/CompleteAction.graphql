@@ -1,0 +1,16 @@
+mutation completeAction($input: CompleteActionInput!) {
+  completeAction(input: $input) {
+    action {
+      completionComments
+      isCompleted
+      completedAt
+      verificationTargetDate
+      completedBy {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

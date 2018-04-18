@@ -118,6 +118,8 @@ export const DocumentIdSchema = new SimpleSchema({
   documentId: idSchemaDoc,
 });
 
+// DO NOT USE THIS
+// Pick only needed types
 export const DocumentTypeSchema = new SimpleSchema({
   documentType: {
     type: String,
@@ -256,6 +258,7 @@ export const standardsIdsSchema = new SimpleSchema({
   standardsIds: {
     type: [String],
     regEx: SimpleSchema.RegEx.Id,
+    optional: true,
     // maxCount: ?
   },
 });

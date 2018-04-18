@@ -1,12 +1,10 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { _ } from 'meteor/underscore';
 
 import {
   BaseEntitySchema,
   BaseProblemsRequiredSchema,
   BaseProblemsOptionalSchema,
   ReviewSchema,
-  ImprovementPlanSchema,
   FileIdsSchema,
   getNotifySchema,
 } from './schemas';

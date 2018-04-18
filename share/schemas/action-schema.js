@@ -13,13 +13,13 @@ import {
   ActionTypes,
   ActionPlanOptions,
   ActionStatuses,
-  ProblemTypes,
   StringLimits,
+  AllowedActionLinkedDocTypes,
 } from '../constants';
 
 
 function checkDate() {
-  const value = this.value;
+  const { value } = this;
 
   if (!_.isDate(value)) return false;
 
@@ -33,7 +33,7 @@ const linkedToSchema = new SimpleSchema({
   },
   documentType: {
     type: String,
-    allowedValues: Object.values(ProblemTypes),
+    allowedValues: AllowedActionLinkedDocTypes,
   },
 });
 
@@ -90,7 +90,7 @@ const ActionSchema = new SimpleSchema([
     },
     sequentialId: {
       type: String,
-      regEx: /^(?:CA|PA|RC)[1-9][0-9]*$/,
+      regEx: /^(?:CA|PA|RC|GA)[1-9][0-9]*$/,
       min: StringLimits.sequentialId.min,
     },
     status: {

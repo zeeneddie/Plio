@@ -1,0 +1,70 @@
+type Organization {
+  _id: ID!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime
+  updatedBy: User
+  name: String!
+  serialNumber: Int!
+  workspaceDefaults: WorkspaceDefaults
+  users: [OrganizationUser]!
+  timezone: String
+  currency: String
+  # reminders - hide for security reasons?
+  # review - hide for security reasons?
+  ncGuidelines: Guidelines
+  rkGuidelines: Guidelines
+  pgGuidelines: Guidelines
+  rkScoringGuidelines: String
+  # customerType - hide for security reasons?
+  homeScreenTitles: HomeScreenTitles
+  lastAccessedDate: DateTime
+  workflowDefaults: WorkflowDefaults
+}
+
+type WorkspaceDefaults {
+  displayUsers: Int
+  displayMessages: Int
+  displayActions: Int
+  displayGoals: Int
+  displayCompletedDeletedGoals: Int
+  timeScale: Int
+}
+
+type OrganizationUser {
+  joinedAt: DateTime!
+  role: String!
+  isRemoved: Boolean
+  sendDailyRecap: Boolean
+  user: User!
+}
+
+type WorkflowDefaults {
+  minorProblem: WorkflowProblem
+  majorProblem: WorkflowProblem
+  criticalProblem: WorkflowProblem
+  isActionsCompletionSimplified: Boolean
+}
+
+type WorkflowProblem {
+  workflowType: String
+  stepTime: TimePeriod
+}
+
+type TimePeriod {
+  timeValue: Int
+  timeUnit: String
+}
+
+type Guidelines {
+  minor: String
+  major: String
+  critical: String
+}
+
+type HomeScreenTitles {
+  standards: String
+  risks: String
+  nonConformities: String
+  workInbox: String
+}

@@ -1,6 +1,8 @@
 module.exports = {
   transform: {
+    '\\.(gql|graphql)$': 'jest-transform-graphql',
     '^.+\\.jsx?$': 'babel-jest',
+    '.+\\.css$': 'jest-css-modules-transform',
   },
   modulePaths: [
     '<rootDir>/node_modules/',

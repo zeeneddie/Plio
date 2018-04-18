@@ -1,29 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
+import { Button } from 'reactstrap';
 
-import Button from './Button';
 import { IconLoading } from '../Icons';
 
 const SaveButton = ({
-  color = 'secondary',
-  className,
+  color = 'primary',
   isSaving,
+  children = 'Save',
   ...props
 }) => (
   <Button
-    color={color}
-    className={cx({ disabled: isSaving }, className)}
     disabled={isSaving}
-    {...props}
+    {...{ color, ...props }}
   >
     {isSaving && <IconLoading />}
-    {isSaving ? 'Saving...' : 'Save'}
+    {isSaving ? 'Saving...' : children}
   </Button>
 );
 
 SaveButton.propTypes = {
   isSaving: PropTypes.bool,
+  children: PropTypes.node,
   ...Button.propTypes,
 };
 

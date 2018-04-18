@@ -1,0 +1,15 @@
+{
+  "_id": "vkNfd2yPs8Eg6BQgm",
+  "organizationId": "KwKXz5RefrE5hjWJ2",
+  "title": "Completed",
+  "status": 2,
+  "completionTargetDate": { "$date": 1516275111424 },
+  "isCompleted": "true",
+  "completedAt": { "$date": 1515670311424 },
+  "completedBy": "SQHmBKJ94gJvpLKLt",
+  "isDeleted": false,
+  "createdAt" : {"$date": 1515670311424},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "updatedAt" : {"$date": 1515670311424},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt"
+}

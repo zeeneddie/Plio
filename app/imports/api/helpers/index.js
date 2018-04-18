@@ -488,13 +488,12 @@ export const searchByRegex = curry((regex, transformOrArrayOfProps, array) =>
   array.filter((item) => {
     if (typeof transformOrArrayOfProps === 'function') {
       const result = transformOrArrayOfProps(item);
-      return result.filter(a => typeof a === 'string' && a.search(regex) >= 0).length;
+      return result.filter(a => regex.test(a)).length;
     }
 
     if (!_.isArray(transformOrArrayOfProps)) return false;
 
-    return transformOrArrayOfProps.filter(prop =>
-      typeof item[prop] === 'string' && item[prop].search(regex) >= 0).length;
+    return transformOrArrayOfProps.filter(prop => regex.test(item[prop])).length;
   }));
 
 export const toDocId = transsoc({ documentId: propId });

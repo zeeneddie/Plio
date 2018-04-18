@@ -1,0 +1,13 @@
+{
+  "_id": "rdbFsRoszz5BReiJS",
+  "organizationId": "KwKXz5RefrE5hjWJ2",
+  "title": "Test",
+  "status": 1,
+  "completionTargetDate": { "$date": 1516275111424 },
+  "isCompleted": "false",
+  "isDeleted": false,
+  "createdAt" : {"$date": 1515670311424},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "updatedAt" : {"$date": 1515670311424},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt"
+}

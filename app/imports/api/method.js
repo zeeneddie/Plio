@@ -41,7 +41,11 @@ export class CheckedMethod extends ValidatedMethod {
     props.run = function ({ ...args }) {
       const userId = this.userId;
 
-      const res = props.check(collection => (checker, err) => checkDocAndMembershipAndMore(collection, args._id, userId)(curry(checker)({ ...args, userId }), err));
+      const res = props.check.call(this, collection =>
+        (checker, err) => checkDocAndMembershipAndMore(collection, args._id, userId)(
+          curry(checker)({ ...args, userId }),
+          err,
+        ));
 
       return run.call(this, { ...args }, res);
     };
@@ -69,7 +73,9 @@ export class MiddlewareMethod extends ValidatedMethod {
     const run = async function (args) {
       const { userId } = this;
       const context = { userId };
-      return applyMiddleware(...middleware)(props.run.bind(this))(args, context);
+      return applyMiddleware(...middleware)(
+        (root, ...otherArgs) => props.run.apply(this, otherArgs),
+      )({}, args, context);
     };
 
     super({ ...props, run, mixins });

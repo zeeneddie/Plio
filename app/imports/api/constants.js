@@ -49,13 +49,22 @@ export const StandardFilters = {
   3: { title: 'Standards', name: 'deleted', prepend: '' },
 };
 
+export const WorkInboxFilterIndexes = {
+  MY_CURRENT: 1,
+  TEAM_CURRENT: 2,
+  MY_COMPLETED: 3,
+  TEAM_COMPLETED: 4,
+  MY_DELETED: 5,
+  TEAM_DELETED: 6,
+};
+
 export const WorkInboxFilters = {
-  1: { title: 'Work', name: 'my current', prepend: '' },
-  2: { title: 'Work', name: 'team current', prepend: '' },
-  3: { title: 'Work', name: 'my completed', prepend: '' },
-  4: { title: 'Work', name: 'team completed', prepend: '' },
-  5: { name: 'My deleted actions' },
-  6: { name: 'Team deleted actions' },
+  [WorkInboxFilterIndexes.MY_CURRENT]: { title: 'Work', name: 'my current', prepend: '' },
+  [WorkInboxFilterIndexes.TEAM_CURRENT]: { title: 'Work', name: 'team current', prepend: '' },
+  [WorkInboxFilterIndexes.MY_COMPLETED]: { title: 'Work', name: 'my completed', prepend: '' },
+  [WorkInboxFilterIndexes.TEAM_COMPLETED]: { title: 'Work', name: 'team completed', prepend: '' },
+  [WorkInboxFilterIndexes.MY_DELETED]: { name: 'My deleted actions' },
+  [WorkInboxFilterIndexes.TEAM_DELETED]: { name: 'Team deleted actions' },
 };
 
 export const STANDARD_FILTER_MAP = {
@@ -193,12 +202,6 @@ export const WorkItemDescriptions = {
   updateOfRiskRecord: 'Request for approval to close this risk',
 };
 
-export const ActionTitles = {
-  CA: 'Corrective action',
-  PA: 'Preventative action',
-  RK: 'Risk control',
-};
-
 export const riskScoreTypes = {
   inherent: {
     id: 'inherent',
@@ -262,3 +265,50 @@ export const UserPresenceStatuses = {
   AWAY: 'away',
   OFFLINE: 'offline',
 };
+
+export const TransitionTimeouts = {
+  modal: 300,
+};
+
+export const TransitionBaseActiveClass = 'in';
+
+export const StatusColors = {
+  DEFAULT: 'default',
+  AMBER: 'warning',
+  RED: 'danger',
+  GREEN: 'success',
+};
+
+export const DEFAULT_UPDATE_TIMEOUT = 1200;
+
+export const ApolloFetchPolicies = {
+  CACHE_ONLY: 'cache-only',
+};
+
+export const TimelineColors = {
+  OVERDUE: '#dc3545',
+  IN_PROGRESS: '#ff8c00',
+};
+
+export const SymbolTypes = {
+  DIAMOND: 'diamond',
+  SQUARE: 'square',
+};
+
+export const TimelineSymbols = {
+  MILESTONE: SymbolTypes.DIAMOND,
+  ACTION: SymbolTypes.SQUARE,
+};
+
+export const Timeline = {
+  PART_OF_PAST_TIME: 15 / 100,
+  WIDTH: 1140,
+  LINE_HEIGHT: 25,
+  AXIS_HEIGHT: 20,
+  LIST_ICON_SIZE: 11,
+};
+
+export const GQ_ERROR_MESSAGE_PREFIX = 'GraphQL error: ';
+export const DEFAULT_ERROR_MESSAGE = 'Internal server error';
+
+export const SUPPORT_FORUM_URL = 'https://plio.slack.com';

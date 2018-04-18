@@ -1,0 +1,13 @@
+mutation updateRiskOwner($input: UpdateRiskOwnerInput!) {
+  updateRiskOwner(input: $input) {
+    risk {
+      _id
+      owner {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

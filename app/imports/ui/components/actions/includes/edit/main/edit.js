@@ -1,14 +1,15 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
-import { ActionPlanOptions, WorkflowTypes } from '/imports/share/constants.js';
-import { updateViewedBy } from '/imports/api/actions/methods';
-import { isViewed } from '/imports/api/checkers';
+import { WorkflowTypes } from '../../../../../../share/constants.js';
+import { updateViewedBy } from '../../../../../../api/actions/methods';
+import { isViewed } from '../../../../../../api/checkers';
 
 
 Template.Actions_Card_Edit_Main.viewmodel({
   mixin: ['utils', 'getChildrenData'],
   onRendered(templateInstance) {
-    const action = templateInstance.data.action;
+    const { action } = templateInstance.data;
     const userId = Meteor.userId();
 
     if (action && !isViewed(action, userId)) {
@@ -17,7 +18,9 @@ Template.Actions_Card_Edit_Main.viewmodel({
   },
   autorun() {
     const action = this.action && this.action();
-    action && this.load(action);
+    if (action) {
+      this.load(action);
+    }
   },
   isCompletionEditable({ isVerified }) {
     return !isVerified;
@@ -60,6 +63,9 @@ Template.Actions_Card_Edit_Main.viewmodel({
   },
   onUpdateVerificationExecutor() {
     return this.updateVerificationExecutorFn;
+  },
+  onUpdateTitle() {
+    return this.updateTitleFn;
   },
   showVerification() {
     const action = this.action && this.action();

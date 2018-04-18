@@ -1,0 +1,16 @@
+type CountType {
+  totalCount: Int!
+  notViewedCount: Int!
+}
+
+type CountsQueryPayload {
+  standards: CountType
+  risks: CountType
+  nonConformities: CountType
+  workInbox: CountType
+}
+
+type Query {
+  organization(_id: ID!): Organization
+  counts(organizationId: ID!): CountsQueryPayload
+}

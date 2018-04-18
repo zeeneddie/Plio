@@ -1,5 +1,8 @@
 import { Template } from 'meteor/templating';
-import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { mergeDeepLeft } from 'ramda';
+import { swal } from '../../../../../client/util';
+import { ALERT_AUTOHIDE_TIME } from '../../../../../api/constants';
+import { client } from '../../../../../client/apollo';
 
 import {
   update,
@@ -8,7 +11,10 @@ import {
   verify,
   undoCompletion,
   undoVerification,
+  // TODO fix linkStandard, unlinkStandard import
+  // eslint-disable-next-line import/named
   linkStandard,
+  // eslint-disable-next-line import/named
   unlinkStandard,
   linkDocument,
   unlinkDocument,
@@ -16,11 +22,25 @@ import {
   setCompletionExecutor,
   setVerificationDate,
   setVerificationExecutor,
-} from '/imports/api/actions/methods';
-import { getTzTargetDate } from '/imports/share/helpers';
+} from '../../../../../api/actions/methods';
+import { getTzTargetDate } from '../../../../../share/helpers';
+import { ActionTypes } from '../../../../../share/constants';
+import {
+  deleteActionFromGoalFragment,
+  updateActionFragment,
+} from '../../../../../client/apollo/utils';
+import { Fragment } from '../../../../../client/graphql';
+
+const updateFragment = (actionId, action) => {
+  updateActionFragment(mergeDeepLeft(action), {
+    id: actionId,
+    fragment: Fragment.DASHBOARD_ACTION,
+  }, client);
+};
 
 Template.Actions_Edit.viewmodel({
-  mixin: ['organization', 'workInbox', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
+  mixin: ['organization', 'workInbox', 'modal',
+    'callWithFocusCheck', 'router', 'collapsing', 'utils'],
   isLinkedToEditable: true,
   action() {
     return this._getActionByQuery({ _id: this._id() });
@@ -96,8 +116,16 @@ Template.Actions_Edit.viewmodel({
       const { timezone } = this.organization();
       const tzDate = getTzTargetDate(targetDate, timezone);
 
-      this.callUpdate(setCompletionDate, { targetDate: tzDate }, cb);
+      this.callUpdate(setCompletionDate, { targetDate: tzDate }, (err, res) => {
+        if (cb) cb(err, res);
+        if (!err) {
+          updateFragment(this._id(), { completionTargetDate: tzDate });
+        }
+      });
     };
+  },
+  getUpdateTitleFn() {
+    return newAction => updateFragment(this._id(), newAction);
   },
   getUpdateCompletionExecutorFn() {
     return ({ userId }, cb) => {
@@ -118,7 +146,7 @@ Template.Actions_Edit.viewmodel({
     };
   },
   remove() {
-    const { title } = this.action();
+    const { title, type, linkedTo } = this.action();
     const _id = this._id();
 
     swal(
@@ -135,6 +163,12 @@ Template.Actions_Edit.viewmodel({
           if (err) {
             swal.close();
             return;
+          }
+
+          if (type === ActionTypes.GENERAL_ACTION) {
+            linkedTo.forEach(({ documentId }) => (
+              deleteActionFromGoalFragment(documentId, _id, client)
+            ));
           }
 
           swal({

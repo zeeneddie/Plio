@@ -27,6 +27,7 @@ import {
   getFilteredStandards,
   getSortedStandardsByFilter,
 } from '../../../../../client/store/selectors/standards';
+import { getStandardTypesByIds } from '../../../../../client/store/selectors/standardTypes';
 import { namedCompose } from '../../../helpers';
 
 const mapStateToProps = (state) => {
@@ -36,6 +37,7 @@ const mapStateToProps = (state) => {
   return {
     standards,
     searchText,
+    standardTypesByIds: getStandardTypesByIds(state),
     filteredStandards: getFilteredStandards(state),
     organizationId: getOrganizationId(state),
     filter: getFilter(state),

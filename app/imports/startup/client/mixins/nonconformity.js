@@ -44,7 +44,7 @@ export default {
   },
   _getNCsByQuery({
     isDeleted = { $in: [null, false] },
-    ...args,
+    ...args
   } = {},
   options = { sort: { createdAt: -1 } }) {
     const query = { isDeleted, ...args, organizationId: this.organizationId() };

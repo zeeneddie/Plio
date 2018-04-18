@@ -1,3 +1,5 @@
+import { ANALYSIS_STATUSES } from '../../share/constants';
+
 export const getProblemStatusColor = (status) => {
   switch (status) {
     case 1:
@@ -60,3 +62,13 @@ export const compareStatusesByPriority = (() => {
     return status2 - status1;
   };
 })();
+
+export const getAnalysisStatusClass = (status) => {
+  switch (status) {
+    case ANALYSIS_STATUSES.COMPLETED:
+      return 'success';
+    case ANALYSIS_STATUSES.NOT_COMPLETED:
+    default:
+      return 'default';
+  }
+};

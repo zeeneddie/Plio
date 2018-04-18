@@ -139,7 +139,7 @@ const initBulk = collection => collection.rawCollection().initializeUnorderedBul
 const executeBulks = (...bulks) => bulks.reduce((acc, bulk) => {
   if (!bulk || !bulk.length) return acc;
 
-  const result = Meteor.wrapAsync(bulk.execute.bind(bulk))({ w: 1, wTimeout: 5000 });
+  const result = Meteor.wrapAsync(bulk.execute.bind(bulk))();
 
   return acc.concat(result);
 }, []);

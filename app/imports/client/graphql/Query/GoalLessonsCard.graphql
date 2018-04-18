@@ -1,0 +1,24 @@
+#import '../Fragment/LessonCard.graphql'
+
+query GoalLessonsCard($_id: ID!) {
+  user: me {
+    _id
+    profile {
+      fullName
+    }
+  }
+
+  goal(_id: $_id) {
+    goal {
+      _id
+      title
+      sequentialId
+      organization {
+        _id
+      }
+      lessons {
+        ...LessonCard
+      }
+    }
+  }
+}

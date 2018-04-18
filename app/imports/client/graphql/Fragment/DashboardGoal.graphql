@@ -1,0 +1,22 @@
+#import "../Fragment/DashboardAction.graphql"
+
+fragment DashboardGoal on Goal {
+  _id
+  isDeleted
+  title
+  startDate
+  endDate
+  color
+  priority
+  sequentialId
+  milestones {
+    _id
+    title
+    completionTargetDate
+    isCompleted
+    status
+  }
+  actions(input: { isDeleted: false }) {
+    ...DashboardAction
+  }
+}

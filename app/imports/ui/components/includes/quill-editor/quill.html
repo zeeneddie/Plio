@@ -1,0 +1,5 @@
+<template name="Quill">
+  {{#QuillEditor onUpdate=(callback 'onBlurFn')}}
+    <div {{b "html: value"}}></div>
+  {{/QuillEditor}}
+</template>

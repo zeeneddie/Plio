@@ -3,15 +3,14 @@ import PropTypes from 'prop-types';
 
 import Button from './Button';
 
-const ToggleGuidelinesButton = ({ collapsed, onClick, ...props }) => (
-  <Button color="link collapse" {...{ ...props, onClick }}>
-    {collapsed ? 'Guidelines' : 'Hide guidelines'}
+const ToggleGuidelinesButton = ({ isOpen, ...props }) => (
+  <Button color="link collapse" {...{ ...props }}>
+    {isOpen ? 'Hide guidelines' : 'Guidelines'}
   </Button>
 );
 
 ToggleGuidelinesButton.propTypes = {
-  collapsed: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
 };
 
 export default ToggleGuidelinesButton;

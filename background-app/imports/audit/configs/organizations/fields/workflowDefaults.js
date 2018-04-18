@@ -96,7 +96,7 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => [
       const { newValue, oldValue } = diffs[
         `workflowDefaults.${field}.stepTime.timeValue`
       ];
-      const timeUnit = newDoc.workflowDefaults[field].stepTime.timeUnit;
+      const { timeUnit } = newDoc.workflowDefaults[field].stepTime;
 
       return {
         newValue: `${newValue} ${timeUnit}`,
@@ -114,4 +114,36 @@ export default [
   ...getWorkflowDefaultsConfig('minorProblem', 'minor nonconformities/risks'),
   ...getWorkflowDefaultsConfig('majorProblem', 'major nonconformities/risks'),
   ...getWorkflowDefaultsConfig('criticalProblem', 'critical nonconformities/risks'),
+  {
+    field: 'workflowDefaults.isActionsCompletionSimplified',
+    logs: [
+      {
+        message: {
+          [ChangesKinds.FIELD_CHANGED]:
+            'Simplified completion of own actions {{{operation}}}',
+        },
+      },
+    ],
+    notifications: [
+      {
+        text: '{{{userName}}} {{{operation}}} simplified completion of own actions ' +
+        'in {{{docDesc}}} {{{docName}}}',
+      },
+    ],
+    data({ diffs }) {
+      const { newValue, oldValue } = diffs[
+        'workflowDefaults.isActionsCompletionSimplified'
+      ];
+      const operation = newValue ? 'enabled' : 'disabled';
+
+      return {
+        newValue,
+        oldValue,
+        operation,
+      };
+    },
+    receivers({ newDoc, user }) {
+      return getReceivers(newDoc, user);
+    },
+  },
 ];

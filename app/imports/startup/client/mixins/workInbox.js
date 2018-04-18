@@ -1,4 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Meteor } from 'meteor/meteor';
 import { Actions } from '/imports/share/collections/actions';
 import { WorkItems } from '/imports/share/collections/work-items';
 import {
@@ -20,7 +21,8 @@ export default {
       case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
         return 'Update of standard(s)';
       default:
-        return capitalize(this.getTypeText({ type, linkedDoc }).replace(/^(complete|verify)\s/i, ''));
+        return capitalize(this.getTypeText({ type, linkedDoc })
+          .replace(/^(complete|verify)\s/i, ''));
     }
   },
   currentWorkItem() {
@@ -62,7 +64,10 @@ export default {
     const query = { ...filter };
     return WorkItems.findOne(query, options);
   },
-  _getActionsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+  _getActionsByQuery(
+    { isDeleted = { $in: [null, false] }, ...args } = {},
+    options = { sort: { createdAt: -1 } },
+  ) {
     const query = { isDeleted, ...args, organizationId: this.organizationId() };
     return Actions.find(query, options);
   },
@@ -74,25 +79,26 @@ export default {
     switch (type) {
       case ActionTypes.CORRECTIVE_ACTION:
         return 'Corrective action';
-        break;
       case ActionTypes.PREVENTATIVE_ACTION:
         return 'Preventative action';
-        break;
       case ActionTypes.RISK_CONTROL:
         return 'Risk control';
-        break;
+      case ActionTypes.GENERAL_ACTION:
+        return 'General action';
+      default:
+        return 'Action';
     }
   },
   _getQueryParams({ isCompleted, assigneeId }) {
-    assigneeId = assigneeId || Meteor.userId();
+    const assignee = assigneeId || Meteor.userId();
     return (userId) => {
       if (isCompleted) { // completed
-        if (assigneeId === userId) {
+        if (assignee === userId) {
           return { filter: 3 }; // My completed work
         }
         return { filter: 4 }; // Team completed work
       }
-      if (assigneeId === userId) {
+      if (assignee === userId) {
         return { filter: 1 }; // My current work
       }
       return { filter: 2 }; // Team current work

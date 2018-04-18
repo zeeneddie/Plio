@@ -1,0 +1,12 @@
+query GoalNotifyCard($_id: ID!) {
+  goal(_id: $_id) {
+    goal {
+      notify {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

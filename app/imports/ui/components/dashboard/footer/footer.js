@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
-
-import { DocumentsListSubs } from '/imports/startup/client/subsmanagers';
+import { SUPPORT_FORUM_URL } from '../../../../api/constants';
+import { DocumentsListSubs } from '../../../../startup/client/subsmanagers';
 
 Template.Dashboard_Footer.viewmodel({
   mixin: ['modal', 'organization', 'roles'],
@@ -27,5 +27,8 @@ Template.Dashboard_Footer.viewmodel({
       template: 'NC_Create',
       variation: 'save',
     });
+  },
+  supportForumUrl() {
+    return SUPPORT_FORUM_URL;
   },
 });

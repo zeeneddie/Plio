@@ -5,7 +5,7 @@ import {
   OrgCurrencies, WorkflowTypes, UserMembership,
   StandardTitles, RiskTitles, NonConformitiesTitles,
   WorkInboxTitles, CustomerTypes, PossibleReviewFrequencies,
-  HomeScreenTitlesTypes,
+  HomeScreenTitlesTypes, OrganizationDefaults,
 } from '../constants';
 import {
   BaseEntitySchema, ReminderTimePeriodSchema,
@@ -35,6 +35,8 @@ const UserSettingsSchema = new SimpleSchema({
       if (!this.isSet) {
         return true;
       }
+
+      return undefined;
     },
   },
 });
@@ -54,6 +56,8 @@ const OrgUserSchema = new SimpleSchema([
         if (!this.isSet) {
           return new Date();
         }
+
+        return undefined;
       },
       type: Date,
     },
@@ -63,6 +67,8 @@ const OrgUserSchema = new SimpleSchema([
         if (!this.isSet) {
           return false;
         }
+
+        return undefined;
       },
     },
     removedAt: {
@@ -97,6 +103,10 @@ const workflowDefaultsSchema = new SimpleSchema({
   },
   criticalProblem: {
     type: problemWorkflowSchema,
+  },
+  isActionsCompletionSimplified: {
+    type: Boolean,
+    defaultValue: OrganizationDefaults.workflowDefaults.isActionsCompletionSimplified,
   },
 });
 
@@ -190,6 +200,8 @@ export const reviewReviewerIdSchema = new SimpleSchema({
           return createdBy.value;
         }
       }
+
+      return undefined;
     },
   },
 });
@@ -217,6 +229,8 @@ export const reviewAnnualDateSchema = new SimpleSchema({
           return createdAt.value;
         }
       }
+
+      return undefined;
     },
   },
 });
@@ -332,7 +346,7 @@ const OrganizationSchema = new SimpleSchema([
     },
     lastAccessedDate: {
       type: Date,
-      defaultValue: new Date,
+      defaultValue: new Date(),
     },
   },
 ]);

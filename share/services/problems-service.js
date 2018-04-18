@@ -1,5 +1,5 @@
 import { generateSerialNumber, getWorkflowDefaultStepDate } from '../helpers';
-import { WorkflowTypes } from '../constants';
+import { WorkflowTypes, ANALYSIS_STATUSES } from '../constants';
 import { Organizations, Actions } from '../collections';
 import ActionService from './action-service';
 import WorkItemService from './work-item-service';
@@ -59,9 +59,16 @@ export default {
     return this.collection.update(query, options);
   },
 
-  setAnalysisExecutor({ _id, executor, assignedBy }, doc) {
-    const { analysis = {}, ...rest } = doc;
+  async set({ _id, ...args }) {
+    const query = { _id };
+    const modifier = {
+      $set: args,
+    };
 
+    return this.collection.update(query, modifier);
+  },
+
+  setAnalysisExecutor({ _id, executor, assignedBy }) {
     const query = { _id };
     const options = {
       $set: {
@@ -77,9 +84,7 @@ export default {
     return ret;
   },
 
-  setAnalysisDate({ _id, targetDate }, doc) {
-    const { analysis: { targetDate: td, ...analysis } = {}, ...rest } = doc;
-
+  setAnalysisDate({ _id, targetDate }) {
     const query = { _id };
     const options = { $set: { 'analysis.targetDate': targetDate } };
 
@@ -112,17 +117,15 @@ export default {
   },
 
   completeAnalysis({ _id, completionComments, userId }) {
-    const doc = this.collection.findOne({ _id }) || {};
-
     const ret = this.collection.update({
       _id,
     }, {
       $set: {
-        'analysis.status': 1, // Completed
+        'analysis.status': ANALYSIS_STATUSES.COMPLETED,
         'analysis.completedAt': new Date(),
         'analysis.completedBy': userId,
         'analysis.completionComments': completionComments,
-      }
+      },
     });
 
     WorkItemService.analysisCompleted(_id, this._docType);
@@ -130,7 +133,7 @@ export default {
     return ret;
   },
 
-  undoAnalysis({ _id, userId }) {
+  undoAnalysis({ _id }) {
     const ret = this.collection.update({
       _id,
     }, {
@@ -265,20 +268,25 @@ export default {
     return this._service.removePermanently({ _id, query });
   },
 
-  linkStandard({ _id, standardId }) {
+  async linkStandard({ _id, standardId }) {
     const query = { _id };
     const modifier = {
       $addToSet: {
         standardsIds: standardId,
       },
     };
-    this.collection.update(query, modifier);
+
+    return this.collection.update(query, modifier);
   },
 
-  unlinkStandard({ _id, standardId }) {
-    this.collection.update({ _id }, {
-      $pull: { standardsIds: standardId },
-    });
+  async unlinkStandard({ _id, standardId }) {
+    const query = { _id };
+    const modifier = {
+      $pull: {
+        standardsIds: standardId,
+      },
+    };
+    return this.collection.update(query, modifier);
   },
 
   unlinkActions({ _id }) {

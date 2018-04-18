@@ -1,0 +1,8 @@
+query RiskTypeList($organizationId: ID!) {
+  riskTypes(organizationId: $organizationId) {
+    riskTypes {
+      _id
+      title
+    }
+  }
+}

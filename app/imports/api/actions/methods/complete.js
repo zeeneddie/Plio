@@ -1,13 +1,12 @@
 import { MiddlewareMethod } from '../../method';
 import { CompleteActionSchema } from '../../../share/schemas/schemas';
 import {
-  checkLoggedIn,
   checkDocExistanceById,
   checkOrgMembershipByDocument,
 } from '../../middleware';
 import { Actions } from '../../../share/collections';
 import { ActionService } from '../../../share/services';
-import { ensureCanBeCompleted } from '../middleware';
+import { checkLoggedIn, ensureActionCanBeCompleted } from '../../../share/middleware';
 
 export default new MiddlewareMethod({
   name: 'Actions.complete',
@@ -16,7 +15,7 @@ export default new MiddlewareMethod({
     checkLoggedIn(),
     checkDocExistanceById(Actions),
     checkOrgMembershipByDocument(),
-    ensureCanBeCompleted(),
+    ensureActionCanBeCompleted(),
   ],
   run: ActionService.complete.bind(ActionService),
 });
