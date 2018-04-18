@@ -4,6 +4,7 @@ mutation completeMilestone($input: CompleteMilestoneInput!) {
       _id
       isCompleted
       completedAt
+      status
     }
   }
 }

@@ -8,6 +8,8 @@ import {
 } from 'plio-util';
 import { view, map, flatten } from 'ramda';
 
+import { getGoalStatus } from '../../../../../share/helpers';
+
 const {
   _id,
   createdBy,
@@ -31,6 +33,11 @@ export default {
     organization: loadOrganizationById(view(organizationId)),
     files: loadFilesById(view(fileIds)),
     lessons: loadLessonsByDocumentId(view(_id)),
+    // TODO: subscribe cuz it may change over time
+    status: async (goal, args, { loaders: { Organization: { byId } } }) => {
+      const { timezone } = await byId.load(view(organizationId, goal));
+      return getGoalStatus(timezone, goal);
+    },
     actions: async (root, args, context) => {
       const { _id: documentId } = root;
       const { isDeleted = false } = args;

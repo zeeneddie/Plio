@@ -3,6 +3,7 @@ mutation updateGoalEndDate($input: UpdateGoalEndDateInput!) {
     goal {
       _id
       endDate
+      status
     }
   }
 }

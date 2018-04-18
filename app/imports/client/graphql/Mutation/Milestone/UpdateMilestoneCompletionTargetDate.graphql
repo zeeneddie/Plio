@@ -3,6 +3,7 @@ mutation updateMilestoneCompletionTargetDate($input: UpdateMilestoneCompletionTa
     milestone {
       _id
       completionTargetDate
+      status
     }
   }
 }

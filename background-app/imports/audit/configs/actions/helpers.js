@@ -1,4 +1,5 @@
 import { _ } from 'meteor/underscore';
+import { without } from 'ramda';
 
 import { Standards } from '/imports/share/collections/standards';
 import { NonConformities } from '/imports/share/collections/non-conformities';
@@ -43,11 +44,7 @@ export const getReceivers = ({ linkedTo, notify }, user) => {
 
   const receivers = Array.from(usersIds);
 
-  const index = receivers.indexOf(getUserId(user));
-
-  return index > -1
-    ? receivers.slice(0, index).concat(receivers.slice(index + 1))
-    : receivers;
+  return without(getUserId(user), receivers);
 };
 
 export const getLinkedDocAuditConfig = documentType => ({

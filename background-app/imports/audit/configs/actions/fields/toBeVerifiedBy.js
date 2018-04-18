@@ -1,7 +1,7 @@
+import { without } from 'ramda';
 import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '/imports/share/helpers';
+import { getUserFullNameOrEmail } from '../../../../share/helpers';
 import { getReceivers } from '../helpers';
-
 
 export default {
   field: 'toBeVerifiedBy',
@@ -23,9 +23,11 @@ export default {
         [ChangesKinds.FIELD_ADDED]:
           '{{{userName}}} assigned {{{newValue}}} to verify the {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} assigned {{{newValue}}} to verify the {{{docDesc}}} {{{docName}}} instead of {{{oldValue}}}',
+          '{{{userName}}} assigned {{{newValue}}} to verify the ' +
+          '{{{docDesc}}} {{{docName}}} instead of {{{oldValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{{userName}}} removed {{{oldValue}}} from the verification process of the {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed {{{oldValue}}} from the verification process ' +
+          'of the {{{docDesc}}} {{{docName}}}',
       },
     },
   ],
@@ -39,10 +41,6 @@ export default {
   },
   receivers({ diffs: { toBeVerifiedBy }, newDoc, user }) {
     const receivers = getReceivers(newDoc, user);
-    const index = receivers.indexOf(toBeVerifiedBy.newValue);
-
-    return index > -1
-      ? receivers.slice(0, index).concat(receivers.slice(index + 1))
-      : receivers;
+    return without(toBeVerifiedBy.newValue, receivers);
   },
 };

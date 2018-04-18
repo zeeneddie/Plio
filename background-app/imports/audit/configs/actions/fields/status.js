@@ -1,23 +1,14 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { ActionStatuses } from '/imports/share/constants';
+import { ActionStatuses } from '../../../../share/constants';
 import { getReceivers } from '../helpers';
-
+import status from '../../common/fields/status';
 
 export default {
   field: 'status',
   logs: [
-    {
-      message: {
-        [ChangesKinds.FIELD_ADDED]: 'Status set to "{{{newValue}}}"',
-        [ChangesKinds.FIELD_CHANGED]: 'Status changed from "{{{oldValue}}}" to "{{{newValue}}}"',
-        [ChangesKinds.FIELD_REMOVED]: 'Status removed',
-      },
-    },
+    status.logs.default,
   ],
   notifications: [],
-  data({ diffs: { status } }) {
-    const { newValue, oldValue } = status;
-
+  data({ diffs: { status: { newValue, oldValue } } }) {
     return {
       newValue: ActionStatuses[newValue],
       oldValue: ActionStatuses[oldValue],

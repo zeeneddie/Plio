@@ -11,6 +11,7 @@ mutation undoGoalCompletion($input: UndoGoalCompletionInput!) {
         }
       }
       completionComment
+      status
       ...CompletedDeletedGoal
       ...DashboardGoal
     }

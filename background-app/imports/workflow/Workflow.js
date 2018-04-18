@@ -1,8 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { WorkflowTypes } from '/imports/share/constants';
-import { Organizations } from '/imports/share/collections/organizations';
-
+import { WorkflowTypes } from '../share/constants';
+import { Organizations } from '../share/collections';
 
 export default class Workflow {
   constructor(id) {
@@ -33,6 +32,8 @@ export default class Workflow {
     } else if (workflowType === WorkflowTypes.SIX_STEP) {
       return this._getSixStepStatus();
     }
+
+    return undefined;
   }
 
   _updateStatus(status) {
@@ -49,7 +50,7 @@ export default class Workflow {
     this._onUpdateStatus(status);
   }
 
-  _onUpdateStatus(status) {
+  _onUpdateStatus() {
     // Implement in child class
   }
 
@@ -82,10 +83,11 @@ export default class Workflow {
 
   static get _collection() {
     // Implement in child class
+    return undefined;
   }
 
   static get _docType() {
     // Implement in child class
+    return undefined;
   }
-
 }

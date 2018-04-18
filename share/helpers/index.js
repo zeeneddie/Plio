@@ -29,6 +29,8 @@ import {
 } from '../collections';
 
 export * from './actions';
+export * from './goals';
+export * from './milestones';
 
 export const capitalize = str => `${str}`.charAt(0).toUpperCase() + `${str}`.substring(1);
 

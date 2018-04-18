@@ -1,7 +1,9 @@
+import { getTitle } from 'plio-util';
+
 import {
   ActionTypes,
   ProblemTypes,
-} from '/imports/share/constants';
+} from '../share/constants';
 
 // actions
 export const getCADesc = () => 'corrective action';
@@ -45,3 +47,11 @@ export const getProblemName = doc => `${doc.sequentialId} "${doc.title}"`;
 export const getStandardDesc = () => 'standard';
 
 export const getStandardName = doc => `"${doc.title}"`;
+
+// goals
+export const getGoalDesc = () => 'key goal';
+export const getGoalName = getTitle;
+
+// milestones
+export const getMilestoneDesc = () => 'milestone';
+export const getMilestoneName = getTitle;

@@ -3,7 +3,6 @@ import { pickNonInt } from 'plio-util';
 
 import {
   BaseEntitySchema,
-  getNotifySchema,
   OrganizationIdSchema,
   DeletedSchema,
 } from './schemas';
@@ -13,7 +12,6 @@ export const MilestoneSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
   DeletedSchema,
-  getNotifySchema('ownerId'),
   {
     title: {
       type: String,
