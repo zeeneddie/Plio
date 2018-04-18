@@ -35,10 +35,7 @@ const redirectAndOpen = props => setTimeout(() => {
     filter: STANDARD_FILTER_MAP.SECTION,
   });
 
-  let redirectOptions = { selectedStandard, defaultStandard };
-  if (props.searchText) {
-    redirectOptions = { defaultStandard };
-  }
+  const redirectOptions = { selectedStandard, defaultStandard };
 
   const redirect = () => redirectToStandardOrDefault(redirectOptions);
 
