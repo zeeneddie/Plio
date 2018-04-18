@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { setPropTypes, withState, withHandlers, flattenProp, onlyUpdateForKeys } from 'recompose';
 
 import DashboardStatsUnreadMessages from '../components/DashboardStatsUnreadMessages';
@@ -107,8 +107,8 @@ export default namedCompose('DashboardStatsUnreadMessagesContainer')(
     },
   }),
 )(({ messages, ...props }) => !!messages.length && (
-  <Fragment>
+  <div>
     <hr />
     <DashboardStatsUnreadMessages {...{ messages, ...props }} />
-  </Fragment>
+  </div>
 ));

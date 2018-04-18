@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
-import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers.js';
+import { DocumentLayoutSubs } from '../../../startup/client/subsmanagers';
+import { WorkInboxFilterIndexes } from '../../../api/constants';
 
 Template.WorkInbox_Layout.viewmodel({
   mixin: ['organization', 'workInbox', 'nonconformity', 'risk'],
@@ -8,8 +9,12 @@ Template.WorkInbox_Layout.viewmodel({
   autorun: [
     function () {
       const orgSerialNumber = this.organizationSerialNumber();
+      const isDeleted = (
+        this.isActiveWorkInboxFilter(WorkInboxFilterIndexes.MY_DELETED) ||
+        this.isActiveWorkInboxFilter(WorkInboxFilterIndexes.TEAM_DELETED)
+      );
       const _subHandlers = [
-        DocumentLayoutSubs.subscribe('workInboxLayout', orgSerialNumber),
+        DocumentLayoutSubs.subscribe('workInboxLayout', orgSerialNumber, isDeleted),
       ];
 
       this._subHandlers(_subHandlers);

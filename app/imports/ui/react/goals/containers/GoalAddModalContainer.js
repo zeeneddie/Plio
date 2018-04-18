@@ -1,107 +1,70 @@
-import connectUI from 'redux-ui';
-import { mapProps } from 'recompose';
-import { lenses } from 'plio-util';
-import { view, over, compose, append, inc } from 'ramda';
-import gql from 'graphql-tag';
+import { getUserOptions } from 'plio-util';
 import { graphql } from 'react-apollo';
+import { FORM_ERROR } from 'final-form';
+import { withProps } from 'recompose';
 
-import { namedCompose, withStore } from '../../helpers';
+import { GoalColors, GoalPriorities } from '../../../../share/constants';
+import { moveGoalWithinCacheAfterCreating } from '../../../../client/apollo/utils';
+import { namedCompose } from '../../helpers';
 import GoalAddModal from '../components/GoalAddModal';
-import { GoalPriorities } from '../../../../share/constants';
-import { Query, Fragment } from '../../../../client/graphql';
-
-const addGoal = (goal, data) => compose(
-  over(lenses.goals.goals, append(goal)),
-  over(lenses.goals.totalCount, inc),
-)(data);
-
-const CREATE_GOAL = gql`
-  mutation createGoal($input: CreateGoalInput!) {
-    createGoal(input: $input) {
-      goal {
-        ...DashboardGoal
-      }
-    }
-  }
-  ${Fragment.DASHBOARD_GOAL}
-`;
+import { Mutation } from '../../../../client/graphql';
+import { handleGQError } from '../../../../api/handleGQError';
 
 export default namedCompose('GoalAddModalContainer')(
-  withStore,
-  connectUI({
-    state: {
-      title: '',
-      description: '',
-      ownerId: view(lenses.ownerId),
-      startDate: () => new Date(),
-      endDate: null,
+  withProps(({ owner }) => ({
+    initialValues: {
+      ownerId: getUserOptions(owner),
+      startDate: new Date(),
       priority: GoalPriorities.MINOR,
-      color: '',
-      errorText: '',
-      isSaving: false,
+      color: GoalColors.INDIGO,
     },
-  }),
-  graphql(CREATE_GOAL, {
+  })),
+  graphql(Mutation.CREATE_GOAL, {
     props: ({
       mutate,
       ownProps: {
-        updateUI,
-        resetUI,
         organizationId,
         toggle,
         isOpen,
-        ui: {
-          title,
-          description,
-          ownerId,
-          startDate,
-          endDate,
-          priority,
-          color = '',
-        },
       },
     }) => ({
-      onClosed: resetUI,
-      onSubmit: () => {
-        updateUI('isSaving', true);
+      onSubmit: async ({
+        title,
+        description,
+        ownerId,
+        startDate,
+        endDate,
+        priority,
+        color,
+      }) => {
+        const errors = [];
+        if (!title) errors.push('Key goal name is required');
+        if (!endDate) errors.push('End Date is required');
 
-        return mutate({
-          variables: {
-            input: {
-              organizationId,
-              title,
-              description,
-              ownerId,
-              startDate,
-              endDate,
-              priority,
-              color: color.toUpperCase(),
+        if (errors.length) return { [FORM_ERROR]: errors.join('\n') };
+
+        try {
+          await mutate({
+            variables: {
+              input: {
+                title,
+                description,
+                startDate,
+                endDate,
+                priority,
+                color,
+                organizationId,
+                ownerId: ownerId.value,
+              },
             },
-          },
-          update: (proxy, { data: { createGoal: { goal } } }) => {
-            const data = addGoal(goal, proxy.readQuery({
-              query: Query.DASHBOARD_GOALS,
-              variables: { organizationId },
-            }));
-
-            return proxy.writeQuery({
-              data,
-              query: Query.DASHBOARD_GOALS,
-              variables: { organizationId },
-            });
-          },
-        }).then(() => {
-          updateUI('isSaving', false);
+            update: (proxy, { data: { createGoal: { goal } } }) =>
+              moveGoalWithinCacheAfterCreating(organizationId, goal, proxy),
+          });
           return isOpen && toggle();
-        }).catch(({ message }) => updateUI({
-          errorText: message,
-          isSaving: false,
-        }));
+        } catch (error) {
+          return { [FORM_ERROR]: handleGQError(error) };
+        }
       },
     }),
   }),
-  mapProps(({
-    ui: { errorText, isSaving },
-    ...props
-  }) => ({ errorText, isSaving, ...props })),
 )(GoalAddModal);

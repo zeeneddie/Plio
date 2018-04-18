@@ -1,5 +1,4 @@
 import DataLoader from 'dataloader';
-import { Organizations } from '../../../../share/collections';
 
-export default () => new DataLoader(async ids =>
-  Promise.all(ids.map(_id => Organizations.findOne({ _id }))));
+export default ({ collections: { Organizations } }) => new DataLoader(async ids =>
+  Organizations.find({ _id: { $in: ids } }).fetch());

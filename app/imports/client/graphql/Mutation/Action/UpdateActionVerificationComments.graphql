@@ -1,0 +1,7 @@
+mutation updateActionVerificationComments($input: UpdateActionVerificationCommentsInput!) {
+  updateActionVerificationComments(input: $input) {
+    action {
+      verificationComments
+    }
+  }
+}

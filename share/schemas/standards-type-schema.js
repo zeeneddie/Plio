@@ -21,5 +21,22 @@ export const StandardsTypeSchema = new SimpleSchema([
       max: 4,
       optional: true,
     },
+    isDefault: {
+      type: Boolean,
+      optional: true,
+    },
+    reservedTitle: {
+      type: String,
+      min: StringLimits.title.min,
+      max: StringLimits.title.max,
+      optional: true,
+      autoValue() {
+        if (this.isInsert && this.field('isDefault').value === true) {
+          return this.field('title').value;
+        }
+
+        return this.unset();
+      },
+    },
   },
 ]);

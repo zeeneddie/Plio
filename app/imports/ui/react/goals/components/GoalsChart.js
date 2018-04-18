@@ -1,104 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { pick } from 'ramda';
+
 import {
   TimelineChart,
-  TimelineCurrentDateLine,
   TimelineHorizontalLine,
-  TimelinePoint,
 } from '../../components';
+import { Timeline } from '../../../../api/constants';
+import ActionsMilestonesListContainer from '../containers/ActionsMilestonesListContainer';
 
-const getLineData = ({
-  startDate,
-  endDate,
-  title,
-  milestones = [],
-}, y) => [
-  { x: new Date(startDate), y, label: title },
-  { x: new Date(endDate), y },
-  ...milestones.map(({ completionTargetDate }) => ({
-    y,
-    x: new Date(completionTargetDate),
-  })),
-];
-
-const getScatterData = ({
-  title,
-  startDate,
-  endDate,
-  color,
-  milestones = [],
-}, y) => [
-  {
-    y,
-    x: new Date(startDate),
-    label: `${title} \n start date: \n ${new Date(startDate).toDateString()}`,
-    symbol: 'circle',
-    strokeWidth: 7,
-    fill: color,
-  },
-  {
-    y,
-    x: new Date(endDate),
-    label: `${title} \n end date: \n ${new Date(endDate).toDateString()}`,
-    symbol: 'circle',
-    strokeWidth: 7,
-    fill: color,
-  },
-  ...milestones.map(({ completionTargetDate, title: milestoneTitle }) => ({
-    y,
-    x: new Date(completionTargetDate),
-    label: milestoneTitle,
-    symbol: 'square',
-    strokeWidth: 3,
-    size: 5,
-    fill: color,
-  })),
-];
-
-const GoalsChart = ({
-  goals,
-  onLineTap,
-  onScatterTap,
-}) => {
-  const height = 50 * goals.length + 30;
-
-  return (
-    <TimelineChart
-      width={1140}
-      domain={{
-        x: [
-          new Date('01 January 2018'),
-          new Date('01 January 2019'),
-        ],
-        y: [
-          -1,
-          goals.length,
-        ],
-      }}
-      {...{ height }}
-    >
-      {/* VictoryChart expects components to be direct children */}
-      {TimelineCurrentDateLine({ height })}
-      {goals.map((goal, index) => TimelineHorizontalLine({
-        key: goal._id,
-        data: getLineData(goal, index),
-        onClick: onLineTap,
-        color: goal.color,
-      }))}
-      {goals.map((goal, index) => TimelinePoint({
-        key: goal._id,
-        color: goal.color,
-        onClick: onScatterTap,
-        data: getScatterData(goal, index),
-      }))}
-    </TimelineChart>
-  );
-};
+const GoalsChart = ({ goals, timeScale, onEdit }) => (
+  <TimelineChart
+    scaleType={timeScale}
+    partOfPastTime={Timeline.PART_OF_PAST_TIME}
+    maxWidth={Timeline.WIDTH}
+    lineHeight={Timeline.LINE_HEIGHT}
+    axisHeight={Timeline.AXIS_HEIGHT}
+    items={goals}
+    renderLine={({ item: goal, scaleDates }) => (
+      <TimelineHorizontalLine
+        {...{
+          scaleDates,
+          entityId: goal._id,
+          onClickPoints: onEdit,
+          ...pick(['color', 'title', 'startDate', 'endDate', 'points'], goal),
+        }}
+      />
+    )}
+    renderTimelineList={({ item: goal }) => (
+      <ActionsMilestonesListContainer {...{ goal }} />
+    )}
+  />
+);
 
 GoalsChart.propTypes = {
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onLineTap: PropTypes.func,
-  onScatterTap: PropTypes.func,
+  timeScale: PropTypes.number.isRequired,
+  onEdit: PropTypes.func,
 };
 
 export default GoalsChart;

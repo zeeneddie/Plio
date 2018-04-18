@@ -1,0 +1,19 @@
+#import "../../Fragment/CompletedDeletedGoal.graphql"
+#import "../../Fragment/DashboardGoal.graphql"
+
+mutation undoGoalCompletion($input: UndoGoalCompletionInput!) {
+  undoGoalCompletion(input: $input) {
+    goal {
+      completedBy {
+        _id
+        profile {
+          fullName
+        }
+      }
+      completionComment
+      status
+      ...CompletedDeletedGoal
+      ...DashboardGoal
+    }
+  }
+}

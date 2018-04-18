@@ -1,10 +1,12 @@
+/* eslint-disable camelcase */
+
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import ActionService from '/imports/share/services/action-service';
 import { RequiredSchema } from '/imports/share/schemas/action-schema';
 import { Actions } from '/imports/share/collections/actions';
 import { IdSchema } from '/imports/share/schemas/schemas';
-import { ProblemTypes } from '/imports/share/constants';
+import { AllowedActionLinkedDocTypes } from '/imports/share/constants';
 import Method, { CheckedMethod } from '../../method';
 import {
   checkOrgMembership,
@@ -13,7 +15,7 @@ import {
   ACT_OnLinkChecker,
   ACT_LinkedDocsChecker,
 } from '../../checkers';
-import { inject, always, T } from '/imports/api/helpers';
+import { inject, always, T } from '../../helpers';
 import {
   ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED,
   ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED,
@@ -181,14 +183,20 @@ export const linkDocument = new CheckedMethod({
       },
       documentType: {
         type: String,
-        allowedValues: Object.values(ProblemTypes),
+        allowedValues: AllowedActionLinkedDocTypes,
       },
     },
   ]).validator(),
 
-  check: checker => injectACT(checker)(ACT_OnLinkChecker),
+  check(checker) {
+    if (this.isSimulation) return undefined;
+
+    return injectACT(checker)(ACT_OnLinkChecker);
+  },
 
   run(...args) {
+    if (this.isSimulation) return undefined;
+
     return ActionService.linkDocument(...args);
   },
 });
@@ -205,7 +213,7 @@ export const unlinkDocument = new CheckedMethod({
       },
       documentType: {
         type: String,
-        allowedValues: Object.values(ProblemTypes),
+        allowedValues: AllowedActionLinkedDocTypes,
       },
     },
   ]).validator(),

@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import { UserRoles } from '/imports/share/constants';
+import { UserRoles } from '../share/constants';
 
 const StandardsHelp = {
   standard: 'A standard is a document that sets standards for how you do things (policies, processes, etc) in your organization.  To add a standard into Plio, just fill in the card details, and link to a source file which may be a Word document, a URL link to a web document or a video.',
@@ -63,6 +63,11 @@ const UserProfileHelp = {
   [UserRoles.EDIT_USER_ROLES]: 'Indicate whether this user can edit the User Superpowers section in the User profile (you should only grant this power to very few, highly trusted users)',
   [UserRoles.CHANGE_ORG_SETTINGS]: 'Indicate whether this user can edit the Organization settings (you should only grant this power to very few, highly trusted users)',
   [UserRoles.COMPLETE_ANY_ACTION]: 'Indicate whether this user can complete/verify any action in your Plio organization',
+  [UserRoles.CREATE_DELETE_GOALS]: 'Indicate whether this user can create and delete key goals',
+};
+
+const GoalsHelp = {
+  goal: 'In Plio, key goals are defined as your important operational objectives. These can include both shorter and longer term objectives. Key goals should have an owner, plus a target date for completion, with optional milestones and one or more linked actions. Normally, it’s useful to focus on managing a relatively small number of key goals at a time, typically in the range of 5 to 20.',
 };
 
 export {
@@ -74,4 +79,5 @@ export {
   MyPreferencesHelp,
   UserProfileHelp,
   PotentialGainsHelp,
+  GoalsHelp,
 };

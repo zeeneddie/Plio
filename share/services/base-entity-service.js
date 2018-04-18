@@ -5,10 +5,6 @@ import { SystemName } from '../constants';
 
 export default class BaseEntityService {
   constructor(collection) {
-    if (!collection) {
-      throw new Error('collection is undefined');
-    }
-
     this.collection = collection;
   }
 

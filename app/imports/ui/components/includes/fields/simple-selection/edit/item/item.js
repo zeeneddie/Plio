@@ -9,7 +9,7 @@ Template.SimpleSelection_Edit_Item.viewmodel({
   showAbbreviation: false,
   requireAbbreviation: false,
   abbreviationMaxLength: StringLimits.abbreviation.max,
-
+  disabled: false,
   onChange() {},
   onFocusOut(e) {
     const data = prop => ({
@@ -27,10 +27,10 @@ Template.SimpleSelection_Edit_Item.viewmodel({
       return;
     }
 
-    return this.callWithFocusCheck(e, () => this.onChange(this));
+    this.callWithFocusCheck(e, () => this.onChange(this));
   },
   onDelete() {},
-  onDeleteFn(e) {
+  onDeleteFn() {
     return () => this.onDelete(this);
   },
   getData() {

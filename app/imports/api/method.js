@@ -41,7 +41,11 @@ export class CheckedMethod extends ValidatedMethod {
     props.run = function ({ ...args }) {
       const userId = this.userId;
 
-      const res = props.check(collection => (checker, err) => checkDocAndMembershipAndMore(collection, args._id, userId)(curry(checker)({ ...args, userId }), err));
+      const res = props.check.call(this, collection =>
+        (checker, err) => checkDocAndMembershipAndMore(collection, args._id, userId)(
+          curry(checker)({ ...args, userId }),
+          err,
+        ));
 
       return run.call(this, { ...args }, res);
     };

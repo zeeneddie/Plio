@@ -1,19 +1,17 @@
 import { applyMiddleware } from 'plio-util';
-import { checkLoggedIn, checkOrgMembership } from '../../../../../share/middleware';
+import {
+  checkLoggedIn,
+  checkOrgMembership,
+  flattenInput,
+  ensureCanChangeGoals,
+} from '../../../../../share/middleware';
 
-export const resolver = async (
-  root,
-  args,
-  {
-    services: { GoalService },
-    collections: { Goals },
-  },
-) => GoalService.insert(args)
-  .then(_id => Goals.findOne({ _id }))
-  .then(goal => ({ goal }));
+export const resolver = async (root, args, { services: { GoalService } }) =>
+  GoalService.insert(args);
 
 export default applyMiddleware(
-  async (next, root, { input }, context) => next(root, input, context),
+  flattenInput(),
   checkLoggedIn(),
   checkOrgMembership(),
+  ensureCanChangeGoals((root, args) => args.organizationId),
 )(resolver);

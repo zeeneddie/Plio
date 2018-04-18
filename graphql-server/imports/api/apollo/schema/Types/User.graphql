@@ -11,7 +11,7 @@ type User {
   # List of emails that the user has
   emails: [UserEmail]!
   # The name of the roles the user has
-  roles: JSON!
+  roles(organizationId: ID!): [String]
   # User status (online/offline/away)
   status: String
   statusConnection: String

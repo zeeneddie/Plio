@@ -5,6 +5,7 @@ export const ROUTE_MAP = {
   NON_CONFORMITIES: 'non-conformities',
   RISKS: 'risks',
   ACTIONS: 'actions',
+  GOALS: 'goals',
 };
 
 export const DOCUMENT_TYPE_BY_ROUTE_MAP = {
@@ -12,4 +13,5 @@ export const DOCUMENT_TYPE_BY_ROUTE_MAP = {
   [ROUTE_MAP.NON_CONFORMITIES]: DocumentTypes.NON_CONFORMITY,
   [ROUTE_MAP.RISKS]: DocumentTypes.RISK,
   [ROUTE_MAP.ACTIONS]: DocumentTypes.CORRECTIVE_ACTION,
+  [ROUTE_MAP.GOALS]: DocumentTypes.GOAL,
 };

@@ -1,53 +1,58 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import { ModalBody, CardTitle, Button } from 'reactstrap';
+import React, { Fragment } from 'react';
+import { ModalBody, CardTitle, Button, Form } from 'reactstrap';
+import { Form as FinalForm } from 'react-final-form';
+import ErrorSection from '../../components/ErrorSection';
 
 import {
-  ErrorSection,
   Modal,
   ModalHeader,
   CardBlock,
   SaveButton,
 } from '../../components';
-import GoalFormContainer from '../containers/GoalFormContainer';
+import GoalForm from './GoalForm';
 
 export const GoalAddModal = ({
   isOpen,
   toggle,
-  errorText,
-  isSaving,
   onSubmit,
   organizationId,
   onClosed,
+  ...props
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
-    <ModalHeader
-      renderLeftButton={() => <Button onClick={toggle}>Close</Button>}
-      renderRightButton={() => (
-        <SaveButton onClick={onSubmit} {...{ isSaving }} />
-      )}
-    >
-      <CardTitle>Key Goal</CardTitle>
-    </ModalHeader>
-    <ModalBody>
-      <ErrorSection {...{ errorText }} />
+    <FinalForm {...{ onSubmit, ...props }}>
+      {({ handleSubmit, submitError }) => (
+        <Fragment>
+          <ModalHeader
+            renderLeftButton={() => <Button onClick={toggle}>Close</Button>}
+            renderRightButton={({ loading }) => (
+              <SaveButton onClick={handleSubmit} isSaving={loading} />
+            )}
+          >
+            <CardTitle>Key Goal</CardTitle>
+          </ModalHeader>
 
-      <div>
-        <CardBlock>
-          <GoalFormContainer {...{ organizationId }} />
-        </CardBlock>
-      </div>
-    </ModalBody>
+          <ErrorSection errorText={submitError} />
+
+          <ModalBody>
+            <CardBlock>
+              <Form onSubmit={handleSubmit}>
+                <GoalForm {...{ organizationId }} />
+              </Form>
+            </CardBlock>
+          </ModalBody>
+        </Fragment>
+      )}
+    </FinalForm>
   </Modal>
 );
 
 GoalAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  isSaving: PropTypes.bool,
   toggle: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func,
-  errorText: PropTypes.string,
   organizationId: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func,
   onClosed: PropTypes.func,
 };
 

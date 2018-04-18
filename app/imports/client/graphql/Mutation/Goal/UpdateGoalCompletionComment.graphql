@@ -1,0 +1,8 @@
+mutation updateGoalCompletionComment($input: UpdateGoalCompletionCommentInput!) {
+  updateGoalCompletionComment(input: $input) {
+    goal {
+      _id
+      completionComment
+    }
+  }
+}

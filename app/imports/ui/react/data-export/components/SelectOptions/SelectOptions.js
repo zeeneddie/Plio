@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Form from '/imports/ui/react/forms/components/Form';
-import Checkbox from '/imports/ui/react/forms/components/Checkbox';
+import Checkbox from '/imports/ui/react/forms/components/LegacyCheckbox';
 
 const SelectOptions = ({ fields }) => (
   <div className="relative">

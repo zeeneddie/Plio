@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { _ } from 'meteor/underscore';
-import { curry } from 'ramda';
+import { curry, flip } from 'ramda';
 
 import { Organizations } from '../../share/collections/organizations';
 import {
@@ -12,22 +12,14 @@ import {
   createOrgQueryWhereUserIsMember,
 } from '../../share/mongo/queries';
 import { checkDocExistance } from './document';
+import { isOrgOwner as isOrgOwnerChecker } from '../../share/checkers';
 
 const userIdOrgIdTester = (userId, organizationId) => _.every([
   SimpleSchema.RegEx.Id.test(userId),
   SimpleSchema.RegEx.Id.test(organizationId),
 ]);
 
-export const isOrgOwner = (userId, organizationId) => {
-  if (!userIdOrgIdTester(userId, organizationId)) return false;
-
-  const query = {
-    _id: organizationId,
-    ...createOrgQueryWhereUserIsOwner(userId),
-  };
-
-  return !!Organizations.findOne(query);
-};
+export const isOrgOwner = flip(isOrgOwnerChecker);
 
 export const isPlioUser = (userId) => {
   const adminOrg = Organizations.findOne({ isAdminOrg: true });

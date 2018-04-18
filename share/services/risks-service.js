@@ -5,6 +5,7 @@ import { Risks } from '../collections';
 import { ProblemTypes } from '../constants';
 import BaseEntityService from './base-entity-service';
 import ProblemsService from './problems-service';
+import GoalService from './goal-service';
 
 if (Meteor.isServer) {
   // import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
@@ -19,6 +20,40 @@ export default Object.assign({}, ProblemsService, {
   _docType: ProblemTypes.RISK,
 
   _getAbbr: () => 'RK',
+
+  async insert({
+    organizationId,
+    title,
+    description,
+    originatorId,
+    ownerId,
+    magnitude,
+    typeId,
+    standardsIds,
+    goalId,
+  }) {
+    const args = {
+      organizationId,
+      title,
+      description,
+      originatorId,
+      ownerId,
+      magnitude,
+      typeId,
+    };
+
+    if (goalId) {
+      Object.assign(args, { goalId });
+    } else {
+      Object.assign(args, { standardsIds });
+    }
+
+    const _id = await ProblemsService.insert.call(this, args);
+
+    if (goalId) await GoalService.linkRisk({ _id: goalId, riskId: _id });
+
+    return _id;
+  },
 
   'scores.insert': function ({ _id, ...args }) {
     const id = Random.id();

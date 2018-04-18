@@ -1,8 +1,9 @@
+/* eslint-disable camelcase */
+
 import { _ } from 'meteor/underscore';
 
-import { NonConformities } from '../../../share/collections/non-conformities';
-import { Risks } from '../../../share/collections/risks';
-import { ProblemTypes, ActionTypes, WorkflowTypes } from '../../../share/constants';
+import { Risks, NonConformities, Goals } from '../../../share/collections';
+import { ProblemTypes, ActionTypes, WorkflowTypes, DocumentTypes } from '../../../share/constants';
 import { AnalysisTitles } from '../../constants';
 import { checkAndThrow } from '../../helpers';
 import { capitalize } from '../../../share/helpers';
@@ -66,14 +67,21 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
 
 export const ACT_OnLinkChecker = ({ documentId, documentType }, action) => {
   const collection = ((() => {
-    if (Object.is(documentType, ProblemTypes.NON_CONFORMITY)) {
-      if (Object.is(action.type, ActionTypes.RISK_CONTROL)) {
-        throw ACT_RK_CANNOT_BE_LINKED_TO_NC;
-      }
+    switch (documentType) {
+      case ProblemTypes.NON_CONFORMITY:
+      case ProblemTypes.POTENTIAL_GAIN: {
+        if (action.type === ActionTypes.RISK_CONTROL) {
+          throw ACT_RK_CANNOT_BE_LINKED_TO_NC;
+        }
 
-      return NonConformities;
-    } else if (Object.is(documentType, ProblemTypes.RISK)) {
-      return Risks;
+        return NonConformities;
+      }
+      case ProblemTypes.RISK:
+        return Risks;
+      case DocumentTypes.GOAL:
+        return Goals;
+      default:
+        return undefined;
     }
   })());
 

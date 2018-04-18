@@ -8,7 +8,7 @@ type Risk {
   organization: Organization!
   serialNumber: Int!
   sequentialId: String!
-  # standards: [Standard]!
+  standards: [Standard]
   title: String!
   description: String
   magnitude: String!
@@ -21,10 +21,10 @@ type Risk {
   status: Int!
   workflowType: String
   statusComment: String
-  # departments: [Department]
+  departments: [Department]
   # isViewed: Boolean
   files: [File]
-  # type: RiskType
+  type: RiskType
   improvementPlan: ImprovementPlan
   analysis: Analysis
   updateOfStandards: Analysis

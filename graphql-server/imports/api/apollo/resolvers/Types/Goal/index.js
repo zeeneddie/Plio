@@ -3,13 +3,12 @@ import {
   loadUsersById,
   loadOrganizationById,
   loadFilesById,
-  loadActionsByLinkedDocumentId,
   loadLessonsByDocumentId,
-  loadMilestonesById,
-  loadRisksById,
   lenses,
 } from 'plio-util';
-import { view } from 'ramda';
+import { view, map, flatten } from 'ramda';
+
+import { getGoalStatus } from '../../../../../share/helpers';
 
 const {
   _id,
@@ -21,8 +20,6 @@ const {
   organizationId,
   completedBy,
   fileIds,
-  riskIds,
-  milestoneIds,
 } = lenses;
 
 export default {
@@ -35,9 +32,37 @@ export default {
     notify: loadUsersById(view(notify)),
     organization: loadOrganizationById(view(organizationId)),
     files: loadFilesById(view(fileIds)),
-    risks: loadRisksById(view(riskIds)),
-    actions: loadActionsByLinkedDocumentId(view(_id)),
     lessons: loadLessonsByDocumentId(view(_id)),
-    milestones: loadMilestonesById(view(milestoneIds)),
+    // TODO: subscribe cuz it may change over time
+    status: async (goal, args, { loaders: { Organization: { byId } } }) => {
+      const { timezone } = await byId.load(view(organizationId, goal));
+      return getGoalStatus(timezone, goal);
+    },
+    actions: async (root, args, context) => {
+      const { _id: documentId } = root;
+      const { isDeleted = false } = args;
+      const { loaders: { Action: { byQuery } } } = context;
+
+      return byQuery.load({ 'linkedTo.documentId': documentId, isDeleted });
+    },
+    milestones: async (root, args, context) => {
+      const { milestoneIds } = root;
+      const { loaders: { Milestone: { byQuery } } } = context;
+
+      return byQuery.loadMany(map(milestoneId => ({
+        _id: milestoneId,
+        isDeleted: false,
+      }), milestoneIds)).then(flatten);
+    },
+    risks: async (root, args, context) => {
+      const { riskIds } = root;
+      const { isDeleted = false } = args;
+      const { loaders: { Risk: { byQuery } } } = context;
+
+      return byQuery.loadMany(map(riskId => ({
+        _id: riskId,
+        isDeleted,
+      }), riskIds)).then(flatten);
+    },
   },
 };

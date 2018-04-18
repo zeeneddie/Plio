@@ -2,12 +2,12 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
-import { HttpLink } from 'apollo-link-http';
+import { BatchHttpLink } from 'apollo-link-batch-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
 const GRAPHQL_URL = Meteor.settings.public.graphql.url;
 
-const httpLink = new HttpLink({ uri: GRAPHQL_URL });
+const httpLink = new BatchHttpLink({ uri: GRAPHQL_URL });
 const meteorAccountsLink = new ApolloLink((operation, forward) => {
   operation.setContext({
     headers: {

@@ -1,29 +1,28 @@
 import { Mongo } from 'meteor/mongo';
 import moment from 'moment-timezone';
+import { _ } from 'meteor/underscore';
 
-import { ActionSchema } from '../schemas/action-schema.js';
-import { NonConformities } from './non-conformities.js';
-import { Risks } from './risks.js';
-import { WorkItems } from './work-items.js';
+import { ActionSchema } from '../schemas/action-schema';
+import { NonConformities } from './non-conformities';
+import { Risks } from './risks';
+import { WorkItems } from './work-items';
 import {
-  ActionUndoTimeInHours, ProblemMagnitudes,
-  ProblemTypes, WorkflowTypes, CollectionNames
-} from '../constants.js';
-
+  ActionUndoTimeInHours,
+  ProblemTypes,
+  CollectionNames,
+} from '../constants';
+import { getActionWorkflowType } from '../helpers';
 
 const Actions = new Mongo.Collection(CollectionNames.ACTIONS);
 Actions.attachSchema(ActionSchema);
 
-
-const getLinkedDocsIds = (linkedDocs, docType) => {
-  return _.pluck(
-    _.filter(
-      linkedDocs,
-      ({ documentType }) => documentType === docType
-    ),
-    'documentId'
-  );
-};
+const getLinkedDocsIds = (linkedDocs, docType) => _.pluck(
+  _.filter(
+    linkedDocs,
+    ({ documentType }) => documentType === docType,
+  ),
+  'documentId',
+);
 
 // WARNING: Deprecated. Use app/imports/api/actions/helpers instead
 Actions.helpers({
@@ -33,8 +32,8 @@ Actions.helpers({
   getLinkedNCs() {
     return NonConformities.find({
       _id: {
-        $in: this.getLinkedNCsIds()
-      }
+        $in: this.getLinkedNCsIds(),
+      },
     }).fetch();
   },
   getLinkedRisksIds() {
@@ -43,8 +42,8 @@ Actions.helpers({
   getLinkedRisks() {
     return Risks.find({
       _id: {
-        $in: this.getLinkedRisksIds()
-      }
+        $in: this.getLinkedRisksIds(),
+      },
     }).fetch();
   },
   getLinkedDocuments() {
@@ -58,10 +57,10 @@ Actions.helpers({
     const { isCompleted, isVerified, completedAt } = this;
 
     if (!_.every([
-          isCompleted === true,
-          isVerified === false,
-          _.isDate(completedAt)
-        ])) {
+      isCompleted === true,
+      isVerified === false,
+      _.isDate(completedAt),
+    ])) {
       return false;
     }
 
@@ -85,9 +84,8 @@ Actions.helpers({
     return undoDeadline.isAfter(new Date());
   },
   isLinkedToDocument(docId, docType) {
-    return !!_.find(this.linkedTo, ({ documentId, documentType }) => {
-      return (documentId === docId) && (documentType === docType);
-    });
+    return !!_.find(this.linkedTo, ({ documentId, documentType }) =>
+      (documentId === docId) && (documentType === docType));
   },
   completed() {
     const { isCompleted, completedAt, completedBy } = this;
@@ -108,26 +106,7 @@ Actions.helpers({
     return (isDeleted === true) && deletedAt && deletedBy;
   },
   getWorkflowType() {
-    // Action has 6-step workflow if at least one linked document has 6-step workflow
-    const { linkedTo } = this;
-
-    if (!linkedTo || !linkedTo.length) {
-      return WorkflowTypes.THREE_STEP;
-    }
-
-    const query = {
-      isDeleted: false,
-      deletedAt: { $exists: false },
-      deletedBy: { $exists: false },
-      workflowType: WorkflowTypes.SIX_STEP
-    };
-
-    const ncQuery = _.extend({ _id: { $in: this.getLinkedNCsIds() } }, query);
-    const riskQuery = _.extend({ _id: { $in: this.getLinkedRisksIds() } }, query);
-
-    const sixStepDoc = NonConformities.findOne(ncQuery) || Risks.findOne(riskQuery);
-
-    return sixStepDoc ? WorkflowTypes.SIX_STEP : WorkflowTypes.THREE_STEP;
+    return getActionWorkflowType(this);
   },
   getWorkItems() {
     return WorkItems.find({ 'linkedDoc._id': this._id }).fetch();

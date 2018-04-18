@@ -1,7 +1,9 @@
 import { Template } from 'meteor/templating';
 
-import { setWorkflowDefaults } from '/imports/api/organizations/methods.js';
-import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
+import { setWorkflowDefaults } from '/imports/api/organizations/methods';
+import { OrganizationSettingsHelp } from '/imports/api/help-messages';
+
+import Checkbox from '../../../../../../react/forms/components/Checkbox';
 
 Template.OrgSettings_WorkflowDefaults.viewmodel({
   mixin: 'modal',
@@ -18,7 +20,7 @@ Template.OrgSettings_WorkflowDefaults.viewmodel({
       return;
     }
 
-    const type = viewModel.templateInstance.data.type;
+    const { type } = viewModel.templateInstance.data;
     const _id = this.organizationId();
 
     this.modal().callMethod(setWorkflowDefaults, {
@@ -29,7 +31,7 @@ Template.OrgSettings_WorkflowDefaults.viewmodel({
     return this.onStepTimeChange.bind(this);
   },
   onStepTimeChange(viewModel) {
-    const type = viewModel.templateInstance.data.type;
+    const { type } = viewModel.templateInstance.data;
     const { timeValue, timeUnit } = viewModel.getData();
     const _id = this.organizationId();
 
@@ -37,4 +39,13 @@ Template.OrgSettings_WorkflowDefaults.viewmodel({
       _id, type, stepTime: { timeValue, timeUnit },
     });
   },
+  onActionsSimplifiedCompletionChange(isActionsCompletionSimplified) {
+    const _id = this.organizationId();
+
+    this.modal().callMethod(setWorkflowDefaults, {
+      _id,
+      isActionsCompletionSimplified,
+    });
+  },
+  Checkbox: () => Checkbox,
 });

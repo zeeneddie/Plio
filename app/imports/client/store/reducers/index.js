@@ -2,6 +2,7 @@
 
 import { combineReducers } from 'redux';
 import { reducer as uiReducer } from 'redux-ui';
+
 import { ORGANIZATION_CHANGED, USER_LOGOUT } from '../actions/types';
 
 import discussion from './discussionReducer';

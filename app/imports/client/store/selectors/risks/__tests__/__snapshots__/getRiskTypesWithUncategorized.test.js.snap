@@ -7,6 +7,10 @@ Array [
     "risks": Array [
       Object {
         "_id": 10,
+        "analysis": Object {
+          "completedBy": 6,
+          "executor": 6,
+        },
         "departmentsIds": Array [
           16,
         ],
@@ -48,6 +52,7 @@ Array [
       Object {
         "_id": 13,
         "deletedAt": 1513074233018,
+        "departmentsIds": Array [],
         "isDeleted": true,
         "standardsIds": Array [
           1,
@@ -55,6 +60,7 @@ Array [
       },
       Object {
         "_id": 14,
+        "departmentsIds": Array [],
         "standardsIds": Array [
           2,
         ],

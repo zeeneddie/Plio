@@ -1,0 +1,13 @@
+#import "../Fragment/CompletedDeletedGoal.graphql"
+
+query ComplatedDeletedGoals($organizationId: ID!, $limit: Int!) {
+  goals(organizationId: $organizationId, limit: $limit, isCompletedOrDeleted: true) @connection(
+    key: "complatedDeletedGoals",
+    filter: ["organizationId"]
+  ) {
+    totalCount
+    goals {
+      ...CompletedDeletedGoal
+    }
+  }
+}

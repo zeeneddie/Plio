@@ -8,6 +8,9 @@ import Action from './Action';
 import Lesson from './Lesson';
 import Milestone from './Milestone';
 import Goal from './Goal';
+import RiskType from './RiskType';
+import Standard from './Standard';
+import Department from './Department';
 
 const loaders = {
   User,
@@ -18,14 +21,17 @@ const loaders = {
   Lesson,
   Milestone,
   Goal,
+  RiskType,
+  Standard,
+  Department,
 };
 
-export const createLoaders = () => reduce(
+export const createLoaders = ctx => reduce(
   (parentAcc, parentKey) => ({
     ...parentAcc,
     [parentKey]: reduce((acc, key) => ({
       ...acc,
-      [key]: loaders[parentKey][key](),
+      [key]: loaders[parentKey][key](ctx),
     }), {}, Object.keys(loaders[parentKey])),
   }),
   {},

@@ -1,0 +1,12 @@
+mutation updateActionOwner($input: UpdateActionOwnerInput!) {
+  updateActionOwner(input: $input) {
+    action {
+      owner {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

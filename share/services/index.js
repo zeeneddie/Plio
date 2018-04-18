@@ -5,3 +5,7 @@ export { default as ProblemService } from './problems-service';
 export { default as RiskService } from './risks-service';
 export { default as WorkItemService } from './work-item-service';
 export { default as GoalService } from './goal-service';
+export { default as MilestoneService } from './milestone-service';
+export { default as OrganizationService } from './organization-service';
+export { default as LessonService } from './lesson-service';
+export { default as DepartmentService } from './department-service';

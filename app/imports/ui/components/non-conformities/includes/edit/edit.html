@@ -15,15 +15,23 @@
               occurrencesIds=this.occurrences}}
         {{/unless}}
 
-        {{> Subcards_Actions_Edit
+        {{#if (isPG this)}}
+          {{> Subcards_Actions_Edit
+            type="GA"
+            label="Action"
+            documentId=this._id
+            documentType=this.type}}
+        {{else}}
+          {{> Subcards_Actions_Edit
             type="CA"
             documentId=this._id
-            documentType="non-conformity"}}
+            documentType=this.type}}
 
-        {{> Subcards_Actions_Edit
+          {{> Subcards_Actions_Edit
             type="PA"
             documentId=this._id
-            documentType="non-conformity"}}
+            documentType=this.type}}
+        {{/if}}
 
         {{> Subcards_ImprovementPlan_Edit
             improvementPlan=this.improvementPlan}}

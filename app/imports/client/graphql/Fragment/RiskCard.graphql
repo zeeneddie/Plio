@@ -1,0 +1,52 @@
+fragment RiskCard on Risk {
+  _id
+  sequentialId
+  serialNumber
+  title
+  description
+  status
+  statusComment
+  magnitude
+  analysis {
+    targetDate
+    executor {
+      _id
+      profile {
+        fullName
+      }
+    }
+    status
+    completedBy {
+      _id
+      profile {
+        fullName
+      }
+    }
+    completedAt
+    completionComments
+  }  
+  originator {
+    _id
+    profile {
+      fullName
+    }
+  }
+  owner {
+    _id
+    profile {
+      fullName
+    }
+  }
+  standards {
+    _id
+    title
+  }
+  type {
+    _id
+    title
+  }
+  departments {
+    _id
+    title
+  }
+}

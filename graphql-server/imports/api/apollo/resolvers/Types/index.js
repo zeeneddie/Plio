@@ -8,6 +8,9 @@ import ImprovementPlan from './ImprovementPlan';
 import Lesson from './Lesson';
 import Goal from './Goal';
 import Milestone from './Milestone';
+import RiskType from './RiskType';
+import Standard from './Standard';
+import Department from './Department';
 
 export default {
   ...User,
@@ -20,4 +23,7 @@ export default {
   ...Lesson,
   ...Goal,
   ...Milestone,
+  ...RiskType,
+  ...Standard,
+  ...Department,
 };

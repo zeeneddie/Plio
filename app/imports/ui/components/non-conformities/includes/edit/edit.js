@@ -1,15 +1,17 @@
 import { Template } from 'meteor/templating';
+import { Meteor } from 'meteor/meteor';
+import { swal } from 'meteor/plio:bootstrap-sweetalert';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 import invoke from 'lodash.invoke';
 
 import {
   update,
   remove,
-} from '/imports/api/non-conformities/methods';
+} from '../../../../../api/non-conformities/methods';
 import {
   ALERT_AUTOHIDE_TIME,
   AnalysisFieldPrefixes,
 } from '../../../../../api/constants';
-
 
 Template.NC_Card_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck', 'router', 'collapsing'],
@@ -45,8 +47,8 @@ Template.NC_Card_Edit.viewmodel({
   }, cb = () => {}) {
     const _id = this._id();
 
-    if ((_.keys(query).length > 0) && (!('_id' in query))) {
-      query = { _id, ...query };
+    if ((Object.keys(query).length > 0) && (!('_id' in query))) {
+      Object.assign(query, { _id });
     }
 
     const allArgs = {
@@ -102,10 +104,10 @@ Template.NC_Card_Edit.viewmodel({
       if (first) {
         const { _id } = first;
 
-        Meteor.setTimeout(() => {
+        Meteor.defer(() => {
           this.goToNC(_id);
           this.expandCollapsed(_id);
-        }, 0);
+        });
       }
     }
   },

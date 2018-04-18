@@ -3,9 +3,10 @@ import {
   loadUsersById,
   loadOrganizationById,
   loadFilesById,
+  loadDepartmentsById,
   lenses,
 } from 'plio-util';
-import { view } from 'ramda';
+import { view, map, flatten } from 'ramda';
 
 const {
   createdBy,
@@ -16,6 +17,7 @@ const {
   notify,
   organizationId,
   fileIds,
+  departmentsIds,
 } = lenses;
 
 export default {
@@ -28,5 +30,17 @@ export default {
     notify: loadUsersById(view(notify)),
     organization: loadOrganizationById(view(organizationId)),
     files: loadFilesById(view(fileIds)),
+    departments: loadDepartmentsById(view(departmentsIds)),
+    type: ({ typeId }, args, { loaders: { RiskType: { byId } } }) => byId.load(typeId),
+    standards: (root, args, context) => {
+      const { standardsIds = [] } = root;
+      const { isDeleted = false } = args;
+      const { loaders: { Standard: { byQuery } } } = context;
+
+      return byQuery.loadMany(map(standardId => ({
+        isDeleted,
+        _id: standardId,
+      }), standardsIds)).then(flatten);
+    },
   },
 };

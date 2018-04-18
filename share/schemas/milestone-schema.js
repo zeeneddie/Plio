@@ -1,16 +1,17 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { pickNonInt } from 'plio-util';
 
 import {
   BaseEntitySchema,
-  getNotifySchema,
   OrganizationIdSchema,
+  DeletedSchema,
 } from './schemas';
 import { StringLimits, MilestoneStatuses } from '../constants';
 
 export const MilestoneSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
-  getNotifySchema('ownerId'),
+  DeletedSchema,
   {
     title: {
       type: String,
@@ -24,7 +25,7 @@ export const MilestoneSchema = new SimpleSchema([
     },
     status: {
       type: Number,
-      allowedValues: Object.values(MilestoneStatuses),
+      allowedValues: Object.values(pickNonInt(MilestoneStatuses)),
       defaultValue: 1,
     },
     completionTargetDate: {
@@ -42,6 +43,11 @@ export const MilestoneSchema = new SimpleSchema([
       type: String,
       regEx: SimpleSchema.RegEx.Id,
       optional: true,
+    },
+    completionComment: {
+      type: String,
+      optional: true,
+      max: StringLimits.comments.max,
     },
   },
 ]);

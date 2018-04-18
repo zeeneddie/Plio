@@ -8,8 +8,7 @@ import {
 } from '../../middleware';
 import { Actions } from '../../../share/collections';
 import { ActionService } from '../../../share/services';
-import { ensureCanBeVerified } from '../middleware';
-import { checkLoggedIn } from '../../../share/middleware';
+import { checkLoggedIn, ensureActionCanBeVerified } from '../../../share/middleware';
 
 export default new MiddlewareMethod({
   name: 'Actions.verify',
@@ -24,7 +23,7 @@ export default new MiddlewareMethod({
     checkLoggedIn(),
     checkDocExistanceById(Actions),
     checkOrgMembershipByDocument(),
-    ensureCanBeVerified(),
+    ensureActionCanBeVerified(),
   ],
   run: ActionService.verify.bind(ActionService),
 });

@@ -10,7 +10,7 @@ import { pickDocuments } from '../../../../../api/helpers';
 
 const mapStateToProps = (state, props) => {
   const usersByIds = getUsersByIds(state);
-  const { owner, improvementPlan, notify } = props;
+  const { owner, improvementPlan = {}, notify } = props;
 
   return {
     section: getStandardBookSectionBySectionId(state, props),

@@ -1,5 +1,5 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-
+import { pickNonInt } from 'plio-util';
 import {
   BaseEntitySchema,
   getNotifySchema,
@@ -51,10 +51,10 @@ const GoalSchema = new SimpleSchema([
     },
     status: {
       type: Number,
-      allowedValues: Object.values(GoalStatuses),
+      allowedValues: Object.values(pickNonInt(GoalStatuses)),
       defaultValue: 1,
     },
-    statusComments: {
+    statusComment: {
       type: String,
       optional: true,
       max: StringLimits.comments.max,
@@ -71,6 +71,11 @@ const GoalSchema = new SimpleSchema([
       type: String,
       regEx: SimpleSchema.RegEx.Id,
       optional: true,
+    },
+    completionComment: {
+      type: String,
+      optional: true,
+      max: StringLimits.comments.max,
     },
     color: {
       type: String,

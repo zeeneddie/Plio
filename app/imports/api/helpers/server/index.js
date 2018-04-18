@@ -1,1 +1,1 @@
-export { default as publishWithMiddleware } from './publishWithMiddleware';
+export * from './publishWithMiddleware';

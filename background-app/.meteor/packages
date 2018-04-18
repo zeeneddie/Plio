@@ -20,3 +20,4 @@ mdg:validated-method
 percolate:synced-cron
 blaze-html-templates
 dynamic-import@0.3.0
+alanning:roles

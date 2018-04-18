@@ -1,0 +1,8 @@
+mutation updateLessonTitle($input: UpdateLessonTitleInput!) {
+  updateLessonTitle(input: $input) {
+    lesson {
+      _id
+      title
+    }
+  }
+}

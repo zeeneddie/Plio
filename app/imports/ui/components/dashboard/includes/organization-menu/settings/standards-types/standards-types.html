@@ -6,7 +6,7 @@
     loading=(not Template.subscriptionsReady)}}
     <div class="card-block">
       {{> SimpleSelection_Edit
-          items=standardsTypes
+          items=(items standardsTypes)
           addButtonText="Add standards type"
           placeholder=placeholder
           showAbbreviation=true

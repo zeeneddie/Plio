@@ -6,8 +6,7 @@ import {
 } from '../../middleware';
 import { Actions } from '../../../share/collections';
 import { ActionService } from '../../../share/services';
-import { ensureCanUndoVerification } from '../middleware';
-import { checkLoggedIn } from '../../../share/middleware';
+import { checkLoggedIn, ensureCanUndoActionVerification } from '../../../share/middleware';
 
 export default new MiddlewareMethod({
   name: 'Actions.undoVerification',
@@ -16,7 +15,7 @@ export default new MiddlewareMethod({
     checkLoggedIn(),
     checkDocExistanceById(Actions),
     checkOrgMembershipByDocument(),
-    ensureCanUndoVerification(),
+    ensureCanUndoActionVerification(),
   ],
   run: ActionService.undoVerification.bind(ActionService),
 });

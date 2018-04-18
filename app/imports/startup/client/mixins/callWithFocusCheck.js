@@ -4,6 +4,12 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 export default {
   callWithFocusCheck(e, updateFn) {
     const modal = ViewModel.findOne('ModalWindow');
+
+    if (!modal) {
+      updateFn();
+      return;
+    }
+
     modal.isWaiting(true);
 
     Meteor.setTimeout(() => {

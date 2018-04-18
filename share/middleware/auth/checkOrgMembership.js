@@ -1,19 +1,15 @@
-import { Meteor } from 'meteor/meteor';
-import { ifElse, view, useWith } from 'ramda';
-import { lenses } from 'plio-util';
 
 import { isOrgMember } from '../../checkers';
 import Errors from '../../errors';
 
-const { userId, organizationId } = lenses;
+export default (
+  getOrgId = (root, args) => args.organizationId,
+) => async (next, root, args, context) => {
+  const organizationId = getOrgId(root, args, context);
 
-export default lens => async (next, root, args, context) => ifElse(
-  useWith(isOrgMember, [
-    view(lens || organizationId),
-    view(userId),
-  ]),
-  (...otherArgs) => next(root, ...otherArgs),
-  () => {
-    throw new Meteor.Error(403, Errors.NOT_ORG_MEMBER);
-  },
-)(args, context);
+  if (!await isOrgMember(organizationId, context.userId)) {
+    throw new Error(Errors.NOT_ORG_MEMBER);
+  }
+
+  return next(root, args, context);
+};

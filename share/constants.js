@@ -36,6 +36,14 @@ export const ActionTypes = {
   CORRECTIVE_ACTION: 'CA',
   PREVENTATIVE_ACTION: 'PA',
   RISK_CONTROL: 'RC',
+  GENERAL_ACTION: 'GA',
+};
+
+export const ActionTitles = {
+  [ActionTypes.CORRECTIVE_ACTION]: 'Corrective action',
+  [ActionTypes.PREVENTATIVE_ACTION]: 'Preventative action',
+  [ActionTypes.RISK_CONTROL]: 'Risk control',
+  [ActionTypes.GENERAL_ACTION]: 'General action',
 };
 
 export const ActionUndoTimeInHours = 1;
@@ -138,47 +146,47 @@ export const DefaultStandardSections = [
   },
 ];
 
-export const DefaultStandardTypes = [
-  {
+export const DefaultStandardTypes = {
+  PROCESS: {
     title: 'Process',
     abbreviation: 'PRO',
   },
-  {
+  POLICY: {
     title: 'Policy',
     abbreviation: 'POL',
   },
-  {
+  CHECKLIST: {
     title: 'Checklist',
     abbreviation: 'CHK',
   },
-  {
+  COMPLIANCE_MANAGEMENT_OBJECTIVE: {
     title: 'Compliance management objective',
     abbreviation: 'CMO',
   },
-  {
+  COMPLIANCE_OBLIGATION: {
     title: 'Compliance obligation',
     abbreviation: 'COB',
   },
-  {
+  STANDARD_OPERATING_PROCEDURE: {
     title: 'Standard operating procedure',
     abbreviation: 'SOP',
   },
-  {
+  WORK_INSTRUCTION: {
     title: 'Work instruction',
     abbreviation: 'WORK',
   },
-  {
+  PRODUCT_SPECIFICATION: {
     title: 'Product specification',
     abbreviation: 'SPEC',
   },
-  {
+  RISK_CONTROL: {
     title: 'Risk control',
     abbreviation: 'RSC',
   },
-  {
+  SECTION_HEADER: {
     title: 'Section header',
   },
-];
+};
 
 export const DocChangesKinds = {
   DOC_CREATED: 1,
@@ -296,6 +304,7 @@ export const ProblemTypes = {
 export const DocumentTypes = {
   STANDARD: 'standard',
   GOAL: 'goal',
+  MILESTONE: 'milestone',
   ...ProblemTypes,
   ...ActionTypes,
 };
@@ -401,6 +410,7 @@ export const UserMembership = {
 
 export const UserRoles = {
   CREATE_UPDATE_DELETE_STANDARDS: 'create-update-delete-standards',
+  CREATE_DELETE_GOALS: 'create-delete-goals',
   VIEW_TEAM_ACTIONS: 'view-team-actions',
   INVITE_USERS: 'invite-users',
   DELETE_USERS: 'delete-users',
@@ -411,6 +421,7 @@ export const UserRoles = {
 
 export const UserRolesNames = {
   [UserRoles.CREATE_UPDATE_DELETE_STANDARDS]: 'Create & edit standards documents',
+  [UserRoles.CREATE_DELETE_GOALS]: 'Create & delete Key goals',
   [UserRoles.VIEW_TEAM_ACTIONS]: 'View all Team actions',
   [UserRoles.INVITE_USERS]: 'Invite users',
   [UserRoles.DELETE_USERS]: 'Delete users',
@@ -460,12 +471,14 @@ export const OrgOwnerRoles = [
   UserRoles.EDIT_USER_ROLES,
   UserRoles.CHANGE_ORG_SETTINGS,
   UserRoles.COMPLETE_ANY_ACTION,
+  UserRoles.CREATE_DELETE_GOALS,
 ];
 
 export const OrgMemberRoles = [
   UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
   UserRoles.VIEW_TEAM_ACTIONS,
   UserRoles.COMPLETE_ANY_ACTION,
+  UserRoles.CREATE_DELETE_GOALS,
 ];
 
 export const OrgCurrencies = {
@@ -502,6 +515,7 @@ export const OrganizationDefaults = {
         timeUnit: TimeUnits.DAYS,
       },
     },
+    isActionsCompletionSimplified: true,
   },
   reminders: {
     minorNc: {
@@ -715,14 +729,41 @@ export const WorkspaceDefaultsTypes = {
   DISPLAY_MESSAGES: 'displayMessages',
   DISPLAY_ACTIONS: 'displayActions',
   DISPLAY_GOALS: 'displayGoals',
+  DISPLAY_COMPLETED_DELETED_GOALS: 'displayCompletedDeletedGoals',
+  TIME_SCALE: 'timeScale',
 };
 
 export const WorkspaceDefaults = {
   [WorkspaceDefaultsTypes.DISPLAY_USERS]: 5,
   [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: 1,
   [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 4,
-  [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 5,
+  [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 10,
+  [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 5,
+  [WorkspaceDefaultsTypes.TIME_SCALE]: 3,
 };
+
+export const TimeScaleOptions = [
+  {
+    label: '1 month',
+    value: 1,
+  },
+  {
+    label: '3 months',
+    value: 3,
+  },
+  {
+    label: '6 months',
+    value: 6,
+  },
+  {
+    label: '9 months',
+    value: 9,
+  },
+  {
+    label: '12 months',
+    value: 12,
+  },
+];
 
 export const GoalPriorities = { ...ProblemMagnitudes };
 
@@ -730,12 +771,9 @@ export const GoalStatuses = {
   AWAITING_COMPLETION: 1,
   OVERDUE: 2,
   COMPLETED: 3,
-};
-
-export const GoalStatusesNames = {
-  [GoalStatuses.AWAITING_COMPLETION]: 'Open - awaiting completion',
-  [GoalStatuses.OVERDUE]: 'Open - overdue',
-  [GoalStatuses.COMPLETED]: 'Closed - marked as complete',
+  1: 'Open - awaiting completion',
+  2: 'Open - overdue',
+  3: 'Closed - marked as complete',
 };
 
 export const GoalColors = {
@@ -764,16 +802,30 @@ export const AllowedActionLinkedDocTypes = [
 ];
 
 export const MilestoneStatuses = {
-  OPEN: 1,
-  COMPLETED: 2,
-};
-
-export const MilestoneStatusNames = {
-  [MilestoneStatuses.OPEN]: 'Open',
-  [MilestoneStatuses.COMPLETED]: 'Completed',
+  AWAITING_COMPLETION: 1,
+  OVERDUE: 2,
+  COMPLETE: 3,
+  1: 'Awaiting completion',
+  2: 'Overdue',
+  3: 'Complete',
 };
 
 // fill in other stuff
 export const Abbreviations = {
   GOAL: 'KG',
+  LESSON: 'LL',
+};
+
+export const AWSDirectives = {
+  DISCUSSION_FILES: 'discussionFiles',
+  USER_AVATARS: 'userAvatars',
+  HTML_ATTACHMENT_PREVIEW: 'htmlAttachmentPreview',
+  STANDARD_FILES: 'standardFiles',
+  IMPROVEMENT_PLAN_FILES: 'improvementPlanFiles',
+  NONCONFORMITY_FILES: 'nonConformityFiles',
+  RISK_FILES: 'riskFiles',
+  ACTION_FILES: 'actionFiles',
+  ROOT_CAUSE_ANALYSIS_FILES: 'rootCauseAnalysisFiles',
+  HELP_DOC_FILES: 'helpDocFiles',
+  GOAL_FILES: 'goalFiles',
 };

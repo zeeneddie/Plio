@@ -7,6 +7,10 @@ Array [
     "risks": Array [
       Object {
         "_id": 10,
+        "analysis": Object {
+          "completedBy": 6,
+          "executor": 6,
+        },
         "departmentsIds": Array [
           16,
         ],

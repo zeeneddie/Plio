@@ -1,5 +1,7 @@
-import { loadOrganizationById, loadUserById, lenses } from 'plio-util';
+import { loadOrganizationById, loadUserById, lenses, generateSequentialId } from 'plio-util';
 import { view } from 'ramda';
+
+import { Abbreviations } from '../../../../../share/constants';
 
 const {
   createdBy,
@@ -10,6 +12,7 @@ const {
 
 export default {
   Lesson: {
+    sequentialId: generateSequentialId(Abbreviations.LESSON),
     createdBy: loadUserById(view(createdBy)),
     updatedBy: loadUserById(view(updatedBy)),
     owner: loadUserById(view(owner)),

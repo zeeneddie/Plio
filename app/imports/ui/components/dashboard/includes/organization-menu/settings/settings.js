@@ -8,10 +8,11 @@ import {
 } from '/imports/share/collections/standards-book-sections.js';
 import { isOrgOwner } from '/imports/api/checkers';
 
-import HomeTitlesSubcardContainer
-  from '/imports/ui/react/organization-settings/containers/HomeTitlesSubcardContainer';
+import WorkspaceContainer
+  from '/imports/ui/react/organization-settings/containers/WorkspaceContainer';
 import ReviewContainer
   from '/imports/ui/react/organization-settings/containers/ReviewContainer';
+import KeyGoalsSettingsContainer from '/imports/ui/react/organization-settings/containers/KeyGoals';
 import { DocumentTypes } from '../../../../../../share/constants';
 import {
   setNCGuideline,
@@ -30,8 +31,8 @@ Template.OrgSettings.viewmodel({
       this.load(_.pick(org, ['name', 'currency', 'timezone']));
     }
   },
-  homeTitlesSubcard() {
-    return HomeTitlesSubcardContainer;
+  workspaceSubcard() {
+    return WorkspaceContainer;
   },
   departments() {
     const query = { organizationId: this.organizationId() };
@@ -92,6 +93,9 @@ Template.OrgSettings.viewmodel({
   },
   reviewContainer() {
     return ReviewContainer;
+  },
+  keyGoalsSettings() {
+    return KeyGoalsSettingsContainer;
   },
   DocumentTypes: () => DocumentTypes,
 });

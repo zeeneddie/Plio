@@ -8,12 +8,15 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.39",
+    "babel-runtime": "^6.26.0",
     "deep-diff": "^0.3.4",
     "handlebars": "^4.0.5",
     "lodash.get": "^4.4.2",
     "lodash.property": "^4.4.2",
     "meteor-node-stubs": "~0.2.0",
     "moment-timezone": "^0.5.7",
-    "pluralize": "^3.0.0"
+    "plio-util": "https://github.com/Pliohub/plio-util.git#devel",
+    "pluralize": "^3.0.0",
+    "ramda": "^0.25.0"
   }
 }

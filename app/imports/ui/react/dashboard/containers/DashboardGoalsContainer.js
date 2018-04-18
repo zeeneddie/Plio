@@ -1,27 +1,33 @@
 import { graphql } from 'react-apollo';
 import {
-  withContext,
   renameProps,
   flattenProp,
   setPropTypes,
   onlyUpdateForKeys,
-  withState,
-  withHandlers,
+  defaultProps,
+  branch,
+  renderNothing,
 } from 'recompose';
 import PropTypes from 'prop-types';
-import { lenses, lensNotEq } from 'plio-util';
-import { view, allPass } from 'ramda';
+import { lenses, lensNotEq, byEndDate, byPriority } from 'plio-util';
+import { view, allPass, sort, either, when, always, slice, compose } from 'ramda';
 import { NetworkStatus } from 'apollo-client';
+import connectUI from 'redux-ui';
 
-import { namedCompose, withHr, withPreloaderPage, withStateToggle } from '../../helpers';
+import { namedCompose, withHr, withPreloaderPage } from '../../helpers';
 import { DashboardGoals } from '../components';
 import {
   WORKSPACE_DEFAULTS,
   WorkspaceDefaultsTypes,
   WorkspaceDefaults,
+  UserRoles,
 } from '../../../../share/constants';
-import { client } from '../../../../client/apollo';
 import { Query } from '../../../../client/graphql';
+
+const sortAndSliceGoals = (limit, goals) => compose(
+  when(always(limit), slice(0, limit)),
+  sort(either(byPriority, byEndDate)),
+)(goals);
 
 export default namedCompose('DashboardGoalsContainer')(
   setPropTypes({
@@ -30,26 +36,45 @@ export default namedCompose('DashboardGoalsContainer')(
       serialNumber: PropTypes.number.isRequired,
       [WORKSPACE_DEFAULTS]: PropTypes.shape({
         [WorkspaceDefaultsTypes.DISPLAY_GOALS]: PropTypes.number,
+        [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: PropTypes.number,
+        [WorkspaceDefaultsTypes.TIME_SCALE]: PropTypes.number,
       }).isRequired,
     }).isRequired,
   }),
-  withContext({ client: PropTypes.object }, () => ({ client })),
   flattenProp('organization'),
   flattenProp(WORKSPACE_DEFAULTS),
   renameProps({
     _id: 'organizationId',
-    [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'itemsPerRow',
+    [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'limit',
+    [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'deletedItemsPerRow',
+    [WorkspaceDefaultsTypes.TIME_SCALE]: 'timeScale',
   }),
-  onlyUpdateForKeys(['organizationId', 'itemsPerRow']),
-  withState('isOpen', 'setIsOpen', false),
+  defaultProps({
+    limit: WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
+    timeScale: WorkspaceDefaults[WorkspaceDefaultsTypes.TIME_SCALE],
+  }),
+  onlyUpdateForKeys(['organizationId', 'deletedItemsPerRow', 'timeScale', 'limit']),
+  connectUI({
+    state: {
+      isOpen: false,
+      isAddModalOpen: false,
+      isEditModalOpen: false,
+      isMilestoneModalOpen: false,
+      isActionModalOpen: false,
+      activeGoal: null,
+      activeMilestone: null,
+      activeAction: null,
+    },
+  }),
   graphql(Query.DASHBOARD_GOALS, {
     options: ({
+      ui: { isOpen },
+      limit,
       organizationId,
-      itemsPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
     }) => ({
       variables: {
         organizationId,
-        limit: itemsPerRow,
+        limit: isOpen ? 0 : limit,
       },
       notifyOnNetworkStatusChange: true,
     }),
@@ -60,25 +85,37 @@ export default namedCompose('DashboardGoalsContainer')(
         networkStatus,
         goals: {
           totalCount,
-          goals,
+          goals = [],
         } = {},
-        me: { userId } = {},
+        me: user = { roles: [] },
       },
       ownProps: {
-        isOpen,
-        setIsOpen,
+        ui: {
+          isOpen,
+          isAddModalOpen,
+          isEditModalOpen,
+          isMilestoneModalOpen,
+          isActionModalOpen,
+        },
         organizationId,
+        updateUI,
+        limit,
       },
     }) => ({
       isOpen,
+      isAddModalOpen,
+      isEditModalOpen,
+      isMilestoneModalOpen,
+      isActionModalOpen,
       loading,
-      goals,
       totalCount,
       networkStatus,
-      userId,
+      user,
       organizationId,
+      goals: sortAndSliceGoals(isOpen ? 0 : limit, goals),
+      canEditGoals: user.roles.includes(UserRoles.CREATE_DELETE_GOALS),
       toggle: async () => {
-        if (!isOpen) {
+        if (!isOpen && goals.length < totalCount) {
           await fetchMore({
             variables: {
               limit: 0,
@@ -92,9 +129,18 @@ export default namedCompose('DashboardGoalsContainer')(
             }),
           });
         }
-
-        setIsOpen(!isOpen);
+        updateUI({ isOpen: !isOpen });
       },
+      toggleAddModal: (e) => {
+        if (!isAddModalOpen) e.stopPropagation();
+
+        updateUI('isAddModalOpen', !isAddModalOpen);
+      },
+      toggleEditModal: () => updateUI('isEditModalOpen', !isEditModalOpen),
+      toggleMilestoneModal: () =>
+        updateUI('isMilestoneModalOpen', !isMilestoneModalOpen),
+      toggleActionModal: () =>
+        updateUI('isActionModalOpen', !isActionModalOpen),
     }),
   }),
   withPreloaderPage(
@@ -104,13 +150,9 @@ export default namedCompose('DashboardGoalsContainer')(
     ]),
     () => ({ size: 2 }),
   ),
-  withStateToggle(false, 'isModalOpen', 'toggleModal'),
-  withHandlers({
-    openModal: ({ toggleModal }) => (e) => {
-      e.stopPropagation();
-
-      toggleModal();
-    },
-  }),
-  withHr,
+  branch(
+    ({ totalCount, canEditGoals }) => !!totalCount || canEditGoals,
+    withHr,
+    renderNothing,
+  ),
 )(DashboardGoals);

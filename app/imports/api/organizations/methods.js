@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import { Meteor } from 'meteor/meteor';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
@@ -13,22 +15,20 @@ import {
   reviewFrequencySchema,
   reviewAnnualDateSchema,
   reviewReviewerIdSchema,
-} from '/imports/share/schemas/organization-schema';
+} from '../../share/schemas/organization-schema';
 import {
   WorkflowTypes, ProblemMagnitudes, InvitationStatuses,
-  DocumentTypes, DocumentTypesPlural,
-} from '/imports/share/constants';
+  DocumentTypes, DocumentTypesPlural, OrganizationDefaults,
+} from '../../share/constants';
 import {
   IdSchema, ReminderTimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
   UserIdSchema, TimezoneSchema,
   pwdSchemaObj, idSchemaDoc,
-} from '/imports/share/schemas/schemas';
+} from '../../share/schemas/schemas';
 import Method, { MiddlewareMethod } from '../method';
-import { chain, compose } from '/imports/api/helpers';
+import { chain, compose } from '../helpers';
 import {
-  checkOrgMembership,
-  ORG_CheckExistance,
   ORG_EnsureCanChange,
   ORG_EnsureNameIsUnique,
   ORG_EnsureCanInvite,
@@ -41,12 +41,10 @@ import {
   USR_EnsureIsPlioAdmin,
   USR_EnsureIsPlioUser,
 } from '../checkers';
-import { USR_EnsurePasswordIsValid, ensureCanChangeRoles } from '/imports/api/users/checkers';
+import { USR_EnsurePasswordIsValid, ensureCanChangeRoles } from '../users/checkers';
 import { ensureCanUnsubscribeFromDailyRecap, ensureThereIsNoDocuments } from './checkers';
 import { CANNOT_IMPORT_DOCS } from './errors';
-import {
-  checkOrgMembership as checkOrgMembershipMiddleware,
-} from '../middleware';
+import { checkOrgMembership as checkOrgMembershipMiddleware } from '../middleware';
 import { checkLoggedIn } from '../../share/middleware';
 
 const nameSchema = new SimpleSchema({ name: { type: String } });
@@ -100,6 +98,8 @@ export const insert = new Method({
         ownerId: this.userId,
       });
     }
+
+    return undefined;
   },
 });
 
@@ -161,7 +161,8 @@ export const setWorkflowDefaults = new Method({
     {
       type: {
         type: String,
-        allowedValues: ['minorProblem', 'majorProblem', 'criticalProblem'],
+        allowedValues: Object.keys(OrganizationDefaults.workflowDefaults),
+        optional: true,
       },
       workflowType: {
         type: String,
@@ -170,6 +171,10 @@ export const setWorkflowDefaults = new Method({
       },
       stepTime: {
         type: ReminderTimePeriodSchema,
+        optional: true,
+      },
+      isActionsCompletionSimplified: {
+        type: Boolean,
         optional: true,
       },
     },
@@ -410,7 +415,7 @@ export const inviteUserByEmail = new Method({
 
   run({ organizationId, email, welcomeMessage }) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
@@ -466,7 +471,7 @@ export const inviteMultipleUsersByEmail = new Method({
 
   run({ organizationId, emails, welcomeMessage }) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     const invitedEmails = [];
@@ -550,7 +555,7 @@ export const createOrganizationTransfer = new Method({
 
   run({ organizationId, newOwnerId }) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     return OrganizationService.createTransfer({
@@ -634,7 +639,7 @@ export const deleteOrganization = new Method({
 
   check(checker) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     return checker(chain(
@@ -646,7 +651,7 @@ export const deleteOrganization = new Method({
 
   run({ organizationId }) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     return OrganizationService.deleteOrganization({ organizationId });
@@ -666,7 +671,7 @@ export const deleteCustomerOrganization = new Method({
 
   check(checker) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     return checker(chain(
@@ -678,7 +683,7 @@ export const deleteCustomerOrganization = new Method({
 
   run({ organizationId }) {
     if (this.isSimulation) {
-      return;
+      return undefined;
     }
 
     return OrganizationService.deleteOrganization({ organizationId });
@@ -754,30 +759,6 @@ export const unsubscribeFromDailyRecap = new Method({
     if (this.isSimulation) return undefined;
 
     return OrganizationService.unsubscribeFromDailyRecap({ orgSerialNumber, userId: this.userId });
-  },
-});
-
-export const updateLastAccessedDate = new Method({
-  name: 'Organizations.updateLastAccessedDate',
-
-  validate: new SimpleSchema([
-    OrganizationIdSchema,
-  ]).validator(),
-
-  check(checker) {
-    if (this.isSimulation) {
-      return undefined;
-    }
-
-    return checker(({ organizationId }) => checkOrgMembership(this.userId, organizationId));
-  },
-
-  run({ organizationId }) {
-    if (this.isSimulation) {
-      return undefined;
-    }
-
-    return OrganizationService.updateLastAccessedDate({ organizationId });
   },
 });
 

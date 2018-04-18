@@ -1,0 +1,7 @@
+mutation removeLesson($input: RemoveLessonInput!) {
+  removeLesson(input: $input) {
+    lesson {
+      _id
+    }
+  }
+}

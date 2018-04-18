@@ -26,6 +26,9 @@ type WorkspaceDefaults {
   displayUsers: Int
   displayMessages: Int
   displayActions: Int
+  displayGoals: Int
+  displayCompletedDeletedGoals: Int
+  timeScale: Int
 }
 
 type OrganizationUser {
@@ -40,6 +43,7 @@ type WorkflowDefaults {
   minorProblem: WorkflowProblem
   majorProblem: WorkflowProblem
   criticalProblem: WorkflowProblem
+  isActionsCompletionSimplified: Boolean
 }
 
 type WorkflowProblem {

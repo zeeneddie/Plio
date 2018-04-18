@@ -1,6 +1,9 @@
-import { equals } from 'ramda';
+import { equals, compose, ifElse, view, allPass } from 'ramda';
+import { lenses, filterBy } from 'plio-util';
 
-import { ActionTypes } from '../../share/constants';
+import { ActionTypes, ActionStatuses, ActionIndexes } from '../../share/constants';
+import { getFormattedDate } from '../../share/helpers';
+import { TimelineColors } from '../constants';
 
 export const getClassByStatus = (status) => {
   switch (status) {
@@ -22,6 +25,8 @@ export const getClassByStatus = (status) => {
   }
 };
 
+export const getStatusName = status => ActionStatuses[status];
+
 export const splitActionsByType = (actions) => {
   const map = {
     [ActionTypes.CORRECTIVE_ACTION]: [],
@@ -40,4 +45,38 @@ export const splitActionsByType = (actions) => {
       ],
     }) : ({ ...prev });
   }, map);
+};
+
+export const getDisplayDate = compose(
+  getFormattedDate,
+  ifElse(
+    allPass([
+      view(lenses.isCompleted),
+      view(lenses.completedAt),
+    ]),
+    view(lenses.completedAt),
+    view(lenses.completionTargetDate),
+  ),
+);
+
+export const getDueActions = filterBy('status', [
+  ActionIndexes.DUE_COMPLETION_TODAY,
+  ActionIndexes.VERIFY_DUE_TODAY,
+]);
+
+export const getOverdueActions = filterBy('status', [
+  ActionIndexes.COMPLETION_OVERDUE,
+  ActionIndexes.VERIFY_OVERDUE,
+  ActionIndexes.COMPLETED_FAILED,
+]);
+
+export const getActionPointColor = (status, goalColor) => {
+  switch (status) {
+    case ActionIndexes.COMPLETED:
+      return goalColor;
+    case ActionIndexes.COMPLETION_OVERDUE:
+      return TimelineColors.OVERDUE;
+    default:
+      return TimelineColors.IN_PROGRESS;
+  }
 };

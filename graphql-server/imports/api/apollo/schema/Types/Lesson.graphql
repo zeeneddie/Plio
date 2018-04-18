@@ -6,6 +6,7 @@ type Lesson {
   updatedBy: User
   organization: Organization!
   serialNumber: Int!
+  sequentialId: String
   title: String!
   date: DateTime!
   notes: String!

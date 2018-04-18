@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { GithubPicker } from 'react-color';
 import styled, { css } from 'styled-components';
-import { Popover, PopoverBody } from 'reactstrap';
+import { Popover } from 'reactstrap';
 import { StyledMixins } from 'plio-util';
 import { defaultTo, compose, prop, identity } from 'ramda';
 import { withHandlers, branch } from 'recompose';
@@ -18,9 +18,8 @@ const StyledColorPickerIcon = styled.div`
   height: 33px;
   border-radius: 3px;
   outline: none !important;
-  border: 1px solid #ccc;
+  border: 5px solid #fff;
   position: relative;
-  overflow: hidden;
   display: block;
   transition: border-color 0.3s ease;
   cursor: pointer;
@@ -29,17 +28,18 @@ const StyledColorPickerIcon = styled.div`
   &:before {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    border: 5px solid white;
+    left: -6px;
+    right: -6px;
+    top: -6px;
+    bottom: -6px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
     transition: border-color 0.3s ease;
   }
     
   &:hover {
-    border-color: #adadad;
-    &:before { border-color: #e6e6e6; }
+    border-color: #e6e6e6;
+    &:before { border-color: #adadad; }
   }
 `;
 
@@ -108,12 +108,20 @@ const StyledGithubPicker = styled(GithubPicker)`
   & > span > div {
     width: auto !important;
     height: auto !important;
+    font-size: inherit !important;
 
     &:hover {
       outline: none !important;
       box-shadow: none !important;
     }
   }
+`;
+
+const StyledPopover = styled(Popover)`
+  max-width: inherit;
+  background-color: transparent;
+  border: none;
+  padding: 0;
 `;
 
 const enhance = compose(
@@ -146,24 +154,22 @@ const ColorPicker = ({
       onClick={toggle}
       {...{ value }}
     />
-    <Popover
+    <StyledPopover
       placement="bottom-start"
       target="colorpicker"
       {...{ isOpen, toggle }}
     >
-      <PopoverBody>
-        <StyledGithubPicker
-          {...{
-            colors,
-            width,
-            triangle,
-            value,
-            onChange,
-            ...props,
-          }}
-        />
-      </PopoverBody>
-    </Popover>
+      <StyledGithubPicker
+        {...{
+          colors,
+          width,
+          triangle,
+          value,
+          onChange,
+          ...props,
+        }}
+      />
+    </StyledPopover>
   </Fragment>
 );
 

@@ -2,7 +2,11 @@
 
 query DashboardGoals($organizationId: ID!, $limit: Int!) {
   me {
-    userId: _id
+    _id
+    profile {
+      fullName
+    }
+    roles(organizationId: $organizationId)
   }
 
   goals(organizationId: $organizationId, limit: $limit) @connection(

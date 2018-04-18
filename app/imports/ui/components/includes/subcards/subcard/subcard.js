@@ -1,7 +1,11 @@
+/* global $, _ */
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
+import { Tracker } from 'meteor/tracker';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
-import { isViewed } from '/imports/api/checkers';
+import { isViewed } from '../../../../../api/checkers';
 
 Template.Subcard.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck'],
@@ -46,7 +50,6 @@ Template.Subcard.viewmodel({
           const newSubcard = ViewModel.findOne('Subcard', vm => vm._id && vm._id() === res);
 
           if (newSubcard) {
-            newSubcard.toggleCollapse(null, 250);
             newSubcard.subcard.closest('.modal').animate({
               scrollTop: newSubcard.subcard.position().top + 70,
             }, 500, 'swing');
@@ -78,6 +81,7 @@ Template.Subcard.viewmodel({
   afterSave(err, res, cb, timeout) {
     const afterSaveFn = () => {
       if (err) {
+        // eslint-disable-next-line no-param-reassign
         err.isFromSubcard = true;
       }
 
@@ -100,6 +104,7 @@ Template.Subcard.viewmodel({
       if (_.isFunction(cb)) {
         return cb(err, res);
       }
+      return null;
     };
 
     if (_.isFinite(timeout) && (timeout >= 0)) {
@@ -119,8 +124,8 @@ Template.Subcard.viewmodel({
       } else {
         this.toggleCollapse();
       }
-    } else {
-      this.save && this.save();
+    } else if (this.save) {
+      this.save();
     }
   },
   setError(errMsg) {
@@ -148,7 +153,9 @@ Template.Subcard.viewmodel({
   },
   save() {
     const insertData = this.getData();
-    insertData && this.callInsert(this.insertFn, insertData);
+    if (insertData) {
+      this.callInsert(this.insertFn, insertData);
+    }
   },
   delete() {
     this.removeFn(this);

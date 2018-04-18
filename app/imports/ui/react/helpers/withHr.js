@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 export default Component => props => (
-  <Fragment>
+  <div>
     <hr />
     <Component {...props} />
-  </Fragment>
+  </div>
 );

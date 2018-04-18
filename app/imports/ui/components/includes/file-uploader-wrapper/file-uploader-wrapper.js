@@ -1,12 +1,13 @@
 import { Template } from 'meteor/templating';
-import { Files } from '/imports/share/collections/files.js';
-import { remove as removeFile } from '/imports/api/files/methods.js';
-import UploadsStore from '/imports/ui/utils/uploads/uploads-store.js';
+
+import { Files } from '../../../../share/collections';
+import { remove as removeFile } from '../../../../api/files/methods';
+import UploadsStore from '../../../utils/uploads/uploads-store';
+import { swal } from '../../../../client/util';
 
 Template.FileUploader_Wrapper.viewmodel({
   mixin: 'organization',
   slingshotDirective: '',
-
   uploader() {
     return this.child('FileUploader');
   },
@@ -14,14 +15,15 @@ Template.FileUploader_Wrapper.viewmodel({
     return this.afterInsert.bind(this);
   },
   afterInsert(fileId, cb) {
-    // if (this.files() && this.files().length) {
+    if (this.onAfterInsert) return this.onAfterInsert(fileId, cb);
+
     const options = {
       $addToSet: {
         fileIds: fileId,
       },
     };
 
-    this.parent().update({ options }, cb);
+    return this.parent().update({ options }, cb);
   },
   files() {
     const fileIds = this.fileIds() && this.fileIds().array() || [];
@@ -32,7 +34,7 @@ Template.FileUploader_Wrapper.viewmodel({
     return this.removeFile.bind(this);
   },
   removeFile(file) {
-    const { _id, url } = file;
+    const { _id } = file;
     const isFileUploading = !file.isUploaded() && !file.isFailed();
 
     let warningMsg = 'This file will be removed';
@@ -54,15 +56,17 @@ Template.FileUploader_Wrapper.viewmodel({
         UploadsStore.terminateUploading(_id);
       }
 
+      removeFile.call({ _id });
+
+      if (this.onAfterRemove) return this.onAfterRemove({ _id });
+
       const options = {
         $pull: {
           fileIds: _id,
         },
       };
 
-      removeFile.call({ _id });
-
-      this.parent().update({ options });
+      return this.parent().update({ options });
     });
   },
   uploaderMetaContext: {},
