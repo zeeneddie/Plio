@@ -17,6 +17,7 @@ mutation undoActionVerification($input: UndoActionVerificationInput!) {
       isVerifiedAsEffective
       verifiedAt
       verificationComments
+      status
       verifiedBy {
         _id
         profile {

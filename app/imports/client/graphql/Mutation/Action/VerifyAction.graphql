@@ -5,6 +5,7 @@ mutation verifyAction($input: VerifyActionInput!) {
       isVerified
       isVerifiedAsEffective
       verifiedAt
+      status
       verifiedBy {
         _id
         profile {

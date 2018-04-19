@@ -5,6 +5,7 @@ mutation completeAction($input: CompleteActionInput!) {
       isCompleted
       completedAt
       verificationTargetDate
+      status
       completedBy {
         _id
         profile {

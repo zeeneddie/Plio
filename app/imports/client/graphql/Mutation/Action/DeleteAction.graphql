@@ -2,6 +2,7 @@ mutation deleteAction($input: DeleteActionInput!) {
   deleteAction(input: $input) {
     action {
       _id
+      status
     }
   }
 }

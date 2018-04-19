@@ -2,6 +2,7 @@ mutation updateActionVerificationTargetDate($input: UpdateActionVerificationTarg
   updateActionVerificationTargetDate(input: $input) {
     action {
       verificationTargetDate
+      status
     }
   }
 }

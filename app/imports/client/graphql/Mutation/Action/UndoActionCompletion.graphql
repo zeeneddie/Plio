@@ -5,6 +5,7 @@ mutation undoActionCompletion($input: UndoActionCompletionInput!) {
       completedAt
       completionComments
       verificationTargetDate
+      status
       completedBy {
         _id
         profile {

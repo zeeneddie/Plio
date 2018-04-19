@@ -8,7 +8,7 @@ import {
 import { view, flatten } from 'ramda';
 
 import { DocumentTypes } from '../../../../../share/constants';
-import { getActionWorkflowType } from '../../../../../share/helpers';
+import { getActionWorkflowType, getActionStatus } from '../../../../../share/helpers';
 
 const {
   createdBy,
@@ -39,6 +39,11 @@ export default {
     notify: loadUsersById(view(notify)),
     organization: loadOrganizationById(view(organizationId)),
     owner: loadUserById(view(ownerId)),
+    // TODO: subscribe cuz it may change over time
+    status: async (action, args, { loaders: { Organization: { byId } } }) => {
+      const { timezone } = await byId.load(view(organizationId, action));
+      return getActionStatus(timezone, action);
+    },
     goals: async (root, args, context) => {
       const { linkedTo } = root;
       const { isDeleted = false } = args;

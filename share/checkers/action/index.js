@@ -7,3 +7,7 @@ export { default as isActionCompletedAtDeadlineDue } from './isActionCompletedAt
 export { default as isActionVerifiedAtDeadlineDue } from './isActionVerifiedAtDeadlineDue';
 export { default as canActionVerificationBeUndone } from './canActionVerificationBeUndone';
 export { default as isActionsCompletionSimplified } from './isActionsCompletionSimplified';
+export { default as isActionCompletionOverdue } from './isActionCompletionOverdue';
+export { default as isActionCompletionDueToday } from './isActionCompletionDueToday';
+export { default as isActionVerificationOverdue } from './isActionVerificationOverdue';
+export { default as isActionVerificationDueToday } from './isActionVerificationDueToday';

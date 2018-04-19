@@ -2,6 +2,7 @@ mutation updateActionCompletionTargetDate($input: UpdateActionCompletionTargetDa
   updateActionCompletionTargetDate(input: $input) {
     action {
       completionTargetDate
+      status
     }
   }
 }

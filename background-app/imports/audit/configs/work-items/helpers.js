@@ -1,14 +1,12 @@
 import { _ } from 'meteor/underscore';
 
-import { ActionTypes, ProblemTypes, WorkItemsStore } from '/imports/share/constants';
-import { Actions } from '/imports/share/collections/actions';
-import { NonConformities } from '/imports/share/collections/non-conformities';
-import { Risks } from '/imports/share/collections/risks';
+import { ActionTypes, ProblemTypes, WorkItemsStore, DocumentTypes } from '../../../share/constants';
+import { Actions, NonConformities, Risks, Goals } from '../../../share/collections';
 import { getUserId } from '../../utils/helpers';
 import ActionAuditConfig from '../actions/action-audit-config';
 import NCAuditConfig from '../non-conformities/nc-audit-config';
 import RiskAuditConfig from '../risks/risk-audit-config';
-
+import GoalAuditConfig from '../goals/goal-audit-config';
 
 const {
   COMPLETE_ACTION,
@@ -27,6 +25,7 @@ export const getLinkedDoc = (workItem) => {
     [ActionTypes.GENERAL_ACTION]: Actions,
     [ProblemTypes.NON_CONFORMITY]: NonConformities,
     [ProblemTypes.RISK]: Risks,
+    [DocumentTypes.GOAL]: Goals,
   }[type];
 
   return collection.findOne({ _id });
@@ -39,6 +38,7 @@ export const getLinkedDocAuditConfig = workItem => ({
   [ActionTypes.GENERAL_ACTION]: ActionAuditConfig,
   [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
   [ProblemTypes.RISK]: RiskAuditConfig,
+  [DocumentTypes.GOAL]: GoalAuditConfig,
 }[workItem.linkedDoc.type]);
 
 export const getReceivers = function ({ newDoc, user }) {
