@@ -16,3 +16,4 @@ export * from './meteorhacks_subs-manager';
 export * from './tracker';
 export * from './plio_bootstrap-sweetalert';
 export * from './gadicc_blaze-react-component';
+export * from './matb33_collection-hooks';
