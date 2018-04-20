@@ -4555,9 +4555,9 @@ please-upgrade-node@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/please-upgrade-node/-/please-upgrade-node-3.0.1.tgz#0a681f2c18915e5433a5ca2cd94e0b8206a782db"
 
-"plio-util@https://github.com/Pliohub/plio-util.git#i870-goals-actions":
+"plio-util@https://github.com/Pliohub/plio-util.git#devel":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#a1260d5a4c48c05ecd78836cd30839395b5c300f"
+  resolved "https://github.com/Pliohub/plio-util.git#73c13a064c5d54f94827617bd180b1ffc5aa88b0"
 
 pluralize@^7.0.0:
   version "7.0.0"
@@ -5958,9 +5958,9 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
-yarn@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.5.1.tgz#e8680360e832ac89521eb80dad3a7bc27a40bab4"
+yarn@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.6.0.tgz#9cec6f7986dc237d39ec705ce74d95155fe55d4b"
 
 yauzl@^2.4.2:
   version "2.9.1"
