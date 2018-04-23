@@ -42,6 +42,7 @@ export const getReceivers = ({ linkedTo, notify }, user) => {
 
   const problemCollections = [
     { collection: NonConformities, type: ProblemTypes.NON_CONFORMITY },
+    { collection: NonConformities, type: ProblemTypes.POTENTIAL_GAIN },
     { collection: Risks, type: ProblemTypes.RISK },
   ];
 

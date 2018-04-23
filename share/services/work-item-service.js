@@ -22,11 +22,11 @@ export default {
   update({
     _id, query = {}, options = {}, ...args
   }) {
-    if (!_.keys(query).length > 0) {
-      query = { _id };
+    if (!Object.keys(query).length) {
+      Object.assign(query, { _id });
     }
-    if (!_.keys(options).length > 0) {
-      options.$set = args;
+    if (!Object.keys(options).length) {
+      options.$set = args; // eslint-disable-line no-param-reassign
     }
 
     return this.collection.update(query, options);
@@ -166,7 +166,7 @@ export default {
         organizationId, targetDate, type,
       } = this._getDocData(docId, docType, workItemType);
 
-      const newId = this.collection.insert({
+      this.collection.insert({
         organizationId,
         targetDate,
         assigneeId: userId,
@@ -183,7 +183,7 @@ export default {
     }
   },
 
-  _dateUpdated(docId, date, workItemType, docType) {
+  _dateUpdated(docId, date, workItemType) {
     this.collection.update({
       'linkedDoc._id': docId,
       type: workItemType,
@@ -193,7 +193,7 @@ export default {
     });
   },
 
-  _completed(docId, workItemType, docType) {
+  _completed(docId, workItemType) {
     this.collection.update({
       'linkedDoc._id': docId,
       type: workItemType,
@@ -203,7 +203,7 @@ export default {
     });
   },
 
-  _canceled(docId, workItemType, docType) {
+  _canceled(docId, workItemType) {
     this.collection.update({
       'linkedDoc._id': docId,
       type: workItemType,
@@ -214,22 +214,22 @@ export default {
   },
 
   _getDocData(docId, docType, workItemType) {
-    let doc,
-      targetDate,
-      type;
+    let doc;
+    let targetDate;
+    let type;
 
     if (docType) {
       doc = this._getProblemDoc(docId, docType);
       type = docType;
 
       if (workItemType === COMPLETE_ANALYSIS) {
-        targetDate = doc.analysis.targetDate;
+        ({ targetDate } = doc.analysis);
       } else if (workItemType === COMPLETE_UPDATE_OF_DOCUMENTS) {
-        targetDate = doc.updateOfStandards.targetDate;
+        ({ targetDate } = doc.updateOfStandards);
       }
     } else {
       doc = Actions.findOne({ _id: docId });
-      type = doc.type;
+      ({ type } = doc);
 
       if (workItemType === COMPLETE_ACTION) {
         targetDate = doc.completionTargetDate;
@@ -248,6 +248,7 @@ export default {
   _getProblemDoc(docId, docType) {
     const collections = {
       [ProblemTypes.NON_CONFORMITY]: NonConformities,
+      [ProblemTypes.POTENTIAL_GAIN]: NonConformities,
       [ProblemTypes.RISK]: Risks,
     };
 

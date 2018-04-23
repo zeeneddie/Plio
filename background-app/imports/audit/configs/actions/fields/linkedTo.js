@@ -66,6 +66,7 @@ export default {
 
       const Workflow = {
         [ProblemTypes.NON_CONFORMITY]: NCWorkflow,
+        [ProblemTypes.POTENTIAL_GAIN]: NCWorkflow,
         [ProblemTypes.RISK]: RiskWorkflow,
         [DocumentTypes.GOAL]: GoalWorkflow,
       }[documentType];

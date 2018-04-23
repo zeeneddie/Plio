@@ -55,6 +55,7 @@ export const getWorkItemUrl = (serialNumber, documentId) => {
 export const getProblemUrl = (problem, problemType, organization) => {
   const urlFn = {
     [ProblemTypes.NON_CONFORMITY]: getNCUrl,
+    [ProblemTypes.POTENTIAL_GAIN]: getNCUrl,
     [ProblemTypes.RISK]: getRiskUrl,
   }[problemType];
 

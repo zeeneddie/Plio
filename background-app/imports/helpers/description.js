@@ -32,9 +32,12 @@ export const getNCDesc = () => 'nonconformity';
 
 export const getRiskDesc = () => 'risk';
 
+export const getPGDesc = () => 'potential gain';
+
 export const getProblemDesc = (problemType) => {
   const descFn = {
     [ProblemTypes.NON_CONFORMITY]: getNCDesc,
+    [ProblemTypes.POTENTIAL_GAIN]: getPGDesc,
     [ProblemTypes.RISK]: getRiskDesc,
   }[problemType];
 

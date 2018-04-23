@@ -814,6 +814,8 @@ export const MilestoneStatuses = {
 export const Abbreviations = {
   GOAL: 'KG',
   LESSON: 'LL',
+  NONCONFORMITY: 'NC',
+  POTENTIAL_GAIN: 'PG',
 };
 
 export const AWSDirectives = {

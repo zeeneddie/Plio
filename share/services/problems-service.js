@@ -25,7 +25,6 @@ export default {
     });
 
     if (workflowType === WorkflowTypes.SIX_STEP) {
-
       const doc = this.collection.findOne({ _id });
 
       this.setAnalysisExecutor({
@@ -38,7 +37,7 @@ export default {
         _id,
         targetDate: getWorkflowDefaultStepDate({
           organization,
-          linkedTo: [{ documentId: _id, documentType: this._docType }],
+          linkedTo: [{ documentId: _id, documentType: this._getDocType(_id) }],
         }),
       }, doc);
     }
@@ -49,11 +48,11 @@ export default {
   update({
     _id, query = {}, options = {}, ...args
   }) {
-    if (!_.keys(query).length > 0) {
-      query = { _id };
+    if (!Object.keys(query).length) {
+      Object.assign(query, { _id });
     }
-    if (!_.keys(options).length > 0) {
-      options.$set = args;
+    if (!Object.keys(options).length) {
+      options.$set = args; // eslint-disable-line no-param-reassign
     }
 
     return this.collection.update(query, options);
@@ -79,7 +78,7 @@ export default {
 
     const ret = this.collection.update(query, options);
 
-    WorkItemService.analysisUserUpdated(_id, this._docType, executor);
+    WorkItemService.analysisUserUpdated(_id, this._getDocType(_id), executor);
 
     return ret;
   },
@@ -90,7 +89,7 @@ export default {
 
     const ret = this.collection.update(query, options);
 
-    WorkItemService.analysisDateUpdated(_id, this._docType, targetDate);
+    WorkItemService.analysisDateUpdated(_id, this._getDocType(_id), targetDate);
 
     return ret;
   },
@@ -128,7 +127,7 @@ export default {
       },
     });
 
-    WorkItemService.analysisCompleted(_id, this._docType);
+    WorkItemService.analysisCompleted(_id, this._getDocType(_id));
 
     return ret;
   },
@@ -147,7 +146,7 @@ export default {
       },
     });
 
-    WorkItemService.analysisCanceled(_id, this._docType);
+    WorkItemService.analysisCanceled(_id, this._getDocType(_id));
 
     return ret;
   },
@@ -164,12 +163,12 @@ export default {
       },
     });
 
-    WorkItemService.standardsUpdated(_id, this._docType);
+    WorkItemService.standardsUpdated(_id, this._getDocType(_id));
 
     return ret;
   },
 
-  undoStandardsUpdate({ _id, userId }) {
+  undoStandardsUpdate({ _id }) {
     const ret = this.collection.update({
       _id,
     }, {
@@ -183,14 +182,12 @@ export default {
       },
     });
 
-    WorkItemService.standardsUpdateCanceled(_id, this._docType);
+    WorkItemService.standardsUpdateCanceled(_id, this._getDocType(_id));
 
     return ret;
   },
 
-  setStandardsUpdateExecutor({ _id, executor, assignedBy }, doc) {
-    const { updateOfStandards = {}, ...rest } = doc;
-
+  setStandardsUpdateExecutor({ _id, executor, assignedBy }) {
     const query = { _id };
     const options = {
       $set: {
@@ -201,21 +198,19 @@ export default {
 
     const ret = this.collection.update(query, options);
 
-    WorkItemService.updateOfStandardsUserUpdated(_id, this._docType, executor);
+    WorkItemService.updateOfStandardsUserUpdated(_id, this._getDocType(_id), executor);
 
     return ret;
   },
 
-  setStandardsUpdateDate({ _id, targetDate }, doc) {
-    const { updateOfStandards: { targetDate: td, ...updateOfStandards } = {}, ...rest } = doc;
-
+  setStandardsUpdateDate({ _id, targetDate }) {
     const ret = this.collection.update({
       _id,
     }, {
       $set: { 'updateOfStandards.targetDate': targetDate },
     });
 
-    WorkItemService.updateOfStandardsDateUpdated(_id, this._docType, targetDate);
+    WorkItemService.updateOfStandardsDateUpdated(_id, this._getDocType(_id), targetDate);
 
     return ret;
   },
@@ -290,16 +285,17 @@ export default {
   },
 
   unlinkActions({ _id }) {
+    const documentType = this._getDocType(_id);
     const query = {
       'linkedTo.documentId': _id,
-      'linkedTo.documentType': this._docType,
+      'linkedTo.documentType': documentType,
     };
 
     Actions.find(query).forEach((action) => {
       ActionService.unlinkDocument({
+        documentType,
         _id: action._id,
         documentId: _id,
-        documentType: this._docType,
       });
     });
   },

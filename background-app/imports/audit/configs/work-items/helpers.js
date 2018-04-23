@@ -24,6 +24,7 @@ export const getLinkedDoc = (workItem) => {
     [ActionTypes.RISK_CONTROL]: Actions,
     [ActionTypes.GENERAL_ACTION]: Actions,
     [ProblemTypes.NON_CONFORMITY]: NonConformities,
+    [ProblemTypes.POTENTIAL_GAIN]: NonConformities,
     [ProblemTypes.RISK]: Risks,
     [DocumentTypes.GOAL]: Goals,
   }[type];
@@ -37,6 +38,7 @@ export const getLinkedDocAuditConfig = workItem => ({
   [ActionTypes.RISK_CONTROL]: ActionAuditConfig,
   [ActionTypes.GENERAL_ACTION]: ActionAuditConfig,
   [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
+  [ProblemTypes.POTENTIAL_GAIN]: NCAuditConfig,
   [ProblemTypes.RISK]: RiskAuditConfig,
   [DocumentTypes.GOAL]: GoalAuditConfig,
 }[workItem.linkedDoc.type]);
@@ -102,8 +104,19 @@ export const getNotifications = () => [
   },
   {
     shouldSendNotification({ newDoc: { type, linkedDoc } }) {
-      return (type === COMPLETE_UPDATE_OF_DOCUMENTS)
-            && (linkedDoc.type === ProblemTypes.NON_CONFORMITY);
+      return (type === COMPLETE_ANALYSIS)
+            && (linkedDoc.type === ProblemTypes.POTENTIAL_GAIN);
+    },
+    text: '{{{userName}}} assigned you to do a potential gain analysis ' +
+      'of {{{docDesc}}} {{{docName}}}',
+    title: 'You have been assigned to do a potential gain analysis',
+    sendBoth: true,
+    emailTemplateData: getEmailTemplateData,
+  },
+  {
+    shouldSendNotification({ newDoc: { type, linkedDoc } }) {
+      return (type === COMPLETE_UPDATE_OF_DOCUMENTS) &&
+        ([ProblemTypes.NON_CONFORMITY, ProblemTypes.POTENTIAL_GAIN].includes(linkedDoc.type));
     },
     text: '{{{userName}}} assigned you to do an approval related to {{{docDesc}}} {{{docName}}}',
     title: 'You have been assigned to do an approval',

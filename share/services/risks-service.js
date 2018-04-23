@@ -17,7 +17,7 @@ export default Object.assign({}, ProblemsService, {
 
   _service: new BaseEntityService(Risks),
 
-  _docType: ProblemTypes.RISK,
+  _getDocType: () => ProblemTypes.RISK,
 
   _getAbbr: () => 'RK',
 
@@ -88,7 +88,7 @@ export default Object.assign({}, ProblemsService, {
     return risk;
   },
 
-  _refreshStatus(_id) {
+  _refreshStatus() {
     /* Meteor.isServer && Meteor.defer(() => {
       new RiskWorkflow(_id).refreshStatus();
     }); */

@@ -93,7 +93,7 @@ export default class ActionCreationReminderSender {
 
   _sendReminders() {
     this._NCsWithoutActions.forEach(nc => (
-      this._sendReminder(nc, ProblemTypes.NON_CONFORMITY)
+      this._sendReminder(nc, nc.type || ProblemTypes.NON_CONFORMITY)
     ));
 
     this._risksWithoutActions.forEach(risk => (

@@ -29,6 +29,7 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
   const linkedToByType = _.groupBy(linkedTo, doc => doc.documentType);
 
   const NCsIds = _.pluck(linkedToByType[ProblemTypes.NON_CONFORMITY], 'documentId');
+  const PGsIds = _.pluck(linkedToByType[ProblemTypes.POTENTIAL_GAIN], 'documentId');
   const risksIds = _.pluck(linkedToByType[ProblemTypes.RISK], 'documentId');
 
   let docWithUncompletedAnalysis;
@@ -44,7 +45,7 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
     analysisTitle = AnalysisTitles.riskAnalysis;
   } else {
     docWithUncompletedAnalysis = NonConformities.findOne({
-      _id: { $in: NCsIds },
+      _id: { $in: [...NCsIds, ...PGsIds] },
       workflowType: WorkflowTypes.SIX_STEP,
       'analysis.status': 0, // Not completed
     });
