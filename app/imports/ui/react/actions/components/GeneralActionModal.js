@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form as FinalForm } from 'react-final-form';
+
 import { EntityModal } from '../../components';
 import GeneralActionEditFormContainer from '../containers/GeneralActionEditFormContainer';
 import NewGeneralActionFormContainer from '../containers/NewGeneralActionFormContainer';
@@ -25,15 +26,16 @@ const GeneralActionModal = ({
     title="Action"
     formTarget={FORM_ID}
   >
-    {action ?
+    {action ? (
       <FinalForm
         initialValues={initialValues}
         onSubmit={() => null}
+        subscription={{}}
         render={() => (
           <GeneralActionEditFormContainer {...{ ...props, ...action }} />
         )}
       />
-    :
+    ) : (
       <NewGeneralActionFormContainer
         {...{
           ...props,
@@ -41,7 +43,7 @@ const GeneralActionModal = ({
           formId: FORM_ID,
         }}
       />
-    }
+    )}
   </EntityModal>
 );
 

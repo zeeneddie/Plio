@@ -30,6 +30,7 @@ const MilestoneModal = ({
       <FinalForm
         initialValues={initialValues}
         onSubmit={() => null}
+        subscription={{}}
         render={() => (
           <MilestoneEditFormContainer {...{ ...props, milestone }} />
         )}

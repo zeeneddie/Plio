@@ -2,6 +2,7 @@ import { withHandlers } from 'recompose';
 import { graphql } from 'react-apollo';
 import { mapRejectedEntitiesToOptions, Cache } from 'plio-util';
 import { last, mergeDeepLeft } from 'ramda';
+
 import {
   client,
   deleteActionFromGoalFragment,

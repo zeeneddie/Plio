@@ -33,7 +33,7 @@ const editEnhance = compose(
       loading,
       action,
       canCompleteAnyAction: roles.includes(UserRoles.COMPLETE_ANY_ACTION),
-      initialValues: action && getGeneralActionValuesByAction(action),
+      initialValues: action ? getGeneralActionValuesByAction(action) : {},
     }),
   }),
   branch(
