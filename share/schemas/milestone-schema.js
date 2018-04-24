@@ -49,6 +49,11 @@ export const MilestoneSchema = new SimpleSchema([
       optional: true,
       max: StringLimits.comments.max,
     },
+    notify: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+    },
   },
 ]);
 

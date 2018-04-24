@@ -7,8 +7,8 @@ import {
   checkMilestoneCompletionTargetDate,
 } from '../../../../../share/middleware';
 
-export const resolver = async (root, args, { services: { MilestoneService } }) =>
-  MilestoneService.insert(args);
+export const resolver = async (root, args, { userId, services: { MilestoneService } }) =>
+  MilestoneService.insert({ ...args, createdBy: userId });
 
 export default applyMiddleware(
   flattenInput(),

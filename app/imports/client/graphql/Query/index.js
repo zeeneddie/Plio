@@ -17,6 +17,7 @@ import ACTION_LIST from './ActionList.graphql';
 import GOAL_LIST from './GoalList.graphql';
 import MILESTONE_CARD from './MilestoneCard.graphql';
 import ACTION_CARD from './ActionCard.graphql';
+import MILESTONE_NOTIFY_CARD from './MilestoneNotifyCard.graphql';
 
 export default {
   DASHBOARD_GOALS,
@@ -38,4 +39,5 @@ export default {
   GOAL_LIST,
   MILESTONE_CARD,
   ACTION_CARD,
+  MILESTONE_NOTIFY_CARD,
 };

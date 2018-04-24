@@ -10,4 +10,10 @@ fragment MilestoneCard on Milestone {
   isCompleted
   completedAt
   completionComment
+  notify {
+    _id
+    profile {
+      fullName
+    }
+  }
 }

@@ -44,6 +44,16 @@ input UpdateMilestoneCompletionCommentInput {
   completionComment: String!
 }
 
+input AddMilestoneNotifyUserInput {
+  _id: ID!
+  userId: ID!
+}
+
+input RemoveMilestoneNotifyUserInput {
+  _id: ID!
+  userId: ID!
+}
+
 type Mutation {
   createMilestone(input: CreateMilestoneInput!): MilestonePayload
   deleteMilestone(input: DeleteMilestoneInput!): MilestonePayload
@@ -55,4 +65,6 @@ type Mutation {
   completeMilestone(input: CompleteMilestoneInput!): MilestonePayload
   updateMilestoneCompletedAt(input: UpdateMilestoneCompletedAtInput!): MilestonePayload
   updateMilestoneCompletionComment(input: UpdateMilestoneCompletionCommentInput!): MilestonePayload
+  addMilestoneNotifyUser(input: AddMilestoneNotifyUserInput!): UserPayload
+  removeMilestoneNotifyUser(input: RemoveMilestoneNotifyUserInput!): MilestonePayload
 }

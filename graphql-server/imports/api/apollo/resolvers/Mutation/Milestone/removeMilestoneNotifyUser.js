@@ -1,15 +1,21 @@
 import { applyMiddleware } from 'plio-util';
 import {
   checkLoggedIn,
-  checkMilestoneAccess,
   flattenInput,
+  checkMilestoneAccess,
+  checkUserOrgMembership,
+  milestoneUpdateAfterware,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { MilestoneService } }) =>
-  MilestoneService.remove(args);
+  MilestoneService.removeFromNotify(args);
 
 export default applyMiddleware(
-  flattenInput(),
   checkLoggedIn(),
+  flattenInput(),
   checkMilestoneAccess(),
+  checkUserOrgMembership({
+    getUserId: (root, args) => args.userId,
+  }),
+  milestoneUpdateAfterware(),
 )(resolver);

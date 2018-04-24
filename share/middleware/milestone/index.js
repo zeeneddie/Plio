@@ -3,3 +3,4 @@ export { default as checkMilestoneLinkedDocument } from './checkMilestoneLinkedD
 export {
   default as checkMilestoneCompletionTargetDate,
 } from './checkMilestoneCompletionTargetDate';
+export { default as milestoneUpdateAfterware } from './milestoneUpdateAfterware';

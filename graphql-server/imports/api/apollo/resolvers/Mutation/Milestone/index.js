@@ -6,7 +6,8 @@ import updateMilestoneCompletionTargetDate from './updateMilestoneCompletionTarg
 import completeMilestone from './completeMilestone';
 import updateMilestoneCompletedAt from './updateMilestoneCompletedAt';
 import updateMilestoneCompletionComment from './updateMilestoneCompletionComment';
-
+import addMilestoneNotifyUser from './addMilestoneNotifyUser';
+import removeMilestoneNotifyUser from './removeMilestoneNotifyUser';
 
 export default {
   createMilestone,
@@ -17,4 +18,6 @@ export default {
   completeMilestone,
   updateMilestoneCompletedAt,
   updateMilestoneCompletionComment,
+  addMilestoneNotifyUser,
+  removeMilestoneNotifyUser,
 };
