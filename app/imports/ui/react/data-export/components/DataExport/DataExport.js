@@ -12,12 +12,12 @@ import SelectOptions from '../SelectOptions';
 const DataExportModal = props => (
   <Form onSubmit={props.onSubmit}>
     <div className="relative">
-      <CardBody class="card-block">
+      <CardBody className="card-block">
         <SelectOptions {...props} />
       </CardBody>
       <CardDivider />
       <CardBlockCollapse leftText="Advanced filters" loading={props.processing}>
-        <CardBody class="card-block">
+        <CardBody className="card-block">
           <Filter {...props} />
         </CardBody>
       </CardBlockCollapse>

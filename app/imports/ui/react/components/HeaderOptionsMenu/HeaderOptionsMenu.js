@@ -1,18 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Nav, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 
-import Icon from '/imports/ui/react/components/Icons/Icon';
-import Nav from 'reactstrap/lib/Nav';
-import NavItem from 'reactstrap/lib/NavItem';
-import NavLink from 'reactstrap/lib/NavLink';
-import Dropdown from 'reactstrap/lib/Dropdown';
-import DropdownMenu from 'reactstrap/lib/DropdownMenu';
-import DropdownToggle from 'reactstrap/lib/DropdownToggle';
+import Icon from '../Icons/Icon';
 
 const HeaderOptionsMenu = props => (
-  <Nav navbar className="pull-xs-right">
+  <Nav navbar className="pull-xs-right nav">
     <NavItem>
-      <Dropdown isOpen={props.isOpen} toggle={props.setIsOpen}>
+      <Dropdown isOpen={props.isOpen} toggle={props.toggle}>
         <DropdownToggle tag={NavLink}>
           <Icon name="ellipsis-v" />
         </DropdownToggle>
@@ -26,7 +21,7 @@ const HeaderOptionsMenu = props => (
 
 HeaderOptionsMenu.propTypes = {
   isOpen: PropTypes.bool,
-  setIsOpen: PropTypes.func.isRequired,
+  toggle: PropTypes.func.isRequired,
   children: PropTypes.node,
 };
 
