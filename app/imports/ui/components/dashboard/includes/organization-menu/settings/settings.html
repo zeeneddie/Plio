@@ -9,7 +9,9 @@
 
   <div class="card-divider"></div>
   <div>{{> React component=workspaceSubcard}}</div>
-
+  <div class="card-divider">
+    <div>{{> React component=keyGoalsSettings organization=organization}}</div>
+  </div>
   {{> OrgSettings_Departments
       departments=departments
       organizationId=organizationId}}
@@ -38,7 +40,7 @@
       method=setNCGuidelineMethod}}
 
   {{> OrgSettings_ProblemGuidelines
-      label="Gain guidelines"
+      label="Potential gain guidelines"
       documentType=DocumentTypes.POTENTIAL_GAIN
       guidelines=PGGuidelines
       organizationId=organizationId
@@ -68,10 +70,6 @@
     {{> OrgSettings_DangerZone
         organizationId=organizationId}}
   {{/if}}
-
-  <div class="card-divider">
-    <div>{{> React component=keyGoalsSettings organization=organization}}</div>
-  </div>
 
   {{> CardOrgChangelog organization=organization}}
 </template>
