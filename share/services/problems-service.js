@@ -285,15 +285,12 @@ export default {
   },
 
   unlinkActions({ _id }) {
-    const documentType = this._getDocType(_id);
     const query = {
       'linkedTo.documentId': _id,
-      'linkedTo.documentType': documentType,
     };
 
     Actions.find(query).forEach((action) => {
       ActionService.unlinkDocument({
-        documentType,
         _id: action._id,
         documentId: _id,
       });

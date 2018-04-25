@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { renameKeys } from 'plio-util';
 
 import {
   SwitchViewField,
@@ -15,7 +14,7 @@ import RiskForm from './RiskForm';
 const NewRiskCard = ({
   organizationId,
   risks = [],
-  linkedTo,
+  linkedTo = {},
   ...props
 }) => (
   <SwitchViewField
@@ -28,7 +27,7 @@ const NewRiskCard = ({
     <RiskForm {...{ ...props, organizationId }}>
       <FormField>
         Linked to
-        <LinkedEntityInput disabled {...renameKeys({ title: 'value' }, linkedTo)} />
+        <LinkedEntityInput disabled value={linkedTo.title} sequentialId={linkedTo.sequentialId} />
       </FormField>
     </RiskForm>
     <CardBlock>

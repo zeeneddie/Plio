@@ -2,6 +2,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { Meteor } from 'meteor/meteor';
 import { AccountsTemplates } from 'meteor/useraccounts:core';
+import { toastr } from 'meteor/chrismbeckett:toastr';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { $ } from 'meteor/jquery';
@@ -274,19 +275,19 @@ FlowRouter.route('/:orgSerialNumber/users/:userId', {
 FlowRouter.route('/:orgSerialNumber/non-conformities', {
   name: 'nonconformities',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action: renderNcs,
+  action: renderNcs({ content: 'NC_Page' }),
 });
 
 FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action: renderNcs,
+  action: renderNcs({ content: 'NC_Page' }),
 });
 
 FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId/discussion', {
   name: 'nonConformityDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action: renderNcs,
+  action: renderNcs(({ content: 'NC_Page', isDiscussionOpened: true })),
 });
 
 FlowRouter.route('/:orgSerialNumber/work-inbox', {

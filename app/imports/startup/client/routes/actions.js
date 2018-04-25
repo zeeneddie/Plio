@@ -56,7 +56,7 @@ export const renderNcs = renderBlazeComponent(async () => {
   ]);
 
   return 'NC_Layout';
-})({ content: 'NC_Page' });
+});
 
 export const renderWorkInbox = renderBlazeComponent(async () => {
   await Promise.all([

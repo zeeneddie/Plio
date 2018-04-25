@@ -92,7 +92,7 @@ const RisksSubcard = ({
 RisksSubcard.propTypes = {
   risks: PropTypes.arrayOf(PropTypes.object).isRequired,
   onDelete: PropTypes.func.isRequired,
-  linkedTo: PropTypes.object.isRequired,
+  linkedTo: PropTypes.object,
   organizationId: PropTypes.string.isRequired,
   guidelines: PropTypes.object,
   user: PropTypes.object,

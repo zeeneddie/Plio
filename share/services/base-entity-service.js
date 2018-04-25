@@ -38,13 +38,14 @@ export default class BaseEntityService {
   }) {
     const query = { _id };
 
-    const { isDeleted } = this.collection.findOne({ _id });
+    const prevDoc = this.collection.findOne({ _id });
+    const { isDeleted } = prevDoc;
 
     if (isDeleted) {
       const result = this.collection.remove(query);
 
       if (Meteor.isServer && _(onPermanentDelete).isFunction()) {
-        Meteor.defer(onPermanentDelete);
+        Meteor.defer(() => onPermanentDelete(prevDoc));
       }
 
       return result;
@@ -60,7 +61,7 @@ export default class BaseEntityService {
     const ret = this.collection.update(query, modifier);
 
     if (Meteor.isServer && _(onSoftDelete).isFunction()) {
-      Meteor.defer(onSoftDelete);
+      Meteor.defer(() => onSoftDelete(prevDoc));
     }
 
     return ret;
@@ -68,7 +69,7 @@ export default class BaseEntityService {
 
   restore({ _id, query = {}, onRestore }) {
     if (_(query).isEmpty()) {
-      query = { _id };
+      Object.assign(query, { _id });
     }
 
     const options = {
@@ -92,7 +93,7 @@ export default class BaseEntityService {
 
   removePermanently({ _id, query = {} }) {
     if (_(query).isEmpty()) {
-      query = { _id };
+      Object.assign(query, { _id });
     }
 
     return this.collection.remove(query);
@@ -100,7 +101,7 @@ export default class BaseEntityService {
 
   removeSoftly({ _id, deletedBy, query = {} }) {
     if (_(query).isEmpty()) {
-      query = { _id };
+      Object.assign(query, { _id });
     }
 
     const options = {

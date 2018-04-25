@@ -1,4 +1,4 @@
-import { Actions, Organizations, NonConformities, Risks } from '../../share/collections';
+import { Actions, Organizations, NonConformities, Risks, Files } from '../../share/collections';
 import { WorkflowTypes, ProblemTypes } from '../../share/constants';
 import BaseEntityService from './base-entity-service';
 import WorkItemService from './work-item-service';
@@ -134,10 +134,6 @@ export default {
       ownerId,
     } = action;
     const organization = Organizations.findOne({ _id: organizationId });
-
-    // We need to find the owner of the first linked
-    // problem to set him as a "To be verified by" user
-    // const firstLinkedTo = linkedTo[0];
 
     const set = {
       completionComments,
@@ -327,8 +323,11 @@ export default {
     const workQuery = { query: { 'linkedDoc._id': _id } };
     const onSoftDelete = () =>
       WorkItemService.removeSoftly(workQuery);
-    const onPermanentDelete = () =>
+    const onPermanentDelete = ({ fileIds }) => {
       WorkItemService.removePermanently(workQuery);
+
+      if (fileIds) Files.remove({ _id: { $in: fileIds } });
+    };
 
     return this._service.remove({
       _id, deletedBy, onSoftDelete, onPermanentDelete,

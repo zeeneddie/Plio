@@ -1,17 +1,14 @@
 import { Template } from 'meteor/templating';
+import { Blaze } from 'meteor/blaze';
+import { swal } from 'meteor/plio:bootstrap-sweetalert';
 import invoke from 'lodash.invoke';
 
-import { Departments } from '/imports/share/collections/departments.js';
-import { OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
-import { insert, update, remove } from '/imports/api/departments/methods.js';
-import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
+import { insert, update, remove } from '/imports/api/departments/methods';
+import { OrganizationSettingsHelp } from '/imports/api/help-messages';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.OrgSettings_Departments.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
-  onCreated(template) {
-    template.autorun(() => OrgSettingsDocSubs.subscribe('departments', this.organizationId()));
-  },
   _lText: 'Department/sector(s)',
   _rText() {
     return invoke(this.departments(), 'count');
@@ -20,7 +17,10 @@ Template.OrgSettings_Departments.viewmodel({
   departments: '',
   helpText: OrganizationSettingsHelp.departments,
   departmentsMapped() {
-    return this.departments() && this.departments().map(({ name, ...args }) => ({ ...args, title: name }));
+    return this.departments() && this.departments().map(({ name, ...args }) => ({
+      ...args,
+      title: name,
+    }));
   },
   onChangeCb() {
     return this.onChange.bind(this);

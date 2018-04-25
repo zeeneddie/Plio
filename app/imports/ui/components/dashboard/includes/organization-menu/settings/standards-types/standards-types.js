@@ -22,9 +22,6 @@ const mapStandardTypes = map(cond([
 
 Template.OrgSettings_StandardTypes.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
-  onCreated(template) {
-    template.autorun(() => template.subscribe('standards-types', this.organizationId()));
-  },
   _lText: 'Standards types',
   _rText() {
     return this.standardsTypes().count();
