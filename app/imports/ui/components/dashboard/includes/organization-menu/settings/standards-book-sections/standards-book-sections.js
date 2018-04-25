@@ -1,21 +1,14 @@
 import { Template } from 'meteor/templating';
-import { OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
+import { Blaze } from 'meteor/blaze';
+import { swal } from 'meteor/plio:bootstrap-sweetalert';
 import invoke from 'lodash.invoke';
 
-import {
-  StandardsBookSections,
-} from '/imports/share/collections/standards-book-sections.js';
-import {
-  insert, update, remove,
-} from '/imports/api/standards-book-sections/methods.js';
-import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
+import { insert, update, remove } from '/imports/api/standards-book-sections/methods';
+import { OrganizationSettingsHelp } from '/imports/api/help-messages';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.OrgSettings_StandardsBookSections.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
-  onCreated(template) {
-    template.autorun(() => OrgSettingsDocSubs.subscribe('standards-book-sections', this.organizationId()));
-  },
   _lText: 'Standards sections',
   _rText() {
     return invoke(this.standardsBookSections(), 'count');

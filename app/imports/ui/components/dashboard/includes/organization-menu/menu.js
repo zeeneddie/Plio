@@ -8,12 +8,12 @@ import { OrgCurrencies } from '/imports/share/constants';
 import { OrganizationSettingsHelp } from '/imports/api/help-messages';
 import { createOrgQueryWhereUserIsMember } from '../../../../../share/mongo/queries';
 
-
 Template.Organization_Menu.viewmodel({
   mixin: ['modal', 'organization', 'roles'],
-
-  autorun() {
-    this.templateInstance.subscribe('currentUserOrganizations');
+  onCreated(template) {
+    template.autorun(() => {
+      template.subscribe('currentUserOrganizations');
+    });
   },
   organizations() {
     const userId = Meteor.userId();

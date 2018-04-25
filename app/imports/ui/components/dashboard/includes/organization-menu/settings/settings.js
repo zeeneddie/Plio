@@ -1,11 +1,11 @@
 import { Template } from 'meteor/templating';
+import { Meteor } from 'meteor/meteor';
+import { pick } from 'ramda';
 
-import { Departments } from '/imports/share/collections/departments.js';
-import { StandardTypes } from '/imports/share/collections/standards-types.js';
-import { RiskTypes } from '/imports/share/collections/risk-types.js';
-import {
-  StandardsBookSections,
-} from '/imports/share/collections/standards-book-sections.js';
+import { Departments } from '/imports/share/collections/departments';
+import { StandardTypes } from '/imports/share/collections/standards-types';
+import { RiskTypes } from '/imports/share/collections/risk-types';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { isOrgOwner } from '/imports/api/checkers';
 
 import WorkspaceContainer
@@ -19,17 +19,23 @@ import {
   setPGGuideline,
   setRKGuideline,
 } from '../../../../../../api/organizations/methods';
+import { OrgSettingsDocSubs } from '../../../../../../startup/client/subsmanagers';
 
 Template.OrgSettings.viewmodel({
   mixin: 'organization',
   name: '',
   currency: '',
   timezone: '',
-  autorun() {
-    const org = this.organization();
-    if (org) {
-      this.load(_.pick(org, ['name', 'currency', 'timezone']));
-    }
+  onCreated(template) {
+    template.autorun(() => {
+      const organization = this.organization();
+
+      if (organization) {
+        this.load(pick(['name', 'currency', 'timezone'], organization));
+
+        OrgSettingsDocSubs.subscribe('organizationDeps', organization._id);
+      }
+    });
   },
   workspaceSubcard() {
     return WorkspaceContainer;
