@@ -63,7 +63,7 @@ const Body = ({
   lessons,
   improvementPlan,
   riskEvaluation,
-  fileIds,
+  fileIds = [],
   analysis,
   updateOfStandards,
 }) => (

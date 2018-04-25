@@ -1,6 +1,11 @@
 import { Template } from 'meteor/templating';
+import { Meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker';
 import invoke from 'lodash.invoke';
 import get from 'lodash.get';
+import React from 'react';
+import { swal } from 'meteor/plio:bootstrap-sweetalert';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
 import { update, remove, updateViewedBy } from '/imports/api/standards/methods';
 import { isViewed } from '/imports/api/checkers';
@@ -101,16 +106,14 @@ Template.EditStandard.viewmodel({
           const { first } = Object.assign({}, invoke(list, '_findStandardForFilter'));
 
           if (first) {
-            const { _id } = first;
-
-            Meteor.setTimeout(() => {
-              this.goToStandard(_id);
-              this.expandCollapsed(_id);
-            }, 0);
+            Meteor.defer(() => {
+              this.goToStandard(first._id);
+              this.expandCollapsed(first._id);
+            });
           }
         }
       });
     });
   },
-  RisksSubcardContainer: () => StandardRisksSubcardContainer,
+  RisksSubcardContainer: () => props => <div><StandardRisksSubcardContainer {...props} /></div>,
 });

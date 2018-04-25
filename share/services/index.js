@@ -9,3 +9,6 @@ export { default as MilestoneService } from './milestone-service';
 export { default as OrganizationService } from './organization-service';
 export { default as LessonService } from './lesson-service';
 export { default as DepartmentService } from './department-service';
+export { default as DiscussionService } from './discussion-service';
+export { default as MessageService } from './message-service';
+export { default as StandardService } from './standard-service';

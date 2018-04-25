@@ -37,6 +37,8 @@ import {
   StandardTypes,
   Standards,
   WorkItems,
+  Goals,
+  Milestones,
 } from '../../../share/collections';
 
 const OrganizationService = {
@@ -373,6 +375,8 @@ const OrganizationService = {
       StandardTypes,
       Standards,
       WorkItems,
+      Goals,
+      Milestones,
     ];
 
     _(collections).each(coll => coll.direct.remove({ organizationId }));
