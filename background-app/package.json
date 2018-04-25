@@ -7,7 +7,7 @@
     "start:windows": "cmd /c \"SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&meteor --port 4000 --settings settings-local.json\""
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.39",
+    "@babel/runtime": "^7.0.0-beta.46",
     "babel-runtime": "^6.26.0",
     "deep-diff": "^0.3.4",
     "handlebars": "^4.0.5",

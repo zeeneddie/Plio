@@ -9,7 +9,7 @@
     "start:windows:mock": "cmd /c \"SET MOCK_SCHEMA=1&&SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&meteor --port 5000 --settings settings-local.json\""
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.39",
+    "@babel/runtime": "^7.0.0-beta.46",
     "apollo-cache-inmemory": "^1.1.5",
     "apollo-client": "^2.2.0",
     "apollo-link": "^1.0.7",
