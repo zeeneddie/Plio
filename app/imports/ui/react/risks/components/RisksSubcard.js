@@ -61,7 +61,7 @@ const RisksSubcard = ({
         onSubmit={() => null}
         initialValues={getInitialValues(entity)}
         subscription={{}}
-        render={() => (
+        render={({ reset }) => (
           <RiskSubcardContainer
             risk={entity}
             {...{
@@ -70,6 +70,7 @@ const RisksSubcard = ({
               onDelete,
               organizationId,
               user,
+              reset,
             }}
           />
         )}
