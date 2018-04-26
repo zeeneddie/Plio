@@ -7,8 +7,9 @@ import { graphql } from 'react-apollo';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { namedCompose } from '../../helpers';
 import MilestoneModal from '../components/MilestoneModal';
-import { Query } from '../../../../client/graphql';
+import { Query, Mutation } from '../../../../client/graphql';
 import { callAsync } from '../../components/Modal';
+import { onDelete } from '../handlers';
 
 const editEnhance = compose(
   graphql(Query.DASHBOARD_GOAL, {
@@ -64,6 +65,11 @@ const editEnhance = compose(
         'completionComments',
       ], milestone),
     }),
+  }),
+  graphql(Mutation.DELETE_MILESTONE, { name: Mutation.DELETE_MILESTONE.name }),
+  withHandlers({
+    onDelete: ({ milestone, toggle, ...props }) => e => onDelete(props)(e, { entity: milestone })
+      .then(toggle),
   }),
 );
 

@@ -12,6 +12,8 @@ export const onDelete = ({ [DELETE_MILESTONE.name]: mutate, linkedTo = {} }) =>
   (e, { entity: { _id, title } }) => swal.promise({
     text: `The milestone "${title}" will be deleted`,
     confirmButtonText: 'Delete',
+    successTitle: 'Deleted!',
+    successText: `The milestone "${title}" was deleted successfully.`,
   }, () => mutate({
     variables: {
       input: { _id },
