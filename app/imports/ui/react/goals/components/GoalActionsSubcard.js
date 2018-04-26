@@ -21,12 +21,13 @@ const GoalActionsSubcard = ({
         onSubmit={() => null}
         subscription={{}}
         initialValues={getGeneralActionValuesByAction(entity)}
-        render={() => (
+        render={({ reset }) => (
           <ActionSubcardContainer
             {...{
               isOpen,
               toggle,
               onDelete,
+              reset,
             }}
             action={entity}
             render={({ mutateWithState }) =>

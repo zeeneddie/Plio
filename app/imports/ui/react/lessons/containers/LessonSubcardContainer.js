@@ -1,6 +1,7 @@
 import { graphql } from 'react-apollo';
 import { getTargetValue, toDate } from 'plio-util';
 import { mergeDeepLeft } from 'ramda';
+import { lifecycle } from 'recompose';
 
 import { namedCompose, withMutationState } from '../../helpers';
 import { Mutation, Fragment } from '../../../../client/graphql';
@@ -9,6 +10,11 @@ import LessonSubcard from '../components/LessonSubcard';
 
 export default namedCompose('LessonSubcardContainer')(
   withMutationState(),
+  lifecycle({
+    componentWillReceiveProps({ mutation: { error } }) {
+      if (error) this.props.reset();
+    },
+  }),
   graphql(Mutation.UPDATE_LESSON_TITLE, { name: 'updateLessonTitle' }),
   graphql(Mutation.UPDATE_LESSON_DATE, { name: 'updateLessonDate' }),
   graphql(Mutation.UPDATE_LESSON_NOTES, { name: 'updateLessonNotes' }),

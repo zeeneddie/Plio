@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { FormSpy } from 'react-final-form';
+import { Field } from 'react-final-form';
 import { FormGroup, Button } from 'reactstrap';
 import { onlyUpdateForKeys } from 'recompose';
 
@@ -14,6 +14,7 @@ import SelectInputField from './SelectInputField';
 import ToggleComplete from '../../components/ToggleComplete';
 import TextareaField from './TextareaField';
 import StyledFlexFormGroup from '../../components/styled/StyledFlexFormGroup';
+import FieldCondition from '../../forms/components/FieldCondition';
 
 const enhance = onlyUpdateForKeys(['organizationId', 'status', 'userId']);
 
@@ -35,6 +36,24 @@ const AnalysisForm = ({
       name="completionComments"
       placeholder="Enter any completion comments"
       onBlur={e => isCompleted && onChangeCompletionComments(e)}
+    />
+  );
+  const executor = (
+    <OrgUsersSelectInputContainer
+      name="executor"
+      placeholder="Who will do it?"
+      component={SelectInputField}
+      onChange={onChangeExecutor}
+      {...{ organizationId }}
+    />
+  );
+  const completedBy = (
+    <OrgUsersSelectInputContainer
+      name="completedBy"
+      placeholder="Completed by"
+      component={SelectInputField}
+      onChange={onChangeCompletedBy}
+      {...{ organizationId }}
     />
   );
 
@@ -61,35 +80,27 @@ const AnalysisForm = ({
       ) : (
         <FormField>
           Who will do it?
-          <FormSpy subscription={{ values: true }}>
-            {({ values: { executor: { value } = {}, completionComments } }) => {
-              const component = (
-                <OrgUsersSelectInputContainer
-                  name="executor"
-                  placeholder="Who will do it?"
-                  component={SelectInputField}
-                  onChange={onChangeExecutor}
-                  {...{ organizationId }}
-                />
-              );
-
-              if (!value || value !== userId) return component;
-
-              return (
-                <ToggleComplete input={component}>
-                  <FormGroup className="margin-top">
-                    {comments}
-                  </FormGroup>
+          <FieldCondition
+            when="executor"
+            is={({ value }) => value && value === userId}
+            otherwise={executor}
+          >
+            <ToggleComplete input={executor}>
+              <FormGroup className="margin-top">
+                {comments}
+              </FormGroup>
+              <Field name="completionComments" subscription={{ value: true }}>
+                {({ input }) => (
                   <Button
                     color="success"
-                    onClick={() => onComplete({ completionComments })}
+                    onClick={() => onComplete({ completionComments: input.value })}
                   >
                     Complete
                   </Button>
-                </ToggleComplete>
-              );
-            }}
-          </FormSpy>
+                )}
+              </Field>
+            </ToggleComplete>
+          </FieldCondition>
         </FormField>
       )}
       <FormField>
@@ -102,30 +113,18 @@ const AnalysisForm = ({
         <Fragment>
           <FormField>
             Completed by
-            <FormSpy subscription={{ values: true }}>
-              {({ values: { completedBy: { value } = {} } }) => {
-                const component = (
-                  <OrgUsersSelectInputContainer
-                    name="completedBy"
-                    placeholder="Completed by"
-                    component={SelectInputField}
-                    onChange={onChangeCompletedBy}
-                    {...{ organizationId }}
-                  />
-                );
-
-                if (!value || value !== userId) return component;
-
-                return (
-                  <StyledFlexFormGroup>
-                    {component}
-                    <Button color="link" onClick={onUndoCompletion}>
-                      Undo
-                    </Button>
-                  </StyledFlexFormGroup>
-                );
-              }}
-            </FormSpy>
+            <FieldCondition
+              when="completedBy"
+              is={({ value }) => value && value === userId}
+              otherwise={completedBy}
+            >
+              <StyledFlexFormGroup>
+                {completedBy}
+                <Button color="link" onClick={onUndoCompletion}>
+                  Undo
+                </Button>
+              </StyledFlexFormGroup>
+            </FieldCondition>
           </FormField>
           <FormField>
             Comments

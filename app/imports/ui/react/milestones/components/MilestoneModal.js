@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form as FinalForm } from 'react-final-form';
+import { Button } from 'reactstrap';
+
+import { EntityModal, TextAlign, CardBlock } from '../../components';
 import MilestoneEditFormContainer from '../containers/MilestoneEditFormContainer';
-import { EntityModal } from '../../components';
 import NewMilestoneFormContainer from '../containers/NewMilestoneFormContainer';
 import MilestoneNotifySubcardContainer from '../containers/MilestoneNotifySubcardContainer';
 
@@ -14,6 +16,7 @@ const MilestoneModal = ({
   loading,
   initialValues,
   milestone,
+  onDelete,
   ...props
 }) => (
   <EntityModal
@@ -50,6 +53,15 @@ const MilestoneModal = ({
         organizationId={props.organizationId}
       />
     )}
+    {onDelete && (
+      <TextAlign center>
+        <CardBlock>
+          <Button onClick={onDelete}>
+            Delete
+          </Button>
+        </CardBlock>
+      </TextAlign>
+    )}
   </EntityModal>
 );
 
@@ -60,6 +72,7 @@ MilestoneModal.propTypes = {
   loading: PropTypes.bool,
   milestone: PropTypes.object,
   organizationId: PropTypes.string.isRequired,
+  onDelete: PropTypes.func,
 };
 
 export default MilestoneModal;

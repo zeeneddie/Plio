@@ -16,4 +16,13 @@ export default applyMiddleware(
   checkLoggedIn(),
   checkGoalAccess(),
   ensureCanChangeGoals(),
+  async (next, root, args, context) => {
+    const { _id } = args;
+    const { collections: { Goals } } = context;
+    const goal = Goals.findOne({ _id });
+
+    await next(root, args, context);
+
+    return { goal };
+  },
 )(resolver);

@@ -4,6 +4,7 @@ import {
   flattenInput,
   checkMilestoneAccess,
   ensureIsCompleted,
+  milestoneUpdateAfterware,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { MilestoneService } }) =>
@@ -14,4 +15,5 @@ export default applyMiddleware(
   flattenInput(),
   checkMilestoneAccess(),
   ensureIsCompleted(),
+  milestoneUpdateAfterware(),
 )(resolver);

@@ -25,7 +25,7 @@ const GoalMilestonesSubcard = ({
           'completedAt',
           'completionComment',
         ], entity)}
-        render={() => (
+        render={({ reset }) => (
           <MilestoneSubcardContainer
             milestone={entity}
             {...{
@@ -34,6 +34,7 @@ const GoalMilestonesSubcard = ({
               onDelete,
               linkedTo,
               color,
+              reset,
             }}
           />
         )}

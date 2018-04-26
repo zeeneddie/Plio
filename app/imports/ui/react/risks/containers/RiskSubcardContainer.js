@@ -1,5 +1,5 @@
 import { graphql } from 'react-apollo';
-import { withHandlers, flattenProp } from 'recompose';
+import { withHandlers, flattenProp, lifecycle } from 'recompose';
 import { getTargetValue, getValue, Cache, toDate } from 'plio-util';
 import { mergeDeepLeft, compose, objOf, pluck, identity, always } from 'ramda';
 
@@ -177,4 +177,9 @@ export default namedCompose('RiskSubcardContainer')(
     }),
   }),
   flattenProp('mutation'),
+  lifecycle({
+    componentWillReceiveProps({ error }) {
+      if (error) this.props.reset();
+    },
+  }),
 )(RiskSubcard);

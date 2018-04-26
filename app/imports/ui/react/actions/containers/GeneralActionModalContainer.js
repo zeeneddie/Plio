@@ -7,10 +7,11 @@ import { graphql } from 'react-apollo';
 import { UserRoles } from '../../../../share/constants';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { namedCompose } from '../../helpers';
-import { Query } from '../../../../client/graphql';
+import { Query, Mutation } from '../../../../client/graphql';
 import { callAsync } from '../../components/Modal';
 import { getGeneralActionValuesByAction } from '../helpers';
 import GeneralActionModal from '../components/GeneralActionModal';
+import { onDelete } from '../handlers';
 
 const editEnhance = compose(
   graphql(Query.ACTION_CARD, {
@@ -41,6 +42,15 @@ const editEnhance = compose(
     identity,
     renderNothing,
   ),
+  graphql(Mutation.DELETE_ACTION, { name: Mutation.DELETE_ACTION.name }),
+  withHandlers({
+    onDelete: ({
+      ui: { activeGoal } = {},
+      action,
+      toggle,
+      ...props
+    }) => e => onDelete({ ...props, goalId: activeGoal })(e, { entity: action }).then(toggle),
+  }),
 );
 
 const createEnhance = compose(

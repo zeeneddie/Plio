@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form as FinalForm } from 'react-final-form';
+import { Button } from 'reactstrap';
 
-import { EntityModal } from '../../components';
+import { EntityModal, TextAlign, CardBlock } from '../../components';
 import GeneralActionEditFormContainer from '../containers/GeneralActionEditFormContainer';
 import NewGeneralActionFormContainer from '../containers/NewGeneralActionFormContainer';
 
@@ -14,6 +15,7 @@ const GeneralActionModal = ({
   toggle,
   loading,
   initialValues,
+  onDelete,
   ...props
 }) => (
   <EntityModal
@@ -44,6 +46,15 @@ const GeneralActionModal = ({
         }}
       />
     )}
+    {onDelete && (
+      <TextAlign center>
+        <CardBlock>
+          <Button onClick={onDelete}>
+            Delete
+          </Button>
+        </CardBlock>
+      </TextAlign>
+    )}
   </EntityModal>
 );
 
@@ -53,6 +64,7 @@ GeneralActionModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
   loading: PropTypes.bool,
+  onDelete: PropTypes.func,
 };
 
 export default GeneralActionModal;

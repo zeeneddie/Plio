@@ -3,6 +3,7 @@ import {
   checkLoggedIn,
   flattenInput,
   checkMilestoneAccess,
+  milestoneUpdateAfterware,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { MilestoneService } }) =>
@@ -12,4 +13,5 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkMilestoneAccess(),
+  milestoneUpdateAfterware(),
 )(resolver);

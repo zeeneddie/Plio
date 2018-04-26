@@ -21,7 +21,7 @@ export default {
     const serialNumber = generateSerialNumber(this.collection, { organizationId });
     const sequentialId = `${Abbreviations.GOAL}${serialNumber}`;
 
-    const _id = await this.collection.insert({
+    return this.collection.insert({
       organizationId,
       title,
       description,
@@ -33,10 +33,6 @@ export default {
       sequentialId,
       priority,
     });
-
-    const goal = await this.collection.findOne({ _id });
-
-    return { goal };
   },
 
   async complete({ _id, completionComment }, { userId }) {
@@ -62,7 +58,7 @@ export default {
       },
     };
 
-    return this.update(query, modifier);
+    return this.collection.update(query, modifier);
   },
 
   async linkMilestone({ _id, milestoneId }) {
@@ -73,7 +69,7 @@ export default {
       },
     };
 
-    return this.update(query, modifier);
+    return this.collection.update(query, modifier);
   },
 
   async unlinkMilestone({ milestoneId }) {
@@ -84,7 +80,7 @@ export default {
       },
     };
 
-    return this.update(query, modifier);
+    return this.collection.update(query, modifier);
   },
 
   async linkRisk({ _id, riskId }) {
@@ -186,13 +182,13 @@ export default {
   },
 
   async delete({ _id }, { userId }) {
+    const goal = await this.collection.findOne({ _id });
     const res = await this.set({
       _id,
       isDeleted: true,
       deletedBy: userId,
       deletedAt: new Date(),
     });
-    const { goal } = res;
 
     await this.deleteMilestones(goal, { userId });
 
@@ -200,7 +196,7 @@ export default {
   },
 
   async remove({ _id }, { goal, ...context }) {
-    await this.collection.remove({ _id });
+    const res = await this.collection.remove({ _id });
 
     await Promise.all([
       this.removeMilestones(goal, context),
@@ -209,7 +205,7 @@ export default {
       this.removeFiles(goal, context),
     ]);
 
-    return { goal };
+    return res;
   },
 
   async restore({ _id }) {
@@ -227,9 +223,8 @@ export default {
         completionComment: '',
       },
     };
-    const res = await this.update(query, modifier);
-
-    const { goal: { milestoneIds } } = res;
+    const { milestoneIds = [] } = this.collection.findOne(query);
+    const res = await this.collection.update(query, modifier);
 
     await Promise.all(milestoneIds.map(milestoneId =>
       MilestoneService.restore({ _id: milestoneId })));
@@ -238,14 +233,6 @@ export default {
   },
 
   async set({ _id, ...args }) {
-    return this.update({ _id }, { $set: args });
-  },
-
-  async update(query, modifier, options) {
-    await this.collection.update(query, modifier, options);
-
-    const goal = await this.collection.findOne(query);
-
-    return { goal };
+    return this.collection.update({ _id }, { $set: args });
   },
 };

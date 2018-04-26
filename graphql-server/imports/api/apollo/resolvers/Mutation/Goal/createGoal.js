@@ -14,4 +14,10 @@ export default applyMiddleware(
   checkLoggedIn(),
   checkOrgMembership(),
   ensureCanChangeGoals((root, args) => args.organizationId),
+  async (next, root, args, context) => {
+    const { collections: { Goals } } = context;
+    const _id = await next(root, args, context);
+    const goal = Goals.findOne({ _id });
+    return { goal };
+  },
 )(resolver);

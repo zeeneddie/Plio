@@ -28,10 +28,10 @@ const InputGroupWrapper = styled.div`
 
 export const GoalEditFrom = (props) => {
   const {
+    onSubmit = () => null,
     initialValues,
     status,
     onChangeStatusComment,
-    onSubmit,
     onChangeCompletionComment,
     isCompleted,
     completedAt,
@@ -43,7 +43,7 @@ export const GoalEditFrom = (props) => {
   return (
     <Form
       {...{ initialValues, onSubmit }}
-      onSubmit={() => null}
+      subscription={{}}
       render={() => (
         <Fragment>
           <GoalForm {...{ organizationId, ...props }} />
