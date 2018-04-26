@@ -1,5 +1,7 @@
 import { __setupDB, __closeDB, Mongo } from 'meteor/mongo';
 
+import { GoalColors, GoalPriorities, Abbreviations } from '../../constants';
+
 describe('Goal service', () => {
   beforeAll(__setupDB);
   afterAll(__closeDB);
@@ -9,6 +11,26 @@ describe('Goal service', () => {
       Goals: new Mongo.Collection('goals'),
       WorkItems: new Mongo.Collection('workItems'),
     }));
+  });
+
+  describe('insert', () => {
+    it('inserts a new goal', async () => {
+      const GoalService = require('../goal-service').default;
+      const args = {
+        organizationId: 1,
+        title: 'hello',
+        ownerId: 2,
+        startDate: new Date(),
+        endDate: new Date(),
+        color: GoalColors.PINK,
+        priority: GoalPriorities.MAJOR,
+      };
+      const _id = await GoalService.insert(args);
+      const goal = await GoalService.collection.findOne({ _id });
+
+      expect(goal).toMatchObject(args);
+      expect(goal.sequentialId.startsWith(Abbreviations.GOAL)).toBe(true);
+    });
   });
 
   describe('remove', () => {

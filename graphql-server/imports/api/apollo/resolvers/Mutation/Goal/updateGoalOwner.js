@@ -4,6 +4,7 @@ import {
   flattenInput,
   checkGoalAccess,
   checkUserOrgMembership,
+  goalUpdateAfterware,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { GoalService } }) =>
@@ -16,4 +17,5 @@ export default applyMiddleware(
   checkUserOrgMembership({
     getUserId: (root, args) => args.ownerId,
   }),
+  goalUpdateAfterware(),
 )(resolver);
