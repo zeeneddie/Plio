@@ -26,7 +26,8 @@ describe('Milestone service', () => {
 
     await Goals.insert({ _id: goalId });
 
-    const { milestone } = await MilestoneService.insert(args);
+    const _id = await MilestoneService.insert(args);
+    const milestone = await MilestoneService.collection.findOne({ _id });
     const { milestoneIds } = await Goals.findOne({ _id: goalId });
 
     expect(milestone).toMatchObject(args);
@@ -43,8 +44,11 @@ describe('Milestone service', () => {
       linkedTo: 3,
     };
     const context = { userId: 4 };
-    const { milestone: { _id } } = await MilestoneService.insert(args);
-    const { milestone } = await MilestoneService.delete({ _id }, context);
+    const _id = await MilestoneService.insert(args);
+
+    await MilestoneService.delete({ _id }, context);
+
+    const milestone = await MilestoneService.collection.findOne({ _id });
 
     expect(milestone).toMatchObject({
       isDeleted: true,
@@ -56,8 +60,11 @@ describe('Milestone service', () => {
   test('complete', async () => {
     const MilestoneService = require('../milestone-service').default;
     const context = { userId: 1 };
-    const { milestone: { _id } } = await MilestoneService.insert({});
-    const { milestone } = await MilestoneService.complete({ _id }, context);
+    const _id = await MilestoneService.insert({});
+
+    await MilestoneService.complete({ _id }, context);
+
+    const milestone = await MilestoneService.collection.findOne({ _id });
 
     expect(milestone).toMatchObject({
       isCompleted: true,

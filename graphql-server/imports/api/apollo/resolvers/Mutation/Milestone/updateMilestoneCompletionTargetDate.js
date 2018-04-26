@@ -5,6 +5,7 @@ import {
   checkMilestoneAccess,
   checkMilestoneLinkedDocument,
   checkMilestoneCompletionTargetDate,
+  milestoneUpdateAfterware,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { MilestoneService } }) =>
@@ -16,4 +17,5 @@ export default applyMiddleware(
   checkMilestoneAccess(),
   checkMilestoneLinkedDocument(),
   checkMilestoneCompletionTargetDate(),
+  milestoneUpdateAfterware(),
 )(resolver);

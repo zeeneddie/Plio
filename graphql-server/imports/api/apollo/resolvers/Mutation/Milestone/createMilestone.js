@@ -16,4 +16,10 @@ export default applyMiddleware(
   checkOrgMembership(),
   checkMilestoneLinkedDocument(),
   checkMilestoneCompletionTargetDate(),
+  async (next, root, args, context) => {
+    const { collections: { Milestones } } = context;
+    const _id = await next(root, args, context);
+    const milestone = Milestones.findOne({ _id });
+    return { milestone };
+  },
 )(resolver);

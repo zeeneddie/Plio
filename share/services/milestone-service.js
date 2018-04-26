@@ -24,9 +24,7 @@ export default {
 
     await GoalService.linkMilestone({ _id: linkedTo, milestoneId: _id });
 
-    const milestone = await this.collection.findOne({ _id });
-
-    return { milestone };
+    return _id;
   },
 
   async delete({ _id }, { userId }) {
@@ -57,7 +55,7 @@ export default {
         completionComment: '',
       },
     };
-    return this.update(query, modifier);
+    return this.collection.update(query, modifier);
   },
 
   async complete({ _id }, { userId }) {
@@ -92,14 +90,6 @@ export default {
   },
 
   async set({ _id, ...args }) {
-    return this.update({ _id }, { $set: args });
-  },
-
-  async update(query, modifier, options) {
-    await this.collection.update(query, modifier, options);
-
-    const milestone = await this.collection.findOne(query);
-
-    return { milestone };
+    return this.collection.update({ _id }, { $set: args });
   },
 };

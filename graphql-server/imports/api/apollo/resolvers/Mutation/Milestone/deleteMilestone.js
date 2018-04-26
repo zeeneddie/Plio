@@ -12,4 +12,13 @@ export default applyMiddleware(
   flattenInput(),
   checkLoggedIn(),
   checkMilestoneAccess(),
+  async (next, root, args, context) => {
+    const { _id } = args;
+    const { collections: { Milestones } } = context;
+    const milestone = Milestones.findOne({ _id });
+
+    await next(root, args, context);
+
+    return { milestone };
+  },
 )(resolver);
