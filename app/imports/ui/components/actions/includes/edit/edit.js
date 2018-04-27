@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
 import { mergeDeepLeft } from 'ramda';
 import { swal } from '../../../../../client/util';
-import { ALERT_AUTOHIDE_TIME } from '../../../../../api/constants';
 import { client } from '../../../../../client/apollo';
 
 import {
@@ -171,13 +170,7 @@ Template.Actions_Edit.viewmodel({
             ));
           }
 
-          swal({
-            title: 'Removed!',
-            text: `An action "${title}" was removed successfully.`,
-            type: 'success',
-            timer: ALERT_AUTOHIDE_TIME,
-            showConfirmButton: false,
-          });
+          swal.success('Removed', `An action "${title}" was removed successfully.`);
 
           this.modal().close();
         });
