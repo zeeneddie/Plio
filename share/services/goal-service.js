@@ -72,32 +72,10 @@ export default {
     return this.collection.update(query, modifier);
   },
 
-  async unlinkMilestone({ milestoneId }) {
-    const query = { milestoneIds: milestoneId };
-    const modifier = {
-      $pull: {
-        milestoneIds: milestoneId,
-      },
-    };
-
-    return this.collection.update(query, modifier);
-  },
-
   async linkRisk({ _id, riskId }) {
     const query = { _id };
     const modifier = {
       $addToSet: {
-        riskIds: riskId,
-      },
-    };
-
-    return this.collection.update(query, modifier);
-  },
-
-  async unlinkRisk({ riskId }) {
-    const query = { riskIds: riskId };
-    const modifier = {
-      $pull: {
         riskIds: riskId,
       },
     };
@@ -223,7 +201,7 @@ export default {
         completionComment: '',
       },
     };
-    const { milestoneIds = [] } = this.collection.findOne(query);
+    const { milestoneIds = [] } = await this.collection.findOne(query);
     const res = await this.collection.update(query, modifier);
 
     await Promise.all(milestoneIds.map(milestoneId =>
