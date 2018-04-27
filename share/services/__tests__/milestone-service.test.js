@@ -57,6 +57,67 @@ describe('Milestone service', () => {
     });
   });
 
+  test('remove', async () => {
+    const MilestoneService = require('../milestone-service').default;
+    const _id = await MilestoneService.collection.insert({});
+
+    await MilestoneService.remove({ _id });
+
+    const milestone = await MilestoneService.collection.findOne({ _id });
+
+    expect(milestone).toBe(null);
+  });
+
+  test('restore', async () => {
+    const MilestoneService = require('../milestone-service').default;
+    const _id = await MilestoneService.collection.insert({
+      isCompleted: true,
+      isDeleted: true,
+      deletedBy: 1,
+      deletedAt: new Date(),
+    });
+
+    await MilestoneService.restore({ _id });
+
+    const milestone = await MilestoneService.collection.findOne({ _id });
+
+    expect(milestone).toEqual({
+      _id,
+      isDeleted: false,
+      isCompleted: false,
+    });
+  });
+
+  test('addToNotify', async () => {
+    const MilestoneService = require('../milestone-service').default;
+    const _id = await MilestoneService.collection.insert({});
+    const userId = 1;
+
+    await MilestoneService.addToNotify({ _id, userId });
+
+    const milestone = await MilestoneService.collection.findOne({ _id });
+
+    expect(milestone).toEqual({
+      _id,
+      notify: [userId],
+    });
+  });
+
+  test('removeFromNotify', async () => {
+    const MilestoneService = require('../milestone-service').default;
+    const userId = 1;
+    const _id = await MilestoneService.collection.insert({ notify: [userId] });
+
+    await MilestoneService.removeFromNotify({ _id, userId });
+
+    const milestone = await MilestoneService.collection.findOne({ _id });
+
+    expect(milestone).toEqual({
+      _id,
+      notify: [],
+    });
+  });
+
   test('complete', async () => {
     const MilestoneService = require('../milestone-service').default;
     const context = { userId: 1 };
