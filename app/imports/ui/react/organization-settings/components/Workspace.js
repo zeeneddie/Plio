@@ -14,6 +14,7 @@ import {
   NonConformitiesTitles,
   WorkInboxTitles,
   WorkspaceDefaultsTypes,
+  WorkspaceDefaultsLabels,
 } from '../../../../share/constants';
 import { withStateToggle } from '../../helpers';
 import { createWorkspaceTitleValue } from '../helpers';
@@ -105,7 +106,7 @@ const Workspace = enhance(({
             {() => (
               <Fragment>
                 <FormField>
-                  Users online
+                  {WorkspaceDefaultsLabels[WorkspaceDefaultsTypes.DISPLAY_USERS]}
                   <SelectInputField
                     name={WorkspaceDefaultsTypes.DISPLAY_USERS}
                     options={generateWorkspaceDefaultsOptions()}
@@ -115,7 +116,7 @@ const Workspace = enhance(({
                   />
                 </FormField>
                 <FormField>
-                  Unread messages
+                  {WorkspaceDefaultsLabels[WorkspaceDefaultsTypes.DISPLAY_MESSAGES]}
                   <SelectInputField
                     name={WorkspaceDefaultsTypes.DISPLAY_MESSAGES}
                     options={generateWorkspaceDefaultsOptions()}
@@ -125,7 +126,7 @@ const Workspace = enhance(({
                   />
                 </FormField>
                 <FormField>
-                  Overdue actions
+                  {WorkspaceDefaultsLabels[WorkspaceDefaultsTypes.DISPLAY_ACTIONS]}
                   <SelectInputField
                     name={WorkspaceDefaultsTypes.DISPLAY_ACTIONS}
                     options={generateWorkspaceDefaultsOptions()}

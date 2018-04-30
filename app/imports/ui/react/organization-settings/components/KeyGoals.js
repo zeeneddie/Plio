@@ -4,7 +4,11 @@ import { CardTitle } from 'reactstrap';
 import { Form } from 'react-final-form';
 import { noop, generateWorkspaceDefaultsOptions } from 'plio-util';
 
-import { WorkspaceDefaultsTypes, TimeScaleOptions } from '../../../../share/constants';
+import {
+  WorkspaceDefaultsTypes,
+  TimeScaleOptions,
+  WorkspaceDefaultsLabels,
+} from '../../../../share/constants';
 import {
   CardBlock,
   Subcard,
@@ -35,7 +39,7 @@ const KeyGoalsSettings = ({
             {() => (
               <Fragment>
                 <FormField sm={6}>
-                  Horizontal scale
+                  {WorkspaceDefaultsLabels[WorkspaceDefaultsTypes.TIME_SCALE]}
                   <SelectInputField
                     name={WorkspaceDefaultsTypes.TIME_SCALE}
                     options={TimeScaleOptions}
@@ -43,7 +47,7 @@ const KeyGoalsSettings = ({
                   />
                 </FormField>
                 <FormField sm={6}>
-                  Number of key goals
+                  {WorkspaceDefaultsLabels[WorkspaceDefaultsTypes.DISPLAY_GOALS]}
                   <SelectInputField
                     name={WorkspaceDefaultsTypes.DISPLAY_GOALS}
                     options={generateWorkspaceDefaultsOptions()}
@@ -51,7 +55,7 @@ const KeyGoalsSettings = ({
                   />
                 </FormField>
                 <FormField sm={6}>
-                  Number of completed & deleted goals
+                  {WorkspaceDefaultsLabels[WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]}
                   <SelectInputField
                     name={WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS}
                     options={generateWorkspaceDefaultsOptions()}

@@ -742,6 +742,15 @@ export const WorkspaceDefaults = {
   [WorkspaceDefaultsTypes.TIME_SCALE]: 3,
 };
 
+export const WorkspaceDefaultsLabels = {
+  [WorkspaceDefaultsTypes.DISPLAY_USERS]: 'Users online',
+  [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: 'Unread messages',
+  [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 'Overdue actions',
+  [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'Number of key goals',
+  [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'Number of completed & deleted goals',
+  [WorkspaceDefaultsTypes.TIME_SCALE]: 'Horizontal scale',
+};
+
 export const TimeScaleOptions = [
   {
     label: '1 month',

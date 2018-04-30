@@ -22,9 +22,11 @@ const getGuidelinesConfig = (field, magnitude, relatedDocs) => ({
         [ChangesKinds.FIELD_ADDED]:
             '{{{userName}}} set guidelines for {{{relatedDocs}}} in {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-            '{{{userName}}} changed guidelines for {{{relatedDocs}}} in {{{docDesc}}} {{{docName}}}',
+            '{{{userName}}} changed guidelines for {{{relatedDocs}}} ' +
+            'in {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-            '{{{userName}}} removed guidelines for {{{relatedDocs}}} in {{{docDesc}}} {{{docName}}}',
+            '{{{userName}}} removed guidelines for {{{relatedDocs}}} ' +
+            'in {{{docDesc}}} {{{docName}}}',
       },
     },
   ],
@@ -43,4 +45,7 @@ export default [
   getGuidelinesConfig('rkGuidelines', 'minor', 'minor risks'),
   getGuidelinesConfig('rkGuidelines', 'major', 'major risks'),
   getGuidelinesConfig('rkGuidelines', 'critical', 'critical risks'),
+  getGuidelinesConfig('pgGuidelines', 'minor', 'minor potential gains'),
+  getGuidelinesConfig('pgGuidelines', 'major', 'major potential gains'),
+  getGuidelinesConfig('pgGuidelines', 'critical', 'critical potential gains'),
 ];
