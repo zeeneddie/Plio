@@ -650,7 +650,7 @@ export const RiskTitles = [
 ];
 
 export const NonConformitiesTitles = [
-  'Nonconformities',
+  'Nonconformities & gains',
   'Exceptions',
 ];
 
