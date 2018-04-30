@@ -1,7 +1,6 @@
 import { pure } from 'recompose';
 import moment from 'moment';
 import { graphql } from 'react-apollo';
-import { FORM_ERROR } from 'final-form';
 import { Cache, toDate, getUserOptions, bySerialNumber } from 'plio-util';
 import { sort } from 'ramda';
 
@@ -66,7 +65,7 @@ export default namedCompose('GoalLessonsSubcardContainer')(
         if (!title) errors.push('Title is required');
         if (!notes) errors.push('Notes are required');
 
-        if (errors.length) return { [FORM_ERROR]: errors.join('\n') };
+        if (errors.length) throw new Error(errors.join('\n'));
 
         return mutate({
           variables: {

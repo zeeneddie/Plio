@@ -3,7 +3,6 @@ import { withHandlers, withProps } from 'recompose';
 import { view, ifElse, compose } from 'ramda';
 import { lenses, viewEq, getUserOptions } from 'plio-util';
 import { graphql } from 'react-apollo';
-import { FORM_ERROR } from 'final-form';
 
 import { namedCompose, withStore, withApollo } from '../../helpers';
 import { ProblemMagnitudes } from '../../../../share/constants';
@@ -40,7 +39,7 @@ export default namedCompose('StandardRisksSubcardContainer')(
       },
     }) => ({
       linkStandardToRisk: async ({ risk: { value: riskId } = {} }) => {
-        if (!riskId) return { [FORM_ERROR]: 'Risk is required' };
+        if (!riskId) throw new Error('Risk is required');
 
         return mutate({
           variables: {
@@ -69,7 +68,7 @@ export default namedCompose('StandardRisksSubcardContainer')(
         owner: { value: ownerId },
         type: typeId,
       }) => {
-        if (!title) return { [FORM_ERROR]: 'Title is required' };
+        if (!title) throw new Error('Title is required');
 
         return mutate({
           variables: {
