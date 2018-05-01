@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { filter, compose, pluck, complement, prop, memoize } from 'ramda';
-import { onlyUpdateForKeys, withHandlers, setPropTypes, flattenProp } from 'recompose';
+import { pure, withHandlers, setPropTypes, mapProps } from 'recompose';
+import { getActiveOrgUserIds } from 'plio-util';
 
 import { DashboardUserStats } from '../components';
 
@@ -16,11 +16,7 @@ import {
   WorkspaceDefaultsTypes,
 } from '../../../../share/constants';
 import { canInviteUsers } from '../../../../api/checkers/roles';
-
-const getOrgUserIds = memoize(compose(
-  pluck('userId'),
-  filter(complement(prop)('isRemoved')),
-));
+import { UserSubs } from '../../../../startup/client/subsmanagers';
 
 export default namedCompose('DashboardUserStatsContainer')(
   setPropTypes({
@@ -32,46 +28,57 @@ export default namedCompose('DashboardUserStatsContainer')(
       }).isRequired,
     }).isRequired,
   }),
-  flattenProp('organization'),
-  flattenProp(WORKSPACE_DEFAULTS),
-  onlyUpdateForKeys(['_id', 'users', WorkspaceDefaultsTypes.DISPLAY_USERS]),
+  mapProps(({
+    organization: {
+      _id,
+      users,
+      [WORKSPACE_DEFAULTS]: {
+        [WorkspaceDefaultsTypes.DISPLAY_USERS]: usersPerRow,
+      },
+    } = {},
+  }) => ({
+    _id,
+    usersPerRow,
+    userIds: getActiveOrgUserIds(users),
+  })),
+  pure,
   composeWithTracker(({
     _id: organizationId,
-    users: orgUsers,
-    [WorkspaceDefaultsTypes.DISPLAY_USERS]:
-      usersPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_USERS],
+    usersPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_USERS],
+    userIds,
     ...props
   }, onData) => {
-    const orgUserIds = getOrgUserIds(orgUsers);
-    const query = {
-      _id: { $in: orgUserIds },
-      status: {
-        $in: [UserPresenceStatuses.ONLINE, UserPresenceStatuses.AWAY],
-      },
-    };
-    const options = {
-      sort: {
-        'profile.firstName': 1,
-      },
-      fields: {
-        _id: 1,
-        status: 1,
-        emails: 1,
-        profile: 1,
-      },
-    };
-    const users = Meteor.users.find(query, options).fetch();
-    const userId = Meteor.userId();
+    const subscription = UserSubs.subscribe('Users.online', { organizationId });
 
-    onData(null, {
-      users,
-      usersPerRow,
-      organizationId,
-      canInviteUsers: canInviteUsers(userId, organizationId),
-      ...props,
-    });
-  }, {
-    propsToWatch: ['users', '_id', WorkspaceDefaultsTypes.DISPLAY_USERS],
+    if (subscription.ready()) {
+      const query = {
+        _id: { $in: userIds },
+        status: {
+          $in: [UserPresenceStatuses.ONLINE, UserPresenceStatuses.AWAY],
+        },
+      };
+      const options = {
+        sort: {
+          'profile.firstName': 1,
+        },
+        fields: {
+          _id: 1,
+          status: 1,
+          emails: 1,
+          profile: 1,
+        },
+      };
+      const users = Meteor.users.find(query, options).fetch();
+      const userId = Meteor.userId();
+
+      onData(null, {
+        users,
+        usersPerRow,
+        organizationId,
+        canInviteUsers: canInviteUsers(userId, organizationId),
+        ...props,
+      });
+    }
   }),
   withHandlers({
     onInvite: ({ organizationId }) => async (e) => {
