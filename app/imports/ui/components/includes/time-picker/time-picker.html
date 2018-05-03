@@ -1,7 +1,7 @@
 <template name="TimePicker">
   <div class="input-group {{cssClass}}">
     <input type="number" class="form-control" min="1"
-        {{b "value: timeValue, focusout: onFocusOut"}} />
+        {{b "value: timeValue, mousedown: onMouseDown, blur: onBlur"}} />
     <span class="input-group-btn dropdown">
       <button type="button" class="btn btn-secondary dropdown-toggle"
           {{b "text: timeUnit"}} data-toggle="dropdown">
