@@ -155,7 +155,7 @@ export const CreatedAtSchema = new SimpleSchema({
 });
 
 const dbChangeExecutor = new RegExp(
-  `^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|${SystemName}$`
+  `^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|${SystemName}$`,
 );
 
 export const CreatedBySchema = new SimpleSchema({
@@ -182,11 +182,11 @@ export const UpdatedAtSchema = new SimpleSchema({
     autoValue() {
       if (this.isUpdate) {
         return new Date();
-      } else {
-        this.unset();
       }
-    }
-  }
+
+      return this.unset();
+    },
+  },
 });
 
 export const UpdatedBySchema = new SimpleSchema({
@@ -272,9 +272,9 @@ export const getNotifySchema = fieldNames => new SimpleSchema({
     autoValue() {
       if (this.isInsert) {
         if (_.isString(fieldNames)) {
-          fieldNames = [fieldNames];
+          fieldNames = [fieldNames]; // eslint-disable-line no-param-reassign
         }
-        let notifyChanges = [];
+        const notifyChanges = [];
         _.each(fieldNames, (fieldName) => {
           const field = this.field(fieldName);
           if (field.isSet) {
@@ -287,12 +287,14 @@ export const getNotifySchema = fieldNames => new SimpleSchema({
           }
         });
 
-        if (!!notifyChanges.length) {
+        if (notifyChanges.length) {
           return notifyChanges;
         }
 
-        this.unset();
+        return this.unset();
       }
+
+      return this.unset();
     },
   },
 });
@@ -305,8 +307,10 @@ export const ViewedBySchema = new SimpleSchema({
     // maxCount: ?
     autoValue() {
       if (this.isInsert) {
-        return this.userId ? [this.userId] : [];
+        return this.userId ? [this.userId] : (this.isSet && this.value) || [];
       }
+
+      return this.unset();
     },
   },
 });
@@ -336,6 +340,8 @@ export const FileSchema = new SimpleSchema({
       if (this.isSet) {
         return this.value.toLowerCase();
       }
+
+      return this.unset();
     },
   },
   url: {
@@ -484,9 +490,9 @@ export const ReviewSchema = ((() => {
       type: Date,
       optional: true,
       custom() {
-        const value = this.value;
+        const { value } = this;
         if (!_.isDate(value)) {
-          return;
+          return undefined;
         }
 
         return moment(value).isBefore(new Date()) ? true : 'badDate';

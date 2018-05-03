@@ -35,7 +35,7 @@ export const getGeneralActionValuesByAction = compose(
   over(lenses.owner, getUserOptions),
 );
 
-export const getGeneralActionDefaultValues = user => ({
+export const getActionFormInitialState = user => ({
   active: 0,
   owner: getUserOptions(user),
   toBeCompletedBy: getUserOptions(user),

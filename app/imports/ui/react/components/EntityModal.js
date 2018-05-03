@@ -1,12 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CardTitle, Button } from 'reactstrap';
+import { CardTitle, Button, Form } from 'reactstrap';
+import { Form as FinalForm } from 'react-final-form';
+import { FORM_ERROR } from 'final-form';
+import { withHandlers } from 'recompose';
+
 import {
   Modal,
   ModalHeader,
   ModalBody,
   SaveButton,
+  TextAlign,
+  CardBlock,
+  ErrorSection,
 } from './';
+import { handleGQError } from '../../../api/handleGQError';
+
+const enhance = withHandlers({
+  onSave: ({ onSave }) => async (...args) => {
+    try {
+      return await onSave(...args);
+    } catch (err) {
+      return { [FORM_ERROR]: handleGQError(err) };
+    }
+  },
+});
 
 const EntityModal = ({
   isOpen,
@@ -14,30 +32,64 @@ const EntityModal = ({
   loading,
   children,
   title,
-  formTarget,
   showSubmitBtn,
+  onSave,
+  initialValues,
+  onDelete,
 }) => (
-  <Modal {...{ isOpen, toggle }}>
-    <ModalHeader
-      renderLeftButton={() => showSubmitBtn ? <Button onClick={toggle}>Close</Button> : null}
-      renderRightButton={props => (
-        <SaveButton
-          isSaving={loading || props.loading}
-          onClick={!showSubmitBtn ? toggle : undefined}
-          color={showSubmitBtn ? 'primary' : 'secondary'}
-          form={formTarget}
-        >
-          {showSubmitBtn ? 'Save' : 'Close'}
-        </SaveButton>
-      )}
-    >
-      <CardTitle>{title}</CardTitle>
-    </ModalHeader>
-
-    <ModalBody>
-      {children}
-    </ModalBody>
-  </Modal>
+  <FinalForm
+    {...{ initialValues }}
+    onSubmit={onSave}
+    subscription={{
+      submitError: true,
+      submitting: true,
+      initialValues: true,
+    }}
+  >
+    {({
+      handleSubmit,
+      reset,
+      submitting,
+      submitError,
+    }) => (
+      <Form onSubmit={handleSubmit} id={title}>
+        <Modal {...{ isOpen, toggle }} onError={reset}>
+          <ModalHeader
+            renderLeftButton={() => showSubmitBtn ? <Button onClick={toggle}>Close</Button> : null}
+            renderRightButton={props => (
+              <SaveButton
+                isSaving={loading || submitting || props.loading}
+                onClick={!showSubmitBtn ? toggle : undefined}
+                color={showSubmitBtn ? 'primary' : 'secondary'}
+                type="submit"
+                form={title}
+              >
+                {showSubmitBtn ? 'Save' : 'Close'}
+              </SaveButton>
+            )}
+          >
+            <CardTitle>{title}</CardTitle>
+          </ModalHeader>
+          <ModalBody
+            renderErrorSection={({ error }) => (
+              <ErrorSection errorText={submitError || error} />
+            )}
+          >
+            {children}
+            {onDelete && (
+              <TextAlign center>
+                <CardBlock>
+                  <Button onClick={onDelete}>
+                    Delete
+                  </Button>
+                </CardBlock>
+              </TextAlign>
+            )}
+          </ModalBody>
+        </Modal>
+      </Form>
+    )}
+  </FinalForm>
 );
 
 EntityModal.propTypes = {
@@ -48,7 +100,8 @@ EntityModal.propTypes = {
   initialValues: PropTypes.object,
   loading: PropTypes.bool,
   showSubmitBtn: PropTypes.bool,
-  formTarget: PropTypes.string,
+  onSave: PropTypes.func.isRequired,
+  onDelete: PropTypes.func,
 };
 
-export default EntityModal;
+export default enhance(EntityModal);

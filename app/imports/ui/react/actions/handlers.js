@@ -1,6 +1,5 @@
-import { Cache, toDate, mapRejectedEntitiesToOptions, noop } from 'plio-util';
-import { FORM_ERROR } from 'final-form';
-import { identity, tap } from 'ramda';
+import { Cache, toDate, mapRejectedEntitiesToOptions } from 'plio-util';
+import { identity } from 'ramda';
 
 import { swal } from '../../../client/util';
 import { Mutation, Fragment, Query } from '../../../client/graphql';
@@ -17,7 +16,6 @@ const {
 export const createGeneralAction = ({
   organizationId,
   goalId,
-  onCreate = noop,
   [CREATE_ACTION.name]: mutate,
   mutateWithState = identity,
 }) => async ({
@@ -28,7 +26,7 @@ export const createGeneralAction = ({
   owner: { value: ownerId },
   toBeCompletedBy: { value: toBeCompletedBy },
 }) => {
-  if (!title) return { [FORM_ERROR]: 'Title is required' };
+  if (!title) throw new Error('Title is required');
 
   return mutateWithState(mutate({
     variables: {
@@ -55,7 +53,7 @@ export const createGeneralAction = ({
       },
       proxy,
     ),
-  })).then(tap(onCreate));
+  }));
 };
 
 export const onDelete = ({ [DELETE_ACTION.name]: mutate, goalId }) =>
@@ -78,11 +76,10 @@ export const onDelete = ({ [DELETE_ACTION.name]: mutate, goalId }) =>
 
 export const linkGoalToAction = ({
   goalId,
-  onCreate = noop,
   [LINK_DOC_TO_ACTION.name]: mutate,
   mutateWithState = identity,
 }) => async ({ action: { value: actionId } = {} }) => {
-  if (!actionId) return { [FORM_ERROR]: 'Action is required' };
+  if (!actionId) throw new Error('Action is required');
 
   return mutateWithState(mutate({
     variables: {
@@ -101,7 +98,7 @@ export const linkGoalToAction = ({
         },
         proxy,
       ),
-  })).then(tap(onCreate));
+  }));
 };
 
 export const loadActions = ({ organizationId, actions }) => () => client.query({
