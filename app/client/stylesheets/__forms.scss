@@ -493,6 +493,10 @@ fieldset[disabled] {
 
 .help-block {
   margin: 0 0 10px;
+
+  & > span {
+    word-wrap: break-word;
+  }
 }
 
 .field-help-message {
