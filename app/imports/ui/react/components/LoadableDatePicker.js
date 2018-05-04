@@ -25,6 +25,7 @@ const LoadableDatePicker = Loadable.Map({
     // trick to get around date picker unable to pass className to input wrapper...
     <div {...{ className }}>
       <DatePicker
+        fixedHeight
         className="form-control"
         selected={selected ? moment(selected) : null}
         popperClassName={className}
