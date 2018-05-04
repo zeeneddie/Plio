@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { FlowRouter } from 'meteor/kadira:flow-router';
-import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
 import { ActionTypes } from '/imports/share/constants';
 import { getClassByStatus } from '/imports/api/problems/helpers';
@@ -24,14 +21,6 @@ const ConnectedDocList = (props) => {
       sequentialId,
       href,
       indicator: getClassByStatus(status),
-      // when opening nonconformities blaze screen from standards react screen
-      // it just doesn't work the normal way
-      onMouseUp: (e) => {
-        e.preventDefault();
-        ReactDOM.unmountComponentAtNode(document.getElementById('app'));
-        BlazeLayout.reset();
-        FlowRouter.go(href);
-      },
     };
   });
   const risks = props.risks.map(risk => ({
@@ -74,11 +63,9 @@ const ConnectedDocList = (props) => {
 };
 
 ConnectedDocList.propTypes = {
-  userId: PropTypes.string,
   ncs: PropTypes.array,
   risks: PropTypes.array,
   actions: PropTypes.array,
-  workItems: PropTypes.array,
   lessons: PropTypes.array,
   children: PropTypes.node,
 };
