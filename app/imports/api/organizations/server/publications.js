@@ -15,7 +15,7 @@ import { isPlioUser, isOrgMember } from '../../checkers';
 import { createOrgQueryWhereUserIsOwner } from '../../../share/mongo/queries';
 import { WORKSPACE_DEFAULTS } from '../../../share/constants';
 
-Meteor.publish('invitationInfo', (invitationId) => {
+Meteor.publish('invitationInfo', function (invitationId) {
   check(invitationId, String);
 
   const sendInternalError = message => this.error(new Meteor.Error(500, message));
