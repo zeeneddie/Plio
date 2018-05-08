@@ -16,7 +16,6 @@ import {
   WorkspaceDefaultsTypes,
 } from '../../../../share/constants';
 import { canInviteUsers } from '../../../../api/checkers/roles';
-import { UserSubs } from '../../../../startup/client/subsmanagers';
 
 export default namedCompose('DashboardUserStatsContainer')(
   setPropTypes({
@@ -48,7 +47,7 @@ export default namedCompose('DashboardUserStatsContainer')(
     userIds,
     ...props
   }, onData) => {
-    const subscription = UserSubs.subscribe('Users.online', { organizationId });
+    const subscription = Meteor.subscribe('Users.online', { organizationId });
 
     if (subscription.ready()) {
       const query = {
