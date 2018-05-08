@@ -14,7 +14,7 @@ import {
   CompletedDeletedGoalsContainer,
 } from '../../goals';
 import { MilestoneModalContainer } from '../../milestones';
-import { GeneralActionModalContainer } from '../../actions';
+import { ActionModalContainer } from '../../actions';
 
 const DashboardGoals = ({
   totalCount,
@@ -84,7 +84,7 @@ const DashboardGoals = ({
           toggle={toggleMilestoneModal}
           {...{ organizationId }}
         />
-        <GeneralActionModalContainer
+        <ActionModalContainer
           isOpen={isActionModalOpen}
           toggle={toggleActionModal}
           {...{ organizationId, user }}

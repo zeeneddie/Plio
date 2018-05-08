@@ -50,7 +50,7 @@ Template.Actions_LinkedTo_Read.viewmodel({
       case DocumentTypes.NON_CONFORMITY:
         return getRoute('nonconformity', { urlItemId: _id });
       case DocumentTypes.RISK:
-        return getRoute('risk', { riskId: _id });
+        return getRoute('risk', { urlItemId: _id });
       case DocumentTypes.GOAL:
         return getRoute('dashboardPage');
       default:

@@ -1,15 +1,20 @@
 import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
+import { pick } from 'ramda';
+
 import { changeTitle } from '../../../../api/organizations/methods';
 import { Mutation } from '../../../../client/graphql';
 import { pickDeep, getId } from '../../../../api/helpers';
 import store from '../../../../client/store';
 import Workspace from '../components/Workspace';
 import initMainData from './loaders/initMainData';
-import { composeWithTracker } from '../../../../client/util';
+import { composeWithTracker, swal } from '../../../../client/util';
 import { withApollo } from '../../helpers';
-
+import {
+  WORKSPACE_DEFAULTS,
+  WorkspaceDefaultsTypes,
+} from '../../../../share/constants';
 
 const enhance = compose(
   withApollo,
@@ -34,9 +39,16 @@ const enhance = compose(
             ...workspaceDefaults,
           },
         },
-      }),
+      }).catch(swal.error),
     }),
   }),
+  withProps(({ organization: { [WORKSPACE_DEFAULTS]: workspaceDefaults = {} } = {} }) => ({
+    initialValues: pick([
+      WorkspaceDefaultsTypes.DISPLAY_USERS,
+      WorkspaceDefaultsTypes.DISPLAY_MESSAGES,
+      WorkspaceDefaultsTypes.DISPLAY_ACTIONS,
+    ], workspaceDefaults),
+  })),
 );
 
 export default enhance(Workspace);

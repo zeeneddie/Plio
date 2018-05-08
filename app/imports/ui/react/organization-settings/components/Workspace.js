@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { compose } from 'recompose';
 import { CardTitle } from 'reactstrap';
+import { noop, generateWorkspaceDefaultsOptions } from 'plio-util';
+import { Form } from 'react-final-form';
+
 import { OrganizationSettingsHelp } from '../../../../api/help-messages';
 import { equals } from '../../../../api/helpers';
 import HomeScreenTitle from '../fields/edit/components/HomeScreenTitle';
@@ -11,6 +14,7 @@ import {
   NonConformitiesTitles,
   WorkInboxTitles,
   WorkspaceDefaultsTypes,
+  WorkspaceDefaultsLabels,
 } from '../../../../share/constants';
 import { withStateToggle } from '../../helpers';
 import { createWorkspaceTitleValue } from '../helpers';
@@ -21,8 +25,9 @@ import {
   SubcardBody,
   GuidancePanel,
   GuidanceIcon,
+  SelectInputField,
+  FormField,
 } from '../../components';
-import WorkspaceDefaultsField from './WorkspaceDefaultsField';
 
 const ITEM_MAP = {
   standards: {
@@ -56,7 +61,8 @@ const Workspace = enhance(({
   toggleGuidancePanel,
   changeWorkspaceDefaults,
   onSelectTitle: onSelect,
-  organization: { homeScreenTitles: titles = {}, workspaceDefaults } = {},
+  organization: { homeScreenTitles: titles = {} } = {},
+  initialValues,
 }) => {
   const workspaceTitlesFields = Object.keys(ITEM_MAP).map((key) => {
     // we need a key for a method and a value to know which title is selected
@@ -92,26 +98,46 @@ const Workspace = enhance(({
         <CardBlock>
           <legend>Workspace defaults</legend>
 
-          <WorkspaceDefaultsField
-            label="Users online"
-            value={workspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_USERS]}
-            valueKey={WorkspaceDefaultsTypes.DISPLAY_USERS}
-            onChange={changeWorkspaceDefaults}
-          />
-
-          <WorkspaceDefaultsField
-            label="Unread messages"
-            value={workspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_MESSAGES]}
-            valueKey={WorkspaceDefaultsTypes.DISPLAY_MESSAGES}
-            onChange={changeWorkspaceDefaults}
-          />
-
-          <WorkspaceDefaultsField
-            label="Overdue actions"
-            value={workspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_ACTIONS]}
-            valueKey={WorkspaceDefaultsTypes.DISPLAY_ACTIONS}
-            onChange={changeWorkspaceDefaults}
-          />
+          <Form
+            onSubmit={noop}
+            subscription={{}}
+            {...{ initialValues }}
+          >
+            {() => (
+              <Fragment>
+                <FormField>
+                  {WorkspaceDefaultsLabels[WorkspaceDefaultsTypes.DISPLAY_USERS]}
+                  <SelectInputField
+                    name={WorkspaceDefaultsTypes.DISPLAY_USERS}
+                    options={generateWorkspaceDefaultsOptions()}
+                    onChange={({ value }) => changeWorkspaceDefaults({
+                      [WorkspaceDefaultsTypes.DISPLAY_USERS]: value,
+                    })}
+                  />
+                </FormField>
+                <FormField>
+                  {WorkspaceDefaultsLabels[WorkspaceDefaultsTypes.DISPLAY_MESSAGES]}
+                  <SelectInputField
+                    name={WorkspaceDefaultsTypes.DISPLAY_MESSAGES}
+                    options={generateWorkspaceDefaultsOptions()}
+                    onChange={({ value }) => changeWorkspaceDefaults({
+                      [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: value,
+                    })}
+                  />
+                </FormField>
+                <FormField>
+                  {WorkspaceDefaultsLabels[WorkspaceDefaultsTypes.DISPLAY_ACTIONS]}
+                  <SelectInputField
+                    name={WorkspaceDefaultsTypes.DISPLAY_ACTIONS}
+                    options={generateWorkspaceDefaultsOptions()}
+                    onChange={({ value }) => changeWorkspaceDefaults({
+                      [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: value,
+                    })}
+                  />
+                </FormField>
+              </Fragment>
+            )}
+          </Form>
 
           <legend>Workspace titles</legend>
 

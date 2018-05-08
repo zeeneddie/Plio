@@ -8,8 +8,8 @@ import {
 
 const getOrganizationId = (root, { organizationId }) => organizationId;
 
-export const resolver = async (root, args, { services: { ActionService } }) =>
-  ActionService.insert(args);
+export const resolver = async (root, args, { userId, services: { ActionService } }) =>
+  ActionService.insert({ ...args, createdBy: userId, viewedBy: [userId] });
 
 export default applyMiddleware(
   checkLoggedIn(),

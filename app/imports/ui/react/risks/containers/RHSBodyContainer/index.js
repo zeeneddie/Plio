@@ -4,8 +4,6 @@ import property from 'lodash.property';
 import set from 'lodash.set';
 
 import {
-  combineObjects,
-  pickFrom,
   pickDocuments,
   mapC,
   transsoc,

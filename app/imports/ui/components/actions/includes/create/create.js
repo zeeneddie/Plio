@@ -2,12 +2,13 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 
-import { ActionPlanOptions, ActionTypes } from '../../../../../share/constants';
+import { ActionPlanOptions, ActionTypes, DocumentTypes } from '../../../../../share/constants';
 import { insert } from '../../../../../api/actions/methods';
 import { getTzTargetDate, getWorkflowDefaultStepDate } from '../../../../../share/helpers';
 import { setModalError, inspire } from '../../../../../api/helpers';
 import { addActionToGoalFragment } from '../../../../../client/apollo/utils';
 import { client } from '../../../../../client/apollo';
+import { Query } from '../../../../../client/graphql';
 
 Template.Actions_Create.viewmodel({
   mixin: ['workInbox', 'organization', 'router', 'getChildrenData'],
@@ -76,10 +77,18 @@ Template.Actions_Create.viewmodel({
         template: 'Actions_Edit',
       });
 
+      // update cache to show new action on goals chart
       if (type === ActionTypes.GENERAL_ACTION) {
-        allArgs.linkedTo.forEach(({ documentId }) => (
-          addActionToGoalFragment(documentId, action, client)
-        ));
+        client.query({
+          query: Query.ACTION_CARD,
+          variables: { _id },
+        }).then(({ data: { action: { action: fetchedAction } } }) => {
+          allArgs.linkedTo.forEach(({ documentId, documentType }) => {
+            if (documentType === DocumentTypes.GOAL) {
+              addActionToGoalFragment(documentId, fetchedAction, client);
+            }
+          });
+        });
       }
     };
 

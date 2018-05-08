@@ -71,6 +71,7 @@ const RisksSubcard = ({
               organizationId,
               user,
               reset,
+              guidelines,
             }}
           />
         )}

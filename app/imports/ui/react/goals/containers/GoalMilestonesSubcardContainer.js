@@ -11,7 +11,6 @@ import { onDelete, onSave } from '../../milestones/handlers';
 
 const { DELETE_MILESTONE, CREATE_MILESTONE } = Mutation;
 
-// TODO delete onSave handler when EntityManagerSubcard will be refactored
 export default namedCompose('GoalMilestonesSubcardContainer')(
   pure,
   graphql(Query.GOAL_MILESTONES_CARD, {

@@ -7,7 +7,7 @@ import { Query, Mutation } from '../../../../client/graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { UserRoles } from '../../../../share/constants';
 import { namedCompose } from '../../helpers';
-import { getGeneralActionDefaultValues } from '../../actions/helpers';
+import { getActionFormInitialState } from '../../actions/helpers';
 import {
   onDelete,
   createGeneralAction,
@@ -52,7 +52,7 @@ export default namedCompose('GoalActionsSubcardContainer')(
         title,
         sequentialId,
       },
-      initialValues: getGeneralActionDefaultValues(user),
+      initialValues: getActionFormInitialState(user),
     }),
   }),
   graphql(DELETE_ACTION, { name: DELETE_ACTION.name }),

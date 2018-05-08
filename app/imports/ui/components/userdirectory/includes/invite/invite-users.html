@@ -1,12 +1,5 @@
 <template name="UserDirectory_InviteUsers">
   <div id="invite-modal" class="card-block">
-    {{#each usersEntries}}
-      {{> UserDirectory_InviteUsers_UserEntry}}
-    {{/each}}
-    <hr>
-    <div class="form-group">
-      <label class="control-label"><strong>Add a welcome message</strong></label>
-      <textarea class="form-control" rows="6" {{b "value: welcomeMessage"}}></textarea>
-    </div>
+    {{> React component=UsersInviteForm onSubmit=(callback 'onSubmit')}}
   </div>
 </template>

@@ -1,6 +1,5 @@
-import { Cache, noop } from 'plio-util';
-import { FORM_ERROR } from 'final-form';
-import { identity, tap } from 'ramda';
+import { Cache } from 'plio-util';
+import { identity } from 'ramda';
 import { swal } from '../../../client/util';
 import { updateGoalFragment } from '../../../client/apollo';
 import { Mutation, Fragment } from '../../../client/graphql';
@@ -29,7 +28,6 @@ export const onSave = ({
   mutateWithState = identity,
   organizationId,
   linkedTo,
-  onCreate = noop,
 }) => async ({
   title,
   description,
@@ -39,8 +37,7 @@ export const onSave = ({
 
   if (!title) errors.push('Title is required');
   if (!completionTargetDate) errors.push('Completion - target date is required');
-
-  if (errors.length) return { [FORM_ERROR]: errors.join('\n') };
+  if (errors.length) throw new Error(errors.join('\n'));
 
   return mutateWithState(mutate({
     variables: {
@@ -60,5 +57,5 @@ export const onSave = ({
       },
       proxy,
     ),
-  })).then(tap(onCreate));
+  }));
 };

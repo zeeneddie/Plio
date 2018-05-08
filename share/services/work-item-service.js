@@ -55,7 +55,12 @@ export default {
   actionCreated(actionId) {
     const action = Actions.findOne({ _id: actionId });
     const {
-      organizationId, type, completionTargetDate, toBeCompletedBy,
+      organizationId,
+      type,
+      completionTargetDate,
+      toBeCompletedBy,
+      viewedBy = [],
+      createdBy,
     } = action;
 
     this.collection.insert({
@@ -63,6 +68,8 @@ export default {
       targetDate: completionTargetDate,
       assigneeId: toBeCompletedBy,
       type: WorkItemsStore.TYPES.COMPLETE_ACTION,
+      viewedBy,
+      createdBy,
       linkedDoc: {
         type,
         _id: actionId,

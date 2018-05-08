@@ -17,7 +17,14 @@ const ModalDataImport = ({
   <div className="relative">
     <ListGroup className="list-group-flush">
       {children}
-      <CardBlockCollapse {...{ leftText, ...other }}>
+      <CardBlockCollapse
+        {...{ leftText, ...other }}
+        props={{
+          leftText: {
+            className: 'list-group-item-heading',
+          },
+        }}
+      >
         <List {...{ documentType, onOrgClick, ...other }} />
       </CardBlockCollapse>
     </ListGroup>

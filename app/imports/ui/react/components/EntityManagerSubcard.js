@@ -5,7 +5,7 @@ import { Form as FinalForm } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import { FORM_ERROR } from 'final-form';
-import { tap } from 'ramda';
+import { is } from 'ramda';
 
 import { handleGQError } from '../../../api/handleGQError';
 import { withToggle } from '../helpers';
@@ -38,7 +38,15 @@ class EntityManagerSubcard extends Component {
     const { onSave } = this.props;
 
     return (values, form) => onSave(values, form)
-      .then(tap(() => fields.remove(index)))
+      .then((res) => {
+        if (is(Object, res) && Object.prototype.hasOwnProperty.call(res, FORM_ERROR)) {
+          return res;
+        }
+
+        fields.remove(index);
+
+        return res;
+      })
       .catch(err => ({ [FORM_ERROR]: handleGQError(err) }));
   }
 

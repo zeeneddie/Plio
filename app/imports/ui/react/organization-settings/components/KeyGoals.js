@@ -1,59 +1,81 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { CardTitle } from 'reactstrap';
-import { withStateToggle } from '../../helpers';
-import { WorkspaceDefaultsTypes, TimeScaleOptions } from '../../../../share/constants';
-import { CardBlock, Subcard, SubcardHeader, SubcardBody } from '../../components';
-import WorkspaceDefaultsField from './WorkspaceDefaultsField';
+import { Form } from 'react-final-form';
+import { noop, generateWorkspaceDefaultsOptions } from 'plio-util';
 
-const enhance = withStateToggle(false, 'isOpen', 'toggle');
-const KeyGoalsSettings = enhance(({
-  isOpen,
-  toggle,
+import {
+  WorkspaceDefaultsTypes,
+  TimeScaleOptions,
+  WorkspaceDefaultsLabels,
+} from '../../../../share/constants';
+import {
+  CardBlock,
+  Subcard,
+  SubcardHeader,
+  SubcardBody,
+  FormField,
+  SelectInputField,
+} from '../../components';
+
+const KeyGoalsSettings = ({
   changeChartScale,
   changeGoalsLimit,
   changeCompletedDeletedGoals,
-  ...restProps
+  initialValues,
 }) => (
   <div>
-    <Subcard {...{ isOpen, toggle }}>
-      <SubcardHeader><CardTitle>Key goals</CardTitle></SubcardHeader>
+    <Subcard>
+      <SubcardHeader>
+        <CardTitle>Key goals</CardTitle>
+      </SubcardHeader>
       <SubcardBody>
         <CardBlock>
-          <WorkspaceDefaultsField
-            label="Horizontal scale"
-            value={restProps[WorkspaceDefaultsTypes.TIME_SCALE]}
-            valueKey={WorkspaceDefaultsTypes.TIME_SCALE}
-            onChange={changeChartScale}
-            options={TimeScaleOptions}
-            sm="6"
-          />
-
-          <WorkspaceDefaultsField
-            label="Number of key goals"
-            value={restProps[WorkspaceDefaultsTypes.DISPLAY_GOALS]}
-            valueKey={WorkspaceDefaultsTypes.DISPLAY_GOALS}
-            onChange={changeGoalsLimit}
-            sm="6"
-          />
-
-          <WorkspaceDefaultsField
-            label="Number of completed & deleted goals"
-            value={restProps[WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]}
-            valueKey={WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS}
-            onChange={changeCompletedDeletedGoals}
-            sm="6"
-          />
+          <Form
+            onSubmit={noop}
+            subscription={{}}
+            {...{ initialValues }}
+          >
+            {() => (
+              <Fragment>
+                <FormField sm={6}>
+                  {WorkspaceDefaultsLabels[WorkspaceDefaultsTypes.TIME_SCALE]}
+                  <SelectInputField
+                    name={WorkspaceDefaultsTypes.TIME_SCALE}
+                    options={TimeScaleOptions}
+                    onChange={changeChartScale}
+                  />
+                </FormField>
+                <FormField sm={6}>
+                  {WorkspaceDefaultsLabels[WorkspaceDefaultsTypes.DISPLAY_GOALS]}
+                  <SelectInputField
+                    name={WorkspaceDefaultsTypes.DISPLAY_GOALS}
+                    options={generateWorkspaceDefaultsOptions()}
+                    onChange={changeGoalsLimit}
+                  />
+                </FormField>
+                <FormField sm={6}>
+                  {WorkspaceDefaultsLabels[WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]}
+                  <SelectInputField
+                    name={WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS}
+                    options={generateWorkspaceDefaultsOptions()}
+                    onChange={changeCompletedDeletedGoals}
+                  />
+                </FormField>
+              </Fragment>
+            )}
+          </Form>
         </CardBlock>
       </SubcardBody>
     </Subcard>
   </div>
-));
+);
 
 KeyGoalsSettings.propTypes = {
   changeChartScale: PropTypes.func.isRequired,
   changeGoalsLimit: PropTypes.func.isRequired,
   changeCompletedDeletedGoals: PropTypes.func.isRequired,
+  initialValues: PropTypes.object,
 };
 
 export default KeyGoalsSettings;

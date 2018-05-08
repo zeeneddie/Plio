@@ -5,7 +5,7 @@ import { RisksHelp } from '/imports/api/help-messages';
 import swal from '/imports/ui/utils/swal';
 import { restore, remove } from '/imports/api/risks/methods';
 import { isOrgOwner } from '/imports/api/checkers';
-import { RiskFilterIndexes, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { RiskFilterIndexes } from '/imports/api/constants';
 import { goTo } from '../../../../utils/router/actions';
 
 export const onModalOpen = ({ _id }) => () =>
@@ -31,13 +31,7 @@ export const onRestore = ({
   const cb = (err) => {
     if (err) swal.error(err);
 
-    swal({
-      title: 'Restored!',
-      text: `The risk "${title}" was restored successfully.`,
-      type: 'success',
-      timer: ALERT_AUTOHIDE_TIME,
-      showConfirmButton: false,
-    });
+    swal.success('Restored!', `The risk "${title}" was restored successfully.`);
 
     const params = { urlItemId: _id };
     const queryParams = { filter: RiskFilterIndexes.TYPE };
@@ -64,13 +58,7 @@ export const onDelete = ({
   const cb = (err) => {
     if (err) swal.error(err);
 
-    swal({
-      title: 'Deleted!',
-      text: `The risk "${title}" was removed successfully.`,
-      type: 'success',
-      timer: ALERT_AUTOHIDE_TIME,
-      showConfirmButton: false,
-    });
+    swal.success('Deleted!', `The risk "${title}" was removed successfully.`);
   };
 
   swal(options, () => remove.call({ _id }, cb));

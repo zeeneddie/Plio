@@ -1,4 +1,7 @@
+import { Meteor } from 'meteor/meteor';
 import { applyMiddleware } from 'plio-util';
+import { reduce, merge, defaultTo } from 'ramda';
+
 import { checkLoggedIn, checkOrgMembership } from '../../../../../share/middleware';
 import { getJoinUserToOrganizationDate } from '../../../../../share/utils';
 import { HomeScreenTitlesTypes } from '../../../../../share/constants';
@@ -11,28 +14,51 @@ export const resolver = async (root, { organizationId }, { collections, userId }
     WorkItems,
   } = collections;
   const joinedAt = getJoinUserToOrganizationDate({ organizationId, userId });
-  const getCounts = (collection) => {
-    const query = { organizationId, isDeleted: false };
-    const notViewedQuery = {
-      ...query,
-      viewedBy: { $ne: userId },
-      isCompleted: { $ne: true },
-    };
+  const getCounts = async (collection) => {
+    const rawCollection = collection.rawCollection();
+    const aggregate = Meteor.wrapAsync(rawCollection.aggregate, rawCollection);
 
-    if (joinedAt) Object.assign(query, { createdAt: { $gt: joinedAt } });
+    const aggregationResult = aggregate([
+      {
+        $match: {
+          organizationId,
+          isDeleted: false,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalCount: { $sum: 1 },
+          notViewedCount: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $not: { $in: [userId, '$viewedBy'] } },
+                    { $ne: ['$isCompleted', true] },
+                    { $gt: ['$createdAt', joinedAt] },
+                  ],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+    ]);
 
-    return {
-      totalCount: collection.find(query).count(),
-      notViewedCount: collection.find(notViewedQuery).count(),
-    };
+    return defaultTo({ totalCount: 0, notViewedCount: 0 }, aggregationResult[0]);
   };
 
-  return {
-    [HomeScreenTitlesTypes.STANDARDS]: getCounts(Standards),
-    [HomeScreenTitlesTypes.RISKS]: getCounts(Risks),
-    [HomeScreenTitlesTypes.NON_CONFORMITIES]: getCounts(NonConformities),
-    [HomeScreenTitlesTypes.WORK_INBOX]: getCounts(WorkItems),
-  };
+  return Promise.all(
+    [
+      [Standards, HomeScreenTitlesTypes.STANDARDS],
+      [Risks, HomeScreenTitlesTypes.RISKS],
+      [NonConformities, HomeScreenTitlesTypes.NON_CONFORMITIES],
+      [WorkItems, HomeScreenTitlesTypes.WORK_INBOX],
+    ].map(async ([collection, key]) => ({ [key]: await getCounts(collection) })),
+  ).then(reduce(merge, {}));
 };
 
 export default applyMiddleware(

@@ -1,6 +1,5 @@
 import { graphql } from 'react-apollo';
 import { Cache, lenses, viewEq, getUserOptions, bySerialNumber } from 'plio-util';
-import { FORM_ERROR } from 'final-form';
 import { view, ifElse, sort } from 'ramda';
 import { withHandlers, pure } from 'recompose';
 
@@ -60,7 +59,7 @@ export default namedCompose('GoalRisksSubcardContainer')(
       },
     }) => ({
       linkRiskToGoal: async ({ risk: { value: riskId } = {} }) => {
-        if (!riskId) return { [FORM_ERROR]: 'Risk is required' };
+        if (!riskId) throw new Error('Risk is required');
 
         return mutate({
           variables: {
@@ -97,7 +96,7 @@ export default namedCompose('GoalRisksSubcardContainer')(
         magnitude,
         type: typeId,
       }) => {
-        if (!title) return { [FORM_ERROR]: 'Title is required' };
+        if (!title) throw new Error('Title is required');
 
         return mutate({
           variables: {

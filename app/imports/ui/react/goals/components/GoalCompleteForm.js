@@ -9,8 +9,8 @@ import ToggleComplete from '../../components/ToggleComplete';
 export const GoalCompleteForm = ({ onComplete }) => (
   <FinalForm
     onSubmit={onComplete}
-    subscription={{}}
-    render={({ handleSubmit }) => (
+    subscription={{ submitting: true }}
+    render={({ handleSubmit, submitting }) => (
       <TextAlign center>
         <Form onSubmit={handleSubmit}>
           <ToggleComplete completeButtonContent="Mark as complete">
@@ -23,6 +23,7 @@ export const GoalCompleteForm = ({ onComplete }) => (
             <Button
               color="success"
               type="submit"
+              disabled={submitting}
             >
               Complete
             </Button>

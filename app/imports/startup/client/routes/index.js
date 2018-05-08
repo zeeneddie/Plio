@@ -10,6 +10,8 @@ import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
+import './triggers';
+
 import {
   renderStandards,
   renderRisks,
