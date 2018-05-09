@@ -21,13 +21,16 @@ export const GoalAddModal = ({
   ...props
 }) => (
   <Modal {...{ isOpen, toggle, onClosed }}>
-    <FinalForm {...{ onSubmit, ...props }}>
-      {({ handleSubmit, submitError }) => (
+    <FinalForm
+      {...{ onSubmit, ...props }}
+      subscription={{ submitError: true, submitting: true }}
+    >
+      {({ handleSubmit, submitError, submitting }) => (
         <Fragment>
           <ModalHeader
             renderLeftButton={() => <Button onClick={toggle}>Close</Button>}
             renderRightButton={({ loading }) => (
-              <SaveButton onClick={handleSubmit} isSaving={loading} />
+              <SaveButton onClick={handleSubmit} isSaving={submitting || loading} />
             )}
           >
             <CardTitle>Key Goal</CardTitle>
