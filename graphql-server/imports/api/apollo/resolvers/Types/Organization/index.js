@@ -1,18 +1,11 @@
-import { loadUserById, lenses } from 'plio-util';
-import { view } from 'ramda';
+import { loadUserById, getCreatedAt, getCreatedBy } from 'plio-util';
 
-const {
-  userId,
-  createdBy,
-  updatedBy,
-} = lenses;
+import users from './users';
 
 export default {
   Organization: {
-    createdBy: loadUserById(view(createdBy)),
-    updatedBy: loadUserById(view(updatedBy)),
-  },
-  OrganizationUser: {
-    user: loadUserById(view(userId)),
+    users,
+    createdBy: loadUserById(getCreatedBy),
+    updatedBy: loadUserById(getCreatedAt),
   },
 };
