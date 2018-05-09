@@ -9,6 +9,7 @@ const swal = ({
   showCancelButton = true,
   confirmButtonText = '',
   closeOnConfirm = false,
+  showLoaderOnConfirm = true,
   ...other
 }, cb) => sweetAlert({
   title,
@@ -17,6 +18,7 @@ const swal = ({
   showCancelButton,
   confirmButtonText,
   closeOnConfirm,
+  showLoaderOnConfirm,
   ...other,
 }, cb);
 
