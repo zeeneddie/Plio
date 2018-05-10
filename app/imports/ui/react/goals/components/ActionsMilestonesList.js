@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Collapse, Button } from 'reactstrap';
+import { StyledMixins } from 'plio-util';
+
 import { TimelineListItem, ToggleAngleIcon } from '../../components';
 
 const ToggleButtonWrapper = styled.div`
@@ -17,6 +19,10 @@ const ActionPanel = styled.div`
     padding: 0;
     margin-right: 15px;
     text-decoration: none;
+    max-width: none;
+    ${StyledMixins.media.mobile`
+      display: block;
+    `};
   }
 `;
 
