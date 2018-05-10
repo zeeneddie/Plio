@@ -9,6 +9,7 @@ import { getFullNameOrEmail } from '/imports/api/users/helpers';
 import { getClassByStatus } from '/imports/api/problems/helpers';
 import Label from '/imports/ui/react/components/Labels/Label';
 import LinkItemList from '/imports/ui/react/fields/read/components/LinkItemList';
+import Lessons from '/imports/ui/react/fields/read/components/Lessons';
 import ImprovementPlan from '/imports/ui/react/fields/read/components/ImprovementPlan';
 import Notify from '/imports/ui/react/fields/read/components/Notify';
 import Field from '/imports/ui/react/fields/read/components/Field';
@@ -164,9 +165,7 @@ const Body = ({
       <LinkItemList label="Preventative actions" items={preventativeActions} />
     )}
 
-    {!!lessons.length && (
-      <LinkItemList label="Lessons Learned" items={lessons} />
-    )}
+    {!!lessons.length && (<Lessons {...{ lessons }} />)}
 
     {!!fileIds.length && (
       <Block>

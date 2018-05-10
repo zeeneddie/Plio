@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { ActionTypes } from '/imports/share/constants';
-import { getClassByStatus } from '/imports/api/problems/helpers';
-import { splitActionsByType } from '/imports/api/actions/helpers';
+import { ActionTypes } from '../../../../../../../share/constants';
+import { getClassByStatus } from '../../../../../../../api/problems/helpers';
+import { splitActionsByType } from '../../../../../../../api/actions/helpers';
 import LinkItemList from '../../../../../fields/read/components/LinkItemList';
 import { getPath } from '../../../../../../utils/router/paths';
+import Lessons from '../../../../../fields/read/components/Lessons';
 
 const ConnectedDocList = (props) => {
   const ncs = props.ncs.map(({
@@ -56,7 +57,7 @@ const ConnectedDocList = (props) => {
       ))}
       {props.children}
       {props.lessons && !!props.lessons.length && (
-        <LinkItemList label="Lessons Learned" items={props.lessons} />
+        <Lessons lessons={props.lessons} />
       )}
     </div>
   );
