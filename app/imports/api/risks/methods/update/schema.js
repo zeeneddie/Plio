@@ -9,7 +9,6 @@ const lookup = [
   'statusComment',
   'originatorId',
   'ownerId',
-  'magnitude',
   'type',
   'improvementPlan',
   'riskEvaluation',

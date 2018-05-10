@@ -66,6 +66,7 @@ const RiskForm = ({
     </FormField>
     <Magnitudes label="Initial categorization" {...{ guidelines }}>
       <Magnitudes.Select
+        disabled
         name="magnitude"
         onChange={onChangeMagnitude}
         component={SelectField}
