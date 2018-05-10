@@ -252,7 +252,7 @@ Meteor.publishComposite('unreadMessages', function ({ organizationId, limit }) {
       },
       children: [{
         find(message) {
-          return Meteor.users.find({ _id: message.userId }, { fields: { profile: 1 } });
+          return Meteor.users.find({ _id: message.createdBy }, { fields: { profile: 1 } });
         },
       }, {
         find(message) {
