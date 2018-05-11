@@ -312,3 +312,15 @@ export const GQ_ERROR_MESSAGE_PREFIX = 'GraphQL error: ';
 export const DEFAULT_ERROR_MESSAGE = 'Internal server error';
 
 export const SUPPORT_FORUM_URL = 'https://gitter.im/Pliohub/SupportForum';
+
+/* eslint-disable max-len */
+export const Styles = {
+  font: {
+    family: {
+      segoe: {
+        semibold: '"Segoe UI Semibold WestEuropean", "Segoe UI Semibold", "Segoe WP Semibold", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif',
+      },
+    },
+  },
+};
+/* eslint-enable max-len */

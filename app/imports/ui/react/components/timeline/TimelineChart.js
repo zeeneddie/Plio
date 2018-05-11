@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { prop } from 'ramda';
@@ -39,6 +39,10 @@ const TimelineListWrapper = styled.div.attrs({
       text-align: ${float};
     }
   `}
+`;
+
+const TimelineChartItemWrapper = styled.div`
+  padding: 15px 8px;
 `;
 
 const enhance = compose(
@@ -95,7 +99,7 @@ const TimelineChart = ({
     <TimelineChartWrapper>
       <CurrentDateLine {...{ partOfPastTime }} />
       {items.map(item => (
-        <Fragment key={item._id}>
+        <TimelineChartItemWrapper key={item._id}>
           <VictoryChart
             height={lineHeight}
             {...chartOptions}
@@ -111,7 +115,7 @@ const TimelineChart = ({
               {renderTimelineList({ item })}
             </TimelineListWrapper>
           )}
-        </Fragment>
+        </TimelineChartItemWrapper>
       ))}
       <TimelineAxis {...chartOptions} height={axisHeight} />
     </TimelineChartWrapper>
