@@ -32,8 +32,9 @@ export default namedCompose('DashboardUserStatsContainer')(
       _id,
       users,
       [WORKSPACE_DEFAULTS]: {
-        [WorkspaceDefaultsTypes.DISPLAY_USERS]: usersPerRow,
-      },
+        [WorkspaceDefaultsTypes.DISPLAY_USERS]:
+          usersPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_USERS],
+      } = {},
     } = {},
   }) => ({
     _id,
@@ -43,7 +44,7 @@ export default namedCompose('DashboardUserStatsContainer')(
   pure,
   composeWithTracker(({
     _id: organizationId,
-    usersPerRow = WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_USERS],
+    usersPerRow,
     userIds,
     ...props
   }, onData) => {

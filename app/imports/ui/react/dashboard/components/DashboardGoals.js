@@ -36,34 +36,7 @@ const DashboardGoals = ({
   isActionModalOpen,
   toggleActionModal,
 }) => (
-  <DashboardStatsExpandable
-    items={goals}
-    total={totalCount}
-    itemsPerRow={goals.length}
-    renderIcon={loading ? () => <IconLoading /> : undefined}
-    render={({ items }) => (
-      <Fragment>
-        {!!items.length && (
-          <GoalsChartContainer
-            {...{ timeScale }}
-            goals={items}
-          />
-        )}
-        <CompletedDeletedGoalsContainer
-          {...{
-            canEditGoals,
-            organizationId,
-            deletedItemsPerRow,
-          }}
-        />
-      </Fragment>
-    )}
-    {...{ toggle, isOpen }}
-  >
-    {canEditGoals && <PlusButton size="1" onClick={toggleAddModal} />}
-    {totalCount
-      ? pluralize('goal', totalCount || goals.length, true)
-      : 'Add a key goal'}
+  <Fragment>
     {canEditGoals && (
       <GoalAddModalContainer
         isOpen={isAddModalOpen}
@@ -91,7 +64,36 @@ const DashboardGoals = ({
         />
       </Fragment>
     )}
-  </DashboardStatsExpandable>
+    <DashboardStatsExpandable
+      items={goals}
+      total={totalCount}
+      itemsPerRow={goals.length}
+      renderIcon={loading ? () => <IconLoading /> : undefined}
+      render={({ items }) => (
+        <Fragment>
+          {!!items.length && (
+            <GoalsChartContainer
+              {...{ timeScale }}
+              goals={items}
+            />
+          )}
+          <CompletedDeletedGoalsContainer
+            {...{
+              canEditGoals,
+              organizationId,
+              deletedItemsPerRow,
+            }}
+          />
+        </Fragment>
+      )}
+      {...{ toggle, isOpen }}
+    >
+      {canEditGoals && <PlusButton size="1" onClick={toggleAddModal} />}
+      {totalCount
+        ? pluralize('goal', totalCount || goals.length, true)
+        : 'Add a key goal'}
+    </DashboardStatsExpandable>
+  </Fragment>
 );
 
 DashboardGoals.propTypes = {

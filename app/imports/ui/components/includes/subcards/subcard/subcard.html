@@ -21,7 +21,7 @@
         {{> Template.dynamic template=content}}
         <div class="card-block clearfix">
           <button type="button" class="btn btn-secondary pull-xs-right"
-              {{b "click: close, class: { disabled: isSaving }"}}>
+              {{b "click: close, class: { disabled: isSaving }, disable: isSaving"}}>
             {{#if isSaving}}
               <i class="fa fa-spinner fa-pulse fa-fw margin-bottom">
               </i>

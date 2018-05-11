@@ -8,18 +8,21 @@ export default {
   sendNotification({
     _id, title, body, tag, icon, url, silent = true, timeout = 4000,
   }) {
-    const notificationSound = document.getElementById('notification-sound');
-
-    if (notificationSound) {
-      notificationSound.currentTime = 0;
-      notificationSound.play();
-    }
     const notification = new Notification(title, {
       body,
       tag: tag || _id,
       icon: icon || '/p-logo-square.png',
       silent,
     });
+
+    if (Notification.permission === 'granted') {
+      const notificationSound = document.getElementById('notification-sound');
+
+      if (notificationSound) {
+        notificationSound.currentTime = 0;
+        notificationSound.play();
+      }
+    }
 
     if (url) {
       notification.onclick = function () {

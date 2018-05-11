@@ -80,14 +80,11 @@ const RiskEditForm = ({
       <FormField>
         Department/sector(s)
         <DepartmentsSelectInputContainer
-          multi
-          type={onAddDepartment ? 'creatable' : undefined}
           name="departments"
           placeholder="Department/sector(s)"
           organizationId={organizationId}
           component={SelectInputField}
           onChange={onChangeDepartments}
-          promptTextCreator={value => `Add "${value}" department/sector`}
           onNewOptionClick={onAddDepartment}
         />
       </FormField>

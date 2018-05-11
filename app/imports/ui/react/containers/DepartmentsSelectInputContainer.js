@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { mapEntitiesToOptions } from 'plio-util';
-import { withHandlers, setPropTypes, defaultProps, componentFromProp } from 'recompose';
+import { withHandlers, setPropTypes, defaultProps, componentFromProp, withProps } from 'recompose';
 
 import { namedCompose } from '../helpers';
 import { SelectInput } from '../components';
@@ -12,8 +12,12 @@ export default namedCompose('DepartmentsSelectInputContainer')(
   defaultProps({
     component: SelectInput,
     loadOptionsOnOpen: true,
-    backspaceRemoves: false,
+    multi: true,
+    promptTextCreator: value => `Add "${value}" department/sector`,
   }),
+  withProps(({ onNewOptionClick, type }) => ({
+    type: type || onNewOptionClick ? 'creatable' : undefined,
+  })),
   withHandlers({
     loadOptions: ({ organizationId }) => () => client.query({
       query: Query.DEPARTMENT_LIST,

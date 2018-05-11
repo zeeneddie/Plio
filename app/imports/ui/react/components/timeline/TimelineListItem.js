@@ -7,6 +7,10 @@ import { Rect, Diamond, StylessPopover, Icon } from '../';
 import { Timeline, SymbolTypes } from '../../../../api/constants';
 import withStateToggle from '../../helpers/withStateToggle';
 
+const Wrapper = styled.div`
+  margin: 10px 0;
+`;
+
 const ListItemWrapper = styled.span`
   cursor: pointer;
   padding-left: 2px;
@@ -40,7 +44,7 @@ const TimelineListItem = ({
   togglePopover,
   renderPopover,
 }) => (
-  <div>
+  <Wrapper>
     <ListItemWrapper onClick={togglePopover}>
       {symbol === SymbolTypes.SQUARE && <Rect {...iconProps} />}
       {symbol === SymbolTypes.DIAMOND && <Diamond {...iconProps} />}
@@ -49,7 +53,7 @@ const TimelineListItem = ({
         {userName ? ` ${userName}, ` : ' '}
         {moment(date).format('D MMM YYYY ')}
       </span>
-      <Icon name="angle-down" />
+      <Icon name="angle-down" margin="left" />
     </ListItemWrapper>
     {renderPopover && (
       <StylessPopover
@@ -61,7 +65,7 @@ const TimelineListItem = ({
         {isOpen && renderPopover({ togglePopover })}
       </StylessPopover>
     )}
-  </div>
+  </Wrapper>
 );
 
 TimelineListItem.propTypes = {

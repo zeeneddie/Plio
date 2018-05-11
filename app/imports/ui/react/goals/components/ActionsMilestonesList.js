@@ -2,13 +2,20 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Collapse, Button } from 'reactstrap';
+import { StyledMixins } from 'plio-util';
+
 import { TimelineListItem, ToggleAngleIcon } from '../../components';
+import { Styles } from '../../../../api/constants';
 
 const ToggleButtonWrapper = styled.div`
   text-align: center;
-  font-weight: 1000;
-  span {
+  font-family: ${Styles.font.family.segoe.semibold};
+  font-size: 16px;
+  & > span {
     cursor: pointer;
+    & > i {
+      margin-left: 4px;
+    }
   }
 `;
 
@@ -17,6 +24,11 @@ const ActionPanel = styled.div`
     padding: 0;
     margin-right: 15px;
     text-decoration: none;
+    max-width: none;
+    font: inherit;
+    ${StyledMixins.media.mobile`
+      display: block;
+    `};
   }
 `;
 

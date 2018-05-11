@@ -1,8 +1,9 @@
 import { Template } from 'meteor/templating';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
-import { Departments } from '/imports/share/collections/departments.js';
-import { insert } from '/imports/api/departments/methods.js';
+import { insert } from '/imports/api/departments/methods';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { swal } from '../../../../../../../client/util';
 
 Template.Departments_Create.viewmodel({
   mixin: ['organization', 'modal'],
@@ -38,8 +39,8 @@ Template.Departments_Create.viewmodel({
 
         try {
           departmentsEdit.child('Select_Multi').child('Select_Single').clear();
-        } catch (err) {
-          console.log(err);
+        } catch (error) {
+          console.log(error);
         }
 
         this.selected(_id);
@@ -52,6 +53,7 @@ Template.Departments_Create.viewmodel({
           type: 'success',
           timer: ALERT_AUTOHIDE_TIME,
           showConfirmButton: false,
+          showCancelButton: false,
         });
       }
     });

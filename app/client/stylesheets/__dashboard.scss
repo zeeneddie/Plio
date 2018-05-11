@@ -221,6 +221,12 @@
     padding: 5px 0;
     cursor: pointer;
     display: block;
+    color: #373a3c;
+    text-decoration: none;
+
+    &:hover {
+      color: #0078d7;
+    }
 
     .label {
       font-size: 14px;
