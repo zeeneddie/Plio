@@ -24,3 +24,4 @@ export { default as withToggle } from './withToggle';
 export { default as withMutationState } from './withMutationState';
 export { default as onlyUpdateForKeysDeep } from './onlyUpdateForKeysDeep';
 export { default as debounceHandlers } from './debounceHandlers';
+export { default as withApolloPreloader } from './withApolloPreloader';

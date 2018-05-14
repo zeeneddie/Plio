@@ -1,54 +1,60 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import pluralize from 'pluralize';
+import { joinIds } from 'plio-util';
+
 import DashboardDeletedItem from '../../dashboard/components/DashboardDeletedItem';
-import { DashboardStats } from '../../components';
+import { DashboardStatsExpandable, IconLoading } from '../../components';
 
 const CompletedDeletedGoals = ({
   goals,
   totalCount,
-  loadAllDeletedGoals,
-  showLatestItems,
-  isAllBtn,
-  moreItemsCount,
-  ...restProps
+  loading,
+  isOpen,
+  toggle,
+  itemsPerRow,
+  canRestore,
+  onUndoCompletion,
+  onRestore,
+  onRemove,
 }) => (
-  <Fragment>
-    <DashboardStats.Title>
-      {totalCount} completed & deleted {pluralize('goal', totalCount)}
-    </DashboardStats.Title>
-    <div>
-      {goals.map(goal => (
-        <DashboardDeletedItem
-          key={`removed-goal-${goal._id}`}
-          {...{
-            ...goal,
-            ...restProps,
-          }}
-        />
-      ))}
-    </div>
-    {isAllBtn && (
-      <a href="" onClick={loadAllDeletedGoals}>
-        View all items
-        <span className="text-muted"> ({moreItemsCount} more)</span>
-      </a>
+  <DashboardStatsExpandable
+    {...{ isOpen, toggle, itemsPerRow }}
+    items={goals}
+    total={totalCount}
+    renderIcon={loading ? () => <IconLoading /> : undefined}
+    render={({ items }) => (
+      <div key={joinIds(items)}>
+        {items.map(item => (
+          <DashboardDeletedItem
+            {...{
+              ...item,
+              canRestore,
+              onUndoCompletion,
+              onRestore,
+              onRemove,
+            }}
+            key={item._id}
+          />
+        ))}
+      </div>
     )}
-    {showLatestItems && (
-      <a href="" onClick={showLatestItems}>
-        View latest items
-      </a>
-    )}
-  </Fragment>
+  >
+    {totalCount} completed & deleted {pluralize('goal', totalCount)}
+  </DashboardStatsExpandable>
 );
 
 CompletedDeletedGoals.propTypes = {
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
   totalCount: PropTypes.number.isRequired,
-  moreItemsCount: PropTypes.number.isRequired,
-  isAllBtn: PropTypes.bool.isRequired,
-  loadAllDeletedGoals: PropTypes.func,
-  showLatestItems: PropTypes.func,
+  itemsPerRow: PropTypes.number.isRequired,
+  loading: PropTypes.bool,
+  isOpen: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
+  canRestore: PropTypes.func.isRequired,
+  onUndoCompletion: PropTypes.func,
+  onRestore: PropTypes.func,
+  onRemove: PropTypes.func,
 };
 
 export default CompletedDeletedGoals;

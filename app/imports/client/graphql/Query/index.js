@@ -1,6 +1,6 @@
 import DASHBOARD_GOALS from './DashboardGoals.graphql';
 import DASHBOARD_GOAL from './DashboardGoal.graphql';
-import COMPLETED_DELETED_GOALS from './ComplatedDeletedGoals.graphql';
+import COMPLETED_DELETED_GOALS from './CompletedDeletedGoals.graphql';
 import ORGANIZATION_USERS from './OrganizationUsers.graphql';
 import GOAL_CARD from './GoalCard.graphql';
 import RISK_TYPE_LIST from './RiskTypeList.graphql';

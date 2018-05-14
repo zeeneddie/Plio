@@ -9,12 +9,11 @@ import {
   renderNothing,
 } from 'recompose';
 import PropTypes from 'prop-types';
-import { lenses, lensNotEq, byEndDate, byPriority } from 'plio-util';
-import { view, allPass, sort, either, when, always, slice, compose } from 'ramda';
-import { NetworkStatus } from 'apollo-client';
+import { byEndDate, byPriority } from 'plio-util';
+import { sort, either, when, always, slice, compose, mergeDeepLeft } from 'ramda';
 import connectUI from 'redux-ui';
 
-import { namedCompose, withHr, withPreloaderPage } from '../../helpers';
+import { namedCompose, withHr, withApolloPreloader } from '../../helpers';
 import { DashboardGoals } from '../components';
 import {
   WORKSPACE_DEFAULTS,
@@ -46,14 +45,16 @@ export default namedCompose('DashboardGoalsContainer')(
   renameProps({
     _id: 'organizationId',
     [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'limit',
-    [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'deletedItemsPerRow',
+    [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'completedDeletedItemsPerRow',
     [WorkspaceDefaultsTypes.TIME_SCALE]: 'timeScale',
   }),
   defaultProps({
     limit: WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_GOALS],
     timeScale: WorkspaceDefaults[WorkspaceDefaultsTypes.TIME_SCALE],
+    // eslint-disable-next-line max-len
+    completedDeletedItemsPerRow: WorkspaceDefaults[WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS],
   }),
-  onlyUpdateForKeys(['organizationId', 'deletedItemsPerRow', 'timeScale', 'limit']),
+  onlyUpdateForKeys(['organizationId', 'completedDeletedItemsPerRow', 'timeScale', 'limit']),
   connectUI({
     state: {
       isOpen: false,
@@ -67,14 +68,10 @@ export default namedCompose('DashboardGoalsContainer')(
     },
   }),
   graphql(Query.DASHBOARD_GOALS, {
-    options: ({
-      ui: { isOpen },
-      limit,
-      organizationId,
-    }) => ({
+    options: ({ limit, organizationId }) => ({
       variables: {
         organizationId,
-        limit: isOpen ? 0 : limit,
+        limit,
       },
       notifyOnNetworkStatusChange: true,
     }),
@@ -86,6 +83,9 @@ export default namedCompose('DashboardGoalsContainer')(
         goals: {
           totalCount,
           goals = [],
+        } = {},
+        completedDeletedGoals: {
+          totalCount: completedDeletedTotalCount,
         } = {},
         me: user = { roles: [] },
       },
@@ -109,6 +109,7 @@ export default namedCompose('DashboardGoalsContainer')(
       isActionModalOpen,
       loading,
       totalCount,
+      completedDeletedTotalCount,
       networkStatus,
       user,
       organizationId,
@@ -118,15 +119,9 @@ export default namedCompose('DashboardGoalsContainer')(
         if (!isOpen && goals.length < totalCount) {
           await fetchMore({
             variables: {
-              limit: 0,
+              limit: totalCount,
             },
-            updateQuery: (prev, { fetchMoreResult }) => ({
-              ...prev,
-              goals: {
-                ...prev.goals,
-                goals: fetchMoreResult.goals.goals,
-              },
-            }),
+            updateQuery: (prev, { fetchMoreResult }) => mergeDeepLeft(fetchMoreResult, prev),
           });
         }
         updateUI({ isOpen: !isOpen });
@@ -143,13 +138,7 @@ export default namedCompose('DashboardGoalsContainer')(
         updateUI('isActionModalOpen', !isActionModalOpen),
     }),
   }),
-  withPreloaderPage(
-    allPass([
-      view(lenses.loading),
-      lensNotEq(lenses.networkStatus, NetworkStatus.fetchMore),
-    ]),
-    () => ({ size: 2 }),
-  ),
+  withApolloPreloader(),
   branch(
     ({ totalCount, canEditGoals }) => !!totalCount || canEditGoals,
     withHr,

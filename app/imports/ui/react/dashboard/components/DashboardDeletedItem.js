@@ -1,29 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose, withProps, withHandlers, branch, pure } from 'recompose';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import styled from 'styled-components';
-import { compose, withProps, onlyUpdateForKeys, withHandlers, branch } from 'recompose';
-import { Button, ButtonGroup } from 'reactstrap';
+
 import { getFormattedDate } from '../../../../share/helpers';
+import { withToggle } from '../../helpers';
 import Label from '../../components/Labels/Label';
 
-const StyledDeletedGoal = styled.div`
-  cursor: inherit;
-  .btn-group {
-    position: relative;
-    top: -2px;
-    float: right;
-    .btn.btn-secondary:first-child:not(:last-child) {
-      padding-right: .75rem;
-    }
-  }
+const StyledDropdownMenu = styled(DropdownMenu)`
+  top: 10px !important;
 `;
 
 const enhance = compose(
-  onlyUpdateForKeys(['_id', 'isDeleted', 'completedAt', 'deletedAt', 'title', 'sequentialId']),
-  withProps(({ canRestore, ...restProps }) => ({
-    date: restProps.isDeleted ? restProps.deletedAt : restProps.completedAt,
-    statusText: restProps.isDeleted ? 'deleted' : 'completed',
-    canRestore: canRestore(restProps),
+  pure,
+  withProps(({
+    canRestore,
+    deletedAt,
+    completedAt,
+    isDeleted,
+  }) => ({
+    date: isDeleted ? deletedAt : completedAt,
+    statusText: isDeleted ? 'deleted' : 'completed',
+    canRestore: canRestore({ isDeleted, completedAt }),
   })),
   branch(
     ({ onRemove, onUndoCompletion, onRestore }) => onRemove && onUndoCompletion && onRestore,
@@ -38,6 +37,7 @@ const enhance = compose(
       onRemove: ({ _id, title, onRemove }) => () => onRemove({ _id, title }),
     }),
   ),
+  withToggle(),
 );
 
 const DashboardDeletedItem = ({
@@ -48,24 +48,28 @@ const DashboardDeletedItem = ({
   onRestore,
   onRemove,
   canRestore,
+  isOpen,
+  toggle,
 }) => (
-  <StyledDeletedGoal className="dashboard-stats-action">
-    <Label>{sequentialId}</Label>
-    {title}
-    <span className="text-muted"> ({statusText} {getFormattedDate(date)})</span>
-    {onRemove && onRestore && (
-      <ButtonGroup size="sm">
-        <Button onClick={onRemove}>Delete</Button>
-        <Button disabled={!canRestore} onClick={onRestore}>Restore</Button>
-      </ButtonGroup>
-    )}
-  </StyledDeletedGoal>
+  <Dropdown {...{ isOpen, toggle }} className="dashboard-stats-action">
+    <DropdownToggle tag="div">
+      <Label>{sequentialId}</Label>
+      {title}
+      <span className="text-muted"> ({statusText} {getFormattedDate(date)})</span>
+    </DropdownToggle>
+    <StyledDropdownMenu>
+      <DropdownItem onClick={onRestore} disabled={!canRestore}>Restore key goal</DropdownItem>
+      <DropdownItem onClick={onRemove}>Delete permanently</DropdownItem>
+    </StyledDropdownMenu>
+  </Dropdown>
 );
 
 DashboardDeletedItem.propTypes = {
   sequentialId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   statusText: PropTypes.string.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
   date: PropTypes.number.isRequired,
   canRestore: PropTypes.bool.isRequired,
   onRestore: PropTypes.func,

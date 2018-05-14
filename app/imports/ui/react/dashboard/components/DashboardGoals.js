@@ -18,6 +18,7 @@ import { ActionModalContainer } from '../../actions';
 
 const DashboardGoals = ({
   totalCount,
+  completedDeletedTotalCount,
   goals,
   toggle,
   isOpen,
@@ -28,7 +29,7 @@ const DashboardGoals = ({
   organizationId,
   isEditModalOpen,
   toggleEditModal,
-  deletedItemsPerRow,
+  completedDeletedItemsPerRow,
   timeScale,
   canEditGoals,
   isMilestoneModalOpen,
@@ -66,7 +67,7 @@ const DashboardGoals = ({
     )}
     <DashboardStatsExpandable
       items={goals}
-      total={totalCount}
+      total={completedDeletedTotalCount ? Infinity : totalCount}
       itemsPerRow={goals.length}
       renderIcon={loading ? () => <IconLoading /> : undefined}
       render={({ items }) => (
@@ -77,13 +78,12 @@ const DashboardGoals = ({
               goals={items}
             />
           )}
-          <CompletedDeletedGoalsContainer
-            {...{
-              canEditGoals,
-              organizationId,
-              deletedItemsPerRow,
-            }}
-          />
+          {isOpen && !!completedDeletedTotalCount && (
+            <CompletedDeletedGoalsContainer
+              {...{ canEditGoals, organizationId }}
+              itemsPerRow={completedDeletedItemsPerRow}
+            />
+          )}
         </Fragment>
       )}
       {...{ toggle, isOpen }}
@@ -115,7 +115,8 @@ DashboardGoals.propTypes = {
   toggleActionModal: PropTypes.func.isRequired,
   limit: PropTypes.number,
   canEditGoals: PropTypes.bool,
-  deletedItemsPerRow: PropTypes.number,
+  completedDeletedItemsPerRow: PropTypes.number,
+  completedDeletedTotalCount: PropTypes.number,
 };
 
 export default DashboardGoals;
