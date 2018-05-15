@@ -6,11 +6,24 @@ import { applyMiddleware } from 'plio-util';
 import { UNAUTHORIZED } from './errors';
 import { checkDocAndMembershipAndMore } from './checkers';
 
+export const withCallPromise = function (options) {
+  Object.assign(options, {
+    callP: function callP(args) {
+      return new Promise((resolve, reject) => {
+        this.call(args, (err, res) => {
+          if (err) reject(err);
+          else resolve(res);
+        });
+      });
+    },
+  });
+  return options;
+};
 export default class Method extends ValidatedMethod {
   constructor(props) {
     const { run } = props;
 
-    props.mixins = Object.assign([], props.mixins).concat(LoggedInMixin);
+    props.mixins = Object.assign([], props.mixins).concat([LoggedInMixin, withCallPromise]);
     props.checkLoggedInError = {
       error: '403',
       reason: UNAUTHORIZED.reason,
@@ -32,7 +45,7 @@ export class CheckedMethod extends ValidatedMethod {
 
     const { run } = props;
 
-    props.mixins = Object.assign([], props.mixins).concat(LoggedInMixin);
+    props.mixins = Object.assign([], props.mixins).concat([LoggedInMixin, withCallPromise]);
     props.checkLoggedInError = {
       error: '403',
       reason: UNAUTHORIZED.reason,
@@ -56,19 +69,7 @@ export class CheckedMethod extends ValidatedMethod {
 
 export class MiddlewareMethod extends ValidatedMethod {
   constructor({ middleware, ...props }) {
-    const mixins = [function (options) {
-      Object.assign(options, {
-        callP: function callP(args) {
-          return new Promise((resolve, reject) => {
-            this.call(args, (err, res) => {
-              if (err) reject(err);
-              else resolve(res);
-            });
-          });
-        },
-      });
-      return options;
-    }];
+    const mixins = [withCallPromise];
 
     const run = async function (args) {
       const { userId } = this;

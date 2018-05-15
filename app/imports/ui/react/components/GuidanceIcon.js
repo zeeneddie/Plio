@@ -16,7 +16,7 @@ const StyledQuestionMarkButton = styled(QuestionMarkButton)`
   }
 `;
 
-const GuidanceIcon = ({ isOpen, ...props }) => !isOpen && (
+const GuidanceIcon = ({ isOpen, persist, ...props }) => !!(persist || !isOpen) && (
   <StyledQuestionMarkButton
     {...props}
   />
@@ -24,6 +24,7 @@ const GuidanceIcon = ({ isOpen, ...props }) => !isOpen && (
 
 GuidanceIcon.propTypes = {
   isOpen: PropTypes.bool,
+  persist: PropTypes.bool,
 };
 
 export default GuidanceIcon;

@@ -27,6 +27,7 @@ import {
   GuidanceIcon,
   SelectInputField,
   FormField,
+  HelpInfo,
 } from '../../components';
 
 const ITEM_MAP = {
@@ -144,13 +145,15 @@ const Workspace = enhance(({
           {workspaceTitlesFields}
         </CardBlock>
 
-        <GuidanceIcon onClick={toggleGuidancePanel} />
-        <GuidancePanel
-          isOpen={isGuidancePanelOpen}
-          toggle={toggleGuidancePanel}
-        >
-          {OrganizationSettingsHelp.homeScreenTitles}
-        </GuidancePanel>
+        <HelpInfo>
+          <GuidanceIcon onClick={toggleGuidancePanel} />
+          <GuidancePanel
+            isOpen={isGuidancePanelOpen}
+            toggle={toggleGuidancePanel}
+          >
+            {OrganizationSettingsHelp.homeScreenTitles}
+          </GuidancePanel>
+        </HelpInfo>
       </SubcardBody>
     </Subcard>
   );
