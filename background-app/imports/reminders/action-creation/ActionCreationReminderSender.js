@@ -4,13 +4,17 @@ import { Actions } from '/imports/share/collections/actions';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
 import { Organizations } from '/imports/share/collections/organizations';
-import { ProblemTypes, WorkflowTypes } from '/imports/share/constants';
 import { capitalize } from '/imports/share/helpers';
 import { getDiffInDays, getPrettyTzDate } from '/imports/helpers/date';
 import { getProblemName, getProblemDesc } from '/imports/helpers/description';
 import { getProblemUrl, getDocUnsubscribePath } from '/imports/helpers/url';
 import NotificationSender from '/imports/share/utils/NotificationSender';
-
+import {
+  ProblemTypes,
+  WorkflowTypes,
+  ProblemIndexes,
+  ANALYSIS_STATUSES,
+} from '../../share/constants';
 
 const REMINDER_EMAIL_TEMPLATE = 'defaultEmail';
 
@@ -47,19 +51,19 @@ export default class ActionCreationReminderSender {
         workflowType: WorkflowTypes.SIX_STEP,
         status: {
           $in: [
-            1, // Open - just reported,
-            6, // Open - analysis completed, action needed
+            ProblemIndexes.REPORTED,
+            ProblemIndexes.ANALYSIS_COMPLETED_ACTIONS_NEED,
           ],
         },
-        'analysis.status': 1, // Completed
+        'analysis.status': ANALYSIS_STATUSES.COMPLETED, // Completed
         'analysis.completedAt': { $exists: true },
         'analysis.completedBy': { $exists: true },
       }, {
         workflowType: WorkflowTypes.THREE_STEP,
         status: {
           $in: [
-            1, // Open - just reported,
-            3, // Open - just reported, awaiting action
+            ProblemIndexes.REPORTED,
+            ProblemIndexes.ACTIONS_TO_BE_ADDED,
           ],
         },
       }],
@@ -101,9 +105,9 @@ export default class ActionCreationReminderSender {
     ));
   }
 
-  _getReceivers({ identifiedBy, notify = [] }) {
-    return (identifiedBy && notify.includes(identifiedBy))
-      ? [identifiedBy]
+  _getReceivers({ originatorId, notify = [] }) {
+    return (originatorId && notify.includes(originatorId))
+      ? [originatorId]
       : [];
   }
 

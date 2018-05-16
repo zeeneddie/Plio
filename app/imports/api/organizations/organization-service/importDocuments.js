@@ -25,7 +25,6 @@ const getFieldsByDocType = (documentType, fields) => {
         serialNumber: 1,
         sequentialId: 1,
         workflowType: 1,
-        identifiedAt: 1,
         magnitude: 1,
       });
     default:
@@ -44,7 +43,7 @@ const getPathsByDocType = (documentType, userId, paths) => {
     case DocumentTypes.STANDARD:
       return Object.assign({}, paths, ({ owner: userId }));
     case DocumentTypes.RISK:
-      return Object.assign({}, paths, ({ identifiedBy: userId }));
+      return Object.assign({}, paths, ({ originatorId: userId }));
     default:
       return paths;
   }

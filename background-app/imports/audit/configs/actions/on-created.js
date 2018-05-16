@@ -44,7 +44,7 @@ export default {
           const userId = getUserId(user);
 
           const collection = getCollectionByDocType(documentType);
-          const { identifiedBy, standardsIds } = collection.findOne({
+          const { originatorId, standardsIds } = collection.findOne({
             _id: documentId,
           }) || {};
 
@@ -53,7 +53,7 @@ export default {
             if (owner !== userId) receivers.add(owner);
           });
 
-          if (identifiedBy !== userId) receivers.add(identifiedBy);
+          if (originatorId !== userId) receivers.add(originatorId);
 
           return Array.from(receivers);
         });

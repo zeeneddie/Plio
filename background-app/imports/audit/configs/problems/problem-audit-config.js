@@ -1,4 +1,6 @@
-import { _ } from 'meteor/underscore';
+import { lenses, getId, getOrganizationId, getNotify } from 'plio-util';
+import { view } from 'ramda';
+
 import { getProblemName } from '/imports/helpers/description';
 import onCreated from './on-created';
 import onRemoved from './on-removed';
@@ -12,8 +14,7 @@ import analysisTargetDate from './fields/analysis.targetDate';
 import departmentsIds from './fields/departmentsIds';
 import description from './fields/description';
 import fileIds from './fields/fileIds';
-import identifiedAt from './fields/identifiedAt';
-import identifiedBy from './fields/identifiedBy';
+import originatorId from './fields/originatorId';
 import isDeleted from './fields/isDeleted';
 import magnitude from './fields/magnitude';
 import notify from './fields/notify';
@@ -28,13 +29,8 @@ import updateOfStandardsExecutor from './fields/updateOfStandards.executor';
 import updateOfStandardsStatus from './fields/updateOfStandards.status';
 import updateOfStandardsTargetDate from './fields/updateOfStandards.targetDate';
 
-import { propId, propOrganizationId, propNotify, propIdentifiedBy } from '/imports/helpers/props';
-
-
-export default ProblemAuditConfig = {
-
+export default {
   onCreated,
-
   updateHandlers: [
     analysisCompletedAt,
     analysisCompletedBy,
@@ -45,8 +41,7 @@ export default ProblemAuditConfig = {
     departmentsIds,
     description,
     fileIds,
-    identifiedAt,
-    identifiedBy,
+    originatorId,
     isDeleted,
     magnitude,
     notify,
@@ -64,14 +59,14 @@ export default ProblemAuditConfig = {
 
   onRemoved,
 
-  docId: propId,
+  docId: getId,
 
   docName: getProblemName,
 
-  docOrgId: propOrganizationId,
+  docOrgId: getOrganizationId,
 
-  docNotifyList: propNotify,
+  docNotifyList: getNotify,
 
-  docOwner: propIdentifiedBy,
+  docOwner: view(lenses.originatorId),
 
 };

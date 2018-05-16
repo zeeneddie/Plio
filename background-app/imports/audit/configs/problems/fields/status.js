@@ -41,7 +41,7 @@ export default {
         };
       },
       receivers({ newDoc }) {
-        return [newDoc.identifiedBy];
+        return [newDoc.originatorId];
       },
     },
   ],

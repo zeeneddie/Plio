@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker';
 
 import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { updateViewedBy } from '/imports/api/non-conformities/methods';
@@ -31,8 +32,6 @@ Template.NC_Item.viewmodel({
   _id: '',
   cost: '',
   currency: '',
-  identifiedAt: '',
-  identifiedBy: '',
   magnitude: '',
   sequentialId: '',
   status: '',
@@ -78,7 +77,7 @@ Template.NC_Item.viewmodel({
 
     return symbol + count * this.cost();
   },
-  getUserText({ isDeleted, createdBy, deletedBy }) {
+  getUserText({ isDeleted, deletedBy }) {
     return isDeleted
       ? `Deleted by: ${this.userNameOrEmail(deletedBy)}`
       : '';
