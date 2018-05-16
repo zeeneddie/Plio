@@ -1,19 +1,18 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
 import { getUserFullNameOrEmail } from '/imports/share/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 import { getReceivers } from '../helpers';
 
-
 export default {
-  field: 'identifiedBy',
+  field: 'originatorId',
   logs: [
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Identified by set to {{{newValue}}}',
+          'Originator set to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'Identified by changed from {{{oldValue}}} to {{{newValue}}}',
+          'Originator changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'Identified by removed',
+          'Originator removed',
       },
     },
   ],
@@ -21,16 +20,17 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} set identified by of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
+          '{{{userName}}} set originator of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed identified by of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
+          '{{{userName}}} changed originator of {{{docDesc}}} {{{docName}}} ' +
+          'from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{{userName}}} removed identified by of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed originator of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],
-  data({ diffs: { identifiedBy } }) {
-    const { newValue, oldValue } = identifiedBy;
+  data({ diffs: { originatorId } }) {
+    const { newValue, oldValue } = originatorId;
 
     return {
       newValue: () => getUserFullNameOrEmail(newValue),

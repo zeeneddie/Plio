@@ -36,23 +36,6 @@
             {{/if}}
 
             <div class="row">
-              {{#with this.identifiedBy}}
-                <div class="col-sm-6">
-                  {{> Fields_ListGroupItem_Read
-                    label="Identified by"
-                    text=(userNameOrEmail this)}}
-                </div>
-              {{/with}}
-              {{#with this.identifiedAt}}
-                <div class="col-sm-6">
-                  {{> Fields_ListGroupItem_Read
-                      label="Date identified"
-                      text=(renderDate this)}}
-                </div>
-              {{/with}}
-            </div>
-
-            <div class="row">
               {{#with this.magnitude}}
                 <div class="col-sm-6">
                   {{> Fields_ListGroupItem_Read

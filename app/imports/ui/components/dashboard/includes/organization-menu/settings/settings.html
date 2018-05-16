@@ -20,9 +20,13 @@
       standardsTypes=standardsTypes
       organizationId=organizationId}}
 
-  {{> OrgSettings_StandardsBookSections
-      standardsBookSections=standardsBookSections
+  <div class="card-divider"></div>
+  <div>
+    {{> React
+      component=StandardSectionsSubcardContainer
+      standardSections=standardsBookSections
       organizationId=organizationId}}
+  </div>
 
   {{> OrgSettings_WorkflowDefaults
       workflowDefaults=workflowDefaults

@@ -25,6 +25,9 @@ LINK_FILE_TO_GOAL.name = 'linkFileToGoal';
 UNLINK_FILE_FROM_GOAL.name = 'unlinkFileFromGoal';
 ADD_GOAL_NOTIFY_USER.name = 'addGoalNotifyUser';
 REMOVE_GOAL_NOTIFY_USER.name = 'removeGoalNotifyUser';
+UNDO_GOAL_COMPLETION.name = 'undoGoalCompletion';
+RESTORE_GOAL.name = 'restoreGoal';
+REMOVE_GOAL.name = 'removeGoal';
 
 export default {
   UPDATE_GOAL_TITLE,

@@ -20,6 +20,8 @@ import {
   setRKGuideline,
 } from '../../../../../../api/organizations/methods';
 import { OrgSettingsDocSubs } from '../../../../../../startup/client/subsmanagers';
+import StandardSectionsSubcardContainer from
+  '../../../../../react/organization-settings/containers/StandardSectionsSubcardContainer';
 
 Template.OrgSettings.viewmodel({
   mixin: 'organization',
@@ -51,7 +53,7 @@ Template.OrgSettings.viewmodel({
   standardsBookSections() {
     const query = { organizationId: this.organizationId() };
     const options = { title: 1 };
-    return StandardsBookSections.find(query, options);
+    return StandardsBookSections.find(query, options).fetch();
   },
   riskTypes() {
     const query = { organizationId: this.organizationId() };
@@ -104,4 +106,5 @@ Template.OrgSettings.viewmodel({
     return KeyGoalsSettingsContainer;
   },
   DocumentTypes: () => DocumentTypes,
+  StandardSectionsSubcardContainer: () => StandardSectionsSubcardContainer,
 });

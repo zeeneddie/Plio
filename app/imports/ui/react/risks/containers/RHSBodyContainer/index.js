@@ -80,7 +80,6 @@ const propsMapper = ({
     className: compose(getClassByScore, propValue),
     value: propValue,
   }), risk.scores);
-  const identifiedAt = getFormattedDate(risk.identifiedAt);
   const departments = pickDocuments(['_id', 'name'], departmentsByIds, risk.departmentsIds);
   const standards = compose(
     mapC(s => ({ ...s, href: getPath('standard')({ urlItemId: s._id }) })),
@@ -109,7 +108,6 @@ const propsMapper = ({
     correctiveActions,
     magnitude,
     scores,
-    identifiedAt,
     departments,
     standards,
     lessons,

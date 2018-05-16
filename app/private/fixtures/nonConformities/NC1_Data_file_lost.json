@@ -5,8 +5,7 @@
   "serialNumber" : 1,
   "sequentialId" : "NC1",
   "title" : "Data file lost",
-  "identifiedBy" : "SQHmBKJ94gJvpLKLt",
-  "identifiedAt" : {"$date": 1459508400000},
+  "originatorId" : "SQHmBKJ94gJvpLKLt",
   "magnitude" : "major",
   "analysis": {
     "executor": "SQHmBKJ94gJvpLKLt",

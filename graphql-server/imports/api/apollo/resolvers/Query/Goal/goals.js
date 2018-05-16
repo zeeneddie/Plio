@@ -2,67 +2,57 @@ import { Meteor } from 'meteor/meteor';
 import { applyMiddleware } from 'plio-util';
 import { checkLoggedIn, checkOrgMembership } from '../../../../../share/middleware';
 
-const getGoals = async ({ organizationId, limit = 0 }, GoalsCollection) => {
-  const query = {
-    organizationId,
-    isDeleted: false,
-    isCompleted: false,
-  };
-  const options = {
-    limit,
-    sort: {
-      priority: 1,
-      endDate: 1,
-    },
-  };
-  const totalCount = await GoalsCollection.find(query).count();
-  const goals = await GoalsCollection.find(query, options).fetch();
-
-  return {
-    totalCount,
-    goals,
-  };
-};
-
-const getCompletedDeletedGoals = async ({ organizationId, limit = 0 }, GoalsCollection) => {
-  const query = {
-    organizationId,
-    $or: [
-      { isDeleted: true },
-      { isCompleted: true },
-    ],
-  };
-
-  const totalCount = await GoalsCollection.find(query).count();
-  const goalsRawCollection = GoalsCollection.rawCollection();
+export const resolver = async (root, args, context) => {
+  const { organizationId, limit, isCompletedOrDeleted = false } = args;
+  const { collections: { Goals } } = context;
+  const query = { organizationId };
+  const goalsRawCollection = Goals.rawCollection();
   const aggregate = Meteor.wrapAsync(goalsRawCollection.aggregate, goalsRawCollection);
-  const goals = await aggregate(
-    { $match: query },
-    {
-      $addFields: {
-        completedOrDeletedDate: {
-          $cond: ['$isCompleted', '$completedAt', '$deletedAt'],
+  const pipeline = [{ $match: query }];
+
+  if (isCompletedOrDeleted) {
+    Object.assign(query, {
+      $or: [
+        { isDeleted: true },
+        { isCompleted: true },
+      ],
+    });
+
+    pipeline.push(
+      {
+        $addFields: {
+          completedOrDeletedDate: {
+            $cond: ['$isCompleted', '$completedAt', '$deletedAt'],
+          },
         },
       },
-    },
-    { $sort: { completedOrDeletedDate: -1 } },
-    { $limit: limit },
-  );
-  return {
-    totalCount,
-    goals,
-  };
-};
+      {
+        $sort: { completedOrDeletedDate: -1 },
+      },
+    );
+  } else {
+    Object.assign(query, {
+      isDeleted: false,
+      isCompleted: false,
+    });
 
-export const resolver = async (
-  root,
-  { isCompletedOrDeleted = false, ...restVariables },
-  { collections: { Goals } },
-) => {
-  if (isCompletedOrDeleted) {
-    return getCompletedDeletedGoals(restVariables, Goals);
+    pipeline.push({
+      $sort: {
+        priority: 1,
+        endDate: 1,
+      },
+    });
   }
-  return getGoals(restVariables, Goals);
+
+  pipeline.push({ $limit: limit });
+
+  const goals = await aggregate(...pipeline);
+  const totalCount = await Goals.find(query).count();
+
+  return {
+    goals,
+    totalCount,
+  };
 };
 
 export default applyMiddleware(

@@ -443,7 +443,6 @@ export const BaseProblemsOptionalSchema = ((() => {
     DeletedSchema,
     ViewedBySchema,
     FileIdsSchema,
-    getNotifySchema('identifiedBy'),
     {
       description: {
         type: String,

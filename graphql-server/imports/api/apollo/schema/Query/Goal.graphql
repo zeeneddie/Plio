@@ -11,7 +11,7 @@ type Query {
   # returns a list of goals
   goals(
     organizationId: ID!,
-    limit: Int,
+    limit: Int!,
     isCompletedOrDeleted: Boolean,
   ): GoalsQueryReturnType
   goal(_id: ID!): GoalQueryReturnType

@@ -117,6 +117,7 @@ export const onOrgClick = ({
       return swal({
         text,
         confirmButtonText: 'Yes',
+        showLoaderOnConfirm: false,
       }, showPwdForm);
     }
 

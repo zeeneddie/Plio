@@ -18,4 +18,12 @@ query DashboardGoals($organizationId: ID!, $limit: Int!) {
       ...DashboardGoal
     }
   }
+
+  completedDeletedGoals: goals(
+    organizationId: $organizationId,
+    limit: 1,
+    isCompletedOrDeleted: true
+  ) {
+    totalCount
+  }
 }

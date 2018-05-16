@@ -30,13 +30,13 @@ export const getReceivers = ({ linkedTo, notify }, user) => {
     const options = {
       fields: {
         standardsIds: 1,
-        identifiedBy: 1,
+        originatorId: 1,
       },
     };
 
     collection.find(query, options).forEach((doc) => {
       doc.standardsIds.forEach(id => standardsIds.add(id));
-      usersIds.add(doc.identifiedBy);
+      usersIds.add(doc.originatorId);
     });
   };
 
