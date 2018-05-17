@@ -15,6 +15,7 @@ import ActionCompletionForm from './ActionCompletionForm';
 
 const ActionForm = ({
   children,
+  sequentialId,
   organizationId,
   onChangeTitle,
   onChangeDescription,
@@ -30,6 +31,7 @@ const ActionForm = ({
           name="title"
           onBlur={onChangeTitle}
           placeholder="Title"
+          addon={sequentialId}
         />
       </FormField>
       <FormField>
@@ -69,6 +71,7 @@ const ActionForm = ({
 
 ActionForm.propTypes = {
   children: PropTypes.node,
+  sequentialId: PropTypes.string,
   organizationId: PropTypes.string,
   onChangeTitle: PropTypes.func,
   onChangeDescription: PropTypes.func,

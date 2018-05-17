@@ -17,6 +17,7 @@ import { DepartmentsSelectInputContainer } from '../../containers';
 
 const RiskEditForm = ({
   status,
+  sequentialId,
   organizationId,
   guidelines,
   analysis = {},
@@ -50,6 +51,7 @@ const RiskEditForm = ({
         onChangeType,
         organizationId,
         guidelines,
+        sequentialId,
       }}
     >
       <FormField>
@@ -114,6 +116,7 @@ const RiskEditForm = ({
 
 RiskEditForm.propTypes = {
   status: PropTypes.number,
+  sequentialId: PropTypes.string,
   analysis: PropTypes.shape({
     status: PropTypes.number,
   }),

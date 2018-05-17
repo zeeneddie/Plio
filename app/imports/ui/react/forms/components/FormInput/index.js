@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { withHandlers } from 'recompose';
 import cx from 'classnames';
-import { Input } from 'reactstrap';
+import { Input, InputGroupAddon } from 'reactstrap';
 
 import ClearField from '../../../fields/read/components/ClearField';
 import { onHandleBlur, onHandleClear } from './handlers';
@@ -19,16 +19,19 @@ const FormInput = enhance(({
   innerRef,
   containerClassName,
   inputGroup,
+  addon,
   ...other
 }) => {
   let textInput;
 
   return (
     <ClearField
-      className={cx(containerClassName, { 'input-group': inputGroup })}
+      className={cx(containerClassName, { 'input-group': addon || inputGroup })}
       onClick={e => onClear(e, textInput)}
     >
-      {children}
+      {addon ? (
+        <InputGroupAddon>{addon}</InputGroupAddon>
+      ) : children}
       <Input
         innerRef={(input) => {
           textInput = input;

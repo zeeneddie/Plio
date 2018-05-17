@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'react-final-form';
-import { getId, getUserOptions, mapEntitiesToOptions, lenses, spreadProp } from 'plio-util';
+import { getId, getUserOptions, mapEntitiesToOptions, lenses, spreadProp, noop } from 'plio-util';
 import { compose, pick, over, defaultTo } from 'ramda';
 
 import EntityManagerSubcard from '../../components/EntityManagerSubcard';
@@ -58,7 +58,7 @@ const RisksSubcard = ({
     render={({ entity, isOpen, toggle }) => (
       <Form
         key={entity._id}
-        onSubmit={() => null}
+        onSubmit={noop}
         initialValues={getInitialValues(entity)}
         subscription={{}}
         render={({ reset }) => (
