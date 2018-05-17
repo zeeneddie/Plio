@@ -1,5 +1,6 @@
 import React from 'react';
 import { VictoryChart, VictoryAxis } from 'victory';
+import moment from 'moment';
 
 const TimelineAxis = props => (
   <VictoryChart {...props}>
@@ -15,6 +16,7 @@ const TimelineAxis = props => (
           fill: '#999',
         },
       }}
+      tickFormat={x => moment(x).format('MMM')}
     />
   </VictoryChart>
 );
