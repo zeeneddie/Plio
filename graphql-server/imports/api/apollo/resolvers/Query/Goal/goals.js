@@ -44,7 +44,7 @@ export const resolver = async (root, args, context) => {
     });
   }
 
-  pipeline.push({ $limit: limit });
+  if (limit) pipeline.push({ $limit: limit });
 
   const goals = await aggregate(...pipeline);
   const totalCount = await Goals.find(query).count();

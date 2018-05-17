@@ -1,13 +1,13 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
-import { WorkflowTypes } from '../../../../../../share/constants.js';
+import { WorkflowTypes, ActionTypes } from '../../../../../../share/constants';
 import { updateViewedBy } from '../../../../../../api/actions/methods';
 import { isViewed } from '../../../../../../api/checkers';
 
-
 Template.Actions_Card_Edit_Main.viewmodel({
-  mixin: ['utils', 'getChildrenData'],
+  mixin: ['utils', 'getChildrenData', 'workInbox'],
+  ActionTypes,
   onRendered(templateInstance) {
     const { action } = templateInstance.data;
     const userId = Meteor.userId();

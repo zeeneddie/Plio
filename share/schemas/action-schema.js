@@ -66,6 +66,7 @@ const RequiredSchema = new SimpleSchema([
     planInPlace: {
       type: String,
       allowedValues: Object.values(ActionPlanOptions),
+      optional: true,
     },
     completionTargetDate: {
       type: Date,

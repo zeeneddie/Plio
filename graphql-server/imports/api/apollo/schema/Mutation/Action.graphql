@@ -105,7 +105,7 @@ input CreateActionInput {
   title: String!
   description: String
   ownerId: ID!
-  planInPlace: String!
+  planInPlace: String
   completionTargetDate: DateTime!
   toBeCompletedBy: ID!
   linkedTo: [ActionLinkedToInput]!

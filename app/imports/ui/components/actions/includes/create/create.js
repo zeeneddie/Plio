@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
+import { omit } from 'ramda';
 
 import { ActionPlanOptions, ActionTypes, DocumentTypes } from '../../../../../share/constants';
 import { insert } from '../../../../../api/actions/methods';
@@ -14,6 +15,7 @@ Template.Actions_Create.viewmodel({
   mixin: ['workInbox', 'organization', 'router', 'getChildrenData'],
   type: '',
   title: '',
+  ActionTypes,
   autorun() {
     const data = this.getData();
     if (data && data.ownerId) {
@@ -58,7 +60,7 @@ Template.Actions_Create.viewmodel({
     const tzDate = getTzTargetDate(completionTargetDate, timezone);
 
     const allArgs = {
-      ...args,
+      ...(type === ActionTypes.GENERAL_ACTION ? omit(['planInPlace'], args) : args),
       type,
       organizationId,
       completionTargetDate: tzDate,

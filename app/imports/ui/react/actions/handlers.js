@@ -22,7 +22,6 @@ export const createGeneralAction = ({
   title,
   description,
   completionTargetDate,
-  planInPlace,
   owner: { value: ownerId },
   toBeCompletedBy: { value: toBeCompletedBy },
 }) => {
@@ -35,7 +34,6 @@ export const createGeneralAction = ({
         description,
         ownerId,
         organizationId,
-        planInPlace,
         toBeCompletedBy,
         completionTargetDate: toDate(completionTargetDate),
         type: ActionTypes.GENERAL_ACTION,

@@ -11,7 +11,7 @@ import {
 } from '../../components';
 import { OrgUsersSelectInputContainer } from '../../containers';
 import ActionCompletionForm from './ActionCompletionForm';
-import ActionPlan from './ActionPlan';
+// import ActionPlan from './ActionPlan';
 
 const ActionForm = ({
   children,
@@ -19,7 +19,7 @@ const ActionForm = ({
   onChangeTitle,
   onChangeDescription,
   onChangeOwner,
-  onChangePlanInPlace,
+  // onChangePlanInPlace,
   ...props
 }) => (
   <Fragment>
@@ -52,14 +52,14 @@ const ActionForm = ({
           {...{ organizationId }}
         />
       </FormField>
-      <FormField>
+      {/* <FormField>
         Plan in place?
         <Field
           name="planInPlace"
           onChange={onChangePlanInPlace}
           render={ActionPlan}
         />
-      </FormField>
+      </FormField> */}
     </CardBlock>
     <CardBlock>
       <ActionCompletionForm {...{ ...props, organizationId }} />
@@ -73,7 +73,7 @@ ActionForm.propTypes = {
   onChangeTitle: PropTypes.func,
   onChangeDescription: PropTypes.func,
   onChangeOwner: PropTypes.func,
-  onChangePlanInPlace: PropTypes.func,
+  // onChangePlanInPlace: PropTypes.func,
   onChangeCompletionTargetDate: PropTypes.func,
   onChangeToBeCompletedBy: PropTypes.func,
 };
