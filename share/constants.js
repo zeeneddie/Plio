@@ -375,6 +375,10 @@ export const StringLimits = {
     min: 1,
     max: 80,
   },
+  longTitle: {
+    min: 1,
+    max: 120,
+  },
   description: {
     max: 240,
   },

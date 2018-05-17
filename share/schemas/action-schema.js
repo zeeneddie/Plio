@@ -42,8 +42,8 @@ const RequiredSchema = new SimpleSchema([
   {
     title: {
       type: String,
-      min: StringLimits.title.min,
-      max: StringLimits.title.max,
+      min: StringLimits.longTitle.min,
+      max: StringLimits.longTitle.max,
     },
     description: {
       type: String,
