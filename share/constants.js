@@ -750,8 +750,8 @@ export const WorkspaceDefaultsLabels = {
   [WorkspaceDefaultsTypes.DISPLAY_USERS]: 'Users online',
   [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: 'Unread messages',
   [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 'Overdue actions',
-  [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'Number of key goals',
-  [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'Number of completed & deleted goals',
+  [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'Key goals displayed by default',
+  [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'Completed/deleted goals displayed by default',
   [WorkspaceDefaultsTypes.TIME_SCALE]: 'Horizontal scale',
 };
 
