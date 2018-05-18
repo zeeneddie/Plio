@@ -78,6 +78,9 @@ export const SelectWrapper = styled.div`
     }
     .Select-multi-value-wrapper {
       width: calc(100% - 35px);
+      .btn-group {
+        margin-right: 7px;
+      }
       .btn.disabled {
         padding-right: 14px !important;
       }
