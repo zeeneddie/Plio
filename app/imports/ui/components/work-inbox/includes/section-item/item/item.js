@@ -3,10 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { updateViewedBy } from '/imports/api/work-items/methods.js';
-import { WorkItemsStore } from '/imports/share/constants.js';
-
-const { LINKED_TYPES } = WorkItemsStore;
+import { updateViewedBy } from '/imports/api/work-items/methods';
 
 Template.WorkInbox_Item.viewmodel({
   share: 'window',

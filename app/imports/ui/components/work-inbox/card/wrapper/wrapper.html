@@ -21,7 +21,7 @@
           {{> Actions_Card_Read (cardArgs)}}
         {{/if}}
 
-        {{#if isDocType LINKED_TYPES.NON_CONFORMITY}}
+        {{#if (some (isDocType LINKED_TYPES.NON_CONFORMITY) (isDocType LINKED_TYPES.POTENTIAL_GAIN))}}
           {{> WorkInbox_QAPanel_Read doc=workItem}}
           {{> NC_Card_Read (cardArgs)}}
         {{/if}}

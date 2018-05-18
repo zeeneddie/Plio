@@ -195,6 +195,7 @@ export const AnalysisFieldPrefixes = {
 
 export const WorkItemDescriptions = {
   rootCauseAnalysis: 'Complete root cause analysis',
+  potentialGainAnalysis: 'Complete potential gain analysis',
   riskAnalysis: 'Complete initial risk analysis',
   updateOfStandards: 'Request for approval to close this nonconformity',
   updateOfRiskRecord: 'Request for approval to close this risk',
