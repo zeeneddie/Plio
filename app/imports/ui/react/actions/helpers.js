@@ -41,5 +41,5 @@ export const getActionFormInitialState = user => ({
   toBeCompletedBy: getUserOptions(user),
   planInPlace: ActionPlanOptions.NO,
   // TODO: Update based on linked documents like creation modal?
-  completionTargetDate: moment(),
+  completionTargetDate: moment().add(1, 'days'),
 });
