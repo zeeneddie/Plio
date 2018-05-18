@@ -506,14 +506,14 @@ export const OrganizationDefaults = {
       },
     },
     majorProblem: {
-      workflowType: WorkflowTypes.THREE_STEP,
+      workflowType: WorkflowTypes.SIX_STEP,
       stepTime: {
         timeValue: 2,
         timeUnit: TimeUnits.DAYS,
       },
     },
     criticalProblem: {
-      workflowType: WorkflowTypes.THREE_STEP,
+      workflowType: WorkflowTypes.SIX_STEP,
       stepTime: {
         timeValue: 3,
         timeUnit: TimeUnits.DAYS,
