@@ -1,4 +1,4 @@
-import { WorkItemsStore } from '/imports/share/constants.js';
+import { WorkItemsStore, WorkItemStatuses } from '../../../share/constants';
 
 export default {
   getStatusName(status) {
@@ -6,18 +6,18 @@ export default {
   },
   getClassByStatus(status) {
     switch (status) {
-      case 0:
+      case WorkItemStatuses.IN_PROGRESS:
         return 'default';
-      case 1:
+      case WorkItemStatuses.DUE_TODAY:
         return 'warning';
-      case 2:
+      case WorkItemStatuses.OVERDUE:
         return 'danger';
-      case 3:
+      case WorkItemStatuses.COMPLETED:
         return 'success';
       default:
         return 'default';
     }
   },
-  IN_PROGRESS: [0, 1, 2],
-  COMPLETED: 3,
+  IN_PROGRESS: [WorkItemStatuses.IN_PROGRESS, WorkItemStatuses.DUE_TODAY, WorkItemStatuses.OVERDUE],
+  COMPLETED: WorkItemStatuses.COMPLETED,
 };
