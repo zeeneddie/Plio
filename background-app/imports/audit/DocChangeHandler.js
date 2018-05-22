@@ -9,9 +9,7 @@ import { ChangesKinds } from './utils/changes-kinds';
 import DocumentDiffer from './utils/document-differ';
 import { renderTemplate } from '../helpers/render';
 import NotificationsTempStore from './notifications-temp-store';
-
-
-const DEFAULT_EMAIL_TEMPLATE = 'defaultEmail';
+import { DEFAULT_EMAIL_TEMPLATE } from '../constants';
 
 export default class DocChangeHandler {
   constructor(auditConfig, docChangeKind, docChangeData) {
@@ -434,7 +432,7 @@ export default class DocChangeHandler {
   }
 
   _callTrigger(handler, args) {
-    const trigger = handler.trigger;
+    const { trigger } = handler;
     if (_.isFunction(trigger)) {
       trigger(args);
     }

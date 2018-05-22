@@ -13,8 +13,9 @@ import { ReminderTypes, TimeRelations } from './config/constants';
 import ReminderConfig from './config';
 import { isDateScheduled } from '../../helpers/date';
 import { renderTemplate } from '../../helpers/render';
+import { DEFAULT_EMAIL_TEMPLATE } from '../../constants';
 
-const REMINDER_EMAIL_TEMPLATE = 'defaultEmail';
+const REMINDER_EMAIL_TEMPLATE = DEFAULT_EMAIL_TEMPLATE;
 
 export default class WorkflowReminderSender {
   constructor(organizationId) {
@@ -132,14 +133,14 @@ export default class WorkflowReminderSender {
         let reminderType;
 
         if (isAnalysisCompleted) {
-          targetDate = doc.updateOfStandards.targetDate;
+          ({ targetDate } = doc.updateOfStandards);
 
           reminderType = {
             [DocumentTypes.NON_CONFORMITY]: ReminderTypes.UPDATE_OF_STANDARDS,
             [DocumentTypes.RISK]: ReminderTypes.UPDATE_OF_RISK_RECORD,
           }[docType];
         } else {
-          targetDate = doc.analysis.targetDate;
+          ({ targetDate } = doc.analysis);
 
           reminderType = {
             [DocumentTypes.NON_CONFORMITY]: ReminderTypes.ROOT_CAUSE_ANALYSIS,
@@ -277,7 +278,7 @@ export default class WorkflowReminderSender {
 
     const receivers = config.receivers(args) || [];
     if (!receivers.length) {
-      return;
+      return undefined;
     }
 
     const emailTemplateData = {

@@ -15,8 +15,9 @@ import {
   ProblemIndexes,
   ANALYSIS_STATUSES,
 } from '../../share/constants';
+import { DEFAULT_EMAIL_TEMPLATE } from '../../constants';
 
-const REMINDER_EMAIL_TEMPLATE = 'defaultEmail';
+const REMINDER_EMAIL_TEMPLATE = DEFAULT_EMAIL_TEMPLATE;
 
 export default class ActionCreationReminderSender {
   constructor(organizationId) {
