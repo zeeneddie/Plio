@@ -11,6 +11,7 @@ export const getUserId = user => ((user === SystemName) ? user : user._id);
 export const getLinkedDocAuditConfig = docType => ({
   [DocumentTypes.STANDARD]: StandardAuditConfig,
   [DocumentTypes.NON_CONFORMITY]: NCAuditConfig,
+  [DocumentTypes.POTENTIAL_GAIN]: NCAuditConfig,
   [DocumentTypes.RISK]: RiskAuditConfig,
   [DocumentTypes.GOAL]: GoalAuditConfig,
 }[docType]);

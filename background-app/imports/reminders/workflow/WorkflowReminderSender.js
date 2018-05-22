@@ -3,7 +3,6 @@ import moment from 'moment-timezone';
 import { _ } from 'meteor/underscore';
 
 import { Actions } from '/imports/share/collections/actions';
-import { DocumentTypes, ProblemMagnitudes, ReminderTimeUnits } from '/imports/share/constants';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Organizations } from '/imports/share/collections/organizations';
 import NotificationSender from '/imports/share/utils/NotificationSender';
@@ -11,8 +10,15 @@ import { Risks } from '/imports/share/collections/risks';
 import { Standards } from '/imports/share/collections/standards';
 import { ReminderTypes, TimeRelations } from './config/constants';
 import ReminderConfig from './config';
+import {
+  DocumentTypes,
+  ProblemMagnitudes,
+  ReminderTimeUnits,
+  ANALYSIS_STATUSES,
+} from '../../share/constants';
 import { isDateScheduled } from '../../helpers/date';
 import { renderTemplate } from '../../helpers/render';
+import { getButtonLabelByReminderType } from './config/helpers';
 import { DEFAULT_EMAIL_TEMPLATE } from '../../constants';
 
 const REMINDER_EMAIL_TEMPLATE = DEFAULT_EMAIL_TEMPLATE;
@@ -101,24 +107,24 @@ export default class WorkflowReminderSender {
     const NCsIds = getIds(NonConformities);
     const risksIds = getIds(Risks);
 
-    const createProblemReminders = (collection, ids, docType) => {
+    const createProblemReminders = (collection, ids, documentType) => {
       const query = {
         _id: { $in: ids },
         isDeleted: false,
         deletedAt: { $exists: false },
         deletedBy: { $exists: false },
         $or: [{
-          'analysis.status': 0, // Not completed
+          'analysis.status': ANALYSIS_STATUSES.NOT_COMPLETED,
           'analysis.executor': { $exists: true },
           'analysis.targetDate': {
             $gte: startDate,
             $lte: endDate,
           },
         }, {
-          'analysis.status': 1, // Completed
+          'analysis.status': ANALYSIS_STATUSES.COMPLETED,
           'analysis.completedAt': { $exists: true },
           'analysis.completedBy': { $exists: true },
-          'updateOfStandards.status': 0, // Not completed
+          'updateOfStandards.status': ANALYSIS_STATUSES.NOT_COMPLETED,
           'updateOfStandards.executor': { $exists: true },
           'updateOfStandards.targetDate': {
             $gte: startDate,
@@ -128,7 +134,8 @@ export default class WorkflowReminderSender {
       };
 
       collection.find(query).forEach((doc) => {
-        const isAnalysisCompleted = doc.analysis.status === 1;
+        const isAnalysisCompleted = doc.analysis.status === ANALYSIS_STATUSES.COMPLETED;
+        const docType = doc.type || documentType;
         let targetDate;
         let reminderType;
 
@@ -137,6 +144,7 @@ export default class WorkflowReminderSender {
 
           reminderType = {
             [DocumentTypes.NON_CONFORMITY]: ReminderTypes.UPDATE_OF_STANDARDS,
+            [DocumentTypes.POTENTIAL_GAIN]: ReminderTypes.UPDATE_OF_STANDARDS,
             [DocumentTypes.RISK]: ReminderTypes.UPDATE_OF_RISK_RECORD,
           }[docType];
         } else {
@@ -144,6 +152,7 @@ export default class WorkflowReminderSender {
 
           reminderType = {
             [DocumentTypes.NON_CONFORMITY]: ReminderTypes.ROOT_CAUSE_ANALYSIS,
+            [DocumentTypes.POTENTIAL_GAIN]: ReminderTypes.POTENTIAL_GAIN_ANALYSIS,
             [DocumentTypes.RISK]: ReminderTypes.INITIAL_RISK_ANALYSIS,
           }[docType];
         }
@@ -291,7 +300,7 @@ export default class WorkflowReminderSender {
     if (url) {
       Object.assign(emailTemplateData, {
         button: {
-          label: 'Go to this action',
+          label: getButtonLabelByReminderType(reminderType),
           url,
         },
       });
