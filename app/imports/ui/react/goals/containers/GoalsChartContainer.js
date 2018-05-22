@@ -11,6 +11,7 @@ import { TimelineSymbols } from '../../../../api/constants';
 import { getMilestonePointColor } from '../../../../api/milestone/helpers';
 import { getActionPointColor } from '../../../../api/actions/helpers';
 import { MilestoneStatuses, ActionIndexes } from '../../../../share/constants';
+import { getFormattedDate } from '../../../../share/helpers';
 
 const getMilestonePoints = ({ _id: goalId, milestones, color }) => (
   map((milestone) => {
@@ -21,9 +22,10 @@ const getMilestonePoints = ({ _id: goalId, milestones, color }) => (
       title,
     } = milestone;
     return {
+      title,
       id: _id,
       date: toDate(moment(completionTargetDate).startOf('day')),
-      label: title,
+      label: `Milestone: ${title} - ${getFormattedDate(completionTargetDate)}`,
       fill: getMilestonePointColor(status, color),
       symbol: TimelineSymbols.MILESTONE,
       isCompleted: status === MilestoneStatuses.COMPLETE,
@@ -43,10 +45,11 @@ const getActionPoints = ({ _id: goalId, actions, color }) => (
       completionTargetDate = { profile: {} },
     } = action;
     return {
+      title,
       id: _id,
       date: toDate(moment(completionTargetDate).startOf('day')),
       userName: toBeCompletedBy.profile.fullName,
-      label: title,
+      label: `Action: ${title} - ${getFormattedDate(completionTargetDate)}`,
       fill: getActionPointColor(status, color),
       symbol: TimelineSymbols.ACTION,
       isCompleted: status === ActionIndexes.COMPLETED,
