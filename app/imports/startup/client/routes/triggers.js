@@ -29,6 +29,7 @@ FlowRouter.triggers.enter([
           switch (route) {
             case 'standards':
             case 'risks':
+            case 'non-conformities':
               BlazeLayout.reset();
               break;
             default: noop();
