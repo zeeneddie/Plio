@@ -278,6 +278,12 @@ export const StatusColors = {
   GREEN: 'success',
 };
 
+export const StatusColorsHex = {
+  AMBER: '#ff8c00',
+  RED: '#dc3545',
+  GREEN: '#16a916',
+};
+
 export const DEFAULT_UPDATE_TIMEOUT = 1200;
 
 export const ApolloFetchPolicies = {
@@ -285,8 +291,9 @@ export const ApolloFetchPolicies = {
 };
 
 export const TimelineColors = {
-  OVERDUE: '#dc3545',
-  IN_PROGRESS: '#ff8c00',
+  OVERDUE: StatusColorsHex.RED,
+  IN_PROGRESS: StatusColorsHex.AMBER,
+  COMPLETED: StatusColorsHex.GREEN,
 };
 
 export const SymbolTypes = {

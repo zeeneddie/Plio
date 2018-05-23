@@ -816,11 +816,13 @@ export const AllowedActionLinkedDocTypes = [
 
 export const MilestoneStatuses = {
   AWAITING_COMPLETION: 1,
-  OVERDUE: 2,
-  COMPLETE: 3,
-  1: 'Awaiting completion',
-  2: 'Overdue',
-  3: 'Complete',
+  DUE_TODAY: 2,
+  OVERDUE: 3,
+  COMPLETED: 4,
+  1: 'Open - awaiting completion',
+  2: 'Open - due for completion today',
+  3: 'Open - completion overdue',
+  4: 'Completed',
 };
 
 // fill in other stuff

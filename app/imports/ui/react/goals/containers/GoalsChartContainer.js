@@ -8,32 +8,30 @@ import GoalsChart from '../components/GoalsChart';
 import MilestoneChartActionsContainer from '../containers/MilestoneChartActionsContainer';
 import ActionsPopoverContainer from '../containers/ActionsPopoverContainer';
 import { TimelineSymbols } from '../../../../api/constants';
-import { getMilestonePointColor } from '../../../../api/milestone/helpers';
 import { getActionPointColor } from '../../../../api/actions/helpers';
 import { MilestoneStatuses, ActionIndexes } from '../../../../share/constants';
 import { getFormattedDate } from '../../../../share/helpers';
+import { getMilestoneSymbolColor } from '../../milestones/helpers';
 
-const getMilestonePoints = ({ _id: goalId, milestones, color }) => (
-  map((milestone) => {
-    const {
-      _id,
-      completionTargetDate,
-      status,
-      title,
-    } = milestone;
-    return {
-      title,
-      id: _id,
-      date: toDate(moment(completionTargetDate).startOf('day')),
-      label: `Milestone: ${title} - ${getFormattedDate(completionTargetDate)}`,
-      fill: getMilestonePointColor(status, color),
-      symbol: TimelineSymbols.MILESTONE,
-      isCompleted: status === MilestoneStatuses.COMPLETE,
-      renderPopover: props =>
-        <MilestoneChartActionsContainer {...{ ...props, ...milestone, goalId }} />,
-    };
-  }, milestones)
-);
+const getMilestonePoints = ({ _id: goalId, milestones, color }) => map((milestone) => {
+  const {
+    _id,
+    completionTargetDate,
+    status,
+    title,
+  } = milestone;
+  return {
+    title,
+    id: _id,
+    date: toDate(moment(completionTargetDate).startOf('day')),
+    label: `Milestone: ${title} - ${getFormattedDate(completionTargetDate)}`,
+    fill: getMilestoneSymbolColor(status, color),
+    symbol: TimelineSymbols.MILESTONE,
+    isCompleted: status === MilestoneStatuses.COMPLETED,
+    renderPopover: props =>
+      <MilestoneChartActionsContainer {...{ ...props, ...milestone, goalId }} />,
+  };
+}, milestones);
 
 const getActionPoints = ({ _id: goalId, actions, color }) => (
   map((action) => {
