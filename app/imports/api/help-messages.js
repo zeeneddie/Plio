@@ -41,7 +41,7 @@ const OrganizationSettingsHelp = {
   departments: 'Create a list of departments or business sectors for your organization.',
   standardTypes: 'Create a list of standards types for your organization.',
   standardSections: 'Create the section structure for your standards documents.',
-  workflowSteps: 'Indicate whether you want Plio to use simple (3-step) or full (6-step) workflows for your nonconformity and risk-handling processes.  If you wish, you can set simpler workflows for your less critical nonconformities and risks.',
+  workflowSteps: 'Indicate whether you want Plio to use simple (3-step) or full (6-step) workflows for your nonconformity and risk-handling processes. If you wish, you can set simpler workflows for your less critical nonconformities and risks. Plio always uses a 3-step workflow process for managing potential gains.',
   workflowReminders: 'Set apppropriate reminder times for actions that become due within your nonconformity and risk-handling processes.   If you wish, you can set shorter reminder times for less critical nonconformities and risks.',
   nonConformityGuidelines: 'Help users to indicate the magnitude of this nonconformity, by giving them some clear guidelines relating to the estimated cost impact, or impact on customers.',
   riskTypes: 'Create a list of standards types for your organization.',
