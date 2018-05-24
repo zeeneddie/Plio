@@ -6,9 +6,7 @@ import {
   WorkItemsStore,
   ActionTypes,
 } from '/imports/share/constants';
-import {
-  WorkInboxFilters,
-} from '/imports/api/constants';
+import { WorkInboxFilters } from '/imports/api/constants';
 import { capitalize } from '/imports/share/helpers';
 import { getTypeText } from '../../../api/work-items/helpers';
 
@@ -19,7 +17,8 @@ export default {
 
     switch (type) {
       case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
-        return 'Update of standard(s)';
+        // nonconformity type is non-conformity
+        return `Closing of ${linkedDoc.type}`.replace('-', '');
       default:
         return capitalize(this.getTypeText({ type, linkedDoc })
           .replace(/^(complete|verify)\s/i, ''));

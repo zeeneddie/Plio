@@ -375,6 +375,10 @@ export const StringLimits = {
     min: 1,
     max: 80,
   },
+  longTitle: {
+    min: 1,
+    max: 120,
+  },
   description: {
     max: 240,
   },
@@ -502,14 +506,14 @@ export const OrganizationDefaults = {
       },
     },
     majorProblem: {
-      workflowType: WorkflowTypes.THREE_STEP,
+      workflowType: WorkflowTypes.SIX_STEP,
       stepTime: {
         timeValue: 2,
         timeUnit: TimeUnits.DAYS,
       },
     },
     criticalProblem: {
-      workflowType: WorkflowTypes.THREE_STEP,
+      workflowType: WorkflowTypes.SIX_STEP,
       stepTime: {
         timeValue: 3,
         timeUnit: TimeUnits.DAYS,
@@ -686,12 +690,14 @@ export const CustomerTypes = {
   PAYING_SUBSCRIBER: 1,
   FREE_TRIAL: 2,
   TEST_ACCOUNT: 3,
+  PAST_CUSTOMER: 4,
 };
 
 export const CustomerTypesNames = {
   [CustomerTypes.PAYING_SUBSCRIBER]: 'Paying subscriber',
   [CustomerTypes.FREE_TRIAL]: 'Free trial',
   [CustomerTypes.TEST_ACCOUNT]: 'Test account',
+  [CustomerTypes.PAST_CUSTOMER]: 'Past customer',
 };
 
 export const PossibleReviewFrequencies = [
@@ -746,8 +752,8 @@ export const WorkspaceDefaultsLabels = {
   [WorkspaceDefaultsTypes.DISPLAY_USERS]: 'Users online',
   [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: 'Unread messages',
   [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 'Overdue actions',
-  [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'Number of key goals',
-  [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'Number of completed & deleted goals',
+  [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'Key goals displayed by default',
+  [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'Completed/deleted goals displayed by default',
   [WorkspaceDefaultsTypes.TIME_SCALE]: 'Horizontal scale',
 };
 
@@ -812,11 +818,13 @@ export const AllowedActionLinkedDocTypes = [
 
 export const MilestoneStatuses = {
   AWAITING_COMPLETION: 1,
-  OVERDUE: 2,
-  COMPLETE: 3,
-  1: 'Awaiting completion',
-  2: 'Overdue',
-  3: 'Complete',
+  DUE_TODAY: 2,
+  OVERDUE: 3,
+  COMPLETED: 4,
+  1: 'Open - awaiting completion',
+  2: 'Open - due for completion today',
+  3: 'Open - completion overdue',
+  4: 'Completed',
 };
 
 // fill in other stuff

@@ -24,7 +24,9 @@
 
       {{> Actions_Owner ownerId=this.ownerId}}
 
-      {{> Actions_PlanInPlace planInPlace=this.planInPlace}}
+      {{#if (not (eq this.type ActionTypes.GENERAL_ACTION))}}
+        {{> Actions_PlanInPlace planInPlace=this.planInPlace}}
+      {{/if}}
 
       <hr />
 
@@ -68,7 +70,7 @@
               verificationTargetDate=this.verificationTargetDate
               onUpdate=onUpdateVerificationDate}}
 
-          {{#unless isVerified}}
+          {{#unless this.isVerified}}
 
             {{> Actions_ToBeVerifiedBy
                 organizationId=this.organizationId

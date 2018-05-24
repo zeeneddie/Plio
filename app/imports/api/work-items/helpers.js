@@ -8,6 +8,7 @@ import { lowercase } from '../../share/helpers';
 const {
   riskAnalysis,
   rootCauseAnalysis,
+  potentialGainAnalysis,
   updateOfRiskRecord,
   updateOfStandards,
 } = WorkItemDescriptions;
@@ -52,6 +53,7 @@ export const getLinkedDoc = ({ _id, type }) => {
 
   const collections = {
     [LINKED_TYPES.NON_CONFORMITY]: NonConformities,
+    [LINKED_TYPES.POTENTIAL_GAIN]: NonConformities,
     [LINKED_TYPES.RISK]: Risks,
     [LINKED_TYPES.CORRECTIVE_ACTION]: Actions,
     [LINKED_TYPES.PREVENTATIVE_ACTION]: Actions,
@@ -70,10 +72,15 @@ export const getTypeText = ({ type, linkedDoc }) => {
   const getText = (action, text) => `${action} ${lowercase(text)}`;
   switch (linkedDoc && type) {
     case WorkItemsStore.TYPES.COMPLETE_ANALYSIS: {
-      const title = linkedDoc.type === ProblemTypes.RISK
-        ? riskAnalysis
-        : rootCauseAnalysis;
-      return title;
+      switch (linkedDoc.type) {
+        case ProblemTypes.RISK:
+          return riskAnalysis;
+        case ProblemTypes.POTENTIAL_GAIN:
+          return potentialGainAnalysis;
+        case ProblemTypes.NON_CONFORMITY:
+        default:
+          return rootCauseAnalysis;
+      }
     }
     case WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_DOCUMENTS: {
       const title = linkedDoc.type === ProblemTypes.RISK

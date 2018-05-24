@@ -42,8 +42,8 @@ const RequiredSchema = new SimpleSchema([
   {
     title: {
       type: String,
-      min: StringLimits.title.min,
-      max: StringLimits.title.max,
+      min: StringLimits.longTitle.min,
+      max: StringLimits.longTitle.max,
     },
     description: {
       type: String,
@@ -66,6 +66,7 @@ const RequiredSchema = new SimpleSchema([
     planInPlace: {
       type: String,
       allowedValues: Object.values(ActionPlanOptions),
+      optional: true,
     },
     completionTargetDate: {
       type: Date,

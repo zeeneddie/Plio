@@ -9,7 +9,9 @@
 
     {{> Actions_Owner ownerId=ownerId}}
 
-    {{> Actions_PlanInPlace planInPlace=planInPlace}}
+    {{#if (not (eq type ActionTypes.GENERAL_ACTION))}}
+      {{> Actions_PlanInPlace planInPlace=planInPlace}}
+    {{/if}}
 
     <hr />
 

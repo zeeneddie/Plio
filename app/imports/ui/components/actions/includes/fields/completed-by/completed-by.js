@@ -25,9 +25,11 @@ Template.Actions_CompletedBy.viewmodel({
     }, 10 * 1000);
   },
   autorun() {
-    const undoDeadline = new Date(this.completedAt().getTime());
-    undoDeadline.setHours(undoDeadline.getHours() + ActionUndoTimeInHours);
-    this.undoDeadline(undoDeadline);
+    if (this.completedAt()) {
+      const undoDeadline = new Date(this.completedAt().getTime());
+      undoDeadline.setHours(undoDeadline.getHours() + ActionUndoTimeInHours);
+      this.undoDeadline(undoDeadline);
+    }
   },
   onDestroyed() {
     this.clearInterval();

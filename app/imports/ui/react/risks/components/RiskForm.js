@@ -25,6 +25,7 @@ const RiskForm = ({
   children,
   organizationId,
   guidelines,
+  sequentialId,
 }) => (
   <CardBlock>
     <FormField>
@@ -33,6 +34,7 @@ const RiskForm = ({
         name="title"
         onBlur={onChangeTitle}
         placeholder="Risk name"
+        addon={sequentialId}
       />
     </FormField>
     <FormField>
@@ -94,6 +96,7 @@ RiskForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
   // eslint-disable-next-line react/no-typos
   guidelines: Magnitudes.propTypes.guidelines,
+  sequentialId: PropTypes.string,
   children: PropTypes.node,
 };
 

@@ -9,7 +9,16 @@ describe('getMilestoneStatus', () => {
       isCompleted: true,
     };
 
-    expect(getMilestoneStatus(tz, milestone)).toBe(MilestoneStatuses.COMPLETE);
+    expect(getMilestoneStatus(tz, milestone)).toBe(MilestoneStatuses.COMPLETED);
+  });
+
+  it('returns correct status if milestone is due today', () => {
+    const milestone = {
+      isCompleted: false,
+      completionTargetDate: new Date(),
+    };
+
+    expect(getMilestoneStatus(tz, milestone)).toBe(MilestoneStatuses.DUE_TODAY);
   });
 
   it('returns correct status if milestone is overdue', () => {
@@ -27,7 +36,7 @@ describe('getMilestoneStatus', () => {
       completionTargetDate: moment().subtract(2, 'days').toDate(),
     };
 
-    expect(getMilestoneStatus(tz, milestone)).toBe(MilestoneStatuses.COMPLETE);
+    expect(getMilestoneStatus(tz, milestone)).toBe(MilestoneStatuses.COMPLETED);
   });
 
   it('returns "awaiting completion" status otherwise', () => {

@@ -34,7 +34,7 @@ type Action {
   description: String
   type: String!
   owner: User!
-  planInPlace: String!
+  planInPlace: String
   completionTargetDate: DateTime!
   toBeCompletedBy: User!
   files: [File]

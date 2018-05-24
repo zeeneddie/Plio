@@ -61,6 +61,12 @@ export const SelectWrapper = styled.div`
       background-color: #f8f9fa;
     }
   }
+  .Select-menu-outer {
+    max-height: 494px;
+    & > .Select-menu {
+      max-height: inherit;
+    }
+  }
   .Select--multi {
     .Select-control {
       background-color: transparent;
@@ -72,6 +78,9 @@ export const SelectWrapper = styled.div`
     }
     .Select-multi-value-wrapper {
       width: calc(100% - 35px);
+      .btn-group {
+        margin-right: 7px;
+      }
       .btn.disabled {
         padding-right: 14px !important;
       }

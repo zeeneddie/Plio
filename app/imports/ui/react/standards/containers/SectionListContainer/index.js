@@ -1,9 +1,7 @@
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
-import {
-  propEqType,
-} from '/imports/api/helpers';
+import { propEqType } from '/imports/api/helpers';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import SectionList from '../../components/SectionList';
 import { getState } from '../../../../../client/store';
@@ -69,20 +67,15 @@ const redirectAndOpen = props => setTimeout(() => {
       const { type, defaultType } = props;
       const typeIsDefault = type && defaultType && type._id === defaultType._id;
 
-      if (props.searchText && typeIsDefault) {
-        redirect();
-        return;
-      }
-
       // find opened type and open a section in its section list
       const openedType = collapsed.find(propEqType(CollectionNames.STANDARD_TYPES));
       if (openedType && type && type._id === openedType.key) {
         // check if the current type is the default one
         // and redirect to default standard if needed
-        if (typeIsDefault) {
-          redirect();
+        if (!props.searchText) {
+          if (typeIsDefault) redirect();
+          openSection();
         }
-        openSection();
       }
     }
   }

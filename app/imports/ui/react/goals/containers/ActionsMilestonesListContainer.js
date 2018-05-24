@@ -1,15 +1,20 @@
-import { reject } from 'ramda';
+import { reject, map } from 'ramda';
 import { withProps, compose, withHandlers } from 'recompose';
 import { isCompleted } from 'plio-util';
 import connectUI from 'redux-ui';
 import withStateToggle from '../../helpers/withStateToggle';
 import ActionsMilestonesList from '../components/ActionsMilestonesList';
 
+const mapPoints = compose(
+  map(({ label, title, ...rest }) => ({ ...rest, label: title })),
+  reject(isCompleted),
+);
+
 export default compose(
   connectUI(),
   withStateToggle(false, 'isOpen', 'toggle'),
   withProps(({ goal }) => ({
-    items: reject(isCompleted, goal.points),
+    items: mapPoints(goal.points),
     title: goal.title,
   })),
   withHandlers({

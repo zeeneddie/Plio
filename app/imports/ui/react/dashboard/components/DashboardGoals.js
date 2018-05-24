@@ -90,7 +90,7 @@ const DashboardGoals = ({
     >
       {canEditGoals && <PlusButton size="1" onClick={toggleAddModal} />}
       {totalCount
-        ? pluralize('goal', totalCount || goals.length, true)
+        ? pluralize('Key goal', totalCount || goals.length, true)
         : 'Add a key goal'}
     </DashboardStatsExpandable>
   </Fragment>

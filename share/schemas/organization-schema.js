@@ -346,7 +346,14 @@ const OrganizationSchema = new SimpleSchema([
     },
     lastAccessedDate: {
       type: Date,
-      defaultValue: new Date(),
+      optional: true,
+      autoValue() {
+        if (this.isInsert && !this.isSet) {
+          return new Date();
+        }
+
+        return undefined;
+      },
     },
   },
 ]);

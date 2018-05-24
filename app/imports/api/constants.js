@@ -195,6 +195,7 @@ export const AnalysisFieldPrefixes = {
 
 export const WorkItemDescriptions = {
   rootCauseAnalysis: 'Complete root cause analysis',
+  potentialGainAnalysis: 'Complete potential gain analysis',
   riskAnalysis: 'Complete initial risk analysis',
   updateOfStandards: 'Request for approval to close this nonconformity',
   updateOfRiskRecord: 'Request for approval to close this risk',
@@ -277,6 +278,12 @@ export const StatusColors = {
   GREEN: 'success',
 };
 
+export const StatusColorsHex = {
+  AMBER: '#ff8c00',
+  RED: '#dc3545',
+  GREEN: '#16a916',
+};
+
 export const DEFAULT_UPDATE_TIMEOUT = 1200;
 
 export const ApolloFetchPolicies = {
@@ -284,8 +291,9 @@ export const ApolloFetchPolicies = {
 };
 
 export const TimelineColors = {
-  OVERDUE: '#dc3545',
-  IN_PROGRESS: '#ff8c00',
+  OVERDUE: StatusColorsHex.RED,
+  IN_PROGRESS: StatusColorsHex.AMBER,
+  COMPLETED: StatusColorsHex.GREEN,
 };
 
 export const SymbolTypes = {
@@ -303,6 +311,7 @@ export const Timeline = {
   WIDTH: 1140,
   LINE_HEIGHT: 25,
   AXIS_HEIGHT: 20,
+  AXIS_OFFSET_Y: 30,
   LIST_ICON_SIZE: 11,
 };
 
@@ -322,3 +331,5 @@ export const Styles = {
   },
 };
 /* eslint-enable max-len */
+
+export const SUPPORT_EMAIL = 'hello@pliohub.com';

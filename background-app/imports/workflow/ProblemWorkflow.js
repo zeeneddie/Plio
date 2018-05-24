@@ -1,20 +1,16 @@
 import {
   WorkflowTypes,
   ProblemIndexes,
-  SystemName,
   ProblemTypes,
-} from '/imports/share/constants';
-import { Actions } from '/imports/share/collections/actions';
+} from '../share/constants';
+import { Actions, Organizations } from '../share/collections';
 import {
   isDueToday,
   isOverdue,
   getWorkflowDefaultStepDate,
-} from '/imports/share/helpers';
-import { Organizations } from '/imports/share/collections/organizations.js';
-import NonConformitiesService from '/imports/share/services/non-conformities-service';
-import RisksService from '/imports/share/services/risks-service';
+} from '../share/helpers';
+import { NonConformityService, RiskService } from '../share/services';
 import Workflow from './Workflow';
-
 
 export default class ProblemWorkflow extends Workflow {
   _prepare() {
@@ -67,34 +63,38 @@ export default class ProblemWorkflow extends Workflow {
   }
 
   _getThreeStepStatus() {
-    // 3: Open - just reported, action(s) to be added
-    return this._getDeletedStatus() || this._getActionStatus() || 3;
+    return (
+      this._getDeletedStatus() ||
+      this._getActionStatus() ||
+      ProblemIndexes.ACTIONS_TO_BE_ADDED
+    );
   }
 
   _getSixStepStatus() {
-    // 2: Open - just reported, awaiting analysis
     return this._getDeletedStatus()
         || this._getStandardsUpdateStatus()
         || this._getActionStatus()
         || this._getAnalysisStatus()
-        || 2;
+        || ProblemIndexes.AWAITING_ANALYSIS;
   }
 
   _getDeletedStatus() {
     if (this._doc.deleted()) {
-      return 21; // Deleted
+      return ProblemIndexes.DELETED;
     }
+
+    return undefined;
   }
 
   _getStandardsUpdateStatus() {
-    if (!(this._analysisCompleted()
-          && this._allActionsCompleted()
-          && this._allActionsVerifiedAsEffective())) {
-      return;
-    }
+    if (!(
+      this._analysisCompleted() &&
+      this._allActionsCompleted() &&
+      this._allActionsVerifiedAsEffective()
+    )) return undefined;
 
     if (this._standardsUpdated()) {
-      return 20; // Closed - action(s) verified, standard(s) reviewed
+      return ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED;
     }
 
     const { updateOfStandards } = this._doc || {};
@@ -102,17 +102,19 @@ export default class ProblemWorkflow extends Workflow {
     const timezone = this._timezone;
 
     if (isOverdue(targetDate, timezone)) {
-      return 17; // Open - action(s) verified as effective, approval past due
+      return ProblemIndexes.ACTIONS_UPDATE_PAST_DUE;
     }
 
     if (isDueToday(targetDate, timezone)) {
-      return 16; // Open - action(s) verified as effective, approval due today
+      return ProblemIndexes.ACTIONS_UPDATE_DUE_TODAY;
     }
+
+    return undefined;
   }
 
   _getActionStatus() {
     if (this._actions.length === 0) {
-      return;
+      return undefined;
     }
 
     const workflowType = this._getWorkflowType();
@@ -123,16 +125,18 @@ export default class ProblemWorkflow extends Workflow {
       return this._getActionVerificationStatus()
           || this._getActionCompletionStatus();
     }
+
+    return undefined;
   }
 
   _getActionVerificationStatus() {
     if (!(this._analysisCompleted() && this._allActionsCompleted())) {
-      return;
+      return undefined;
     }
 
     // check if all actions are verified
     if (this._allActionsVerifiedAsEffective()) {
-      return 15; // Open - action(s) verified as effective, approval
+      return ProblemIndexes.ACTIONS_AWAITING_UPDATE;
     }
 
     const actions = this._actions;
@@ -146,7 +150,7 @@ export default class ProblemWorkflow extends Workflow {
     ));
 
     if (overduded) {
-      return 14; // Open - verification past due
+      return ProblemIndexes.VERIFY_PAST_DUE;
     }
 
     // check if there is verification for today
@@ -155,15 +159,17 @@ export default class ProblemWorkflow extends Workflow {
     ));
 
     if (dueToday) {
-      return 13; // Open - verification due today
+      return ProblemIndexes.VERIFY_DUE_TODAY;
     }
 
     // check if there is failed verification
     const failed = actions.find(action => action.failedVerification());
 
     if (failed) {
-      return 18; // Open - action(s) failed verification
+      return ProblemIndexes.ACTIONS_FAILED_VERIFICATION;
     }
+
+    return undefined;
   }
 
   _getActionCompletionStatus() {
@@ -171,14 +177,14 @@ export default class ProblemWorkflow extends Workflow {
 
     if ((workflowType === WorkflowTypes.SIX_STEP)
           && !this._analysisCompleted()) {
-      return;
+      return undefined;
     }
 
     // check if all actions are completed
     if (this._allActionsCompleted()) {
       return {
-        [WorkflowTypes.THREE_STEP]: 19, // Closed - action(s) completed
-        [WorkflowTypes.SIX_STEP]: 12, // Open - action(s) completed, awaiting verification
+        [WorkflowTypes.THREE_STEP]: ProblemIndexes.CLOSED_ACTIONS_COMPLETED,
+        [WorkflowTypes.SIX_STEP]: ProblemIndexes.ACTIONS_COMPLETED_WAITING_VERIFY,
       }[workflowType];
     }
 
@@ -193,7 +199,7 @@ export default class ProblemWorkflow extends Workflow {
     ));
 
     if (overduded) {
-      return 10; // Open - action(s) overdue
+      return ProblemIndexes.ACTIONS_OVERDUE;
     }
 
     // check if there is an action that must completed today
@@ -202,30 +208,32 @@ export default class ProblemWorkflow extends Workflow {
     ));
 
     if (dueToday) {
-      return 9; // Open - action(s) due today
+      return ProblemIndexes.ACTIONS_DUE_TODAY;
     }
 
     // check if there is at least one completed action
     if (this._completedActionsLength >= 1) {
       return {
-        [WorkflowTypes.THREE_STEP]: 11, // Open - action(s) completed
-        [WorkflowTypes.SIX_STEP]: 12, // Open - action(s) completed, awaiting verification
+        [WorkflowTypes.THREE_STEP]: ProblemIndexes.OPEN_ACTIONS_COMPLETED,
+        [WorkflowTypes.SIX_STEP]: ProblemIndexes.ACTIONS_COMPLETED_WAITING_VERIFY,
       }[workflowType];
     }
 
     if ((workflowType === WorkflowTypes.THREE_STEP)
           && actions.length) {
-      return 8; // Open - action(s) in place
+      return ProblemIndexes.ACTIONS_IN_PLACE;
     }
+
+    return undefined;
   }
 
   _getAnalysisStatus() {
     if (this._analysisCompleted()) {
       if (this._actions.length > 0) {
-        return 7; // Open - analysis completed, action(s) in place
+        return ProblemIndexes.ANALYSIS_COMPLETED_ACTIONS_IN_PLACE;
       }
 
-      return 6; // Open - analysis completed, action(s) need to be added
+      return ProblemIndexes.ANALYSIS_COMPLETED_ACTIONS_NEED;
     }
 
     const { analysis } = this._doc || {};
@@ -233,20 +241,22 @@ export default class ProblemWorkflow extends Workflow {
     const timezone = this._timezone;
 
     if (isOverdue(targetDate, timezone)) {
-      return 5; // Open - analysis overdue
+      return ProblemIndexes.ANALYSIS_OVERDUE;
     }
 
     if (isDueToday(targetDate, timezone)) {
-      return 4; // Open - analysis due today
+      return ProblemIndexes.ANALYSIS_DUE_TODAY;
     }
+
+    return undefined;
   }
 
   _onUpdateStatus(status) {
     const initiateApprovalProcess = () => {
       if (status === ProblemIndexes.ACTIONS_AWAITING_UPDATE) {
         const doc = this._doc || {};
-        const organization = Organizations.findOne({ _id: doc.organizationId, });
-        const _id = doc._id;
+        const organization = Organizations.findOne({ _id: doc.organizationId });
+        const { _id } = doc;
         const docType = this.constructor._docType;
 
         if (doc.updateOfStandards && doc.updateOfStandards.executor) {
@@ -255,14 +265,14 @@ export default class ProblemWorkflow extends Workflow {
 
         const targetDate = getWorkflowDefaultStepDate({
           organization,
-          linkedTo: [{ documentId: _id, documentType: docType, }]
+          linkedTo: [{ documentId: _id, documentType: docType }],
         });
         let service;
 
         if (docType === ProblemTypes.RISK) {
-          service = RisksService;
+          service = RiskService;
         } else {
-          service = NonConformitiesService;
+          service = NonConformityService;
         }
 
         service.setStandardsUpdateExecutor({
@@ -279,5 +289,4 @@ export default class ProblemWorkflow extends Workflow {
 
     initiateApprovalProcess();
   }
-
 }
