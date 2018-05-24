@@ -16,7 +16,7 @@ import { getActionWorkflowType } from '../helpers';
 const Actions = new Mongo.Collection(CollectionNames.ACTIONS);
 Actions.attachSchema(ActionSchema);
 
-const getLinkedDocsIds = (linkedDocs, docType) => _.pluck(
+const getLinkedDocsIds = (linkedDocs = [], docType) => _.pluck(
   _.filter(
     linkedDocs,
     ({ documentType }) => documentType === docType,
@@ -24,10 +24,11 @@ const getLinkedDocsIds = (linkedDocs, docType) => _.pluck(
   'documentId',
 );
 
-// WARNING: Deprecated. Use app/imports/api/actions/helpers instead
 Actions.helpers({
   getLinkedNCsIds() {
-    return getLinkedDocsIds(this.linkedTo, ProblemTypes.NON_CONFORMITY);
+    const NCIds = getLinkedDocsIds(this.linkedTo, ProblemTypes.NON_CONFORMITY);
+    const PGIds = getLinkedDocsIds(this.linkedTo, ProblemTypes.POTENTIAL_GAIN);
+    return NCIds.concat(PGIds);
   },
   getLinkedNCs() {
     return NonConformities.find({

@@ -1,5 +1,5 @@
 import { generateSerialNumber, getWorkflowDefaultStepDate } from '../helpers';
-import { WorkflowTypes, ANALYSIS_STATUSES } from '../constants';
+import { WorkflowTypes, ANALYSIS_STATUSES, ProblemTypes } from '../constants';
 import { Organizations, Actions } from '../collections';
 import ActionService from './action-service';
 import WorkItemService from './work-item-service';
@@ -7,13 +7,15 @@ import WorkItemService from './work-item-service';
 export default {
 
   insert({ organizationId, magnitude, ...args }) {
+    const { type } = args;
     const organization = Organizations.findOne({ _id: organizationId });
-
     const serialNumber = generateSerialNumber(this.collection, { organizationId });
     const abbr = this._getAbbr({ organization, magnitude, ...args });
     const sequentialId = `${abbr}${serialNumber}`;
 
-    const workflowType = organization.workflowType(magnitude);
+    const workflowType = type === ProblemTypes.POTENTIAL_GAIN
+      ? WorkflowTypes.THREE_STEP
+      : organization.workflowType(magnitude);
 
     const _id = this.collection.insert({
       organizationId,
