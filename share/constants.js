@@ -690,12 +690,14 @@ export const CustomerTypes = {
   PAYING_SUBSCRIBER: 1,
   FREE_TRIAL: 2,
   TEST_ACCOUNT: 3,
+  PAST_CUSTOMER: 4,
 };
 
 export const CustomerTypesNames = {
   [CustomerTypes.PAYING_SUBSCRIBER]: 'Paying subscriber',
   [CustomerTypes.FREE_TRIAL]: 'Free trial',
   [CustomerTypes.TEST_ACCOUNT]: 'Test account',
+  [CustomerTypes.PAST_CUSTOMER]: 'Past customer',
 };
 
 export const PossibleReviewFrequencies = [
