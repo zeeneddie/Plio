@@ -330,3 +330,5 @@ export const Styles = {
   },
 };
 /* eslint-enable max-len */
+
+export const SUPPORT_EMAIL = 'hello@pliohub.com';
