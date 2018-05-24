@@ -311,6 +311,7 @@ export const Timeline = {
   WIDTH: 1140,
   LINE_HEIGHT: 25,
   AXIS_HEIGHT: 20,
+  AXIS_OFFSET_Y: 30,
   LIST_ICON_SIZE: 11,
 };
 
