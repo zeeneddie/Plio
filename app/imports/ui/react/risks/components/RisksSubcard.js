@@ -61,7 +61,7 @@ const RisksSubcard = ({
         onSubmit={noop}
         initialValues={getInitialValues(entity)}
         subscription={{}}
-        render={({ reset }) => (
+        render={({ form: { reset } }) => (
           <RiskSubcardContainer
             risk={entity}
             {...{

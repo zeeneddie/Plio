@@ -26,7 +26,7 @@ const LessonsSubcard = ({ lessons, onDelete, ...props }) => (
         key={entity._id}
         initialValues={getInitialValues(entity)}
         subscription={{}}
-        render={({ reset }) => (
+        render={({ form: { reset } }) => (
           <LessonSubcardContainer
             lesson={entity}
             {...{

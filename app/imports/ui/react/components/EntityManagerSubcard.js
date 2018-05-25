@@ -83,7 +83,7 @@ class EntityManagerSubcard extends Component {
         subscription={{}}
         mutators={{ ...arrayMutators }}
         render={({
-          mutators: { push },
+          form: { mutators: { push } },
         }) => (
           <Fragment>
             <Card className="new-cards">

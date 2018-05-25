@@ -3,7 +3,7 @@ import React from 'react';
 import { Modal as ReactstrapModal } from 'reactstrap';
 import cx from 'classnames';
 import connectUI from 'redux-ui';
-import { mapProps, compose, setPropTypes, lifecycle } from 'recompose';
+import { mapProps, compose } from 'recompose';
 
 import {
   TransitionBaseActiveClass,
@@ -33,16 +33,15 @@ export const callAsync = asyncAction => (dispatch) => {
     });
 };
 
+// TODO: REWRITE THIS COMPONENT WITH NEW CONTEXT API!!!!!!
+
 const enhance = compose(
-  setPropTypes({
-    onError: PropTypes.func,
-  }),
   connectUI({
     state: {
       [LOADING]: false,
       [ERROR]: null,
     },
-    reducer: (state = {}, action) => {
+    reducer(state = {}, action) {
       switch (action.type) {
         case LOADING:
           return state.set(LOADING, true);
@@ -52,15 +51,6 @@ const enhance = compose(
           return state.set(LOADING, false).set(ERROR, null);
         default:
           return state;
-      }
-    },
-  }),
-  lifecycle({
-    componentWillReceiveProps({ ui, onError }) {
-      // WARNING: could be called multiple times
-      // should be resolved when we switch to the new context API
-      if (onError && !ui[LOADING] && ui[ERROR]) {
-        onError({ error: ui[ERROR] });
       }
     },
   }),
