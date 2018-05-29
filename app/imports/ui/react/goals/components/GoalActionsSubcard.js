@@ -21,7 +21,7 @@ const GoalActionsSubcard = ({
         onSubmit={() => null}
         subscription={{}}
         initialValues={getGeneralActionValuesByAction(entity)}
-        render={({ reset }) => (
+        render={({ form: { reset } }) => (
           <ActionSubcardContainer
             {...{
               isOpen,

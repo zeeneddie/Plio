@@ -22,6 +22,8 @@ import {
 import { OrgSettingsDocSubs } from '../../../../../../startup/client/subsmanagers';
 import StandardSectionsSubcardContainer from
   '../../../../../react/organization-settings/containers/StandardSectionsSubcardContainer';
+import StandardTypesSubcardContainer from
+  '../../../../../react/organization-settings/containers/StandardTypesSubcardContainer';
 
 Template.OrgSettings.viewmodel({
   mixin: 'organization',
@@ -48,12 +50,11 @@ Template.OrgSettings.viewmodel({
   },
   standardsTypes() {
     const query = { organizationId: this.organizationId() };
-    return StandardTypes.find(query);
+    return StandardTypes.find(query).fetch();
   },
   standardsBookSections() {
     const query = { organizationId: this.organizationId() };
-    const options = { title: 1 };
-    return StandardsBookSections.find(query, options).fetch();
+    return StandardsBookSections.find(query).fetch();
   },
   riskTypes() {
     const query = { organizationId: this.organizationId() };
@@ -107,4 +108,5 @@ Template.OrgSettings.viewmodel({
   },
   DocumentTypes: () => DocumentTypes,
   StandardSectionsSubcardContainer: () => StandardSectionsSubcardContainer,
+  StandardTypesSubcardContainer: () => StandardTypesSubcardContainer,
 });

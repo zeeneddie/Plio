@@ -15,10 +15,14 @@
   {{> OrgSettings_Departments
       departments=departments
       organizationId=organizationId}}
-
-  {{> OrgSettings_StandardTypes
-      standardsTypes=standardsTypes
-      organizationId=organizationId}}
+  
+  <div class="card-divider"></div>
+  <div>
+    {{> React
+        component=StandardTypesSubcardContainer
+        standardTypes=standardsTypes
+        organizationId=organizationId}}
+  </div>
 
   <div class="card-divider"></div>
   <div>

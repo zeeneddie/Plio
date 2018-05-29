@@ -1,5 +1,4 @@
 import { withProps, withHandlers, pure } from 'recompose';
-import { juxt } from 'ramda';
 import { mapEntitiesToOptions } from 'plio-util';
 
 import { insert, update, remove } from '../../../../api/standards-book-sections/methods';
@@ -24,7 +23,11 @@ export default namedCompose('StandardSectionsSubcardContainer')(
       if (!_id) {
         insert.callP({ title, organizationId }).catch(swal.error);
       } else {
-        update.callP({ _id, title, organizationId }).catch(juxt([swal.error, reset]));
+        update.callP({ _id, title, organizationId }).catch((err) => {
+          swal.error(err);
+
+          reset();
+        });
       }
     },
   }),

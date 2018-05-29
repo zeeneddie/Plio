@@ -58,7 +58,7 @@ const StandardSectionsSubcard = ({
             subscription={{}}
             mutators={arrayMutators}
           >
-            {({ reset }) => (
+            {({ form: { reset } }) => (
               <FieldArray name="standardSections">
                 {({ fields }) => (
                   <Fragment>

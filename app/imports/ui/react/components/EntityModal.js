@@ -48,12 +48,11 @@ const EntityModal = ({
   >
     {({
       handleSubmit,
-      reset,
       submitting,
       submitError,
     }) => (
       <Form onSubmit={handleSubmit} id={title}>
-        <Modal {...{ isOpen, toggle }} onError={reset}>
+        <Modal {...{ isOpen, toggle }}>
           <ModalHeader
             renderLeftButton={() => showSubmitBtn ? <Button onClick={toggle}>Close</Button> : null}
             renderRightButton={props => (
