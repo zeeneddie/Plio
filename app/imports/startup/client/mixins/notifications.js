@@ -6,7 +6,14 @@ export default {
   // _id is used as notification tag if there's no tag argument passed
   // Only title is required
   sendNotification({
-    _id, title, body, tag, icon, url, silent = true, timeout = 4000,
+    _id,
+    title,
+    body,
+    tag,
+    icon,
+    url,
+    silent = true,
+    timeout = 6000,
   }) {
     const notification = new Notification(title, {
       body,
