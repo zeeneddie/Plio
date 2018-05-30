@@ -6,7 +6,8 @@ import {
   mapEntitiesToOptions,
   renameKeys,
 } from 'plio-util';
-import { ActionPlanOptions } from '../../../share/constants';
+import { ActionPlanOptions, ActionIndexes } from '../../../share/constants';
+import { ActionStatusColors } from '../../../api/constants';
 
 export const getGeneralActionValuesByAction = compose(
   pick([
@@ -43,3 +44,14 @@ export const getActionFormInitialState = user => ({
   // TODO: Update based on linked documents like creation modal?
   completionTargetDate: moment().add(1, 'days'),
 });
+
+export const getActionSymbolColor = (status, color) => {
+  switch (status) {
+    case ActionIndexes.COMPLETED:
+      return color;
+    case ActionIndexes.COMPLETION_OVERDUE:
+      return ActionStatusColors.OVERDUE;
+    default:
+      return ActionStatusColors.IN_PROGRESS;
+  }
+};
