@@ -114,7 +114,7 @@ export default class NotificationSender {
   _getDefaultEmail() {
     const orgName = this._options.templateData.organizationName;
 
-    if (orgName) return `Plio (${orgName})<noreply@pliohub.com>`;
+    if (orgName) return `"Plio (${orgName})"<noreply@pliohub.com>`;
 
     return 'Plio <noreply@pliohub.com>';
   }
