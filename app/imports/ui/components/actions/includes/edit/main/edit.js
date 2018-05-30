@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
-import { WorkflowTypes, ActionTypes } from '../../../../../../share/constants';
+import { WorkflowTypes, ActionTypes, StringLimits } from '../../../../../../share/constants';
 import { updateViewedBy } from '../../../../../../api/actions/methods';
 import { isViewed } from '../../../../../../api/checkers';
 
@@ -21,6 +21,16 @@ Template.Actions_Card_Edit_Main.viewmodel({
     if (action) {
       this.load(action);
     }
+  },
+  titleArgs({ _id, title, sequentialId }) {
+    return {
+      _id,
+      title,
+      sequentialId,
+      maxLength: StringLimits.longTitle.max,
+      label: 'Title',
+      onUpdate: this.updateTitleFn,
+    };
   },
   isCompletionEditable({ isVerified }) {
     return !isVerified;
@@ -63,9 +73,6 @@ Template.Actions_Card_Edit_Main.viewmodel({
   },
   onUpdateVerificationExecutor() {
     return this.updateVerificationExecutorFn;
-  },
-  onUpdateTitle() {
-    return this.updateTitleFn;
   },
   showVerification() {
     const action = this.action && this.action();

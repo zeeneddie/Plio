@@ -1,12 +1,7 @@
 <template name="Actions_Card_Edit_Main">
   <div class="card-block">
     {{#with action}}
-      {{> NC_Title_Edit
-          _id=this._id
-          title=this.title
-          sequentialId=this.sequentialId
-          label="Title"
-          onUpdate=onUpdateTitle}}
+      {{> NC_Title_Edit (titleArgs this)}}
 
       {{> DescriptionTextBox
           description=this.description}}
