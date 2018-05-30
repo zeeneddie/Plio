@@ -8,9 +8,9 @@ import GoalsChart from '../components/GoalsChart';
 import MilestoneChartActionsContainer from '../containers/MilestoneChartActionsContainer';
 import ActionsPopoverContainer from '../containers/ActionsPopoverContainer';
 import { TimelineSymbols } from '../../../../api/constants';
-import { getActionPointColor } from '../../../../api/actions/helpers';
 import { MilestoneStatuses, ActionIndexes } from '../../../../share/constants';
 import { getFormattedDate } from '../../../../share/helpers';
+import { getActionSymbolColor } from '../../actions/helpers';
 import { getMilestoneSymbolColor } from '../../milestones/helpers';
 
 const getMilestonePoints = ({ _id: goalId, milestones, color }) => map((milestone) => {
@@ -48,7 +48,7 @@ const getActionPoints = ({ _id: goalId, actions, color }) => (
       date: toDate(moment(completionTargetDate).startOf('day')),
       userName: toBeCompletedBy.profile.fullName,
       label: `Action: ${title} - ${getFormattedDate(completionTargetDate)}`,
-      fill: getActionPointColor(status, color),
+      fill: getActionSymbolColor(status, color),
       symbol: TimelineSymbols.ACTION,
       isCompleted: status === ActionIndexes.COMPLETED,
       renderPopover: props =>

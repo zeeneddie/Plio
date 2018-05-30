@@ -280,7 +280,9 @@ export const StatusColors = {
 
 export const StatusColorsHex = {
   AMBER: '#ff8c00',
+  DARKER_AMBER: '#e67300',
   RED: '#dc3545',
+  DARKER_RED: '#c31c2c',
   GREEN: '#16a916',
 };
 
@@ -290,9 +292,15 @@ export const ApolloFetchPolicies = {
   CACHE_ONLY: 'cache-only',
 };
 
-export const TimelineColors = {
-  OVERDUE: StatusColorsHex.RED,
+export const MilestoneStatusColors = {
+  IN_PROGRESS: StatusColorsHex.DARKER_AMBER,
+  OVERDUE: StatusColorsHex.DARKER_RED,
+  COMPLETED: StatusColorsHex.GREEN,
+};
+
+export const ActionStatusColors = {
   IN_PROGRESS: StatusColorsHex.AMBER,
+  OVERDUE: StatusColorsHex.RED,
   COMPLETED: StatusColorsHex.GREEN,
 };
 

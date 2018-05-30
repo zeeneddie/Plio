@@ -3,22 +3,21 @@ import { lenses, filterBy } from 'plio-util';
 
 import { ActionTypes, ActionStatuses, ActionIndexes } from '../../share/constants';
 import { getFormattedDate } from '../../share/helpers';
-import { TimelineColors } from '../constants';
 
 export const getClassByStatus = (status) => {
   switch (status) {
-    case 1:
-    case 4:
+    case ActionIndexes.IN_PROGRESS:
+    case ActionIndexes.NOT_YET_VERIFY:
       return 'yellow';
-    case 8:
-    case 9:
+    case ActionIndexes.COMPLETED_EFFECTIVE:
+    case ActionIndexes.COMPLETED:
       return 'success';
-    case 2:
-    case 5:
+    case ActionIndexes.DUE_COMPLETION_TODAY:
+    case ActionIndexes.VERIFY_DUE_TODAY:
       return 'warning';
-    case 3:
-    case 6:
-    case 7:
+    case ActionIndexes.COMPLETION_OVERDUE:
+    case ActionIndexes.VERIFY_OVERDUE:
+    case ActionIndexes.COMPLETED_FAILED:
       return 'danger';
     default:
       return 'default';
@@ -69,14 +68,3 @@ export const getOverdueActions = filterBy('status', [
   ActionIndexes.VERIFY_OVERDUE,
   ActionIndexes.COMPLETED_FAILED,
 ]);
-
-export const getActionPointColor = (status, goalColor) => {
-  switch (status) {
-    case ActionIndexes.COMPLETED:
-      return goalColor;
-    case ActionIndexes.COMPLETION_OVERDUE:
-      return TimelineColors.OVERDUE;
-    default:
-      return TimelineColors.IN_PROGRESS;
-  }
-};
