@@ -14,6 +14,7 @@ import {
   OrgUsersSelectInputContainer,
   RiskTypeSelectContainer,
 } from '../../containers';
+import { StringLimits } from '../../../../share/constants';
 
 const RiskForm = ({
   onChangeTitle,
@@ -35,6 +36,7 @@ const RiskForm = ({
         onBlur={onChangeTitle}
         placeholder="Risk name"
         addon={sequentialId}
+        maxLength={StringLimits.title.max}
       />
     </FormField>
     <FormField>

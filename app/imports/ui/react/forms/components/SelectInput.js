@@ -63,8 +63,11 @@ export const SelectWrapper = styled.div`
   }
   .Select-menu-outer {
     max-height: 494px;
+    border: none;
     & > .Select-menu {
       max-height: inherit;
+      border: 1px solid #ccc;
+      border-bottom-width: 2px;
     }
   }
   .Select--multi {

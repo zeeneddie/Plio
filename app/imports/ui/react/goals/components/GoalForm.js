@@ -11,10 +11,9 @@ import {
   Magnitudes,
   SelectField,
   ColorPickerField,
-  LinkedEntityInput,
 } from '../../components';
 import { OrgUsersSelectInputContainer } from '../../containers';
-import { GoalColors } from '../../../../share/constants';
+import { GoalColors, StringLimits } from '../../../../share/constants';
 
 const enhance = onlyUpdateForKeys(['sequentialId', 'organizationId', 'isEditMode']);
 
@@ -32,12 +31,12 @@ export const GoalForm = ({
   <Fragment>
     <FormField>
       Key goal name
-      <LinkedEntityInput
-        component={InputField}
+      <InputField
         name="title"
         placeholder="Key goal name"
         onBlur={onChangeTitle}
-        {...{ sequentialId }}
+        addon={sequentialId}
+        maxLength={StringLimits.title.max}
       />
     </FormField>
     <FormField>

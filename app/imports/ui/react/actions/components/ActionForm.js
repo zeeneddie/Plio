@@ -11,6 +11,7 @@ import {
 } from '../../components';
 import { OrgUsersSelectInputContainer } from '../../containers';
 import ActionCompletionForm from './ActionCompletionForm';
+import { StringLimits } from '../../../../share/constants';
 // import ActionPlan from './ActionPlan';
 
 const ActionForm = ({
@@ -32,6 +33,7 @@ const ActionForm = ({
           onBlur={onChangeTitle}
           placeholder="Title"
           addon={sequentialId}
+          maxLength={StringLimits.longTitle.max}
         />
       </FormField>
       <FormField>

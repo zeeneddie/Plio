@@ -1,8 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import styled from 'styled-components';
 
 import CardBlock from './CardBlock';
+
+const StyledCardBlock = styled(CardBlock)`
+  & > span {
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+`;
 
 const SubcardHeader = ({
   children,
@@ -12,7 +20,7 @@ const SubcardHeader = ({
   error,
   ...props
 }) => (
-  <CardBlock
+  <StyledCardBlock
     className={cx(
       'card-block-collapse-toggle',
       className,
@@ -25,7 +33,7 @@ const SubcardHeader = ({
     {...props}
   >
     {children}
-  </CardBlock>
+  </StyledCardBlock>
 );
 
 SubcardHeader.propTypes = {

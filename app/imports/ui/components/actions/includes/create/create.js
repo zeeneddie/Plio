@@ -3,7 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 import { omit } from 'ramda';
 
-import { ActionPlanOptions, ActionTypes, DocumentTypes } from '../../../../../share/constants';
+import {
+  ActionPlanOptions,
+  ActionTypes,
+  DocumentTypes,
+  StringLimits,
+} from '../../../../../share/constants';
 import { insert } from '../../../../../api/actions/methods';
 import { getTzTargetDate, getWorkflowDefaultStepDate } from '../../../../../share/helpers';
 import { setModalError, inspire } from '../../../../../api/helpers';
@@ -37,6 +42,13 @@ Template.Actions_Create.viewmodel({
   defaultToBeCompletedBy: '',
   verificationTargetDate: '',
   toBeVerifiedBy: '',
+  titleArgs() {
+    return {
+      label: 'Title',
+      title: this.title(),
+      maxLength: StringLimits.longTitle.max,
+    };
+  },
   save() {
     const data = this.getData();
 
