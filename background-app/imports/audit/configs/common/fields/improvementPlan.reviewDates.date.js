@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
 import { getPrettyTzDate } from '/imports/helpers/date';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -7,7 +7,7 @@ export default {
     default: {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
-          'Improvement plan review date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
+          'Improvement plan review date changed from {{{oldValue}}} to {{{newValue}}}',
       },
     },
   },
@@ -15,7 +15,8 @@ export default {
     default: {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed improvement plan\'s review date for {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
+          '{{{userName}}} changed improvement plan\'s review date for ' +
+          '{{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
       },
     },
   },
