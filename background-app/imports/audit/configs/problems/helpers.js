@@ -29,12 +29,12 @@ export const sendUpdateOfStandardsReminders = ({
     const unsubscribeUrl = StandardAuditConfig.docUnsubscribeUrl(standard);
     const docDesc = auditConfig.docDescription(newDoc);
     const { abbreviation } = StandardTypes.findOne({ _id: typeId });
-    const standardName = `(${abbreviation}${uniqueNumber}) (${standardTitle})`;
+    const standardName = `${abbreviation}${uniqueNumber} ${standardTitle}`;
     const title = `Please update ${standardName}`;
     const text = `You are the Owner of standard ${standardName},` +
-      ` linked to ${docDesc} (${sequentialId}).` +
+      ` linked to ${docDesc} ${sequentialId}.` +
       ` Actions related to this ${docDesc} have now been completed` +
-      ` and (${sequentialId}) has now been closed.` +
+      ` and ${sequentialId} has now been closed.` +
       ' Please take this opportunity to update the standard.';
 
     const notification = {
