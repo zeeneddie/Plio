@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
 import { getPrettyTzDate } from '/imports/helpers/date';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 import { getReceivers } from '../helpers';
 
 
@@ -12,9 +12,9 @@ export default {
       },
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Verification date set to "{{{newValue}}}"',
+          'Verification date set to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'Verification date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
+          'Verification date changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           'Verification date removed',
       },
@@ -27,9 +27,10 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} set verification date of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
+          '{{{userName}}} set verification date of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed verification date of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
+          '{{{userName}}} changed verification date of ' +
+          '{{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           '{{{userName}}} removed verification date of {{{docDesc}}} {{{docName}}}',
       },

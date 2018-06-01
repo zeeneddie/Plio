@@ -20,10 +20,10 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} set start date of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
+          '{{{userName}}} set start date of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
           '{{{userName}}} changed start date of {{{docDesc}}} {{{docName}}} ' +
-          'from "{{{oldValue}}}" to "{{{newValue}}}"',
+          'from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           '{{{userName}}} removed start date of {{{docDesc}}} {{{docName}}}',
       },
