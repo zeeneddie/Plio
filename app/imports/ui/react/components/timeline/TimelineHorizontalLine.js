@@ -26,6 +26,8 @@ const enhance = withProps(({
   color,
   points,
   index = 0,
+  onClickPoints,
+  entityId,
 }) => {
   const isLineOutOfScaleRight = startDate > scaleDates.end;
   const isLineOutOfScale = isLineOutOfScaleRight || endDate < scaleDates.start;
@@ -34,8 +36,17 @@ const enhance = withProps(({
 
   const start = !isStartWithinScale && (isLineOutOfScaleRight ? scaleDates.end : scaleDates.start);
   const end = isEndWithinScale || isLineOutOfScaleRight ? endDate : scaleDates.end;
+
+  const events = onClickPoints ? [{
+    target: 'parent',
+    eventHandlers: {
+      onClick: () => onClickPoints(entityId),
+    },
+  }] : [];
+
   return {
     index,
+    events,
     lineData: [
       {
         x: start || startDate,
@@ -95,6 +106,7 @@ const TimelineHorizontalLine = ({
             data: {
               stroke: color,
               strokeWidth: 4,
+              cursor: onClickPoints ? 'pointer' : 'default',
             },
           },
         }}
