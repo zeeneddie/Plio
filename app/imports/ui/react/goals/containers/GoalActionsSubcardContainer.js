@@ -22,8 +22,6 @@ const {
   LINK_DOC_TO_ACTION,
 } = Mutation;
 
-// TODO delete createAction, linkGoalToAction, loadActions, onSave handlers
-// when EntityManagerSubcard will be refactored
 export default namedCompose('GoalActionsSubcardContainer')(
   pure,
   graphql(Query.GOAL_ACTIONS_CARD, {
