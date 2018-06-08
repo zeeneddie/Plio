@@ -416,22 +416,22 @@ export const UserRoles = {
   CREATE_UPDATE_DELETE_STANDARDS: 'create-update-delete-standards',
   CREATE_DELETE_GOALS: 'create-delete-goals',
   VIEW_TEAM_ACTIONS: 'view-team-actions',
+  COMPLETE_ANY_ACTION: 'complete-any-action',
   INVITE_USERS: 'invite-users',
   DELETE_USERS: 'delete-users',
   EDIT_USER_ROLES: 'edit-user-roles',
   CHANGE_ORG_SETTINGS: 'change-org-settings',
-  COMPLETE_ANY_ACTION: 'complete-any-action',
 };
 
 export const UserRolesNames = {
   [UserRoles.CREATE_UPDATE_DELETE_STANDARDS]: 'Create & edit standards documents',
-  [UserRoles.CREATE_DELETE_GOALS]: 'Create & delete Key goals',
-  [UserRoles.VIEW_TEAM_ACTIONS]: 'View all Team actions',
+  [UserRoles.CREATE_DELETE_GOALS]: 'Create & delete key goals',
+  [UserRoles.VIEW_TEAM_ACTIONS]: 'View all team actions',
+  [UserRoles.COMPLETE_ANY_ACTION]: 'Can complete any action',
   [UserRoles.INVITE_USERS]: 'Invite users',
   [UserRoles.DELETE_USERS]: 'Delete users',
   [UserRoles.EDIT_USER_ROLES]: 'Edit user superpowers',
   [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings',
-  [UserRoles.COMPLETE_ANY_ACTION]: 'Can complete any action',
 };
 
 export const WorkItemTypes = {
