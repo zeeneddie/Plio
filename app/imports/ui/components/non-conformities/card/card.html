@@ -110,10 +110,6 @@
               RCALabel=(getAnalysisTitleByType this)
           }}
 
-          {{#with notify}}
-            {{> Subcards_Notify_Read users=this}}
-          {{/with}}
-
           {{#if isReady}}
             {{> Subcards_Occurrences_Read occurrences=occurrences}}
 
@@ -130,6 +126,10 @@
             {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
             {{> Subcards_OtherFiles_Read fileIds=this.fileIds}}
+
+            {{#with notify}}
+              {{> Subcards_Notify_Read users=this}}
+            {{/with}}
           {{else}}
             <div class="m-t-3">
               {{> PreloaderPage size=1}}
