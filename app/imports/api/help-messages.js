@@ -44,6 +44,7 @@ const OrganizationSettingsHelp = {
   workflowSteps: 'Indicate whether you want Plio to use simple (3-step) or full (6-step) workflows for your nonconformity and risk-handling processes. If you wish, you can set simpler workflows for your less critical nonconformities and risks. Plio always uses a 3-step workflow process for managing potential gains.',
   workflowReminders: 'Set apppropriate reminder times for actions that become due within your nonconformity and risk-handling processes.   If you wish, you can set shorter reminder times for less critical nonconformities and risks.',
   nonConformityGuidelines: 'Help users to indicate the magnitude of this nonconformity, by giving them some clear guidelines relating to the estimated cost impact, or impact on customers.',
+  potentialGainGuidelines: 'Help users to indicate the magnitude of this potential gain, by giving them some clear guidelines relating to the estimated benefits to be gained.',
   riskTypes: 'Create a list of standards types for your organization.',
   riskGuidelines: 'Help users to indicate the magnitude of this risk more accurately, by giving them some clear guidelines (e.g by financial impact  minor - under $1,000; major $1k - $10k) in the context of your organization.',
   riskScoringGuidelines: 'Help users to score this risk more accurately, by giving them some clear guidelines on what the various scoring terms (e.g. minor, moderate, significant) mean in the context of your organization.',
