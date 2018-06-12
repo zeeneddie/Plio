@@ -23,7 +23,7 @@ import {
   setVerificationExecutor,
 } from '../../../../../api/actions/methods';
 import { getTzTargetDate } from '../../../../../share/helpers';
-import { ActionTypes } from '../../../../../share/constants';
+import { ActionTypes, DocumentTypes } from '../../../../../share/constants';
 import {
   deleteActionFromGoalFragment,
   updateActionFragment,
@@ -118,7 +118,12 @@ Template.Actions_Edit.viewmodel({
       this.callUpdate(setCompletionDate, { targetDate: tzDate }, (err, res) => {
         if (cb) cb(err, res);
         if (!err) {
-          updateFragment(this._id(), { completionTargetDate: tzDate });
+          try {
+            updateFragment(this._id(), { completionTargetDate: tzDate });
+          } catch (e) {
+            // if dashboard page was not visited before in the current session
+            // this will break without try/catch
+          }
         }
       });
     };
@@ -165,9 +170,16 @@ Template.Actions_Edit.viewmodel({
           }
 
           if (type === ActionTypes.GENERAL_ACTION) {
-            linkedTo.forEach(({ documentId }) => (
-              deleteActionFromGoalFragment(documentId, _id, client)
-            ));
+            linkedTo.forEach(({ documentId, documentType }) => {
+              if (documentType === DocumentTypes.GOAL) {
+                try {
+                  deleteActionFromGoalFragment(documentId, _id, client);
+                } catch (e) {
+                  // if dashboard page was not visited before in the current session
+                  // this will break without try/catch
+                }
+              }
+            });
           }
 
           swal.success('Removed', `An action "${title}" was removed successfully.`);
