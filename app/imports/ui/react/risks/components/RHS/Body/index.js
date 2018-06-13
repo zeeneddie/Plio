@@ -137,8 +137,6 @@ const Body = ({
       </Block>
     )}
 
-    {notify && !!notify.length && (<Notify users={notify} />)}
-
     {!_.isEmpty(riskEvaluation) && (
       <Block>
         <span>Risk evaluation</span>
@@ -158,11 +156,17 @@ const Body = ({
     )}
 
     {!!correctiveActions.length && (
-      <LinkItemList label="Corrective actions" items={correctiveActions} />
+      <Block>
+        <span>Corrective actions</span>
+        <LinkItemList items={correctiveActions} />
+      </Block>
     )}
 
     {!!preventativeActions.length && (
-      <LinkItemList label="Preventative actions" items={preventativeActions} />
+      <Block>
+        <span>Preventative actions</span>
+        <LinkItemList items={preventativeActions} />
+      </Block>
     )}
 
     {!!lessons.length && (<Lessons {...{ lessons }} />)}
@@ -179,6 +183,8 @@ const Body = ({
     )}
 
     <ReviewsContainer documentId={_id} documentType={DocumentTypes.RISK} />
+
+    {notify && !!notify.length && (<Notify users={notify} />)}
   </div>
 );
 

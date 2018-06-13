@@ -7,6 +7,7 @@ import { splitActionsByType } from '../../../../../../../api/actions/helpers';
 import LinkItemList from '../../../../../fields/read/components/LinkItemList';
 import { getPath } from '../../../../../../utils/router/paths';
 import Lessons from '../../../../../fields/read/components/Lessons';
+import Block from '/imports/ui/react/fields/read/components/Block';
 
 const ConnectedDocList = (props) => {
   const ncs = props.ncs.map(({
@@ -53,7 +54,10 @@ const ConnectedDocList = (props) => {
   return (
     <div>
       {lists.map(({ label, items = [] }) => !!items.length && (
-        <LinkItemList key={`list-${label}`} {...{ label, items }} />
+        <Block>
+          <span>{label}</span>
+          <LinkItemList key={`list-${label}`} {...{ items }} />
+        </Block>
       ))}
       {props.children}
       {props.lessons && !!props.lessons.length && (
