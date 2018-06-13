@@ -5,14 +5,14 @@ import { CardTitle } from 'reactstrap';
 import { getDueActions, getOverdueActions } from '../../../../api/actions/helpers';
 import { Pull, Icon } from '../../components';
 
-const ActionsSubcardHeader = ({ actions }) => {
+const ActionsSubcardHeader = ({ label, actions }) => {
   const dueActions = getDueActions(actions);
   const overdueActions = getOverdueActions(actions);
 
   return (
     <Fragment>
       <Pull left>
-        <CardTitle>Actions</CardTitle>
+        <CardTitle>{label}</CardTitle>
       </Pull>
       <Pull right>
         <CardTitle>
@@ -27,8 +27,13 @@ const ActionsSubcardHeader = ({ actions }) => {
   );
 };
 
+ActionsSubcardHeader.defaultProps = {
+  label: 'Actions',
+};
+
 ActionsSubcardHeader.propTypes = {
   actions: PropTypes.arrayOf(PropTypes.object),
+  label: PropTypes.string,
 };
 
 export default ActionsSubcardHeader;

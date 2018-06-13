@@ -3,10 +3,10 @@ import { SyncedCron } from 'meteor/percolate:synced-cron';
 
 import { checkServerStatusAndReport } from './helpers';
 
-const BACKGROUND_APP_URL = Meteor.settings.backgroundApp.url;
+const GRAPHQL_SERVER_URL = Meteor.settings.public.graphql.url;
 
 SyncedCron.add({
-  name: 'Check alive background application',
+  name: 'Check alive GraphQL server',
 
   schedule(parser) {
     return parser.text('every 30 minutes');
@@ -14,9 +14,9 @@ SyncedCron.add({
 
   job() {
     checkServerStatusAndReport({
-      url: BACKGROUND_APP_URL,
-      tmpFileName: 'background_prev_is_crashed',
-      appName: 'Background application',
+      url: GRAPHQL_SERVER_URL.replace('/graphql', ''),
+      tmpFileName: 'graphql_server_prev_is_crashed',
+      appName: 'GraphQL server',
     });
   },
 });

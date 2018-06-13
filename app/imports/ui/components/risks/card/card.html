@@ -70,10 +70,6 @@
               RCALabel=RiskRCALabel
               UOSLabel=RiskUOSLabel}}
 
-          {{#with notify}}
-            {{> Subcards_Notify_Read users=this}}
-          {{/with}}
-
           {{> Subcards_RiskScoring_Read scores=this.scores}}
 
           {{> Subcards_RiskEvaluation_Read riskEvaluation=this.riskEvaluation}}
@@ -94,6 +90,10 @@
             {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
             {{> Subcards_OtherFiles_Read fileIds=this.fileIds}}
+
+            {{#with notify}}
+              {{> Subcards_Notify_Read users=this}}
+            {{/with}}
           {{else}}
             <div class="m-t-3">
               {{> PreloaderPage size=1}}

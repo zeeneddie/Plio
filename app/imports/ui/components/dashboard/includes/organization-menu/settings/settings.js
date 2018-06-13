@@ -14,6 +14,7 @@ import ReviewContainer
   from '/imports/ui/react/organization-settings/containers/ReviewContainer';
 import KeyGoalsSettingsContainer from '/imports/ui/react/organization-settings/containers/KeyGoals';
 import { DocumentTypes } from '../../../../../../share/constants';
+import { OrganizationSettingsHelp } from '../../../../../../api/help-messages';
 import {
   setNCGuideline,
   setPGGuideline,
@@ -30,6 +31,7 @@ Template.OrgSettings.viewmodel({
   name: '',
   currency: '',
   timezone: '',
+  OrganizationSettingsHelp,
   onCreated(template) {
     template.autorun(() => {
       const organization = this.organization();

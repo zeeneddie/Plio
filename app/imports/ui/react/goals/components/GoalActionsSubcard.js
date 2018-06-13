@@ -15,6 +15,8 @@ const GoalActionsSubcard = ({
 }) => (
   <ActionsSubcard
     {...props}
+    newEntityTitle="New general action"
+    newEntityButtonTitle="Add general action"
     render={({ entity, isOpen, toggle }) => (
       <Form
         key={entity._id}

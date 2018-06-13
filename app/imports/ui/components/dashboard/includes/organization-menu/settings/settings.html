@@ -15,7 +15,7 @@
   {{> OrgSettings_Departments
       departments=departments
       organizationId=organizationId}}
-  
+
   <div class="card-divider"></div>
   <div>
     {{> React
@@ -42,13 +42,15 @@
 
   {{> OrgSettings_ProblemGuidelines
       label="Nonconformity guidelines"
+      helpText=OrganizationSettingsHelp.nonConformityGuidelines
       documentType=DocumentTypes.NON_CONFORMITY
       guidelines=NCGuidelines
       organizationId=organizationId
       method=setNCGuidelineMethod}}
 
   {{> OrgSettings_ProblemGuidelines
-      label="Potential gain guidelines"
+      label="Gain guidelines"
+      helpText=OrganizationSettingsHelp.potentialGainGuidelines
       documentType=DocumentTypes.POTENTIAL_GAIN
       guidelines=PGGuidelines
       organizationId=organizationId

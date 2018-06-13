@@ -70,12 +70,10 @@ const addPointsDataToGoals = map((goal) => {
 const enhance = compose(
   connectUI(),
   withHandlers({
-    onEdit: ({ updateUI }) => goalId => (
-      updateUI({
-        isEditModalOpen: true,
-        activeGoal: goalId,
-      })
-    ),
+    onEdit: ({ updateUI }) => goalId => updateUI({
+      isEditModalOpen: true,
+      activeGoal: goalId,
+    }),
   }),
   mapProps(over(lenses.goals, addPointsDataToGoals)),
 );
