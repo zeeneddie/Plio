@@ -3,6 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import { VictoryLine, VictoryScatter } from 'victory';
 import { withProps } from 'recompose';
+import { StatusColorsHex } from '../../../../api/constants';
 import HorizontalLinePoints from './HorizontalLinePoints';
 
 const getStartSymbol = ({ isStartWithinScale, isLineOutOfScaleRight, isLineOutOfScale }) => {
@@ -33,6 +34,8 @@ const enhance = withProps(({
   const isLineOutOfScale = isLineOutOfScaleRight || endDate < scaleDates.start;
   const isStartWithinScale = !isLineOutOfScaleRight && startDate > scaleDates.start;
   const isEndWithinScale = endDate < scaleDates.end;
+  const isOverduePoints = points.some(({ date, isCompleted }) => date < scaleDates.start && isCompleted);
+  const leftArrowSize = isOverduePoints ? 7 : 5;
 
   const start = !isStartWithinScale && (isLineOutOfScaleRight ? scaleDates.end : scaleDates.start);
   const end = isEndWithinScale || isLineOutOfScaleRight ? endDate : scaleDates.end;
@@ -62,9 +65,10 @@ const enhance = withProps(({
         y: index,
         x: start || startDate,
         fill: color,
+        stroke: isOverduePoints && !isStartWithinScale ? StatusColorsHex.RED : color,
         label: `Starts ${moment(startDate).format('D MMM YYYY')}`,
         symbol: getStartSymbol({ isStartWithinScale, isLineOutOfScaleRight, isLineOutOfScale }),
-        strokeWidth: isStartWithinScale ? 10 : 5,
+        strokeWidth: isStartWithinScale ? 10 : leftArrowSize,
       },
       {
         y: index,
