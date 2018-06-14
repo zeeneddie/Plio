@@ -34,7 +34,7 @@ const enhance = withProps(({
   const isLineOutOfScale = isLineOutOfScaleRight || endDate < scaleDates.start;
   const isStartWithinScale = !isLineOutOfScaleRight && startDate > scaleDates.start;
   const isEndWithinScale = endDate < scaleDates.end;
-  const isOverduePoints = points.some(({ date, isCompleted }) => date < scaleDates.start && isCompleted);
+  const isOverduePoints = points.some(({ date, isCompleted }) => date < scaleDates.start && !isCompleted);
   const leftArrowSize = isOverduePoints ? 7 : 5;
 
   const start = !isStartWithinScale && (isLineOutOfScaleRight ? scaleDates.end : scaleDates.start);
