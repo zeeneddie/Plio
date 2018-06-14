@@ -81,7 +81,7 @@ const TimelineChart = ({
   const scaleDates = getScaleDates(scaleType, partOfPastTime);
   const chartOptions = {
     scale: { x: 'time', y: 'linear' },
-    domainPadding: { x: [7, 7] },
+    domainPadding: { x: [8, 8] },
     padding: {
       top: 0,
       left: 0,
