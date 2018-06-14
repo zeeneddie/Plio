@@ -15,7 +15,7 @@ const TimelineChartWrapper = styled.div`
 
 const CurrentDateLine = styled.div.attrs({
   style: ({ partOfPastTime }) => ({
-    left: `${partOfPastTime * 100}%`,
+    left: `calc(${partOfPastTime * 100}% + 10px)`,
   }),
 })`
   height: 100%;
