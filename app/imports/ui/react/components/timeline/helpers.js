@@ -12,12 +12,13 @@ export const getTitleDX = (textAnchor) => {
 
 export const getLineCenter = (start, end) => new Date(start + (end - start) / 2);
 
-export const getScaleDates = (timeScale, partOfPastTime) => {
-  const MONTH_DAYS = 30;
-  const dayTimeScale = timeScale * MONTH_DAYS;
-  const daysBeforeToday = dayTimeScale * partOfPastTime;
-  const start = moment().subtract(daysBeforeToday, 'days');
-  const end = moment().add(dayTimeScale - daysBeforeToday, 'days');
+const currentDay = () => moment().startOf('day');
+
+export const getScaleDates = (monthScale, partOfPastTime) => {
+  const msScale = currentDay().add(monthScale, 'months').diff(currentDay(), 'ms');
+  const msBeforeToday = msScale * partOfPastTime;
+  const start = currentDay().subtract(msBeforeToday, 'ms');
+  const end = currentDay().add(msScale - msBeforeToday, 'ms');
   return {
     start: start.toDate(),
     end: end.toDate(),
