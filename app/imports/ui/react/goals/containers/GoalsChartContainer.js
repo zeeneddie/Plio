@@ -33,6 +33,11 @@ const getMilestonePoints = ({ _id: goalId, milestones, color }) => map((mileston
   };
 }, milestones);
 
+const cutLongTitle = title => {
+  const TITLE_MAX_LENGTH = 30;
+  return title.length > TITLE_MAX_LENGTH ? `${title.slice(0, TITLE_MAX_LENGTH)}...` : title;
+};
+
 const getActionPoints = ({ _id: goalId, actions, color }) => (
   map((action) => {
     const {
@@ -47,7 +52,7 @@ const getActionPoints = ({ _id: goalId, actions, color }) => (
       id: _id,
       date: toDate(moment(completionTargetDate).startOf('day')),
       userName: toBeCompletedBy.profile.fullName,
-      label: `Action: ${title} - ${getFormattedDate(completionTargetDate)}`,
+      label: `Action: ${cutLongTitle(title)} - ${getFormattedDate(completionTargetDate)}`,
       fill: getActionSymbolColor(status, color),
       symbol: TimelineSymbols.ACTION,
       isCompleted: status === ActionIndexes.COMPLETED,
