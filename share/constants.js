@@ -672,7 +672,6 @@ export const HomeScreenTitlesTypes = {
 };
 
 export const EmailsForPlioReporting = [
-  'james.ives@pliohub.com',
   'steve.ives@pliohub.com',
   'mike@jssolutionsdev.com',
 ];

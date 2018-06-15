@@ -118,8 +118,8 @@ export const getNotifications = () => [
       return (type === COMPLETE_UPDATE_OF_DOCUMENTS) &&
         ([ProblemTypes.NON_CONFORMITY, ProblemTypes.POTENTIAL_GAIN].includes(linkedDoc.type));
     },
-    text: '{{{userName}}} assigned you to do an approval related to {{{docDesc}}} {{{docName}}}',
-    title: 'You have been assigned to do an approval',
+    text: '{{{userName}}} assigned you to approve closing of {{{docDesc}}} {{{docName}}}',
+    title: 'Please approve closing of {{{docName}}}',
     sendBoth: true,
     emailTemplateData: getEmailTemplateData,
   },
@@ -128,8 +128,8 @@ export const getNotifications = () => [
       return (type === COMPLETE_UPDATE_OF_DOCUMENTS)
             && (linkedDoc.type === ProblemTypes.RISK);
     },
-    text: '{{{userName}}} assigned you to do an approval {{{docName}}}',
-    title: 'You have been assigned to do an approval',
+    text: '{{{userName}}} assigned you to approve closing of {{{docDesc}}} {{{docName}}}',
+    title: 'Please approve closing of {{{docName}}}',
     sendBoth: true,
     emailTemplateData: getEmailTemplateData,
   },

@@ -1,9 +1,16 @@
 <template name="Dashboard_Footer">
   <div class="dashboard-footer">
     <div class="dashboard-footer-buttons">
-      <a type="button" class="btn btn-secondary" href="{{supportForumUrl}}" target="_blank">
-        Support forum
-      </a>
+      {{#if canInviteUsers organizationId}}
+        <button type="button" class="btn btn-secondary" {{b "click: onInviteClick"}}>
+          <i class="fa fa-user-plus margin-right"></i>
+          Invite users
+        </button>
+      {{/if}}
+      <button type="button" class="btn btn-secondary" {{b "click: openAddNCModal"}}>
+        <i class="fa fa-plus margin-right"></i>
+        Report a non-conformity
+      </button>
       <a class="btn btn-secondary" href="{{pathFor 'helpDocs'}}">
         <i class="fa fa-question margin-right"></i>
         Help center

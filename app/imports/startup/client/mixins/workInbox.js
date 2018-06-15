@@ -18,7 +18,7 @@ export default {
     switch (type) {
       case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
         // nonconformity type is non-conformity
-        return `Closing of ${linkedDoc.type}`.replace('-', '');
+        return `Closing of this ${linkedDoc.type}`.replace('-', '');
       default:
         return capitalize(this.getTypeText({ type, linkedDoc })
           .replace(/^(complete|verify)\s/i, ''));
