@@ -8,6 +8,10 @@ import { CardBlock, Icon } from '../../components';
 
 const Wrapper = styled.div`
   min-height: 92px;
+
+  @media (max-width: 767px) {
+    min-height:auto;
+  }
 `;
 
 const DashboardCard = ({
