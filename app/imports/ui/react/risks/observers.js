@@ -10,20 +10,18 @@ import {
 } from '/imports/client/store/actions/collectionsActions';
 import { Risks } from '/imports/share/collections/risks';
 import { RiskTypes } from '/imports/share/collections/risk-types';
-import { expandCollapsedRisks } from './helpers';
 import { getState } from '/imports/client/store';
-import { propEq, getId } from '/imports/api/helpers';
+import { expandCollapsedRisks } from './helpers';
+import { propEq, getId, createStoreMutationObserver } from '../../../api/helpers';
 import { goTo } from '../../utils/router/actions';
 
-export const observeRisks = (dispatch, query, options) => {
-  const handle = Risks.find(query, options).observeChanges({
+export const observeRisks = createStoreMutationObserver(
+  dispatch => ({
     added(_id, fields) {
-      if (handle) {
-        dispatch(addRisk({ _id, ...fields }));
+      dispatch(addRisk({ _id, ...fields }));
 
-        if (fields.createdBy === getState('global.userId')) {
-          expandCollapsedRisks(_id);
-        }
+      if (fields.createdBy === getState('global.userId')) {
+        expandCollapsedRisks(_id);
       }
     },
     changed(_id, fields) {
@@ -47,17 +45,14 @@ export const observeRisks = (dispatch, query, options) => {
         goTo('risk')({ urlItemId });
       }
     },
-  });
+  }),
+  Risks,
+);
 
-  return handle;
-};
-
-export const observeRiskTypes = (dispatch, query, options) => {
-  const handle = RiskTypes.find(query, options).observeChanges({
+export const observeRiskTypes = createStoreMutationObserver(
+  dispatch => ({
     added(_id, fields) {
-      if (handle) {
-        dispatch(addRiskType({ _id, ...fields }));
-      }
+      dispatch(addRiskType({ _id, ...fields }));
     },
     changed(_id, fields) {
       dispatch(updateRiskType({ _id, ...fields }));
@@ -65,7 +60,6 @@ export const observeRiskTypes = (dispatch, query, options) => {
     removed(_id) {
       dispatch(removeRiskType(_id));
     },
-  });
-
-  return handle;
-};
+  }),
+  RiskTypes,
+);

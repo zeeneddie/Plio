@@ -31,7 +31,7 @@ const LinkItemList = ({ items, label }) => (
 );
 
 LinkItemList.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   items: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     title: PropTypes.string,

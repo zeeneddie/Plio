@@ -25,17 +25,18 @@ const CardBlockCollapse = enhance(({
   rightText,
   loading,
   children,
-  props: {
-    collapseBlock: { tag = 'div', ...collapseBlock } = {},
-    leftText: { className: lTextCx, ...lTextProps } = {},
-    rightText: { className: rTextCx, ...rTextProps } = {},
-  } = {},
+  props = {},
 }) => {
   let rightContent = null;
   const classNames = {
     head: 'card-block card-block-collapse-toggle',
     body: 'card-block-collapse',
   };
+  const {
+    collapseBlock: { tag = 'div', ...collapseBlock } = {},
+    leftText: { className: lTextCx, ...lTextProps } = {},
+    rightText: { className: rTextCx, ...rTextProps } = {},
+  } = props;
 
   if (loading) rightContent = <IconLoading />;
 

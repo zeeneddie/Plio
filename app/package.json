@@ -9,7 +9,7 @@
     "deploy-staging": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy staging.pliohub.com --settings settings-staging.json"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.46",
+    "@babel/runtime": "^7.0.0-beta.51",
     "@storybook/react-komposer": "^2.0.3",
     "apollo-cache-inmemory": "^1.1.5",
     "apollo-client": "^2.2.0",
@@ -47,7 +47,7 @@
     "lodash.set": "^4.3.2",
     "mammoth": "^1.0.3",
     "matches-selector": "^1.0.0",
-    "meteor-node-stubs": "^0.2.3",
+    "meteor-node-stubs": "^0.4.1",
     "moment-timezone": "^0.5.5",
     "npm": "^5.6.0",
     "path": "^0.12.7",

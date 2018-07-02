@@ -6,15 +6,14 @@ import {
 } from '/imports/client/store/actions/collectionsActions';
 import { getState } from '/imports/client/store';
 import { expandCollapsedCustomer } from '../helpers';
+import { createStoreMutationObserver } from '../../../../api/helpers';
 
-export default (dispatch) => {
-  const query = { isAdminOrg: { $ne: true } };
+const query = { isAdminOrg: { $ne: true } };
 
-  const handle = Organizations.find(query).observeChanges({
+export default dispatch => createStoreMutationObserver(
+  {
     added(_id, fields) {
-      if (handle) {
-        dispatch(addOrganization({ _id, ...fields }));
-      }
+      dispatch(addOrganization({ _id, ...fields }));
     },
 
     changed(_id, fields) {
@@ -28,7 +27,6 @@ export default (dispatch) => {
     removed(_id) {
       dispatch(removeOrganization(_id));
     },
-  });
-
-  return handle;
-};
+  },
+  Organizations,
+)(dispatch, query);

@@ -20,6 +20,7 @@ export { default as getTitlePrefix } from './getTitlePrefix';
 export { default as getSearchMatchText } from './getSearchMatchText';
 export { default as pickDocuments } from './pickDocuments';
 export { default as pickDeep } from './pickDeep';
+export { default as createStoreMutationObserver } from './createStoreMutationObserver';
 
 export const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
 

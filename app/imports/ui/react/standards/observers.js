@@ -14,21 +14,19 @@ import {
 import { Standards } from '/imports/share/collections/standards';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
-import { expandCollapsedStandard } from './helpers';
 import { getState } from '/imports/client/store';
-import { propEq, getId } from '/imports/api/helpers';
+import { propEq, getId, createStoreMutationObserver } from '../../../api/helpers';
+import { expandCollapsedStandard } from './helpers';
 import { goTo } from '../../utils/router/actions';
 
-export const observeStandards = (dispatch, query, options) => {
-  const observer = Standards.find(query, options).observeChanges({
+export const observeStandards = createStoreMutationObserver(
+  dispatch => ({
     added(_id, fields) {
-      if (observer) {
-        dispatch(addStandard({ _id, ...fields }));
+      dispatch(addStandard({ _id, ...fields }));
 
-        if (fields.createdBy === getState('global.userId')) {
-          // expand the section and type that are holding a newly created standard
-          expandCollapsedStandard(_id);
-        }
+      if (fields.createdBy === getState('global.userId')) {
+        // expand the section and type that are holding a newly created standard
+        expandCollapsedStandard(_id);
       }
     },
     changed(_id, fields) {
@@ -49,17 +47,14 @@ export const observeStandards = (dispatch, query, options) => {
         goTo('standard')({ urlItemId });
       }
     },
-  });
+  }),
+  Standards,
+);
 
-  return observer;
-};
-
-export const observeStandardBookSections = (dispatch, query, options) => {
-  const observer = StandardsBookSections.find(query, options).observeChanges({
+export const observeStandardBookSections = createStoreMutationObserver(
+  dispatch => ({
     added(_id, fields) {
-      if (observer) {
-        dispatch(addStandardBookSection({ _id, ...fields }));
-      }
+      dispatch(addStandardBookSection({ _id, ...fields }));
     },
     changed(_id, fields) {
       dispatch(updateStandardBookSection({ _id, ...fields }));
@@ -67,17 +62,14 @@ export const observeStandardBookSections = (dispatch, query, options) => {
     removed(_id) {
       dispatch(removeStandardBookSection(_id));
     },
-  });
+  }),
+  StandardsBookSections,
+);
 
-  return observer;
-};
-
-export const observeStandardTypes = (dispatch, query, options) => {
-  const observer = StandardTypes.find(query, options).observeChanges({
+export const observeStandardTypes = createStoreMutationObserver(
+  dispatch => ({
     added(_id, fields) {
-      if (observer) {
-        dispatch(addStandardType({ _id, ...fields }));
-      }
+      dispatch(addStandardType({ _id, ...fields }));
     },
     changed(_id, fields) {
       dispatch(updateStandardType({ _id, ...fields }));
@@ -85,7 +77,6 @@ export const observeStandardTypes = (dispatch, query, options) => {
     removed(_id) {
       dispatch(removeStandardType(_id));
     },
-  });
-
-  return observer;
-};
+  }),
+  StandardTypes,
+);
