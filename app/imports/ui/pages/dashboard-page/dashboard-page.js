@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { DashboardPageContainer } from '../../react/dashboard/containers';
+import { DashboardPageContainer } from '../../../client/react/dashboard/containers';
 
 Template.Dashboard_Page.viewmodel({
   mixin: ['organization'],

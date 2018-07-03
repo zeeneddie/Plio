@@ -8,7 +8,7 @@ import invoke from 'lodash.invoke';
 
 import { NonConformityFilters } from '/imports/api/constants';
 import { isMobileRes } from '/imports/api/checkers';
-import HeaderMenu from '/imports/ui/react/non-comformities/components/HeaderMenu';
+import HeaderMenu from '/imports/client/react/non-comformities/components/HeaderMenu';
 
 Template.NC_Header.viewmodel({
   mixin: ['nonconformity', 'organization', 'router'],

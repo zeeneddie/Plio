@@ -6,7 +6,7 @@ import { swal } from 'meteor/plio:bootstrap-sweetalert';
 
 import { inviteMultipleUsersByEmail } from '../../../../../api/organizations/methods';
 import { ALERT_AUTOHIDE_TIME } from '../../../../../api/constants';
-import UsersInviteForm from '../../../../react/forms/components/UsersInviteForm';
+import UsersInviteForm from '../../../../../client/react/forms/components/UsersInviteForm';
 
 const getEmails = compose(uniq, reject(isNil), pluck('value'));
 

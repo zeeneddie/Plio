@@ -3,7 +3,7 @@ import { lenses, withUncategorized, belongsToDepartment } from 'plio-util';
 
 import { getRisksFromProps } from './state';
 import { getDepartments } from '../departments';
-import { createUncategorizedDepartment } from '../../../../ui/react/risks/helpers';
+import { createUncategorizedDepartment } from '../../../../client/react/risks/helpers';
 
 // selector(risks: Array, departments: Array) => Array
 const selector = (risks, departments) => withUncategorized(

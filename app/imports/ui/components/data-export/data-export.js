@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import DataExport from '/imports/ui/react/data-export/containers/DataExportContainer';
+import DataExport from '/imports/client/react/data-export/containers/DataExportContainer';
 
 Template.DataExport.viewmodel({
   mixin: 'modal',

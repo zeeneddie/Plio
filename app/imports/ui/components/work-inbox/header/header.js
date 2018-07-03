@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { WorkInboxFilters } from '/imports/api/constants.js';
-import HeaderMenu from '/imports/ui/react/work-inbox/components/HeaderMenu';
+import HeaderMenu from '/imports/client/react/work-inbox/components/HeaderMenu';
 
 Template.WorkInbox_Header.viewmodel({
   mixin: 'workInbox',

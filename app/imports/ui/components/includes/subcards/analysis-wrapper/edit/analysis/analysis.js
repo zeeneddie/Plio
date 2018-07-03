@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import Analysis from '../../../../../../react/fields/edit/components/Analysis';
+import Analysis from '../../../../../../../client/react/fields/edit/components/Analysis';
 
 Template.Analysis_Edit.viewmodel({
   mixin: 'utils',

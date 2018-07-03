@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { lenses, lensEqById, withUncategorized } from 'plio-util';
 
 import { getStandardTypes } from '../standardTypes';
-import { createUncategorizedType } from '../../../../ui/react/standards/helpers';
+import { createUncategorizedType } from '../../../../client/react/standards/helpers';
 import { getStandardsFromProps } from './state';
 
 // selector(standards: Array, types: Array) => Array

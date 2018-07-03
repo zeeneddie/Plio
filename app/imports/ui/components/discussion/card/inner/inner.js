@@ -9,7 +9,7 @@ import { Meteor } from 'meteor/meteor';
 import store from '/imports/client/store';
 import { setUrlItemId, setUserId } from '/imports/client/store/actions/globalActions';
 import { setOrgId } from '/imports/client/store/actions/organizationsActions';
-import DiscussionContainer from '/imports/ui/react/discussion/containers/DiscussionContainer';
+import DiscussionContainer from '/imports/client/react/discussion/containers/DiscussionContainer';
 import { Organizations } from '/imports/share/collections/organizations';
 import {
   setOrganizations,

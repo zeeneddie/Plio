@@ -310,7 +310,7 @@ FlowRouter.route('/:orgSerialNumber/:route/:documentId/unsubscribe', {
   action: renderTransitionalLayout(async ({ documentId, route, orgSerialNumber }) => {
     const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
     const { default: UnsubscribeFromNotifications } =
-      await import('../../../ui/react/pages/components/Unsubscribe/Notifications');
+      await import('../../../client/react/pages/components/Unsubscribe/Notifications');
 
     return {
       content: (
@@ -325,7 +325,7 @@ FlowRouter.route('/:orgSerialNumber/unsubscribe', {
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action: renderTransitionalLayout(async ({ orgSerialNumber }) => {
     const { default: UnsubscribeFromDailyRecap } =
-      await import('../../../ui/react/pages/components/Unsubscribe/DailyRecap');
+      await import('../../../client/react/pages/components/Unsubscribe/DailyRecap');
 
     return {
       content: (
@@ -341,7 +341,7 @@ FlowRouter.route('/:orgSerialNumber/:route/:documentId/discussion/unsubscribe', 
   action: renderTransitionalLayout(async ({ documentId, route, orgSerialNumber }) => {
     const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
     const { default: UnsubscribeFromDiscussion } =
-      await import('../../../ui/react/pages/components/Unsubscribe/Discussion');
+      await import('../../../client/react/pages/components/Unsubscribe/Discussion');
 
     return {
       content: (

@@ -16,7 +16,7 @@ import department from './department';
 import discussions from './discussions';
 import filters from './filters';
 import iframe from './iframe';
-import index from './index';
+import index from '.';
 import magnitude from './magnitude';
 import members from './members';
 import messages from './messages';
