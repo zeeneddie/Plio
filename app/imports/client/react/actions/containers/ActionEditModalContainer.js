@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { withHandlers, pure, setPropTypes } from 'recompose';
 import { graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 
 import { Query, Mutation } from '../../../graphql';
 import { namedCompose } from '../../helpers';
@@ -9,10 +8,8 @@ import ActionEditModal from '../components/ActionEditModal';
 import { UserRoles } from '../../../../share/constants';
 import { getGeneralActionValuesByAction } from '../helpers';
 import { onDelete } from '../handlers';
-import { callAsync } from '../../components/Modal';
 
 // TODO: make this universal for all types of actions
-
 export default namedCompose('ActionEditModalContainer')(
   setPropTypes({
     goalId: PropTypes.string.isRequired,
@@ -22,7 +19,6 @@ export default namedCompose('ActionEditModalContainer')(
     }).isRequired,
   }),
   pure,
-  connect(),
   graphql(Query.ACTION_CARD, {
     options: ({ actionId }) => ({
       variables: {
@@ -46,7 +42,6 @@ export default namedCompose('ActionEditModalContainer')(
   }),
   graphql(Mutation.DELETE_ACTION, { name: Mutation.DELETE_ACTION.name }),
   withHandlers({
-    mutateWithState: ({ dispatch }) => mutate => dispatch(callAsync(() => mutate)),
     onDelete: ({
       goalId,
       action,

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { noop } from 'plio-util';
 
 import { EntityModal } from '../../components';
@@ -23,17 +23,24 @@ const MilestoneEditModal = ({
       initialValues,
       onDelete,
     }}
-    showSubmitBtn={false}
+    isEditMode
     title="Milestone"
     onSave={noop}
   >
-    <MilestoneEditFormContainer {...{ ...props, milestone }} />
+    {({ handleMutation }) => (
+      <Fragment>
+        <MilestoneEditFormContainer
+          {...{ ...props, milestone }}
+          mutateWithState={handleMutation}
+        />
 
-    {!loading && (
-      <MilestoneNotifySubcardContainer
-        milestoneId={milestone._id}
-        organizationId={props.organizationId}
-      />
+        {!loading && (
+          <MilestoneNotifySubcardContainer
+            milestoneId={milestone._id}
+            organizationId={props.organizationId}
+          />
+        )}
+      </Fragment>
     )}
   </EntityModal>
 );

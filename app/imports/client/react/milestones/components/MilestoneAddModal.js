@@ -20,7 +20,6 @@ const MilestoneAddModal = ({
       initialValues,
       onSave,
     }}
-    showSubmitBtn
     title="Milestone"
   >
     <MilestoneForm {...props} />

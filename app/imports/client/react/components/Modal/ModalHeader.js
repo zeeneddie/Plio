@@ -2,25 +2,24 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
 
-import CardHeadingButtons from './CardHeadingButtons';
-import { Pull } from './Utility';
+import CardHeadingButtons from '../CardHeadingButtons';
+import { Pull } from '../Utility';
 
 const ModalHeader = ({
   children,
   className,
   renderLeftButton,
   renderRightButton,
-  loading,
   ...props
 }) => (
   <div
-    className={cx('card-block card-heading modal-window-heading', className)}
     {...props}
+    className={cx('card-block card-heading modal-window-heading', className)}
   >
     {renderLeftButton && (
       <Pull left>
         <CardHeadingButtons>
-          {renderLeftButton({ loading, ...props })}
+          {renderLeftButton}
         </CardHeadingButtons>
       </Pull>
     )}
@@ -28,7 +27,7 @@ const ModalHeader = ({
     {renderRightButton && (
       <Pull right>
         <CardHeadingButtons>
-          {renderRightButton({ loading, ...props })}
+          {renderRightButton}
         </CardHeadingButtons>
       </Pull>
     )}
@@ -38,9 +37,8 @@ const ModalHeader = ({
 ModalHeader.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  renderLeftButton: PropTypes.func,
-  renderRightButton: PropTypes.func,
-  loading: PropTypes.bool,
+  renderLeftButton: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+  renderRightButton: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
 };
 
 export default ModalHeader;

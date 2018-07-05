@@ -3,7 +3,7 @@ import { branch, renderNothing } from 'recompose';
 import { identity, path, prop } from 'ramda';
 import { graphql } from 'react-apollo';
 
-import { namedCompose, withStateToggle } from '../../helpers';
+import { namedCompose } from '../../helpers';
 import GoalEditModal from '../components/GoalEditModal';
 import { Query, Mutation } from '../../../graphql';
 import { onDelete } from '../handlers';
@@ -51,5 +51,4 @@ export default namedCompose('GoalEditModalContainer')(
       }),
     }),
   ),
-  withStateToggle(false, 'isGuidancePanelOpen', 'toggleGuidancePanel'),
 )(GoalEditModal);

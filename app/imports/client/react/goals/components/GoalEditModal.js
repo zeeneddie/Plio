@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { CardTitle, Button } from 'reactstrap';
 import { onlyUpdateForKeys } from 'recompose';
 
@@ -7,6 +7,8 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  ModalProvider,
+  ErrorSection,
   CardBlock,
   SaveButton,
   TextAlign,
@@ -15,6 +17,7 @@ import {
 } from '../../components';
 import GoalEditContainer from '../containers/GoalEditContainer';
 import { GoalsHelp } from '../../../../api/help-messages';
+import { WithToggle } from '../../helpers';
 
 const enhance = onlyUpdateForKeys([
   'isOpen',
@@ -34,51 +37,65 @@ export const GoalEditModal = ({
   organizationId,
   onDelete,
   loading,
-  isGuidancePanelOpen,
-  toggleGuidancePanel,
-  guidance = GoalsHelp.goal,
+  guidanceText,
   activeGoal,
   canEditGoals,
 }) => (
-  <Modal {...{ isOpen, toggle, onClosed }}>
-    <ModalHeader
-      renderLeftButton={() => (
-        <GuidanceIcon isOpen={isGuidancePanelOpen} onClick={toggleGuidancePanel} />
+  <ModalProvider {...{ isOpen, toggle }}>
+    <Modal {...{ onClosed }}>
+      {modal => (
+        <WithToggle>
+          {guidance => (
+            <Fragment>
+              <ModalHeader
+                renderLeftButton={(
+                  <GuidanceIcon isOpen={guidance.isOpen} onClick={guidance.toggle} />
+                )}
+                renderRightButton={(
+                  <SaveButton
+                    onClick={toggle}
+                    color="secondary"
+                    isSaving={loading || modal.loading}
+                  >
+                    Close
+                  </SaveButton>
+                )}
+              >
+                <CardTitle>Key Goal</CardTitle>
+              </ModalHeader>
+              <ErrorSection errorText={modal.error} />
+              <ModalBody>
+                <GuidancePanel {...guidance}>
+                  {guidanceText}
+                </GuidancePanel>
+                <div>
+                  <GoalEditContainer
+                    {...{ organizationId, canEditGoals }}
+                    goalId={activeGoal}
+                    handleMutation={modal.handleMutation}
+                  />
+                  {onDelete && (
+                    <TextAlign center>
+                      <CardBlock>
+                        <Button onClick={onDelete}>
+                          Delete
+                        </Button>
+                      </CardBlock>
+                    </TextAlign>
+                  )}
+                </div>
+              </ModalBody>
+            </Fragment>
+          )}
+        </WithToggle>
       )}
-      renderRightButton={props => (
-        <SaveButton
-          onClick={toggle}
-          isSaving={loading || props.loading}
-          color="secondary"
-        >
-          Close
-        </SaveButton>
-      )}
-    >
-      <CardTitle>Key Goal</CardTitle>
-    </ModalHeader>
-    <ModalBody>
-      <GuidancePanel
-        isOpen={isGuidancePanelOpen}
-        toggle={toggleGuidancePanel}
-      >
-        {guidance}
-      </GuidancePanel>
-      <div>
-        <GoalEditContainer goalId={activeGoal} {...{ organizationId, canEditGoals }} />
-        {onDelete && (
-          <TextAlign center>
-            <CardBlock>
-              <Button onClick={onDelete}>
-                Delete
-              </Button>
-            </CardBlock>
-          </TextAlign>
-        )}
-      </div>
-    </ModalBody>
-  </Modal>
+    </Modal>
+  </ModalProvider>
 );
+
+GoalEditModal.defaultProps = {
+  guidanceText: GoalsHelp.goal,
+};
 
 GoalEditModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
@@ -87,9 +104,7 @@ GoalEditModal.propTypes = {
   organizationId: PropTypes.string.isRequired,
   onDelete: PropTypes.func,
   loading: PropTypes.bool,
-  guidance: PropTypes.node,
-  isGuidancePanelOpen: PropTypes.bool,
-  toggleGuidancePanel: PropTypes.func,
+  guidanceText: PropTypes.node,
   activeGoal: PropTypes.string,
   canEditGoals: PropTypes.bool,
 };

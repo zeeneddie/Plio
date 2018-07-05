@@ -20,7 +20,6 @@ const ActionAddModal = ({
       initialValues,
       onSave,
     }}
-    showSubmitBtn
     title="Action"
   >
     <NewActionForm {...props} />

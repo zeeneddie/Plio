@@ -24,11 +24,16 @@ const ActionEditModal = ({
       initialValues,
       onDelete,
     }}
-    showSubmitBtn={false}
+    isEditMode
     title="Action"
     onSave={noop}
   >
-    <GeneralActionEditFormContainer {...{ ...props, ...action }} />
+    {({ handleMutation }) => (
+      <GeneralActionEditFormContainer
+        {...{ ...props, ...action }}
+        mutateWithState={handleMutation}
+      />
+    )}
   </EntityModal>
 );
 

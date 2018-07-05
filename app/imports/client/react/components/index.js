@@ -7,6 +7,7 @@ export * from './Labels';
 export * from './timeline';
 export * from './subcards';
 export * from './styled';
+export * from './Modal';
 
 export { default as CardBlock } from './CardBlock';
 export { default as Collapse } from './Collapse';
@@ -17,9 +18,6 @@ export { default as ErrorSection } from './ErrorSection';
 export { default as DashboardStats } from './DashboardStats';
 export { default as DashboardStatsExpandable } from './DashboardStatsExpandable';
 export { default as CardHeadingButtons } from './CardHeadingButtons';
-export { default as Modal } from './Modal';
-export { default as ModalHeader } from './ModalHeader';
-export { default as ModalBody } from './ModalBody';
 export { default as LoadableDatePicker } from './LoadableDatePicker';
 export { default as ColorPicker } from './ColorPicker';
 export { default as ToggleComplete } from './ToggleComplete';

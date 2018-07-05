@@ -2,7 +2,6 @@ import { graphql } from 'react-apollo';
 import { flattenProp, branch, withProps, pure, renderNothing } from 'recompose';
 import { lenses, getTargetValue, toDate, getUserOptions, transformGoal, getValue } from 'plio-util';
 import { view, curry, compose, objOf, toUpper, prop, pick, identity } from 'ramda';
-import { connect } from 'react-redux';
 
 import {
   moveGoalWithinCacheAfterDeleting,
@@ -11,7 +10,6 @@ import {
 import { namedCompose } from '../../helpers';
 import GoalEdit from '../components/GoalEdit';
 import { Query, Fragment, Mutation } from '../../../graphql';
-import { callAsync } from '../../components/Modal';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 
 const update = (name, updateQuery) => (proxy, { data: { [name]: { goal } } }) => {
@@ -55,13 +53,13 @@ const props = curry((getInputArgs, {
   const {
     goal,
     organizationId,
-    dispatch,
+    handleMutation,
   } = ownProps;
 
   return {
     goal,
     organizationId,
-    [handler]: (...args) => dispatch(callAsync(() => mutate({
+    [handler]: (...args) => handleMutation(mutate({
       update: update(mutation, updateQuery),
       variables: {
         input: {
@@ -69,7 +67,7 @@ const props = curry((getInputArgs, {
           ...getInputArgs(...args, ownProps),
         },
       },
-    }))),
+    })),
   };
 });
 
@@ -88,7 +86,6 @@ const getCompleteGoalInputArgs = pick(['completionComment']);
 
 export default namedCompose('GoalEditContainer')(
   pure,
-  connect(),
   graphql(Query.GOAL_CARD, {
     options: ({ goalId }) => ({
       variables: { _id: goalId },

@@ -56,9 +56,9 @@
     "mongodb-memory-server": "^1.6.4",
     "pre-commit": "^1.2.2",
     "ramda": "^0.25.0",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-test-renderer": "^16.2.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-test-renderer": "^16.4.1",
     "styled-components": "^3.1.5"
   }
 }
