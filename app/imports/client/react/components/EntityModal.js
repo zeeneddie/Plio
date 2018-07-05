@@ -47,12 +47,16 @@ const EntityModal = ({
       submitError: true,
       submitting: true,
       initialValues: true,
+      active: true,
+      dirty: true,
     }}
   >
     {({
       handleSubmit,
       submitting,
       submitError,
+      active,
+      dirty,
       form,
     }) => (
       <Form onSubmit={handleSubmit} id={title}>
@@ -64,14 +68,24 @@ const EntityModal = ({
             {modal => (
               <Fragment>
                 <ModalHeader
-                  renderLeftButton={!isEditMode ? <Button onClick={toggle}>Close</Button> : null}
+                  renderLeftButton={isEditMode ? null : <Button onClick={toggle}>Close</Button>}
                   renderRightButton={(
                     <SaveButton
                       isSaving={loading || modal.loading || submitting}
-                      onClick={isEditMode ? toggle : undefined}
-                      color={!isEditMode ? 'primary' : 'secondary'}
+                      color={isEditMode ? 'secondary' : 'primary'}
                       type="submit"
                       form={title}
+                      onMouseDown={() => {
+                        // display saving state when clicking on "Close" button
+                        // while being focused on the input
+                        if (isEditMode) {
+                          if (active && dirty) {
+                            setTimeout(toggle, 200);
+                          } else {
+                            toggle();
+                          }
+                        }
+                      }}
                     >
                       {isEditMode ? 'Close' : 'Save'}
                     </SaveButton>
