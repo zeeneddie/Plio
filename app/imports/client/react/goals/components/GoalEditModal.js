@@ -1,23 +1,11 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
-import { CardTitle, Button } from 'reactstrap';
+import React from 'react';
 import { onlyUpdateForKeys } from 'recompose';
+import { noop } from 'plio-util';
 
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalProvider,
-  ErrorSection,
-  CardBlock,
-  SaveButton,
-  TextAlign,
-  GuidanceIcon,
-  GuidancePanel,
-} from '../../components';
+import { EntityModal } from '../../components';
 import GoalEditContainer from '../containers/GoalEditContainer';
 import { GoalsHelp } from '../../../../api/help-messages';
-import { WithToggle } from '../../helpers';
 
 const enhance = onlyUpdateForKeys([
   'isOpen',
@@ -33,64 +21,34 @@ const enhance = onlyUpdateForKeys([
 export const GoalEditModal = ({
   isOpen,
   toggle,
-  onClosed,
   organizationId,
   onDelete,
   loading,
   guidanceText,
   activeGoal,
   canEditGoals,
+  initialValues,
 }) => (
-  <ModalProvider {...{ isOpen, toggle }}>
-    <Modal {...{ onClosed }}>
-      {modal => (
-        <WithToggle>
-          {guidance => (
-            <Fragment>
-              <ModalHeader
-                renderLeftButton={(
-                  <GuidanceIcon isOpen={guidance.isOpen} onClick={guidance.toggle} />
-                )}
-                renderRightButton={(
-                  <SaveButton
-                    onClick={toggle}
-                    color="secondary"
-                    isSaving={loading || modal.loading}
-                  >
-                    Close
-                  </SaveButton>
-                )}
-              >
-                <CardTitle>Key Goal</CardTitle>
-              </ModalHeader>
-              <ErrorSection errorText={modal.error} />
-              <ModalBody>
-                <GuidancePanel {...guidance}>
-                  {guidanceText}
-                </GuidancePanel>
-                <div>
-                  <GoalEditContainer
-                    {...{ organizationId, canEditGoals }}
-                    goalId={activeGoal}
-                    handleMutation={modal.handleMutation}
-                  />
-                  {onDelete && (
-                    <TextAlign center>
-                      <CardBlock>
-                        <Button onClick={onDelete}>
-                          Delete
-                        </Button>
-                      </CardBlock>
-                    </TextAlign>
-                  )}
-                </div>
-              </ModalBody>
-            </Fragment>
-          )}
-        </WithToggle>
-      )}
-    </Modal>
-  </ModalProvider>
+  <EntityModal
+    {...{
+      isOpen,
+      toggle,
+      loading,
+      onDelete,
+      initialValues,
+    }}
+    isEditMode
+    title="Key Goal"
+    onSave={noop}
+    guidanceText={guidanceText}
+  >
+    {({ handleMutation }) => (
+      <GoalEditContainer
+        {...{ organizationId, canEditGoals, handleMutation }}
+        goalId={activeGoal}
+      />
+    )}
+  </EntityModal>
 );
 
 GoalEditModal.defaultProps = {
@@ -107,6 +65,7 @@ GoalEditModal.propTypes = {
   guidanceText: PropTypes.node,
   activeGoal: PropTypes.string,
   canEditGoals: PropTypes.bool,
+  initialValues: PropTypes.object,
 };
 
 export default enhance(GoalEditModal);

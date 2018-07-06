@@ -15,8 +15,11 @@ import {
   TextAlign,
   CardBlock,
   ErrorSection,
+  GuidanceIcon,
+  GuidancePanel,
 } from '../components';
 import { handleGQError } from '../../../api/handleGQError';
+import { WithToggle } from '../helpers';
 
 const enhance = withHandlers({
   onSave: ({ onSave }) => async (...args) => {
@@ -39,6 +42,7 @@ const EntityModal = ({
   initialValues,
   onDelete,
   resetFormStateOnError,
+  guidanceText,
 }) => (
   <FinalForm
     {...{ initialValues }}
@@ -66,47 +70,58 @@ const EntityModal = ({
         >
           <Modal>
             {modal => (
-              <Fragment>
-                <ModalHeader
-                  renderLeftButton={isEditMode ? null : <Button onClick={toggle}>Close</Button>}
-                  renderRightButton={(
-                    <SaveButton
-                      isSaving={loading || modal.loading || submitting}
-                      color={isEditMode ? 'secondary' : 'primary'}
-                      type="submit"
-                      form={title}
-                      onMouseDown={() => {
-                        // display saving state when clicking on "Close" button
-                        // while being focused on the input
-                        if (isEditMode) {
-                          if (active && dirty) {
-                            setTimeout(toggle, 200);
-                          } else {
-                            toggle();
-                          }
-                        }
-                      }}
+              <WithToggle>
+                {guidance => (
+                  <Fragment>
+                    <ModalHeader
+                      renderLeftButton={isEditMode ? guidanceText && (
+                        <GuidanceIcon isOpen={guidance.isOpen} onClick={guidance.toggle} />
+                      ) : <Button onClick={toggle}>Close</Button>}
+                      renderRightButton={(
+                        <SaveButton
+                          isSaving={loading || modal.loading || submitting}
+                          color={isEditMode ? 'secondary' : 'primary'}
+                          type="submit"
+                          form={title}
+                          onMouseDown={() => {
+                            // display saving state when clicking on "Close" button
+                            // while being focused on the input
+                            if (isEditMode) {
+                              if (active && dirty) {
+                                setTimeout(toggle, 200);
+                              } else {
+                                toggle();
+                              }
+                            }
+                          }}
+                        >
+                          {isEditMode ? 'Close' : 'Save'}
+                        </SaveButton>
+                      )}
                     >
-                      {isEditMode ? 'Close' : 'Save'}
-                    </SaveButton>
-                  )}
-                >
-                  <CardTitle>{title}</CardTitle>
-                </ModalHeader>
-                <ErrorSection errorText={submitError || modal.error} />
-                <ModalBody>
-                  {is(Function, children) ? children({ ...modal, form }) : children}
-                  {onDelete && (
-                    <TextAlign center>
-                      <CardBlock>
-                        <Button onClick={onDelete}>
-                          Delete
-                        </Button>
-                      </CardBlock>
-                    </TextAlign>
-                  )}
-                </ModalBody>
-              </Fragment>
+                      <CardTitle>{title}</CardTitle>
+                    </ModalHeader>
+                    <ErrorSection errorText={submitError || modal.error} />
+                    <ModalBody>
+                      {guidance && (
+                        <GuidancePanel {...guidance}>
+                          {guidanceText}
+                        </GuidancePanel>
+                      )}
+                      {is(Function, children) ? children({ ...modal, form }) : children}
+                      {onDelete && (
+                        <TextAlign center>
+                          <CardBlock>
+                            <Button onClick={onDelete}>
+                              Delete
+                            </Button>
+                          </CardBlock>
+                        </TextAlign>
+                      )}
+                    </ModalBody>
+                  </Fragment>
+                )}
+              </WithToggle>
             )}
           </Modal>
         </ModalProvider>
@@ -130,6 +145,7 @@ EntityModal.propTypes = {
   resetFormStateOnError: PropTypes.bool,
   onSave: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
+  guidanceText: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
 };
 
 export default enhance(EntityModal);

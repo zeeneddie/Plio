@@ -1,7 +1,8 @@
 import connectUI from 'redux-ui';
-import { branch, renderNothing } from 'recompose';
-import { identity, path, prop } from 'ramda';
+import { branch, renderNothing, pure } from 'recompose';
+import { identity, path, prop, pick, compose, over } from 'ramda';
 import { graphql } from 'react-apollo';
+import { getUserOptions, lenses } from 'plio-util';
 
 import { namedCompose } from '../../helpers';
 import GoalEditModal from '../components/GoalEditModal';
@@ -9,6 +10,7 @@ import { Query, Mutation } from '../../../graphql';
 import { onDelete } from '../handlers';
 
 export default namedCompose('GoalEditModalContainer')(
+  pure,
   connectUI(),
   branch(
     path(['ui', 'activeGoal']),
@@ -29,13 +31,31 @@ export default namedCompose('GoalEditModalContainer')(
         goal: { goal } = {},
       },
       ownProps: {
-        ui: { error, activeGoal },
+        ui: { activeGoal },
       },
     }) => ({
-      error,
       loading,
       activeGoal,
       goal,
+      initialValues: {
+        ...compose(
+          pick([
+            'title',
+            'description',
+            'startDate',
+            'endDate',
+            'priority',
+            'color',
+            'statusComment',
+            'completionComment',
+            'completedAt',
+            'owner',
+            'completedBy',
+          ]),
+          over(lenses.owner, getUserOptions),
+          over(lenses.completedBy, getUserOptions),
+        )(goal),
+      },
     }),
   }),
   graphql(Query.RISK_TYPE_LIST, {

@@ -1,6 +1,6 @@
 import { graphql } from 'react-apollo';
-import { flattenProp, branch, withProps, pure, renderNothing } from 'recompose';
-import { lenses, getTargetValue, toDate, getUserOptions, transformGoal, getValue } from 'plio-util';
+import { flattenProp, branch, pure, renderNothing } from 'recompose';
+import { lenses, getTargetValue, toDate, transformGoal, getValue } from 'plio-util';
 import { view, curry, compose, objOf, toUpper, prop, pick, identity } from 'ramda';
 
 import {
@@ -121,7 +121,7 @@ export default namedCompose('GoalEditContainer')(
   }),
   graphql(Mutation.UPDATE_GOAL_OWNER, {
     props: props(getUpdateOwnerInputArgs, {
-      handler: 'onChangeOwnerId',
+      handler: 'onChangeOwner',
       mutation: 'updateGoalOwner',
     }),
   }),
@@ -192,21 +192,4 @@ export default namedCompose('GoalEditContainer')(
       })(propsArg),
     }),
   ),
-  withProps(({ completedBy, owner, goal }) => ({
-    initialValues: {
-      completedBy: completedBy && getUserOptions(completedBy),
-      ownerId: getUserOptions(owner),
-      ...pick([
-        'title',
-        'description',
-        'startDate',
-        'endDate',
-        'priority',
-        'color',
-        'statusComment',
-        'completionComment',
-        'completedAt',
-      ], goal),
-    },
-  })),
 )(GoalEdit);

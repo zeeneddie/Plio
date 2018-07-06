@@ -6,8 +6,9 @@ import { Form, FormGroup, Button } from 'reactstrap';
 import { TextareaField, TextAlign } from '../../components';
 import ToggleComplete from '../../components/ToggleComplete';
 
-export const GoalCompleteForm = ({ onComplete }) => (
+export const GoalCompleteForm = ({ onComplete, initialValues }) => (
   <FinalForm
+    {...{ initialValues }}
     onSubmit={onComplete}
     subscription={{ submitting: true }}
     render={({ handleSubmit, submitting }) => (
@@ -36,6 +37,7 @@ export const GoalCompleteForm = ({ onComplete }) => (
 
 GoalCompleteForm.propTypes = {
   onComplete: PropTypes.func.isRequired,
+  initialValues: PropTypes.object.isRequired,
 };
 
 export default GoalCompleteForm;

@@ -35,12 +35,16 @@ export const GoalEdit = (props) => {
     organizationId,
     _id: goalId,
     canEditGoals,
+    completionComment,
+    isCompleted,
   } = props;
   return (
     <Fragment>
       <CardBlock>
         <GoalEditForm {...props} />
-        {onComplete && <GoalCompleteForm {...{ onComplete }} />}
+        {onComplete && !isCompleted && (
+          <GoalCompleteForm {...{ onComplete }} initialValues={{ completionComment }} />
+        )}
       </CardBlock>
       <GoalActionsSubcardContainer {...{ organizationId, goalId }} />
       <GoalMilestonesSubcardContainer {...{ goalId }} />

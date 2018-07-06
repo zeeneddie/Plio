@@ -22,7 +22,7 @@ export const GoalForm = ({
   sequentialId,
   onChangeTitle,
   onChangeDescription,
-  onChangeOwnerId,
+  onChangeOwner,
   onChangeStartDate,
   onChangeEndDate,
   onChangePriority,
@@ -50,10 +50,10 @@ export const GoalForm = ({
     <FormField>
       Owner
       <OrgUsersSelectInputContainer
-        name="ownerId"
+        name="owner"
         placeholder="Owner"
         component={SelectInputField}
-        onChange={onChangeOwnerId}
+        onChange={onChangeOwner}
         {...{ organizationId }}
       />
     </FormField>
@@ -97,7 +97,7 @@ GoalForm.propTypes = {
   sequentialId: PropTypes.string,
   onChangeTitle: PropTypes.func,
   onChangeDescription: PropTypes.func,
-  onChangeOwnerId: PropTypes.func,
+  onChangeOwner: PropTypes.func,
   onChangeStartDate: PropTypes.func,
   onChangeEndDate: PropTypes.func,
   onChangePriority: PropTypes.func,
