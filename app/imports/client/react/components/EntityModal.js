@@ -103,7 +103,7 @@ const EntityModal = ({
                     </ModalHeader>
                     <ErrorSection errorText={submitError || modal.error} />
                     <ModalBody>
-                      {guidance && (
+                      {guidanceText && (
                         <GuidancePanel {...guidance}>
                           {guidanceText}
                         </GuidancePanel>
