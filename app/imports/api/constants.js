@@ -337,6 +337,9 @@ export const Styles = {
       },
     },
   },
+  color: {
+    blue: '#0078d7',
+  },
 };
 /* eslint-enable max-len */
 
