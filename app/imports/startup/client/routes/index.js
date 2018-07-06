@@ -18,6 +18,7 @@ import {
   renderCustomers,
   renderHelpDocs,
   renderTransitionalLayout,
+  renderCanvasLayout,
   renderNcs,
   renderWorkInbox,
   renderUserDirectory,
@@ -351,4 +352,10 @@ FlowRouter.route('/:orgSerialNumber/:route/:documentId/discussion/unsubscribe', 
       ),
     };
   }),
+});
+
+FlowRouter.route('/:orgSerialNumber/canvas', {
+  name: 'canvas',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action: renderCanvasLayout(),
 });
