@@ -339,6 +339,7 @@ export const Styles = {
   },
   color: {
     blue: '#0078d7',
+    muted: '#818a91',
   },
 };
 /* eslint-enable max-len */
