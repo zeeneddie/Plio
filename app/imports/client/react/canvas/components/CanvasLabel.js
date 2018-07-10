@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import { ButtonDropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
+import { ButtonDropdown, DropdownMenu, DropdownToggle, Button, Tooltip } from 'reactstrap';
 
 import { WithToggle } from '../../helpers';
 
@@ -15,26 +15,39 @@ const CanvasLabel = ({
   children,
   label,
   ...props
-}) => (
-  <WithToggle>
-    {({ isOpen, toggle }) => (
-      <ButtonDropdown
-        dropup
-        group={false}
-        color="secondary"
-        size="sm"
-        {...{ ...props, isOpen, toggle }}
-      >
-        <DropdownToggle>
-          {label}
-        </DropdownToggle>
-        <StyledDropdownMenu>
-          {children}
-        </StyledDropdownMenu>
-      </ButtonDropdown>
-    )}
-  </WithToggle>
-);
+}) => {
+  const id = `Tooltip-${label}`;
+
+  return (
+    <WithToggle>
+      {({ isOpen, toggle }) => children ? (
+        <ButtonDropdown
+          dropup
+          group={false}
+          color="secondary"
+          size="sm"
+          {...{ ...props, isOpen, toggle }}
+        >
+          <DropdownToggle>
+            {label}
+          </DropdownToggle>
+          <StyledDropdownMenu>
+            {children}
+          </StyledDropdownMenu>
+        </ButtonDropdown>
+      ) : (
+        <Fragment>
+          <Button color="secondary" size="sm" {...{ ...props, id }}>
+            {label}
+          </Button>
+          <Tooltip placement="top" target={id} {...{ isOpen, toggle }}>
+            Hello World
+          </Tooltip>
+        </Fragment>
+      )}
+    </WithToggle>
+  );
+};
 
 CanvasLabel.propTypes = {
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),

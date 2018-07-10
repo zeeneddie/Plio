@@ -1,8 +1,22 @@
+import PropTypes from 'prop-types';
+import React from 'react';
 import styled from 'styled-components';
 
 import { Styles } from '../../../../api/constants';
+import { Icon } from '../../components';
 
-const CanvasLinkedItem = styled.div`
+const CanvasLinkedItem = ({ children, ...props }) => (
+  <span {...props}>
+    <Icon name="long-arrow-right" />
+    {children}
+  </span>
+);
+
+CanvasLinkedItem.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+};
+
+const StyledCanvasLinkedItem = styled(CanvasLinkedItem)`
   overflow: hidden;
   color: ${Styles.color.muted};
   margin-top: 2px;
@@ -15,4 +29,4 @@ const CanvasLinkedItem = styled.div`
   }
 `;
 
-export default CanvasLinkedItem;
+export default StyledCanvasLinkedItem;
