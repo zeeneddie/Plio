@@ -10,6 +10,7 @@ import CanvasSquareIcon from './CanvasSquareIcon';
 import CanvasSectionFooter from './CanvasSectionFooter';
 import CanvasSectionFooterLabels from './CanvasSectionFooterLabels';
 import CanvasLabel from './CanvasLabel';
+// import CanvasSectionHelp from './CanvasSectionHelp';
 
 const items = [
   { sequentialId: 'KG1', title: 'Finish ui design' },
@@ -24,6 +25,9 @@ const KeyActivities = () => (
       <h4>Key Activities</h4>
       <CanvasAddButton />
     </CanvasSectionHeading>
+    {/* <CanvasSectionHelp>
+      <p>What are the key activities we need to create our value propositions?</p>
+    </CanvasSectionHelp> */}
     <CanvasSectionItems>
       <CanvasSectionItem>
         <CanvasSquareIcon pink />

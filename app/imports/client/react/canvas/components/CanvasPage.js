@@ -14,35 +14,37 @@ import CostStructure from './CostStructure';
 import RevenueStreams from './RevenueStreams';
 
 const CanvasPage = () => (
-  <Canvas>
-    <CanvasRow twoThirds>
-      <CanvasCol md>
-        <KeyPartners />
-      </CanvasCol>
-      <CanvasCol md>
-        <KeyActivities />
-        <KeyResources />
-      </CanvasCol>
-      <CanvasCol md>
-        <ValuePropositions />
-      </CanvasCol>
-      <CanvasCol md>
-        <CustomerRelationships />
-        <Channels />
-      </CanvasCol>
-      <CanvasCol md>
-        <CustomerSegments />
-      </CanvasCol>
-    </CanvasRow>
-    <CanvasRow oneThird>
-      <CanvasCol sm>
-        <CostStructure />
-      </CanvasCol>
-      <CanvasCol sm>
-        <RevenueStreams />
-      </CanvasCol>
-    </CanvasRow>
-  </Canvas>
+  <div className="content scroll">
+    <Canvas>
+      <CanvasRow twoThirds>
+        <CanvasCol md>
+          <KeyPartners />
+        </CanvasCol>
+        <CanvasCol md>
+          <KeyActivities />
+          <KeyResources />
+        </CanvasCol>
+        <CanvasCol md>
+          <ValuePropositions />
+        </CanvasCol>
+        <CanvasCol md>
+          <CustomerRelationships />
+          <Channels />
+        </CanvasCol>
+        <CanvasCol md>
+          <CustomerSegments />
+        </CanvasCol>
+      </CanvasRow>
+      <CanvasRow oneThird>
+        <CanvasCol sm>
+          <CostStructure />
+        </CanvasCol>
+        <CanvasCol sm>
+          <RevenueStreams />
+        </CanvasCol>
+      </CanvasRow>
+    </Canvas>
+  </div>
 );
 
 export default CanvasPage;

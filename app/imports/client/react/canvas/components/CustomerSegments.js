@@ -10,6 +10,7 @@ import CanvasLinkedItem from './CanvasLinkedItem';
 import CanvasSectionFooter from './CanvasSectionFooter';
 import CanvasChartButton from './CanvasChartButton';
 import CanvasSectionFooterLabels from './CanvasSectionFooterLabels';
+// import CanvasSectionHelp from './CanvasSectionHelp';
 
 const CustomerSegments = () => (
   <CanvasSection>
@@ -17,6 +18,10 @@ const CustomerSegments = () => (
       <h4>Customer segments</h4>
       <CanvasAddButton />
     </CanvasSectionHeading>
+    {/* <CanvasSectionHelp>
+      <p>For whom are we creating value?</p>
+      <p>Who are our most important customers?</p>
+    </CanvasSectionHelp> */}
     <CanvasSectionItems>
       <CanvasSectionItem>
         <CanvasSquareIcon pink />

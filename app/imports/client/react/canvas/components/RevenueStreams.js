@@ -9,6 +9,7 @@ import CanvasSquareIcon from './CanvasSquareIcon';
 import CanvasSectionFooter from './CanvasSectionFooter';
 import CanvasChartButton from './CanvasChartButton';
 import CanvasSectionFooterLabels from './CanvasSectionFooterLabels';
+// import CanvasSectionHelp from './CanvasSectionHelp';
 
 const ValuePropositions = () => (
   <CanvasSection>
@@ -16,6 +17,10 @@ const ValuePropositions = () => (
       <h4>Cost structure</h4>
       <CanvasAddButton />
     </CanvasSectionHeading>
+    {/* <CanvasSectionHelp>
+      <p>From which channels and segments?</p>
+      <p>How much does each contribute to overall revenue?</p>
+    </CanvasSectionHelp> */}
     <CanvasSectionItems>
       <CanvasSectionItem>
         <CanvasSquareIcon pink />

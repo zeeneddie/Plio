@@ -13,6 +13,7 @@ import CanvasSectionFooter from './CanvasSectionFooter';
 import CanvasSectionFooterLabels from './CanvasSectionFooterLabels';
 import CanvasLabel from './CanvasLabel';
 import CanvasChartButton from './CanvasChartButton';
+// import CanvasSectionHelp from './CanvasSectionHelp';
 
 const goals = [
   { sequentialId: 'KG1', title: 'Finish UI design' },
@@ -31,6 +32,10 @@ const KeyPartners = () => (
       <h4>Key partners</h4>
       <CanvasAddButton />
     </CanvasSectionHeading>
+    {/* <CanvasSectionHelp>
+      <p>Who are our key partners/suppliers?</p>
+      <p>Which key resources do they provide?</p>
+    </CanvasSectionHelp> */}
     <CanvasSectionItems>
       <CanvasSectionItem>
         <CanvasSquareIcon yellow />

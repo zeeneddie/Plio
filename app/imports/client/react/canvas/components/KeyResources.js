@@ -17,6 +17,4 @@ const KeyResources = () => (
   </CanvasSection>
 );
 
-KeyResources.propTypes = {};
-
 export default KeyResources;

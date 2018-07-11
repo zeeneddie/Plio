@@ -9,6 +9,7 @@ import CanvasSquareIcon from './CanvasSquareIcon';
 import CanvasSectionFooter from './CanvasSectionFooter';
 import CanvasChartButton from './CanvasChartButton';
 import CanvasSectionFooterLabels from './CanvasSectionFooterLabels';
+// import CanvasSectionHelp from './CanvasSectionHelp';
 
 const ValuePropositions = () => (
   <CanvasSection>
@@ -16,6 +17,13 @@ const ValuePropositions = () => (
       <h4>Cost structure</h4>
       <CanvasAddButton />
     </CanvasSectionHeading>
+    {/* <CanvasSectionHelp>
+      <p>
+        What are the main elements of operational expense
+        {' '}
+        (including variable costs, inventory, WIP and capital assets)?
+      </p>
+    </CanvasSectionHelp> */}
     <CanvasSectionItems>
       <CanvasSectionItem>
         <CanvasSquareIcon pink />
