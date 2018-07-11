@@ -83,7 +83,7 @@
     top: 2px;
   }
 
-  &:not([data-toggle="buttons"]) > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  &:not([data-toggle="buttons"]):not([role="group"]) > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
     max-width: 100%;
     padding-right: 46px;
   }

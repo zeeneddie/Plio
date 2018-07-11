@@ -1,7 +1,14 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { ButtonDropdown, DropdownMenu, DropdownToggle, Button, Tooltip } from 'reactstrap';
+import {
+  ButtonDropdown,
+  DropdownMenu,
+  DropdownToggle,
+  Button,
+  Tooltip,
+  ButtonGroup,
+} from 'reactstrap';
 
 import { WithToggle } from '../../helpers';
 
@@ -14,6 +21,7 @@ const StyledDropdownMenu = styled(DropdownMenu)`
 const CanvasLabel = ({
   children,
   label,
+  tooltip,
   ...props
 }) => {
   const id = `Tooltip-${label}`;
@@ -36,14 +44,16 @@ const CanvasLabel = ({
           </StyledDropdownMenu>
         </ButtonDropdown>
       ) : (
-        <Fragment>
-          <Button color="secondary" size="sm" {...{ ...props, id }}>
+        <ButtonGroup {...props}>
+          <Button color="secondary" size="sm" {...{ id }}>
             {label}
           </Button>
-          <Tooltip placement="top" target={id} {...{ isOpen, toggle }}>
-            Hello World
-          </Tooltip>
-        </Fragment>
+          {tooltip && (
+            <Tooltip placement="top" target={id} {...{ isOpen, toggle }}>
+              {tooltip}
+            </Tooltip>
+          )}
+        </ButtonGroup>
       )}
     </WithToggle>
   );
@@ -52,6 +62,7 @@ const CanvasLabel = ({
 CanvasLabel.propTypes = {
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  tooltip: PropTypes.string,
 };
 
 const StyledCanvasLabel = styled(CanvasLabel)`

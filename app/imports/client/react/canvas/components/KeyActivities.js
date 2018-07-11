@@ -49,8 +49,8 @@ const KeyActivities = () => (
     <CanvasSectionFooter>
       <CanvasSectionFooterLabels>
         <ButtonGroup>
-          {items.map(({ sequentialId }) => (
-            <CanvasLabel key={sequentialId} label={sequentialId} />
+          {items.map(({ sequentialId, title }) => (
+            <CanvasLabel key={sequentialId} label={sequentialId} tooltip={title} />
           ))}
         </ButtonGroup>
       </CanvasSectionFooterLabels>
