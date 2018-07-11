@@ -6,38 +6,32 @@ import CanvasAddButton from './CanvasAddButton';
 import CanvasSectionItems from './CanvasSectionItems';
 import CanvasSectionItem from './CanvasSectionItem';
 import CanvasSquareIcon from './CanvasSquareIcon';
-import CanvasLinkedItem from './CanvasLinkedItem';
 import CanvasSectionFooter from './CanvasSectionFooter';
 import CanvasChartButton from './CanvasChartButton';
 import CanvasSectionFooterLabels from './CanvasSectionFooterLabels';
 
-const CustomerSegments = () => (
+const ValuePropositions = () => (
   <CanvasSection>
     <CanvasSectionHeading>
-      <h4>Customer segments</h4>
+      <h4>Cost structure</h4>
       <CanvasAddButton />
     </CanvasSectionHeading>
     <CanvasSectionItems>
       <CanvasSectionItem>
         <CanvasSquareIcon pink />
-        <span>
-          Pharmaceutical firms
-          <CanvasLinkedItem>
-            <span>Novel drug molecule for age-related diseases</span>
-          </CanvasLinkedItem>
-        </span>
+        <span>Staff costs (R&D, operational)</span>
+      </CanvasSectionItem>
+      <CanvasSectionItem>
+        <CanvasSquareIcon magenta />
+        <span>Outsourced contract research</span>
       </CanvasSectionItem>
       <CanvasSectionItem>
         <CanvasSquareIcon yellow />
-        <span>Biotechnology firms</span>
+        <span>Outsourced DNA sequencing</span>
       </CanvasSectionItem>
       <CanvasSectionItem>
-        <CanvasSquareIcon magenta />
-        <span>Genome diagnostic firms (23andme - licensing)</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon magenta />
-        <span>Mitochondrial disease clinicians</span>
+        <CanvasSquareIcon pink />
+        <span>Patenting costs</span>
       </CanvasSectionItem>
     </CanvasSectionItems>
     <CanvasSectionFooter>
@@ -47,4 +41,4 @@ const CustomerSegments = () => (
   </CanvasSection>
 );
 
-export default CustomerSegments;
+export default ValuePropositions;

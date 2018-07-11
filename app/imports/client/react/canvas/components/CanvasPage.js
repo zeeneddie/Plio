@@ -10,6 +10,8 @@ import ValuePropositions from './ValuePropositions';
 import CustomerRelationships from './CustomerRelationships';
 import Channels from './Channels';
 import CustomerSegments from './CustomerSegments';
+import CostStructure from './CostStructure';
+import RevenueStreams from './RevenueStreams';
 
 const CanvasPage = () => (
   <Canvas>
@@ -33,8 +35,12 @@ const CanvasPage = () => (
       </CanvasCol>
     </CanvasRow>
     <CanvasRow oneThird>
-      <CanvasCol sm>Hello World</CanvasCol>
-      <CanvasCol sm>Hello World</CanvasCol>
+      <CanvasCol sm>
+        <CostStructure />
+      </CanvasCol>
+      <CanvasCol sm>
+        <RevenueStreams />
+      </CanvasCol>
     </CanvasRow>
   </Canvas>
 );
