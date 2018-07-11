@@ -3,6 +3,8 @@ $gray:                      #55595c !default;
 $gray-light:                #818a91 !default;
 $gray-lighter:              #eceeef !default;
 $gray-lightest:             #f7f7f9 !default;
+$white: #fff !default;
+$black: #000 !default;
 
 $red-color: #E81123;
 $amber-color: #FF8C00;
@@ -50,7 +52,28 @@ $font-light: 'Segoe UI Light WestEuropean', 'Segoe UI Light', 'Segoe WP Light', 
 $font-semilight: 'Segoe UI Semilight WestEuropean', 'Segoe UI Semilight', 'Segoe WP Semilight', 'Segoe UI', 'Segoe WP', Tahoma, Arial, sans-serif;
 $font-regular: 'Segoe UI Regular WestEuropean', 'Segoe UI', 'Segoe WP', Tahoma, Arial, sans-serif;
 $font-semibold: 'Segoe UI Semibold WestEuropean', 'Segoe UI Semibold', 'Segoe WP Semibold', 'Segoe UI', 'Segoe WP', Tahoma, Arial, sans-serif;
+$font-size-base: 1rem !default; // Assumes the browser default, typically `16px`
+$font-size-lg: ($font-size-base * 1.25) !default;
+$font-size-sm: ($font-size-base * .875) !default;
 
 $navbar-background: #444;
 $navbar-height-standard: 50px;
 $navbar-height-branded: 80px;
+
+$border-radius: .25rem !default;
+$border-radius-lg: .3rem !default;
+$border-radius-sm: .2rem !default;
+
+$zindex-tooltip: 1070 !default;
+$tooltip-font-size: $font-size-sm !default;
+$tooltip-max-width: 200px !default;
+$tooltip-color: $white !default;
+$tooltip-bg: $black !default;
+$tooltip-border-radius: $border-radius !default;
+$tooltip-opacity: .9 !default;
+$tooltip-padding-y: .25rem !default;
+$tooltip-padding-x: .5rem !default;
+$tooltip-margin: 0 !default; 
+$tooltip-arrow-width: .8rem !default;
+$tooltip-arrow-height: .4rem !default;
+$tooltip-arrow-color: $tooltip-bg !default;
