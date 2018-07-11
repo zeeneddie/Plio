@@ -21,10 +21,12 @@ const ValuePropositions = () => (
       </CanvasSectionItem>
       <CanvasSectionItem>
         <CanvasSquareIcon magenta />
-        <span>Novel drug molecule for age-related diseases</span>
-        <CanvasLinkedItem>
-          Pharmaceutical firms
-        </CanvasLinkedItem>
+        <span>
+          Novel drug molecule for age-related diseases
+          <CanvasLinkedItem>
+            <span>Pharmaceutical firms</span>
+          </CanvasLinkedItem>
+        </span>
       </CanvasSectionItem>
       <CanvasSectionItem>
         <CanvasSquareIcon yellow />

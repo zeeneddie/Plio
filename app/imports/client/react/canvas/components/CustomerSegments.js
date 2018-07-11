@@ -20,7 +20,7 @@ const CustomerSegments = () => (
         <span>
           Pharmaceutical firms
           <CanvasLinkedItem>
-            Novel drug molecule for age-related diseases
+            <span>Novel drug molecule for age-related diseases</span>
           </CanvasLinkedItem>
         </span>
       </CanvasSectionItem>

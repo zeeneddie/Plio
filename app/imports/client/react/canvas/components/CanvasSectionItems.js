@@ -10,6 +10,11 @@ const CanvasSectionItems = styled.ul`
   padding: 0px ${CanvasStyles.sectionPadding};
   flex: 1;
   ${StyledMixins.scroll};
+
+  li span {
+    overflow: hidden;
+    display: block;
+  }
 `;
 
 export default CanvasSectionItems;

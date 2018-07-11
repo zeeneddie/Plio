@@ -6,10 +6,10 @@ import { Styles } from '../../../../api/constants';
 import { Icon } from '../../components';
 
 const CanvasLinkedItem = ({ children, ...props }) => (
-  <span {...props}>
+  <div {...props}>
     <Icon name="long-arrow-right" />
     {children}
-  </span>
+  </div>
 );
 
 CanvasLinkedItem.propTypes = {
