@@ -27,3 +27,5 @@ export { default as TextareaAdapter } from './TextareaAdapter';
 export { default as FieldCondition } from './FieldCondition';
 export { default as SwitchViewAdapter } from './SwitchViewAdapter';
 export { default as SelectInputAdapter } from './SelectInputAdapter';
+export { default as UserSelectInput } from './UserSelectInput';
+export { default as SelectRadioField } from './SelectRadioField';

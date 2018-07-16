@@ -1,5 +1,5 @@
-
-import React from 'react';
+import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
 import { DropdownItem, ButtonGroup } from 'reactstrap';
 import pluralize from 'pluralize';
 
@@ -14,6 +14,8 @@ import CanvasSectionFooterLabels from './CanvasSectionFooterLabels';
 import CanvasLabel from './CanvasLabel';
 import CanvasChartButton from './CanvasChartButton';
 // import CanvasSectionHelp from './CanvasSectionHelp';
+import KeyPartnerAddModal from './KeyPartnerAddModal';
+import { WithToggle } from '../../helpers';
 
 const goals = [
   { sequentialId: 'KG1', title: 'Finish UI design' },
@@ -26,11 +28,18 @@ const standards = [
   { issueNumber: '2.2.1.1', title: 'Due diligence' },
 ];
 
-const KeyPartners = () => (
+const KeyPartners = ({ organizationId }) => (
   <CanvasSection>
     <CanvasSectionHeading>
       <h4>Key partners</h4>
-      <CanvasAddButton />
+      <WithToggle>
+        {({ isOpen, toggle }) => (
+          <Fragment>
+            <KeyPartnerAddModal {...{ isOpen, toggle, organizationId }} />
+            <CanvasAddButton onClick={toggle} />
+          </Fragment>
+        )}
+      </WithToggle>
     </CanvasSectionHeading>
     {/* <CanvasSectionHelp>
       <p>Who are our key partners/suppliers?</p>
@@ -145,5 +154,9 @@ const KeyPartners = () => (
     </CanvasSectionFooter>
   </CanvasSection>
 );
+
+KeyPartners.propTypes = {
+  organizationId: PropTypes.string.isRequired,
+};
 
 export default KeyPartners;

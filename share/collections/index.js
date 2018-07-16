@@ -20,3 +20,4 @@ export * from './standards';
 export * from './work-items';
 export * from './goals';
 export * from './milestones';
+export * from './key-partners';

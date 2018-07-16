@@ -8,6 +8,7 @@ export * from './timeline';
 export * from './subcards';
 export * from './styled';
 export * from './Modal';
+export * from './FlowRouter';
 
 export { default as CardBlock } from './CardBlock';
 export { default as Collapse } from './Collapse';
@@ -34,3 +35,4 @@ export { default as Rect } from './Rect';
 export { default as Diamond } from './Diamond';
 export { default as StylessPopover } from './StylessPopover';
 export { default as EntityModal } from './EntityModal';
+export { default as RenderSwitch } from './RenderSwitch';

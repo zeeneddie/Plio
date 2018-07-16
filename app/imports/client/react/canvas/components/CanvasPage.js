@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import Canvas from './Canvas';
@@ -13,12 +14,12 @@ import CustomerSegments from './CustomerSegments';
 import CostStructure from './CostStructure';
 import RevenueStreams from './RevenueStreams';
 
-const CanvasPage = () => (
+const CanvasPage = ({ organizationId }) => (
   <div className="content scroll">
     <Canvas>
       <CanvasRow twoThirds>
         <CanvasCol md>
-          <KeyPartners />
+          <KeyPartners {...{ organizationId }} />
         </CanvasCol>
         <CanvasCol md>
           <KeyActivities />
@@ -46,5 +47,9 @@ const CanvasPage = () => (
     </Canvas>
   </div>
 );
+
+CanvasPage.propTypes = {
+  organizationId: PropTypes.string.isRequired,
+};
 
 export default CanvasPage;

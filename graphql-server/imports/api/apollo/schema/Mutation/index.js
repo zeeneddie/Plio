@@ -6,6 +6,7 @@ import Lesson from './Lesson.graphql';
 import Department from './Department.graphql';
 import User from './User.graphql';
 import Action from './Action.graphql';
+import KeyPartner from './KeyPartner.graphql';
 
 export default [
   Goal,
@@ -16,4 +17,5 @@ export default [
   Department,
   User,
   Action,
+  KeyPartner,
 ];

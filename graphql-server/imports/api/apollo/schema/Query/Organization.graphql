@@ -11,6 +11,6 @@ type CountsQueryPayload {
 }
 
 type Query {
-  organization(_id: ID!): Organization
+  organization(_id: ID, serialNumber: Int): Organization
   counts(organizationId: ID!): CountsQueryPayload
 }

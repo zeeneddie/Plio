@@ -21,7 +21,7 @@ describe('checkOrgMembership', () => {
     const args = { organizationId };
     const context = { userId };
 
-    await Organizations.insert({
+    const _id = await Organizations.insert({
       _id: organizationId,
       users: [{
         userId,
@@ -30,9 +30,10 @@ describe('checkOrgMembership', () => {
     });
 
     const actual = await checkOrgMembership()(next, root, args, context);
+    const expectedContext = { ...context, organization: await Organizations.findOne({ _id }) };
 
     expect(actual).toBe(true);
-    expect(next).toHaveBeenCalledWith(root, args, context);
+    expect(next).toHaveBeenCalledWith(root, args, expectedContext);
   });
 
   // it('throws', async () => {

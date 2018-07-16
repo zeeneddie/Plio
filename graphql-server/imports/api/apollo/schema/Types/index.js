@@ -11,6 +11,7 @@ import Milestone from './Milestone.graphql';
 import RiskType from './RiskType.graphql';
 import Standard from './Standard.graphql';
 import Department from './Department.graphql';
+import KeyPartner from './KeyPartner.graphql';
 
 export default [
   User,
@@ -26,4 +27,5 @@ export default [
   RiskType,
   Standard,
   Department,
+  KeyPartner,
 ];

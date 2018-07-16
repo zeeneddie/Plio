@@ -1,0 +1,17 @@
+import { applyMiddleware } from 'plio-util';
+import {
+  checkLoggedIn,
+  flattenInput,
+  checkOrgMembership,
+  keyPartnerInsertAfterware,
+} from '../../../../../share/middleware';
+
+export const resolver = async (root, args, context) =>
+  context.services.KeyPartnerService.insert(args, context);
+
+export default applyMiddleware(
+  checkLoggedIn(),
+  flattenInput(),
+  checkOrgMembership(),
+  keyPartnerInsertAfterware(),
+)(resolver);

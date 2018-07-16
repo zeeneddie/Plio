@@ -1,0 +1,8 @@
+query CurrentUserFullName {
+  user: me {
+    _id
+    profile {
+      fullName
+    }
+  }
+}

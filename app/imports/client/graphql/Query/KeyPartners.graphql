@@ -1,0 +1,3 @@
+# query KeyPartners($orgSerialNumber: Int!) {
+  
+# }

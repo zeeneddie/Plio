@@ -108,6 +108,7 @@ export const CollectionNames = {
   USERS: 'users',
   GOALS: 'Goals',
   MILESTONES: 'Milestones',
+  KEY_PARTNERS: 'KeyPartners',
 };
 
 export const DefaultRiskTypes = [
@@ -847,3 +848,14 @@ export const AWSDirectives = {
   HELP_DOC_FILES: 'helpDocFiles',
   GOAL_FILES: 'goalFiles',
 };
+
+export const Criticality = {
+  LOW: 1,
+  MEDIUM: 2,
+  HIGH: 3,
+  VERY_HIGH: 4,
+};
+
+export const LevelOfSpend = { ...Criticality };
+
+export const KeyPartnerColors = { ...GoalColors };

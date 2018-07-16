@@ -11,6 +11,7 @@ import Milestone from './Milestone';
 import RiskType from './RiskType';
 import Standard from './Standard';
 import Department from './Department';
+import KeyPartner from './KeyPartner';
 
 export default {
   ...User,
@@ -26,4 +27,5 @@ export default {
   ...RiskType,
   ...Standard,
   ...Department,
+  ...KeyPartner,
 };

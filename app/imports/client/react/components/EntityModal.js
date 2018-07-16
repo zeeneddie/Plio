@@ -43,6 +43,10 @@ const EntityModal = ({
   onDelete,
   resetFormStateOnError,
   guidanceText,
+  onEnter,
+  onExit,
+  onOpened,
+  onClosed,
 }) => (
   <FinalForm
     {...{ initialValues }}
@@ -68,7 +72,13 @@ const EntityModal = ({
           {...{ isOpen, toggle }}
           onError={() => resetFormStateOnError ? form.reset() : null}
         >
-          <Modal>
+          <Modal {...{
+            onEnter,
+            onExit,
+            onOpened,
+            onClosed,
+          }}
+          >
             {modal => (
               <WithToggle>
                 {guidance => (
@@ -146,6 +156,10 @@ EntityModal.propTypes = {
   onSave: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
   guidanceText: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+  onEnter: PropTypes.func,
+  onExit: PropTypes.func,
+  onOpened: PropTypes.func,
+  onClosed: PropTypes.func,
 };
 
 export default enhance(EntityModal);

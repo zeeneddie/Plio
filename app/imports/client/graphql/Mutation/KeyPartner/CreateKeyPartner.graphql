@@ -1,0 +1,7 @@
+mutation createKeyPartner($input: CreateKeyPartnerInput!) {
+  createKeyPartner(input: $input) {
+    keyPartner {
+      _id
+    }
+  }
+}

@@ -1,0 +1,17 @@
+type KeyPartnerPayload {
+  keyPartner: KeyPartner
+}
+
+input CreateKeyPartnerInput {
+  organizationId: ID!
+  title: String!
+  originatorId: ID!
+  color: String!
+  criticality: Int!
+  levelOfSpend: Int!
+  notes: String
+}
+
+type Mutation {
+  createKeyPartner(input: CreateKeyPartnerInput!): KeyPartnerPayload
+}
