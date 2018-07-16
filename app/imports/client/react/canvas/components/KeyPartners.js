@@ -28,6 +28,29 @@ const standards = [
   { issueNumber: '2.2.1.1', title: 'Due diligence' },
 ];
 
+const items = [
+  { _id: 1, title: 'Total Scientific Ltd', color: 'yellow' },
+  { _id: 2, title: 'Jackson Laboratory', color: 'magenta' },
+  { _id: 3, title: 'Boult (international patent lawyers)', color: 'pink' },
+  { _id: 4, title: 'Clinical & research collaborators', color: 'yellow' },
+  { _id: 5, title: 'Another item here', color: 'yellow' },
+  { _id: 6, title: 'Total Scientific Ltd', color: 'yellow' },
+  { _id: 7, title: 'Jackson Laboratory', color: 'magenta' },
+  { _id: 8, title: 'Boult (international patent lawyers)', color: 'pink' },
+  { _id: 9, title: 'Clinical & research collaborators', color: 'yellow' },
+  { _id: 10, title: 'Another item here', color: 'yellow' },
+  { _id: 11, title: 'Total Scientific Ltd', color: 'yellow' },
+  { _id: 12, title: 'Jackson Laboratory', color: 'magenta' },
+  { _id: 13, title: 'Boult (international patent lawyers)', color: 'pink' },
+  { _id: 14, title: 'Clinical & research collaborators', color: 'yellow' },
+  { _id: 15, title: 'Another item here', color: 'yellow' },
+  { _id: 16, title: 'Total Scientific Ltd', color: 'yellow' },
+  { _id: 17, title: 'Jackson Laboratory', color: 'magenta' },
+  { _id: 18, title: 'Boult (international patent lawyers)', color: 'pink' },
+  { _id: 19, title: 'Clinical & research collaborators', color: 'yellow' },
+  { _id: 20, title: 'Another item here', color: 'yellow' },
+];
+
 const KeyPartners = ({ organizationId }) => (
   <CanvasSection>
     <CanvasSectionHeading>
@@ -46,86 +69,12 @@ const KeyPartners = ({ organizationId }) => (
       <p>Which key resources do they provide?</p>
     </CanvasSectionHelp> */}
     <CanvasSectionItems>
-      <CanvasSectionItem>
-        <CanvasSquareIcon yellow />
-        <span>Total Scientific Ltd</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon magenta />
-        <span>Jackson Laboratory</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon pink />
-        <span>Boult (international patent lawyers)</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon yellow />
-        <span>Clinical & research collaborators</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon yellow />
-        <span>Another item here</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon yellow />
-        <span>Total Scientific Ltd</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon magenta />
-        <span>Jackson Laboratory</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon pink />
-        <span>Boult (international patent lawyers)</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon yellow />
-        <span>Clinical & research collaborators</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon yellow />
-        <span>Another item here</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon yellow />
-        <span>Total Scientific Ltd</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon magenta />
-        <span>Jackson Laboratory</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon pink />
-        <span>Boult (international patent lawyers)</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon yellow />
-        <span>Clinical & research collaborators</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon yellow />
-        <span>Another item here</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon yellow />
-        <span>Total Scientific Ltd</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon magenta />
-        <span>Jackson Laboratory</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon pink />
-        <span>Boult (international patent lawyers)</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon yellow />
-        <span>Clinical & research collaborators</span>
-      </CanvasSectionItem>
-      <CanvasSectionItem>
-        <CanvasSquareIcon yellow />
-        <span>Another item here</span>
-      </CanvasSectionItem>
+      {items.map(({ _id, title, color }) => (
+        <CanvasSectionItem data-id={_id} key={_id}>
+          <CanvasSquareIcon {...{ [color]: true }} />
+          <span>{title}</span>
+        </CanvasSectionItem>
+      ))}
     </CanvasSectionItems>
     <CanvasSectionFooter>
       <CanvasSectionFooterLabels>

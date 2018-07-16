@@ -7,7 +7,7 @@ import CanvasSectionItems from './CanvasSectionItems';
 import CanvasSectionItem from './CanvasSectionItem';
 import CanvasSquareIcon from './CanvasSquareIcon';
 import CanvasLinkedItem from './CanvasLinkedItem';
-import CanvasSectionHelp from './CanvasSectionHelp';
+// import CanvasSectionHelp from './CanvasSectionHelp';
 
 const ValuePropositions = () => (
   <CanvasSection>
@@ -15,12 +15,12 @@ const ValuePropositions = () => (
       <h4>Value propositions</h4>
       <CanvasAddButton />
     </CanvasSectionHeading>
-    <CanvasSectionHelp>
-      {/* eslint-disable react/no-unescaped-entities */}
+    {/* <CanvasSectionHelp>
+      eslint-disable react/no-unescaped-entities
       <p>Which of our customer's problems are we helping to solve?</p>
       <p>What does a winning value proposition look like, vs today's?</p>
-      {/* eslint-enable react/no-unescaped-entities */}
-    </CanvasSectionHelp>
+      eslint-enable react/no-unescaped-entities
+    </CanvasSectionHelp> */}
     <CanvasSectionItems>
       <CanvasSectionItem>
         <CanvasSquareIcon magenta />

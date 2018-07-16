@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import is from 'styled-is';
 
@@ -22,5 +23,9 @@ const CanvasSectionItem = styled.li`
     }
   `}
 `;
+
+CanvasSectionItem.propTypes = {
+  'data-id': PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+};
 
 export default CanvasSectionItem;
