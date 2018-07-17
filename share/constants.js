@@ -109,6 +109,7 @@ export const CollectionNames = {
   GOALS: 'Goals',
   MILESTONES: 'Milestones',
   KEY_PARTNERS: 'KeyPartners',
+  KEY_ACTIVITIES: 'KeyActivities',
 };
 
 export const DefaultRiskTypes = [
@@ -859,3 +860,5 @@ export const Criticality = {
 export const LevelOfSpend = { ...Criticality };
 
 export const KeyPartnerColors = { ...GoalColors };
+
+export const KeyActivityColors = { ...GoalColors };

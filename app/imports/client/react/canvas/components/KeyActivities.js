@@ -1,4 +1,5 @@
-import React from 'react';
+import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
 import { ButtonGroup } from 'reactstrap';
 
 import CanvasSection from './CanvasSection';
@@ -11,6 +12,8 @@ import CanvasSectionFooter from './CanvasSectionFooter';
 import CanvasSectionFooterLabels from './CanvasSectionFooterLabels';
 import CanvasLabel from './CanvasLabel';
 // import CanvasSectionHelp from './CanvasSectionHelp';
+import KeyActivityAddModal from './KeyActivityAddModal';
+import { WithToggle } from '../../helpers';
 
 const items = [
   { sequentialId: 'KG1', title: 'Finish ui design' },
@@ -19,11 +22,18 @@ const items = [
   { sequentialId: 'NC3', title: 'Brackets getting corroded' },
 ];
 
-const KeyActivities = () => (
+const KeyActivities = ({ organizationId }) => (
   <CanvasSection>
     <CanvasSectionHeading>
       <h4>Key Activities</h4>
-      <CanvasAddButton />
+      <WithToggle>
+        {({ isOpen, toggle }) => (
+          <Fragment>
+            <KeyActivityAddModal {...{ isOpen, toggle, organizationId }} />
+            <CanvasAddButton onClick={toggle} />
+          </Fragment>
+        )}
+      </WithToggle>
     </CanvasSectionHeading>
     {/* <CanvasSectionHelp>
       <p>What are the key activities we need to create our value propositions?</p>
@@ -61,5 +71,9 @@ const KeyActivities = () => (
     </CanvasSectionFooter>
   </CanvasSection>
 );
+
+KeyActivities.propTypes = {
+  organizationId: PropTypes.string.isRequired,
+};
 
 export default KeyActivities;

@@ -22,7 +22,7 @@ const CanvasPage = ({ organizationId }) => (
           <KeyPartners {...{ organizationId }} />
         </CanvasCol>
         <CanvasCol md>
-          <KeyActivities />
+          <KeyActivities {...{ organizationId }} />
           <KeyResources />
         </CanvasCol>
         <CanvasCol md>

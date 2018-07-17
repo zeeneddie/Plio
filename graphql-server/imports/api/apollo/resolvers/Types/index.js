@@ -12,6 +12,7 @@ import RiskType from './RiskType';
 import Standard from './Standard';
 import Department from './Department';
 import KeyPartner from './KeyPartner';
+import KeyActivity from './KeyActivity';
 
 export default {
   ...User,
@@ -28,4 +29,5 @@ export default {
   ...Standard,
   ...Department,
   ...KeyPartner,
+  ...KeyActivity,
 };

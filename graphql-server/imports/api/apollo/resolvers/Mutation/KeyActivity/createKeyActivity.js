@@ -7,14 +7,14 @@ import {
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, context) =>
-  context.services.KeyPartnerService.insert(args, context);
+  context.services.KeyActivityService.insert(args, context);
 
 export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkOrgMembership(),
   insertAfterware({
-    collection: 'KeyPartners',
-    key: 'keyPartner',
+    collection: 'KeyActivities',
+    key: 'keyActivity',
   }),
 )(resolver);

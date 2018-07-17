@@ -6,6 +6,7 @@ import Lesson from './Lesson';
 import Department from './Department';
 import Action from './Action';
 import KeyPartner from './KeyPartner';
+import KeyActivity from './KeyActivity';
 
 export default {
   ...Goal,
@@ -16,4 +17,5 @@ export default {
   ...Department,
   ...Action,
   ...KeyPartner,
+  ...KeyActivity,
 };

@@ -5,9 +5,9 @@ import {
   OrganizationIdSchema,
   idSchemaDoc,
 } from './schemas';
-import { StringLimits, KeyPartnerColors, Criticality, LevelOfSpend } from '../constants';
+import { StringLimits, KeyActivityColors } from '../constants';
 
-const KeyPartnerSchema = new SimpleSchema([
+const KeyActivitySchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
   {
@@ -24,17 +24,9 @@ const KeyPartnerSchema = new SimpleSchema([
     },
     color: {
       type: String,
-      allowedValues: Object.values(KeyPartnerColors),
-    },
-    criticality: {
-      type: Number,
-      allowedValues: Object.values(Criticality),
-    },
-    levelOfSpend: {
-      type: Number,
-      allowedValues: Object.values(LevelOfSpend),
+      allowedValues: Object.values(KeyActivityColors),
     },
   },
 ]);
 
-export default KeyPartnerSchema;
+export default KeyActivitySchema;

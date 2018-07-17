@@ -10,9 +10,8 @@ import {
   ColorPickerField,
   TextareaField,
 } from '../../components';
-import CriticalityField from './CriticalityField';
 
-const KeyPartnerForm = ({ organizationId }) => (
+const KeyActivityForm = ({ organizationId }) => (
   <CardBlock>
     <FormField>
       Title
@@ -35,22 +34,14 @@ const KeyPartnerForm = ({ organizationId }) => (
       <ColorPickerField name="color" />
     </FormField>
     <FormField>
-      Criticality
-      <CriticalityField name="criticality" />
-    </FormField>
-    <FormField>
-      Level of spend
-      <CriticalityField name="levelOfSpend" />
-    </FormField>
-    <FormField>
       Notes
       <TextareaField name="notes" placeholder="Notes" />
     </FormField>
   </CardBlock>
 );
 
-KeyPartnerForm.propTypes = {
+KeyActivityForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default KeyPartnerForm;
+export default KeyActivityForm;

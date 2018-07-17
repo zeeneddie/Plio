@@ -13,3 +13,4 @@ export { default as DiscussionService } from './discussion-service';
 export { default as MessageService } from './message-service';
 export { default as StandardService } from './standard-service';
 export { default as KeyPartnerService } from './key-partner-service';
+export { default as KeyActivityService } from './key-activity-service';

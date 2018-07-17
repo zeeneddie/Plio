@@ -21,3 +21,4 @@ export * from './work-items';
 export * from './goals';
 export * from './milestones';
 export * from './key-partners';
+export * from './key-activities';
