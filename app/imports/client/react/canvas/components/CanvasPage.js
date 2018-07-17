@@ -23,7 +23,7 @@ const CanvasPage = ({ organizationId }) => (
         </CanvasCol>
         <CanvasCol md>
           <KeyActivities {...{ organizationId }} />
-          <KeyResources />
+          <KeyResources {...{ organizationId }} />
         </CanvasCol>
         <CanvasCol md>
           <ValuePropositions />

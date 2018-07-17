@@ -13,6 +13,7 @@ import Standard from './Standard';
 import Department from './Department';
 import KeyPartner from './KeyPartner';
 import KeyActivity from './KeyActivity';
+import KeyResource from './KeyResource';
 
 export default {
   ...User,
@@ -30,4 +31,5 @@ export default {
   ...Department,
   ...KeyPartner,
   ...KeyActivity,
+  ...KeyResource,
 };

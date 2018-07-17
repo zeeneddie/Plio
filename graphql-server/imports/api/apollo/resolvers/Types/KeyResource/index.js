@@ -9,7 +9,7 @@ const {
 } = lenses;
 
 export default {
-  KeyActivity: {
+  KeyResource: {
     createdBy: loadUserById(view(createdBy)),
     updatedBy: loadUserById(view(updatedBy)),
     originator: loadUserById(view(originatorId)),

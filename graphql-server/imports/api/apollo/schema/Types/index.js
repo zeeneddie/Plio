@@ -13,6 +13,7 @@ import Standard from './Standard.graphql';
 import Department from './Department.graphql';
 import KeyPartner from './KeyPartner.graphql';
 import KeyActivity from './KeyActivity.graphql';
+import KeyResource from './KeyResource.graphql';
 
 export default [
   User,
@@ -30,4 +31,5 @@ export default [
   Department,
   KeyPartner,
   KeyActivity,
+  KeyResource,
 ];

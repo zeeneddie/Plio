@@ -1,0 +1,7 @@
+mutation createKeyResource($input: CreateKeyResourceInput!) {
+  createKeyResource(input: $input) {
+    keyResource {
+      _id
+    }
+  }
+}

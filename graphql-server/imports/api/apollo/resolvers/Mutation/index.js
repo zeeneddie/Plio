@@ -7,6 +7,7 @@ import Department from './Department';
 import Action from './Action';
 import KeyPartner from './KeyPartner';
 import KeyActivity from './KeyActivity';
+import KeyResource from './KeyResource';
 
 export default {
   ...Goal,
@@ -18,4 +19,5 @@ export default {
   ...Action,
   ...KeyPartner,
   ...KeyActivity,
+  ...KeyResource,
 };
