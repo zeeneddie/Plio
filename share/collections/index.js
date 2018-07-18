@@ -24,3 +24,4 @@ export * from './key-partners';
 export * from './key-activities';
 export * from './key-resources';
 export * from './cost-lines';
+export * from './customer-relationships';

@@ -112,6 +112,7 @@ export const CollectionNames = {
   KEY_ACTIVITIES: 'KeyActivities',
   KEY_RESOURCES: 'KeyResources',
   COST_LINES: 'CostLines',
+  CUSTOMER_RELATIONSHIPS: 'CustomerRelationships',
 };
 
 export const DefaultRiskTypes = [
@@ -868,3 +869,5 @@ export const KeyActivityColors = { ...GoalColors };
 export const KeyResourceColors = { ...GoalColors };
 
 export const CostLineColors = { ...GoalColors };
+
+export const CanvasColors = { ...GoalColors };

@@ -1,0 +1,15 @@
+type CustomerRelationship {
+  customerRelationship: CustomerRelationship
+}
+
+input CreateCustomerRelationshipInput {
+  organizationId: ID!
+  title: String!
+  originatorId: ID!
+  color: String!
+  notes: String
+}
+
+type Mutation {
+  createCustomerRelationship(input: CreateCustomerRelationshipInput!): CustomerRelationship
+}

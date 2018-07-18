@@ -29,7 +29,7 @@ const CanvasPage = ({ organizationId }) => (
           <ValuePropositions />
         </CanvasCol>
         <CanvasCol md>
-          <CustomerRelationships />
+          <CustomerRelationships {...{ organizationId }} />
           <Channels />
         </CanvasCol>
         <CanvasCol md>
