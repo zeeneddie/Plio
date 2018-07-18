@@ -9,6 +9,7 @@ import Action from './Action.graphql';
 import KeyPartner from './KeyPartner.graphql';
 import KeyActivity from './KeyActivity.graphql';
 import KeyResource from './KeyResource.graphql';
+import CostLine from './CostLine.graphql';
 
 export default [
   Goal,
@@ -22,4 +23,5 @@ export default [
   KeyPartner,
   KeyActivity,
   KeyResource,
+  CostLine,
 ];

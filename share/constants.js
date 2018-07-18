@@ -111,6 +111,7 @@ export const CollectionNames = {
   KEY_PARTNERS: 'KeyPartners',
   KEY_ACTIVITIES: 'KeyActivities',
   KEY_RESOURCES: 'KeyResources',
+  COST_LINES: 'CostLines',
 };
 
 export const DefaultRiskTypes = [
@@ -865,3 +866,5 @@ export const KeyPartnerColors = { ...GoalColors };
 export const KeyActivityColors = { ...GoalColors };
 
 export const KeyResourceColors = { ...GoalColors };
+
+export const CostLineColors = { ...GoalColors };

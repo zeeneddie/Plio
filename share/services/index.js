@@ -15,3 +15,4 @@ export { default as StandardService } from './standard-service';
 export { default as KeyPartnerService } from './key-partner-service';
 export { default as KeyActivityService } from './key-activity-service';
 export { default as KeyResourceService } from './key-resource-service';
+export { default as CostLineService } from './cost-line-service';

@@ -14,6 +14,7 @@ import Department from './Department';
 import KeyPartner from './KeyPartner';
 import KeyActivity from './KeyActivity';
 import KeyResource from './KeyResource';
+import CostLine from './CostLine';
 
 export default {
   ...User,
@@ -32,4 +33,5 @@ export default {
   ...KeyPartner,
   ...KeyActivity,
   ...KeyResource,
+  ...CostLine,
 };

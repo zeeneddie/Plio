@@ -8,6 +8,7 @@ import Action from './Action';
 import KeyPartner from './KeyPartner';
 import KeyActivity from './KeyActivity';
 import KeyResource from './KeyResource';
+import CostLine from './CostLine';
 
 export default {
   ...Goal,
@@ -20,4 +21,5 @@ export default {
   ...KeyPartner,
   ...KeyActivity,
   ...KeyResource,
+  ...CostLine,
 };
