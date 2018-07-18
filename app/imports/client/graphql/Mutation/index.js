@@ -10,6 +10,7 @@ import KeyActivity from './KeyActivity';
 import KeyResource from './KeyResource';
 import CostLine from './CostLine';
 import CustomerRelationship from './CustomerRelationship';
+import Channel from './Channel';
 
 export default {
   ...Goal,
@@ -24,4 +25,5 @@ export default {
   ...KeyResource,
   ...CostLine,
   ...CustomerRelationship,
+  ...Channel,
 };

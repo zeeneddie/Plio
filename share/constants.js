@@ -113,6 +113,7 @@ export const CollectionNames = {
   KEY_RESOURCES: 'KeyResources',
   COST_LINES: 'CostLines',
   CUSTOMER_RELATIONSHIPS: 'CustomerRelationships',
+  CHANNELS: 'Channels,',
 };
 
 export const DefaultRiskTypes = [

@@ -17,3 +17,4 @@ export { default as KeyActivityService } from './key-activity-service';
 export { default as KeyResourceService } from './key-resource-service';
 export { default as CostLineService } from './cost-line-service';
 export { default as CustomerRelationshipService } from './customer-relationship-service';
+export { default as ChannelService } from './channel-service';

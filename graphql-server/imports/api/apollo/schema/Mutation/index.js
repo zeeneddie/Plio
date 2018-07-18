@@ -11,6 +11,7 @@ import KeyActivity from './KeyActivity.graphql';
 import KeyResource from './KeyResource.graphql';
 import CostLine from './CostLine.graphql';
 import CustomerRelationship from './CustomerRelationship.graphql';
+import Channel from './Channel.graphql';
 
 export default [
   Goal,
@@ -26,4 +27,5 @@ export default [
   KeyResource,
   CostLine,
   CustomerRelationship,
+  Channel,
 ];

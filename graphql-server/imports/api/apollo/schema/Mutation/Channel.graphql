@@ -1,0 +1,15 @@
+type ChannelPayload {
+  channel: Channel
+}
+
+input CreateChannelInput {
+  organizationId: ID!
+  title: String!
+  originatorId: ID!
+  color: String!
+  notes: String
+}
+
+type Mutation {
+  createChannel(input: CreateChannelInput!): ChannelPayload
+}
