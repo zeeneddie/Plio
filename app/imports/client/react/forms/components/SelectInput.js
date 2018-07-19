@@ -64,6 +64,7 @@ export const SelectWrapper = styled.div`
   .Select-menu-outer {
     max-height: 494px;
     border: none;
+    z-index: 9999;
     & > .Select-menu {
       max-height: inherit;
       border: 1px solid #ccc;

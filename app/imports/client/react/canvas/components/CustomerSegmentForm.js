@@ -5,9 +5,9 @@ import { mapEntitiesToOptions } from 'plio-util';
 import { swal } from '../../../util';
 import { Query } from '../../../graphql';
 import CanvasForm from './CanvasForm';
-import { FormField, ApolloSelectInputField } from '../../components';
+import { FormField, ApolloSelectInputField, PercentInputField } from '../../components';
 
-const ValuePropositionForm = ({ organizationId }) => (
+const CustomerSegmentForm = ({ organizationId }) => (
   <CanvasForm {...{ organizationId }}>
     <FormField>
       Matched to
@@ -15,21 +15,25 @@ const ValuePropositionForm = ({ organizationId }) => (
         name="matchedTo"
         placeholder="Matched to"
         loadOptions={query => query({
-          query: Query.CUSTOMER_SEGMENT_LIST,
+          query: Query.VALUE_PROPOSITION_LIST,
           variables: { organizationId },
-        }).then(({ data: { customerSegments: { customerSegments } } }) => ({
+        }).then(({ data: { valuePropositions: { valuePropositions } } }) => ({
           options: [
             { label: 'None', value: undefined },
-            ...mapEntitiesToOptions(customerSegments),
+            ...mapEntitiesToOptions(valuePropositions),
           ],
         })).catch(swal.error)}
       />
     </FormField>
+    <FormField>
+      % of market size
+      <PercentInputField name="percentOfMarketSize" />
+    </FormField>
   </CanvasForm>
 );
 
-ValuePropositionForm.propTypes = {
+CustomerSegmentForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default ValuePropositionForm;
+export default CustomerSegmentForm;

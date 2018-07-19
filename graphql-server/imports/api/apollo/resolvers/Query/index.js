@@ -7,6 +7,8 @@ import Standard from './Standard';
 import Department from './Department';
 import Action from './Action';
 import Milestone from './Milestone';
+import ValueProposition from './ValueProposition';
+import CustomerSegment from './CustomerSegment';
 
 export default {
   ...User,
@@ -18,4 +20,6 @@ export default {
   ...Department,
   ...Action,
   ...Milestone,
+  ...ValueProposition,
+  ...CustomerSegment,
 };

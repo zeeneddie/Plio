@@ -19,3 +19,4 @@ export { default as CostLineService } from './cost-line-service';
 export { default as CustomerRelationshipService } from './customer-relationship-service';
 export { default as ChannelService } from './channel-service';
 export { default as ValuePropositionService } from './value-proposition-service';
+export { default as CustomerSegmentService } from './customer-segment-service';

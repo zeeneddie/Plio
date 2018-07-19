@@ -17,6 +17,7 @@ import KeyResource from './KeyResource';
 import CostLine from './CostLine';
 import CustomerRelationship from './CustomerRelationship';
 import ValueProposition from './ValueProposition';
+import CustomerSegment from './CustomerSegment';
 
 export default {
   ...User,
@@ -38,4 +39,5 @@ export default {
   ...CostLine,
   ...CustomerRelationship,
   ...ValueProposition,
+  ...CustomerSegment,
 };

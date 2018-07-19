@@ -1,0 +1,7 @@
+mutation createCustomerSegment($input: CreateCustomerSegmentInput!) {
+  createCustomerSegment(input: $input) {
+    customerSegment {
+      _id
+    }
+  }
+}

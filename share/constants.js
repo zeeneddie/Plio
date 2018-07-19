@@ -115,6 +115,7 @@ export const CollectionNames = {
   CUSTOMER_RELATIONSHIPS: 'CustomerRelationships',
   CHANNELS: 'Channels',
   VALUE_PROPOSITIONS: 'ValuePropositions',
+  CUSTOMER_SEGMENTS: 'CustomerSegments',
 };
 
 export const DefaultRiskTypes = [

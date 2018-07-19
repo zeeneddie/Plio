@@ -33,7 +33,7 @@ const CanvasPage = ({ organizationId }) => (
           <Channels {...{ organizationId }} />
         </CanvasCol>
         <CanvasCol md>
-          <CustomerSegments />
+          <CustomerSegments {...{ organizationId }} />
         </CanvasCol>
       </CanvasRow>
       <CanvasRow oneThird>

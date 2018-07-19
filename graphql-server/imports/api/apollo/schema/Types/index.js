@@ -18,6 +18,7 @@ import CostLine from './CostLine.graphql';
 import CustomerRelationship from './CustomerRelationship.graphql';
 import Channel from './Channel.graphql';
 import ValueProposition from './ValueProposition.graphql';
+import CustomerSegment from './CustomerSegment.graphql';
 
 export default [
   User,
@@ -40,4 +41,5 @@ export default [
   CustomerRelationship,
   Channel,
   ValueProposition,
+  CustomerSegment,
 ];

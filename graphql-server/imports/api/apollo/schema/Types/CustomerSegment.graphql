@@ -1,0 +1,19 @@
+type CustomerSegmentMatchedTo {
+  documentId: ID!
+  # could be union in future
+  document: ValueProposition
+}
+
+type CustomerSegment {
+  _id: ID!
+  organization: Organization!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime!
+  updatedBy: User!
+  title: String!
+  originator: User!
+  color: String!
+  notes: String
+  matchedTo: CustomerSegmentMatchedTo
+}

@@ -6,26 +6,27 @@ import { getUserOptions } from 'plio-util';
 import { CanvasColors, CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { EntityModal } from '../../components';
-import ValuePropositionForm from './ValuePropositionForm';
+import CustomerSegmentForm from './CustomerSegmentForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 
-const ValuePropositionAddModal = ({
+const CustomerSegmentAddModal = ({
   isOpen,
   toggle,
   organizationId,
 }) => (
   <Query query={Queries.CURRENT_USER_FULL_NAME} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
     {({ data: { user } }) => (
-      <Mutation mutation={Mutations.CREATE_VALUE_PROPOSITION}>
-        {createValueProposition => (
+      <Mutation mutation={Mutations.CREATE_CUSTOMER_SEGMENT}>
+        {createCustomerSegment => (
           <EntityModal
             {...{ isOpen, toggle }}
-            title="Value proposition"
+            title="Customer segment"
             initialValues={{
               originator: getUserOptions(user),
               title: '',
               color: CanvasColors.INDIGO,
               matchedTo: { label: 'None', value: undefined },
+              percentOfMarketSize: null,
               notes: '',
             }}
             onSave={({
@@ -34,10 +35,12 @@ const ValuePropositionAddModal = ({
               color,
               notes,
               matchedTo,
+              percentOfMarketSize,
             }) => {
               if (!title) throw new Error('title is required');
+              if (!percentOfMarketSize) throw new Error('% of market size is required');
 
-              return createValueProposition({
+              return createCustomerSegment({
                 variables: {
                   input: {
                     organizationId,
@@ -45,9 +48,10 @@ const ValuePropositionAddModal = ({
                     originatorId,
                     color,
                     notes,
+                    percentOfMarketSize,
                     matchedTo: matchedTo.value ? {
                       documentId: matchedTo.value,
-                      documentType: CanvasTypes.CUSTOMER_SEGMENT,
+                      documentType: CanvasTypes.VALUE_PROPOSITION,
                     } : undefined,
                   },
                 },
@@ -55,7 +59,7 @@ const ValuePropositionAddModal = ({
             }}
             // TODO: update cache
           >
-            <ValuePropositionForm {...{ organizationId }} />
+            <CustomerSegmentForm {...{ organizationId }} />
           </EntityModal>
         )}
       </Mutation>
@@ -63,10 +67,10 @@ const ValuePropositionAddModal = ({
   </Query>
 );
 
-ValuePropositionAddModal.propTypes = {
+CustomerSegmentAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
 };
 
-export default ValuePropositionAddModal;
+export default CustomerSegmentAddModal;

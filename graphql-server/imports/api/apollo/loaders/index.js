@@ -11,6 +11,8 @@ import Goal from './Goal';
 import RiskType from './RiskType';
 import Standard from './Standard';
 import Department from './Department';
+import ValueProposition from './ValueProposition';
+import CustomerSegment from './CustomerSegment';
 
 const loaders = {
   User,
@@ -24,6 +26,8 @@ const loaders = {
   RiskType,
   Standard,
   Department,
+  ValueProposition,
+  CustomerSegment,
 };
 
 export const createLoaders = ctx => reduce(
