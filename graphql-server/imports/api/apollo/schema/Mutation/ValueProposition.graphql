@@ -1,0 +1,21 @@
+type ValuePropositionPayload {
+  valueProposition: ValueProposition
+}
+
+input ValuePropositionMatchedToInput {
+  documentId: ID!
+  documentType: String!
+}
+
+input CreateValuePropositionInput {
+  organizationId: ID!
+  title: String!
+  originatorId: ID!
+  color: String!
+  notes: String
+  matchedTo: ValuePropositionMatchedToInput
+}
+
+type Mutation {
+  createValueProposition(input: CreateValuePropositionInput!): ValuePropositionPayload
+}

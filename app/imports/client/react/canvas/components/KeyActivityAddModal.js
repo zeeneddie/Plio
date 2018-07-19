@@ -6,7 +6,7 @@ import { getUserOptions } from 'plio-util';
 import { KeyPartnerColors } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { EntityModal } from '../../components';
-import KeyActivityForm from './KeyActivityForm';
+import CanvasForm from './CanvasForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 
 const KeyActivitiesAddModal = ({
@@ -49,7 +49,7 @@ const KeyActivitiesAddModal = ({
             }}
             // TODO: update cache
           >
-            <KeyActivityForm {...{ organizationId }} />
+            <CanvasForm {...{ organizationId }} />
           </EntityModal>
         )}
       </Mutation>

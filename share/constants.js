@@ -113,7 +113,8 @@ export const CollectionNames = {
   KEY_RESOURCES: 'KeyResources',
   COST_LINES: 'CostLines',
   CUSTOMER_RELATIONSHIPS: 'CustomerRelationships',
-  CHANNELS: 'Channels,',
+  CHANNELS: 'Channels',
+  VALUE_PROPOSITIONS: 'ValuePropositions',
 };
 
 export const DefaultRiskTypes = [
@@ -305,6 +306,18 @@ export const ProblemTypes = {
   NON_CONFORMITY: 'non-conformity',
   RISK: 'risk',
   POTENTIAL_GAIN: 'potential gain',
+};
+
+export const CanvasTypes = {
+  KEY_PARTNER: 'key-partner',
+  KEY_ACTIVITY: 'key-activity',
+  KEY_RESOURCE: 'key-resource',
+  VALUE_PROPOSITION: 'value-proposition',
+  CUSTOMER_RELATIONSHIP: 'customer-relationship',
+  CHANNEL: 'channel',
+  CUSTOMER_SEGMENT: 'customer-segment',
+  COST_LINE: 'cost-line',
+  REVENUE_STREAM: 'revenue-stream',
 };
 
 export const DocumentTypes = {

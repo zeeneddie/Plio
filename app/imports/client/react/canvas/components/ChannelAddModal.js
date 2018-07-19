@@ -6,7 +6,7 @@ import { getUserOptions } from 'plio-util';
 import { CanvasColors } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { EntityModal } from '../../components';
-import ChannelForm from './ChannelForm';
+import CanvasForm from './CanvasForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 
 const ChannelAddModal = ({
@@ -49,7 +49,7 @@ const ChannelAddModal = ({
             }}
             // TODO: update cache
           >
-            <ChannelForm {...{ organizationId }} />
+            <CanvasForm {...{ organizationId }} />
           </EntityModal>
         )}
       </Mutation>

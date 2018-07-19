@@ -3,28 +3,29 @@ import React from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions } from 'plio-util';
 
-import { KeyResourceColors } from '../../../../share/constants';
+import { CanvasColors, CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { EntityModal } from '../../components';
-import CanvasForm from './CanvasForm';
+import ValuePropositionForm from './ValuePropositionForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 
-const KeyActivitiesAddModal = ({
+const ValuePropositionAddModal = ({
   isOpen,
   toggle,
   organizationId,
 }) => (
   <Query query={Queries.CURRENT_USER_FULL_NAME} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
     {({ data: { user } }) => (
-      <Mutation mutation={Mutations.CREATE_KEY_RESOURCE}>
-        {createKeyResource => (
+      <Mutation mutation={Mutations.CREATE_VALUE_PROPOSITION}>
+        {createValueProposition => (
           <EntityModal
             {...{ isOpen, toggle }}
-            title="Key resource"
+            title="Value proposition"
             initialValues={{
               originator: getUserOptions(user),
               title: '',
-              color: KeyResourceColors.INDIGO,
+              color: CanvasColors.INDIGO,
+              matchedTo: { label: 'No customer segments available', value: undefined },
               notes: '',
             }}
             onSave={({
@@ -32,10 +33,11 @@ const KeyActivitiesAddModal = ({
               originator: { value: originatorId },
               color,
               notes,
+              matchedTo,
             }) => {
               if (!title) throw new Error('title is required');
 
-              return createKeyResource({
+              return createValueProposition({
                 variables: {
                   input: {
                     organizationId,
@@ -43,13 +45,17 @@ const KeyActivitiesAddModal = ({
                     originatorId,
                     color,
                     notes,
+                    matchedTo: matchedTo.value ? {
+                      documentId: matchedTo.value,
+                      documentType: CanvasTypes.CUSTOMER_SEGMENT,
+                    } : undefined,
                   },
                 },
               }).then(toggle);
             }}
             // TODO: update cache
           >
-            <CanvasForm {...{ organizationId }} />
+            <ValuePropositionForm {...{ organizationId }} />
           </EntityModal>
         )}
       </Mutation>
@@ -57,10 +63,10 @@ const KeyActivitiesAddModal = ({
   </Query>
 );
 
-KeyActivitiesAddModal.propTypes = {
+ValuePropositionAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
 };
 
-export default KeyActivitiesAddModal;
+export default ValuePropositionAddModal;

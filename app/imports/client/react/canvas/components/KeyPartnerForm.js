@@ -1,39 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { StringLimits } from '../../../../share/constants';
-import {
-  CardBlock,
-  FormField,
-  InputField,
-  UserSelectInput,
-  ColorPickerField,
-  TextareaField,
-} from '../../components';
+import { FormField } from '../../components';
 import CriticalityField from './CriticalityField';
+import CanvasForm from './CanvasForm';
 
 const KeyPartnerForm = ({ organizationId }) => (
-  <CardBlock>
-    <FormField>
-      Title
-      <InputField
-        name="title"
-        placeholder="Title"
-        maxLength={StringLimits.title.max}
-      />
-    </FormField>
-    <FormField>
-      Originator
-      <UserSelectInput
-        {...{ organizationId }}
-        name="originator"
-        placeholder="Originator"
-      />
-    </FormField>
-    <FormField>
-      Color
-      <ColorPickerField name="color" />
-    </FormField>
+  <CanvasForm {...{ organizationId }}>
     <FormField>
       Criticality
       <CriticalityField name="criticality" />
@@ -42,11 +15,7 @@ const KeyPartnerForm = ({ organizationId }) => (
       Level of spend
       <CriticalityField name="levelOfSpend" />
     </FormField>
-    <FormField>
-      Notes
-      <TextareaField name="notes" placeholder="Notes" />
-    </FormField>
-  </CardBlock>
+  </CanvasForm>
 );
 
 KeyPartnerForm.propTypes = {

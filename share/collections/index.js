@@ -26,3 +26,4 @@ export * from './key-resources';
 export * from './cost-lines';
 export * from './customer-relationships';
 export * from './channels';
+export * from './value-propositions';

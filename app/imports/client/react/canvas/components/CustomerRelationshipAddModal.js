@@ -6,7 +6,7 @@ import { getUserOptions } from 'plio-util';
 import { CanvasColors } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { EntityModal } from '../../components';
-import CustomerRelationshipForm from './CustomerRelationshipForm';
+import CanvasForm from './CanvasForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 
 const CustomerRelationshipAddModal = ({
@@ -49,7 +49,7 @@ const CustomerRelationshipAddModal = ({
             }}
             // TODO: update cache
           >
-            <CustomerRelationshipForm {...{ organizationId }} />
+            <CanvasForm {...{ organizationId }} />
           </EntityModal>
         )}
       </Mutation>

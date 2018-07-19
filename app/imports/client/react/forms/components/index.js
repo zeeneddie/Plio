@@ -30,3 +30,4 @@ export { default as SelectInputAdapter } from './SelectInputAdapter';
 export { default as UserSelectInput } from './UserSelectInput';
 export { default as SelectRadioField } from './SelectRadioField';
 export { default as PercentInputField } from './PercentInputField';
+export { default as ApolloSelectInputField } from './ApolloSelectInputField';

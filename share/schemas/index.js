@@ -6,3 +6,4 @@ export { default as KeyResourceSchema } from './key-resource-schema';
 export { default as CostLineSchema } from './cost-line-schema';
 export { default as CustomerRelationshipSchema } from './customer-relationship-schema';
 export { default as ChannelSchema } from './channel-schema';
+export { default as ValuePropositionSchema } from './value-proposition-schema';

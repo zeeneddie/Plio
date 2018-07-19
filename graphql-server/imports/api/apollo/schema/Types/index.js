@@ -17,6 +17,7 @@ import KeyResource from './KeyResource.graphql';
 import CostLine from './CostLine.graphql';
 import CustomerRelationship from './CustomerRelationship.graphql';
 import Channel from './Channel.graphql';
+import ValueProposition from './ValueProposition.graphql';
 
 export default [
   User,
@@ -38,4 +39,5 @@ export default [
   CostLine,
   CustomerRelationship,
   Channel,
+  ValueProposition,
 ];

@@ -16,6 +16,7 @@ import KeyActivity from './KeyActivity';
 import KeyResource from './KeyResource';
 import CostLine from './CostLine';
 import CustomerRelationship from './CustomerRelationship';
+import ValueProposition from './ValueProposition';
 
 export default {
   ...User,
@@ -36,4 +37,5 @@ export default {
   ...KeyResource,
   ...CostLine,
   ...CustomerRelationship,
+  ...ValueProposition,
 };

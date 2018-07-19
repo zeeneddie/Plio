@@ -11,7 +11,7 @@ import {
   TextareaField,
 } from '../../components';
 
-const KeyActivityForm = ({ organizationId }) => (
+const CanvasForm = ({ organizationId, children }) => (
   <CardBlock>
     <FormField>
       Title
@@ -33,6 +33,7 @@ const KeyActivityForm = ({ organizationId }) => (
       Color
       <ColorPickerField name="color" />
     </FormField>
+    {children}
     <FormField>
       Notes
       <TextareaField name="notes" placeholder="Notes" />
@@ -40,8 +41,9 @@ const KeyActivityForm = ({ organizationId }) => (
   </CardBlock>
 );
 
-KeyActivityForm.propTypes = {
+CanvasForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
+  children: PropTypes.node,
 };
 
-export default KeyActivityForm;
+export default CanvasForm;

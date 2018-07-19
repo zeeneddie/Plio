@@ -11,6 +11,7 @@ import KeyResource from './KeyResource';
 import CostLine from './CostLine';
 import CustomerRelationship from './CustomerRelationship';
 import Channel from './Channel';
+import ValueProposition from './ValueProposition';
 
 export default {
   ...Goal,
@@ -26,4 +27,5 @@ export default {
   ...CostLine,
   ...CustomerRelationship,
   ...Channel,
+  ...ValueProposition,
 };
