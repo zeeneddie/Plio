@@ -6,7 +6,7 @@ input GoalActionsInput {
   isDeleted: Boolean
 }
 
-type Goal {
+type Goal implements BaseEntity, PlioEntity {
   _id: ID!
   createdAt: DateTime!
   createdBy: User!

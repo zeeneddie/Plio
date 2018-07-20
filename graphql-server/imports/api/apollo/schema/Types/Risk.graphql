@@ -1,4 +1,4 @@
-type Risk {
+type Risk implements BaseEntity, PlioEntity {
   _id: ID!
   createdAt: DateTime!
   createdBy: User!

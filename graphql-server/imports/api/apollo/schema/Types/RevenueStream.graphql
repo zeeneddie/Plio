@@ -1,4 +1,4 @@
-type RevenueStream {
+type RevenueStream implements BaseEntity, CanvasEntity {
   _id: ID!
   organization: Organization!
   createdAt: DateTime!

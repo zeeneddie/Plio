@@ -1,4 +1,4 @@
-type KeyResource {
+type KeyResource implements BaseEntity, CanvasEntity {
   _id: ID!
   organization: Organization!
   createdAt: DateTime!

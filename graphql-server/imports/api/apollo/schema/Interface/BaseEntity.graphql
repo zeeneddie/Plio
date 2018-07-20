@@ -1,9 +1,7 @@
-type Department implements BaseEntity {
+interface BaseEntity {
   _id: ID!
   createdAt: DateTime!
   createdBy: User!
   updatedAt: DateTime
   updatedBy: User
-  organization: Organization!
-  title: String!
 }

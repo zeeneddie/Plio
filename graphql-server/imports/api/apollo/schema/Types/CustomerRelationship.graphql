@@ -1,4 +1,4 @@
-type CustomerRelationship {
+type CustomerRelationship implements BaseEntity, CanvasEntity {
   _id: ID!
   organization: Organization!
   createdAt: DateTime!

@@ -1,4 +1,4 @@
-type Milestone {
+type Milestone implements BaseEntity, PlioEntity {
   _id: ID!
   createdAt: DateTime!
   createdBy: User!

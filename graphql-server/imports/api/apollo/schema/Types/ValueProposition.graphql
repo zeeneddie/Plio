@@ -1,10 +1,10 @@
 type ValuePropositionMatchedTo {
   documentId: ID!
   # could be union in future
-  # document: CustomerSegment
+  document: CustomerSegment
 }
 
-type ValueProposition {
+type ValueProposition implements BaseEntity, CanvasEntity {
   _id: ID!
   organization: Organization!
   createdAt: DateTime!

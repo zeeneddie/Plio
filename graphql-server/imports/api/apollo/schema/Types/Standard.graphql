@@ -1,5 +1,5 @@
 # Incomplete
-type Standard {
+type Standard implements BaseEntity, PlioEntity {
   _id: ID!
   createdAt: DateTime!
   createdBy: User!

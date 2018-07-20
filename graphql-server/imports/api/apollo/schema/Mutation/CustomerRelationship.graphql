@@ -1,4 +1,4 @@
-type CustomerRelationship {
+type CustomerRelationshipPayload {
   customerRelationship: CustomerRelationship
 }
 
@@ -11,5 +11,5 @@ input CreateCustomerRelationshipInput {
 }
 
 type Mutation {
-  createCustomerRelationship(input: CreateCustomerRelationshipInput!): CustomerRelationship
+  createCustomerRelationship(input: CreateCustomerRelationshipInput!): CustomerRelationshipPayload
 }
