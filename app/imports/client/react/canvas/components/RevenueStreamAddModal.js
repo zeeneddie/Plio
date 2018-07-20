@@ -9,7 +9,7 @@ import { EntityModal } from '../../components';
 import RevenueStreamForm from './RevenueStreamForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 
-const ValuePropositionAddModal = ({
+const RevenueStreamAddModal = ({
   isOpen,
   toggle,
   organizationId,
@@ -67,10 +67,10 @@ const ValuePropositionAddModal = ({
   </Query>
 );
 
-ValuePropositionAddModal.propTypes = {
+RevenueStreamAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
 };
 
-export default ValuePropositionAddModal;
+export default RevenueStreamAddModal;
