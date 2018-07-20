@@ -41,7 +41,7 @@ const CanvasPage = ({ organizationId }) => (
           <CostStructure {...{ organizationId }} />
         </CanvasCol>
         <CanvasCol sm>
-          <RevenueStreams />
+          <RevenueStreams {...{ organizationId }} />
         </CanvasCol>
       </CanvasRow>
     </Canvas>

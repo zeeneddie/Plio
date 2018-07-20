@@ -28,3 +28,4 @@ export * from './customer-relationships';
 export * from './channels';
 export * from './value-propositions';
 export * from './customer-segments';
+export * from './revenue-streams';

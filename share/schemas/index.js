@@ -7,3 +7,4 @@ export { default as CostLineSchema } from './cost-line-schema';
 export { default as CustomerRelationshipSchema } from './customer-relationship-schema';
 export { default as ValuePropositionSchema } from './value-proposition-schema';
 export { default as CustomerSegmentSchema } from './customer-segment-schema';
+export { default as RevenueStreamSchema } from './revenue-stream-schema';

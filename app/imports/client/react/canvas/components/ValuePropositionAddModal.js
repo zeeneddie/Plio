@@ -9,6 +9,8 @@ import { EntityModal } from '../../components';
 import ValuePropositionForm from './ValuePropositionForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 
+window.Queries = Queries;
+
 const ValuePropositionAddModal = ({
   isOpen,
   toggle,
@@ -51,9 +53,11 @@ const ValuePropositionAddModal = ({
                     } : undefined,
                   },
                 },
+                refetchQueries: [
+                  { query: Queries.VALUE_PROPOSITION_LIST, variables: { organizationId } },
+                ],
               }).then(toggle);
             }}
-            // TODO: update cache
           >
             <ValuePropositionForm {...{ organizationId }} />
           </EntityModal>

@@ -116,6 +116,7 @@ export const CollectionNames = {
   CHANNELS: 'Channels',
   VALUE_PROPOSITIONS: 'ValuePropositions',
   CUSTOMER_SEGMENTS: 'CustomerSegments',
+  REVENUE_STREAMS: 'RevenueStreams',
 };
 
 export const DefaultRiskTypes = [

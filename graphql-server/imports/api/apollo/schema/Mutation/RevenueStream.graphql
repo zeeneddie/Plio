@@ -1,0 +1,17 @@
+type RevenueStreamPayload {
+  revenueStream: RevenueStream
+}
+
+input CreateRevenueStreamInput {
+  organizationId: ID!
+  title: String!
+  originatorId: ID!
+  color: String!
+  percentOfRevenue: Int!
+  percentOfProfit: Int!
+  notes: String
+}
+
+type Mutation {
+  createRevenueStream(input: CreateRevenueStreamInput!): RevenueStreamPayload
+}

@@ -18,6 +18,7 @@ import CostLine from './CostLine';
 import CustomerRelationship from './CustomerRelationship';
 import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
+import RevenueStream from './RevenueStream';
 
 export default {
   ...User,
@@ -40,4 +41,5 @@ export default {
   ...CustomerRelationship,
   ...ValueProposition,
   ...CustomerSegment,
+  ...RevenueStream,
 };

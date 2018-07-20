@@ -3,30 +3,28 @@ import React from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions } from 'plio-util';
 
-import { CanvasColors, CanvasTypes } from '../../../../share/constants';
+import { CanvasColors } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { EntityModal } from '../../components';
-import CustomerSegmentForm from './CustomerSegmentForm';
+import RevenueStreamForm from './RevenueStreamForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 
-const CustomerSegmentAddModal = ({
+const ValuePropositionAddModal = ({
   isOpen,
   toggle,
   organizationId,
 }) => (
   <Query query={Queries.CURRENT_USER_FULL_NAME} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
     {({ data: { user } }) => (
-      <Mutation mutation={Mutations.CREATE_CUSTOMER_SEGMENT}>
-        {createCustomerSegment => (
+      <Mutation mutation={Mutations.CREATE_REVENUE_STREAM}>
+        {createRevenueStream => (
           <EntityModal
             {...{ isOpen, toggle }}
-            title="Customer segment"
+            title="Revenue stream"
             initialValues={{
               originator: getUserOptions(user),
               title: '',
               color: CanvasColors.INDIGO,
-              matchedTo: { label: 'None', value: undefined },
-              percentOfMarketSize: null,
               notes: '',
             }}
             onSave={({
@@ -34,17 +32,18 @@ const CustomerSegmentAddModal = ({
               originator: { value: originatorId },
               color,
               notes,
-              matchedTo,
-              percentOfMarketSize,
+              percentOfRevenue,
+              percentOfProfit,
             }) => {
               const errors = [];
 
               if (!title) errors.push('title is required');
-              if (!percentOfMarketSize) errors.push('% of market size is required');
+              if (!percentOfRevenue) errors.push('% of revenue is required');
+              if (!percentOfProfit) errors.push('% of profit is required');
 
               if (errors.length) throw new Error(errors.join('\n'));
 
-              return createCustomerSegment({
+              return createRevenueStream({
                 variables: {
                   input: {
                     organizationId,
@@ -52,20 +51,15 @@ const CustomerSegmentAddModal = ({
                     originatorId,
                     color,
                     notes,
-                    percentOfMarketSize,
-                    matchedTo: matchedTo.value ? {
-                      documentId: matchedTo.value,
-                      documentType: CanvasTypes.VALUE_PROPOSITION,
-                    } : undefined,
+                    percentOfRevenue,
+                    percentOfProfit,
                   },
                 },
-                refetchQueries: [
-                  { query: Queries.CUSTOMER_SEGMENT_LIST, variables: { organizationId } },
-                ],
               }).then(toggle);
             }}
+            // TODO: update cache
           >
-            <CustomerSegmentForm {...{ organizationId }} />
+            <RevenueStreamForm {...{ organizationId }} />
           </EntityModal>
         )}
       </Mutation>
@@ -73,10 +67,10 @@ const CustomerSegmentAddModal = ({
   </Query>
 );
 
-CustomerSegmentAddModal.propTypes = {
+ValuePropositionAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
 };
 
-export default CustomerSegmentAddModal;
+export default ValuePropositionAddModal;
