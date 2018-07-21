@@ -10,12 +10,12 @@ const CanvasLayout = () => (
   <ApolloProvider {...{ client }}>
     <FlowRouterContext getParam="orgSerialNumber">
       {({ orgSerialNumber }) => (
-        <Query query={Queries.CANVAS_PAGE} variables={{ orgSerialNumber }}>
+        <Query query={Queries.CANVAS_LAYOUT} variables={{ orgSerialNumber }}>
           {({ loading, error, data }) => (
             <RenderSwitch
               {...{ loading, error }}
               require={data && data.organization}
-              renderLoading={() => <PreloaderPage />}
+              renderLoading={<PreloaderPage />}
               // TODO: handle errors
             >
               {({ _id: organizationId }) => (

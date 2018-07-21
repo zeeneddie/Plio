@@ -1,0 +1,8 @@
+type KeyPartnersQueryPayload {
+  totalCount: Int
+  keyPartners: [KeyPartner]
+}
+
+type Query {
+  keyPartners(organizationId: ID!): KeyPartnersQueryPayload
+}

@@ -51,9 +51,11 @@ const KeyPartnerAddModal = ({
                     notes,
                   },
                 },
+                refetchQueries: [
+                  { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                ],
               }).then(toggle);
             }}
-            // TODO: update cache
           >
             <KeyPartnerForm {...{ organizationId }} />
           </EntityModal>

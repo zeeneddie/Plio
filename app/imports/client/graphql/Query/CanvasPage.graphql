@@ -1,12 +1,9 @@
-query CanvasPage($orgSerialNumber: Int!) {
-  me {
-    _id
-    profile {
-      fullName
+query CanvasPage($organizationId: ID!) {
+  keyPartners(organizationId: $organizationId) {
+    keyPartners {
+      _id
+      title
+      color
     }
-  }
-
-  organization(serialNumber: $orgSerialNumber) {
-    _id
   }
 }

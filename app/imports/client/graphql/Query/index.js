@@ -18,7 +18,8 @@ import GOAL_LIST from './GoalList.graphql';
 import MILESTONE_CARD from './MilestoneCard.graphql';
 import ACTION_CARD from './ActionCard.graphql';
 import MILESTONE_NOTIFY_CARD from './MilestoneNotifyCard.graphql';
-// import KEY_PARTNERS from './KeyPartners.graphql';
+import KEY_PARTNERS from './KeyPartners.graphql';
+import CANVAS_LAYOUT from './CanvasLayout.graphql';
 import CANVAS_PAGE from './CanvasPage.graphql';
 import CURRENT_USER_FULL_NAME from './CurrentUserFullName.graphql';
 import VALUE_PROPOSITION_LIST from './ValuePropositionList.graphql';
@@ -45,8 +46,9 @@ export default {
   MILESTONE_CARD,
   ACTION_CARD,
   MILESTONE_NOTIFY_CARD,
+  CANVAS_LAYOUT,
   CANVAS_PAGE,
-  // KEY_PARTNERS,
+  KEY_PARTNERS,
   CURRENT_USER_FULL_NAME,
   VALUE_PROPOSITION_LIST,
   CUSTOMER_SEGMENT_LIST,

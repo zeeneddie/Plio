@@ -16,7 +16,7 @@ const RenderSwitch = ({
 
   if (!require) {
     if (loading) {
-      return renderLoading();
+      return is(Function, renderLoading) ? renderLoading() : renderLoading;
     }
 
     if (errorWhenMissing) {
@@ -33,7 +33,7 @@ RenderSwitch.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorWhenMissing: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   renderError: PropTypes.func,
-  renderLoading: PropTypes.func,
+  renderLoading: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
   require: PropTypes.any,
 };
 

@@ -9,6 +9,7 @@ import Action from './Action.graphql';
 import Milestone from './Milestone.graphql';
 import ValueProposition from './ValueProposition.graphql';
 import CustomerSegment from './CustomerSegment.graphql';
+import KeyPartner from './KeyPartner.graphql';
 
 export default [
   User,
@@ -22,4 +23,5 @@ export default [
   Milestone,
   ValueProposition,
   CustomerSegment,
+  KeyPartner,
 ];

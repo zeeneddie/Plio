@@ -9,6 +9,7 @@ import Action from './Action';
 import Milestone from './Milestone';
 import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
+import KeyPartner from './KeyPartner';
 
 export default {
   ...User,
@@ -22,4 +23,5 @@ export default {
   ...Milestone,
   ...ValueProposition,
   ...CustomerSegment,
+  ...KeyPartner,
 };
