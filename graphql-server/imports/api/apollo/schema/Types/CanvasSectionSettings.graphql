@@ -1,0 +1,3 @@
+type SectionSettings {
+  order: [String]!
+}

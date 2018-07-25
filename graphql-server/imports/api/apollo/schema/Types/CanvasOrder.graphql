@@ -1,5 +1,0 @@
-type CanvasOrder implements BaseEntity {
-  _id: ID!
-  sectionType: String!
-  order: [ID]!
-}

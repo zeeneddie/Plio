@@ -4,13 +4,11 @@ import { checkLoggedIn, checkOrgMembership } from '../../../../../share/middlewa
 export const resolver = async (
   root,
   { organizationId },
-  { collections: { CanvasOrders } },
+  { collections: { CanvasSettings } },
 ) => {
-  const cursor = CanvasOrders.find({ organizationId });
+  const canvasSettings = CanvasSettings.findOne({ organizationId });
 
-  return {
-    canvasOrders: cursor.fetch(),
-  };
+  return { canvasSettings };
 };
 
 export default applyMiddleware(

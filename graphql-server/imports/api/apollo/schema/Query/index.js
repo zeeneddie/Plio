@@ -10,7 +10,7 @@ import Milestone from './Milestone.graphql';
 import ValueProposition from './ValueProposition.graphql';
 import CustomerSegment from './CustomerSegment.graphql';
 import KeyPartner from './KeyPartner.graphql';
-import CanvasOrder from './CanvasOrder.graphql';
+import CanvasSettings from './CanvasSettings.graphql';
 
 export default [
   User,
@@ -25,5 +25,5 @@ export default [
   ValueProposition,
   CustomerSegment,
   KeyPartner,
-  CanvasOrder,
+  CanvasSettings,
 ];

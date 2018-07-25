@@ -10,7 +10,7 @@ import Milestone from './Milestone';
 import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
 import KeyPartner from './KeyPartner';
-import CanvasOrder from './CanvasOrder';
+import CanvasSettings from './CanvasSettings';
 
 export default {
   ...User,
@@ -25,5 +25,5 @@ export default {
   ...ValueProposition,
   ...CustomerSegment,
   ...KeyPartner,
-  ...CanvasOrder,
+  ...CanvasSettings,
 };

@@ -1,9 +1,36 @@
+#import "../Fragment/SectionSettings.graphql"
+
 query CanvasPage($organizationId: ID!) {
-  canvasOrders(organizationId: $organizationId) {
-    canvasOrders {
+  CanvasSettings(organizationId: $organizationId) {
+    CanvasSettings {
       _id
-      sectionType
-      order
+      keyPartners {
+        ...SectionSettings
+      }
+      keyActivities {
+        ...SectionSettings
+      }
+      keyResources {
+        ...SectionSettings
+      }
+      valuePropositions {
+        ...SectionSettings
+      }
+      customerRelationships {
+        ...SectionSettings
+      }
+      channels {
+        ...SectionSettings
+      }
+      customerSegments {
+        ...SectionSettings
+      }
+      costStructure {
+        ...SectionSettings
+      }
+      revenueStreams {
+        ...SectionSettings
+      }
     }
   }
   keyPartners(organizationId: $organizationId) {

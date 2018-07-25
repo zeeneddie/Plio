@@ -1,0 +1,12 @@
+type Canvas implements BaseEntity {
+  _id: ID!
+  keyPartners: SectionSettings
+  keyActivities: SectionSettings
+  keyResources: SectionSettings
+  valuePropositions: SectionSettings
+  customerRelationships: SectionSettings
+  channels: SectionSettings
+  customerSegments: SectionSettings
+  costStructure: SectionSettings
+  revenueStreams: SectionSettings
+}
