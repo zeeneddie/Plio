@@ -1,0 +1,7 @@
+type CanvasOrdersQueryPayload {
+  canvasOrders: [CanvasOrder]
+}
+
+type Query {
+  canvasOrders(organizationId: ID!): CanvasOrdersQueryPayload
+}
