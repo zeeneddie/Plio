@@ -1,4 +1,11 @@
 query CanvasPage($organizationId: ID!) {
+  canvasOrders(organizationId: $organizationId) {
+    canvasOrders {
+      _id
+      sectionType
+      order
+    }
+  }
   keyPartners(organizationId: $organizationId) {
     keyPartners {
       _id

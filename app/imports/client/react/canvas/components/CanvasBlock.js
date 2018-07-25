@@ -46,7 +46,7 @@ const CanvasBlock = ({
               {help}
             </CanvasSectionHelp>
           )}
-          <CanvasSectionItems>
+          <CanvasSectionItems onChange={console.log}>
             {items.map(({ _id, title, color }) => (
               <CanvasSectionItem data-id={_id} key={_id}>
                 <CanvasSquareIcon {...{ color }} />
