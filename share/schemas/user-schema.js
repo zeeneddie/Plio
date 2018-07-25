@@ -10,6 +10,7 @@ const PhoneNumberSchema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id,
   },
   number: {
+    label: 'Phone number',
     type: String,
     regEx: /^[\+|0-9][0-9\-\s\(\)]+$/,
   },

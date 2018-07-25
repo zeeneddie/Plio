@@ -2,7 +2,7 @@ import { $ } from 'meteor/jquery';
 
 import { setIsFullScreenMode } from '/imports/client/store/actions/globalActions';
 
-export default onToggleScreenMode = props => e => {
+export default onToggleScreenMode = props => (e) => {
   const $div = $(e.target).closest('.content-cards-inner');
   const offset = $div.offset();
 

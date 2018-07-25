@@ -1,0 +1,9 @@
+fragment CompletedDeletedGoal on Goal {
+  _id
+  isDeleted
+  isCompleted
+  title
+  sequentialId
+  deletedAt
+  completedAt
+}

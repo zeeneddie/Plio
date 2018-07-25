@@ -23,7 +23,7 @@ Template.Select_Single.viewmodel({
       }
     },
     function () {
-      const selected = this.selected()
+      const selected = this.selected();
 
       if (!this.loading() && !this.focused() && _.isFunction(this.getAllItems)) {
         const selectedItem = this.getAllItems().find(({ _id }) => _id === selected);
@@ -102,16 +102,18 @@ Template.Select_Single.viewmodel({
   getData() {
     const { value, selected, items } = this.data();
     const item = this.getSelectedItem();
-    return { value, selected, items, item };
+    return {
+      value, selected, items, item,
+    };
   },
   getContentData() {
     return { ...this.getData(), ...this.contentData() };
   },
   events: {
-    'click input'(e) {
+    'click input': function (e) {
       if (this.dropdown.is('.open')) {
         e.stopPropagation();
       }
-    }
-  }
+    },
+  },
 });

@@ -1,6 +1,4 @@
 import { Template } from 'meteor/templating';
-import { ViewModel } from 'meteor/manuel:viewmodel';
-import invoke from 'lodash.invoke';
 
 import { StringLimits } from '/imports/share/constants.js';
 
@@ -27,36 +25,20 @@ Template.TitleInput.viewmodel({
 
     const { onFocusOut = () => {} } = this.templateInstance.data;
 
-    const handler = (e) => {
-      const val = e.target.value;
-
-      if (!val) {
-        invoke(
-          ViewModel.findOne('ModalWindow'),
-          'setError',
-          'Title is required!'
-        );
-
-        this.value(value);
-
-        this.value.changed();
-
-        return this.value();
-      }
-
-      if (Object.is(val, value)) return;
-
-      return withFocusCheck
-        ? this.callWithFocusCheck(e, () => onFocusOut(e, { value: val }))
-        : onFocusOut(e, { value: val });
-    };
-
     return {
       value,
       className,
       placeholder,
       maxLength,
-      onFocusOut: handler,
+      onFocusOut: (e) => {
+        const targetValue = e.target.value;
+
+        if (value === targetValue) return false;
+
+        return withFocusCheck
+          ? this.callWithFocusCheck(e, () => onFocusOut(e, { value: targetValue }))
+          : onFocusOut(e, { value: targetValue });
+      },
     };
   },
 });

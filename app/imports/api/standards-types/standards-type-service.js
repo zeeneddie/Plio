@@ -1,24 +1,28 @@
-import { StandardTypes } from '/imports/share/collections/standards-types.js';
+import { StandardTypes } from '/imports/share/collections/standards-types';
 
-
-export default StandardsTypeService = {
-
+export default {
   collection: StandardTypes,
-
-  insert({ title, abbreviation, organizationId, createdBy }) {
+  insert({
+    title,
+    abbreviation,
+    organizationId,
+    createdBy,
+    isDefault,
+  }) {
     return this.collection.insert({
-      title, abbreviation, organizationId, createdBy
+      title,
+      abbreviation,
+      organizationId,
+      createdBy,
+      isDefault,
     });
   },
-
   update({ _id, title, abbreviation }) {
     return this.collection.update({ _id }, {
-      $set: { title, abbreviation }
+      $set: { title, abbreviation },
     });
   },
-
   remove({ _id }) {
     return this.collection.remove({ _id });
-  }
-
+  },
 };

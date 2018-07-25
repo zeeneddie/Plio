@@ -1,7 +1,7 @@
 import { _ } from 'meteor/underscore';
 import { CollectionNames, ProblemsStatuses, ProblemIndexes } from '/imports/share/constants';
 import { Risks } from '/imports/share/collections/risks';
-import { formatUser, formatLessonsLearned, formatMap, formatDate } from '../formatters';
+import { formatUser, formatLessonsLearned, formatMap } from '../formatters';
 
 export const mapping = {
   collection: Risks,
@@ -54,19 +54,25 @@ export const mapping = {
         many: true,
       },
     },
-    identifiedBy: {
-      label: 'Identified by',
+    originatorId: {
+      label: 'Originator',
+      isDefault: true,
       format: formatUser,
       reference: {
         from: CollectionNames.USERS,
-        internalField: 'identifiedBy',
+        internalField: 'originatorId',
         externalField: '_id',
       },
     },
-    identifiedDate: {
-      label: 'Identified date',
-      reference: 'identifiedAt',
-      format: formatDate,
+    owner: {
+      label: 'Owner',
+      isDefault: true,
+      format: formatUser,
+      reference: {
+        from: CollectionNames.USERS,
+        internalField: 'ownerId',
+        externalField: '_id',
+      },
     },
     initialCategorization: {
       label: 'Initial categorization',

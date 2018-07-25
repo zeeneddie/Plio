@@ -1,0 +1,219 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DashboardUserStats matches snapshot 1`] = `
+<branch(DashboardStatsExpandable)
+  items={
+    Array [
+      Object {
+        "_id": 0,
+        "profile": Object {
+          "firstName": "John 0",
+          "lastName": "Doe 0",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 1,
+        "profile": Object {
+          "firstName": "John 1",
+          "lastName": "Doe 1",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 2,
+        "profile": Object {
+          "firstName": "John 2",
+          "lastName": "Doe 2",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 3,
+        "profile": Object {
+          "firstName": "John 3",
+          "lastName": "Doe 3",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 4,
+        "profile": Object {
+          "firstName": "John 4",
+          "lastName": "Doe 4",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 5,
+        "profile": Object {
+          "firstName": "John 5",
+          "lastName": "Doe 5",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 6,
+        "profile": Object {
+          "firstName": "John 6",
+          "lastName": "Doe 6",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 7,
+        "profile": Object {
+          "firstName": "John 7",
+          "lastName": "Doe 7",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 8,
+        "profile": Object {
+          "firstName": "John 8",
+          "lastName": "Doe 8",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 9,
+        "profile": Object {
+          "firstName": "John 9",
+          "lastName": "Doe 9",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 10,
+        "profile": Object {
+          "firstName": "John 10",
+          "lastName": "Doe 10",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 11,
+        "profile": Object {
+          "firstName": "John 11",
+          "lastName": "Doe 11",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 12,
+        "profile": Object {
+          "firstName": "John 12",
+          "lastName": "Doe 12",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 13,
+        "profile": Object {
+          "firstName": "John 13",
+          "lastName": "Doe 13",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 14,
+        "profile": Object {
+          "firstName": "John 14",
+          "lastName": "Doe 14",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 15,
+        "profile": Object {
+          "firstName": "John 15",
+          "lastName": "Doe 15",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 16,
+        "profile": Object {
+          "firstName": "John 16",
+          "lastName": "Doe 16",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 17,
+        "profile": Object {
+          "firstName": "John 17",
+          "lastName": "Doe 17",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 18,
+        "profile": Object {
+          "firstName": "John 18",
+          "lastName": "Doe 18",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 19,
+        "profile": Object {
+          "firstName": "John 19",
+          "lastName": "Doe 19",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 20,
+        "profile": Object {
+          "firstName": "John 20",
+          "lastName": "Doe 20",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 21,
+        "profile": Object {
+          "firstName": "John 21",
+          "lastName": "Doe 21",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 22,
+        "profile": Object {
+          "firstName": "John 22",
+          "lastName": "Doe 22",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 23,
+        "profile": Object {
+          "firstName": "John 23",
+          "lastName": "Doe 23",
+        },
+        "status": "online",
+      },
+      Object {
+        "_id": 24,
+        "profile": Object {
+          "firstName": "John 24",
+          "lastName": "Doe 24",
+        },
+        "status": "online",
+      },
+    ]
+  }
+  itemsPerRow={5}
+  render={[Function]}
+>
+  <PlusButton
+    onClick={[Function]}
+    size="1"
+  />
+  25 users
+   online
+</branch(DashboardStatsExpandable)>
+`;

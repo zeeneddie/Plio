@@ -1,9 +1,9 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { $ } from 'meteor/jquery';
-import { pure } from 'recompose';
 import { _ } from 'meteor/underscore';
 
-import Modal from '../Modal';
+import Modal from '../LegacyModal';
 import { setModal, onModalClose } from '/imports/client/store/actions/modalActions';
 
 const propTypes = {
@@ -36,7 +36,6 @@ const defaultProps = {
   onModalClose: () => null,
 };
 
-@pure
 class ModalWindow extends React.Component {
   constructor(props) {
     super(props);
@@ -95,7 +94,9 @@ class ModalWindow extends React.Component {
   }
 
   _getCloseCaptionText() {
-    const { isSaving, variation, closeCaptionText, closeCaptionTextOnSave } = this.props;
+    const {
+      isSaving, variation, closeCaptionText, closeCaptionTextOnSave,
+    } = this.props;
 
     return isSaving && variation === 'save' ? closeCaptionTextOnSave : closeCaptionText;
   }

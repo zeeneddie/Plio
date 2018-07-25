@@ -3,7 +3,7 @@ import { _ } from 'meteor/underscore';
 import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
- // Used for waiting for new notifications before sending them to a user
+// Used for waiting for new notifications before sending them to a user
 const NOTIFICATION_WAIT_TIME_MS = 5000;
 
 // Delay between notifications for one user
@@ -90,6 +90,8 @@ const NotificationsTempStore = {
   },
 
   _sendNotificationToUser(notification, user) {
+    if (!user) return undefined;
+
     const {
       sendBoth,
       templateData: {

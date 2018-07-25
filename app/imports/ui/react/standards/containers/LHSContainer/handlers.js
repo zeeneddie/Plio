@@ -1,4 +1,5 @@
 import { batchActions } from 'redux-batched-actions';
+import { map, path } from 'ramda';
 
 import { extractIds } from '/imports/api/helpers';
 import {
@@ -6,26 +7,40 @@ import {
   collapseExpandedStandards,
   expandCollapsedStandard,
 } from '../../helpers';
-import _modal_ from '/imports/startup/client/mixins/modal';
+import _modal_ from '../../../../../startup/client/mixins/modal';
 import {
   setFilteredStandards,
   setInitializing,
-} from '/imports/client/store/actions/standardsActions';
-import { onSearchTextClear, onSearch } from '/imports/ui/react/share/LHS/handlers';
-import { close } from '/imports/client/store/actions/modalActions';
+} from '../../../../../client/store/actions/standardsActions';
+import { onSearchTextClear, onSearch } from '../../../share/LHS/handlers';
+import { close } from '../../../../../client/store/actions/modalActions';
 import {
   setModalOpenedState,
   setDataImportInProgress,
   setImportedIds,
-} from '/imports/client/store/actions/dataImportActions';
-import { goTo } from '/imports/ui/utils/router';
-import { getCount } from '/imports/api/standards/methods';
-import { canChangeRoles } from '/imports/api/checkers';
+} from '../../../../../client/store/actions/dataImportActions';
+import { goTo } from '../../../../utils/router';
+import { getCount } from '../../../../../api/standards/methods';
+import { canChangeRoles } from '../../../../../api/checkers';
 
-const getItems = ({ standards }, search) =>
-  extractIds(search(['title', 'description', 'status'], standards));
+const addTypeAbbrs = (standardTypesByIds = {}, standards = []) => map((standard = {}) => {
+  const { typeId, uniqueNumber = '' } = standard;
+  // allow to search by linked type's abbreviation and/or by unique number
+  const typeAbbr = path([typeId, 'abbreviation'], standardTypesByIds);
+  const typePrefix = `${typeAbbr}${uniqueNumber}`;
+  return {
+    ...standard,
+    typePrefix,
+  };
+}, standards);
 
-const getActions = (ids) => [setFilteredStandards(ids)];
+const getItems = ({ standards, standardTypesByIds }, search) =>
+  extractIds(search(
+    ['title', 'description', 'status', 'uniqueNumber', 'typePrefix'],
+    addTypeAbbrs(standardTypesByIds, standards)),
+  );
+
+const getActions = ids => [setFilteredStandards(ids)];
 
 export const onSearchTextChange =
   onSearch(getItems, getActions, expandCollapsedStandards, collapseExpandedStandards);
@@ -42,7 +57,7 @@ export const openDocumentCreationModal = ({ dispatch }) => () => {
   });
 };
 
-export const onModalOpen = (props) => (e) => {
+export const onModalOpen = props => (e) => {
   const {
     dispatch,
     filteredStandards,

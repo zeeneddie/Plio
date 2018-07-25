@@ -1,5 +1,6 @@
-import React, { PropTypes } from 'react';
-import { CardBlock, ListGroup, CardTitle } from 'reactstrap';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { CardBody, ListGroup, CardTitle } from 'reactstrap';
 import cx from 'classnames';
 
 const Block = ({
@@ -10,9 +11,9 @@ const Block = ({
   children,
 }) => (
   <div {...wrapper}>
-    <CardBlock className={cx('card-subheading', headingCx)} {...heading}>
+    <CardBody className={cx('card-subheading card-block', headingCx)} {...heading}>
       <CardTitle {...title}>{children[0]}</CardTitle>
-    </CardBlock>
+    </CardBody>
 
     <ListGroup {...listGroup}>
       {children[1]}

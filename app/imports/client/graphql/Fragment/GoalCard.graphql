@@ -1,0 +1,59 @@
+#import "./MilestoneCard.graphql"
+#import "./RiskCard.graphql"
+#import "./LessonCard.graphql"
+#import "./ActionCard.graphql"
+
+fragment GoalCard on Goal {
+  owner {
+    _id
+    profile {
+      fullName
+    }
+  }
+  _id
+  isDeleted
+  title
+  startDate
+  endDate
+  color
+  sequentialId
+  description
+  priority
+  status
+  statusComment
+  isCompleted
+  completedAt
+  completedBy {
+    _id
+    profile {
+      fullName
+    }
+  }
+  completionComment
+  organization {
+    _id
+    rkGuidelines {
+      minor
+      major
+      critical
+    }
+  }
+  actions(input: { isDeleted: false }) {
+    ...ActionCard
+  }
+  milestones {
+    ...MilestoneCard
+  }
+  risks(input: { isDeleted: false }) {
+    ...RiskCard
+  }
+  lessons {
+    ...LessonCard
+  }
+  notify {
+    _id
+    profile {
+      fullName
+    }
+  }
+}

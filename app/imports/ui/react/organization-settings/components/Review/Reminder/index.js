@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { compose, getContext, withProps } from 'recompose';
 
 import ReminderTimePicker from '../../../../forms/components/ReminderTimePicker';
@@ -31,7 +32,7 @@ const enhance = compose(
   }),
 );
 
-const ReviewReminder = enhance((props) => (
+const ReviewReminder = enhance(props => (
   <ReminderTimePicker
     timeValue={props.timeValue}
     timeUnit={props.timeUnit}

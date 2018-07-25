@@ -1,7 +1,8 @@
 import { compose, withState, withHandlers } from 'recompose';
+import { not } from 'ramda';
 
-import { not } from '/imports/api/helpers';
-import { capitalize } from '/imports/share/helpers';
+import { capitalize } from '../../../share/helpers';
+import omitProps from './omitProps';
 
 export default (initialValue, prop, handle) => {
   const setProp = `set${capitalize(prop)}`;
@@ -11,5 +12,6 @@ export default (initialValue, prop, handle) => {
     withHandlers({
       [handle]: props => () => props[setProp](not),
     }),
+    omitProps([setProp]),
   );
 };

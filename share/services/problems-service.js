@@ -1,29 +1,32 @@
-import { Meteor } from 'meteor/meteor';
-
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { Actions } from '/imports/share/collections/actions.js';
-import { generateSerialNumber, getWorkflowDefaultStepDate } from '/imports/share/helpers.js';
-import ActionService from '/imports/share/services/action-service';
-import WorkItemService from '/imports/share/services/work-item-service.js';
-import { WorkItemsStore, WorkflowTypes } from '/imports/share/constants.js';
+import { generateSerialNumber, getWorkflowDefaultStepDate } from '../helpers';
+import { WorkflowTypes, ANALYSIS_STATUSES, ProblemTypes } from '../constants';
+import { Organizations, Actions } from '../collections';
+import ActionService from './action-service';
+import WorkItemService from './work-item-service';
 
 export default {
 
   insert({ organizationId, magnitude, ...args }) {
+    const { type } = args;
     const organization = Organizations.findOne({ _id: organizationId });
-
     const serialNumber = generateSerialNumber(this.collection, { organizationId });
-    const sequentialId = `${this._abbr}${serialNumber}`;
+    const abbr = this._getAbbr({ organization, magnitude, ...args });
+    const sequentialId = `${abbr}${serialNumber}`;
 
-    const workflowType = organization.workflowType(magnitude);
+    const workflowType = type === ProblemTypes.POTENTIAL_GAIN
+      ? WorkflowTypes.THREE_STEP
+      : organization.workflowType(magnitude);
 
     const _id = this.collection.insert({
-      organizationId, serialNumber, sequentialId,
-      workflowType, magnitude, ...args
+      organizationId,
+      serialNumber,
+      sequentialId,
+      workflowType,
+      magnitude,
+      ...args,
     });
 
     if (workflowType === WorkflowTypes.SIX_STEP) {
-
       const doc = this.collection.findOne({ _id });
 
       this.setAnalysisExecutor({
@@ -34,27 +37,39 @@ export default {
 
       this.setAnalysisDate({
         _id,
-        targetDate: getWorkflowDefaultStepDate({ organization, linkedTo: [{ documentId: _id, documentType: this._docType, }] }),
+        targetDate: getWorkflowDefaultStepDate({
+          organization,
+          linkedTo: [{ documentId: _id, documentType: this._getDocType(_id) }],
+        }),
       }, doc);
     }
 
     return _id;
   },
 
-  update({ _id, query = {}, options = {}, ...args }) {
-    if (!_.keys(query).length > 0) {
-      query = { _id };
+  update({
+    _id, query = {}, options = {}, ...args
+  }) {
+    if (!Object.keys(query).length) {
+      Object.assign(query, { _id });
     }
-    if (!_.keys(options).length > 0) {
-      options['$set'] = args;
+    if (!Object.keys(options).length) {
+      options.$set = args; // eslint-disable-line no-param-reassign
     }
 
     return this.collection.update(query, options);
   },
 
-  setAnalysisExecutor({ _id, executor, assignedBy }, doc) {
-    const { analysis = {}, ...rest } = doc;
+  async set({ _id, ...args }) {
+    const query = { _id };
+    const modifier = {
+      $set: args,
+    };
 
+    return this.collection.update(query, modifier);
+  },
+
+  setAnalysisExecutor({ _id, executor, assignedBy }) {
     const query = { _id };
     const options = {
       $set: {
@@ -65,20 +80,18 @@ export default {
 
     const ret = this.collection.update(query, options);
 
-    WorkItemService.analysisUserUpdated(_id, this._docType, executor);
+    WorkItemService.analysisUserUpdated(_id, this._getDocType(_id), executor);
 
     return ret;
   },
 
-  setAnalysisDate({ _id, targetDate }, doc) {
-    const { analysis: { targetDate:td, ...analysis } = {}, ...rest } = doc;
-
+  setAnalysisDate({ _id, targetDate }) {
     const query = { _id };
     const options = { $set: { 'analysis.targetDate': targetDate } };
 
     const ret = this.collection.update(query, options);
 
-    WorkItemService.analysisDateUpdated(_id, this._docType, targetDate);
+    WorkItemService.analysisDateUpdated(_id, this._getDocType(_id), targetDate);
 
     return ret;
   },
@@ -105,27 +118,25 @@ export default {
   },
 
   completeAnalysis({ _id, completionComments, userId }) {
-    const doc = this.collection.findOne({ _id }) || {};
-
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $set: {
-        'analysis.status': 1, // Completed
+        'analysis.status': ANALYSIS_STATUSES.COMPLETED,
         'analysis.completedAt': new Date(),
         'analysis.completedBy': userId,
         'analysis.completionComments': completionComments,
-      }
+      },
     });
 
-    WorkItemService.analysisCompleted(_id, this._docType);
+    WorkItemService.analysisCompleted(_id, this._getDocType(_id));
 
     return ret;
   },
 
-  undoAnalysis({ _id, userId }) {
+  undoAnalysis({ _id }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $set: { 'analysis.status': 0 }, // Not completed
       $unset: {
@@ -133,54 +144,52 @@ export default {
         'analysis.completedBy': '',
         'analysis.completionComments': '',
         'updateOfStandards.targetDate': '',
-        'updateOfStandards.executor': ''
-      }
+        'updateOfStandards.executor': '',
+      },
     });
 
-    WorkItemService.analysisCanceled(_id, this._docType);
+    WorkItemService.analysisCanceled(_id, this._getDocType(_id));
 
     return ret;
   },
 
   updateStandards({ _id, completionComments, userId }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $set: {
         'updateOfStandards.status': 1, // Completed
         'updateOfStandards.completedAt': new Date(),
         'updateOfStandards.completedBy': userId,
-        'updateOfStandards.completionComments': completionComments
-      }
+        'updateOfStandards.completionComments': completionComments,
+      },
     });
 
-    WorkItemService.standardsUpdated(_id, this._docType);
+    WorkItemService.standardsUpdated(_id, this._getDocType(_id));
 
     return ret;
   },
 
-  undoStandardsUpdate({ _id, userId }) {
+  undoStandardsUpdate({ _id }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
       $set: {
-        'updateOfStandards.status': 0 // Not completed
+        'updateOfStandards.status': 0, // Not completed
       },
       $unset: {
         'updateOfStandards.completedAt': '',
         'updateOfStandards.completedBy': '',
-        'updateOfStandards.completionComments': ''
-      }
+        'updateOfStandards.completionComments': '',
+      },
     });
 
-    WorkItemService.standardsUpdateCanceled(_id, this._docType);
+    WorkItemService.standardsUpdateCanceled(_id, this._getDocType(_id));
 
     return ret;
   },
 
-  setStandardsUpdateExecutor({ _id, executor, assignedBy }, doc) {
-    const { updateOfStandards = {}, ...rest } = doc;
-
+  setStandardsUpdateExecutor({ _id, executor, assignedBy }) {
     const query = { _id };
     const options = {
       $set: {
@@ -191,21 +200,19 @@ export default {
 
     const ret = this.collection.update(query, options);
 
-    WorkItemService.updateOfStandardsUserUpdated(_id, this._docType, executor);
+    WorkItemService.updateOfStandardsUserUpdated(_id, this._getDocType(_id), executor);
 
     return ret;
   },
 
-  setStandardsUpdateDate({ _id, targetDate }, doc) {
-    const { updateOfStandards: { targetDate:td, ...updateOfStandards } = {}, ...rest } = doc;
-
+  setStandardsUpdateDate({ _id, targetDate }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
-      $set: { 'updateOfStandards.targetDate': targetDate }
+      $set: { 'updateOfStandards.targetDate': targetDate },
     });
 
-    WorkItemService.updateOfStandardsDateUpdated(_id, this._docType, targetDate);
+    WorkItemService.updateOfStandardsDateUpdated(_id, this._getDocType(_id), targetDate);
 
     return ret;
   },
@@ -241,7 +248,9 @@ export default {
     const onPermanentDelete = () =>
       WorkItemService.removePermanently(workQuery);
 
-    return this._service.remove({ _id, deletedBy, onSoftDelete, onPermanentDelete });
+    return this._service.remove({
+      _id, deletedBy, onSoftDelete, onPermanentDelete,
+    });
   },
 
   restore({ _id }) {
@@ -256,24 +265,37 @@ export default {
     return this._service.removePermanently({ _id, query });
   },
 
-  unlinkStandard({ _id, standardId }) {
-    this.collection.update({ _id }, {
-      $pull: { standardsIds: standardId }
-    });
+  async linkStandard({ _id, standardId }) {
+    const query = { _id };
+    const modifier = {
+      $addToSet: {
+        standardsIds: standardId,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
+
+  async unlinkStandard({ _id, standardId }) {
+    const query = { _id };
+    const modifier = {
+      $pull: {
+        standardsIds: standardId,
+      },
+    };
+    return this.collection.update(query, modifier);
   },
 
   unlinkActions({ _id }) {
     const query = {
       'linkedTo.documentId': _id,
-      'linkedTo.documentType': this._docType
     };
 
     Actions.find(query).forEach((action) => {
       ActionService.unlinkDocument({
         _id: action._id,
         documentId: _id,
-        documentType: this._docType
       });
     });
-  }
+  },
 };

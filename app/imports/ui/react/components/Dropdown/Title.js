@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { _ } from 'meteor/underscore';
 import { mapProps } from 'recompose';
 import TextInput from '/imports/ui/react/forms/components/TextInput';
@@ -8,7 +9,7 @@ const replaceValue = (string, value) =>
 
 const enhance = mapProps(props => ({
   ...props,
-  children: React.Children.map(props.children, child => {
+  children: React.Children.map(props.children, (child) => {
     if (_.isString(child)) {
       return replaceValue(child, props.dropdownValue);
     }
@@ -30,8 +31,10 @@ const enhance = mapProps(props => ({
 }));
 
 export const Title = enhance((props) => {
-  const { children, as = 'a', dropdownValue, ...other } = props;
-  
+  const {
+    children, as = 'a', dropdownValue, ...other
+  } = props;
+
   return React.createElement(as, { 'data-toggle': 'dropdown', ...other }, children);
 });
 

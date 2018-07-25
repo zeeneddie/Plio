@@ -1,12 +1,14 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { isMobileRes } from '/imports/api/checkers.js';
+import { isMobileRes } from '/imports/api/checkers';
 
 Template.ListItemLink.viewmodel({
   share: 'window',
   linkArgs() {
-    const { isActive, href, onClick, className } = this.templateInstance.data;
+    const {
+      isActive, href, onClick, className,
+    } = this.templateInstance.data;
     const active = isActive ? 'active' : '';
     const finalClassName = `list-group-item ${className} ${active}`;
     return {
@@ -22,7 +24,7 @@ Template.ListItemLink.viewmodel({
 
           FlowRouter.setParams(params);
         });
-      }
-    }
-  }
+      },
+    };
+  },
 });

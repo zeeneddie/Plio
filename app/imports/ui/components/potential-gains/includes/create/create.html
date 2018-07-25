@@ -1,0 +1,18 @@
+<template name="PG_Create">
+  {{#Card_Create ref="card"}}
+    {{> NC_Title_Edit}}
+
+    {{> DescriptionTextBox}}
+
+    {{> Fields_Standards_Edit
+        isEditable=isStandardsEditable
+        standardsIds=standardsIds}}
+
+    {{> NC_Originator_Edit}}
+
+    {{> NC_Owner_Edit}}
+
+    {{> Problems_Magnitude_Edit
+        guidelines=guidelines}}
+  {{/Card_Create}}
+</template>

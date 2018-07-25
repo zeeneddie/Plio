@@ -1,0 +1,17 @@
+{
+  "_id": "6sH5xtkpLBk2zFE5v",
+  "organizationId": "KwKXz5RefrE5hjWJ2",
+  "title": "Deleted",
+  "status": 2,
+  "completionTargetDate": { "$date": 1516275111424 },
+  "isCompleted": "true",
+  "completedAt": { "$date": 1515670311424 },
+  "completedBy": "SQHmBKJ94gJvpLKLt",
+  "isDeleted": true,
+  "deletedAt": { "$date": 1515670311424 },
+  "deletedBy": "SQHmBKJ94gJvpLKLt",
+  "createdAt" : { "$date": 1515670311424 },
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "updatedAt" : { "$date": 1515670311424 },
+  "updatedBy" : "SQHmBKJ94gJvpLKLt"
+}

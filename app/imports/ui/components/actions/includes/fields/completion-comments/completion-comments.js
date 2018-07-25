@@ -12,10 +12,10 @@ Template.Actions_CompletionComments.viewmodel({
     }
 
     this.parent().update && this.parent().update({
-      e, completionComments, withFocusCheck: true
+      e, completionComments, withFocusCheck: true,
     });
   },
   getData() {
     return { completionComments: this.completionComments() };
-  }
+  },
 });

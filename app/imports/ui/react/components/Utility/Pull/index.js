@@ -1,8 +1,9 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 
-import { pickC, omitC } from '/imports/api/helpers';
-import { PullMap } from '/imports/api/constants';
+import { pickC, omitC } from '../../../../../api/helpers';
+import { PullMap } from '../../../../../api/constants';
 
 const Pull = ({ children, className: cn, ...other }) => {
   const child = React.Children.only(children);

@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-const { Error:E } = Meteor;
+const { Error: E } = Meteor;
 
 export const ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED = new E(400, 'Cannot set completion date for completed action');
 
@@ -10,7 +10,7 @@ export const ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED = new E(400, 'Cannot 
 
 export const ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED = new E(400, 'Cannot set verification executor for verified action');
 
-export const ACT_RK_CANNOT_BE_LINKED_TO_NC = new E(400, 'Risk control cannot be linked to a non-conformity');
+export const ACT_RK_CANNOT_BE_LINKED_TO_NC = new E(400, 'Risk control cannot be linked to a nonconformity');
 
 export const ACT_ALREADY_LINKED = new E(400, 'This action is already linked to a specified document');
 

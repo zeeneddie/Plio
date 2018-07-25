@@ -1,8 +1,8 @@
 import React from 'react';
 
 import Field from '../fields/read/components/Field';
-import { flattenObjects, compose, join, mapC, concatC, split } from '/imports/api/helpers';
-import { lowercase, capitalize } from '/imports/share/helpers';
+import { flattenObjects, compose, join, mapC, concatC, split } from '../../../api/helpers';
+import { lowercase, capitalize } from '../../../share/helpers';
 
 const createKey = (label) => {
   const words = split(' ', label);
@@ -16,9 +16,11 @@ const createKey = (label) => {
   return result;
 };
 
-const mapFields = fields => fields.map(({ label, text, render, ...other }) => {
+const mapFields = fields => fields.map(({
+  label, text, render, ...other
+}) => {
   const key = createKey(label);
-  const field = <Field {...{ key, label, ...other }}>{text}</Field>;
+  const field = (<Field {...{ key, label, ...other }}>{text}</Field>);
   return !!text && ({
     [key]: render ? render(field) : field,
   });

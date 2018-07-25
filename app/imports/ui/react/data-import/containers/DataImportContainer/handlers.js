@@ -5,18 +5,18 @@ import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 
 import { OrgSubs } from '/imports/startup/client/subsmanagers';
-import { createOrgQueryWhereUserIsOwner } from '/imports/api/queries';
-import { Organizations } from '/imports/share/collections/organizations';
+import { createOrgQueryWhereUserIsOwner } from '../../../../../share/mongo/queries';
+import { Organizations } from '../../../../../share/collections/organizations';
 import {
   setOwnOrgs,
   setOrgsLoading,
   setOrgsLoaded,
   setOrgsCollapsed,
   setDataImportInProgress,
-} from '/imports/client/store/actions/dataImportActions';
-import { callMethod, setErrorText, close } from '/imports/client/store/actions/modalActions';
-import swal from '/imports/ui/utils/swal';
-import { importDocuments } from '/imports/api/organizations/methods';
+} from '../../../../../client/store/actions/dataImportActions';
+import { callMethod, setErrorText, close } from '../../../../../client/store/actions/modalActions';
+import { importDocuments } from '../../../../../api/organizations/methods';
+import { swal } from '../../../../../client/util';
 
 export const onToggleCollapse = ({
   dispatch,
@@ -73,7 +73,7 @@ export const onOrgClick = ({
 
       swal.success(
         'Success',
-        `Data import from ${name} organization has been successfully completed`
+        `Data import from ${name} organization has been successfully completed`,
       );
       if (typeof onSuccess === 'function') onSuccess(res);
     };
@@ -94,7 +94,13 @@ export const onOrgClick = ({
 
     dispatch(setDataImportInProgress(true));
 
-    return dispatch(action).then(_onSuccess);
+    return dispatch(action).then(_onSuccess).catch((err) => {
+      dispatch(setDataImportInProgress(false));
+      // Hack to show the error message. Are there better ways to achieve this?
+      Meteor.setTimeout(() => {
+        swal.error(err);
+      }, 1500);
+    });
   };
 
   const showPwdForm = () => swal.showPasswordForm({
@@ -111,6 +117,7 @@ export const onOrgClick = ({
       return swal({
         text,
         confirmButtonText: 'Yes',
+        showLoaderOnConfirm: false,
       }, showPwdForm);
     }
 

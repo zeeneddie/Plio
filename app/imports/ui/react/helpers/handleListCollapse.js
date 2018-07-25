@@ -9,8 +9,8 @@ import {
   propEqKey,
   not,
   find,
-} from '/imports/api/helpers';
-import { addCollapsedWithClose, chainActions } from '/imports/client/store/actions/globalActions';
+} from '../../../api/helpers';
+import { addCollapsedWithClose, chainActions } from '../../../client/store/actions/globalActions';
 
 
 const handleListCollapse = (createItem, dispatch, containedInArray, defaultContainedInArray) => {

@@ -22,8 +22,8 @@ import {
   P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_ANALYSIS,
   P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_ANALYSIS,
 } from '../errors';
-import { checkAndThrow } from '/imports/api/helpers';
-import { Actions } from '/imports/share/collections/actions';
+import { checkAndThrow } from '../helpers';
+import { Actions } from '../../share/collections/actions';
 import { isOrgOwner } from '../checkers';
 
 export const P_IsAnalysisOwner = (userId, organizationId, {
@@ -43,9 +43,7 @@ export const P_EnsureIsAnalysisOwner = (userId, organizationId, doc = {}) => {
   return doc;
 };
 
-export const P_IsExecutor = ({ userId } = {}, { executor } = {}) => {
-  return Object.is(userId, executor);
-};
+export const P_IsExecutor = ({ userId } = {}, { executor } = {}) => Object.is(userId, executor);
 
 export const P_OnSetAnalysisExecutorChecker = ({ ...args }, doc) => {
   checkAndThrow(doc.isAnalysisCompleted(), P_CANNOT_SET_EXECUTOR_FOR_COMPLETED_ANALYSIS);
@@ -82,7 +80,7 @@ export const P_OnSetAnalysisCompletedByChecker = ({ userId }, doc) => {
 
   P_EnsureIsAnalysisOwner(userId, doc.organizationId, doc.analysis);
 
-  return doc
+  return doc;
 };
 
 export const P_OnSetAnalysisCompletedDateChecker = ({ userId }, doc) => {
@@ -109,7 +107,7 @@ export const P_OnStandardsUpdateChecker = ({ userId }, doc) => {
   const actionsCount = ((() => {
     const query = {
       'linkedTo.documentId': doc._id,
-      isDeleted: { $in: [null, false] }
+      isDeleted: { $in: [null, false] },
     };
 
     const actions = Actions.find(query);
@@ -128,7 +126,7 @@ export const P_OnStandardsUpdateChecker = ({ userId }, doc) => {
       isVerified: true,
       isVerifiedAsEffective: true,
       verifiedAt: { $exists: true },
-      verifiedBy: { $exists: true }
+      verifiedBy: { $exists: true },
     };
 
     const actions = Actions.find(query);
@@ -168,7 +166,7 @@ export const P_OnSetStandardsUpdateCompletedByChecker = ({ userId }, doc) => {
 
   checkAndThrow(!doc.areStandardsUpdated(), P_CANNOT_SET_COMPLETED_BY_FOR_INCOMPLETE_STANDARDS);
 
-  return doc
+  return doc;
 };
 
 export const P_OnSetStandardsUpdateCompletedDateChecker = ({ userId }, doc) => {

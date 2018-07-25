@@ -3,8 +3,8 @@ import { Tracker } from 'meteor/tracker';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
-import { canChangeOrgSettings } from '/imports/api/checkers.js';
-import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
+import { canChangeOrgSettings } from '/imports/api/checkers';
+import { sortArrayByTitlePrefix } from '/imports/api/helpers';
 
 Template.ESBookSection.viewmodel({
   mixin: ['search', 'modal', 'organization', 'collapsing', 'standard'],
@@ -27,28 +27,28 @@ Template.ESBookSection.viewmodel({
     const query = {
       $and: [
         {
-          organizationId: this.organizationId()
+          organizationId: this.organizationId(),
         },
         {
-          ...this.searchObject('section', [{ name: 'title' }])
-        }
-      ]
+          ...this.searchObject('section', [{ name: 'title' }]),
+        },
+      ],
     };
     const options = { sort: { title: 1 } };
     const sections = StandardsBookSections.find(query, options).fetch();
-  
+
     return sortArrayByTitlePrefix(sections);
   },
   content() {
     return canChangeOrgSettings(Meteor.userId(), this.organizationId())
-            ? 'ESBookSectionCreate'
-            : null;
+      ? 'ESBookSectionCreate'
+      : null;
   },
   onUpdateCb() {
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { selected:sectionId } = viewmodel.getData();
+    const { selected: sectionId } = viewmodel.getData();
 
     this.selectedBookSectionId(sectionId);
 

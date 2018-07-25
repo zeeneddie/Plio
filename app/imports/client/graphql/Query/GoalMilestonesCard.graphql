@@ -1,0 +1,18 @@
+#import '../Fragment/MilestoneCard.graphql'
+
+query GoalMilestonesCard($_id: ID!) {
+  goal(_id: $_id) {
+    goal {
+      _id
+      title
+      sequentialId
+      color
+      organization {
+        _id
+      }
+      milestones {
+        ...MilestoneCard
+      }
+    }
+  }
+}

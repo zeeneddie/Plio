@@ -4,7 +4,6 @@ import { ProblemTypes } from '/imports/share/constants.js';
 
 
 export default class NCWorkflow extends ProblemWorkflow {
-
   static get _collection() {
     return NonConformities;
   }

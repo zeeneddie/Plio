@@ -3,28 +3,25 @@ import { Meteor } from 'meteor/meteor';
 
 Template.Standards_Owner_Edit.viewmodel({
   label: 'Owner',
-  _owner: '',
-  owner(id) {
-    if (id) return this._owner(id);
-
-    return this._owner() || Meteor.userId();
+  owner: null,
+  onCreated(template) {
+    this.owner(template.data.owner || Meteor.userId());
   },
   selectArgs() {
-    const { owner: value } = this.data();
-
     return {
-      value,
+      value: this.owner(),
       onUpdate: (viewmodel) => {
         const { selected: owner } = viewmodel.getData();
+
         this.owner(owner);
 
-        if (!this._id) return;
+        if (!this._id) return undefined;
 
         return this.parent().update({ owner });
-      }
+      },
     };
   },
   getData() {
     return { owner: this.owner() };
-  }
+  },
 });

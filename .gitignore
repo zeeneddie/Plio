@@ -8,3 +8,6 @@ deploy
 mup.js
 settings*.json
 npm-debug.log
+.vscode
+yarn-error.log
+package-lock.json

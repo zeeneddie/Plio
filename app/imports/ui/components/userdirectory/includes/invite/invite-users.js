@@ -1,68 +1,75 @@
 import { Template } from 'meteor/templating';
-import { ViewModel } from 'meteor/manuel:viewmodel';
 import pluralize from 'pluralize';
 import moment from 'moment-timezone';
+import { pluck, reject, isNil, uniq, compose } from 'ramda';
+import { swal } from 'meteor/plio:bootstrap-sweetalert';
 
-import { inviteMultipleUsersByEmail } from '/imports/api/organizations/methods';
-import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { inviteMultipleUsersByEmail } from '../../../../../api/organizations/methods';
+import { ALERT_AUTOHIDE_TIME } from '../../../../../api/constants';
+import UsersInviteForm from '../../../../react/forms/components/UsersInviteForm';
+
+const getEmails = compose(uniq, reject(isNil), pluck('value'));
 
 Template.UserDirectory_InviteUsers.viewmodel({
   mixin: ['modal', 'organization'],
-  welcomeMessage: 'Hi there.\nWe\'ll be using Plio to share standards documents, to record non-conformities and risks and to track actions. See you soon.',
-  usersEntries: _.range(0, 4).map((i) => {
-    return {avatarIndex: i};
-  }),
-
+  UsersInviteForm: () => UsersInviteForm,
   save() {
-    let emailViewModels = this.children('UserDirectory_InviteUsers_UserEntry');
-    let emails = emailViewModels
-      .map(userEntryViewModel => userEntryViewModel.email()) // get emails
-      .filter(email => !!email); // get rid of empty strings
+    const event = new Event('submit', { cancelable: true });
+    this.templateInstance.$('form')[0].dispatchEvent(event);
+  },
+  onSubmit({
+    options,
+    welcome: welcomeMessage,
+  }) {
+    const organizationId = this.organizationId();
+    const emails = getEmails(options);
+    const args = { organizationId, emails, welcomeMessage };
 
-    if(emails.length <= 0) {
-      this.modal().setError('You need to fill in at least one valid email address first');
-      return;
+    if (emails.length === 0) {
+      return this.modal().setError('You need to fill in at least one valid email address first');
     }
 
-    let welcomeMessage = this.welcomeMessage();
-    let organizationId = this.organizationId();
+    return this.modal().callMethod(inviteMultipleUsersByEmail, args, (err, res) => {
+      if (!err) {
+        const { name: organizationName = 'organization' } = this.organization();
+        const { invitedEmails = [], addedEmails = [] } = res;
+        const invitedEmailsText = invitedEmails.length
+          // eslint-disable-next-line max-len
+          ? `${pluralize('Invite', invitedEmails.length)} to ${invitedEmails.join(', ')} ${invitedEmails.length ? 'were' : 'was'} sent successfully.\n`
+          : '';
+        const addedEmailsText = addedEmails.length
+          // eslint-disable-next-line max-len
+          ? `${addedEmails.join(', ')} ${addedEmails.length ? 'are already Plio users. These users have' : 'is already a Plio user. This user has'} now been added to the ${organizationName} organization in Plio.\n`
+          : '';
+        const successMessagePart = `${invitedEmailsText}${addedEmailsText}`;
+        const failMessagePart = res.error ? `\n${res.error}` : '';
 
-    if (emails.length > 0) {
-      this.modal().callMethod(inviteMultipleUsersByEmail, {
-        organizationId, emails, welcomeMessage
-      }, (err, res) => {
-        if (!err) {
-          const organization = this.organization();
-          const organizationName = organization && organization.name || 'organization';
-          const invitedEmails = res.invitedEmails || [];
-          const addedEmails = res.addedEmails || [];
-          const invitedEmailsText = invitedEmails.length > 0 ? `${pluralize('Invite', invitedEmails.length)} to ${invitedEmails.join(', ')} ${invitedEmails.length > 1 ? 'were' : 'was'} sent successfully.\n` : '';
-          const addedEmailsText = addedEmails.length > 0 ? `${addedEmails.join(', ')} ${addedEmails.length > 1 ? 'are already Plio users. These users have' : 'is already a Plio user. This user has' } now been added to the ${organizationName} organization in Plio.\n` : '';
-          const successMessagePart = `${invitedEmailsText}${addedEmailsText}`;
-          const failMessagePart = res.error ? `\n${res.error}` : '';
-
-          let notificationTitle;
-          if (failMessagePart) {
-            if (successMessagePart) {
-              notificationTitle = 'Some users were not invited!';
-            } else {
-              notificationTitle = 'Not invited!'
-            }
+        let notificationTitle;
+        if (failMessagePart) {
+          if (successMessagePart) {
+            notificationTitle = 'Some users were not invited!';
           } else {
-            notificationTitle = 'Invited!'
+            notificationTitle = 'Not invited!';
           }
-
-          const expirationMessagePart = invitedEmailsText.length ? `\nInvitation expiration date: ${moment().add(res.expirationTime, 'days').format('MMMM Do YYYY')}` : '';
-          swal({
-            title: notificationTitle,
-            text: `${successMessagePart}${failMessagePart}${expirationMessagePart}`,
-            type: failMessagePart ? 'error' : 'success',
-            timer: ALERT_AUTOHIDE_TIME,
-            showConfirmButton: false,
-          });
-          this.modal().close();
+        } else {
+          notificationTitle = 'Invited!';
         }
-      });
-    }
-  }
+
+        const expirationMessagePart = invitedEmailsText.length
+          // eslint-disable-next-line max-len
+          ? `\nInvitation expiration date: ${moment().add(res.expirationTime, 'days').format('MMMM Do YYYY')}`
+          : '';
+
+        swal({
+          title: notificationTitle,
+          text: `${successMessagePart}${failMessagePart}${expirationMessagePart}`,
+          type: failMessagePart ? 'error' : 'success',
+          timer: ALERT_AUTOHIDE_TIME * 2,
+          showConfirmButton: false,
+        });
+
+        this.modal().close();
+      }
+    });
+  },
 });

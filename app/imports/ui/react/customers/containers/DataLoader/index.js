@@ -1,4 +1,3 @@
-import { composeWithTracker } from 'react-komposer';
 import {
   branch,
   compose,
@@ -26,6 +25,7 @@ import loadCardData from '../../../loaders/loadCardData';
 import loadMainData from '../../loaders/loadMainData';
 import loadUsersData from '../../../loaders/loadUsersData';
 import observeOrganizations from '../../observers/observeOrganizations';
+import { composeWithTracker } from '../../../../../client/util';
 
 const getLayoutData = () => loadLayoutData(() => (
   DocumentLayoutSubs.subscribe('customersLayout')
@@ -38,22 +38,22 @@ const getCardData = () => loadCardData(({ urlItemId }) => (
 export default compose(
   connect(),
 
-  composeWithTracker(loadInitialData, null, null, {
-    shouldResubscribe: false,
+  composeWithTracker(loadInitialData, {
+    propsToWatch: [],
   }),
 
-  composeWithTracker(getLayoutData(), null, null, {
-    shouldResubscribe: false,
+  composeWithTracker(getLayoutData(), {
+    propsToWatch: [],
   }),
 
   branch(
     property('loading'),
     renderComponent(CustomersLayout),
-    identity
+    identity,
   ),
 
-  composeWithTracker(loadUsersData, null, null, {
-    shouldResubscribe: false,
+  composeWithTracker(loadUsersData, {
+    propsToWatch: [],
   }),
 
   lifecycle({
@@ -64,9 +64,8 @@ export default compose(
 
   connect(pickDeep(['global.urlItemId'])),
 
-  composeWithTracker(getCardData(), null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.urlItemId !== nextProps.urlItemId,
+  composeWithTracker(getCardData(), {
+    propsToWatch: ['urlItemId'],
   }),
 
   connect(pickDeep(['customers.initializing'])),
@@ -96,12 +95,12 @@ export default compose(
   }),
 
   withHandlers({
-    onHandleReturn: (props) => () => {
+    onHandleReturn: props => () => {
       if (props.width <= MOBILE_BREAKPOINT && props.showCard) {
         return props.dispatch(setShowCard(false));
       }
 
       return goTo('dashboardPage')();
     },
-  })
+  }),
 )(CustomersLayout);

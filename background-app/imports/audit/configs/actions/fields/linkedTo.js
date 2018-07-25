@@ -1,11 +1,11 @@
-import { ProblemTypes } from '/imports/share/constants';
 import { ChangesKinds } from '../../../utils/changes-kinds';
 import { getLinkedDocAuditConfig } from '../../../utils/helpers';
 import { getLinkedDocDescription, getLinkedDocName, getReceivers } from '../helpers';
-import ActionWorkflow from '/imports/workflow/ActionWorkflow';
-import NCWorkflow from '/imports/workflow/NCWorkflow';
-import RiskWorkflow from '/imports/workflow/RiskWorkflow';
-
+import NCWorkflow from '../../../../workflow/NCWorkflow';
+import RiskWorkflow from '../../../../workflow/RiskWorkflow';
+import ActionWorkflow from '../../../../workflow/ActionWorkflow';
+import GoalWorkflow from '../../../../workflow/GoalWorkflow';
+import { ProblemTypes, DocumentTypes } from '../../../../share/constants';
 
 export default {
   field: 'linkedTo',
@@ -36,9 +36,11 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{{userName}}} linked {{{docDesc}}} {{{docName}}} to {{{linkedDocDesc}}} {{{linkedDocName}}}',
+          '{{{userName}}} linked {{{docDesc}}} {{{docName}}} ' +
+          'to {{{linkedDocDesc}}} {{{linkedDocName}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{{userName}}} unlinked {{{docDesc}}} {{{docName}}} from {{{linkedDocDesc}}} {{{linkedDocName}}}'
+          '{{{userName}}} unlinked {{{docDesc}}} {{{docName}}} ' +
+          'from {{{linkedDocDesc}}} {{{linkedDocName}}}',
       },
     },
   ],
@@ -50,7 +52,9 @@ export default {
       linkedDocName: () => getLinkedDocName(documentId, documentType),
     };
   },
-  receivers({ diffs: { linkedTo }, newDoc, oldDoc, user }) {
+  receivers({
+    diffs: { linkedTo }, newDoc, oldDoc, user,
+  }) {
     const doc = (linkedTo.kind === ChangesKinds.ITEM_ADDED) ? newDoc : oldDoc;
     return getReceivers(doc, user);
   },
@@ -60,12 +64,14 @@ export default {
     if (linkedTo.kind === ChangesKinds.ITEM_REMOVED) {
       const { documentId, documentType } = linkedTo.item;
 
-      const workflowConstructor = {
+      const Workflow = {
         [ProblemTypes.NON_CONFORMITY]: NCWorkflow,
+        [ProblemTypes.POTENTIAL_GAIN]: NCWorkflow,
         [ProblemTypes.RISK]: RiskWorkflow,
+        [DocumentTypes.GOAL]: GoalWorkflow,
       }[documentType];
 
-      new workflowConstructor(documentId).refreshStatus();
+      new Workflow(documentId).refreshStatus();
     }
   },
 };

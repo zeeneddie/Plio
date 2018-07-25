@@ -1,11 +1,14 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { FormGroup, InputGroup, InputGroupButton } from 'reactstrap';
 
 import Button from '../../../components/Buttons/Button';
 import Icon from '../../../components/Icons/Icon';
 import Mention from '../../../components/Mention';
 
-const MessagesForm = ({ value, setValue, users, onSubmit, disabled, children }) => (
+const MessagesForm = ({
+  value, setValue, users, onSubmit, disabled, children,
+}) => (
   <div className="chat-form" {...{ onSubmit }}>
     <form className="f1">
       <fieldset {...{ disabled }}>
@@ -14,7 +17,11 @@ const MessagesForm = ({ value, setValue, users, onSubmit, disabled, children }) 
             {children}
 
             <Mention dropup {...{ value, setValue, users }}>
-              <Mention.Input placeholder="Add a comment" name="message" autoComplete="off" />
+              <Mention.Input
+                placeholder="Add a comment"
+                name="message"
+                autoComplete="off"
+              />
               <Mention.Menu />
             </Mention>
 

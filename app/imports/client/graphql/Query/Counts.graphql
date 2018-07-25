@@ -1,0 +1,20 @@
+query Counts($organizationId: ID!) {
+  counts(organizationId: $organizationId) {
+    standards {
+      totalCount
+      notViewedCount
+    }
+    risks {
+      totalCount
+      notViewedCount
+    }
+    nonConformities {
+      totalCount
+      notViewedCount
+    }
+    workInbox {
+      totalCount
+      notViewedCount
+    }
+  }
+}

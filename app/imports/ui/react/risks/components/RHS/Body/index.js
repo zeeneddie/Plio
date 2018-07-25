@@ -1,13 +1,15 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Row, Col, ListGroup } from 'reactstrap';
 import { _ } from 'meteor/underscore';
 
 import { ProblemsStatuses, DocumentTypes } from '/imports/share/constants';
 import { AnalysisTitles } from '/imports/api/constants';
 import { getFullNameOrEmail } from '/imports/api/users/helpers';
-import { getClassByStatus } from '/imports/api/problems/helpers.js';
+import { getClassByStatus } from '/imports/api/problems/helpers';
 import Label from '/imports/ui/react/components/Labels/Label';
 import LinkItemList from '/imports/ui/react/fields/read/components/LinkItemList';
+import Lessons from '/imports/ui/react/fields/read/components/Lessons';
 import ImprovementPlan from '/imports/ui/react/fields/read/components/ImprovementPlan';
 import Notify from '/imports/ui/react/fields/read/components/Notify';
 import Field from '/imports/ui/react/fields/read/components/Field';
@@ -54,7 +56,7 @@ const Body = ({
   originatorId,
   ownerId,
   magnitude,
-  type,
+  type = {},
   departments,
   scores,
   correctiveActions,
@@ -62,7 +64,7 @@ const Body = ({
   lessons,
   improvementPlan,
   riskEvaluation,
-  fileIds,
+  fileIds = [],
   analysis,
   updateOfStandards,
 }) => (
@@ -135,8 +137,6 @@ const Body = ({
       </Block>
     )}
 
-    {notify && !!notify.length && (<Notify users={notify} />)}
-
     {!_.isEmpty(riskEvaluation) && (
       <Block>
         <span>Risk evaluation</span>
@@ -156,22 +156,26 @@ const Body = ({
     )}
 
     {!!correctiveActions.length && (
-      <LinkItemList label="Corrective actions" items={correctiveActions} />
+      <Block>
+        <span>Corrective actions</span>
+        <LinkItemList items={correctiveActions} />
+      </Block>
     )}
 
     {!!preventativeActions.length && (
-      <LinkItemList label="Preventative actions" items={preventativeActions} />
+      <Block>
+        <span>Preventative actions</span>
+        <LinkItemList items={preventativeActions} />
+      </Block>
     )}
 
-    {!!lessons.length && (
-      <LinkItemList label="Lessons Learned" items={lessons} />
-    )}
+    {!!lessons.length && (<Lessons {...{ lessons }} />)}
 
     {!!fileIds.length && (
       <Block>
         <span>Other files</span>
         <Field>
-          {fileIds.map((fileId) => (
+          {fileIds.map(fileId => (
             <FileProvider key={fileId} {...{ fileId }} />
           ))}
         </Field>
@@ -179,6 +183,8 @@ const Body = ({
     )}
 
     <ReviewsContainer documentId={_id} documentType={DocumentTypes.RISK} />
+
+    {notify && !!notify.length && (<Notify users={notify} />)}
   </div>
 );
 

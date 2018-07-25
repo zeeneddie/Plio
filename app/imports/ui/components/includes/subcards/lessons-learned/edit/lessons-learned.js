@@ -23,7 +23,7 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
       _lText: 'Lessons learned',
       _rText: items.length,
       onAdd: this.onAdd.bind(this),
-      getSubcardArgs: this.getSubcardArgs.bind(this)
+      getSubcardArgs: this.getSubcardArgs.bind(this),
     };
   },
   getSubcardArgs(doc) {
@@ -35,7 +35,7 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
       content: 'Subcards_LessonLearned',
       insertFn: this.insert.bind(this),
       updateFn: this.update.bind(this),
-      removeFn: this.remove.bind(this)
+      removeFn: this.remove.bind(this),
     };
   },
   renderText({ title, serialNumber }) {
@@ -57,8 +57,8 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
         ...getLinks(this),
         insertFn: this.insert.bind(this),
         updateFn: this.update.bind(this),
-        removeFn: this.remove.bind(this)
-      }
+        removeFn: this.remove.bind(this),
+      },
     );
   },
   insert({ ...args }, cb) {
@@ -66,7 +66,7 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
     const { documentId, documentType } = this.data();
 
     this.modal().callMethod(insert, {
-      organizationId, documentId, documentType, ...args
+      organizationId, documentId, documentType, ...args,
     }, cb);
   },
   update({ ...args }, cb) {
@@ -79,28 +79,27 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
 
     if (!_id) {
       return viewmodel.destroy();
-    } else {
-      swal({
-        title: 'Are you sure?',
-        text: `The lesson "${title}" will be removed.`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Remove',
-        closeOnConfirm: false
-      }, () => {
-        const cb = () => {
-          viewmodel.destroy();
-          swal({
-            title: 'Removed!',
-            text: `The lesson "${title}" was removed successfully.`,
-            type: 'success',
-            timer: ALERT_AUTOHIDE_TIME,
-            showConfirmButton: false,
-          });
-        };
-
-        this.modal().callMethod(remove, { _id }, cb);
-      });
     }
-  }
+    swal({
+      title: 'Are you sure?',
+      text: `The lesson "${title}" will be removed.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove',
+      closeOnConfirm: false,
+    }, () => {
+      const cb = () => {
+        viewmodel.destroy();
+        swal({
+          title: 'Removed!',
+          text: `The lesson "${title}" was removed successfully.`,
+          type: 'success',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
+        });
+      };
+
+      this.modal().callMethod(remove, { _id }, cb);
+    });
+  },
 });

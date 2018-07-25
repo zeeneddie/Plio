@@ -16,8 +16,9 @@ const clearAtWithRouter = (props) => {
   }
 };
 
-export const openUserDetails = ({ user }) => (e) => {
+export const openUserDetails = ({ user }) => async (e) => {
   e.preventDefault();
+  await import('../../../../components/userdirectory/card/inner');
 
   // we need the user from minimongo here because blaze template uses collection helpers
   // which can only be accessed from minimongo document
@@ -33,6 +34,4 @@ export const select = ({ dispatch, _id }) => () => dispatch(setAt(_id));
 
 export const deselect = props => () => clearAtWithRouter(props);
 
-export const remove = props => () => props.dispatch(
-  removeMessage(props, () => err => !err && clearAtWithRouter(props))
-);
+export const remove = props => () => props.dispatch(removeMessage(props, () => err => !err && clearAtWithRouter(props)));

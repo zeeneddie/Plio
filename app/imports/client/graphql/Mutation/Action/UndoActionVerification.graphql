@@ -1,0 +1,29 @@
+# TODO: Update problems cache
+# updateOfStandards {
+#   status
+#   completedAt
+#   completedBy {
+#     _id
+#     profile {
+#       fullName
+#     }
+#   }
+# }
+
+mutation undoActionVerification($input: UndoActionVerificationInput!) {
+  undoActionVerification(input: $input) {
+    action {
+      isVerified
+      isVerifiedAsEffective
+      verifiedAt
+      verificationComments
+      status
+      verifiedBy {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
-import { RCAMaxCauses } from '/imports/share/constants.js';
-
+import { RCAMaxCauses } from '/imports/share/constants';
+import { AnalysisFieldPrefixes } from '../../../../../../api/constants';
 
 Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
   mixin: ['collapse', 'modal'],
@@ -9,6 +9,7 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
     return this.rootCauseAnalysis() || {};
   },
   label: 'Root cause analysis',
+  prefix: AnalysisFieldPrefixes.CAUSE,
   causes() {
     return this.doc() && this.doc().causes || [];
   },
@@ -33,5 +34,5 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
   },
   update({ query = {}, options = {}, ...args }, cb) {
     this.parent().update({ query, options, ...args }, cb);
-  }
+  },
 });

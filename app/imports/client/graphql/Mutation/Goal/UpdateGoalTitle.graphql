@@ -1,0 +1,8 @@
+mutation updateGoalTitle($input: UpdateGoalTitleInput!) {
+  updateGoalTitle(input: $input) {
+    goal {
+      _id
+      title
+    }
+  }
+}

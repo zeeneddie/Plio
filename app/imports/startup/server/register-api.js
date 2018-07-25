@@ -43,3 +43,5 @@ import '../../api/help-docs';
 import '../../api/data-export';
 
 import '../../api/reviews';
+
+import '../../share/startup/hooks';

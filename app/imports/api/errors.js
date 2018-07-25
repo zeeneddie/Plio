@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 
-const { Error:E } = Meteor;
+import { Errors } from '../share';
+
+const { Error: E } = Meteor;
 
 export * from './work-items/errors.js';
 
@@ -12,13 +14,13 @@ export * from './problems/errors.js';
 
 export * from './standards/errors.js';
 
-export * from './organizations/errors.js';
+export * from './organizations/errors';
 
-export * from './users/errors.js';
+export * from './users/errors';
 
-export * from './discussions/errors.js';
+export * from './discussions/errors';
 
-export const NOT_AN_ORG_MEMBER = new E(403, 'You are not a member of this organization');
+export const NOT_AN_ORG_MEMBER = new E(403, Errors.NOT_ORG_MEMBER);
 
 export const DOC_NOT_FOUND = new E(400, 'The document you are looking for is not found');
 

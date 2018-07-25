@@ -8,21 +8,21 @@ import { getCollectionByDocType } from '/imports/share/helpers';
 export const getProblemsByStandardIds = collection => ({ _id: standardsIds }) =>
   getCursorNonDeleted({ standardsIds }, {}, collection);
 
-export const createProblemsTree = (getInitial) => ({
+export const createProblemsTree = getInitial => ({
   find: getInitial,
   children: [
     {
       find: getActionsCursorByLinkedDoc({}),
       children: [
         {
-          find: getWorkItemsCursorByIdsWithLimitedFields
-        }
-      ]
+          find: getWorkItemsCursorByIdsWithLimitedFields,
+        },
+      ],
     },
     {
-      find: getWorkItemsCursorByIdsWithLimitedFields
-    }
-  ]
+      find: getWorkItemsCursorByIdsWithLimitedFields,
+    },
+  ],
 });
 
 export const getProblemsWithLimitedFields = curry((query, collection) => {
@@ -30,7 +30,7 @@ export const getProblemsWithLimitedFields = curry((query, collection) => {
     organizationId: 1,
     title: 1,
     sequentialId: 1,
-    standardsIds: 1
+    standardsIds: 1,
   };
 
   return getCursorNonDeleted(query, fields, collection);
@@ -42,8 +42,8 @@ export const getLinkedProblems = curry((documentType, options, { organizationId,
   const query = {
     organizationId,
     _id: {
-      $in: ids
-    }
+      $in: ids,
+    },
   };
 
   return collection.find(query, options);

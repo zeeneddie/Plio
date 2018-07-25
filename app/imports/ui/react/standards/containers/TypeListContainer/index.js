@@ -1,26 +1,19 @@
-import { compose, lifecycle, mapProps } from 'recompose';
+import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
 import TypeList from '../../components/TypeList';
-import {
-  lengthStandards,
-  propEq,
-} from '/imports/api/helpers';
-import { getState } from '/imports/client/store';
-import { STANDARD_FILTER_MAP } from '/imports/api/constants';
+import { getState } from '../../../../../client/store';
+import { STANDARD_FILTER_MAP } from '../../../../../api/constants';
 import {
   openStandardByFilter,
   getSelectedAndDefaultStandardByFilter,
-  getSelectedStandardDeletedState,
-  createUncategorizedType,
 } from '../../helpers';
+import {
+  getTypesWithUncategorized,
+  getSelectedStandardIsDeleted,
+} from '../../../../../client/store/selectors/standards';
 
-const mapStateToProps = (state) => ({
-  standardTypes: state.collections.standardTypes,
-  ...getSelectedStandardDeletedState(state),
-});
-
-const openType = (props) => setTimeout(() => {
+const openType = props => setTimeout(() => {
   const urlItemId = getState('global.urlItemId');
   const standardsByIds = getState('collections.standardsByIds');
   const {
@@ -49,25 +42,13 @@ const openType = (props) => setTimeout(() => {
   });
 }, 0);
 
+const mapStateToProps = (state, props) => ({
+  types: getTypesWithUncategorized(state, props),
+  isSelectedStandardDeleted: getSelectedStandardIsDeleted(state),
+});
+
 export default compose(
   connect(mapStateToProps),
-  mapProps(({ standardTypes, standards, ...props }) => {
-    let types = standardTypes;
-    const uncategorized = createUncategorizedType({ types, standards });
-
-    // add own standards to each type
-    types = types.map(type => ({
-      ...type,
-      standards: standards.filter(propEq('typeId', type._id)),
-    }));
-
-    // add uncategorized type
-    types = types.concat(uncategorized);
-
-    types = types.filter(lengthStandards);
-
-    return { ...props, types };
-  }),
   lifecycle({
     componentWillMount() {
       openType(this.props);

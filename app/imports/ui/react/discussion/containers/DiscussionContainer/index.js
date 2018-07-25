@@ -1,21 +1,21 @@
 import { connect } from 'react-redux';
-import { composeWithTracker } from 'react-komposer';
 import { compose, lifecycle, withProps, withHandlers } from 'recompose';
 import get from 'lodash.get';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { pickDeep, handleMethodResult, equals, getId, find } from '/imports/api/helpers';
 import { DiscussionSubs } from '/imports/startup/client/subsmanagers';
-import Discussion from '../../components/Discussion';
 import { setAt, reset, setDiscussion } from '/imports/client/store/actions/discussionActions';
 import { setShowCard } from '/imports/client/store/actions/mobileActions';
 import { Discussions } from '/imports/share/collections/discussions';
 import { toggleMute } from '/imports/api/discussions/methods';
+import Discussion from '../../components/Discussion';
+import { composeWithTracker } from '../../../../../client/util';
 
 const discussionLoad = ({ dispatch, urlItemId, organizationId }, onData) => {
   const subscription = DiscussionSubs.subscribe(
     'discussionsByDocId',
-    { organizationId, docId: urlItemId }
+    { organizationId, docId: urlItemId },
   );
 
   if (subscription.ready()) {
@@ -33,10 +33,12 @@ export default compose(
     'global.urlItemId',
     'discussion.resetCompleted',
   ])),
-  composeWithTracker(discussionLoad, null, null, {
-    shouldResubscribe: (props, nextProps) =>
+  composeWithTracker(discussionLoad, {
+    propsToWatch: ['urlItemId', 'resetCompleted'],
+    shouldSubscribe: (props, nextProps) => !!(
       props.urlItemId !== nextProps.urlItemId ||
-      nextProps.resetCompleted,
+      nextProps.resetCompleted
+    ),
   }),
   connect(({ collections, discussion, global: { userId } }, { organizationId }) => ({
     userId,
@@ -64,5 +66,5 @@ export default compose(
     componentWillUnmount() {
       this.props.dispatch(reset());
     },
-  })
+  }),
 )(Discussion);

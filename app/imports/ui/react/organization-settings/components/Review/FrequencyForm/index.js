@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { withProps } from 'recompose';
 
 import Form from '/imports/ui/react/forms/components/Form';
@@ -7,7 +8,7 @@ import { getFormProps } from '../helpers';
 
 const enhance = withProps(getFormProps);
 
-const ReviewFrequencyForm = enhance((props) => (
+const ReviewFrequencyForm = enhance(props => (
   <Form
     autosave
     initialFormData={props.initialFormData}

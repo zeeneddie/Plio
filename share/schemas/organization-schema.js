@@ -5,12 +5,12 @@ import {
   OrgCurrencies, WorkflowTypes, UserMembership,
   StandardTitles, RiskTitles, NonConformitiesTitles,
   WorkInboxTitles, CustomerTypes, PossibleReviewFrequencies,
-  HomeScreenTitlesTypes,
+  HomeScreenTitlesTypes, OrganizationDefaults,
 } from '../constants';
 import {
   BaseEntitySchema, ReminderTimePeriodSchema,
   TimezoneSchema, TimePeriodSchema,
-  idSchemaDoc,
+  idSchemaDoc, WorkspaceDefaultsSchema,
 } from './schemas';
 
 export const HomeTitlesSchema = new SimpleSchema({
@@ -35,6 +35,8 @@ const UserSettingsSchema = new SimpleSchema({
       if (!this.isSet) {
         return true;
       }
+
+      return undefined;
     },
   },
 });
@@ -54,6 +56,8 @@ const OrgUserSchema = new SimpleSchema([
         if (!this.isSet) {
           return new Date();
         }
+
+        return undefined;
       },
       type: Date,
     },
@@ -63,6 +67,8 @@ const OrgUserSchema = new SimpleSchema([
         if (!this.isSet) {
           return false;
         }
+
+        return undefined;
       },
     },
     removedAt: {
@@ -97,6 +103,10 @@ const workflowDefaultsSchema = new SimpleSchema({
   },
   criticalProblem: {
     type: problemWorkflowSchema,
+  },
+  isActionsCompletionSimplified: {
+    type: Boolean,
+    defaultValue: OrganizationDefaults.workflowDefaults.isActionsCompletionSimplified,
   },
 });
 
@@ -138,15 +148,30 @@ const OrganizationCurrencySchema = {
 const ncGuidelinesSchema = new SimpleSchema({
   minor: {
     type: String,
-    label: 'Guideline for classifying a minor non-conformity',
+    label: 'Guideline for classifying a minor nonconformity',
   },
   major: {
     type: String,
-    label: 'Guideline for classifying a major non-conformity',
+    label: 'Guideline for classifying a major nonconformity',
   },
   critical: {
     type: String,
-    label: 'Guideline for classifying a critical non-conformity',
+    label: 'Guideline for classifying a critical nonconformity',
+  },
+});
+
+const pgGuidelinesSchema = new SimpleSchema({
+  minor: {
+    type: String,
+    label: 'Guideline for classifying a minor potential gain',
+  },
+  major: {
+    type: String,
+    label: 'Guideline for classifying a major potential gain',
+  },
+  critical: {
+    type: String,
+    label: 'Guideline for classifying a critical potential gain',
   },
 });
 
@@ -175,6 +200,8 @@ export const reviewReviewerIdSchema = new SimpleSchema({
           return createdBy.value;
         }
       }
+
+      return undefined;
     },
   },
 });
@@ -202,6 +229,8 @@ export const reviewAnnualDateSchema = new SimpleSchema({
           return createdAt.value;
         }
       }
+
+      return undefined;
     },
   },
 });
@@ -242,6 +271,10 @@ const OrganizationEditableFields = {
   },
   ncGuidelines: {
     type: ncGuidelinesSchema,
+    optional: true,
+  },
+  pgGuidelines: {
+    type: pgGuidelinesSchema,
     optional: true,
   },
   rkGuidelines: {
@@ -287,6 +320,7 @@ const OrganizationSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationEditableFields,
   CustomerTypeSchema,
+  WorkspaceDefaultsSchema,
   {
     homeScreenTitles: {
       type: HomeTitlesSchema,
@@ -312,7 +346,14 @@ const OrganizationSchema = new SimpleSchema([
     },
     lastAccessedDate: {
       type: Date,
-      defaultValue: new Date,
+      optional: true,
+      autoValue() {
+        if (this.isInsert && !this.isSet) {
+          return new Date();
+        }
+
+        return undefined;
+      },
     },
   },
 ]);

@@ -1,22 +1,21 @@
 import { Template } from 'meteor/templating';
 
 import { ActionPlanOptions } from '/imports/share/constants.js';
-import { insert } from '/imports/api/actions/methods';
-import { getWorkflowDefaultStepDate } from '/imports/share/helpers.js';
+import { getWorkflowDefaultStepDate } from '/imports/share/helpers';
 
 Template.Actions_CreateSubcard.viewmodel({
   mixin: ['getChildrenData', 'organization'],
   type: '',
   title: '',
   description: '',
-  defaultToBeCompletedBy:'',
+  defaultToBeCompletedBy: '',
   autorun() {
     const data = this.getData();
     if (data && data.ownerId) {
       this.defaultToBeCompletedBy(data.ownerId);
     }
   },
-  ownerId() { return Meteor.userId() },
+  ownerId() { return Meteor.userId(); },
   planInPlace: ActionPlanOptions.NO,
   completionTargetDate() {
     const organization = this.organization();

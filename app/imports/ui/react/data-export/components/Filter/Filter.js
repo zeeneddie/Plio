@@ -1,21 +1,21 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { _ } from 'meteor/underscore';
 import Form from '/imports/ui/react/forms/components/Form';
 import FormGroup from 'reactstrap/lib/FormGroup';
-import Checkbox from '/imports/ui/react/forms/components/Checkbox';
+import Checkbox from '/imports/ui/react/forms/components/LegacyCheckbox';
 
 const Filter = ({ statuses, checkedFilters }) => (
   <div className="relative">
     <Form.SubForm name="filter">
       <FormGroup>
         {Object.keys(statuses).map(status =>
-          <Checkbox
+          (<Checkbox
             checked={_.contains(checkedFilters, Number(status))}
             name={status}
             text={statuses[status]}
             key={`actions-status-${status}`}
-          />
-        )}
+          />))}
       </FormGroup>
     </Form.SubForm>
   </div>

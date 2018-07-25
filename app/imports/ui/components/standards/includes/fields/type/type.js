@@ -2,9 +2,23 @@ import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import cx from 'classnames';
+import { lenses, getId } from 'plio-util';
+import { view, propEq, find, either, compose } from 'ramda';
 
-import { StandardTypes } from '/imports/share/collections/standards-types.js';
-import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
+import { StandardTypes } from '../../../../../../share/collections';
+import { sortArrayByTitlePrefix } from '../../../../../../api/helpers';
+import { DefaultStandardTypes } from '../../../../../../share/constants';
+
+// this will only work if the organization hasn't removed/changed
+// the default Standard operating procedure type
+const getDefaultType = find(propEq(
+  'titlePrefix',
+  DefaultStandardTypes.STANDARD_OPERATING_PROCEDURE.title,
+));
+const getDefaultTypeId = either(
+  compose(getId, getDefaultType),
+  view(lenses.head._id),
+);
 
 Template.ESType.viewmodel({
   share: 'standard',
@@ -18,8 +32,8 @@ Template.ESType.viewmodel({
   },
   onCreated() {
     if (!this.typeId()) {
-      const defaultType = _.first(Object.assign([], this.types()));
-      defaultType && this.typeId(defaultType._id);
+      const typeId = getDefaultTypeId(Object.assign([], this.types()));
+      if (typeId) this.typeId(typeId);
     }
   },
   types() {
@@ -42,12 +56,12 @@ Template.ESType.viewmodel({
       modal.setError('Type is required!');
     }
 
-    this.parent().update({ typeId }, (err) => {
+    this.parent().update({ typeId }, () => {
       this.expandCollapsed(this.standardId());
     });
   },
   getData() {
     const { typeId } = this.data();
     return { typeId: typeId || this.typeId() };
-  }
+  },
 });

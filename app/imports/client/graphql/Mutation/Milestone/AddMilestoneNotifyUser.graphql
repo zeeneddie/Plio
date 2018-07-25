@@ -1,0 +1,10 @@
+mutation addMilestoneNotifyUser($input: AddMilestoneNotifyUserInput!) {
+  addMilestoneNotifyUser(input: $input) {
+    user {
+      _id
+      profile {
+        fullName
+      }
+    }
+  }
+}

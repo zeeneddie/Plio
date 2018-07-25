@@ -1,6 +1,6 @@
 import curry from 'lodash.curry';
 
-import { Organizations } from '/imports/share/collections/organizations';
+import { Organizations } from '../../share/collections/organizations';
 import {
   ORG_CANNOT_CHANGE_SETTINGS,
   ORG_ALREADY_EXISTS,
@@ -27,13 +27,11 @@ import {
   checkOrgMembershipBySelector,
 } from '../checkers';
 import { checkAndThrow, checkAndThrowC, compose, invoker } from '../helpers';
-import { getCollectionByDocType } from '/imports/share/helpers';
+import { getCollectionByDocType } from '../../share/helpers';
 import { DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED, throwExpectedNoDocs } from './errors';
 
 
-export const ORG_EnsureCanChange = (userId, organizationId) => {
-  return checkAndThrow(!canChangeOrgSettings(userId, organizationId), ORG_CANNOT_CHANGE_SETTINGS);
-};
+export const ORG_EnsureCanChange = (userId, organizationId) => checkAndThrow(!canChangeOrgSettings(userId, organizationId), ORG_CANNOT_CHANGE_SETTINGS);
 
 export const ORG_EnsureCanChangeChecker = ({ userId }, doc) => {
   ORG_EnsureCanChange(userId, doc.organizationId);
@@ -43,13 +41,11 @@ export const ORG_EnsureCanChangeChecker = ({ userId }, doc) => {
 
 export const ORG_EnsureCanChangeCheckerCurried = userId => curry(ORG_EnsureCanChangeChecker)({ userId });
 
-export const ORG_EnsureCanInvite = (userId, organizationId) => {
-  return checkAndThrow(!canInviteUsers(userId, organizationId), ORG_CANNOT_INVITE_USERS);
-};
+export const ORG_EnsureCanInvite = (userId, organizationId) => checkAndThrow(!canInviteUsers(userId, organizationId), ORG_CANNOT_INVITE_USERS);
 
 export const ORG_EnsureNameIsUnique = ({ name }, doc) => {
   const nameIsUnique = !Organizations.findOne({
-    name: new RegExp(`^${name}$`, 'i')
+    name: new RegExp(`^${name}$`, 'i'),
   });
 
   checkAndThrow(!nameIsUnique, ORG_ALREADY_EXISTS(name));
@@ -64,10 +60,10 @@ export const ORG_EnsureUserIsNotAlreadyDeleted = (userId, organizationId) => {
       $elemMatch: {
         userId,
         isRemoved: true,
-        removedBy: {$exists: true},
-        removedAt: {$exists: true}
-      }
-    }
+        removedBy: { $exists: true },
+        removedAt: { $exists: true },
+      },
+    },
   });
 
   return checkAndThrow(isAlreadyRemoved, ORG_USER_ALREADY_DELETED);
@@ -85,20 +81,14 @@ export const ORG_EnsureCanDeleteUsers = (userToDeleteId, userId, organizationId)
   return true;
 };
 
-export const ORG_IsOnTransfer = (organizationId) => {
-  return !!Organizations.findOne({
-    _id: organizationId,
-    transfer: { $exists: true }
-  });
-};
+export const ORG_IsOnTransfer = organizationId => !!Organizations.findOne({
+  _id: organizationId,
+  transfer: { $exists: true },
+});
 
-export const ORG_EnsureIsOwner = (userId, organizationId) => {
-  return checkAndThrow(!isOrgOwner(userId, organizationId), ORG_CANNOT_UPDATE);
-};
+export const ORG_EnsureIsOwner = (userId, organizationId) => checkAndThrow(!isOrgOwner(userId, organizationId), ORG_CANNOT_UPDATE);
 
-export const ORG_EnsureCanDelete = (userId, organizationId) => {
-  return checkAndThrow(!isOrgOwner(userId, organizationId), ORG_CANNOT_DELETE);
-};
+export const ORG_EnsureCanDelete = (userId, organizationId) => checkAndThrow(!isOrgOwner(userId, organizationId), ORG_CANNOT_DELETE);
 
 export const ORG_EnsureCanTransfer = (userToTransferId, userId, organizationId) => {
   checkAndThrow(Object.is(userToTransferId, userId), ORG_ALREADY_OWNER);
@@ -139,9 +129,9 @@ export const ORG_OnTransferChecker = (userToTransferId, transferId) => {
 
 export const ORG_EnsureCanBeDeleted = (organizationId) => {
   const { isAdminOrg } = Organizations.findOne({
-    _id: organizationId
+    _id: organizationId,
   }, {
-    fields: { isAdminOrg: 1 }
+    fields: { isAdminOrg: 1 },
   }) || {};
 
   checkAndThrow(isAdminOrg === true, ORG_CAN_NOT_BE_DELETED);
@@ -170,5 +160,5 @@ export const ensureThereIsNoDocuments = curry((err, docType, organizationId) => 
   checkAndThrowC(err),
   invoker(0, 'count'),
   invoker(1, 'find')({ organizationId, isDeleted: false }),
-  getCollectionByDocType
+  getCollectionByDocType,
 )(docType));

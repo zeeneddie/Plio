@@ -21,7 +21,9 @@ export const getMentionData = (text) => {
     const firstName = match[1];
     const email = match2 && match2.substring(1, match2.length - 1);
 
-    return { firstName, email, match, text, mentionString: str };
+    return {
+      firstName, email, match, text, mentionString: str,
+    };
   });
 
   return data;

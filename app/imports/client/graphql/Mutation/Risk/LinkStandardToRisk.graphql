@@ -1,0 +1,9 @@
+#import "../../Fragment/RiskCard.graphql"
+
+mutation linkStandardToRisk($input: LinkStandardToRiskInput!) {
+  linkStandardToRisk(input: $input) {
+    risk {
+      ...RiskCard
+    }
+  }
+}

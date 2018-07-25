@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
-import { isOrgOwner } from '/imports/api/checkers.js';
-import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { isOrgOwner } from '../../../../../api/checkers';
+import { ALERT_AUTOHIDE_TIME } from '../../../../../api/constants';
 
 Template.Card_Read.viewmodel({
   mixin: 'utils',
@@ -21,7 +21,7 @@ Template.Card_Read.viewmodel({
   onRestore() {},
   onDelete() {},
   onOpenEditModal() {},
-  openModal: _.throttle(function() {
+  openModal: _.throttle(function () {
     if (ViewModel.findOne('ModalWindow')) {
       return;
     }
@@ -35,22 +35,24 @@ Template.Card_Read.viewmodel({
       this.parent().isFullScreenMode(false);
 
       setTimeout(() => {
-        $div.css({ 'position': 'inherit', 'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto', 'transition': 'none' });
+        $div.css({
+          position: 'inherit', top: 'auto', right: 'auto', bottom: 'auto', left: 'auto', transition: 'none',
+        });
       }, 150);
     } else {
-      $div.css({ 'position': 'fixed', 'top': offset.top, 'right': $(window).width() - (offset.left + $div.outerWidth()), 'bottom': '0', 'left': offset.left });
+      $div.css({
+        position: 'fixed', top: offset.top, right: $(window).width() - (offset.left + $div.outerWidth()), bottom: '0', left: offset.left,
+      });
 
       setTimeout(() => {
-
         // Safari workaround
-        $div.css({ 'transition': 'all .15s linear' });
+        $div.css({ transition: 'all .15s linear' });
         this.parent().isFullScreenMode(true);
       }, 100);
     }
   },
   handleMethodCall(err = '', title = '', action = 'updated', cb) {
     if (err) {
-
       swal({
         title: 'Oops... Something went wrong!',
         text: err.reason,
@@ -70,10 +72,13 @@ Template.Card_Read.viewmodel({
       return _.isFunction(cb) && cb();
     }
   },
-  restore({ _id, title, isDeleted, ...args }) {
+  restore({
+    _id, title, isDeleted, ...args
+  }) {
     if (!isDeleted) return;
 
-    swal({
+    swal(
+      {
         title: 'Are you sure?',
         text: `The document "${title}" will be restored!`,
         type: 'warning',
@@ -82,13 +87,17 @@ Template.Card_Read.viewmodel({
         closeOnConfirm: false,
       },
       () => {
-        this.onRestore({ _id, title, isDeleted, ...args }, (err, cb) => {
+        this.onRestore({
+          _id, title, isDeleted, ...args,
+        }, (err, cb) => {
           this.handleMethodCall(err, title, 'restored', cb);
         });
-      }
+      },
     );
   },
-  delete({ _id, title, isDeleted, organizationId, ...args }) {
+  delete({
+    _id, title, isDeleted, organizationId, ...args
+  }) {
     if (!isDeleted || !this.isOrgOwner({ organizationId })) return;
 
     swal({
@@ -99,9 +108,11 @@ Template.Card_Read.viewmodel({
       confirmButtonText: 'Delete',
       closeOnConfirm: false,
     }, () => {
-      this.onDelete({ _id, title, isDeleted, ...args }, (err, cb) => {
+      this.onDelete({
+        _id, title, isDeleted, ...args,
+      }, (err, cb) => {
         this.handleMethodCall(err, title, 'deleted', cb);
       });
     });
-  }
+  },
 });

@@ -3,10 +3,11 @@ import { Meteor } from 'meteor/meteor';
 import { Organizations } from '/imports/share/collections/organizations';
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 
-const getPathPrefixByDocType = (docType) => ({
+export const getPathPrefixByDocType = docType => ({
   [DocumentTypes.STANDARD]: 'standards',
   [DocumentTypes.RISK]: 'risks',
   [DocumentTypes.NON_CONFORMITY]: 'non-conformities',
+  [DocumentTypes.POTENTIAL_GAIN]: 'non-conformities',
 })[docType];
 
 export const getAbsoluteUrl = path => (
@@ -55,6 +56,7 @@ export const getWorkItemUrl = (serialNumber, documentId) => {
 export const getProblemUrl = (problem, problemType, organization) => {
   const urlFn = {
     [ProblemTypes.NON_CONFORMITY]: getNCUrl,
+    [ProblemTypes.POTENTIAL_GAIN]: getNCUrl,
     [ProblemTypes.RISK]: getRiskUrl,
   }[problemType];
 

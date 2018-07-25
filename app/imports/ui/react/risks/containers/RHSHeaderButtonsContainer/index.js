@@ -1,44 +1,40 @@
-import { compose, mapProps, withHandlers } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 
 import { getPath } from '../../../../utils/router/paths';
-import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
-import { pickDeep } from '/imports/api/helpers';
 import {
-  onDiscussionOpen,
   onModalOpen,
   onRestore,
   onDelete,
 } from './handlers';
 import HeaderButtons from '../../components/RHS/HeaderButtons';
+import {
+  getIsFullScreenMode,
+  getUserId,
+} from '../../../../../client/store/selectors/global';
+import { getOrganizationId } from '../../../../../client/store/selectors/organizations';
+import { getIsDiscussionOpened } from '../../../../../client/store/selectors/discussion';
+import {
+  getCanChangeStandards,
+  getIsOrgOwner,
+} from '../../../../../client/store/selectors/users';
+
+const mapStateToProps = (state, { risk: { _id, title, isDeleted = false } }) => ({
+  _id,
+  title,
+  isDeleted,
+  pathToDiscussion: getPath('riskDiscussion')({ urlItemId: _id }),
+  userId: getUserId(state),
+  isFullScreenMode: getIsFullScreenMode(state),
+  organizationId: getOrganizationId(state),
+  isDiscussionOpened: getIsDiscussionOpened(state),
+  hasAccess: getCanChangeStandards(state),
+  hasFullAccess: getIsOrgOwner(state),
+});
 
 export default compose(
-  connect(pickDeep([
-    'global.isFullScreenMode',
-    'global.userId',
-    'organizations.organizationId',
-    'discussion.isDiscussionOpened',
-  ])),
-
-  mapProps(({ risk: { _id, title, isDeleted = false }, organizationId, userId, ...props }) => {
-    const hasAccess = canChangeStandards(userId, organizationId);
-    const hasFullAccess = isOrgOwner(userId, organizationId);
-    const pathToDiscussion = getPath('riskDiscussion')({ urlItemId: _id });
-
-    return {
-      ...props,
-      userId,
-      organizationId,
-      _id,
-      title,
-      hasAccess,
-      hasFullAccess,
-      pathToDiscussion,
-      isDeleted,
-    };
-  }),
+  connect(mapStateToProps),
   withHandlers({
-    onDiscussionOpen,
     onModalOpen,
     onRestore,
     onDelete,

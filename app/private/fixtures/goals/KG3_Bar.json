@@ -1,0 +1,27 @@
+{
+  "_id": "sMvzMrhXAyCDwKLBp",
+  "organizationId": "KwKXz5RefrE5hjWJ2",
+  "title": "Bar",
+  "startDate": { "$date": 1606390422791 },
+  "endDate": { "$date": 1570098822791 },
+  "status": 1,
+  "priority": "major",
+  "isCompleted": true,
+  "completedAt": { "$date": 1515670311424 },
+  "completedBy": "SQHmBKJ94gJvpLKLt",
+  "ownerId": "SQHmBKJ94gJvpLKLt",
+  "serialNumber": 3,
+  "sequentialId": "KG3",
+  "color": "#9e898f",
+  "fileIds": [],
+  "notify" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "isDeleted": false,
+  "createdAt" : {"$date": 1515670311424},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "updatedAt" : {"$date": 1515670311424},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt",
+  "riskIds": ["wT7nRwywbkTMzmPwQ"],
+  "milestoneIds": ["vkNfd2yPs8Eg6BQgm", "6sH5xtkpLBk2zFE5v"]
+}

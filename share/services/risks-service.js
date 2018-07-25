@@ -1,31 +1,67 @@
 import { Meteor } from 'meteor/meteor';
+import Random from 'meteor/random';
 
-import { Risks } from '/imports/share/collections/risks.js';
-import { ProblemTypes } from '/imports/share/constants.js';
-import BaseEntityService from '/imports/share/services/base-entity-service.js';
-import ProblemsService from '/imports/share/services/problems-service.js';
+import { Risks } from '../collections';
+import { ProblemTypes } from '../constants';
+import BaseEntityService from './base-entity-service';
+import ProblemsService from './problems-service';
+import GoalService from './goal-service';
 
 if (Meteor.isServer) {
-  //import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
+  // import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
 }
 
 
-export default _.extend({}, ProblemsService, {
+export default Object.assign({}, ProblemsService, {
   collection: Risks,
 
   _service: new BaseEntityService(Risks),
 
-  _abbr: 'RK',
+  _getDocType: () => ProblemTypes.RISK,
 
-  _docType: ProblemTypes.RISK,
+  _getAbbr: () => 'RK',
 
-  'scores.insert'({ _id, ...args }) {
+  async insert({
+    organizationId,
+    title,
+    description,
+    originatorId,
+    ownerId,
+    magnitude,
+    typeId,
+    standardsIds,
+    goalId,
+  }) {
+    const args = {
+      organizationId,
+      title,
+      description,
+      originatorId,
+      ownerId,
+      magnitude,
+      typeId,
+    };
+
+    if (goalId) {
+      Object.assign(args, { goalId });
+    } else {
+      Object.assign(args, { standardsIds });
+    }
+
+    const _id = await ProblemsService.insert.call(this, args);
+
+    if (goalId) await GoalService.linkRisk({ _id: goalId, riskId: _id });
+
+    return _id;
+  },
+
+  'scores.insert': function ({ _id, ...args }) {
     const id = Random.id();
     const query = { _id };
     const options = {
       $addToSet: {
-        scores: { _id: id, ...args }
-      }
+        scores: { _id: id, ...args },
+      },
     };
 
     this.collection.update(query, options);
@@ -33,12 +69,12 @@ export default _.extend({}, ProblemsService, {
     return id;
   },
 
-  'scores.remove'({ _id, score }) {
+  'scores.remove': function ({ _id, score }) {
     const query = { _id };
     const options = {
-      '$pull': {
-        'scores': score
-      }
+      $pull: {
+        scores: score,
+      },
     };
 
     return this.collection.update(query, options);
@@ -52,9 +88,9 @@ export default _.extend({}, ProblemsService, {
     return risk;
   },
 
-  _refreshStatus(_id) {
-    /*Meteor.isServer && Meteor.defer(() => {
+  _refreshStatus() {
+    /* Meteor.isServer && Meteor.defer(() => {
       new RiskWorkflow(_id).refreshStatus();
-    });*/
-  }
+    }); */
+  },
 });

@@ -9,12 +9,12 @@ Template.SimpleSelection_Edit_Item.viewmodel({
   showAbbreviation: false,
   requireAbbreviation: false,
   abbreviationMaxLength: StringLimits.abbreviation.max,
-
+  disabled: false,
   onChange() {},
   onFocusOut(e) {
     const data = prop => ({
       current: get(this.getData(), prop),
-      stored: get(this.templateInstance.data, prop)
+      stored: get(this.templateInstance.data, prop),
     });
     const title = data('title');
     const abbr = data('abbreviation');
@@ -24,16 +24,16 @@ Template.SimpleSelection_Edit_Item.viewmodel({
         return;
       }
     } else if (!title.current || title.current === title.stored) {
-       return;
+      return;
     }
 
-    return this.callWithFocusCheck(e, () => this.onChange(this));
+    this.callWithFocusCheck(e, () => this.onChange(this));
   },
   onDelete() {},
-  onDeleteFn(e) {
+  onDeleteFn() {
     return () => this.onDelete(this);
   },
   getData() {
     return { ...this.data() };
-  }
+  },
 });

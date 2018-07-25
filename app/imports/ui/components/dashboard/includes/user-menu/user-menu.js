@@ -1,29 +1,32 @@
+/* global $ */
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { isMobileRes } from '/imports/api/checkers.js';
-import { flattenObjects } from '/imports/api/helpers.js';
-import { MyPreferencesHelp } from '/imports/api/help-messages.js';
-import { userLogout } from '/imports/client/store/actions/globalActions';
+import { Organizations } from '../../../../../share/collections/organizations';
+import { isMobileRes } from '../../../../../api/checkers';
+import { flattenObjects } from '../../../../../api/helpers';
+import { MyPreferencesHelp } from '../../../../../api/help-messages';
+import { userLogout } from '../../../../../client/store/actions/globalActions';
+import { UserPresenceStatuses, SUPPORT_FORUM_URL } from '../../../../../api/constants';
+import { client } from '../../../../../client/apollo';
 
 const STATUSES = [
   {
     text: 'Online',
     css: 'text-success',
-    status: 'online'
+    status: UserPresenceStatuses.ONLINE,
   },
   {
     text: 'Away',
     css: 'text-warning',
-    status: 'away'
+    status: UserPresenceStatuses.AWAY,
   },
   {
     text: 'Offline',
     css: 'text-danger',
-    status: 'offline'
-  }
+    status: UserPresenceStatuses.OFFLINE,
+  },
 ];
 
 Template.UserMenu.viewmodel({
@@ -40,31 +43,38 @@ Template.UserMenu.viewmodel({
 
       return {
         href,
-        onClick: () => this.goToMyProfile(href)
-      }
+        onClick: () => this.goToMyProfile(href),
+      };
     };
 
     const links = {
       myProfile: myProfile(),
       myPreferences: {
-        onClick: this.openUserPreferences.bind(this)
+        onClick: this.openUserPreferences.bind(this),
       },
       userDirectory: {
-        href: getPath('userDirectoryPage')
+        href: getPath('userDirectoryPage'),
       },
       inviteUsers: {
-        onClick: this.onInviteClick.bind(this)
+        onClick: this.onInviteClick.bind(this),
       },
       logout: {
-        onClick: this.logout.bind(this)
-      }
+        onClick: this.logout.bind(this),
+      },
+      helpCenter: {
+        href: getPath('helpDocs'),
+      },
+      supportForum: {
+        href: SUPPORT_FORUM_URL,
+        target: '_blank',
+      },
     };
 
     const status = (index) => {
       const active = this.isActiveStatus(index) ? 'active' : '';
       return {
         className: `${className} pointer ${active}`,
-        onClick: this.changeStatus.bind(this)
+        onClick: this.changeStatus.bind(this),
       };
     };
 
@@ -75,8 +85,8 @@ Template.UserMenu.viewmodel({
 
     return {
       ...mappedLinks,
-      status
-    }
+      status,
+    };
   },
   getStatuses() {
     return STATUSES;
@@ -85,16 +95,13 @@ Template.UserMenu.viewmodel({
     const user = Meteor.user();
     const currentStatus = STATUSES[index].text.toLowerCase() ||
                           user.statusDefault;
-    const statusDefault = user.statusDefault;
 
-    return currentStatus === statusDefault;
+    return currentStatus === user.statusDefault;
   },
   getActiveClass() {
     const user = Meteor.user();
     const userStatus = user.status;
-    const activeStatus = STATUSES.find((status) => {
-      return status.text.toLowerCase() === userStatus;
-    });
+    const activeStatus = STATUSES.find(status => status.text.toLowerCase() === userStatus);
 
     return (activeStatus && activeStatus.css) || STATUSES[0].css;
   },
@@ -105,14 +112,16 @@ Template.UserMenu.viewmodel({
     e.preventDefault();
 
     const status = $(e.target).text().trim().toLowerCase();
-    if (status != Meteor.user().statusDefault) {
+    if (status !== Meteor.user().statusDefault) {
       Meteor.call('UserPresence:setDefaultStatus', status);
     }
   },
-  onInviteClick(event) {
+  async onInviteClick(event) {
     event.preventDefault();
-    let orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
-    let organizationId = Organizations.findOne({serialNumber: orgSerialNumber})._id;
+    const orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 0);
+    const organizationId = Organizations.findOne({ serialNumber: orgSerialNumber })._id;
+
+    await import('../../../userdirectory/includes/invite');
 
     this.modal().open({
       template: 'UserDirectory_InviteUsers',
@@ -121,7 +130,7 @@ Template.UserMenu.viewmodel({
       submitCaptionOnSave: 'Inviting...',
       closeCaption: 'Cancel',
       variation: 'save',
-      organizationId
+      organizationId,
     });
   },
   goToMyProfile(href) {
@@ -137,18 +146,21 @@ Template.UserMenu.viewmodel({
     e.preventDefault();
 
     Meteor.logout(() => {
+      client.resetStore(); // reset apollo store on logout
       this.dispatch(userLogout);
       FlowRouter.go('signIn');
     });
   },
-  openUserPreferences(e) {
+  async openUserPreferences(e) {
     e.preventDefault();
+
+    await import('../../../userdirectory/includes/preferences');
 
     this.modal().open({
       template: 'UserPreferences',
       _title: 'My preferences',
       helpText: MyPreferencesHelp.myPreferences,
-      userId: Meteor.userId()
+      userId: Meteor.userId(),
     });
-  }
+  },
 });

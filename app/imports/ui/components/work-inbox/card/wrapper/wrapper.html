@@ -8,7 +8,12 @@
           {{/CardHeading}}
         </div>
       {{else}}
-        {{#if isDocType LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
+        {{#if isDocType
+            LINKED_TYPES.CORRECTIVE_ACTION
+            LINKED_TYPES.PREVENTATIVE_ACTION
+            LINKED_TYPES.RISK_CONTROL
+            LINKED_TYPES.GENERAL_ACTION
+        }}
           {{#unless workItem.isDeleted}}
             {{> WorkInbox_QAPanel_Read doc=workItem}}
           {{/unless}}
@@ -16,7 +21,7 @@
           {{> Actions_Card_Read (cardArgs)}}
         {{/if}}
 
-        {{#if isDocType LINKED_TYPES.NON_CONFORMITY}}
+        {{#if (some (isDocType LINKED_TYPES.NON_CONFORMITY) (isDocType LINKED_TYPES.POTENTIAL_GAIN))}}
           {{> WorkInbox_QAPanel_Read doc=workItem}}
           {{> NC_Card_Read (cardArgs)}}
         {{/if}}

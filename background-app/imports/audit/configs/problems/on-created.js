@@ -17,7 +17,7 @@ export default {
         }));
       },
       logData({ newDoc: { standardsIds } }) {
-        return _(standardsIds).map((standardId) => ({
+        return _(standardsIds).map(standardId => ({
           collection: StandardAuditConfig.collectionName,
           documentId: standardId,
         }));
@@ -30,7 +30,7 @@ export default {
       data({ newDoc }) {
         const standards = Standards.find({ _id: { $in: newDoc.standardsIds } });
 
-        return standards.map((standard) => ({
+        return standards.map(standard => ({
           standardDesc: StandardAuditConfig.docDescription(standard),
           standardName: StandardAuditConfig.docName(standard),
         }));

@@ -11,7 +11,7 @@ export default class StandardsNotificationsSender {
     this._standardId = standardId;
     this._standard = Standards.findOne({ _id: standardId });
     this._organization = Organizations.findOne({
-      _id: this._standard.organizationId
+      _id: this._standard.organizationId,
     });
   }
 
@@ -22,8 +22,8 @@ export default class StandardsNotificationsSender {
       title: emailSubject,
       button: {
         label: 'View standard',
-        url: this.getStandardUrl()
-      }
+        url: this.getStandardUrl(),
+      },
     };
 
     new NotificationSender({
@@ -34,9 +34,9 @@ export default class StandardsNotificationsSender {
       notificationData: {
         title: this._standard.title,
         body: 'You have been added to the notification list for any changes',
-        url: this.getStandardUrl()
-      }
-    }).sendOnSite().sendEmail()
+        url: this.getStandardUrl(),
+      },
+    }).sendOnSite().sendEmail();
   }
 
   removedFromNotifyList(userId) {
@@ -48,8 +48,6 @@ export default class StandardsNotificationsSender {
   }
 
   getStandardUrl() {
-    return Meteor.absoluteUrl(
-      `${this._organization.serialNumber}/standards/${this._standardId}`
-    );
+    return Meteor.absoluteUrl(`${this._organization.serialNumber}/standards/${this._standardId}`);
   }
 }

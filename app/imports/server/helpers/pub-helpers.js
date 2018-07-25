@@ -8,10 +8,10 @@ import { isOrgMemberBySelector } from '../../api/checkers';
 export const getUsersCursorByIdsAndOrgId = (
   ids,
   organizationId,
-  query
+  query,
 ) => {
   const _query = { _id: { $in: ids }, ...query };
-  let _projection = {
+  const _projection = {
     fields: {
       ...Meteor.users.publicFields,
     },
@@ -37,7 +37,7 @@ export const getPublishCompositeOrganizationUsersObject = (userId, selector) => 
   ],
 });
 
-export const getPublishCompositeOrganizationUsers = (fn) =>
+export const getPublishCompositeOrganizationUsers = fn =>
   function publishCompositeOrganizationUsers(serialNumber, isDeleted) {
     check(serialNumber, Number);
     check(isDeleted, Match.OneOf(Boolean, undefined)); // eslint-disable-line new-cap

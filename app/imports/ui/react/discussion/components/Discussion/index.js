@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-pascal-case */
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 
 import PreloaderPage from '../../../components/PreloaderPage';
 import MessagesListWrapperContainer from '../../containers/MessagesListWrapperContainer';
@@ -9,7 +11,7 @@ import DiscussionFileUploaderContainer from '../../containers/DiscussionFileUplo
 import RHS from '../../../components/RHS';
 import DiscussionHeader from '../DiscussionHeader';
 
-const Discussion = (props) => (
+const Discussion = props => (
   <RHS className="flexbox-column">
     <RHS.Card className="chat">
       <DiscussionHeader {...props} />

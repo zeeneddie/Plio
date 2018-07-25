@@ -1,5 +1,7 @@
+import { without } from 'ramda';
+
 import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '/imports/share/helpers';
+import { getUserFullNameOrEmail } from '../../../../share/helpers';
 import { getReceivers } from '../helpers';
 
 
@@ -21,9 +23,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} assigned {{{newValue}}} to carry out root cause analysis of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} assigned {{{newValue}}} to carry out root cause analysis ' +
+          'of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} assigned {{{newValue}}} to carry out root cause analysis of {{{docDesc}}} {{{docName}}} instead of {{{oldValue}}}',
+          '{{{userName}}} assigned {{{newValue}}} to carry out root cause analysis ' +
+          'of {{{docDesc}}} {{{docName}}} instead of {{{oldValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           '{{{userName}}} removed root cause analysis executor of {{{docDesc}}} {{{docName}}}',
       },
@@ -48,10 +52,6 @@ export default {
     // Remove new analysis executor from receivers
     // because he will receive a personal notification
     const executor = executorField.newValue;
-    const index = receivers.indexOf(executor);
-
-    return index > -1
-      ? receivers.slice(0, index).concat(receivers.slice(index + 1))
-      : receivers;
+    return without(executor, receivers);
   },
 };

@@ -1,24 +1,27 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { getId } from 'plio-util';
 
-import { Organizations } from '/imports/share/collections/organizations';
-import { Actions } from '/imports/share/collections/actions';
-import { NonConformities } from '/imports/share/collections/non-conformities';
-import { Risks } from '/imports/share/collections/risks';
-import { WorkItems } from '/imports/share/collections/work-items';
-import { WorkflowTypes } from '/imports/share/constants';
-import ActionWorkflow from '/imports/workflow/ActionWorkflow';
-import NCWorkflow from '/imports/workflow/NCWorkflow';
-import RiskWorkflow from '/imports/workflow/RiskWorkflow';
-import WorkItemWorkflow from '/imports/workflow/WorkItemWorkflow';
-
+import {
+  Organizations,
+  Actions,
+  NonConformities,
+  Risks,
+  WorkItems,
+  Goals,
+  Milestones,
+} from '../share/collections';
+import { WorkflowTypes } from '../share/constants';
+import ActionWorkflow from './ActionWorkflow';
+import NCWorkflow from './NCWorkflow';
+import RiskWorkflow from './RiskWorkflow';
+import WorkItemWorkflow from './WorkItemWorkflow';
+import GoalWorkflow from './GoalWorkflow';
+import MilestoneWorkflow from './MilestoneWorkflow';
 
 export default class WorkflowUpdater {
-
   constructor(organizationId) {
     if (!SimpleSchema.RegEx.Id.test(organizationId)) {
-      throw new Error(
-        `${JSON.stringify(organizationId)} is not valid organization ID`
-      );
+      throw new Error(`${JSON.stringify(organizationId)} is not valid organization ID`);
     }
 
     this._organizationId = organizationId;
@@ -27,15 +30,14 @@ export default class WorkflowUpdater {
   _prepare() {
     const org = Organizations.findOne({ _id: this._organizationId });
     if (!org) {
-      throw new Error(
-        `Organization with ID ${this._organizationId} does not exist`
-      );
+      throw new Error(`Organization with ID ${this._organizationId} does not exist`);
     }
 
     this._organization = org;
   }
 
   update() {
+    const options = { fields: { _id: 1 } };
     const actionsIds = Actions.find({
       organizationId: this._organizationId,
       $or: [{
@@ -51,9 +53,7 @@ export default class WorkflowUpdater {
         verifiedBy: { $exists: false },
         status: { $ne: 9 }, // Completed
       }],
-    }, {
-      fields: { _id: 1 },
-    }).map(doc => doc._id);
+    }, options).map(getId);
 
     actionsIds.forEach(id => new ActionWorkflow(id).refreshStatus());
 
@@ -71,26 +71,31 @@ export default class WorkflowUpdater {
       }],
     };
 
-    const NCsIds = NonConformities.find(problemDocQuery, {
-      fields: { _id: 1 },
-    }).map(doc => doc._id);
+    const NCsIds = NonConformities.find(problemDocQuery, options).map(getId);
 
     NCsIds.forEach(id => new NCWorkflow(id).refreshStatus());
 
-    const risksIds = Risks.find(problemDocQuery, {
-      fields: { _id: 1 },
-    }).map(doc => doc._id);
+    const risksIds = Risks.find(problemDocQuery, options).map(getId);
 
     risksIds.forEach(id => new RiskWorkflow(id).refreshStatus());
 
-    const workItemsIds = WorkItems.find({
+    const nonCompletedQuery = {
       organizationId: this._organizationId,
       isCompleted: false,
-    }, {
-      fields: { _id: 1 },
-    }).map(doc => doc._id);
+    };
+
+    const workItemsIds = WorkItems.find(nonCompletedQuery, options).map(getId);
 
     workItemsIds.forEach(id => new WorkItemWorkflow(id).refreshStatus());
-  }
 
+    // update only non-completed
+    // cuz status can't be changed over time if overdue
+    const goalIds = Goals.find(nonCompletedQuery, options).map(getId);
+
+    goalIds.forEach(id => new GoalWorkflow(id).refreshStatus());
+
+    const milestoneIds = Milestones.find(nonCompletedQuery, options).map(getId);
+
+    milestoneIds.forEach(id => new MilestoneWorkflow(id).refreshStatus());
+  }
 }

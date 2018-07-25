@@ -1,4 +1,4 @@
-import _urlRegex_ from '/imports/startup/client/mixins/urlRegex';
+import _urlRegex_ from '../../../startup/client/mixins/urlRegex';
 
 export default (url = '') => {
   if (_urlRegex_.isYoutubeUrl(url)) {

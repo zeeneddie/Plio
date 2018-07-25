@@ -1,0 +1,8 @@
+mutation updateActionCompletionTargetDate($input: UpdateActionCompletionTargetDateInput!) {
+  updateActionCompletionTargetDate(input: $input) {
+    action {
+      completionTargetDate
+      status
+    }
+  }
+}

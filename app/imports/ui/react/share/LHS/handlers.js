@@ -20,7 +20,7 @@ export const needToSearchPrecisely = (value) => {
   const doubleQuotes = '"';
   const getQuotesIndexes = quotes => [value.indexOf(quotes), value.lastIndexOf(quotes)];
   const doubleQuotesIndexes = getQuotesIndexes(doubleQuotes);
-  const isPrecise = (quotesIndexes) =>
+  const isPrecise = quotesIndexes =>
     quotesIndexes.length > 1
     && quotesIndexes.every(idx => idx !== -1);
 

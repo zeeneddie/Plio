@@ -1,8 +1,8 @@
 import curry from 'lodash.curry';
 
-import { mapByIndex, omitC, findIndexById } from '/imports/api/helpers';
+import { mapByIndex, omitC, findIndexById } from '../../../api/helpers';
 import { STORE_COLLECTION_NAMES } from './constants';
-import { CollectionNames } from '/imports/share/constants';
+import { CollectionNames } from '../../../share/constants';
 
 export const getNormalizedDataKey = prop => `${prop}ByIds`;
 

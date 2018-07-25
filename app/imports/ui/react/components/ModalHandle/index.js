@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Portal from 'react-portal';
 
 import ModalWindowContainer from '../../containers/ModalWindowContainer';
@@ -11,7 +12,10 @@ const ModalHandle = ({
   children,
   ...props
 }) => (
-  <Portal {...{ closeOnEsc, closeOnOutsideClick, openByClickOn, isOpened }}>
+  <Portal {...{
+    closeOnEsc, closeOnOutsideClick, openByClickOn, isOpened,
+  }}
+  >
     <ModalWindowContainer {...props}>
       {children}
     </ModalWindowContainer>

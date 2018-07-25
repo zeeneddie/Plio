@@ -1,14 +1,13 @@
 // IE/Edge
 if (![].includes) {
-  Array.prototype.includes = function(searchElement/*, fromIndex*/) {
-    'use strict';
-    var O = Object(this);
-    var len = parseInt(O.length) || 0;
+  Array.prototype.includes = function (searchElement/* , fromIndex */) {
+    const O = Object(this);
+    const len = parseInt(O.length) || 0;
     if (len === 0) {
       return false;
     }
-    var n = parseInt(arguments[1]) || 0;
-    var k;
+    const n = parseInt(arguments[1]) || 0;
+    let k;
     if (n >= 0) {
       k = n;
     } else {
@@ -18,7 +17,7 @@ if (![].includes) {
       }
     }
     while (k < len) {
-      var currentElement = O[k];
+      const currentElement = O[k];
       if (searchElement === currentElement ||
          (searchElement !== searchElement && currentElement !== currentElement)
       ) {

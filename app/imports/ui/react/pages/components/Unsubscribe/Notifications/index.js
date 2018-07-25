@@ -1,5 +1,6 @@
 import { compose, withProps, lifecycle } from 'recompose';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import { handleMethodResult } from '/imports/api/helpers';
 import { unsubscribe } from '/imports/api/notifications/methods';
@@ -10,9 +11,8 @@ const enhancer = compose(
   lifecycle({
     componentDidMount() {
       const { documentId, documentType } = this.props;
-      unsubscribe.call({ documentId, documentType }, handleMethodResult((error) =>
-        this.props.setState({ error, loading: false })
-      ));
+      unsubscribe.call({ documentId, documentType }, handleMethodResult(error =>
+        this.props.setState({ error, loading: false })));
     },
   }),
   withProps({

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 import { pure } from 'recompose';
 import { _ } from 'meteor/underscore';
@@ -17,7 +18,7 @@ const CollapseBlock = ({
   tag: Tag = 'a',
   classNames: {
     head = 'list-group-item list-group-subheading list-group-toggle pointer',
-    body = 'list-group-collapse collapse',
+    body = 'list-group-collapse',
     wrapper = '',
   } = {},
   ...other
@@ -34,7 +35,7 @@ const CollapseBlock = ({
         </Pull>
       )}
     </Tag>
-    <Collapse className={body} {...{ ...other, collapsed }}>
+    <Collapse className={body} isOpen={!collapsed} {...{ ...other }}>
       {children[1]}
     </Collapse>
   </div>

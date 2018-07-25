@@ -33,13 +33,13 @@ NonConformities.helpers({
 
 NonConformities.publicFields = {
   organizationId: 1,
+  type: 1,
   serialNumber: 1,
   sequentialId: 1,
   title: 1,
   cost: 1,
   ref: 1,
   createdAt: 1,
-  identifiedAt: 1,
   magnitude: 1,
   status: 1,
   departmentsIds: 1,

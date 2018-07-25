@@ -1,0 +1,1500 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
+.c1 {
+  -webkit-transition: all .4s ease;
+  transition: all .4s ease;
+  -webkit-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+
+.c0 {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+<DashboardStatsUnreadMessages
+  count={24}
+  displayMessages={1}
+  isOpen={false}
+  loadAll={[Function]}
+  loadLimited={[Function]}
+  markAllAsRead={[Function]}
+  messages={
+    Array [
+      Object {
+        "_id": 0,
+        "extension": "docx",
+        "fullName": "John Doe 0",
+        "text": "Hello World #0",
+        "timeString": "[object Object]",
+        "url": "http://example.com/0",
+      },
+      Object {
+        "_id": 1,
+        "extension": undefined,
+        "fullName": "John Doe 1",
+        "text": "Hello World #1",
+        "timeString": "[object Object]",
+        "url": "http://example.com/1",
+      },
+      Object {
+        "_id": 2,
+        "extension": "docx",
+        "fullName": "John Doe 2",
+        "text": "Hello World #2",
+        "timeString": "[object Object]",
+        "url": "http://example.com/2",
+      },
+      Object {
+        "_id": 3,
+        "extension": undefined,
+        "fullName": "John Doe 3",
+        "text": "Hello World #3",
+        "timeString": "[object Object]",
+        "url": "http://example.com/3",
+      },
+      Object {
+        "_id": 4,
+        "extension": "docx",
+        "fullName": "John Doe 4",
+        "text": "Hello World #4",
+        "timeString": "[object Object]",
+        "url": "http://example.com/4",
+      },
+      Object {
+        "_id": 5,
+        "extension": undefined,
+        "fullName": "John Doe 5",
+        "text": "Hello World #5",
+        "timeString": "[object Object]",
+        "url": "http://example.com/5",
+      },
+      Object {
+        "_id": 6,
+        "extension": "docx",
+        "fullName": "John Doe 6",
+        "text": "Hello World #6",
+        "timeString": "[object Object]",
+        "url": "http://example.com/6",
+      },
+      Object {
+        "_id": 7,
+        "extension": undefined,
+        "fullName": "John Doe 7",
+        "text": "Hello World #7",
+        "timeString": "[object Object]",
+        "url": "http://example.com/7",
+      },
+      Object {
+        "_id": 8,
+        "extension": "docx",
+        "fullName": "John Doe 8",
+        "text": "Hello World #8",
+        "timeString": "[object Object]",
+        "url": "http://example.com/8",
+      },
+      Object {
+        "_id": 9,
+        "extension": undefined,
+        "fullName": "John Doe 9",
+        "text": "Hello World #9",
+        "timeString": "[object Object]",
+        "url": "http://example.com/9",
+      },
+      Object {
+        "_id": 10,
+        "extension": "docx",
+        "fullName": "John Doe 10",
+        "text": "Hello World #10",
+        "timeString": "[object Object]",
+        "url": "http://example.com/10",
+      },
+      Object {
+        "_id": 11,
+        "extension": undefined,
+        "fullName": "John Doe 11",
+        "text": "Hello World #11",
+        "timeString": "[object Object]",
+        "url": "http://example.com/11",
+      },
+      Object {
+        "_id": 12,
+        "extension": "docx",
+        "fullName": "John Doe 12",
+        "text": "Hello World #12",
+        "timeString": "[object Object]",
+        "url": "http://example.com/12",
+      },
+      Object {
+        "_id": 13,
+        "extension": undefined,
+        "fullName": "John Doe 13",
+        "text": "Hello World #13",
+        "timeString": "[object Object]",
+        "url": "http://example.com/13",
+      },
+      Object {
+        "_id": 14,
+        "extension": "docx",
+        "fullName": "John Doe 14",
+        "text": "Hello World #14",
+        "timeString": "[object Object]",
+        "url": "http://example.com/14",
+      },
+      Object {
+        "_id": 15,
+        "extension": undefined,
+        "fullName": "John Doe 15",
+        "text": "Hello World #15",
+        "timeString": "[object Object]",
+        "url": "http://example.com/15",
+      },
+      Object {
+        "_id": 16,
+        "extension": "docx",
+        "fullName": "John Doe 16",
+        "text": "Hello World #16",
+        "timeString": "[object Object]",
+        "url": "http://example.com/16",
+      },
+      Object {
+        "_id": 17,
+        "extension": undefined,
+        "fullName": "John Doe 17",
+        "text": "Hello World #17",
+        "timeString": "[object Object]",
+        "url": "http://example.com/17",
+      },
+      Object {
+        "_id": 18,
+        "extension": "docx",
+        "fullName": "John Doe 18",
+        "text": "Hello World #18",
+        "timeString": "[object Object]",
+        "url": "http://example.com/18",
+      },
+      Object {
+        "_id": 19,
+        "extension": undefined,
+        "fullName": "John Doe 19",
+        "text": "Hello World #19",
+        "timeString": "[object Object]",
+        "url": "http://example.com/19",
+      },
+      Object {
+        "_id": 20,
+        "extension": "docx",
+        "fullName": "John Doe 20",
+        "text": "Hello World #20",
+        "timeString": "[object Object]",
+        "url": "http://example.com/20",
+      },
+      Object {
+        "_id": 21,
+        "extension": undefined,
+        "fullName": "John Doe 21",
+        "text": "Hello World #21",
+        "timeString": "[object Object]",
+        "url": "http://example.com/21",
+      },
+      Object {
+        "_id": 22,
+        "extension": "docx",
+        "fullName": "John Doe 22",
+        "text": "Hello World #22",
+        "timeString": "[object Object]",
+        "url": "http://example.com/22",
+      },
+      Object {
+        "_id": 23,
+        "extension": undefined,
+        "fullName": "John Doe 23",
+        "text": "Hello World #23",
+        "timeString": "[object Object]",
+        "url": "http://example.com/23",
+      },
+    ]
+  }
+  orgSerialNumber={1}
+  toggle={[Function]}
+>
+  <branch(DashboardStatsExpandable)
+    isOpen={false}
+    items={
+      Array [
+        Object {
+          "_id": 0,
+          "extension": "docx",
+          "fullName": "John Doe 0",
+          "text": "Hello World #0",
+          "timeString": "[object Object]",
+          "url": "http://example.com/0",
+        },
+        Object {
+          "_id": 1,
+          "extension": undefined,
+          "fullName": "John Doe 1",
+          "text": "Hello World #1",
+          "timeString": "[object Object]",
+          "url": "http://example.com/1",
+        },
+        Object {
+          "_id": 2,
+          "extension": "docx",
+          "fullName": "John Doe 2",
+          "text": "Hello World #2",
+          "timeString": "[object Object]",
+          "url": "http://example.com/2",
+        },
+        Object {
+          "_id": 3,
+          "extension": undefined,
+          "fullName": "John Doe 3",
+          "text": "Hello World #3",
+          "timeString": "[object Object]",
+          "url": "http://example.com/3",
+        },
+        Object {
+          "_id": 4,
+          "extension": "docx",
+          "fullName": "John Doe 4",
+          "text": "Hello World #4",
+          "timeString": "[object Object]",
+          "url": "http://example.com/4",
+        },
+        Object {
+          "_id": 5,
+          "extension": undefined,
+          "fullName": "John Doe 5",
+          "text": "Hello World #5",
+          "timeString": "[object Object]",
+          "url": "http://example.com/5",
+        },
+        Object {
+          "_id": 6,
+          "extension": "docx",
+          "fullName": "John Doe 6",
+          "text": "Hello World #6",
+          "timeString": "[object Object]",
+          "url": "http://example.com/6",
+        },
+        Object {
+          "_id": 7,
+          "extension": undefined,
+          "fullName": "John Doe 7",
+          "text": "Hello World #7",
+          "timeString": "[object Object]",
+          "url": "http://example.com/7",
+        },
+        Object {
+          "_id": 8,
+          "extension": "docx",
+          "fullName": "John Doe 8",
+          "text": "Hello World #8",
+          "timeString": "[object Object]",
+          "url": "http://example.com/8",
+        },
+        Object {
+          "_id": 9,
+          "extension": undefined,
+          "fullName": "John Doe 9",
+          "text": "Hello World #9",
+          "timeString": "[object Object]",
+          "url": "http://example.com/9",
+        },
+        Object {
+          "_id": 10,
+          "extension": "docx",
+          "fullName": "John Doe 10",
+          "text": "Hello World #10",
+          "timeString": "[object Object]",
+          "url": "http://example.com/10",
+        },
+        Object {
+          "_id": 11,
+          "extension": undefined,
+          "fullName": "John Doe 11",
+          "text": "Hello World #11",
+          "timeString": "[object Object]",
+          "url": "http://example.com/11",
+        },
+        Object {
+          "_id": 12,
+          "extension": "docx",
+          "fullName": "John Doe 12",
+          "text": "Hello World #12",
+          "timeString": "[object Object]",
+          "url": "http://example.com/12",
+        },
+        Object {
+          "_id": 13,
+          "extension": undefined,
+          "fullName": "John Doe 13",
+          "text": "Hello World #13",
+          "timeString": "[object Object]",
+          "url": "http://example.com/13",
+        },
+        Object {
+          "_id": 14,
+          "extension": "docx",
+          "fullName": "John Doe 14",
+          "text": "Hello World #14",
+          "timeString": "[object Object]",
+          "url": "http://example.com/14",
+        },
+        Object {
+          "_id": 15,
+          "extension": undefined,
+          "fullName": "John Doe 15",
+          "text": "Hello World #15",
+          "timeString": "[object Object]",
+          "url": "http://example.com/15",
+        },
+        Object {
+          "_id": 16,
+          "extension": "docx",
+          "fullName": "John Doe 16",
+          "text": "Hello World #16",
+          "timeString": "[object Object]",
+          "url": "http://example.com/16",
+        },
+        Object {
+          "_id": 17,
+          "extension": undefined,
+          "fullName": "John Doe 17",
+          "text": "Hello World #17",
+          "timeString": "[object Object]",
+          "url": "http://example.com/17",
+        },
+        Object {
+          "_id": 18,
+          "extension": "docx",
+          "fullName": "John Doe 18",
+          "text": "Hello World #18",
+          "timeString": "[object Object]",
+          "url": "http://example.com/18",
+        },
+        Object {
+          "_id": 19,
+          "extension": undefined,
+          "fullName": "John Doe 19",
+          "text": "Hello World #19",
+          "timeString": "[object Object]",
+          "url": "http://example.com/19",
+        },
+        Object {
+          "_id": 20,
+          "extension": "docx",
+          "fullName": "John Doe 20",
+          "text": "Hello World #20",
+          "timeString": "[object Object]",
+          "url": "http://example.com/20",
+        },
+        Object {
+          "_id": 21,
+          "extension": undefined,
+          "fullName": "John Doe 21",
+          "text": "Hello World #21",
+          "timeString": "[object Object]",
+          "url": "http://example.com/21",
+        },
+        Object {
+          "_id": 22,
+          "extension": "docx",
+          "fullName": "John Doe 22",
+          "text": "Hello World #22",
+          "timeString": "[object Object]",
+          "url": "http://example.com/22",
+        },
+        Object {
+          "_id": 23,
+          "extension": undefined,
+          "fullName": "John Doe 23",
+          "text": "Hello World #23",
+          "timeString": "[object Object]",
+          "url": "http://example.com/23",
+        },
+      ]
+    }
+    itemsPerRow={1}
+    render={[Function]}
+    toggle={[Function]}
+    total={24}
+  >
+    <branch(DashboardStatsExpandable)
+      isOpen={false}
+      items={
+        Array [
+          Object {
+            "_id": 0,
+            "extension": "docx",
+            "fullName": "John Doe 0",
+            "text": "Hello World #0",
+            "timeString": "[object Object]",
+            "url": "http://example.com/0",
+          },
+          Object {
+            "_id": 1,
+            "extension": undefined,
+            "fullName": "John Doe 1",
+            "text": "Hello World #1",
+            "timeString": "[object Object]",
+            "url": "http://example.com/1",
+          },
+          Object {
+            "_id": 2,
+            "extension": "docx",
+            "fullName": "John Doe 2",
+            "text": "Hello World #2",
+            "timeString": "[object Object]",
+            "url": "http://example.com/2",
+          },
+          Object {
+            "_id": 3,
+            "extension": undefined,
+            "fullName": "John Doe 3",
+            "text": "Hello World #3",
+            "timeString": "[object Object]",
+            "url": "http://example.com/3",
+          },
+          Object {
+            "_id": 4,
+            "extension": "docx",
+            "fullName": "John Doe 4",
+            "text": "Hello World #4",
+            "timeString": "[object Object]",
+            "url": "http://example.com/4",
+          },
+          Object {
+            "_id": 5,
+            "extension": undefined,
+            "fullName": "John Doe 5",
+            "text": "Hello World #5",
+            "timeString": "[object Object]",
+            "url": "http://example.com/5",
+          },
+          Object {
+            "_id": 6,
+            "extension": "docx",
+            "fullName": "John Doe 6",
+            "text": "Hello World #6",
+            "timeString": "[object Object]",
+            "url": "http://example.com/6",
+          },
+          Object {
+            "_id": 7,
+            "extension": undefined,
+            "fullName": "John Doe 7",
+            "text": "Hello World #7",
+            "timeString": "[object Object]",
+            "url": "http://example.com/7",
+          },
+          Object {
+            "_id": 8,
+            "extension": "docx",
+            "fullName": "John Doe 8",
+            "text": "Hello World #8",
+            "timeString": "[object Object]",
+            "url": "http://example.com/8",
+          },
+          Object {
+            "_id": 9,
+            "extension": undefined,
+            "fullName": "John Doe 9",
+            "text": "Hello World #9",
+            "timeString": "[object Object]",
+            "url": "http://example.com/9",
+          },
+          Object {
+            "_id": 10,
+            "extension": "docx",
+            "fullName": "John Doe 10",
+            "text": "Hello World #10",
+            "timeString": "[object Object]",
+            "url": "http://example.com/10",
+          },
+          Object {
+            "_id": 11,
+            "extension": undefined,
+            "fullName": "John Doe 11",
+            "text": "Hello World #11",
+            "timeString": "[object Object]",
+            "url": "http://example.com/11",
+          },
+          Object {
+            "_id": 12,
+            "extension": "docx",
+            "fullName": "John Doe 12",
+            "text": "Hello World #12",
+            "timeString": "[object Object]",
+            "url": "http://example.com/12",
+          },
+          Object {
+            "_id": 13,
+            "extension": undefined,
+            "fullName": "John Doe 13",
+            "text": "Hello World #13",
+            "timeString": "[object Object]",
+            "url": "http://example.com/13",
+          },
+          Object {
+            "_id": 14,
+            "extension": "docx",
+            "fullName": "John Doe 14",
+            "text": "Hello World #14",
+            "timeString": "[object Object]",
+            "url": "http://example.com/14",
+          },
+          Object {
+            "_id": 15,
+            "extension": undefined,
+            "fullName": "John Doe 15",
+            "text": "Hello World #15",
+            "timeString": "[object Object]",
+            "url": "http://example.com/15",
+          },
+          Object {
+            "_id": 16,
+            "extension": "docx",
+            "fullName": "John Doe 16",
+            "text": "Hello World #16",
+            "timeString": "[object Object]",
+            "url": "http://example.com/16",
+          },
+          Object {
+            "_id": 17,
+            "extension": undefined,
+            "fullName": "John Doe 17",
+            "text": "Hello World #17",
+            "timeString": "[object Object]",
+            "url": "http://example.com/17",
+          },
+          Object {
+            "_id": 18,
+            "extension": "docx",
+            "fullName": "John Doe 18",
+            "text": "Hello World #18",
+            "timeString": "[object Object]",
+            "url": "http://example.com/18",
+          },
+          Object {
+            "_id": 19,
+            "extension": undefined,
+            "fullName": "John Doe 19",
+            "text": "Hello World #19",
+            "timeString": "[object Object]",
+            "url": "http://example.com/19",
+          },
+          Object {
+            "_id": 20,
+            "extension": "docx",
+            "fullName": "John Doe 20",
+            "text": "Hello World #20",
+            "timeString": "[object Object]",
+            "url": "http://example.com/20",
+          },
+          Object {
+            "_id": 21,
+            "extension": undefined,
+            "fullName": "John Doe 21",
+            "text": "Hello World #21",
+            "timeString": "[object Object]",
+            "url": "http://example.com/21",
+          },
+          Object {
+            "_id": 22,
+            "extension": "docx",
+            "fullName": "John Doe 22",
+            "text": "Hello World #22",
+            "timeString": "[object Object]",
+            "url": "http://example.com/22",
+          },
+          Object {
+            "_id": 23,
+            "extension": undefined,
+            "fullName": "John Doe 23",
+            "text": "Hello World #23",
+            "timeString": "[object Object]",
+            "url": "http://example.com/23",
+          },
+        ]
+      }
+      itemsPerRow={1}
+      render={[Function]}
+      toggle={[Function]}
+      total={24}
+    >
+      <DashboardStatsExpandable
+        isOpen={false}
+        items={
+          Array [
+            Object {
+              "_id": 0,
+              "extension": "docx",
+              "fullName": "John Doe 0",
+              "text": "Hello World #0",
+              "timeString": "[object Object]",
+              "url": "http://example.com/0",
+            },
+            Object {
+              "_id": 1,
+              "extension": undefined,
+              "fullName": "John Doe 1",
+              "text": "Hello World #1",
+              "timeString": "[object Object]",
+              "url": "http://example.com/1",
+            },
+            Object {
+              "_id": 2,
+              "extension": "docx",
+              "fullName": "John Doe 2",
+              "text": "Hello World #2",
+              "timeString": "[object Object]",
+              "url": "http://example.com/2",
+            },
+            Object {
+              "_id": 3,
+              "extension": undefined,
+              "fullName": "John Doe 3",
+              "text": "Hello World #3",
+              "timeString": "[object Object]",
+              "url": "http://example.com/3",
+            },
+            Object {
+              "_id": 4,
+              "extension": "docx",
+              "fullName": "John Doe 4",
+              "text": "Hello World #4",
+              "timeString": "[object Object]",
+              "url": "http://example.com/4",
+            },
+            Object {
+              "_id": 5,
+              "extension": undefined,
+              "fullName": "John Doe 5",
+              "text": "Hello World #5",
+              "timeString": "[object Object]",
+              "url": "http://example.com/5",
+            },
+            Object {
+              "_id": 6,
+              "extension": "docx",
+              "fullName": "John Doe 6",
+              "text": "Hello World #6",
+              "timeString": "[object Object]",
+              "url": "http://example.com/6",
+            },
+            Object {
+              "_id": 7,
+              "extension": undefined,
+              "fullName": "John Doe 7",
+              "text": "Hello World #7",
+              "timeString": "[object Object]",
+              "url": "http://example.com/7",
+            },
+            Object {
+              "_id": 8,
+              "extension": "docx",
+              "fullName": "John Doe 8",
+              "text": "Hello World #8",
+              "timeString": "[object Object]",
+              "url": "http://example.com/8",
+            },
+            Object {
+              "_id": 9,
+              "extension": undefined,
+              "fullName": "John Doe 9",
+              "text": "Hello World #9",
+              "timeString": "[object Object]",
+              "url": "http://example.com/9",
+            },
+            Object {
+              "_id": 10,
+              "extension": "docx",
+              "fullName": "John Doe 10",
+              "text": "Hello World #10",
+              "timeString": "[object Object]",
+              "url": "http://example.com/10",
+            },
+            Object {
+              "_id": 11,
+              "extension": undefined,
+              "fullName": "John Doe 11",
+              "text": "Hello World #11",
+              "timeString": "[object Object]",
+              "url": "http://example.com/11",
+            },
+            Object {
+              "_id": 12,
+              "extension": "docx",
+              "fullName": "John Doe 12",
+              "text": "Hello World #12",
+              "timeString": "[object Object]",
+              "url": "http://example.com/12",
+            },
+            Object {
+              "_id": 13,
+              "extension": undefined,
+              "fullName": "John Doe 13",
+              "text": "Hello World #13",
+              "timeString": "[object Object]",
+              "url": "http://example.com/13",
+            },
+            Object {
+              "_id": 14,
+              "extension": "docx",
+              "fullName": "John Doe 14",
+              "text": "Hello World #14",
+              "timeString": "[object Object]",
+              "url": "http://example.com/14",
+            },
+            Object {
+              "_id": 15,
+              "extension": undefined,
+              "fullName": "John Doe 15",
+              "text": "Hello World #15",
+              "timeString": "[object Object]",
+              "url": "http://example.com/15",
+            },
+            Object {
+              "_id": 16,
+              "extension": "docx",
+              "fullName": "John Doe 16",
+              "text": "Hello World #16",
+              "timeString": "[object Object]",
+              "url": "http://example.com/16",
+            },
+            Object {
+              "_id": 17,
+              "extension": undefined,
+              "fullName": "John Doe 17",
+              "text": "Hello World #17",
+              "timeString": "[object Object]",
+              "url": "http://example.com/17",
+            },
+            Object {
+              "_id": 18,
+              "extension": "docx",
+              "fullName": "John Doe 18",
+              "text": "Hello World #18",
+              "timeString": "[object Object]",
+              "url": "http://example.com/18",
+            },
+            Object {
+              "_id": 19,
+              "extension": undefined,
+              "fullName": "John Doe 19",
+              "text": "Hello World #19",
+              "timeString": "[object Object]",
+              "url": "http://example.com/19",
+            },
+            Object {
+              "_id": 20,
+              "extension": "docx",
+              "fullName": "John Doe 20",
+              "text": "Hello World #20",
+              "timeString": "[object Object]",
+              "url": "http://example.com/20",
+            },
+            Object {
+              "_id": 21,
+              "extension": undefined,
+              "fullName": "John Doe 21",
+              "text": "Hello World #21",
+              "timeString": "[object Object]",
+              "url": "http://example.com/21",
+            },
+            Object {
+              "_id": 22,
+              "extension": "docx",
+              "fullName": "John Doe 22",
+              "text": "Hello World #22",
+              "timeString": "[object Object]",
+              "url": "http://example.com/22",
+            },
+            Object {
+              "_id": 23,
+              "extension": undefined,
+              "fullName": "John Doe 23",
+              "text": "Hello World #23",
+              "timeString": "[object Object]",
+              "url": "http://example.com/23",
+            },
+          ]
+        }
+        itemsPerRow={1}
+        render={[Function]}
+        toggle={[Function]}
+        total={24}
+      >
+        <DashboardStats>
+          <div
+            className="dashboard-stats"
+          >
+            <DashboardStatsTitle
+              onClick={[Function]}
+              toggle={[Function]}
+            >
+              <Component
+                className="c0"
+                onClick={[Function]}
+                toggle={[Function]}
+              >
+                <DashboardStatsTitle
+                  className="c0"
+                  onClick={[Function]}
+                >
+                  <h4
+                    className="dashboard-stats-title c0"
+                    onClick={[Function]}
+                  >
+                    24 unread messages
+                    <a
+                      className="pointer"
+                      onClick={[Function]}
+                      title="Mark all messages as read"
+                    >
+                      <Icon
+                        name="times-circle"
+                      >
+                        <FaSize
+                          prefix=""
+                          size={1}
+                        >
+                          <i
+                            className="fa fa-times-circle"
+                          />
+                        </FaSize>
+                      </Icon>
+                    </a>
+                     
+                    <ToggleAngleIcon
+                      isOpen={false}
+                      name="angle-down"
+                      toggle={[Function]}
+                    >
+                      <Icon
+                        className="c1"
+                        isOpen={false}
+                        name="angle-down"
+                        toggle={[Function]}
+                      >
+                        <FaSize
+                          prefix=""
+                          size={1}
+                        >
+                          <i
+                            className="fa fa-angle-down c1"
+                          />
+                        </FaSize>
+                      </Icon>
+                    </ToggleAngleIcon>
+                  </h4>
+                </DashboardStatsTitle>
+              </Component>
+            </DashboardStatsTitle>
+            <div
+              key="0"
+            >
+              <DashboardStatsMessageContainer(DashboardStatsMessage)
+                _id={0}
+                extension="docx"
+                fullName="John Doe 0"
+                key="0"
+                orgSerialNumber={1}
+                text="Hello World #0"
+                timeString="[object Object]"
+                url="http://example.com/0"
+              >
+                <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                  _id={0}
+                  extension="docx"
+                  fullName="John Doe 0"
+                  orgSerialNumber={1}
+                  text="Hello World #0"
+                  timeString="[object Object]"
+                  url="http://example.com/0"
+                />
+              </DashboardStatsMessageContainer(DashboardStatsMessage)>
+            </div>
+            <Collapse
+              isOpen={false}
+            >
+              <Collapse
+                appear={false}
+                className=""
+                enter={true}
+                exit={true}
+                in={false}
+                isOpen={false}
+                mountOnEnter={false}
+                onEnter={[Function]}
+                onEntered={[Function]}
+                onEntering={[Function]}
+                onExit={[Function]}
+                onExited={[Function]}
+                onExiting={[Function]}
+                tag="div"
+                timeout={350}
+                unmountOnExit={false}
+              >
+                <Transition
+                  appear={false}
+                  enter={true}
+                  exit={true}
+                  in={false}
+                  mountOnEnter={false}
+                  onEnter={[Function]}
+                  onEntered={[Function]}
+                  onEntering={[Function]}
+                  onExit={[Function]}
+                  onExited={[Function]}
+                  onExiting={[Function]}
+                  timeout={350}
+                  unmountOnExit={false}
+                >
+                  <div
+                    className="collapse"
+                    style={Object {}}
+                  >
+                    <div
+                      key="1"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={1}
+                        fullName="John Doe 1"
+                        key="1"
+                        orgSerialNumber={1}
+                        text="Hello World #1"
+                        timeString="[object Object]"
+                        url="http://example.com/1"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={1}
+                          fullName="John Doe 1"
+                          orgSerialNumber={1}
+                          text="Hello World #1"
+                          timeString="[object Object]"
+                          url="http://example.com/1"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="2"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={2}
+                        extension="docx"
+                        fullName="John Doe 2"
+                        key="2"
+                        orgSerialNumber={1}
+                        text="Hello World #2"
+                        timeString="[object Object]"
+                        url="http://example.com/2"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={2}
+                          extension="docx"
+                          fullName="John Doe 2"
+                          orgSerialNumber={1}
+                          text="Hello World #2"
+                          timeString="[object Object]"
+                          url="http://example.com/2"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="3"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={3}
+                        fullName="John Doe 3"
+                        key="3"
+                        orgSerialNumber={1}
+                        text="Hello World #3"
+                        timeString="[object Object]"
+                        url="http://example.com/3"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={3}
+                          fullName="John Doe 3"
+                          orgSerialNumber={1}
+                          text="Hello World #3"
+                          timeString="[object Object]"
+                          url="http://example.com/3"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="4"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={4}
+                        extension="docx"
+                        fullName="John Doe 4"
+                        key="4"
+                        orgSerialNumber={1}
+                        text="Hello World #4"
+                        timeString="[object Object]"
+                        url="http://example.com/4"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={4}
+                          extension="docx"
+                          fullName="John Doe 4"
+                          orgSerialNumber={1}
+                          text="Hello World #4"
+                          timeString="[object Object]"
+                          url="http://example.com/4"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="5"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={5}
+                        fullName="John Doe 5"
+                        key="5"
+                        orgSerialNumber={1}
+                        text="Hello World #5"
+                        timeString="[object Object]"
+                        url="http://example.com/5"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={5}
+                          fullName="John Doe 5"
+                          orgSerialNumber={1}
+                          text="Hello World #5"
+                          timeString="[object Object]"
+                          url="http://example.com/5"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="6"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={6}
+                        extension="docx"
+                        fullName="John Doe 6"
+                        key="6"
+                        orgSerialNumber={1}
+                        text="Hello World #6"
+                        timeString="[object Object]"
+                        url="http://example.com/6"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={6}
+                          extension="docx"
+                          fullName="John Doe 6"
+                          orgSerialNumber={1}
+                          text="Hello World #6"
+                          timeString="[object Object]"
+                          url="http://example.com/6"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="7"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={7}
+                        fullName="John Doe 7"
+                        key="7"
+                        orgSerialNumber={1}
+                        text="Hello World #7"
+                        timeString="[object Object]"
+                        url="http://example.com/7"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={7}
+                          fullName="John Doe 7"
+                          orgSerialNumber={1}
+                          text="Hello World #7"
+                          timeString="[object Object]"
+                          url="http://example.com/7"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="8"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={8}
+                        extension="docx"
+                        fullName="John Doe 8"
+                        key="8"
+                        orgSerialNumber={1}
+                        text="Hello World #8"
+                        timeString="[object Object]"
+                        url="http://example.com/8"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={8}
+                          extension="docx"
+                          fullName="John Doe 8"
+                          orgSerialNumber={1}
+                          text="Hello World #8"
+                          timeString="[object Object]"
+                          url="http://example.com/8"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="9"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={9}
+                        fullName="John Doe 9"
+                        key="9"
+                        orgSerialNumber={1}
+                        text="Hello World #9"
+                        timeString="[object Object]"
+                        url="http://example.com/9"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={9}
+                          fullName="John Doe 9"
+                          orgSerialNumber={1}
+                          text="Hello World #9"
+                          timeString="[object Object]"
+                          url="http://example.com/9"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="10"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={10}
+                        extension="docx"
+                        fullName="John Doe 10"
+                        key="10"
+                        orgSerialNumber={1}
+                        text="Hello World #10"
+                        timeString="[object Object]"
+                        url="http://example.com/10"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={10}
+                          extension="docx"
+                          fullName="John Doe 10"
+                          orgSerialNumber={1}
+                          text="Hello World #10"
+                          timeString="[object Object]"
+                          url="http://example.com/10"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="11"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={11}
+                        fullName="John Doe 11"
+                        key="11"
+                        orgSerialNumber={1}
+                        text="Hello World #11"
+                        timeString="[object Object]"
+                        url="http://example.com/11"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={11}
+                          fullName="John Doe 11"
+                          orgSerialNumber={1}
+                          text="Hello World #11"
+                          timeString="[object Object]"
+                          url="http://example.com/11"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="12"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={12}
+                        extension="docx"
+                        fullName="John Doe 12"
+                        key="12"
+                        orgSerialNumber={1}
+                        text="Hello World #12"
+                        timeString="[object Object]"
+                        url="http://example.com/12"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={12}
+                          extension="docx"
+                          fullName="John Doe 12"
+                          orgSerialNumber={1}
+                          text="Hello World #12"
+                          timeString="[object Object]"
+                          url="http://example.com/12"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="13"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={13}
+                        fullName="John Doe 13"
+                        key="13"
+                        orgSerialNumber={1}
+                        text="Hello World #13"
+                        timeString="[object Object]"
+                        url="http://example.com/13"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={13}
+                          fullName="John Doe 13"
+                          orgSerialNumber={1}
+                          text="Hello World #13"
+                          timeString="[object Object]"
+                          url="http://example.com/13"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="14"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={14}
+                        extension="docx"
+                        fullName="John Doe 14"
+                        key="14"
+                        orgSerialNumber={1}
+                        text="Hello World #14"
+                        timeString="[object Object]"
+                        url="http://example.com/14"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={14}
+                          extension="docx"
+                          fullName="John Doe 14"
+                          orgSerialNumber={1}
+                          text="Hello World #14"
+                          timeString="[object Object]"
+                          url="http://example.com/14"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="15"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={15}
+                        fullName="John Doe 15"
+                        key="15"
+                        orgSerialNumber={1}
+                        text="Hello World #15"
+                        timeString="[object Object]"
+                        url="http://example.com/15"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={15}
+                          fullName="John Doe 15"
+                          orgSerialNumber={1}
+                          text="Hello World #15"
+                          timeString="[object Object]"
+                          url="http://example.com/15"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="16"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={16}
+                        extension="docx"
+                        fullName="John Doe 16"
+                        key="16"
+                        orgSerialNumber={1}
+                        text="Hello World #16"
+                        timeString="[object Object]"
+                        url="http://example.com/16"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={16}
+                          extension="docx"
+                          fullName="John Doe 16"
+                          orgSerialNumber={1}
+                          text="Hello World #16"
+                          timeString="[object Object]"
+                          url="http://example.com/16"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="17"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={17}
+                        fullName="John Doe 17"
+                        key="17"
+                        orgSerialNumber={1}
+                        text="Hello World #17"
+                        timeString="[object Object]"
+                        url="http://example.com/17"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={17}
+                          fullName="John Doe 17"
+                          orgSerialNumber={1}
+                          text="Hello World #17"
+                          timeString="[object Object]"
+                          url="http://example.com/17"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="18"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={18}
+                        extension="docx"
+                        fullName="John Doe 18"
+                        key="18"
+                        orgSerialNumber={1}
+                        text="Hello World #18"
+                        timeString="[object Object]"
+                        url="http://example.com/18"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={18}
+                          extension="docx"
+                          fullName="John Doe 18"
+                          orgSerialNumber={1}
+                          text="Hello World #18"
+                          timeString="[object Object]"
+                          url="http://example.com/18"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="19"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={19}
+                        fullName="John Doe 19"
+                        key="19"
+                        orgSerialNumber={1}
+                        text="Hello World #19"
+                        timeString="[object Object]"
+                        url="http://example.com/19"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={19}
+                          fullName="John Doe 19"
+                          orgSerialNumber={1}
+                          text="Hello World #19"
+                          timeString="[object Object]"
+                          url="http://example.com/19"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="20"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={20}
+                        extension="docx"
+                        fullName="John Doe 20"
+                        key="20"
+                        orgSerialNumber={1}
+                        text="Hello World #20"
+                        timeString="[object Object]"
+                        url="http://example.com/20"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={20}
+                          extension="docx"
+                          fullName="John Doe 20"
+                          orgSerialNumber={1}
+                          text="Hello World #20"
+                          timeString="[object Object]"
+                          url="http://example.com/20"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="21"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={21}
+                        fullName="John Doe 21"
+                        key="21"
+                        orgSerialNumber={1}
+                        text="Hello World #21"
+                        timeString="[object Object]"
+                        url="http://example.com/21"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={21}
+                          fullName="John Doe 21"
+                          orgSerialNumber={1}
+                          text="Hello World #21"
+                          timeString="[object Object]"
+                          url="http://example.com/21"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="22"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={22}
+                        extension="docx"
+                        fullName="John Doe 22"
+                        key="22"
+                        orgSerialNumber={1}
+                        text="Hello World #22"
+                        timeString="[object Object]"
+                        url="http://example.com/22"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={22}
+                          extension="docx"
+                          fullName="John Doe 22"
+                          orgSerialNumber={1}
+                          text="Hello World #22"
+                          timeString="[object Object]"
+                          url="http://example.com/22"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                    <div
+                      key="23"
+                    >
+                      <DashboardStatsMessageContainer(DashboardStatsMessage)
+                        _id={23}
+                        fullName="John Doe 23"
+                        key="23"
+                        orgSerialNumber={1}
+                        text="Hello World #23"
+                        timeString="[object Object]"
+                        url="http://example.com/23"
+                      >
+                        <Container(withCurrentTime(mapProps(DashboardStatsMessage)))
+                          _id={23}
+                          fullName="John Doe 23"
+                          orgSerialNumber={1}
+                          text="Hello World #23"
+                          timeString="[object Object]"
+                          url="http://example.com/23"
+                        />
+                      </DashboardStatsMessageContainer(DashboardStatsMessage)>
+                    </div>
+                  </div>
+                </Transition>
+              </Collapse>
+            </Collapse>
+          </div>
+        </DashboardStats>
+      </DashboardStatsExpandable>
+    </branch(DashboardStatsExpandable)>
+  </branch(DashboardStatsExpandable)>
+</DashboardStatsUnreadMessages>
+`;

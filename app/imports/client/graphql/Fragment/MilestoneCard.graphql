@@ -1,0 +1,19 @@
+fragment MilestoneCard on Milestone {
+  _id
+  organization {
+    _id
+  }
+  title
+  description
+  status
+  completionTargetDate
+  isCompleted
+  completedAt
+  completionComment
+  notify {
+    _id
+    profile {
+      fullName
+    }
+  }
+}

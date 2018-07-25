@@ -1,10 +1,10 @@
 import { _ } from 'meteor/underscore';
 
-import { Standards } from '/imports/share/collections/standards';
-import { getCollectionByDocType } from '/imports/share/helpers';
+import { Standards } from '../../../share/collections';
+import { getCollectionByDocType } from '../../../share/helpers';
 import { getUserId } from '../../utils/helpers';
 import { getLinkedDocAuditConfig, getLinkedDocDescription, getLinkedDocName } from './helpers';
-import ActionWorkflow from '/imports/workflow/ActionWorkflow';
+import ActionWorkflow from '../../../workflow/ActionWorkflow';
 import onCreated from '../common/on-created';
 
 export default {
@@ -31,7 +31,8 @@ export default {
   ],
   notifications: [
     {
-      text: '{{{userName}}} created {{{docDesc}}} {{{docName}}} for {{{linkedDocDesc}}} {{{linkedDocName}}}',
+      text: '{{{userName}}} created {{{docDesc}}} {{{docName}}} ' +
+        'for {{{linkedDocDesc}}} {{{linkedDocName}}}',
       data({ newDoc }) {
         return _(newDoc.linkedTo).map(({ documentId, documentType }) => ({
           linkedDocDesc: getLinkedDocDescription(documentId, documentType),
@@ -43,7 +44,7 @@ export default {
           const userId = getUserId(user);
 
           const collection = getCollectionByDocType(documentType);
-          const { identifiedBy, standardsIds } = collection.findOne({
+          const { originatorId, standardsIds } = collection.findOne({
             _id: documentId,
           }) || {};
 
@@ -52,7 +53,7 @@ export default {
             if (owner !== userId) receivers.add(owner);
           });
 
-          if (identifiedBy !== userId) receivers.add(identifiedBy);
+          if (originatorId !== userId) receivers.add(originatorId);
 
           return Array.from(receivers);
         });

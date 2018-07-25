@@ -18,7 +18,7 @@ export default compose(
   branch(
     property('organizationsLength'),
     identity,
-    renderComponent(CustomersRHS.NotFound)
+    renderComponent(CustomersRHS.NotFound),
   ),
   connect(state => ({
     ...pickC(['isCardReady', 'urlItemId'], state.global),
@@ -27,9 +27,11 @@ export default compose(
   branch(
     props => props.isCardReady && props.urlItemId && !props.organization,
     renderComponent(CustomersRHS.NotExist),
-    identity
+    identity,
   ),
-  mapProps(({ isCardReady, organizationsLength, organization, ...props }) => ({
+  mapProps(({
+    isCardReady, organizationsLength, organization, ...props
+  }) => ({
     ...props,
     organization,
     isReady: !!(isCardReady && organizationsLength && organization),

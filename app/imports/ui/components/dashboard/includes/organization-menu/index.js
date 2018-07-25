@@ -1,5 +1,4 @@
 import './menu.html';
-import './menu.js';
+import './menu';
 import './item';
-import './settings';
 import './create';

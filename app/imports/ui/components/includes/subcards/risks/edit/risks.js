@@ -2,10 +2,10 @@ import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
 import {
-  insert, update, remove
+  insert, update, remove,
 } from '/imports/api/risks/methods';
-import { getTzTargetDate } from '/imports/share/helpers.js';
-import { inspire } from '/imports/api/helpers.js';
+import { getTzTargetDate } from '/imports/share/helpers';
+import { inspire } from '/imports/api/helpers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.Subcards_Risks_Edit.viewmodel({
@@ -16,11 +16,11 @@ Template.Subcards_Risks_Edit.viewmodel({
     const {
       risks,
       _id,
-      isStandardsEditable
+      isStandardsEditable,
     } = inspire([
       'risks',
       '_id',
-      'isStandardsEditable'
+      'isStandardsEditable',
     ], this);
 
     const items = risks.fetch();
@@ -32,7 +32,7 @@ Template.Subcards_Risks_Edit.viewmodel({
       _lText: 'Risks',
       _rText: items.length,
       onAdd: this.onAdd({ _id, isStandardsEditable }),
-      getSubcardArgs: this.getSubcardArgs.bind(this)
+      getSubcardArgs: this.getSubcardArgs.bind(this),
     };
   },
   getSubcardArgs(doc) {
@@ -43,7 +43,7 @@ Template.Subcards_Risks_Edit.viewmodel({
       content: 'Risk_Subcard',
       insertFn: this.insert.bind(this),
       updateFn: this.update.bind(this),
-      removeFn: this.remove.bind(this)
+      removeFn: this.remove.bind(this),
     };
   },
   risks() {
@@ -62,8 +62,8 @@ Template.Subcards_Risks_Edit.viewmodel({
         _lText: 'New risk',
         isNew: false,
         insertFn: this.insert.bind(this),
-        removeFn: this.remove.bind(this)
-      }
+        removeFn: this.remove.bind(this),
+      },
     );
   },
   insert({ ...args }, cb) {
@@ -79,36 +79,35 @@ Template.Subcards_Risks_Edit.viewmodel({
 
     if (!_id) {
       return viewmodel.destroy();
-    } else {
-      const { title } = viewmodel.getData();
-
-      swal({
-        title: 'Are you sure?',
-        text: `The risk "${title}" will be removed.`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Remove',
-        closeOnConfirm: false
-      }, () => {
-        const cb = (err) => {
-          if (err) {
-            swal.close();
-            return;
-          }
-
-          viewmodel.destroy();
-
-          swal({
-            title: 'Removed!',
-            text: `The risk "${title}" was removed successfully.`,
-            type: 'success',
-            timer: ALERT_AUTOHIDE_TIME,
-            showConfirmButton: false,
-          });
-        };
-
-        this.modal().callMethod(remove, { _id }, cb);
-      });
     }
-  }
+    const { title } = viewmodel.getData();
+
+    swal({
+      title: 'Are you sure?',
+      text: `The risk "${title}" will be removed.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove',
+      closeOnConfirm: false,
+    }, () => {
+      const cb = (err) => {
+        if (err) {
+          swal.close();
+          return;
+        }
+
+        viewmodel.destroy();
+
+        swal({
+          title: 'Removed!',
+          text: `The risk "${title}" was removed successfully.`,
+          type: 'success',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
+        });
+      };
+
+      this.modal().callMethod(remove, { _id }, cb);
+    });
+  },
 });

@@ -4,20 +4,19 @@ Template.ClearField.viewmodel({
   field: '',
   clearFn: null,
   clearField() {
-    this.templateInstance
+    const input = this.templateInstance
       .$('.clear-field')
       .closest('.clearable-field-container')
-      .find('input')
-      .focus();
-    if (this.field()) {
+      .find('input')[0];
 
-      // this.parent() is Template.ClearableField 
-      this.parent().parent()[this.field()]('');
-    } else if (this.clearFn) {
+    input.value = '';
+    input.focus();
+
+    if (this.clearFn()) {
       this.parent().parent()[this.clearFn()]();
     }
   },
   editable() {
     return this.isEditable && this.isEditable();
-  }
+  },
 });

@@ -1,0 +1,44 @@
+input ActionGoalsInput {
+  isDeleted: Boolean
+}
+
+type Action {
+  _id: ID!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime
+  # WARNING: updatedBy may be string 'Plio'. What should we do with that?
+  updatedBy: User
+  organization: Organization
+  serialNumber: Int!
+  sequentialId: String!
+  status: Int!
+  isCompleted: Boolean!
+  completedAt: DateTime
+  completedBy: User
+  completionComments: String
+  completionAssignedBy: User
+  isVerified: Boolean!
+  isVerifiedAsEffective: Boolean!
+  verificationTargetDate: DateTime
+  toBeVerifiedBy: User
+  verifiedAt: DateTime
+  verifiedBy: User
+  verificationComments: String
+  verificationAssignedBy: User
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  deletedBy: User
+  notes: String
+  title: String!
+  description: String
+  type: String!
+  owner: User!
+  planInPlace: String
+  completionTargetDate: DateTime!
+  toBeCompletedBy: User!
+  files: [File]
+  notify: [User]
+  goals(input: ActionGoalsInput): [Goal]
+  workflowType: String
+}

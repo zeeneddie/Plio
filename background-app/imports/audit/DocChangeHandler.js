@@ -3,17 +3,15 @@ import { _ } from 'meteor/underscore';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { Organizations } from '/imports/share/collections/organizations';
+import { getUserFullNameOrEmail } from '/imports/share/helpers';
 import { DocChangesKinds, SystemName } from '/imports/share/constants';
 import { ChangesKinds } from './utils/changes-kinds';
-import { getUserFullNameOrEmail, renderTemplate } from '/imports/share/helpers';
 import DocumentDiffer from './utils/document-differ';
+import { renderTemplate } from '../helpers/render';
 import NotificationsTempStore from './notifications-temp-store';
-
-
-const DEFAULT_EMAIL_TEMPLATE = 'defaultEmail';
+import { DEFAULT_EMAIL_TEMPLATE } from '../constants';
 
 export default class DocChangeHandler {
-
   constructor(auditConfig, docChangeKind, docChangeData) {
     this._config = auditConfig;
     this._docChangeKind = docChangeKind;
@@ -126,9 +124,7 @@ export default class DocChangeHandler {
     };
 
     diffs.forEach((diff) => {
-      const handler = this._config.updateHandlers.find(
-        hdl => hdl.field === diff.field
-      );
+      const handler = this._config.updateHandlers.find(hdl => hdl.field === diff.field);
 
       if (!handler) {
         return;
@@ -229,7 +225,9 @@ export default class DocChangeHandler {
       message,
     };
 
-    const { kind, field, newValue, oldValue } = diff || {};
+    const {
+      kind, field, newValue, oldValue,
+    } = diff || {};
     if (field) {
       Object.assign(log, { field });
     }
@@ -295,12 +293,12 @@ export default class DocChangeHandler {
     let pushTitleTemplate = pushTitle || title;
 
     emailSubjectTemplate = _.isObject(emailSubjectTemplate)
-        ? emailSubjectTemplate[kind]
-        : emailSubjectTemplate;
+      ? emailSubjectTemplate[kind]
+      : emailSubjectTemplate;
 
     pushTitleTemplate = _.isObject(pushTitleTemplate)
-        ? pushTitleTemplate[kind]
-        : pushTitleTemplate;
+      ? pushTitleTemplate[kind]
+      : pushTitleTemplate;
 
     let data = getData && getData(args);
     data = _.isArray(data) ? data : [data];
@@ -329,9 +327,15 @@ export default class DocChangeHandler {
       const templateData = Object.assign({}, defaultData, dataObj);
 
       this._buildNotification({
-        emailTemplate, emailSubjectTemplate, emailTemplateData,
-        pushTemplate, pushTitleTemplate, pushData,
-        emailTemplateName, receivers, templateData,
+        emailTemplate,
+        emailSubjectTemplate,
+        emailTemplateData,
+        pushTemplate,
+        pushTitleTemplate,
+        pushData,
+        emailTemplateName,
+        receivers,
+        templateData,
         sendBoth,
       });
     });
@@ -428,10 +432,9 @@ export default class DocChangeHandler {
   }
 
   _callTrigger(handler, args) {
-    const trigger = handler.trigger;
+    const { trigger } = handler;
     if (_.isFunction(trigger)) {
       trigger(args);
     }
   }
-
 }

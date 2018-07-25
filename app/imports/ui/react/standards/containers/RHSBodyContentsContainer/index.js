@@ -1,23 +1,27 @@
 import { connect } from 'react-redux';
 
 import BodyContents from '../../components/RHS/BodyContents';
-import { pickDocuments } from '/imports/api/helpers';
+import {
+  getStandardBookSectionBySectionId,
+} from '../../../../../client/store/selectors/standardBookSections';
+import { getStandardTypeByTypeId } from '../../../../../client/store/selectors/standardTypes';
+import { getUsersByIds } from '../../../../../client/store/selectors/users';
+import { pickDocuments } from '../../../../../api/helpers';
 
-const mapStateToProps = (({ collections }, {
-  sectionId,
-  typeId,
-  owner,
-  notify,
-  improvementPlan = {},
-}) => ({
-  section: collections.standardBookSectionsByIds[sectionId],
-  type: collections.standardTypesByIds[typeId],
-  owner: collections.usersByIds[owner],
-  improvementPlan: {
-    ...improvementPlan,
-    owner: collections.usersByIds[improvementPlan.owner],
-  },
-  notify: pickDocuments(['_id', 'profile', 'emails'], collections.usersByIds, notify),
-}));
+const mapStateToProps = (state, props) => {
+  const usersByIds = getUsersByIds(state);
+  const { owner, improvementPlan = {}, notify } = props;
+
+  return {
+    section: getStandardBookSectionBySectionId(state, props),
+    type: getStandardTypeByTypeId(state, props),
+    owner: usersByIds[owner],
+    improvementPlan: {
+      ...improvementPlan,
+      owner: usersByIds[improvementPlan.owner],
+    },
+    notify: pickDocuments(['_id', 'profile', 'emails'], usersByIds, notify),
+  };
+};
 
 export default connect(mapStateToProps)(BodyContents);

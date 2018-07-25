@@ -1,7 +1,20 @@
+import { Meteor } from 'meteor/meteor';
 import { UserPresence, UserPresenceMonitor } from 'meteor/konecty:user-presence';
+import { InstanceStatus } from 'meteor/konecty:multiple-instances-status';
 
-// Listen for new connections, login, logoff and application exit to manage user status and register methods to be used by client to set user status and default status
-UserPresence.start();
+Meteor.startup(() => {
+  const instance = {
+    host: 'localhost',
+    port: String(process.env.PORT).trim(),
+  };
 
-// Listen for changes in UserSessions and Meteor.users to set user status based on active connections
-UserPresenceMonitor.start();
+  if (process.env.INSTANCE_IP) {
+    instance.host = String(process.env.INSTANCE_IP).trim();
+  }
+
+  InstanceStatus.registerInstance('plio', instance);
+
+  UserPresence.start();
+
+  return UserPresenceMonitor.start();
+});

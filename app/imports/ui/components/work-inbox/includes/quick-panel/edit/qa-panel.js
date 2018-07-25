@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { chain } from '/imports/api/helpers.js';
+import { chain } from '/imports/api/helpers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.WorkInbox_QAPanel_Edit.viewmodel({
@@ -27,5 +27,5 @@ Template.WorkInbox_QAPanel_Edit.viewmodel({
     };
 
     this.modal().callMethod(method, { _id, ...args }, callback);
-  }
+  },
 });

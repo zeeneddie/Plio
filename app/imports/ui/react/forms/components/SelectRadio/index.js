@@ -1,33 +1,44 @@
-import React, { PropTypes } from 'react';
-import { ButtonGroup, Input } from 'reactstrap';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { ButtonGroup, Input, Button } from 'reactstrap';
 import cx from 'classnames';
+import styled from 'styled-components';
 
-import Button from '../../../components/Buttons/Button';
+const StyledButtonGroup = styled(ButtonGroup)`
+  & > .btn {
+    margin-bottom: 0;
+    z-index: 0 !important;
+  }
+`;
 
-const SelectRadio = ({ items, onSelect, selected }) => (
-  <ButtonGroup className="btn-group-nomargin" data-toggle="buttons">
-    {items.map(({ text, value, ...item }, i) => (
+const SelectRadio = ({
+  options,
+  onChange,
+  value: inputValue,
+  ...props
+}) => (
+  <StyledButtonGroup data-toggle="buttons">
+    {options.map(({ label, value }) => (
       <Button
-        key={i}
-        color="secondary"
-        component="label"
-        onClick={e => onSelect(e, { text, value, ...item })}
-        className={cx({ active: selected === value })}
+        key={`${label}-${value}`}
+        color={value === inputValue ? 'primary' : 'secondary'}
+        className={cx({ active: value === inputValue })}
+        onClick={() => onChange({ label, value })}
       >
-        <Input type="radio" autoComplete="off" {...{ value }} />
-        <span>{text}</span>
+        <Input type="radio" {...{ value, ...props }} />
+        {label}
       </Button>
     ))}
-  </ButtonGroup>
+  </StyledButtonGroup>
 );
 
 SelectRadio.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
-    text: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.node]),
+  options: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.node]),
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   })).isRequired,
-  onSelect: PropTypes.func.isRequired,
-  selected: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default SelectRadio;

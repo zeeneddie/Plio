@@ -11,11 +11,10 @@ import { Departments } from '/imports/share/collections/departments';
 import { Reviews } from '/imports/share/collections/reviews';
 import Counter from '../../counter/server';
 import { ActionTypes, DocumentTypes } from '/imports/share/constants';
-import get from 'lodash.get';
 import { check } from 'meteor/check';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
-import { RiskTypes } from '/imports/share/collections/risk-types.js';
+import { RiskTypes } from '/imports/share/collections/risk-types';
 import {
   makeOptionsFields,
   getCursorNonDeleted,
@@ -33,15 +32,23 @@ import {
   createProblemsTree,
 } from '../../problems/utils';
 import { getPublishCompositeOrganizationUsers } from '/imports/server/helpers/pub-helpers';
+import { publishWithMiddleware } from '../../helpers/server';
+import { checkOrgMembership } from '../../middleware';
+import { checkLoggedIn } from '../../../share/middleware';
 
-const getStandardFiles = (standard) => {
-  const fileIds = standard.improvementPlan && standard.improvementPlan.fileIds || [];
-  const source1FileId = get(standard, 'source1.fileId');
-  const source2FileId = get(standard, 'source2.fileId');
-  if (source1FileId) fileIds.push(source1FileId);
-  if (source2FileId) fileIds.push(source2FileId);
+const getStandardFiles = ({
+  improvementPlan: {
+    fileIds = [],
+  } = {},
+  source1: { fileId: fileId1 } = {},
+  source2: { fileId: fileId2 } = {},
+}) => {
+  let ids = [...fileIds];
 
-  return Files.find({ _id: { $in: fileIds } });
+  if (fileId1) ids = ids.concat(fileId1);
+  if (fileId2) ids = ids.concat(fileId2);
+
+  return Files.find({ _id: { $in: ids } });
 };
 
 const getStandardsLayoutPub = function (userId, serialNumber, isDeleted = false) {
@@ -90,25 +97,23 @@ Meteor.publishComposite(
   getPublishCompositeOrganizationUsers(getStandardsLayoutPub),
 );
 
-Meteor.publishComposite('standardsList', function (
+Meteor.publishComposite('standardsList', (
   organizationId,
   isDeleted = { $in: [null, false] },
-) {
-  return {
-    find() {
-      const userId = this.userId;
+) => ({
+  find() {
+    const userId = this.userId;
 
-      if (!userId || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
+    if (!userId || !isOrgMember(userId, organizationId)) {
+      return this.ready();
+    }
 
-      return Standards.find({
-        organizationId,
-        isDeleted,
-      }, { fields: Standards.publicFields });
-    },
-  };
-});
+    return Standards.find({
+      organizationId,
+      isDeleted,
+    }, { fields: Standards.publicFields });
+  },
+}));
 
 Meteor.publishComposite('standardCard', function publishStandardCard({
   _id,
@@ -184,7 +189,7 @@ Meteor.publish('standardsDeps', function (organizationId) {
   const actions = getActionsWithLimitedFields(actionsQuery);
   const departments = Departments.find(
     { organizationId },
-    makeOptionsFields(Departments.publicFields)
+    makeOptionsFields(Departments.publicFields),
   );
   const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
   const riskTypes = RiskTypes.find({ organizationId });
@@ -197,18 +202,16 @@ Meteor.publish('standardsDeps', function (organizationId) {
   ];
 });
 
-Meteor.publish('standardsCount', function (counterName, organizationId) {
-  const userId = this.userId;
-
-  if (!userId || !isOrgMember(userId, organizationId)) {
-    return this.ready();
-  }
-
-  return new Counter(counterName, Standards.find({
+publishWithMiddleware(
+  ({ counterName, organizationId }) => new Counter(counterName, Standards.find({
     organizationId,
     isDeleted: { $in: [false, null] },
-  }));
-});
+  })),
+  {
+    name: 'standardsCount',
+    middleware: [checkLoggedIn(), checkOrgMembership()],
+  },
+);
 
 Meteor.publish('standardsNotViewedCount', function (counterName, organizationId) {
   const userId = this.userId;

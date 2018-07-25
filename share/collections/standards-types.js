@@ -11,6 +11,8 @@ StandardTypes.publicFields = {
   organizationId: 1,
   title: 1,
   abbreviation: 1,
+  isDefault: 1,
+  reservedTitle: 1,
 };
 
 export { StandardTypes };

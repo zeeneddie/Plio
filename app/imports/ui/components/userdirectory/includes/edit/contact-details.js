@@ -40,7 +40,7 @@ Template.UserEdit_ContactDetails.viewmodel({
       address: this.address(),
       skype: this.skype(),
       country: this.country(),
-      phoneNumbers: this.child('UserEdit_PhoneNumbers').getData()
+      phoneNumbers: this.child('UserEdit_PhoneNumbers').getData(),
     };
-  }
+  },
 });

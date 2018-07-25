@@ -6,12 +6,12 @@ Template.IP_MeansStatement_Edit.viewmodel({
   fileIds: [],
   uploaderMetaContext() {
     return {
-      organizationId: this.organizationId()
+      organizationId: this.organizationId(),
     };
   },
   update({ ...args }, cb) {
     const renameFields = (obj, fieldRe) => {
-      for (let key in obj) {
+      for (const key in obj) {
         if (!obj.hasOwnProperty(key)) {
           continue;
         }
@@ -28,5 +28,5 @@ Template.IP_MeansStatement_Edit.viewmodel({
 
     renameFields(args, /^fileIds/);
     this.parent().update({ ...args }, cb);
-  }
-})
+  },
+});

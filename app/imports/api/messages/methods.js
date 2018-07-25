@@ -3,11 +3,11 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
 import { MessagesSchema } from '/imports/share/schemas/messages-schema';
 import { Messages } from '/imports/share/collections/messages';
-import MessagesService from './messages-service';
 import { Discussions } from '/imports/share/collections/discussions';
 import { IdSchema } from '/imports/share/schemas/schemas';
-import { checkDocExistance, checkOrgMembership } from '../checkers';
 import { getCollectionByDocType } from '/imports/share/helpers';
+import { MessageService } from '../../share/services';
+import { checkDocExistance, checkOrgMembership } from '../checkers';
 import { CANNOT_CREATE_MESSAGE_FOR_DELETED, ONLY_OWNER_CAN_UPDATE } from '../errors';
 
 const onInsertCheck = ({ discussionId }) => {
@@ -39,17 +39,15 @@ export const insert = new ValidatedMethod({
   validate: MessagesSchema.validator(),
 
   run({ ...args }) {
-    const userId = this.userId;
+    const { userId } = this;
 
     if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot add messages to discussions'
-      );
+      throw new Meteor.Error(403, 'Unauthorized user cannot add messages to discussions');
     }
 
     checkOrgMembership(userId, args.organizationId);
     onInsertCheck({ ...args });
-    return MessagesService.insert({ ...args });
+    return MessageService.insert({ ...args }, { userId });
   },
 });
 
@@ -59,15 +57,13 @@ export const remove = new ValidatedMethod({
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    const userId = this.userId;
+    const { userId } = this;
 
     if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove messages from discussions'
-      );
+      throw new Meteor.Error(403, 'Unauthorized user cannot remove messages from discussions');
     }
 
     onUpdateCheck({ _id, userId });
-    return MessagesService.remove({ _id });
+    return MessageService.remove({ _id });
   },
 });

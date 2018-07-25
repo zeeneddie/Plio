@@ -1,83 +1,85 @@
 import {
   compose,
-  mapProps,
   branch,
   renderComponent,
-  shouldUpdate,
 } from 'recompose';
 import { connect } from 'react-redux';
-
 import {
-  some,
-  getC,
-  lengthStandards,
-  notEquals,
-  omitC,
-  pickDeep,
+  length,
+  view,
+  allPass,
+  complement,
   identity,
-  pickC,
-  assoc,
-} from '/imports/api/helpers';
+  anyPass,
+} from 'ramda';
+import { lenses, getStandardsLength } from 'plio-util';
+
 import StandardsRHS from '../../components/RHS';
-import { getStandardsByFilter } from '../../helpers';
+import {
+  getIsFullScreenMode,
+  getIsCardReady,
+  getUrlItemId,
+  getSearchText,
+} from '../../../../../client/store/selectors/global';
+import {
+  getStandardsByIds,
+  getStandardsFiltered,
+  getFilteredStandards,
+  getSelectedStandard,
+} from '../../../../../client/store/selectors/standards';
+import { namedCompose } from '../../../helpers';
 
-const mapStateToProps = state => ({
-  ...pickC(['isFullScreenMode', 'isCardReady', 'urlItemId'])(state.global),
-  standard: state.collections.standardsByIds[state.global.urlItemId],
-});
+// ({ searchText: String, standardsFiltered: Array }) => Boolean
+const noResultsPred = allPass([
+  view(lenses.searchText),
+  compose(complement(length), view(lenses.standardsFiltered)),
+]);
+// ({ isCardReady: Boolean, urlItemId: String, standard: Object }) => Boolean
+const notExistPred = allPass([
+  view(lenses.isCardReady),
+  view(lenses.urlItemId),
+  complement(view)(lenses.standard),
+]);
 
-export default compose(
-  connect(pickDeep([
-    'global.filter',
-    'global.searchText',
-    'collections.standards',
-    'standards.standardsFiltered',
-  ])),
-  mapProps(props => assoc('standards', getStandardsByFilter(props), props)),
+const mapStateToProps = (state) => {
+  const standard = getSelectedStandard(state);
+  const isCardReady = getIsCardReady(state);
+  const standards = getFilteredStandards(state);
+  const isReady = !!(isCardReady && standards.length && standard);
+  const hasDocxAttachment = anyPass([
+    view(lenses.source1.htmlUrl),
+    view(lenses.source2.htmlUrl),
+  ])(standard);
+
+  return {
+    standard,
+    isReady,
+    hasDocxAttachment,
+    standards,
+    isCardReady,
+    standardsByIds: getStandardsByIds(state),
+    standardsFiltered: getStandardsFiltered(state),
+    urlItemId: getUrlItemId(state),
+    isFullScreenMode: getIsFullScreenMode(state),
+    searchText: getSearchText(state),
+  };
+};
+
+export default namedCompose('StandardsRHSContainer')(
+  connect(mapStateToProps),
   branch(
-    props => lengthStandards(props),
+    getStandardsLength,
     identity,
     renderComponent(StandardsRHS.NotFound),
   ),
   branch(
-    props => props.searchText && !props.standardsFiltered.length,
+    noResultsPred,
     renderComponent(StandardsRHS.NoResults),
     identity,
   ),
-  connect(mapStateToProps),
-  mapProps(({
-    isCardReady,
-    standard,
-    standards,
-    ...props
-  }) => ({
-    ...props,
-    standard,
-    isCardReady,
-    isReady: !!(isCardReady && standards.length && standard),
-  })),
   branch(
-    props => props.isCardReady && props.urlItemId && !props.standard,
+    notExistPred,
     renderComponent(StandardsRHS.NotExist),
     identity,
   ),
-  shouldUpdate((props, nextProps) => {
-    const omitStandardKeys = omitC(['updatedAt']);
-    return !!(
-      props.isReady !== nextProps.isReady ||
-      props.isFullScreenMode !== nextProps.isFullScreenMode ||
-      notEquals(omitStandardKeys(props.standard), omitStandardKeys(nextProps.standard))
-    );
-  }),
-  mapProps((props) => {
-    const hasDocxAttachment = some([
-      getC('source1.htmlUrl'),
-      getC('source2.htmlUrl'),
-    ], props.standard);
-
-    return {
-      ...props,
-      hasDocxAttachment,
-    };
-  }),
 )(StandardsRHS);

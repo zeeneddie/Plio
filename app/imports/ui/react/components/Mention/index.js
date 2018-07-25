@@ -1,6 +1,6 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { _ } from 'meteor/underscore';
-import cx from 'classnames';
 import { Dropdown } from 'reactstrap';
 
 import { searchByRegex, createSearchRegex, propEq, omitC } from '/imports/api/helpers';
@@ -94,7 +94,7 @@ class Mention extends React.Component {
           return React.cloneElement(child, {
             onChange: this.onInputChange,
             value: this.props.value,
-            getRef: (input) => (this.input = input),
+            innerRef: input => (this.input = input),
           });
         case Menu:
           return this.state.users.length ? React.cloneElement(child, {
@@ -106,11 +106,16 @@ class Mention extends React.Component {
       }
     });
 
-    const className = cx(this.props.dropup && 'dropup', this.props.className);
     const ddprops = omitC(Object.keys(propTypes), this.props);
 
     return (
-      <Dropdown {...{ ...ddprops, className }} isOpen={this.state.isOpen} toggle={this.toggle}>
+      <Dropdown
+        dropup={this.props.dropup}
+        isOpen={this.state.isOpen}
+        toggle={this.toggle}
+        className={this.props.className}
+        {...{ ...ddprops }}
+      >
         {children}
       </Dropdown>
     );

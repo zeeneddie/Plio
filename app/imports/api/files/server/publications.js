@@ -1,11 +1,17 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 
-import { Files } from '/imports/share/collections/files.js';
-import { isOrgMember } from '../../checkers.js';
-
+import { Files } from '../../../share/collections';
+import Errors from '../../../share/errors';
+import { isOrgMember } from '../../../share/checkers';
+import { publishCompositeWithMiddleware } from '../../helpers/server';
+import { checkLoggedIn } from '../../../share/middleware';
+import { getCollectionByDocType } from '../../../share/helpers';
 
 Meteor.publish('fileById', function (fileId) {
-  const userId = this.userId;
+  check(fileId, String);
+
+  const { userId } = this;
 
   const cursor = Files.find({ _id: fileId });
 
@@ -17,3 +23,35 @@ Meteor.publish('fileById', function (fileId) {
 
   return cursor;
 });
+
+publishCompositeWithMiddleware(
+  async ({ _id, documentType }, { userId }) => ({
+    find() {
+      const collection = getCollectionByDocType(documentType);
+      return collection.find({ _id }, { fields: { organizationId: 1, fileIds: 1 } });
+    },
+    children: [{
+      find({ organizationId, fileIds = [] }) {
+        if (!isOrgMember(organizationId, userId)) {
+          throw new Meteor.Error(403, Errors.NOT_ORG_MEMBER);
+        }
+
+        return Files.find({ _id: { $in: fileIds } });
+      },
+    }],
+  }),
+  {
+    name: 'filesByDocument',
+    middleware: [
+      async (next, root, args, context) => {
+        const { _id, documentType } = args;
+
+        check(_id, String);
+        check(documentType, String);
+
+        return next(root, args, context);
+      },
+      checkLoggedIn(),
+    ],
+  },
+);

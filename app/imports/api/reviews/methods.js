@@ -18,12 +18,10 @@ export const updateViewedBy = new Method({
   validate: IdSchema.validator(),
 
   check(checker) {
-    return checker(
-      compose(
-        ({ organizationId }) => checkOrgMembership(this.userId, organizationId),
-        checkReviewExistance(property('_id'))
-      )
-    );
+    return checker(compose(
+      ({ organizationId }) => checkOrgMembership(this.userId, organizationId),
+      checkReviewExistance(property('_id')),
+    ));
   },
 
   run({ _id }) {
@@ -43,9 +41,7 @@ export const insert = new Method({
   },
 
   check(checker) {
-    return checker(
-      ({ organizationId }) => checkOrgMembership(this.userId, organizationId),
-    );
+    return checker(({ organizationId }) => checkOrgMembership(this.userId, organizationId));
   },
 
   run(args) {
@@ -72,12 +68,10 @@ export const update = new Method({
   },
 
   check(checker) {
-    return checker(
-      compose(
-        ({ organizationId }) => checkOrgMembership(this.userId, organizationId),
-        checkReviewExistance(property('_id'))
-      )
-    );
+    return checker(compose(
+      ({ organizationId }) => checkOrgMembership(this.userId, organizationId),
+      checkReviewExistance(property('_id')),
+    ));
   },
 
   run(args) {
@@ -91,12 +85,10 @@ export const remove = new Method({
   validate: IdSchema.validator(),
 
   check(checker) {
-    return checker(
-      compose(
-        ({ organizationId }) => checkOrgMembership(this.userId, organizationId),
-        checkReviewExistance(property('_id'))
-      )
-    );
+    return checker(compose(
+      ({ organizationId }) => checkOrgMembership(this.userId, organizationId),
+      checkReviewExistance(property('_id')),
+    ));
   },
 
   run({ _id }) {

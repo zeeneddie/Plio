@@ -5,3 +5,6 @@ settings*.json
 npm-debug.log
 .jshintrc
 typings
+yarn-error.log
+package-lock.json
+run.sh

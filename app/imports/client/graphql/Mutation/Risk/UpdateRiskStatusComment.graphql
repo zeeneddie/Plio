@@ -1,0 +1,8 @@
+mutation updateRiskStatusComment($input: UpdateRiskStatusCommentInput!) {
+  updateRiskStatusComment(input: $input) {
+    risk {
+      _id
+      statusComment
+    }
+  }
+}

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import FileItem from '../FileItem';
 import Iframe from '../../../../components/Iframe';
@@ -12,7 +13,9 @@ const getSourceTitle = (id) => {
   return id === 1 ? 'Source file' : `Source file ${id}`;
 };
 
-const Source = ({ id, type, url, file }) => {
+const Source = ({
+  id, type, url, file,
+}) => {
   const title = getSourceTitle(id);
   let content;
 
@@ -20,7 +23,7 @@ const Source = ({ id, type, url, file }) => {
     case FILE_TYPE_MAP.URL:
       content = (
         <h4 className="list-group-item-heading">
-          <i className="fa fa-link margin-right"></i>
+          <i className="fa fa-link margin-right" />
           <a target="_blank" href={url}>{url}</a>
         </h4>
       );

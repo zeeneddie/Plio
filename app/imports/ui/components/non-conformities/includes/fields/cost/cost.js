@@ -23,5 +23,5 @@ Template.NC_Cost_Edit.viewmodel({
     if (!this._id) return;
 
     this.parent().update({ cost, e, withFocusCheck: true });
-  }
+  },
 });

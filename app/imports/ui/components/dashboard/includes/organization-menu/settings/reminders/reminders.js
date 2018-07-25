@@ -18,7 +18,7 @@ Template.OrgSettings_Reminders.viewmodel({
     const _id = this.organizationId();
 
     this.modal().callMethod(setReminder, {
-      _id, type, reminderType, timeValue, timeUnit
+      _id, type, reminderType, timeValue, timeUnit,
     });
-  }
+  },
 });

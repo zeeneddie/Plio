@@ -19,7 +19,7 @@ Template.CustomTitleCreate.viewmodel({
     });
   },
   sectionHintText() {
-    return !!this.value() ? `Add "${this.value()}" title` : 'Start typing...';
+    return this.value() ? `Add "${this.value()}" title` : 'Start typing...';
   },
   addNewSection() {
     if (!this.value()) return;

@@ -1,0 +1,29 @@
+#import "../Fragment/DashboardGoal.graphql"
+
+query DashboardGoals($organizationId: ID!, $limit: Int!) {
+  me {
+    _id
+    profile {
+      fullName
+    }
+    roles(organizationId: $organizationId)
+  }
+
+  goals(organizationId: $organizationId, limit: $limit) @connection(
+    key: "goals",
+    filter: ["organizationId"]
+  ) {
+    totalCount
+    goals {
+      ...DashboardGoal
+    }
+  }
+
+  completedDeletedGoals: goals(
+    organizationId: $organizationId,
+    limit: 1,
+    isCompletedOrDeleted: true
+  ) {
+    totalCount
+  }
+}

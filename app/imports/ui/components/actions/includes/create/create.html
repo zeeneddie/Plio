@@ -1,6 +1,6 @@
 <template name="Actions_Create">
   {{#Card_Create ref="card"}}
-    {{> NC_Title_Edit title=title label="Title"}}
+    {{> NC_Title_Edit (titleArgs)}}
 
     {{> Actions_LinkedTo_Edit
         type=type
@@ -9,7 +9,9 @@
 
     {{> Actions_Owner ownerId=ownerId}}
 
-    {{> Actions_PlanInPlace planInPlace=planInPlace}}
+    {{#if (not (eq type ActionTypes.GENERAL_ACTION))}}
+      {{> Actions_PlanInPlace planInPlace=planInPlace}}
+    {{/if}}
 
     <hr />
 

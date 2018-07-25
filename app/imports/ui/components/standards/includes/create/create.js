@@ -1,7 +1,8 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
-import { _ } from 'meteor/underscore';
 import { Meteor } from 'meteor/meteor';
+import { and } from 'ramda';
+import { toastr } from 'meteor/chrismbeckett:toastr';
 
 import { insert } from '/imports/api/standards/methods';
 import { setModalError, inspire } from '/imports/api/helpers';
@@ -10,44 +11,52 @@ import UploadService from '/imports/ui/utils/uploads/UploadService';
 
 Template.CreateStandard.viewmodel({
   mixin: ['standard', 'numberRegex', 'organization', 'router', 'getChildrenData', 'modal'],
+  validate({
+    sourceType,
+    sourceFile,
+    sourceUrl,
+    sourceVideoUrl,
+    ...data
+  }) {
+    let valid = and(
+      sourceType,
+      sourceFile || sourceUrl || sourceVideoUrl,
+    );
+
+    if (!valid) {
+      setModalError('The new standard cannot be created without a source file. ' +
+        'Please add a source file to your standard.');
+
+      return false;
+    }
+
+    Object.keys(data).forEach((key) => {
+      if (!data[key]) {
+        let message;
+        /* eslint-disable max-len */
+        switch (key) {
+          case 'sectionId':
+            message = 'The new standard cannot be created without a section. You can create a new section by typing it\'s name into the corresponding text input';
+            break;
+          case 'typeId':
+            message = 'The new standard cannot be created without a type. You can create a new standard type in org settings';
+            break;
+          default:
+            message = `The new standard cannot be created without a ${key}. Please enter a ${key} for your standard.`;
+        }
+        /* eslint-enable max-len */
+        setModalError(message);
+
+        valid = false;
+      }
+    });
+
+    return valid;
+  },
   save() {
     const data = this.getChildrenData();
 
-    const { sourceType, sourceFile, sourceUrl, sourceVideoUrl } = data;
-    const isSourcePresent = _.every([
-      sourceType,
-      sourceFile || sourceUrl || sourceVideoUrl,
-    ]);
-    if (!isSourcePresent) {
-      setModalError(
-        'The new standard cannot be created without a source file. ' +
-        'Please add a source file to your standard.'
-      );
-      return;
-    }
-
-    for (let key in data) {
-      if (!data[key]) {
-        let errorMessage;
-        if (key === 'title') {
-          errorMessage = `The new standard cannot be created without a title. Please enter a title for your standard`;
-          setModalError(errorMessage);
-          return;
-        } else if (key === 'sectionId') {
-          errorMessage = `The new standard cannot be created without a section. You can create a new section by typing it's name into the corresponding text input`;
-          setModalError(errorMessage);
-          return;
-        } else if (key === 'typeId') {
-          errorMessage = `The new standard cannot be created without a type. You can create a new standard type in Org settings`;
-          setModalError(errorMessage);
-          return;
-        } else {
-          const errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
-          setModalError(errorMessage);
-          return;
-        }
-      }
-    }
+    if (!this.validate(data)) return;
 
     this.insert(data);
   },
@@ -62,7 +71,7 @@ Template.CreateStandard.viewmodel({
       return;
     }
 
-    _(args).extend({ nestingLevel });
+    Object.assign(args, { nestingLevel });
 
     if ((sourceType === 'attachment') && sourceFile) {
       this.modal().callMethod(insertFile, {
@@ -88,13 +97,13 @@ Template.CreateStandard.viewmodel({
 
     const source1 = { type: sourceType };
     if (sourceType === 'attachment') {
-      _(source1).extend({ fileId });
+      Object.assign(source1, { fileId });
     } else {
       const url = {
         url: sourceUrl,
         video: sourceVideoUrl,
       }[sourceType];
-      _(source1).extend({ url });
+      Object.assign(source1, { url });
     }
 
     const standardArgs = {
@@ -113,9 +122,11 @@ Template.CreateStandard.viewmodel({
         this._uploadFile(sourceFile, fileId, _id);
       }
 
-      this.isActiveStandardFilter('deleted')
-        ? this.goToStandard(_id, false)
-        : this.goToStandard(_id);
+      if (this.isActiveStandardFilter(3)) {
+        this.goToStandard(_id, false);
+      } else {
+        this.goToStandard(_id);
+      }
 
       open({
         _id,
@@ -150,19 +161,17 @@ Template.CreateStandard.viewmodel({
   _launchDocxRendering(fileUrl, fileName, standardId) {
     Meteor.call('Mammoth.convertStandardFileToHtml', {
       fileUrl,
-      htmlFileName: fileName + '.html',
+      htmlFileName: `${fileName}.html`,
       source: 'source1',
       standardId,
     }, (error, result) => {
       if (error) {
         // HTTP errors
         toastr.error(`Failed to get .docx file: ${error}`);
-      } else {
-        if (result.error) {
-          // Mammoth errors
-          toastr.error(`Rendering document: ${result.error}`);
-        }
+      } else if (result.error) {
+        // Mammoth errors
+        toastr.error(`Rendering document: ${result.error}`);
       }
     });
-  }
+  },
 });

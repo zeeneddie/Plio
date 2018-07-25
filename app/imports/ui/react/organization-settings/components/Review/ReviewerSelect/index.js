@@ -1,12 +1,11 @@
-import React, { PropTypes } from 'react';
-import { compose, getContext, withProps, withState, withHandlers } from 'recompose';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { compose, getContext, withProps, withHandlers } from 'recompose';
 import { FormGroup } from 'reactstrap';
 
 import { getId, transsoc } from '/imports/api/helpers';
 import { getFullNameOrEmail } from '/imports/api/users/helpers';
-import SelectInput from '../../../../forms/components/SelectInput';
-
-const SelectInputEnhanced = withState('value', 'setValue', '')(SelectInput);
+import { SelectInput } from '../../../../forms/components';
 
 const enhance = compose(
   getContext({
@@ -17,26 +16,26 @@ const enhance = compose(
     selected: getField(fieldName) || '',
     items: users.map(transsoc({
       value: getId,
-      text: getFullNameOrEmail,
+      label: getFullNameOrEmail,
     })),
   })),
   withHandlers({
-    onSelect: ({ changeField, fieldName }) => (e, { value }, callback) => {
+    onSelect: ({ changeField, fieldName }) => ({ value }, callback) => {
       if (value) changeField(fieldName, value, true, callback);
     },
   }),
 );
 
-const ReviewReviewerSelect = enhance(({ value, setValue, selected, items, onSelect }) => (
+const ReviewReviewerSelect = enhance(({ selected, items, onSelect }) => (
   <FormGroup>
     <label className="form-control-label">
       Reviewer
     </label>
-    <SelectInputEnhanced
-      caret
-      hint
-      input={{ placeholder: 'Select a reviewer...' }}
-      {...{ value, setValue, selected, items, onSelect }}
+    <SelectInput
+      value={selected}
+      options={items}
+      onChange={onSelect}
+      placeholder="Select a reviewer..."
     />
   </FormGroup>
 ));

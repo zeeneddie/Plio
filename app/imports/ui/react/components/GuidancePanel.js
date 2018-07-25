@@ -1,0 +1,48 @@
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Button } from 'reactstrap';
+import cx from 'classnames';
+import styled from 'styled-components';
+
+import Collapse from './Collapse';
+import CardBlock from './CardBlock';
+
+const ButtonWrapper = styled.div`
+  & > button {
+    padding-left: 0;
+  }
+`;
+
+const GuidancePanel = ({
+  isOpen,
+  toggle,
+  children,
+  className,
+  ...props
+}) => (
+  <Collapse
+    {...{ isOpen, ...props }}
+    className={cx('guidance-panel', className)}
+  >
+    <CardBlock>
+      {children}
+      <ButtonWrapper>
+        <Button
+          color="link"
+          onClick={toggle}
+        >
+          Close
+        </Button>
+      </ButtonWrapper>
+    </CardBlock>
+  </Collapse>
+);
+
+GuidancePanel.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
+  className: PropTypes.string,
+  children: PropTypes.node,
+};
+
+export default GuidancePanel;

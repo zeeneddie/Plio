@@ -25,7 +25,6 @@ const getFieldsByDocType = (documentType, fields) => {
         serialNumber: 1,
         sequentialId: 1,
         workflowType: 1,
-        identifiedAt: 1,
         magnitude: 1,
       });
     default:
@@ -44,7 +43,7 @@ const getPathsByDocType = (documentType, userId, paths) => {
     case DocumentTypes.STANDARD:
       return Object.assign({}, paths, ({ owner: userId }));
     case DocumentTypes.RISK:
-      return Object.assign({}, paths, ({ identifiedBy: userId }));
+      return Object.assign({}, paths, ({ originatorId: userId }));
     default:
       return paths;
   }
@@ -139,7 +138,7 @@ const initBulk = collection => collection.rawCollection().initializeUnorderedBul
 const executeBulks = (...bulks) => bulks.reduce((acc, bulk) => {
   if (!bulk || !bulk.length) return acc;
 
-  const result = Meteor.wrapAsync(bulk.execute.bind(bulk))({ w: 1, wTimeout: 5000 });
+  const result = Meteor.wrapAsync(bulk.execute.bind(bulk))();
 
   return acc.concat(result);
 }, []);
@@ -174,7 +173,9 @@ const bulkInsertDocuments = (documentType, to, from, userId) => {
   return executeBulks(bulk, bulkFiles, bulkDiscussions);
 };
 
-export default function importDocuments({ to, from, userId, documentType }) {
+export default function importDocuments({
+  to, from, userId, documentType,
+}) {
   const res = bulkInsertDocuments(documentType, to, from, userId)[0];
 
   return res && res.getInsertedIds();

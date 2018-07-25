@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { CreatedAtSchema, ViewedBySchema } from './schemas.js';
+import { CreatedAtSchema } from './schemas';
 
 const RequiredSchema = new SimpleSchema({
   recipientIds: {

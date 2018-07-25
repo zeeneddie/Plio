@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 import { Col, Row, ListGroup } from 'reactstrap';
 
@@ -12,7 +13,7 @@ import Notify from '../../../../fields/read/components/Notify';
 import ImprovementPlan from '../../../../fields/read/components/ImprovementPlan';
 import FileProvider from '../../../../containers/providers/FileProvider';
 import ConnectedDocListContainer from '../../../fields/read/containers/ConnectedDocListContainer';
-import ReviewsContainer from '/imports/ui/react/fields/read/containers/ReviewsContainer';
+import ReviewsContainer from '../../../../fields/read/containers/ReviewsContainer';
 
 const propTypes = {
   _id: PropTypes.string,
@@ -42,7 +43,7 @@ const BodyContents = ({
   section = {},
   type = {},
 }) => {
-  const render = (field) => (<Col sm="6">{field}</Col>);
+  const render = field => (<Col sm="6">{field}</Col>);
   const data = [
     { label: 'Description', text: description },
     { label: 'Issue number', text: issueNumber, render },
@@ -73,7 +74,7 @@ const BodyContents = ({
 
         {[source1, source2].map((source, i) => source && (
           <FileProvider
-            key={i}
+            key={source.fileId || source.url}
             id={i + 1}
             component={Source}
             flat={false}
@@ -81,8 +82,6 @@ const BodyContents = ({
           />
         ))}
       </ListGroup>
-
-      {!!length(notify) && (<Notify users={notify} />)}
 
       <ConnectedDocListContainer standardId={_id}>
         {improvementPlan && (
@@ -94,6 +93,8 @@ const BodyContents = ({
       </ConnectedDocListContainer>
 
       <ReviewsContainer documentId={_id} documentType={DocumentTypes.STANDARD} />
+
+      {!!length(notify) && (<Notify users={notify} />)}
     </div>
   );
 };

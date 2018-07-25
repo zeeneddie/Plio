@@ -1,16 +1,13 @@
-import { Actions } from '/imports/share/collections/actions.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { WorkItems } from '/imports/share/collections/work-items.js';
-import BaseEntityService from './base-entity-service.js';
-import { ProblemTypes, WorkItemsStore, WorkflowTypes } from '/imports/share/constants.js';
+import { Actions, NonConformities, Risks, WorkItems } from '../collections';
+import BaseEntityService from './base-entity-service';
+import { ProblemTypes, WorkItemsStore } from '../constants';
 
 
 const {
   COMPLETE_ACTION,
   VERIFY_ACTION,
   COMPLETE_ANALYSIS,
-  COMPLETE_UPDATE_OF_DOCUMENTS
+  COMPLETE_UPDATE_OF_DOCUMENTS,
 } = WorkItemsStore.TYPES;
 
 export default {
@@ -22,12 +19,14 @@ export default {
     return this.collection.insert({ ...args });
   },
 
-  update({ _id, query = {}, options = {}, ...args }) {
-    if (!_.keys(query).length > 0) {
-      query = { _id };
+  update({
+    _id, query = {}, options = {}, ...args
+  }) {
+    if (!Object.keys(query).length) {
+      Object.assign(query, { _id });
     }
-    if (!_.keys(options).length > 0) {
-      options['$set'] = args;
+    if (!Object.keys(options).length) {
+      options.$set = args; // eslint-disable-line no-param-reassign
     }
 
     return this.collection.update(query, options);
@@ -55,17 +54,26 @@ export default {
 
   actionCreated(actionId) {
     const action = Actions.findOne({ _id: actionId });
-    const { organizationId, type, completionTargetDate, toBeCompletedBy } = action;
+    const {
+      organizationId,
+      type,
+      completionTargetDate,
+      toBeCompletedBy,
+      viewedBy = [],
+      createdBy,
+    } = action;
 
     this.collection.insert({
       organizationId,
       targetDate: completionTargetDate,
       assigneeId: toBeCompletedBy,
       type: WorkItemsStore.TYPES.COMPLETE_ACTION,
+      viewedBy,
+      createdBy,
       linkedDoc: {
         type,
-        _id: actionId
-      }
+        _id: actionId,
+      },
     });
   },
 
@@ -79,7 +87,7 @@ export default {
     this.collection.remove({
       'linkedDoc._id': actionId,
       type: WorkItemsStore.TYPES.VERIFY_ACTION,
-      isCompleted: false
+      isCompleted: false,
     });
   },
 
@@ -111,7 +119,7 @@ export default {
     this.collection.remove({
       'linkedDoc._id': actionId,
       type: WorkItemsStore.TYPES.VERIFY_ACTION,
-      isCompleted: false
+      isCompleted: false,
     });
   },
 
@@ -125,7 +133,7 @@ export default {
     this.collection.remove({
       'linkedDoc._id': docId,
       type: WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_DOCUMENTS,
-      isCompleted: false
+      isCompleted: false,
     });
   },
 
@@ -157,76 +165,78 @@ export default {
     const { _id } = this.collection.findOne({
       'linkedDoc._id': docId,
       type: workItemType,
-      isCompleted: false
+      isCompleted: false,
     }) || {};
 
     if (!_id) {
       const {
-        organizationId, targetDate, type
+        organizationId, targetDate, type,
       } = this._getDocData(docId, docType, workItemType);
 
-      const newId = this.collection.insert({
+      this.collection.insert({
         organizationId,
         targetDate,
         assigneeId: userId,
         type: workItemType,
         linkedDoc: {
           type,
-          _id: docId
-        }
+          _id: docId,
+        },
       });
     } else {
       this.collection.update({ _id }, {
-        $set: { assigneeId: userId }
+        $set: { assigneeId: userId },
       });
     }
   },
 
-  _dateUpdated(docId, date, workItemType, docType) {
+  _dateUpdated(docId, date, workItemType) {
     this.collection.update({
       'linkedDoc._id': docId,
       type: workItemType,
-      isCompleted: false
+      isCompleted: false,
     }, {
-      $set: { targetDate: date }
+      $set: { targetDate: date },
     });
   },
 
-  _completed(docId, workItemType, docType) {
+  _completed(docId, workItemType) {
     this.collection.update({
       'linkedDoc._id': docId,
       type: workItemType,
-      isCompleted: false
+      isCompleted: false,
     }, {
-      $set: { isCompleted: true }
+      $set: { isCompleted: true },
     });
   },
 
-  _canceled(docId, workItemType, docType) {
+  _canceled(docId, workItemType) {
     this.collection.update({
       'linkedDoc._id': docId,
       type: workItemType,
-      isCompleted: true
+      isCompleted: true,
     }, {
-      $set: { isCompleted: false }
+      $set: { isCompleted: false },
     });
   },
 
   _getDocData(docId, docType, workItemType) {
-    let doc, targetDate, type;
+    let doc;
+    let targetDate;
+    let type;
 
     if (docType) {
       doc = this._getProblemDoc(docId, docType);
       type = docType;
 
       if (workItemType === COMPLETE_ANALYSIS) {
-        targetDate = doc.analysis.targetDate;
+        ({ targetDate } = doc.analysis);
       } else if (workItemType === COMPLETE_UPDATE_OF_DOCUMENTS) {
-        targetDate = doc.updateOfStandards.targetDate;
+        ({ targetDate } = doc.updateOfStandards);
       }
     } else {
       doc = Actions.findOne({ _id: docId });
-      type = doc.type;
+      ({ type } = doc);
 
       if (workItemType === COMPLETE_ACTION) {
         targetDate = doc.completionTargetDate;
@@ -238,18 +248,19 @@ export default {
     return {
       organizationId: doc.organizationId,
       targetDate,
-      type
+      type,
     };
   },
 
   _getProblemDoc(docId, docType) {
     const collections = {
       [ProblemTypes.NON_CONFORMITY]: NonConformities,
-      [ProblemTypes.RISK]: Risks
+      [ProblemTypes.POTENTIAL_GAIN]: NonConformities,
+      [ProblemTypes.RISK]: Risks,
     };
 
     const docCollection = collections[docType];
 
     return docCollection && docCollection.findOne({ _id: docId });
-  }
-}
+  },
+};

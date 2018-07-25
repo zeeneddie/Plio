@@ -1,5 +1,5 @@
-import { checkAndThrow } from '/imports/api/helpers.js';
-import { canChangeStandards } from '../checkers.js';
+import { checkAndThrow } from '../helpers';
+import { canChangeStandards } from '../checkers';
 import { CANNOT_CHANGE_STANDARDS } from '../errors.js';
 
 export const S_EnsureCanChange = (userId, organizationId) => {

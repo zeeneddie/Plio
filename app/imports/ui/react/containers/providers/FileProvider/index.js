@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import {
   compose,
   setPropTypes,
@@ -25,7 +25,7 @@ const enhance = compose(
   branch(
     property('flat'),
     flattenProp('file'),
-    identity
+    identity,
   ),
 );
 

@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 import propTypes from './propTypes';
 
-const ChangelogFooter = (props) => (
+const ChangelogFooter = props => (
   <div className="card-footer">
     {props.showAll ? (
       <a
@@ -19,12 +19,12 @@ const ChangelogFooter = (props) => (
           'btn btn-secondary pointer',
           {
             'not-visible': props.logsCount <= props.lastLogsLimit,
-          }
+          },
         )}
       >
         View all changes ({props.logsCount} total)
         {(props.isLoadingAllLogs || props.isLoadingLogsCount) ? (
-          <i className="fa fa-spinner fa-pulse"></i>
+          <i className="fa fa-spinner fa-pulse" />
         ) : ''}
       </a>
     )}

@@ -1,8 +1,10 @@
 import { Template } from 'meteor/templating';
 
-import { ProblemsStatuses } from '/imports/share/constants.js';
-import { lengthItems, inspire } from '/imports/api/helpers.js';
-import { Departments } from '/imports/share/collections/departments.js';
+import { ProblemsStatuses } from '/imports/share/constants';
+import { lengthItems, inspire } from '/imports/api/helpers';
+import { Departments } from '/imports/share/collections/departments';
+import { NonConformities } from '../../../../share/collections';
+import { sortByType } from '../../../../api/non-conformities/util';
 
 Template.Problems_ListWrapper.viewmodel({
   share: 'search',
@@ -36,9 +38,15 @@ Template.Problems_ListWrapper.viewmodel({
       : defaults;
   },
   statuses() {
+    const collection = this.collection();
+    const searchOptions = this._getSearchOptions();
     const mapper = (status) => {
       const query = { ...this._getMainQuery(), status };
-      const items = this.collection().find(query, this._getSearchOptions()).fetch();
+      let items = collection.find(query, searchOptions).fetch();
+
+      if (collection === NonConformities) {
+        items = sortByType(items);
+      }
 
       return { status, items };
     };
@@ -49,13 +57,19 @@ Template.Problems_ListWrapper.viewmodel({
   departments() {
     const organizationId = this.organizationId();
     const mainQuery = this._getMainQuery();
+    const collection = this.collection();
+    const searchOptions = this._getSearchOptions();
 
     const mapper = (department) => {
       const query = {
         ...mainQuery,
         departmentsIds: department._id,
       };
-      const items = this.collection().find(query, this._getSearchOptions()).fetch();
+      let items = collection.find(query, searchOptions).fetch();
+
+      if (collection === NonConformities) {
+        items = sortByType(items);
+      }
 
       return { ...department, items };
     };
@@ -70,10 +84,14 @@ Template.Problems_ListWrapper.viewmodel({
     const uncategorized = ((() => {
       const filterFn = nc => !departments.find(department =>
         nc.departmentsIds.includes(department._id));
-      const items = this.collection()
-        .find(mainQuery, this._getSearchOptions())
+      let items = collection
+        .find(mainQuery, searchOptions)
         .fetch()
         .filter(filterFn);
+
+      if (collection === NonConformities) {
+        items = sortByType(items);
+      }
 
       return {
         organizationId,
@@ -91,7 +109,13 @@ Template.Problems_ListWrapper.viewmodel({
   deleted() {
     const query = { ...this._getMainQuery(), isDeleted: true };
     const options = this._getSearchOptions({ sort: { deletedAt: -1 } });
+    const collection = this.collection();
+    let items = collection.find(query, options).fetch();
 
-    return this.collection().find(query, options).fetch();
+    if (collection === NonConformities) {
+      items = sortByType(items);
+    }
+
+    return items;
   },
 });

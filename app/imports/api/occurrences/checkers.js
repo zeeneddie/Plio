@@ -1,8 +1,7 @@
-import { checkAndThrow } from '/imports/api/helpers.js';
+import { checkAndThrow } from '../helpers';
 import { DOC_NOT_FOUND } from '../errors.js';
-import { checkDocExistance, checkOrgMembership } from '../checkers.js';
-import { Occurrences } from '/imports/share/collections/occurrences.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { checkDocExistance, checkOrgMembership } from '../checkers';
+import { NonConformities } from '../../share/collections/non-conformities';
 
 export const OCC_MembershipChecker = ({ userId }, { nonConformityId }) => {
   const nc = checkDocExistance(NonConformities, nonConformityId);

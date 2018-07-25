@@ -3,5 +3,5 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 Template.UserDirectory_Header.viewmodel({
   share: 'window',
-  mixin: ['organization', 'mobile']
+  mixin: ['organization', 'mobile'],
 });

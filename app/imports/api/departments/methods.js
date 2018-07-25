@@ -2,13 +2,13 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { Departments } from '/imports/share/collections/departments';
 import { DepartmentSchema } from '/imports/share/schemas/department-schema';
-import DepartmentService from './department-service';
 import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas';
 import { chain, inject } from '/imports/api/helpers';
+import { DepartmentService } from '../../share/services';
 import {
   ORG_EnsureCanChange,
   ORG_EnsureCanChangeChecker,
-  checkOrgMembership
+  checkOrgMembership,
 } from '../checkers';
 import Method, { CheckedMethod } from '../method';
 

@@ -4,7 +4,6 @@ import Workflow from './Workflow';
 
 
 export default class WorkItemWorkflow extends Workflow {
-
   _getStatus() {
     const workItem = this._doc;
 
@@ -29,5 +28,4 @@ export default class WorkItemWorkflow extends Workflow {
   static get _collection() {
     return WorkItems;
   }
-
 }

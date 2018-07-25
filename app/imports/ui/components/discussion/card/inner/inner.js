@@ -30,7 +30,7 @@ Template.Discussion_Card_Inner.viewmodel({
       <Provider {...{ store }}>
         <DiscussionContainer {...{ discussionId, organizationId, doc }} />
       </Provider>,
-      _.first(this.discussionDOMContainer)
+      _.first(this.discussionDOMContainer),
     );
   },
   onDestroyed() {

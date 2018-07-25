@@ -1,6 +1,6 @@
 import curry from 'lodash.curry';
 
-import { getId } from '/imports/api/helpers';
+import { getId } from '../../../api/helpers';
 
 const handleListRedirect = curry((goToDoc, goToDocs, selected, defaultDoc) => {
   if (!selected) {

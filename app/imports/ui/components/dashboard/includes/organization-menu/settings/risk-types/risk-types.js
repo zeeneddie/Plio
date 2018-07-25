@@ -1,16 +1,14 @@
 import { Template } from 'meteor/templating';
+import { Blaze } from 'meteor/blaze';
+import { swal } from 'meteor/plio:bootstrap-sweetalert';
 import invoke from 'lodash.invoke';
 
-import { OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
-import { insert, update, remove } from '/imports/api/risk-types/methods.js';
-import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
+import { insert, update, remove } from '/imports/api/risk-types/methods';
+import { OrganizationSettingsHelp } from '/imports/api/help-messages';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.OrgSettings_RisksTypes.viewmodel({
   mixin: ['modal', 'addForm', 'utils'],
-  onCreated(template) {
-    template.autorun(() => OrgSettingsDocSubs.subscribe('riskTypes', this.organizationId()));
-  },
   _lText: 'Risk types',
   _rText() {
     return invoke(this.riskTypes(), 'count');
@@ -32,7 +30,7 @@ Template.OrgSettings_RisksTypes.viewmodel({
       Blaze.remove(viewModel.templateInstance.view);
 
       this.modal().callMethod(insert, {
-        title, organizationId
+        title, organizationId,
       });
     } else {
       const _id = viewModel._id();
@@ -54,7 +52,7 @@ Template.OrgSettings_RisksTypes.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       const _id = viewModel._id();
 
@@ -78,5 +76,5 @@ Template.OrgSettings_RisksTypes.viewmodel({
         }
       });
     });
-  }
+  },
 });

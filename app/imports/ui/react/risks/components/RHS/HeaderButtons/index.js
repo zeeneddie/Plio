@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import DiscussButton from '../../../../components/Buttons/DiscussButton';
 import Button from '../../../../components/Buttons/Button';
@@ -52,7 +53,6 @@ HeaderButtons.propTypes = {
   unreadMessagesCount: PropTypes.number,
   hasAccess: PropTypes.bool,
   hasFullAccess: PropTypes.bool,
-  onToggleScreenMode: PropTypes.func,
   pathToDiscussion: PropTypes.string,
   onDiscussionOpen: PropTypes.func,
   onRestore: PropTypes.func,

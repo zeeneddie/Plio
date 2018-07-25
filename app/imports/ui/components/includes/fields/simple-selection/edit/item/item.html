@@ -4,18 +4,22 @@
       <div class="form-group-flex-flex" {{b "class: { margin-right: !showAbbreviation }"}}>
         {{#ClearableField field='title'}}
           <input type="text" class="form-control"
-              {{b "value: title, attr: { placeholder: placeholder }, focusout: onFocusOut"}} />
+              {{b "value: title, disable: disabled, attr: { placeholder: placeholder }, focusout: onFocusOut"}} />
         {{/ClearableField}}
       </div>
       {{#if showAbbreviation}}
         <div class="margin-left margin-right">
           {{#ClearableField field="abbreviation"}}
-            <input type="text" class="form-control" placeholder="Short" maxlength="{{abbreviationMaxLength}}"
-                {{b "value: abbreviation, focusout: onFocusOut"}} style="width:100px" />
+            <input type="text" class="form-control" placeholder="Short name" maxlength="{{abbreviationMaxLength}}"
+                {{b "value: abbreviation, disable: disabled, focusout: onFocusOut"}} style="width:120px" />
           {{/ClearableField}}
         </div>
       {{/if}}
-      {{> DeleteButton onClick=onDeleteFn}}
+      {{#if disabled}}
+        <div style="margin-left: 35px"></div>
+      {{else}}
+        {{> DeleteButton onClick=onDeleteFn}}
+      {{/if}}
     </div>
   </div>
 </template>

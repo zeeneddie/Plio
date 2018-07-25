@@ -27,5 +27,5 @@ export default {
   },
   _mapMembers(array) {
     return array.map(doc => ({ title: this.userNameOrEmail(doc), ...doc }));
-  }
+  },
 };

@@ -1,0 +1,13 @@
+type File {
+  _id: ID!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime
+  updatedBy: User
+  organization: Organization!
+  name: String!
+  extension: String!
+  progress: Int
+  url: String
+  status: String!
+}

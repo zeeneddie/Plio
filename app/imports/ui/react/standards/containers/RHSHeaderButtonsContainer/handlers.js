@@ -4,13 +4,13 @@ import { Meteor } from 'meteor/meteor';
 import modal from '/imports/startup/client/mixins/modal';
 import { StandardsHelp } from '/imports/api/help-messages';
 import swal from '/imports/ui/utils/swal';
+import { setIsFullScreenMode } from '/imports/client/store/actions/globalActions';
 import { restore, remove } from '/imports/api/standards/methods';
 import { isOrgOwner } from '/imports/api/checkers';
-import { STANDARD_FILTER_MAP, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import { goTo } from '../../../../utils/router/actions';
-import { setIsFullScreenMode } from '/imports/client/store/actions/globalActions';
 
-export const onToggleScreenMode = props => e => {
+export const onToggleScreenMode = props => (e) => {
   const $div = $(e.target).closest('.content-cards-inner');
   const offset = $div.offset();
 
@@ -71,13 +71,7 @@ export const onRestore = ({
   const cb = (err) => {
     if (err) swal.error(err);
 
-    swal({
-      title: 'Restored!',
-      text: `The standard "${title}" was restored successfully.`,
-      type: 'success',
-      timer: ALERT_AUTOHIDE_TIME,
-      showConfirmButton: false,
-    });
+    swal.success('Restored!', `The standard "${title}" was restored successfully.`);
 
     const params = { urlItemId: _id };
     const queryParams = { filter: STANDARD_FILTER_MAP.SECTION };
@@ -104,13 +98,7 @@ export const onDelete = ({
   const cb = (err) => {
     if (err) swal.error(err);
 
-    swal({
-      title: 'Deleted!',
-      text: `The standard "${title}" was removed successfully.`,
-      type: 'success',
-      timer: ALERT_AUTOHIDE_TIME,
-      showConfirmButton: false,
-    });
+    swal.success('Deleted!', `The standard "${title}" was removed successfully.`);
   };
 
   swal(options, () => remove.call({ _id }, cb));

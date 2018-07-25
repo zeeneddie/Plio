@@ -1,12 +1,20 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
+import { StringLimits } from '../../../../../../share/constants';
+
 Template.NC_Title_Edit.viewmodel({
-  label: 'Non-conformity name',
+  label: 'Title',
   title: '',
   sequentialId: '',
+  maxLength: StringLimits.title.max,
   titleArgs() {
-    const { label, title:value, sequentialId:addon } = this.data();
+    const {
+      label,
+      title: value,
+      sequentialId: addon,
+      maxLength,
+    } = this.data();
     const withFocusCheck = !!this._id;
 
     return {
@@ -14,12 +22,16 @@ Template.NC_Title_Edit.viewmodel({
       value,
       addon,
       withFocusCheck,
-      onFocusOut: (e, { value:title }) => {
+      maxLength,
+      onFocusOut: (e, { value: title }) => {
         this.title(title);
 
         if (!this._id) return;
 
         invoke(this.parent(), 'update', { title });
+        if (this.onUpdate) {
+          this.onUpdate({ title });
+        }
       },
     };
   },

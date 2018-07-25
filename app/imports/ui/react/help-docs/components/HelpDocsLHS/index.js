@@ -4,7 +4,7 @@ import LHSContainer from '../../../containers/LHSContainer';
 import HelpDocsLHSSectionList from '../HelpDocsLHSSectionList';
 import propTypes from './propTypes';
 
-const HelpDocsLHS = (props) => (
+const HelpDocsLHS = props => (
   <LHSContainer
     animating={props.animating}
     searchText={props.searchText}

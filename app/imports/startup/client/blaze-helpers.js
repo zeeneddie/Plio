@@ -7,7 +7,7 @@ const cutSpacebarsKw = fn => (...args) => {
   if (_.last(args) instanceof Spacebars.kw) {
     return fn(...Array.prototype.slice.call(args, 0, args.length - 1));
   }
-  
+
   return fn(...args);
 };
 
@@ -30,6 +30,7 @@ const helpers = {
   omit: (obj, ...keys) => _.omit(obj, keys),
   gt: (val1, val2) => val1 > val2,
   lt: (val1, val2) => val1 < val2,
+  get: (obj, key) => obj[key],
 };
 
 Object.keys(helpers).forEach(key => Template.registerHelper(key, cutSpacebarsKw(helpers[key])));

@@ -17,12 +17,8 @@
             updateCompletionDateFn=getUpdateCompletionDateFn
             updateCompletionExecutorFn=getUpdateCompletionExecutorFn
             updateVerificationDateFn=getUpdateVerificationDateFn
-            updateVerificationExecutorFn=getUpdateVerificationExecutorFn}}
-
-        {{> Subcards_Notify_Edit
-            doc=this
-            documentType="action"
-            onUpdate=onUpdateNotifyUserCb}}
+            updateVerificationExecutorFn=getUpdateVerificationExecutorFn
+            updateTitleFn=getUpdateTitleFn}}
 
         {{> Subcards_Notes_Edit
             notes=this.notes}}
@@ -33,6 +29,11 @@
             fileIds=this.fileIds
             uploaderMetaContext=uploaderMetaContext
             slingshotDirective=slingshotDirective}}
+
+        {{> Subcards_Notify_Edit
+          doc=this
+          documentType="action"
+          onUpdate=onUpdateNotifyUserCb}}
       {{/with}}
       <div class="card-block text-xs-center">
         <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>

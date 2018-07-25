@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { ListGroup } from 'reactstrap';
 
 import RisksListItemContainer from '../../containers/RisksListItemContainer';
@@ -16,7 +17,9 @@ const RisksList = ({
     {risks.map(risk => (
       <RisksListItemContainer
         key={risk._id}
-        {...{ section, orgSerialNumber, organization, userId, filter, urlItemId, ...risk }}
+        {...{
+          section, orgSerialNumber, organization, userId, filter, urlItemId, ...risk,
+        }}
       />
     ))}
   </ListGroup>

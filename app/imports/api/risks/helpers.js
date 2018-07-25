@@ -1,13 +1,15 @@
-import { riskScoreTypes } from '/imports/share/constants';
-import { find, some, propEq } from '/imports/api/helpers';
+import { riskScoreTypes } from '../../share/constants';
+import { find, some, propEq } from '../../api/helpers';
 
 export const getPrimaryScore = (scores) => {
   const propEqScoreTypeId = propEq('scoreTypeId');
 
-  return { ...find(some([
-    propEqScoreTypeId(riskScoreTypes.residual.id),
-    propEqScoreTypeId(riskScoreTypes.inherent.id),
-  ]), scores) };
+  return {
+    ...find(some([
+      propEqScoreTypeId(riskScoreTypes.residual.id),
+      propEqScoreTypeId(riskScoreTypes.inherent.id),
+    ]), scores),
+  };
 };
 
 export const getClassByScore = (score) => {

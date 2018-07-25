@@ -12,7 +12,7 @@ export default {
    */
   isNewDoc({ doc, userId }) {
     const dateUserJoinedToOrg = getJoinUserToOrganizationDate({
-      organizationId: this.organizationId(), userId
+      organizationId: this.organizationId(), userId,
     });
 
     if (!dateUserJoinedToOrg) {
@@ -44,5 +44,5 @@ export default {
     const serialNumber = parseInt(querySerialNumberParam, 10);
 
     return isNaN(serialNumber) ? querySerialNumberParam : serialNumber;
-  }
+  },
 };

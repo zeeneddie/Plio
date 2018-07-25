@@ -1,0 +1,42 @@
+{
+  "name": "graphql-server",
+  "private": true,
+  "scripts": {
+    "start": "MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor run --port 5000 --settings settings-local.json",
+    "start:mock": "MOCK_SCHEMA=1 MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor run --port 5000 --settings settings-local.json",
+    "debug": "MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor debug --settings settings-local.json",
+    "start:windows": "cmd /c \"SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&meteor --port 5000 --settings settings-local.json\"",
+    "start:windows:mock": "cmd /c \"SET MOCK_SCHEMA=1&&SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&meteor --port 5000 --settings settings-local.json\""
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0-beta.46",
+    "apollo-cache-inmemory": "^1.1.5",
+    "apollo-client": "^2.2.0",
+    "apollo-link": "^1.0.7",
+    "apollo-link-http": "^1.3.2",
+    "apollo-server-express": "^1.3.2",
+    "babel-runtime": "^6.26.0",
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "dataloader": "^1.3.0",
+    "express": "^4.16.2",
+    "faker": "^4.1.0",
+    "graphql": "^0.12.3",
+    "graphql-iso-date": "^3.3.0",
+    "graphql-loader": "^1.2.1",
+    "graphql-tools": "^2.18.0",
+    "graphql-type-json": "^0.1.4",
+    "invariant": "^2.2.4",
+    "lodash.get": "^4.4.2",
+    "meteor-node-stubs": "^0.3.2",
+    "moment-timezone": "^0.5.14",
+    "plio-util": "https://github.com/Pliohub/plio-util.git#devel",
+    "ramda": "^0.25.0",
+    "react": "^16.2.0",
+    "sanitize-html": "^1.18.2",
+    "sift": "^5.1.0",
+    "styled-components": "^3.1.6"
+  },
+  "devDependencies": {}
+}

@@ -1,22 +1,20 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
+import { Label } from 'reactstrap';
 
-const FormLabel = ({ children, colSm, colXs }) => (
-  <label
-    className={cx(
-      'form-control-label',
-      colSm && `col-sm-${colSm}`,
-      colXs && `col-xs-${colXs}`,
-    )}
+const FormLabel = ({ children, className, ...props }) => (
+  <Label
+    className={cx('form-control-label', className)}
+    {...props}
   >
     {children}
-  </label>
+  </Label>
 );
 
 FormLabel.propTypes = {
   children: PropTypes.node,
-  colSm: PropTypes.number,
-  colXs: PropTypes.number,
+  className: PropTypes.string,
 };
 
 export default FormLabel;

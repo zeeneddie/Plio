@@ -1,9 +1,10 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 import { Card, ListGroup, ListGroupItem } from 'reactstrap';
 
 import ClearField from '../../fields/read/components/ClearField';
-import AddButton from '../Buttons/AddButton';
+import PlusButton from '../Buttons/PlusButton';
 import TextInput from '../../forms/components/TextInput';
 import Icon from '../Icons/Icon';
 
@@ -38,9 +39,9 @@ const LHS = ({
   onBlur,
   onChange,
   renderAddButton = () => onModalButtonClick && (
-    <AddButton onClick={onModalButtonClick}>
+    <PlusButton onClick={onModalButtonClick} color="primary" icon={{ margin: 'right' }}>
       Add
-    </AddButton>
+    </PlusButton>
   ) || null,
 }) => {
   let searchInput;
@@ -65,7 +66,7 @@ const LHS = ({
               uncontrolled
               value={searchText}
               disabled={animating}
-              getRef={input => (searchInput = input)}
+              innerRef={input => (searchInput = input)}
               placeholder="Search..."
             />
           </ClearField>
@@ -74,7 +75,9 @@ const LHS = ({
             <Icon name="circle-o-notch spin" className="small-loader" />
           )}
         </div>
-        {renderAddButton({ animating, isFocused, searchText, searchResultsText })}
+        {renderAddButton({
+          animating, isFocused, searchText, searchResultsText,
+        })}
       </div>
 
       <ListGroup className="list-group-accordion">

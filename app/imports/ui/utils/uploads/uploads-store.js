@@ -58,6 +58,6 @@ export default UploadsStore = {
   _clearProgressUpdateInterval(fileId) {
     Meteor.clearInterval(this._progressUpdateIntervals[fileId]);
     delete this._progressUpdateIntervals[fileId];
-  }
+  },
 
 };

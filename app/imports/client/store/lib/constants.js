@@ -1,4 +1,4 @@
-import { CollectionNames } from '/imports/share/constants';
+import { CollectionNames } from '../../../share/constants';
 
 export const STORE_COLLECTION_NAMES = {
   [CollectionNames.DEPARTMENTS]: 'departments',

@@ -1,9 +1,12 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 
-import { MarginMap } from '/imports/api/constants';
+import { MarginMap } from '../../../../../api/constants';
 
-const Label = ({ names = 'default', className, margin, children }) => {
+const Label = ({
+  names = 'default', className, margin, children,
+}) => {
   const namesCx = names.split(' ').map(name => `label-${name}`);
   const marginCx = margin && MarginMap[margin];
   return (

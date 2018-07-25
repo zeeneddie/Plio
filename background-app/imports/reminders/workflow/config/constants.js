@@ -9,6 +9,7 @@ export const ReminderTypes = {
   ACTION_COMPLETION: 5,
   ACTION_VERIFICATION: 6,
   IMPROVEMENT_PLAN_REVIEW: 7,
+  POTENTIAL_GAIN_ANALYSIS: 8,
 };
 
 export const ReminderDocTypes = {

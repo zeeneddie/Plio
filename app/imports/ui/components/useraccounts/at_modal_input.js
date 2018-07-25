@@ -13,20 +13,20 @@ Template.atModalInput.helpers({
     if (this.template) {
       return this.template;
     }
-    if (this.type === "checkbox") {
-      return "atModalCheckboxInput";
+    if (this.type === 'checkbox') {
+      return 'atModalCheckboxInput';
     }
-    if (this.type === "select") {
-      return "atModalSelectInput";
+    if (this.type === 'select') {
+      return 'atModalSelectInput';
     }
-    if (this.type === "radio") {
-      return "atModalRadioInput";
+    if (this.type === 'radio') {
+      return 'atModalRadioInput';
     }
-    if (this.type === "hidden") {
-      return "atModalHiddenInput";
+    if (this.type === 'hidden') {
+      return 'atModalHiddenInput';
     }
-    return "atModalTextInput";
-  }
+    return 'atModalTextInput';
+  },
 });
 
 // Simply 'inherites' events from AccountsTemplates

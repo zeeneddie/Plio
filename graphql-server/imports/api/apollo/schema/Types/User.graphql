@@ -1,0 +1,47 @@
+type User {
+  _id: ID!
+  # The registration date
+  createdAt: DateTime!
+  # The first user email
+  email: String!
+  # User preferences
+  preferences: UserPreferences
+  # User profile
+  profile: UserProfile
+  # List of emails that the user has
+  emails: [UserEmail]!
+  # The name of the roles the user has
+  roles(organizationId: ID!): [String]
+  # User status (online/offline/away)
+  status: String
+  statusConnection: String
+}
+
+type UserEmail {
+  address: String!
+  verified: Boolean!
+}
+
+type UserProfile {
+  firstName: String
+  lastName: String
+  fullName: String
+  initials: String
+  description: String
+  avatar: String
+  skype: String
+  country: String
+  phoneNumbers: [PhoneNumber]
+}
+
+type PhoneNumber {
+  _id: ID!
+  type: String
+  number: String
+}
+
+type UserPreferences {
+  areNotificationsEnabled: Boolean
+  notificationSound: String
+  areEmailNotificationsEnabled: Boolean
+}

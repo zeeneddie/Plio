@@ -12,7 +12,7 @@
         <br>
         <span {{b "text: getDescription(this)"}}></span>
       </div>
-      {{#if isCurrentUserAssignee this}}
+      {{#if showCompleteButton this}}
         <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 text-xs-right qa-buttons">
           {{#if not (some this.isDeleted this.isCompleted)}}
             <button type="button" class="btn btn-success" {{b "click: openQAModal(this)"}}>
