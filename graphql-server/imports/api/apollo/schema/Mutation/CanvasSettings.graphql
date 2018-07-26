@@ -1,0 +1,13 @@
+type CanvasSettingsPayload {
+  canvasSettings: CanvasSettings
+}
+
+input ReorderCanvasItemsInput {
+  organizationId: ID!
+  sectionName: String!
+  newOrder: [ID]!
+}
+
+type Mutation {
+  reorderCanvasItems(input: ReorderCanvasItemsInput!): CanvasSettingsPayload
+}

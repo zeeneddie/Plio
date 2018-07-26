@@ -29,11 +29,8 @@ const SortableList = styled(Sortable)`
   }
 `;
 
-const CanvasSectionItems = ({ children, onChange, ...props }) => (
-  <SortableList
-    {...props}
-    onChange={(ordered, sortable, e) => onChange(e.item.dataset.id, e.newIndex, ordered)}
-  >
+const CanvasSectionItems = ({ children, ...props }) => (
+  <SortableList {...props} >
     {children}
   </SortableList>
 );
@@ -41,7 +38,6 @@ const CanvasSectionItems = ({ children, onChange, ...props }) => (
 CanvasSectionItems.propTypes = {
   tag: PropTypes.string,
   children: PropTypes.node.isRequired,
-  onChange: PropTypes.func.isRequired,
 };
 
 CanvasSectionItems.defaultProps = {

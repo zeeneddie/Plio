@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { ButtonGroup, DropdownItem } from 'reactstrap';
 import pluralize from 'pluralize';
+import { ButtonGroup, DropdownItem } from 'reactstrap';
+import { Mutation } from 'react-apollo';
 
 import CanvasSection from './CanvasSection';
 import CanvasSectionHeading from './CanvasSectionHeading';
@@ -15,6 +16,7 @@ import CanvasLabel from './CanvasLabel';
 import CanvasChartButton from './CanvasChartButton';
 import CanvasSectionHelp from './CanvasSectionHelp';
 import { WithToggle } from '../../helpers';
+import { Mutation as Mutations } from '../../../graphql';
 
 // Couldn't figure out a better name >_<
 const CanvasBlock = ({
@@ -26,6 +28,8 @@ const CanvasBlock = ({
   standards,
   risks,
   nonConformities,
+  organizationId,
+  sectionName,
 }) => {
   const isEmpty = !items.length;
 
@@ -46,14 +50,30 @@ const CanvasBlock = ({
               {help}
             </CanvasSectionHelp>
           )}
-          <CanvasSectionItems onChange={console.log}>
-            {items.map(({ _id, title, color }) => (
-              <CanvasSectionItem data-id={_id} key={_id}>
-                <CanvasSquareIcon {...{ color }} />
-                <span>{title}</span>
-              </CanvasSectionItem>
-            ))}
-          </CanvasSectionItems>
+          <Mutation mutation={Mutations.REORDER_CANVAS_ITEMS}>
+            {reorderCanvasItems => (
+              <CanvasSectionItems
+                onChange={newOrder => (
+                  reorderCanvasItems({
+                    variables: {
+                      input: {
+                        organizationId,
+                        sectionName,
+                        newOrder,
+                      },
+                    },
+                  })
+                )}
+              >
+                {items.map(({ _id, title, color }) => (
+                  <CanvasSectionItem data-id={_id} key={_id}>
+                    <CanvasSquareIcon {...{ color }} />
+                    <span>{title}</span>
+                  </CanvasSectionItem>
+                ))}
+              </CanvasSectionItems>
+            )}
+          </Mutation>
           <CanvasSectionFooter>
             <CanvasSectionFooterLabels>
               <ButtonGroup>
@@ -121,6 +141,8 @@ CanvasBlock.defaultProps = {
 };
 
 CanvasBlock.propTypes = {
+  organizationId: PropTypes.string.isRequired,
+  sectionName: PropTypes.string.isRequired,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   help: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   items: PropTypes.arrayOf(PropTypes.shape({
