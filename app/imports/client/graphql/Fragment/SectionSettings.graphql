@@ -1,3 +1,0 @@
-fragment SectionSettings on CanvasSectionSettings {
-  order
-}

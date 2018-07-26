@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import pluralize from 'pluralize';
 import { ButtonGroup, DropdownItem } from 'reactstrap';
-import { Mutation } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 
 import CanvasSection from './CanvasSection';
 import CanvasSectionHeading from './CanvasSectionHeading';
@@ -16,7 +16,10 @@ import CanvasLabel from './CanvasLabel';
 import CanvasChartButton from './CanvasChartButton';
 import CanvasSectionHelp from './CanvasSectionHelp';
 import { WithToggle } from '../../helpers';
-import { Mutation as Mutations } from '../../../graphql';
+import { Query as Queries, Mutation as Mutations } from '../../../graphql';
+import { ApolloFetchPolicies } from '../../../../api/constants';
+
+const sortCanvasItemsByOrder = items => items;
 
 // Couldn't figure out a better name >_<
 const CanvasBlock = ({
@@ -65,12 +68,23 @@ const CanvasBlock = ({
                   })
                 )}
               >
-                {items.map(({ _id, title, color }) => (
-                  <CanvasSectionItem data-id={_id} key={_id}>
-                    <CanvasSquareIcon {...{ color }} />
-                    <span>{title}</span>
-                  </CanvasSectionItem>
-                ))}
+                <Query
+                  query={Queries.CANVAS_SETTINGS}
+                  variables={{ organizationId, sectionName }}
+                  fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}
+                >
+                  {({ data: { canvasSettings: { canvasSettings = {} } } }) => {
+                    const { order } = canvasSettings[sectionName] || {};
+                    return (
+                      sortCanvasItemsByOrder(items, order).map(({ _id, title, color }) => (
+                        <CanvasSectionItem data-id={_id} key={_id}>
+                          <CanvasSquareIcon {...{ color }} />
+                          <span>{title}</span>
+                        </CanvasSectionItem>
+                      ))
+                    );
+                  }}
+                </Query>
               </CanvasSectionItems>
             )}
           </Mutation>
