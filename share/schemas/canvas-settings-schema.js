@@ -1,49 +1,19 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { invert, map } from 'ramda';
 
 import { BaseEntitySchema, OrganizationIdSchema } from './schemas';
+import { CanvasSections } from '../constants';
 import CanvasSectionSettingsSchema from './canvas-section-settings-schema';
+
+const setSchemaFieldOptions = () => ({
+  type: CanvasSectionSettingsSchema,
+  optional: true,
+});
 
 const CanvasSettingsSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
-  {
-    keyPartners: {
-      type: CanvasSectionSettingsSchema,
-      optional: true,
-    },
-    keyActivities: {
-      type: CanvasSectionSettingsSchema,
-      optional: true,
-    },
-    keyResources: {
-      type: CanvasSectionSettingsSchema,
-      optional: true,
-    },
-    valuePropositions: {
-      type: CanvasSectionSettingsSchema,
-      optional: true,
-    },
-    customerRelationships: {
-      type: CanvasSectionSettingsSchema,
-      optional: true,
-    },
-    channels: {
-      type: CanvasSectionSettingsSchema,
-      optional: true,
-    },
-    customerSegments: {
-      type: CanvasSectionSettingsSchema,
-      optional: true,
-    },
-    costStructure: {
-      type: CanvasSectionSettingsSchema,
-      optional: true,
-    },
-    revenueStreams: {
-      type: CanvasSectionSettingsSchema,
-      optional: true,
-    },
-  },
+  map(setSchemaFieldOptions, invert(CanvasSections)),
 ]);
 
 export default CanvasSettingsSchema;
