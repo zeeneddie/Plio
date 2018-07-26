@@ -3,6 +3,7 @@ import React from 'react';
 import pluralize from 'pluralize';
 import { ButtonGroup, DropdownItem } from 'reactstrap';
 import { Query, Mutation } from 'react-apollo';
+import { sortByIds } from 'plio-util';
 
 import CanvasSection from './CanvasSection';
 import CanvasSectionHeading from './CanvasSectionHeading';
@@ -18,8 +19,6 @@ import CanvasSectionHelp from './CanvasSectionHelp';
 import { WithToggle } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-
-const sortCanvasItemsByOrder = items => items;
 
 // Couldn't figure out a better name >_<
 const CanvasBlock = ({
@@ -76,7 +75,7 @@ const CanvasBlock = ({
                   {({ data: { canvasSettings: { canvasSettings = {} } } }) => {
                     const { order } = canvasSettings[sectionName] || {};
                     return (
-                      sortCanvasItemsByOrder(items, order).map(({ _id, title, color }) => (
+                      sortByIds(items, order).map(({ _id, title, color }) => (
                         <CanvasSectionItem data-id={_id} key={_id}>
                           <CanvasSquareIcon {...{ color }} />
                           <span>{title}</span>
