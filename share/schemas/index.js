@@ -8,3 +8,4 @@ export { default as CustomerRelationshipSchema } from './customer-relationship-s
 export { default as ValuePropositionSchema } from './value-proposition-schema';
 export { default as CustomerSegmentSchema } from './customer-segment-schema';
 export { default as RevenueStreamSchema } from './revenue-stream-schema';
+export { default as ChannelSchema } from './channel-schema';

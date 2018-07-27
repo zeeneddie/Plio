@@ -1,0 +1,8 @@
+type ChannelsQueryPayload {
+  totalCount: Int
+  channels: [Channel]
+}
+
+type Query {
+  channels(organizationId: ID!): ChannelsQueryPayload
+}

@@ -55,4 +55,11 @@ query CanvasPage($organizationId: ID!) {
       color
     }
   }
+  channels(organizationId: $organizationId) {
+    channels {
+      _id
+      title
+      color
+    }
+  }
 }
