@@ -25,6 +25,7 @@ import VALUE_PROPOSITIONS from './ValuePropositions.graphql';
 import CUSTOMER_RELATIONSHIPS from './CustomerRelationships.graphql';
 import CUSTOMER_SEGMENTS from './CustomerSegments.graphql';
 import COST_LINES from './CostLines.graphql';
+import REVENUE_STREAMS from './RevenueStreams.graphql';
 import CANVAS_LAYOUT from './CanvasLayout.graphql';
 import CANVAS_PAGE from './CanvasPage.graphql';
 import CURRENT_USER_FULL_NAME from './CurrentUserFullName.graphql';
@@ -61,6 +62,7 @@ export default {
   CUSTOMER_RELATIONSHIPS,
   CUSTOMER_SEGMENTS,
   COST_LINES,
+  REVENUE_STREAMS,
   CURRENT_USER_FULL_NAME,
   VALUE_PROPOSITION_LIST,
   CUSTOMER_SEGMENT_LIST,

@@ -55,9 +55,11 @@ const RevenueStreamAddModal = ({
                     percentOfProfit,
                   },
                 },
+                refetchQueries: [
+                  { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                ],
               }).then(toggle);
             }}
-            // TODO: update cache
           >
             <RevenueStreamForm {...{ organizationId }} />
           </EntityModal>

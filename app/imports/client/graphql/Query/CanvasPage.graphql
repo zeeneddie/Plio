@@ -48,4 +48,11 @@ query CanvasPage($organizationId: ID!) {
       color
     }
   }
+  revenueStreams(organizationId: $organizationId) {
+    revenueStreams {
+      _id
+      title
+      color
+    }
+  }
 }

@@ -14,6 +14,7 @@ import KeyActivity from './KeyActivity';
 import KeyResource from './KeyResource';
 import CustomerRelationship from './CustomerRelationship';
 import CostLine from './CostLine';
+import RevenueStream from './RevenueStream';
 
 export default {
   ...User,
@@ -32,4 +33,5 @@ export default {
   ...KeyResource,
   ...CustomerRelationship,
   ...CostLine,
+  ...RevenueStream,
 };
