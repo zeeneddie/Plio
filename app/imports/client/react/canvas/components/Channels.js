@@ -1,29 +1,34 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
+import { Query } from 'react-apollo';
 
-import CanvasSection from './CanvasSection';
-import CanvasSectionHeading from './CanvasSectionHeading';
-import CanvasAddButton from './CanvasAddButton';
-import CanvasSectionHelp from './CanvasSectionHelp';
 import ChannelAddModal from './ChannelAddModal';
-import { WithToggle } from '../../helpers';
+import CanvasBlock from './CanvasBlock';
+import { Query as Queries } from '../../../graphql';
+import { ApolloFetchPolicies } from '../../../../api/constants';
 
 const Channels = ({ organizationId }) => (
-  <WithToggle>
-    {({ isOpen, toggle }) => (
-      <CanvasSection empty onClick={toggle}>
-        <CanvasSectionHeading>
-          <h4>Channels</h4>
+  <Query
+    query={Queries.CHANNELS}
+    variables={{ organizationId }}
+    fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}
+  >
+    {({ data: { channels: { channels = [] } } }) => (
+      <CanvasBlock
+        label="Channels"
+        help={(
+          <Fragment>
+            <p>Through which channels do each of our segments want to be reached?</p>
+            <p>Which ones are most cost-efficient?</p>
+          </Fragment>
+        )}
+        items={channels}
+        renderModal={({ isOpen, toggle }) => (
           <ChannelAddModal {...{ isOpen, toggle, organizationId }} />
-          <CanvasAddButton />
-        </CanvasSectionHeading>
-        <CanvasSectionHelp>
-          <p>Through which channels do each of our segments want to be reached?</p>
-          <p>Which ones are most cost-efficient?</p>
-        </CanvasSectionHelp>
-      </CanvasSection>
+        )}
+      />
     )}
-  </WithToggle>
+  </Query>
 );
 
 Channels.propTypes = {

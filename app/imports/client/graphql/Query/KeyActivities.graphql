@@ -1,0 +1,9 @@
+query KeyActivities($organizationId: ID!) {
+  keyActivities(organizationId: $organizationId) {
+    keyActivities {
+      _id
+      title
+      color
+    }
+  }
+}

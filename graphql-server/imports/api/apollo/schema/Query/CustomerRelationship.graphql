@@ -1,0 +1,8 @@
+type CustomerRelationshipsQueryPayload {
+  totalCount: Int
+  customerRelationships: [CustomerRelationship]
+}
+
+type Query {
+  customerRelationships(organizationId: ID!): CustomerRelationshipsQueryPayload
+}

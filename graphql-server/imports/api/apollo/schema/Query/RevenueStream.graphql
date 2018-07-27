@@ -1,0 +1,8 @@
+type RevenueStreamsQueryPayload {
+  totalCount: Int
+  revenueStreams: [RevenueStream]
+}
+
+type Query {
+  revenueStreams(organizationId: ID!): RevenueStreamsQueryPayload
+}

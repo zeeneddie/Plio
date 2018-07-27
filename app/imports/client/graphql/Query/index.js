@@ -19,6 +19,14 @@ import MILESTONE_CARD from './MilestoneCard.graphql';
 import ACTION_CARD from './ActionCard.graphql';
 import MILESTONE_NOTIFY_CARD from './MilestoneNotifyCard.graphql';
 import KEY_PARTNERS from './KeyPartners.graphql';
+import KEY_ACTIVITIES from './KeyActivities.graphql';
+import KEY_RESOURCES from './KeyResources.graphql';
+import VALUE_PROPOSITIONS from './ValuePropositions.graphql';
+import CUSTOMER_RELATIONSHIPS from './CustomerRelationships.graphql';
+import CUSTOMER_SEGMENTS from './CustomerSegments.graphql';
+import COST_LINES from './CostLines.graphql';
+import REVENUE_STREAMS from './RevenueStreams.graphql';
+import CHANNELS from './Channels.graphql';
 import CANVAS_LAYOUT from './CanvasLayout.graphql';
 import CANVAS_PAGE from './CanvasPage.graphql';
 import CURRENT_USER_FULL_NAME from './CurrentUserFullName.graphql';
@@ -50,6 +58,14 @@ export default {
   CANVAS_LAYOUT,
   CANVAS_PAGE,
   KEY_PARTNERS,
+  KEY_ACTIVITIES,
+  KEY_RESOURCES,
+  VALUE_PROPOSITIONS,
+  CUSTOMER_RELATIONSHIPS,
+  CUSTOMER_SEGMENTS,
+  COST_LINES,
+  REVENUE_STREAMS,
+  CHANNELS,
   CURRENT_USER_FULL_NAME,
   VALUE_PROPOSITION_LIST,
   CUSTOMER_SEGMENT_LIST,

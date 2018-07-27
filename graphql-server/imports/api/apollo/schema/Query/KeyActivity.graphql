@@ -1,0 +1,8 @@
+type KeyActivitiesQueryPayload {
+  totalCount: Int
+  keyActivities: [KeyActivity]
+}
+
+type Query {
+  keyActivities(organizationId: ID!): KeyActivitiesQueryPayload
+}

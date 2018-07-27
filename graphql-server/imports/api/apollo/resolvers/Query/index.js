@@ -10,6 +10,12 @@ import Milestone from './Milestone';
 import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
 import KeyPartner from './KeyPartner';
+import KeyActivity from './KeyActivity';
+import KeyResource from './KeyResource';
+import CustomerRelationship from './CustomerRelationship';
+import CostLine from './CostLine';
+import RevenueStream from './RevenueStream';
+import Channel from './Channel';
 import CanvasSettings from './CanvasSettings';
 
 export default {
@@ -25,5 +31,11 @@ export default {
   ...ValueProposition,
   ...CustomerSegment,
   ...KeyPartner,
+  ...KeyActivity,
+  ...KeyResource,
+  ...CustomerRelationship,
+  ...CostLine,
+  ...RevenueStream,
+  ...Channel,
   ...CanvasSettings,
 };

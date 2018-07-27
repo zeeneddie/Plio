@@ -1,0 +1,8 @@
+type KeyResourcesQueryPayload {
+  totalCount: Int
+  keyResources: [KeyResource]
+}
+
+type Query {
+  keyResources(organizationId: ID!): KeyResourcesQueryPayload
+}

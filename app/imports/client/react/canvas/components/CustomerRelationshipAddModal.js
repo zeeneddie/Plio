@@ -45,9 +45,11 @@ const CustomerRelationshipAddModal = ({
                     notes,
                   },
                 },
+                refetchQueries: [
+                  { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                ],
               }).then(toggle);
             }}
-            // TODO: update cache
           >
             <CanvasForm {...{ organizationId }} />
           </EntityModal>

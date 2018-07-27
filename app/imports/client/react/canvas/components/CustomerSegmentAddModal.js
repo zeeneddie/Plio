@@ -61,6 +61,7 @@ const CustomerSegmentAddModal = ({
                 },
                 refetchQueries: [
                   { query: Queries.CUSTOMER_SEGMENT_LIST, variables: { organizationId } },
+                  { query: Queries.CANVAS_PAGE, variables: { organizationId } },
                 ],
               }).then(toggle);
             }}

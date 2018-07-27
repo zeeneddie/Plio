@@ -53,6 +53,7 @@ const ValuePropositionAddModal = ({
                 },
                 refetchQueries: [
                   { query: Queries.VALUE_PROPOSITION_LIST, variables: { organizationId } },
+                  { query: Queries.CANVAS_PAGE, variables: { organizationId } },
                 ],
               }).then(toggle);
             }}
