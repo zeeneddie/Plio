@@ -11,6 +11,7 @@ import ValueProposition from './ValueProposition.graphql';
 import CustomerSegment from './CustomerSegment.graphql';
 import KeyPartner from './KeyPartner.graphql';
 import KeyActivity from './KeyActivity.graphql';
+import KeyResource from './KeyResource.graphql';
 
 export default [
   User,
@@ -26,4 +27,5 @@ export default [
   CustomerSegment,
   KeyPartner,
   KeyActivity,
+  KeyResource,
 ];

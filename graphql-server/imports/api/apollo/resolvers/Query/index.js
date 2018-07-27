@@ -11,6 +11,7 @@ import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
 import KeyPartner from './KeyPartner';
 import KeyActivity from './KeyActivity';
+import KeyResource from './KeyResource';
 
 export default {
   ...User,
@@ -26,4 +27,5 @@ export default {
   ...CustomerSegment,
   ...KeyPartner,
   ...KeyActivity,
+  ...KeyResource,
 };

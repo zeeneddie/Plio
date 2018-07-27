@@ -20,6 +20,7 @@ import ACTION_CARD from './ActionCard.graphql';
 import MILESTONE_NOTIFY_CARD from './MilestoneNotifyCard.graphql';
 import KEY_PARTNERS from './KeyPartners.graphql';
 import KEY_ACTIVITIES from './KeyActivities.graphql';
+import KEY_RESOURCES from './KeyResources.graphql';
 import CANVAS_LAYOUT from './CanvasLayout.graphql';
 import CANVAS_PAGE from './CanvasPage.graphql';
 import CURRENT_USER_FULL_NAME from './CurrentUserFullName.graphql';
@@ -51,6 +52,7 @@ export default {
   CANVAS_PAGE,
   KEY_PARTNERS,
   KEY_ACTIVITIES,
+  KEY_RESOURCES,
   CURRENT_USER_FULL_NAME,
   VALUE_PROPOSITION_LIST,
   CUSTOMER_SEGMENT_LIST,

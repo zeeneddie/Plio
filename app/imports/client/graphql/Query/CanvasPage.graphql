@@ -13,4 +13,11 @@ query CanvasPage($organizationId: ID!) {
       color
     }
   }
+  keyResources(organizationId: $organizationId) {
+    keyResources {
+      _id
+      title
+      color
+    }
+  }
 }

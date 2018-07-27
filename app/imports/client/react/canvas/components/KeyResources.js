@@ -1,28 +1,33 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
+import { Query } from 'react-apollo';
 
-import CanvasSection from './CanvasSection';
-import CanvasSectionHeading from './CanvasSectionHeading';
-import CanvasAddButton from './CanvasAddButton';
-import CanvasSectionHelp from './CanvasSectionHelp';
 import KeyResourceAddModal from './KeyResourceAddModal';
-import { WithToggle } from '../../helpers';
+import CanvasBlock from './CanvasBlock';
+import { Query as Queries } from '../../../graphql';
+import { ApolloFetchPolicies } from '../../../../api/constants';
 
 const KeyResources = ({ organizationId }) => (
-  <WithToggle>
-    {({ isOpen, toggle }) => (
-      <CanvasSection empty onClick={toggle}>
-        <CanvasSectionHeading>
-          <h4>Key resources</h4>
+  <Query
+    query={Queries.KEY_RESOURCES}
+    variables={{ organizationId }}
+    fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}
+  >
+    {({ data: { keyResources: { keyResources = [] } } }) => (
+      <CanvasBlock
+        label="Key resources"
+        help={(
+          <Fragment>
+            <p>What key resources do our key activities require?</p>
+          </Fragment>
+        )}
+        items={keyResources}
+        renderModal={({ isOpen, toggle }) => (
           <KeyResourceAddModal {...{ isOpen, toggle, organizationId }} />
-          <CanvasAddButton />
-        </CanvasSectionHeading>
-        <CanvasSectionHelp>
-          <p>What key resources do our key activities require?</p>
-        </CanvasSectionHelp>
-      </CanvasSection>
+        )}
+      />
     )}
-  </WithToggle>
+  </Query>
 );
 
 KeyResources.propTypes = {
