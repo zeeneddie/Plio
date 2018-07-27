@@ -41,4 +41,11 @@ query CanvasPage($organizationId: ID!) {
       color
     }
   }
+  costLines(organizationId: $organizationId) {
+    costLines {
+      _id
+      title
+      color
+    }
+  }
 }

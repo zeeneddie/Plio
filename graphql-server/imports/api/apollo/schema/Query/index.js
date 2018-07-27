@@ -13,6 +13,7 @@ import KeyPartner from './KeyPartner.graphql';
 import KeyActivity from './KeyActivity.graphql';
 import KeyResource from './KeyResource.graphql';
 import CustomerRelationship from './CustomerRelationship.graphql';
+import CostLine from './CostLine.graphql';
 
 export default [
   User,
@@ -30,4 +31,5 @@ export default [
   KeyActivity,
   KeyResource,
   CustomerRelationship,
+  CostLine,
 ];

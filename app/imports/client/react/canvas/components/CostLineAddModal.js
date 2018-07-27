@@ -49,9 +49,11 @@ const CostLineAddModal = ({
                     notes,
                   },
                 },
+                refetchQueries: [
+                  { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                ],
               }).then(toggle);
             }}
-            // TODO: update cache
           >
             <CostLineForm {...{ organizationId }} />
           </EntityModal>
