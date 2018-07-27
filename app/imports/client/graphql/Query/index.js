@@ -22,6 +22,7 @@ import KEY_PARTNERS from './KeyPartners.graphql';
 import KEY_ACTIVITIES from './KeyActivities.graphql';
 import KEY_RESOURCES from './KeyResources.graphql';
 import VALUE_PROPOSITIONS from './ValuePropositions.graphql';
+import CUSTOMER_RELATIONSHIPS from './CustomerRelationships.graphql';
 import CANVAS_LAYOUT from './CanvasLayout.graphql';
 import CANVAS_PAGE from './CanvasPage.graphql';
 import CURRENT_USER_FULL_NAME from './CurrentUserFullName.graphql';
@@ -55,6 +56,7 @@ export default {
   KEY_ACTIVITIES,
   KEY_RESOURCES,
   VALUE_PROPOSITIONS,
+  CUSTOMER_RELATIONSHIPS,
   CURRENT_USER_FULL_NAME,
   VALUE_PROPOSITION_LIST,
   CUSTOMER_SEGMENT_LIST,

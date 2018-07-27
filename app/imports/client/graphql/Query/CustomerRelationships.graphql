@@ -1,0 +1,9 @@
+query CustomerRelationships($organizationId: ID!) {
+  customerRelationships(organizationId: $organizationId) {
+    customerRelationships {
+      _id
+      title
+      color
+    }
+  }
+}

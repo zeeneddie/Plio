@@ -12,6 +12,7 @@ import CustomerSegment from './CustomerSegment';
 import KeyPartner from './KeyPartner';
 import KeyActivity from './KeyActivity';
 import KeyResource from './KeyResource';
+import CustomerRelationship from './CustomerRelationship';
 
 export default {
   ...User,
@@ -28,4 +29,5 @@ export default {
   ...KeyPartner,
   ...KeyActivity,
   ...KeyResource,
+  ...CustomerRelationship,
 };

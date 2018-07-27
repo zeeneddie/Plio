@@ -1,29 +1,34 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
+import { Query } from 'react-apollo';
 
-import CanvasSection from './CanvasSection';
-import CanvasSectionHeading from './CanvasSectionHeading';
-import CanvasAddButton from './CanvasAddButton';
-import CanvasSectionHelp from './CanvasSectionHelp';
 import CustomerRelationshipAddModal from './CustomerRelationshipAddModal';
-import { WithToggle } from '../../helpers';
+import CanvasBlock from './CanvasBlock';
+import { Query as Queries } from '../../../graphql';
+import { ApolloFetchPolicies } from '../../../../api/constants';
 
 const CustomerRelationships = ({ organizationId }) => (
-  <WithToggle>
-    {({ isOpen, toggle }) => (
-      <CanvasSection empty onClick={toggle}>
-        <CanvasSectionHeading>
-          <h4>Customer relationships</h4>
+  <Query
+    query={Queries.CUSTOMER_RELATIONSHIPS}
+    variables={{ organizationId }}
+    fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}
+  >
+    {({ data: { customerRelationships: { customerRelationships = [] } } }) => (
+      <CanvasBlock
+        label="Customer relationships"
+        help={(
+          <Fragment>
+            <p>What type of relationship do you want with customers?</p>
+            <p>Which fits best with each segment?</p>
+          </Fragment>
+        )}
+        items={customerRelationships}
+        renderModal={({ isOpen, toggle }) => (
           <CustomerRelationshipAddModal {...{ isOpen, toggle, organizationId }} />
-          <CanvasAddButton />
-        </CanvasSectionHeading>
-        <CanvasSectionHelp>
-          <p>What type of relationship do you want with customers?</p>
-          <p>Which fits best with each segment?</p>
-        </CanvasSectionHelp>
-      </CanvasSection>
+        )}
+      />
     )}
-  </WithToggle>
+  </Query>
 );
 
 CustomerRelationships.propTypes = {

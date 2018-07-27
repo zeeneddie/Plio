@@ -12,6 +12,7 @@ import CustomerSegment from './CustomerSegment.graphql';
 import KeyPartner from './KeyPartner.graphql';
 import KeyActivity from './KeyActivity.graphql';
 import KeyResource from './KeyResource.graphql';
+import CustomerRelationship from './CustomerRelationship.graphql';
 
 export default [
   User,
@@ -28,4 +29,5 @@ export default [
   KeyPartner,
   KeyActivity,
   KeyResource,
+  CustomerRelationship,
 ];

@@ -27,4 +27,11 @@ query CanvasPage($organizationId: ID!) {
       color
     }
   }
+  customerRelationships(organizationId: $organizationId) {
+    customerRelationships {
+      _id
+      title
+      color
+    }
+  }
 }
