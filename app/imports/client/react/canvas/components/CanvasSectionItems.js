@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import Sortable from 'react-sortablejs';
 import { StyledMixins } from 'plio-util';
 
+import CanvasSectionItem from './CanvasSectionItem';
 import { CanvasStyles } from '../constants';
+import CanvasSquareIcon from './CanvasSquareIcon';
 
 const SortableList = styled(Sortable)`
   list-style: none;
@@ -29,15 +31,25 @@ const SortableList = styled(Sortable)`
   }
 `;
 
-const CanvasSectionItems = ({ children, ...props }) => (
-  <SortableList {...props} >
-    {children}
+const CanvasSectionItems = ({ children, items, ...props }) => (
+  <SortableList {...props}>
+    {items ? items.map(({ _id, title, color }) => (
+      <CanvasSectionItem data-id={_id} key={_id}>
+        <CanvasSquareIcon {...{ color }} />
+        <span>{title}</span>
+      </CanvasSectionItem>
+    )) : children}
   </SortableList>
 );
 
 CanvasSectionItems.propTypes = {
   tag: PropTypes.string,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
+  items: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
+  })),
 };
 
 CanvasSectionItems.defaultProps = {

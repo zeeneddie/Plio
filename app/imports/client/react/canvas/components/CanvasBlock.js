@@ -2,23 +2,17 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import pluralize from 'pluralize';
 import { ButtonGroup, DropdownItem } from 'reactstrap';
-import { Query, Mutation } from 'react-apollo';
-import { sortByIds } from 'plio-util';
 
+import CanvasSectionItemsContainer from '../containers/CanvasSectionItemsContainer';
 import CanvasSection from './CanvasSection';
 import CanvasSectionHeading from './CanvasSectionHeading';
 import CanvasAddButton from './CanvasAddButton';
-import CanvasSectionItems from './CanvasSectionItems';
-import CanvasSectionItem from './CanvasSectionItem';
-import CanvasSquareIcon from './CanvasSquareIcon';
 import CanvasSectionFooter from './CanvasSectionFooter';
 import CanvasSectionFooterLabels from './CanvasSectionFooterLabels';
 import CanvasLabel from './CanvasLabel';
 import CanvasChartButton from './CanvasChartButton';
 import CanvasSectionHelp from './CanvasSectionHelp';
 import { WithToggle } from '../../helpers';
-import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { ApolloFetchPolicies } from '../../../../api/constants';
 
 // Couldn't figure out a better name >_<
 const CanvasBlock = ({
@@ -52,41 +46,7 @@ const CanvasBlock = ({
               {help}
             </CanvasSectionHelp>
           )}
-          <Mutation mutation={Mutations.REORDER_CANVAS_ITEMS}>
-            {reorderCanvasItems => (
-              <CanvasSectionItems
-                onChange={newOrder => (
-                  reorderCanvasItems({
-                    variables: {
-                      input: {
-                        organizationId,
-                        sectionName,
-                        newOrder,
-                      },
-                    },
-                  })
-                )}
-              >
-                <Query
-                  query={Queries.CANVAS_SETTINGS}
-                  variables={{ organizationId, sectionName }}
-                  fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}
-                >
-                  {({ data: { canvasSettings: { canvasSettings = {} } } }) => {
-                    const { order } = canvasSettings[sectionName] || {};
-                    return (
-                      sortByIds(items, order).map(({ _id, title, color }) => (
-                        <CanvasSectionItem data-id={_id} key={_id}>
-                          <CanvasSquareIcon {...{ color }} />
-                          <span>{title}</span>
-                        </CanvasSectionItem>
-                      ))
-                    );
-                  }}
-                </Query>
-              </CanvasSectionItems>
-            )}
-          </Mutation>
+          <CanvasSectionItemsContainer {...{ organizationId, sectionName, items }} />
           <CanvasSectionFooter>
             <CanvasSectionFooterLabels>
               <ButtonGroup>
