@@ -3307,9 +3307,9 @@ pify@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
-"plio-util@https://github.com/Pliohub/plio-util.git#devel":
+"plio-util@https://github.com/Pliohub/plio-util.git#I1205-drag-and-drop-save-order":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#5ed242ec8f50c4831b3af0746139036055abb8b3"
+  resolved "https://github.com/Pliohub/plio-util.git#b39a9b3f7a4a652fa518b7baad770e3cfd3687dd"
 
 pluralize@^2.0.0:
   version "2.0.0"

@@ -6,6 +6,8 @@ import RISK_CARD from './RiskCard.graphql';
 import LESSON_CARD from './LessonCard.graphql';
 import ACTION_CARD from './ActionCard.graphql';
 import DASHBOARD_ACTION from './DashboardAction.graphql';
+import CANVAS_SETTINGS from './CanvasSettings.graphql';
+import CANVAS_SECTION_SETTINGS from './CanvasSectionSettings.graphql';
 
 DASHBOARD_GOAL.fragmentName = 'DashboardGoal';
 GOAL_CARD.fragmentName = 'GoalCard';
@@ -15,6 +17,8 @@ RISK_CARD.fragmentName = 'RiskCard';
 LESSON_CARD.fragmentName = 'LessonCard';
 ACTION_CARD.fragmentName = 'ActionCard';
 DASHBOARD_ACTION.fragmentName = 'DashboardAction';
+CANVAS_SETTINGS.fragmentName = 'CanvasSettings';
+CANVAS_SECTION_SETTINGS.fragmentName = 'CanvasSectionSettings';
 
 export default {
   DASHBOARD_GOAL,
@@ -25,4 +29,6 @@ export default {
   LESSON_CARD,
   ACTION_CARD,
   DASHBOARD_ACTION,
+  CANVAS_SETTINGS,
+  CANVAS_SECTION_SETTINGS,
 };

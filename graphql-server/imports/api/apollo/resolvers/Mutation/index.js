@@ -14,6 +14,7 @@ import Channel from './Channel';
 import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
 import RevenueStream from './RevenueStream';
+import CanvasSettings from './CanvasSettings';
 
 export default {
   ...Goal,
@@ -32,4 +33,5 @@ export default {
   ...ValueProposition,
   ...CustomerSegment,
   ...RevenueStream,
+  ...CanvasSettings,
 };

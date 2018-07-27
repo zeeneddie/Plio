@@ -1,0 +1,32 @@
+#import "../Fragment/CanvasSectionSettings.graphql"
+
+fragment CanvasSettings on CanvasSettings {
+  _id
+  keyPartners {
+    ...CanvasSectionSettings
+  }
+  keyActivities {
+    ...CanvasSectionSettings
+  }
+  keyResources {
+    ...CanvasSectionSettings
+  }
+  valuePropositions {
+    ...CanvasSectionSettings
+  }
+  customerRelationships {
+    ...CanvasSectionSettings
+  }
+  channels {
+    ...CanvasSectionSettings
+  }
+  customerSegments {
+    ...CanvasSectionSettings
+  }
+  costStructure {
+    ...CanvasSectionSettings
+  }
+  revenueStreams {
+    ...CanvasSectionSettings
+  }
+}

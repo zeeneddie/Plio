@@ -6,6 +6,7 @@ import ValuePropositionAddModal from './ValuePropositionAddModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { CanvasSections } from '../../../../share/constants';
 
 const ValuePropositions = ({ organizationId }) => (
   <Query
@@ -15,7 +16,9 @@ const ValuePropositions = ({ organizationId }) => (
   >
     {({ data: { valuePropositions: { valuePropositions = [] } } }) => (
       <CanvasBlock
+        {...{ organizationId }}
         label="Value propositions"
+        sectionName={CanvasSections.VALUE_PROPOSITIONS}
         help={(
           <Fragment>
             {/* eslint-disable react/no-unescaped-entities */}

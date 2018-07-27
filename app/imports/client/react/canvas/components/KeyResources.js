@@ -6,6 +6,7 @@ import KeyResourceAddModal from './KeyResourceAddModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { CanvasSections } from '../../../../share/constants';
 
 const KeyResources = ({ organizationId }) => (
   <Query
@@ -15,7 +16,9 @@ const KeyResources = ({ organizationId }) => (
   >
     {({ data: { keyResources: { keyResources = [] } } }) => (
       <CanvasBlock
+        {...{ organizationId }}
         label="Key resources"
+        sectionName={CanvasSections.KEY_RESOURCES}
         help={(
           <Fragment>
             <p>What key resources do our key activities require?</p>
