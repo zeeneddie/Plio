@@ -3,6 +3,7 @@ import {
   checkLoggedIn,
   flattenInput,
   checkOrgMembership,
+  canvasSettingsUpdateAfterware,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, context) =>
@@ -12,4 +13,5 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkOrgMembership(),
+  canvasSettingsUpdateAfterware(),
 )(resolver);

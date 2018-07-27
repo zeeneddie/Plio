@@ -1,7 +1,9 @@
+#import "../../Fragment/CanvasSettings.graphql"
+
 mutation reorderCanvasItems($input: ReorderCanvasItemsInput!) {
   reorderCanvasItems(input: $input) {
     canvasSettings {
-      _id
+      ...CanvasSettings
     }
   }
 }
