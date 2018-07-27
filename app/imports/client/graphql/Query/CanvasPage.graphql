@@ -20,4 +20,11 @@ query CanvasPage($organizationId: ID!) {
       color
     }
   }
+  valuePropositions(organizationId: $organizationId) {
+    valuePropositions {
+      _id
+      title
+      color
+    }
+  }
 }
