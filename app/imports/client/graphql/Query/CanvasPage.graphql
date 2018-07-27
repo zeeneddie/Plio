@@ -6,4 +6,11 @@ query CanvasPage($organizationId: ID!) {
       color
     }
   }
+  keyActivities(organizationId: $organizationId) {
+    keyActivities {
+      _id
+      title
+      color
+    }
+  }
 }
