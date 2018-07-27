@@ -6,6 +6,7 @@ import CostLineAddModal from './CostLineAddModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { CanvasSections } from '../../../../share/constants';
 
 const CostStructure = ({ organizationId }) => (
   <Query
@@ -15,7 +16,9 @@ const CostStructure = ({ organizationId }) => (
   >
     {({ data: { costLines: { costLines = [] } } }) => (
       <CanvasBlock
+        {...{ organizationId }}
         label="Cost structure"
+        sectionName={CanvasSections.COST_STRUCTURE}
         help={(
           <Fragment>
             <p>
