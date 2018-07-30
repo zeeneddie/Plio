@@ -1,9 +1,0 @@
-#import "../Fragment/CanvasSettings.graphql"
-
-query CanvasSettings($organizationId: ID!) {
-  canvasSettings(organizationId: $organizationId) {
-    canvasSettings {
-      ...CanvasSettings
-    }
-  }
-}

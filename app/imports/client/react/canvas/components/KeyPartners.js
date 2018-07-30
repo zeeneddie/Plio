@@ -7,7 +7,6 @@ import KeyPartnerAddModal from './KeyPartnerAddModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { CanvasSections } from '../../../../share/constants';
 
 const goals = [
   { sequentialId: 'KG1', title: 'Finish UI design' },
@@ -28,9 +27,8 @@ const KeyPartners = ({ organizationId }) => (
   >
     {({ data: { keyPartners: { keyPartners = [] } } }) => (
       <CanvasBlock
-        {...{ standards, goals, organizationId }}
+        {...{ standards, goals }}
         label="Key partners"
-        sectionName={CanvasSections.KEY_PARTNERS}
         help={(
           <Fragment>
             <p>Who are our key partners/suppliers?</p>

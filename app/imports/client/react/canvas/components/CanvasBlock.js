@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import pluralize from 'pluralize';
 import { ButtonGroup, DropdownItem } from 'reactstrap';
+import pluralize from 'pluralize';
 
-import CanvasSectionItemsContainer from '../containers/CanvasSectionItemsContainer';
 import CanvasSection from './CanvasSection';
 import CanvasSectionHeading from './CanvasSectionHeading';
 import CanvasAddButton from './CanvasAddButton';
+import CanvasSectionItems from './CanvasSectionItems';
+import CanvasSectionItem from './CanvasSectionItem';
+import CanvasSquareIcon from './CanvasSquareIcon';
 import CanvasSectionFooter from './CanvasSectionFooter';
 import CanvasSectionFooterLabels from './CanvasSectionFooterLabels';
 import CanvasLabel from './CanvasLabel';
@@ -24,8 +26,6 @@ const CanvasBlock = ({
   standards,
   risks,
   nonConformities,
-  organizationId,
-  sectionName,
 }) => {
   const isEmpty = !items.length;
 
@@ -46,7 +46,14 @@ const CanvasBlock = ({
               {help}
             </CanvasSectionHelp>
           )}
-          <CanvasSectionItemsContainer {...{ organizationId, sectionName, items }} />
+          <CanvasSectionItems>
+            {items.map(({ _id, title, color }) => (
+              <CanvasSectionItem data-id={_id} key={_id}>
+                <CanvasSquareIcon {...{ color }} />
+                <span>{title}</span>
+              </CanvasSectionItem>
+            ))}
+          </CanvasSectionItems>
           <CanvasSectionFooter>
             <CanvasSectionFooterLabels>
               <ButtonGroup>
@@ -114,8 +121,6 @@ CanvasBlock.defaultProps = {
 };
 
 CanvasBlock.propTypes = {
-  organizationId: PropTypes.string.isRequired,
-  sectionName: PropTypes.string.isRequired,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   help: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   items: PropTypes.arrayOf(PropTypes.shape({

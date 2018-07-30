@@ -20,7 +20,6 @@ import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
 import RevenueStream from './RevenueStream';
 
-
 export default {
   ...User,
   ...Organization,

@@ -16,7 +16,6 @@ import CustomerRelationship from './CustomerRelationship';
 import CostLine from './CostLine';
 import RevenueStream from './RevenueStream';
 import Channel from './Channel';
-import CanvasSettings from './CanvasSettings';
 
 export default {
   ...User,
@@ -37,5 +36,4 @@ export default {
   ...CostLine,
   ...RevenueStream,
   ...Channel,
-  ...CanvasSettings,
 };

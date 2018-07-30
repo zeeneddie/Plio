@@ -16,7 +16,6 @@ import CustomerRelationship from './CustomerRelationship.graphql';
 import CostLine from './CostLine.graphql';
 import RevenueStream from './RevenueStream.graphql';
 import Channel from './Channel.graphql';
-import CanvasSettings from './CanvasSettings.graphql';
 
 export default [
   User,
@@ -37,5 +36,4 @@ export default [
   CostLine,
   RevenueStream,
   Channel,
-  CanvasSettings,
 ];

@@ -21,4 +21,3 @@ export { default as ChannelService } from './channel-service';
 export { default as ValuePropositionService } from './value-proposition-service';
 export { default as CustomerSegmentService } from './customer-segment-service';
 export { default as RevenueStreamService } from './revenue-stream-service';
-export { default as CanvasSettingsService } from './canvas-settings-service';

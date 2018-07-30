@@ -32,7 +32,6 @@ import CANVAS_PAGE from './CanvasPage.graphql';
 import CURRENT_USER_FULL_NAME from './CurrentUserFullName.graphql';
 import VALUE_PROPOSITION_LIST from './ValuePropositionList.graphql';
 import CUSTOMER_SEGMENT_LIST from './CustomerSegmentList.graphql';
-import CANVAS_SETTINGS from './CanvasSettings.graphql';
 
 export default {
   DASHBOARD_GOALS,
@@ -69,5 +68,4 @@ export default {
   CURRENT_USER_FULL_NAME,
   VALUE_PROPOSITION_LIST,
   CUSTOMER_SEGMENT_LIST,
-  CANVAS_SETTINGS,
 };

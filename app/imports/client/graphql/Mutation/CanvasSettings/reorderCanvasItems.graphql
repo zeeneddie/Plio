@@ -1,9 +1,0 @@
-#import "../../Fragment/CanvasSettings.graphql"
-
-mutation reorderCanvasItems($input: ReorderCanvasItemsInput!) {
-  reorderCanvasItems(input: $input) {
-    canvasSettings {
-      ...CanvasSettings
-    }
-  }
-}
