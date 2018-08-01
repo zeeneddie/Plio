@@ -3,7 +3,7 @@ import React from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions } from 'plio-util';
 
-import { CostLineColors } from '../../../../share/constants';
+import { CanvasColors } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { EntityModal } from '../../components';
 import CostLineForm from './CostLineForm';
@@ -24,7 +24,7 @@ const CostLineAddModal = ({
             initialValues={{
               originator: getUserOptions(user),
               title: '',
-              color: CostLineColors.INDIGO,
+              color: CanvasColors.INDIGO,
               notes: '',
               percentOfTotalCost: null,
             }}

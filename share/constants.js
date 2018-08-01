@@ -811,7 +811,7 @@ export const GoalStatuses = {
   3: 'Closed - marked as complete',
 };
 
-export const GoalColors = {
+export const Colors = {
   PINK: '#F06292',
   PLUM: '#9C27B0',
   PURPLE: '#673AB7',
@@ -829,6 +829,8 @@ export const GoalColors = {
   MUTED_CYAN: '#80DEEA',
   MUTED_TEAL: '#80CBC4',
 };
+
+export const GoalColors = { ...Colors };
 
 export const AllowedActionLinkedDocTypes = [
   ...Object.values(ProblemTypes),
@@ -878,12 +880,4 @@ export const Criticality = {
 
 export const LevelOfSpend = { ...Criticality };
 
-export const KeyPartnerColors = { ...GoalColors };
-
-export const KeyActivityColors = { ...GoalColors };
-
-export const KeyResourceColors = { ...GoalColors };
-
-export const CostLineColors = { ...GoalColors };
-
-export const CanvasColors = { ...GoalColors };
+export const CanvasColors = { ...Colors };

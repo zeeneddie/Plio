@@ -3,7 +3,7 @@ import React from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions } from 'plio-util';
 
-import { KeyPartnerColors, Criticality } from '../../../../share/constants';
+import { CanvasColors, Criticality } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { EntityModal } from '../../components';
 import KeyPartnerForm from './KeyPartnerForm';
@@ -24,7 +24,7 @@ const KeyPartnerAddModal = ({
             initialValues={{
               originator: getUserOptions(user),
               title: '',
-              color: KeyPartnerColors.INDIGO,
+              color: CanvasColors.INDIGO,
               criticality: Criticality.MEDIUM,
               levelOfSpend: Criticality.MEDIUM,
               notes: '',

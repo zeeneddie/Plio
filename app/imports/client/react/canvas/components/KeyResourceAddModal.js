@@ -3,7 +3,7 @@ import React from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions } from 'plio-util';
 
-import { KeyResourceColors } from '../../../../share/constants';
+import { CanvasColors } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { EntityModal } from '../../components';
 import CanvasForm from './CanvasForm';
@@ -24,7 +24,7 @@ const KeyActivitiesAddModal = ({
             initialValues={{
               originator: getUserOptions(user),
               title: '',
-              color: KeyResourceColors.INDIGO,
+              color: CanvasColors.INDIGO,
               notes: '',
             }}
             onSave={({
