@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import KeyResourceAddModal from './KeyResourceAddModal';
 import CanvasBlock from './CanvasBlock';
@@ -17,9 +18,7 @@ const KeyResources = ({ organizationId }) => (
       <CanvasBlock
         label="Key resources"
         help={(
-          <Fragment>
-            <p>What key resources do our key activities require?</p>
-          </Fragment>
+          <p>What key resources do our key activities require?</p>
         )}
         items={keyResources}
         renderModal={({ isOpen, toggle }) => (
@@ -34,4 +33,4 @@ KeyResources.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default KeyResources;
+export default pure(KeyResources);

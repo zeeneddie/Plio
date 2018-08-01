@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import ValuePropositionAddModal from './ValuePropositionAddModal';
 import CanvasBlock from './CanvasBlock';
@@ -37,4 +38,4 @@ ValuePropositions.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default ValuePropositions;
+export default pure(ValuePropositions);

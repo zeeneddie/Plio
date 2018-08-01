@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import CustomerSegmentAddModal from './CustomerSegmentAddModal';
 import CanvasBlock from './CanvasBlock';
@@ -35,4 +36,4 @@ CustomerSegments.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default CustomerSegments;
+export default pure(CustomerSegments);

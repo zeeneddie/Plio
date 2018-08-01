@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import ChannelAddModal from './ChannelAddModal';
 import CanvasBlock from './CanvasBlock';
@@ -35,4 +36,4 @@ Channels.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default Channels;
+export default pure(Channels);

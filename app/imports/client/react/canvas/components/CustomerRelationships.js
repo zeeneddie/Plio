@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import CustomerRelationshipAddModal from './CustomerRelationshipAddModal';
 import CanvasBlock from './CanvasBlock';
@@ -35,4 +36,4 @@ CustomerRelationships.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default CustomerRelationships;
+export default pure(CustomerRelationships);

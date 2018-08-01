@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import CostLineAddModal from './CostLineAddModal';
 import CanvasBlock from './CanvasBlock';
@@ -17,13 +18,11 @@ const CostStructure = ({ organizationId }) => (
       <CanvasBlock
         label="Cost structure"
         help={(
-          <Fragment>
-            <p>
-              What are the main elements of operational expense
-              {' '}
-              (including variable costs, inventory, WIP and capital assets)?
-            </p>
-          </Fragment>
+          <p>
+            What are the main elements of operational expense
+            {' '}
+            (including variable costs, inventory, WIP and capital assets)?
+          </p>
         )}
         items={costLines}
         renderModal={({ isOpen, toggle }) => (
@@ -38,5 +37,5 @@ CostStructure.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default CostStructure;
+export default pure(CostStructure);
 

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import KeyActivityAddModal from './KeyActivityAddModal';
 import CanvasBlock from './CanvasBlock';
@@ -17,9 +18,7 @@ const KeyActivities = ({ organizationId }) => (
       <CanvasBlock
         label="Key activities"
         help={(
-          <Fragment>
-            <p>What are the key activities we need to create our value propositions?</p>
-          </Fragment>
+          <p>What are the key activities we need to create our value propositions?</p>
         )}
         items={keyActivities}
         renderModal={({ isOpen, toggle }) => (
@@ -34,4 +33,4 @@ KeyActivities.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default KeyActivities;
+export default pure(KeyActivities);
