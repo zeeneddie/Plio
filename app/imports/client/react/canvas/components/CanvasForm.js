@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { noop } from 'plio-util';
+import { pure } from 'recompose';
 
 import { StringLimits } from '../../../../share/constants';
 import {
@@ -11,7 +13,7 @@ import {
   TextareaField,
 } from '../../components';
 
-const CanvasForm = ({ organizationId, children }) => (
+const CanvasForm = ({ organizationId, children, save = noop }) => (
   <CardBlock>
     <FormField>
       Title
@@ -19,6 +21,7 @@ const CanvasForm = ({ organizationId, children }) => (
         name="title"
         placeholder="Title"
         maxLength={StringLimits.title.max}
+        onBlur={e => save({ title: e.target.value })}
       />
     </FormField>
     <FormField>
@@ -27,16 +30,24 @@ const CanvasForm = ({ organizationId, children }) => (
         {...{ organizationId }}
         name="originator"
         placeholder="Originator"
+        onChange={originator => save({ originator })}
       />
     </FormField>
     <FormField>
       Color
-      <ColorPickerField name="color" />
+      <ColorPickerField
+        name="color"
+        onChange={color => save({ color })}
+      />
     </FormField>
     {children}
     <FormField>
       Notes
-      <TextareaField name="notes" placeholder="Notes" />
+      <TextareaField
+        name="notes"
+        placeholder="Notes"
+        onBlur={e => save({ notes: e.target.value })}
+      />
     </FormField>
   </CardBlock>
 );
@@ -44,6 +55,7 @@ const CanvasForm = ({ organizationId, children }) => (
 CanvasForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
   children: PropTypes.node,
+  save: PropTypes.func,
 };
 
-export default CanvasForm;
+export default pure(CanvasForm);

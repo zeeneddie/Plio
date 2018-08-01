@@ -6,6 +6,7 @@ import RISK_CARD from './RiskCard.graphql';
 import LESSON_CARD from './LessonCard.graphql';
 import ACTION_CARD from './ActionCard.graphql';
 import DASHBOARD_ACTION from './DashboardAction.graphql';
+import KEY_PARTNER_CARD from './KeyPartnerCard.graphql';
 
 DASHBOARD_GOAL.fragmentName = 'DashboardGoal';
 GOAL_CARD.fragmentName = 'GoalCard';
@@ -15,6 +16,7 @@ RISK_CARD.fragmentName = 'RiskCard';
 LESSON_CARD.fragmentName = 'LessonCard';
 ACTION_CARD.fragmentName = 'ActionCard';
 DASHBOARD_ACTION.fragmentName = 'DashboardAction';
+KEY_PARTNER_CARD.fragmentName = 'KeyPartnerCard';
 
 export default {
   DASHBOARD_GOAL,
@@ -25,4 +27,5 @@ export default {
   LESSON_CARD,
   ACTION_CARD,
   DASHBOARD_ACTION,
+  KEY_PARTNER_CARD,
 };

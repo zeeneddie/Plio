@@ -35,6 +35,7 @@ const EntityModal = ({
   isOpen,
   toggle,
   loading,
+  error,
   children,
   title,
   isEditMode,
@@ -47,9 +48,10 @@ const EntityModal = ({
   onExit,
   onOpened,
   onClosed,
+  ...props
 }) => (
   <FinalForm
-    {...{ initialValues }}
+    {...{ initialValues, ...props }}
     onSubmit={onSave}
     subscription={{
       submitError: true,
@@ -111,7 +113,7 @@ const EntityModal = ({
                     >
                       <CardTitle>{title}</CardTitle>
                     </ModalHeader>
-                    <ErrorSection errorText={submitError || modal.error} />
+                    <ErrorSection errorText={error || submitError || modal.error} />
                     <ModalBody>
                       {guidanceText && (
                         <GuidancePanel {...guidance}>
@@ -151,6 +153,7 @@ EntityModal.propTypes = {
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
   initialValues: PropTypes.object,
   loading: PropTypes.bool,
+  error: PropTypes.string,
   isEditMode: PropTypes.bool,
   resetFormStateOnError: PropTypes.bool,
   onSave: PropTypes.func.isRequired,

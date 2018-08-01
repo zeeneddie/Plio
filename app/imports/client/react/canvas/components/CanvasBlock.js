@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { ButtonGroup, DropdownItem } from 'reactstrap';
 import pluralize from 'pluralize';
 
@@ -16,12 +16,12 @@ import CanvasChartButton from './CanvasChartButton';
 import CanvasSectionHelp from './CanvasSectionHelp';
 import { WithToggle } from '../../helpers';
 
-// Couldn't figure out a better name >_<
 const CanvasBlock = ({
   label,
   help,
   items,
   renderModal,
+  renderEditModal,
   goals,
   standards,
   risks,
@@ -47,11 +47,18 @@ const CanvasBlock = ({
             </CanvasSectionHelp>
           )}
           <CanvasSectionItems>
-            {items.map(({ _id, title, color }) => (
-              <CanvasSectionItem data-id={_id} key={_id}>
-                <CanvasSquareIcon {...{ color }} />
-                <span>{title}</span>
-              </CanvasSectionItem>
+            {items.map(item => (
+              <WithToggle key={item._id}>
+                {itemToggleState => (
+                  <Fragment>
+                    {renderEditModal && renderEditModal({ ...itemToggleState, item })}
+                    <CanvasSectionItem onClick={itemToggleState.toggle} data-id={item._id}>
+                      <CanvasSquareIcon color={item.color} />
+                      <span>{item.title}</span>
+                    </CanvasSectionItem>
+                  </Fragment>
+                )}
+              </WithToggle>
             ))}
           </CanvasSectionItems>
           <CanvasSectionFooter>
@@ -129,6 +136,7 @@ CanvasBlock.propTypes = {
     color: PropTypes.string.isRequired,
   })).isRequired,
   renderModal: PropTypes.func.isRequired,
+  renderEditModal: PropTypes.func.isRequired,
   goals: PropTypes.arrayOf(PropTypes.shape({
     sequentialId: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -142,8 +150,8 @@ CanvasBlock.propTypes = {
     title: PropTypes.string.isRequired,
   })),
   nonConformities: PropTypes.arrayOf(PropTypes.shape({
-    sequentialId: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
+    sequentialId: PropTypes.string.isRequired,
   })),
 };
 

@@ -3,14 +3,50 @@
 exports[`DashboardStatsExpandable renders correctly 1`] = `
 <DashboardStats>
   <DashboardStatsTitle
-    onClick={[Function]}
-    toggle={[Function]}
+    onClick={
+      [MockFunction] {
+        "calls": Array [
+          Array [],
+        ],
+        "results": Array [
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
+        ],
+      }
+    }
+    toggle={
+      [MockFunction] {
+        "calls": Array [
+          Array [],
+        ],
+        "results": Array [
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
+        ],
+      }
+    }
   >
      
     <ToggleAngleIcon
       isOpen={false}
       name="angle-down"
-      toggle={[Function]}
+      toggle={
+        [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        }
+      }
     />
   </DashboardStatsTitle>
   <div

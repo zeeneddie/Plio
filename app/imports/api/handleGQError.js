@@ -11,7 +11,11 @@ const handleGraphQLErrors = compose(
   map(compose(handleErrorMessage, prop('message'))),
 );
 
-export const handleGQError = ({ networkError, graphQLErrors, message }) => {
+export const handleGQError = (error) => {
+  if (!error) return '';
+
+  const { networkError, graphQLErrors, message } = error;
+
   if (networkError) {
     return networkError;
   }

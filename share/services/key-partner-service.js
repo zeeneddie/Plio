@@ -19,4 +19,28 @@ export default {
       createdBy: userId,
     });
   },
+  async update({
+    _id,
+    title,
+    originatorId,
+    color,
+    criticality,
+    levelOfSpend,
+    notes,
+  }, { userId, collections: { KeyPartners } }) {
+    const query = { _id };
+    const modifier = {
+      $set: {
+        title,
+        originatorId,
+        color,
+        criticality,
+        levelOfSpend,
+        notes,
+        updatedBy: userId,
+      },
+    };
+
+    return KeyPartners.update(query, modifier);
+  },
 };

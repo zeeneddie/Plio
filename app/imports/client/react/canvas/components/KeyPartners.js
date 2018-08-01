@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import { pure } from 'recompose';
 
 import KeyPartnerAddModal from './KeyPartnerAddModal';
+import KeyPartnerEditModal from './KeyPartnerEditModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -38,6 +39,9 @@ const KeyPartners = ({ organizationId }) => (
         items={keyPartners}
         renderModal={({ isOpen, toggle }) => (
           <KeyPartnerAddModal {...{ isOpen, toggle, organizationId }} />
+        )}
+        renderEditModal={({ isOpen, toggle, item }) => (
+          <KeyPartnerEditModal {...{ isOpen, toggle, organizationId }} keyPartner={item} />
         )}
       />
     )}
