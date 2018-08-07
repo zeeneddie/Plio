@@ -210,7 +210,7 @@ exports[`DashboardUserStats matches snapshot 1`] = `
   render={[Function]}
 >
   <PlusButton
-    onClick={[MockFunction]}
+    onClick={[Function]}
     size="1"
   />
   25 users

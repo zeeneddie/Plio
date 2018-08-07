@@ -1,20 +1,25 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { ButtonGroup, DropdownItem } from 'reactstrap';
 import pluralize from 'pluralize';
+import { ButtonGroup, DropdownItem } from 'reactstrap';
+import { Query, Mutation } from 'react-apollo';
+import { sortByIds } from 'plio-util';
+import { pathOr } from 'ramda';
 
+import { Query as Queries, Mutation as Mutations } from '../../../graphql';
+import { ApolloFetchPolicies, GraphQLTypenames } from '../../../../api/constants';
+import { WithToggle } from '../../helpers';
 import CanvasSection from './CanvasSection';
 import CanvasSectionHeading from './CanvasSectionHeading';
 import CanvasAddButton from './CanvasAddButton';
-import CanvasSectionItems from './CanvasSectionItems';
-import CanvasSectionItem from './CanvasSectionItem';
-import CanvasSquareIcon from './CanvasSquareIcon';
 import CanvasSectionFooter from './CanvasSectionFooter';
 import CanvasSectionFooterLabels from './CanvasSectionFooterLabels';
 import CanvasLabel from './CanvasLabel';
 import CanvasChartButton from './CanvasChartButton';
 import CanvasSectionHelp from './CanvasSectionHelp';
-import { WithToggle } from '../../helpers';
+import CanvasSectionItems from './CanvasSectionItems';
+import CanvasSectionItem from './CanvasSectionItem';
+import CanvasSquareIcon from './CanvasSquareIcon';
 
 const CanvasBlock = ({
   label,
@@ -26,6 +31,8 @@ const CanvasBlock = ({
   standards,
   risks,
   nonConformities,
+  organizationId,
+  sectionName,
 }) => {
   const isEmpty = !items.length;
 
@@ -46,21 +53,59 @@ const CanvasBlock = ({
               {help}
             </CanvasSectionHelp>
           )}
-          <CanvasSectionItems>
-            {items.map(item => (
-              <WithToggle key={item._id}>
-                {itemToggleState => (
-                  <Fragment>
-                    {renderEditModal && renderEditModal({ ...itemToggleState, item })}
-                    <CanvasSectionItem onClick={itemToggleState.toggle} data-id={item._id}>
-                      <CanvasSquareIcon color={item.color} />
-                      <span>{item.title}</span>
-                    </CanvasSectionItem>
-                  </Fragment>
+          <Query
+            query={Queries.CANVAS_SETTINGS}
+            variables={{ organizationId, sectionName }}
+            fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}
+          >
+            {({ data: { canvasSettings: { canvasSettings = {} } } }) => (
+              <Mutation mutation={Mutations.REORDER_CANVAS_ITEMS}>
+                {reorderCanvasItems => (
+                  <CanvasSectionItems
+                    onChange={order => (
+                      reorderCanvasItems({
+                        variables: {
+                          input: {
+                            organizationId,
+                            sectionName,
+                            order,
+                          },
+                        },
+                        optimisticResponse: {
+                          __typename: GraphQLTypenames.MUTATION,
+                          reorderCanvasItems: {
+                            __typename: GraphQLTypenames.CANVAS_SETTINGS,
+                            ...canvasSettings,
+                            [sectionName]: {
+                              __typename: GraphQLTypenames.CANVAS_SECTION_SETTINGS,
+                              order,
+                            },
+                          },
+                        },
+                      })
+                    )}
+                  >
+                    {items && sortByIds(
+                      pathOr([], [sectionName, 'order'], canvasSettings),
+                      items,
+                    ).map(item => (
+                      <WithToggle key={item._id}>
+                        {itemToggleState => (
+                          <Fragment>
+                            {renderEditModal && renderEditModal({ ...itemToggleState, item })}
+                            <CanvasSectionItem onClick={itemToggleState.toggle} data-id={item._id}>
+                              <CanvasSquareIcon color={item.color} />
+                              <span>{item.title}</span>
+                            </CanvasSectionItem>
+                          </Fragment>
+                        )}
+                      </WithToggle>
+                    ))}
+                  </CanvasSectionItems>
                 )}
-              </WithToggle>
-            ))}
-          </CanvasSectionItems>
+              </Mutation>
+            )}
+          </Query>
           <CanvasSectionFooter>
             <CanvasSectionFooterLabels>
               <ButtonGroup>
@@ -128,6 +173,8 @@ CanvasBlock.defaultProps = {
 };
 
 CanvasBlock.propTypes = {
+  organizationId: PropTypes.string.isRequired,
+  sectionName: PropTypes.string.isRequired,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   help: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   items: PropTypes.arrayOf(PropTypes.shape({

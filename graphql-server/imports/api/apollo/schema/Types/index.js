@@ -20,6 +20,7 @@ import Channel from './Channel.graphql';
 import ValueProposition from './ValueProposition.graphql';
 import CustomerSegment from './CustomerSegment.graphql';
 import RevenueStream from './RevenueStream.graphql';
+import CanvasSettings from './CanvasSettings.graphql';
 
 export default [
   User,
@@ -44,4 +45,5 @@ export default [
   ValueProposition,
   CustomerSegment,
   RevenueStream,
+  CanvasSettings,
 ];

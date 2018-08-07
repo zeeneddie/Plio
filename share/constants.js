@@ -117,6 +117,7 @@ export const CollectionNames = {
   VALUE_PROPOSITIONS: 'ValuePropositions',
   CUSTOMER_SEGMENTS: 'CustomerSegments',
   REVENUE_STREAMS: 'RevenueStreams',
+  CANVAS_SETTINGS: 'CanvasSettings',
 };
 
 export const DefaultRiskTypes = [
@@ -881,3 +882,15 @@ export const Criticality = {
 export const LevelOfSpend = { ...Criticality };
 
 export const CanvasColors = { ...Colors };
+
+export const CanvasSections = {
+  KEY_PARTNERS: 'keyPartners',
+  KEY_ACTIVITIES: 'keyActivities',
+  KEY_RESOURCES: 'keyResources',
+  VALUE_PROPOSITIONS: 'valuePropositions',
+  CUSTOMER_RELATIONSHIPS: 'customerRelationships',
+  CHANNELS: 'channels',
+  CUSTOMER_SEGMENTS: 'customerSegments',
+  COST_STRUCTURE: 'costStructure',
+  REVENUE_STREAMS: 'revenueStreams',
+};

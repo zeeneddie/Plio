@@ -1,13 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
+.c1 {
+  -webkit-transition: all .4s ease;
+  transition: all .4s ease;
+  -webkit-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+
+.c0 {
+  cursor: pointer;
+  text-decoration: none;
+}
+
 <DashboardStatsUnreadMessages
   count={24}
   displayMessages={1}
   isOpen={false}
-  loadAll={[MockFunction]}
-  loadLimited={[MockFunction]}
-  markAllAsRead={[MockFunction]}
+  loadAll={[Function]}
+  loadLimited={[Function]}
+  markAllAsRead={[Function]}
   messages={
     Array [
       Object {
@@ -205,7 +218,7 @@ exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
     ]
   }
   orgSerialNumber={1}
-  toggle={[MockFunction]}
+  toggle={[Function]}
 >
   <branch(DashboardStatsExpandable)
     isOpen={false}
@@ -407,7 +420,7 @@ exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
     }
     itemsPerRow={1}
     render={[Function]}
-    toggle={[MockFunction]}
+    toggle={[Function]}
     total={24}
   >
     <branch(DashboardStatsExpandable)
@@ -610,7 +623,7 @@ exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
       }
       itemsPerRow={1}
       render={[Function]}
-      toggle={[MockFunction]}
+      toggle={[Function]}
       total={24}
     >
       <DashboardStatsExpandable
@@ -813,7 +826,7 @@ exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
         }
         itemsPerRow={1}
         render={[Function]}
-        toggle={[MockFunction]}
+        toggle={[Function]}
         total={24}
       >
         <DashboardStats>
@@ -821,26 +834,26 @@ exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
             className="dashboard-stats"
           >
             <DashboardStatsTitle
-              onClick={[MockFunction]}
-              toggle={[MockFunction]}
+              onClick={[Function]}
+              toggle={[Function]}
             >
               <Component
-                className="sc-ckVGcZ jEodHE"
-                onClick={[MockFunction]}
-                toggle={[MockFunction]}
+                className="c0"
+                onClick={[Function]}
+                toggle={[Function]}
               >
                 <DashboardStatsTitle
-                  className="sc-ckVGcZ jEodHE"
-                  onClick={[MockFunction]}
+                  className="c0"
+                  onClick={[Function]}
                 >
                   <h4
-                    className="dashboard-stats-title sc-ckVGcZ jEodHE"
-                    onClick={[MockFunction]}
+                    className="dashboard-stats-title c0"
+                    onClick={[Function]}
                   >
                     24 unread messages
                     <a
                       className="pointer"
-                      onClick={[MockFunction]}
+                      onClick={[Function]}
                       title="Mark all messages as read"
                     >
                       <Icon
@@ -860,20 +873,20 @@ exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
                     <ToggleAngleIcon
                       isOpen={false}
                       name="angle-down"
-                      toggle={[MockFunction]}
+                      toggle={[Function]}
                     >
                       <Icon
-                        className="sc-dnqmqq dombso"
+                        className="c1"
                         isOpen={false}
                         name="angle-down"
-                        toggle={[MockFunction]}
+                        toggle={[Function]}
                       >
                         <FaSize
                           prefix=""
                           size={1}
                         >
                           <i
-                            className="fa fa-angle-down sc-dnqmqq dombso"
+                            className="fa fa-angle-down c1"
                           />
                         </FaSize>
                       </Icon>

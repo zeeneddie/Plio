@@ -1,0 +1,9 @@
+input ReorderCanvasItemsInput {
+  organizationId: ID!
+  sectionName: String!
+  order: [ID]!
+}
+
+type Mutation {
+  reorderCanvasItems(input: ReorderCanvasItemsInput!): CanvasSettings
+}

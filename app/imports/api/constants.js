@@ -345,3 +345,9 @@ export const Styles = {
 /* eslint-enable max-len */
 
 export const SUPPORT_EMAIL = 'hello@pliohub.com';
+
+export const GraphQLTypenames = {
+  MUTATION: 'Mutation',
+  CANVAS_SETTINGS: 'CanvasSettings',
+  CANVAS_SECTION_SETTINGS: 'CanvasSectionSettings',
+};

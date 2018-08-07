@@ -1,13 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DashboardStatsOverdueItems renders correctly 1`] = `
+.c1 {
+  -webkit-transition: all .4s ease;
+  transition: all .4s ease;
+  -webkit-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+
+.c0 {
+  cursor: pointer;
+  text-decoration: none;
+}
+
 <DashboardStatsOverdueItems
   count={25}
   isOpen={false}
   itemsPerRow={5}
   loading={false}
   orgSerialNumber={1}
-  toggle={[MockFunction]}
+  toggle={[Function]}
   workItems={
     Array [
       Object {
@@ -171,7 +184,7 @@ exports[`DashboardStatsOverdueItems renders correctly 1`] = `
     }
     itemsPerRow={5}
     render={[Function]}
-    toggle={[MockFunction]}
+    toggle={[Function]}
     total={25}
   >
     <branch(DashboardStatsExpandable)
@@ -257,7 +270,7 @@ exports[`DashboardStatsOverdueItems renders correctly 1`] = `
       }
       itemsPerRow={5}
       render={[Function]}
-      toggle={[MockFunction]}
+      toggle={[Function]}
       total={25}
     >
       <DashboardStatsExpandable
@@ -343,7 +356,7 @@ exports[`DashboardStatsOverdueItems renders correctly 1`] = `
         }
         itemsPerRow={5}
         render={[Function]}
-        toggle={[MockFunction]}
+        toggle={[Function]}
         total={25}
       >
         <DashboardStats>
@@ -351,41 +364,41 @@ exports[`DashboardStatsOverdueItems renders correctly 1`] = `
             className="dashboard-stats"
           >
             <DashboardStatsTitle
-              onClick={[MockFunction]}
-              toggle={[MockFunction]}
+              onClick={[Function]}
+              toggle={[Function]}
             >
               <Component
-                className="sc-ckVGcZ jEodHE"
-                onClick={[MockFunction]}
-                toggle={[MockFunction]}
+                className="c0"
+                onClick={[Function]}
+                toggle={[Function]}
               >
                 <DashboardStatsTitle
-                  className="sc-ckVGcZ jEodHE"
-                  onClick={[MockFunction]}
+                  className="c0"
+                  onClick={[Function]}
                 >
                   <h4
-                    className="dashboard-stats-title sc-ckVGcZ jEodHE"
-                    onClick={[MockFunction]}
+                    className="dashboard-stats-title c0"
+                    onClick={[Function]}
                   >
                     25 overdue work items
                      
                     <ToggleAngleIcon
                       isOpen={false}
                       name="angle-down"
-                      toggle={[MockFunction]}
+                      toggle={[Function]}
                     >
                       <Icon
-                        className="sc-dnqmqq dombso"
+                        className="c1"
                         isOpen={false}
                         name="angle-down"
-                        toggle={[MockFunction]}
+                        toggle={[Function]}
                       >
                         <FaSize
                           prefix=""
                           size={1}
                         >
                           <i
-                            className="fa fa-angle-down sc-dnqmqq dombso"
+                            className="fa fa-angle-down c1"
                           />
                         </FaSize>
                       </Icon>

@@ -29,3 +29,4 @@ export * from './channels';
 export * from './value-propositions';
 export * from './customer-segments';
 export * from './revenue-streams';
+export * from './canvas-settings';
