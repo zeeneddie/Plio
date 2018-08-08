@@ -3,7 +3,7 @@ import {
   checkLoggedIn,
   flattenInput,
   checkGoalAccess,
-  checkUserOrgMembership,
+  checkOrgMembership,
   goalUpdateAfterware,
 } from '../../../../../share/middleware';
 
@@ -14,8 +14,9 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkGoalAccess(),
-  checkUserOrgMembership({
-    getUserId: (root, args) => args.userId,
-  }),
+  checkOrgMembership(({ organizationId }, { userId }) => ({
+    organizationId,
+    userId,
+  })),
   goalUpdateAfterware(),
 )(resolver);

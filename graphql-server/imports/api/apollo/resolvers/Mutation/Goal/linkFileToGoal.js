@@ -4,7 +4,7 @@ import {
   checkGoalAccess,
   flattenInput,
   goalUpdateAfterware,
-  checkDocExistance,
+  checkDocExistence,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { GoalService } }) =>
@@ -14,9 +14,9 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkGoalAccess(),
-  checkDocExistance(
-    ({ fileId }) => ({ _id: fileId }),
-    (root, args, { collections: { Files } }) => Files,
-  ),
+  checkDocExistence((root, { fileId }, { collections: { Files } }) => ({
+    query: { _id: fileId },
+    collection: Files,
+  })),
   goalUpdateAfterware(),
 )(resolver);

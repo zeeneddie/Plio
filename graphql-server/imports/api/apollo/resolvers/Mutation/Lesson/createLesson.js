@@ -4,7 +4,7 @@ import {
   checkOrgMembership,
   flattenInput,
   sanitizeNotes,
-  checkDocExistance,
+  checkDocExistence,
 } from '../../../../../share/middleware';
 import { getCollectionByDocType } from '../../../../../share/helpers';
 
@@ -26,10 +26,10 @@ export default applyMiddleware(
   flattenInput(),
   flattenLinkedTo(),
   checkOrgMembership(),
-  checkDocExistance(
-    ({ documentId }) => ({ _id: documentId }),
-    (root, { documentType }) => getCollectionByDocType(documentType),
-  ),
+  checkDocExistence((root, { documentId, documentType }) => ({
+    query: { _id: documentId },
+    collection: getCollectionByDocType(documentType),
+  })),
   checkOrgMembership(),
   sanitizeNotes(),
   afterware(),

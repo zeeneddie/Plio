@@ -4,7 +4,7 @@ import {
   flattenInput,
   checkRiskAccess,
   riskUpdateAfterware,
-  checkUserOrgMembership,
+  checkOrgMembership,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { RiskService } }) =>
@@ -14,8 +14,9 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkRiskAccess(),
-  checkUserOrgMembership({
-    getUserId: (root, args) => args.originatorId,
-  }),
+  checkOrgMembership(({ organizationId }, { originatorId }) => ({
+    organizationId,
+    userId: originatorId,
+  })),
   riskUpdateAfterware(),
 )(resolver);

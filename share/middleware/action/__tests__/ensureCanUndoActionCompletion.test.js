@@ -10,7 +10,6 @@ describe('ensureCanUndoActionCompletion', async () => {
     const args = {};
     const context = {
       userId: null,
-      doc: {},
     };
 
     await expect(ensureCanUndoActionCompletion()(T, root, args, context))
@@ -19,18 +18,17 @@ describe('ensureCanUndoActionCompletion', async () => {
   });
 
   it('passes', async () => {
-    const root = {};
     const args = {};
     const userId = 1;
     const organizationId = 3;
-    const doc = {
+    const root = {
       isCompleted: true,
       isVerified: false,
       completedAt: new Date(),
       completedBy: 2,
       organizationId,
     };
-    const context = { userId, doc };
+    const context = { userId };
 
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 

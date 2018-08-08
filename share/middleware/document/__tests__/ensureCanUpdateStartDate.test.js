@@ -1,6 +1,6 @@
 import { T } from 'ramda';
 import ensureCanUpdateStartDate from '../ensureCanUpdateStartDate';
-import Errors from '../../../../errors';
+import Errors from '../../../errors';
 
 describe('ensureCanUpdateStartDate', () => {
   it('throws if start date gte end date', async () => {
@@ -10,11 +10,9 @@ describe('ensureCanUpdateStartDate', () => {
     startDate.setDate(endDate.getDate() + 1);
 
     const next = T;
-    const root = {};
+    const root = { endDate };
     const args = { startDate };
-    const context = {
-      doc: { endDate },
-    };
+    const context = {};
     const promise = ensureCanUpdateStartDate()(next, root, args, context);
 
     await expect(promise).rejects.toEqual(new Error(Errors.START_DATE_GTE_END_DATE));
@@ -24,9 +22,9 @@ describe('ensureCanUpdateStartDate', () => {
     const endDate = new Date();
     const startDate = new Date(endDate.getDate() - 1);
     const next = T;
-    const root = {};
+    const root = { endDate };
     const args = { startDate };
-    const context = { doc: { endDate } };
+    const context = {};
     const promise = ensureCanUpdateStartDate()(next, root, args, context);
 
     await expect(promise).resolves.toBe(true);

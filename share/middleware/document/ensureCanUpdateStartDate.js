@@ -1,12 +1,14 @@
 import invariant from 'invariant';
 
-import { canActionVerificationBeUndone } from '../../checkers';
 import Errors from '../../errors';
 
 export default () => async (next, root, args, context) => {
+  const { endDate } = root;
+  const { startDate } = args;
+
   invariant(
-    canActionVerificationBeUndone(root, context.userId),
-    Errors.DOC_CANNOT_UNDO_VERIFICATION,
+    new Date(startDate).getTime() <= new Date(endDate).getTime(),
+    Errors.START_DATE_GTE_END_DATE,
   );
 
   return next(root, args, context);

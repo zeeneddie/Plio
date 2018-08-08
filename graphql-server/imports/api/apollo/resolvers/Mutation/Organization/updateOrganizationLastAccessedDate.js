@@ -11,5 +11,5 @@ export const resolver = async (root, { _id }, { services: { OrganizationService 
 export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
-  checkOrgMembership((root, args) => args._id),
+  checkOrgMembership((root, { _id }) => ({ organizationId: _id })),
 )(resolver);

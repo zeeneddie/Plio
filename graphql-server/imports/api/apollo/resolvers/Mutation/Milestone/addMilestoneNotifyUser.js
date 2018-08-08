@@ -3,11 +3,9 @@ import {
   checkLoggedIn,
   flattenInput,
   checkMilestoneAccess,
-  checkUserOrgMembership,
+  checkOrgMembership,
   userUpdateAfterware,
 } from '../../../../../share/middleware';
-
-const getUserId = (root, args) => args.userId;
 
 export const resolver = async (root, args, { services: { MilestoneService } }) =>
   MilestoneService.addToNotify(args);
@@ -16,6 +14,9 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkMilestoneAccess(),
-  checkUserOrgMembership({ getUserId }),
-  userUpdateAfterware({ getId: getUserId }),
+  checkOrgMembership(({ organizationId }, { userId }) => ({
+    organizationId,
+    userId,
+  })),
+  userUpdateAfterware((root, { userId }) => ({ userId })),
 )(resolver);
