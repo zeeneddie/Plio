@@ -5,9 +5,10 @@ import { getUserOptions } from 'plio-util';
 
 import { CanvasColors, Criticality } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { EntityModal } from '../../components';
+import { EntityModalNext } from '../../components';
 import KeyPartnerForm from './KeyPartnerForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { validateKeyPartner } from '../../../validation';
 
 const KeyPartnerAddModal = ({
   isOpen,
@@ -18,9 +19,9 @@ const KeyPartnerAddModal = ({
     {({ data: { user } }) => (
       <Mutation mutation={Mutations.CREATE_KEY_PARTNER}>
         {createKeyPartner => (
-          <EntityModal
+          <EntityModalNext
             {...{ isOpen, toggle }}
-            title="Key partner"
+            label="Key partner"
             initialValues={{
               originator: getUserOptions(user),
               title: '',
@@ -29,15 +30,19 @@ const KeyPartnerAddModal = ({
               levelOfSpend: Criticality.MEDIUM,
               notes: '',
             }}
-            onSave={({
-              title,
-              originator: { value: originatorId },
-              color,
-              criticality,
-              levelOfSpend,
-              notes,
-            }) => {
-              if (!title) throw new Error('title is required');
+            onSubmit={(values) => {
+              const errors = validateKeyPartner(values);
+
+              if (errors) return errors;
+
+              const {
+                title,
+                originator: { value: originatorId },
+                color,
+                criticality,
+                levelOfSpend,
+                notes,
+              } = values;
 
               return createKeyPartner({
                 variables: {
@@ -58,7 +63,7 @@ const KeyPartnerAddModal = ({
             }}
           >
             <KeyPartnerForm {...{ organizationId }} />
-          </EntityModal>
+          </EntityModalNext>
         )}
       </Mutation>
     )}

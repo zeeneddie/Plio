@@ -42,8 +42,15 @@ const KeyPartners = ({ organizationId }) => (
         renderModal={({ isOpen, toggle }) => (
           <KeyPartnerAddModal {...{ isOpen, toggle, organizationId }} />
         )}
-        renderEditModal={({ isOpen, toggle, item }) => (
-          <KeyPartnerEditModal {...{ isOpen, toggle, organizationId }} keyPartner={item} />
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <KeyPartnerEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
         )}
       />
     )}

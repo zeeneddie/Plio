@@ -18,7 +18,7 @@ const InputAdapter = ({
       if (onChange) onChange(e);
     }}
     onBlur={(e) => {
-      input.onBlur(e);
+      input.onBlur(getTargetValue(e));
       if (dirty && onBlur) {
         onBlur(e);
       }

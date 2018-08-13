@@ -1,16 +1,19 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses } from 'plio-util';
+import { getUserOptions, lenses, noop } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
+import diff from 'deep-diff';
 
+import { ApolloFetchPolicies } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { EntityModal } from '../../components';
+import { validateKeyPartner } from '../../../validation';
+import { EntityModalNext } from '../../components';
+import { WithState } from '../../helpers';
 import KeyPartnerForm from './KeyPartnerForm';
-import { handleGQError } from '../../../../api/handleGQError';
 
-const getInitialValues = (keyPartner, data) => compose(
+const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   pick([
     'originator',
@@ -20,63 +23,85 @@ const getInitialValues = (keyPartner, data) => compose(
     'levelOfSpend',
     'notes',
   ]),
-  pathOr(keyPartner, repeat('keyPartner', 2)),
-)(data);
+  pathOr({}, repeat('keyPartner', 2)),
+);
 
-const KeyPartnerAddModal = ({
+const KeyPartnerEditModal = ({
   isOpen,
   toggle,
   organizationId,
-  keyPartner,
+  _id,
 }) => (
-  <Query query={Queries.KEY_PARTNER_CARD} variables={{ _id: keyPartner._id }} skip={!isOpen}>
-    {({ data, ...query }) => (
-      <Mutation mutation={Mutations.UPDATE_KEY_PARTNER}>
-        {(updateKeyPartner, mutation) => (
-          <EntityModal
-            {...{ isOpen, toggle }}
-            loading={query.loading || mutation.loading}
-            error={handleGQError(query.error || mutation.error)}
-            title="Key partner"
-            initialValues={getInitialValues(keyPartner, data)}
-          >
-            <KeyPartnerForm
-              {...{ organizationId }}
-              save={({
-                title,
-                originator = {},
-                color = {},
-                criticality = {},
-                levelOfSpend = {},
-                notes,
-              }) => updateKeyPartner({
-                variables: {
-                  input: {
+  <WithState initialState={{ initialValues: {} }}>
+    {({ state: { initialValues }, setState }) => (
+      <Query
+        query={Queries.KEY_PARTNER_CARD}
+        variables={{ _id }}
+        skip={!isOpen}
+        onCompleted={data => setState({ initialValues: getInitialValues(data) })}
+        fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
+      >
+        {({ data, ...query }) => (
+          <Mutation mutation={Mutations.UPDATE_KEY_PARTNER}>
+            {updateKeyPartner => (
+              <EntityModalNext
+                {...{ isOpen, toggle, initialValues }}
+                isEditMode
+                label="Key partner"
+                loading={query.loading}
+                error={query.error}
+                guidance="Hello World"
+                validate={validateKeyPartner}
+                onSubmit={(values, form) => {
+                  const currentValues = getInitialValues(data);
+                  const isDirty = diff(values, currentValues);
+
+                  if (!isDirty) return undefined;
+
+                  const {
                     title,
-                    notes,
-                    _id: keyPartner._id,
-                    originatorId: originator.value,
-                    color: color.hex ? color.hex.toUpperCase() : undefined,
-                    criticality: criticality.value,
-                    levelOfSpend: levelOfSpend.value,
-                  },
-                },
-              })}
-            />
-          </EntityModal>
+                    originator,
+                    color,
+                    criticality,
+                    levelOfSpend,
+                    notes = '', // final form sends undefined value instead of an empty string
+                  } = values;
+
+                  return updateKeyPartner({
+                    variables: {
+                      input: {
+                        _id,
+                        title,
+                        notes,
+                        color,
+                        criticality,
+                        levelOfSpend,
+                        originatorId: originator.value,
+                      },
+                    },
+                  }).then(noop).catch((err) => {
+                    form.reset(currentValues);
+                    throw err;
+                  });
+                }}
+              >
+                {({ form: { form } }) => (
+                  <KeyPartnerForm {...{ organizationId }} save={form.submit} />
+                )}
+              </EntityModalNext>
+            )}
+          </Mutation>
         )}
-      </Mutation>
+      </Query>
     )}
-  </Query>
+  </WithState>
 );
 
-KeyPartnerAddModal.propTypes = {
+KeyPartnerEditModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
-  keyPartner: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-  }).isRequired,
+  _id: PropTypes.string,
 };
 
-export default pure(KeyPartnerAddModal);
+export default pure(KeyPartnerEditModal);

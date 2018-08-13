@@ -9,6 +9,7 @@ export * from './subcards';
 export * from './styled';
 export * from './Modal';
 export * from './FlowRouter';
+export * from './EntityModalNext';
 
 export { default as CardBlock } from './CardBlock';
 export { default as Collapse } from './Collapse';

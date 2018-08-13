@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { noop } from 'plio-util';
+import { pure } from 'recompose';
 
 import { FormField } from '../../components';
 import CriticalityField from './CriticalityField';
@@ -8,16 +8,16 @@ import CanvasForm from './CanvasForm';
 
 const KeyPartnerForm = ({
   organizationId,
-  save = noop,
+  save,
 }) => (
   <CanvasForm {...{ organizationId, save }}>
     <FormField>
       Criticality
-      <CriticalityField name="criticality" onChange={criticality => save({ criticality })} />
+      <CriticalityField name="criticality" onChange={save} />
     </FormField>
     <FormField>
       Level of spend
-      <CriticalityField name="levelOfSpend" onChange={levelOfSpend => save({ levelOfSpend })} />
+      <CriticalityField name="levelOfSpend" onChange={save} />
     </FormField>
   </CanvasForm>
 );
@@ -27,4 +27,4 @@ KeyPartnerForm.propTypes = {
   save: PropTypes.func,
 };
 
-export default KeyPartnerForm;
+export default pure(KeyPartnerForm);
