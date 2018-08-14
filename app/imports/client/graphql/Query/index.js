@@ -32,8 +32,9 @@ import CANVAS_PAGE from './CanvasPage.graphql';
 import CURRENT_USER_FULL_NAME from './CurrentUserFullName.graphql';
 import VALUE_PROPOSITION_LIST from './ValuePropositionList.graphql';
 import CUSTOMER_SEGMENT_LIST from './CustomerSegmentList.graphql';
-import KEY_PARTNER_CARD from './KeyPartnerCard.graphql';
 import CANVAS_SETTINGS from './CanvasSettings.graphql';
+import KEY_PARTNER_CARD from './KeyPartnerCard.graphql';
+import KEY_ACTIVITY_CARD from './KeyActivityCard.graphql';
 
 export default {
   DASHBOARD_GOALS,
@@ -70,6 +71,7 @@ export default {
   CURRENT_USER_FULL_NAME,
   VALUE_PROPOSITION_LIST,
   CUSTOMER_SEGMENT_LIST,
-  KEY_PARTNER_CARD,
   CANVAS_SETTINGS,
+  KEY_PARTNER_CARD,
+  KEY_ACTIVITY_CARD,
 };
