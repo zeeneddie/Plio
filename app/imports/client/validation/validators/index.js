@@ -1,4 +1,5 @@
 export { default as validateKeyPartner } from './validateKeyPartner';
+export { default as validateRevenueStream } from './validateRevenueStream';
 export { default as validateCostLine } from './validateCostLine';
 export { default as validateChannel } from './validateChannel';
 export { default as validateCustomerRelationship } from './validateCustomerRelationship';

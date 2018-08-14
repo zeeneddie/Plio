@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import { pure } from 'recompose';
 
 import RevenueStreamAddModal from './RevenueStreamAddModal';
+import RevenueStreamEditModal from './RevenueStreamEditModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -29,6 +30,16 @@ const RevenueStreams = ({ organizationId }) => (
         items={revenueStreams}
         renderModal={({ isOpen, toggle }) => (
           <RevenueStreamAddModal {...{ isOpen, toggle, organizationId }} />
+        )}
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <RevenueStreamEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
         )}
       />
     )}

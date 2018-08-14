@@ -5,9 +5,10 @@ import { getUserOptions } from 'plio-util';
 
 import { CanvasColors } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { EntityModal } from '../../components';
+import { EntityModalNext } from '../../components';
 import RevenueStreamForm from './RevenueStreamForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { validateRevenueStream } from '../../../validation';
 
 const RevenueStreamAddModal = ({
   isOpen,
@@ -18,30 +19,30 @@ const RevenueStreamAddModal = ({
     {({ data: { user } }) => (
       <Mutation mutation={Mutations.CREATE_REVENUE_STREAM}>
         {createRevenueStream => (
-          <EntityModal
+          <EntityModalNext
             {...{ isOpen, toggle }}
-            title="Revenue stream"
+            label="Revenue stream"
             initialValues={{
               originator: getUserOptions(user),
               title: '',
               color: CanvasColors.INDIGO,
               notes: '',
+              percentOfRevenue: null,
+              percentOfProfit: null,
             }}
-            onSave={({
-              title,
-              originator: { value: originatorId },
-              color,
-              notes,
-              percentOfRevenue,
-              percentOfProfit,
-            }) => {
-              const errors = [];
+            onSubmit={(values) => {
+              const errors = validateRevenueStream(values);
 
-              if (!title) errors.push('title is required');
-              if (!percentOfRevenue) errors.push('% of revenue is required');
-              if (!percentOfProfit) errors.push('% of profit is required');
+              if (errors) return errors;
 
-              if (errors.length) throw new Error(errors.join('\n'));
+              const {
+                title,
+                originator: { value: originatorId },
+                color,
+                percentOfRevenue,
+                percentOfProfit,
+                notes,
+              } = values;
 
               return createRevenueStream({
                 variables: {
@@ -62,7 +63,7 @@ const RevenueStreamAddModal = ({
             }}
           >
             <RevenueStreamForm {...{ organizationId }} />
-          </EntityModal>
+          </EntityModalNext>
         )}
       </Mutation>
     )}

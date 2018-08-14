@@ -11,6 +11,7 @@ export * from './department';
 export * from './analysis';
 export * from './user';
 export * from './keyPartner';
+export * from './revenueStream';
 export * from './costLine';
 export * from './channel';
 export * from './customerRelationship';

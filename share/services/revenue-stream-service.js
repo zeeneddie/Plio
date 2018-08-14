@@ -17,4 +17,28 @@ export default {
     percentOfProfit,
     createdBy: userId,
   }),
+  async update({
+    _id,
+    title,
+    originatorId,
+    color,
+    percentOfRevenue,
+    percentOfProfit,
+    notes,
+  }, { userId, collections: { RevenueStreams } }) {
+    const query = { _id };
+    const modifier = {
+      $set: {
+        title,
+        originatorId,
+        color,
+        percentOfRevenue,
+        percentOfProfit,
+        notes,
+        updatedBy: userId,
+      },
+    };
+
+    return RevenueStreams.update(query, modifier);
+  },
 };
