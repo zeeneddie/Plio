@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import { pure } from 'recompose';
 
 import KeyResourceAddModal from './KeyResourceAddModal';
+import KeyResourceEditModal from './KeyResourceEditModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -26,6 +27,16 @@ const KeyResources = ({ organizationId }) => (
         items={keyResources}
         renderModal={({ isOpen, toggle }) => (
           <KeyResourceAddModal {...{ isOpen, toggle, organizationId }} />
+        )}
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <KeyResourceEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
         )}
       />
     )}

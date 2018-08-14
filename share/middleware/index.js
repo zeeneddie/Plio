@@ -11,5 +11,6 @@ export * from './department';
 export * from './analysis';
 export * from './user';
 export * from './keyPartner';
+export * from './keyResource';
 export * from './keyActivity';
 export * from './canvasSettings';

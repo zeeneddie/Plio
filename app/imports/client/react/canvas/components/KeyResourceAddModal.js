@@ -5,9 +5,10 @@ import { getUserOptions } from 'plio-util';
 
 import { CanvasColors } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { EntityModal } from '../../components';
+import { EntityModalNext } from '../../components';
 import CanvasForm from './CanvasForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { validateKeyResource } from '../../../validation';
 
 const KeyActivitiesAddModal = ({
   isOpen,
@@ -18,22 +19,26 @@ const KeyActivitiesAddModal = ({
     {({ data: { user } }) => (
       <Mutation mutation={Mutations.CREATE_KEY_RESOURCE}>
         {createKeyResource => (
-          <EntityModal
+          <EntityModalNext
             {...{ isOpen, toggle }}
-            title="Key resource"
+            label="Key resource"
             initialValues={{
               originator: getUserOptions(user),
               title: '',
               color: CanvasColors.INDIGO,
               notes: '',
             }}
-            onSave={({
-              title,
-              originator: { value: originatorId },
-              color,
-              notes,
-            }) => {
-              if (!title) throw new Error('title is required');
+            onSubmit={(values) => {
+              const errors = validateKeyResource(values);
+
+              if (errors) return errors;
+
+              const {
+                title,
+                originator: { value: originatorId },
+                color,
+                notes,
+              } = values;
 
               return createKeyResource({
                 variables: {
@@ -52,7 +57,7 @@ const KeyActivitiesAddModal = ({
             }}
           >
             <CanvasForm {...{ organizationId }} />
-          </EntityModal>
+          </EntityModalNext>
         )}
       </Mutation>
     )}
