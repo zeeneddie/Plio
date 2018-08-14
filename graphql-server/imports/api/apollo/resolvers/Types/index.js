@@ -19,6 +19,7 @@ import CustomerRelationship from './CustomerRelationship';
 import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
 import RevenueStream from './RevenueStream';
+import Channel from './Channel';
 
 
 export default {
@@ -43,4 +44,5 @@ export default {
   ...ValueProposition,
   ...CustomerSegment,
   ...RevenueStream,
+  ...Channel,
 };

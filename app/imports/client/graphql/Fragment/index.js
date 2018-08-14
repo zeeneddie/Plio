@@ -7,6 +7,7 @@ import LESSON_CARD from './LessonCard.graphql';
 import ACTION_CARD from './ActionCard.graphql';
 import DASHBOARD_ACTION from './DashboardAction.graphql';
 import KEY_PARTNER_CARD from './KeyPartnerCard.graphql';
+import CHANNEL_CARD from './ChannelCard.graphql';
 import CUSTOMER_RELATIONSHIP_CARD from './CustomerRelationshipCard.graphql';
 import KEY_RESOURCE_CARD from './KeyResourceCard.graphql';
 import CANVAS_SETTINGS from './CanvasSettings.graphql';
@@ -21,6 +22,7 @@ LESSON_CARD.fragmentName = 'LessonCard';
 ACTION_CARD.fragmentName = 'ActionCard';
 DASHBOARD_ACTION.fragmentName = 'DashboardAction';
 KEY_PARTNER_CARD.fragmentName = 'KeyPartnerCard';
+CHANNEL_CARD.fragmentName = 'ChannelCard';
 CUSTOMER_RELATIONSHIP_CARD.fragmentName = 'CustomerRelationshipCard';
 KEY_RESOURCE_CARD.fragmentName = 'KeyResourceCard';
 CANVAS_SETTINGS.fragmentName = 'CanvasSettings';
@@ -35,9 +37,10 @@ export default {
   LESSON_CARD,
   ACTION_CARD,
   DASHBOARD_ACTION,
+  KEY_PARTNER_CARD,
+  CHANNEL_CARD,
   CANVAS_SETTINGS,
   CUSTOMER_RELATIONSHIP_CARD,
   KEY_RESOURCE_CARD,
-  KEY_PARTNER_CARD,
   KEY_ACTIVITY_CARD,
 };
