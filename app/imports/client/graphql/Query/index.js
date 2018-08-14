@@ -33,6 +33,7 @@ import CURRENT_USER_FULL_NAME from './CurrentUserFullName.graphql';
 import VALUE_PROPOSITION_LIST from './ValuePropositionList.graphql';
 import CUSTOMER_SEGMENT_LIST from './CustomerSegmentList.graphql';
 import KEY_PARTNER_CARD from './KeyPartnerCard.graphql';
+import COST_LINE_CARD from './CostLineCard.graphql';
 import CHANNEL_CARD from './ChannelCard.graphql';
 import CUSTOMER_RELATIONSHIP_CARD from './CustomerRelationshipCard.graphql';
 import KEY_RESOURCE_CARD from './KeyResourceCard.graphql';
@@ -78,6 +79,7 @@ export default {
   CHANNEL_CARD,
   CUSTOMER_RELATIONSHIP_CARD,
   CANVAS_SETTINGS,
+  COST_LINE_CARD,
   KEY_RESOURCE_CARD,
   KEY_ACTIVITY_CARD,
 };

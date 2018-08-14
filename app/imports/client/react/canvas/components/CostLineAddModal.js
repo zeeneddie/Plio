@@ -5,9 +5,10 @@ import { getUserOptions } from 'plio-util';
 
 import { CanvasColors } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { EntityModal } from '../../components';
+import { EntityModalNext } from '../../components';
 import CostLineForm from './CostLineForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { validateCostLine } from '../../../validation';
 
 const CostLineAddModal = ({
   isOpen,
@@ -18,9 +19,9 @@ const CostLineAddModal = ({
     {({ data: { user } }) => (
       <Mutation mutation={Mutations.CREATE_COST_LINE}>
         {createCostLine => (
-          <EntityModal
+          <EntityModalNext
             {...{ isOpen, toggle }}
-            title="Cost line"
+            label="Cost line"
             initialValues={{
               originator: getUserOptions(user),
               title: '',
@@ -28,15 +29,18 @@ const CostLineAddModal = ({
               notes: '',
               percentOfTotalCost: null,
             }}
-            onSave={({
-              title,
-              originator: { value: originatorId },
-              color,
-              notes,
-              percentOfTotalCost,
-            }) => {
-              if (!title) throw new Error('title is required');
-              if (!percentOfTotalCost) throw new Error('% of total cost is required');
+            onSubmit={(values) => {
+              const errors = validateCostLine(values);
+
+              if (errors) return errors;
+
+              const {
+                title,
+                originator: { value: originatorId },
+                color,
+                percentOfTotalCost,
+                notes,
+              } = values;
 
               return createCostLine({
                 variables: {
@@ -56,7 +60,7 @@ const CostLineAddModal = ({
             }}
           >
             <CostLineForm {...{ organizationId }} />
-          </EntityModal>
+          </EntityModalNext>
         )}
       </Mutation>
     )}

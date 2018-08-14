@@ -11,6 +11,16 @@ input CreateCostLineInput {
   notes: String
 }
 
+input UpdateCostLineInput {
+  _id: ID!
+  title: String
+  originatorId: ID
+  color: String
+  percentOfTotalCost: Int
+  notes: String
+}
+
 type Mutation {
   createCostLine(input: CreateCostLineInput!): CostLinePayload
+  updateCostLine(input: UpdateCostLineInput!): CostLine
 }

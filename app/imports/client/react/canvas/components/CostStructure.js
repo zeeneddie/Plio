@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import { pure } from 'recompose';
 
 import CostLineAddModal from './CostLineAddModal';
+import CostLineEditModal from './CostLineEditModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -30,6 +31,16 @@ const CostStructure = ({ organizationId }) => (
         items={costLines}
         renderModal={({ isOpen, toggle }) => (
           <CostLineAddModal {...{ isOpen, toggle, organizationId }} />
+        )}
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <CostLineEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
         )}
       />
     )}
