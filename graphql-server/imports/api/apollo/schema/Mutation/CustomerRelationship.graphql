@@ -10,6 +10,15 @@ input CreateCustomerRelationshipInput {
   notes: String
 }
 
+input UpdateCustomerRelationshipInput {
+  _id: ID!
+  title: String
+  originatorId: ID
+  color: String
+  notes: String
+}
+
 type Mutation {
   createCustomerRelationship(input: CreateCustomerRelationshipInput!): CustomerRelationshipPayload
+  updateCustomerRelationship(input: UpdateCustomerRelationshipInput!): CustomerRelationship
 }
