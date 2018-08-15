@@ -38,8 +38,10 @@ import COST_LINE_CARD from './CostLineCard.graphql';
 import CHANNEL_CARD from './ChannelCard.graphql';
 import CUSTOMER_RELATIONSHIP_CARD from './CustomerRelationshipCard.graphql';
 import KEY_RESOURCE_CARD from './KeyResourceCard.graphql';
-import CANVAS_SETTINGS from './CanvasSettings.graphql';
 import KEY_ACTIVITY_CARD from './KeyActivityCard.graphql';
+import CANVAS_SETTINGS from './CanvasSettings.graphql';
+import ORGANIZATIONS_MENU from './OrganizationsMenu.graphql';
+import ORGANIZATIONS from './Organizations.graphql';
 
 export default {
   DASHBOARD_GOALS,
@@ -80,8 +82,10 @@ export default {
   REVENUE_STREAM_CARD,
   CHANNEL_CARD,
   CUSTOMER_RELATIONSHIP_CARD,
-  CANVAS_SETTINGS,
   COST_LINE_CARD,
   KEY_RESOURCE_CARD,
   KEY_ACTIVITY_CARD,
+  CANVAS_SETTINGS,
+  ORGANIZATIONS_MENU,
+  ORGANIZATIONS,
 };

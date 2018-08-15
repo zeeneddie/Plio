@@ -1,3 +1,5 @@
+export const APP_VERSION = '0.3.40';
+
 export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
 export const ALERT_AUTOHIDE_TIME = 1500;
 
@@ -341,6 +343,8 @@ export const Styles = {
   color: {
     blue: '#0078d7',
     muted: '#818a91',
+    lightBlue: '#00BCF2',
+    hoverLightBlue: '#59daff',
   },
 };
 /* eslint-enable max-len */
@@ -351,4 +355,12 @@ export const GraphQLTypenames = {
   MUTATION: 'Mutation',
   CANVAS_SETTINGS: 'CanvasSettings',
   CANVAS_SECTION_SETTINGS: 'CanvasSectionSettings',
+  ORGANIZATION: 'Organization',
+};
+
+export const RouteNames = {
+  CANVAS: 'canvas',
+  DASHBOARD: 'dashboardPage',
+  CUSTOMERS: 'customers',
+  HELLO: 'hello',
 };

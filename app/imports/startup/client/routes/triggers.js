@@ -16,9 +16,11 @@ FlowRouter.triggers.enter([
       switch (prevRoute) {
         case 'standards':
         case 'risks':
+        case 'canvas':
           switch (route) {
             case 'work-inbox':
             case 'non-conformities':
+            case 'users':
               ReactDOM.unmountComponentAtNode(document.getElementById('app'));
               BlazeLayout.reset();
               break;

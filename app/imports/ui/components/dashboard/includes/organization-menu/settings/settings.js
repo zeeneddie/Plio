@@ -12,7 +12,8 @@ import WorkspaceContainer
   from '/imports/client/react/organization-settings/containers/WorkspaceContainer';
 import ReviewContainer
   from '/imports/client/react/organization-settings/containers/ReviewContainer';
-import KeyGoalsSettingsContainer from '/imports/client/react/organization-settings/containers/KeyGoals';
+import KeyGoalsSettingsContainer from
+  '/imports/client/react/organization-settings/containers/KeyGoals';
 import { DocumentTypes } from '../../../../../../share/constants';
 import { OrganizationSettingsHelp } from '../../../../../../api/help-messages';
 import {
@@ -22,7 +23,7 @@ import {
 } from '../../../../../../api/organizations/methods';
 import { OrgSettingsDocSubs } from '../../../../../../startup/client/subsmanagers';
 import StandardSectionsSubcardContainer from
-  '../../../../../../client/react/organization-settings/containers/StandardSectionsSubcardContainer';
+  '../../../../../../client/react/organization-settings/containers/StandardSectionsSubcardContainer'; // eslint-disable-line max-len
 import StandardTypesSubcardContainer from
   '../../../../../../client/react/organization-settings/containers/StandardTypesSubcardContainer';
 
@@ -33,6 +34,10 @@ Template.OrgSettings.viewmodel({
   timezone: '',
   OrganizationSettingsHelp,
   onCreated(template) {
+    OrgSettingsDocSubs.subscribe(
+      'currentUserOrganizationBySerialNumber',
+      this.organizationSerialNumber(),
+    );
     template.autorun(() => {
       const organization = this.organization();
 

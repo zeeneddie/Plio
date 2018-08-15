@@ -12,8 +12,9 @@ import COST_LINE_CARD from './CostLineCard.graphql';
 import CHANNEL_CARD from './ChannelCard.graphql';
 import CUSTOMER_RELATIONSHIP_CARD from './CustomerRelationshipCard.graphql';
 import KEY_RESOURCE_CARD from './KeyResourceCard.graphql';
-import CANVAS_SETTINGS from './CanvasSettings.graphql';
 import KEY_ACTIVITY_CARD from './KeyActivityCard.graphql';
+import CANVAS_SETTINGS from './CanvasSettings.graphql';
+import ORGANIZATION from './Organization.graphql';
 
 DASHBOARD_GOAL.fragmentName = 'DashboardGoal';
 GOAL_CARD.fragmentName = 'GoalCard';
@@ -29,8 +30,9 @@ COST_LINE_CARD.fragmentName = 'CostLineCard';
 CHANNEL_CARD.fragmentName = 'ChannelCard';
 CUSTOMER_RELATIONSHIP_CARD.fragmentName = 'CustomerRelationshipCard';
 KEY_RESOURCE_CARD.fragmentName = 'KeyResourceCard';
-CANVAS_SETTINGS.fragmentName = 'CanvasSettings';
 KEY_ACTIVITY_CARD.fragmentName = 'KeyActivityCard';
+CANVAS_SETTINGS.fragmentName = 'CanvasSettings';
+ORGANIZATION.fragmentName = 'Organization';
 
 export default {
   DASHBOARD_GOAL,
@@ -45,8 +47,9 @@ export default {
   REVENUE_STREAM_CARD,
   COST_LINE_CARD,
   CHANNEL_CARD,
-  CANVAS_SETTINGS,
   CUSTOMER_RELATIONSHIP_CARD,
   KEY_RESOURCE_CARD,
   KEY_ACTIVITY_CARD,
+  CANVAS_SETTINGS,
+  ORGANIZATION,
 };

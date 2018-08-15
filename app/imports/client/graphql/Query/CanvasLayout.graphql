@@ -8,5 +8,6 @@ query CanvasLayout($orgSerialNumber: Int!) {
 
   organization(serialNumber: $orgSerialNumber) {
     _id
+    name
   }
 }
