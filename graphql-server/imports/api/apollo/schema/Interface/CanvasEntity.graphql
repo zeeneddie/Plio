@@ -1,0 +1,6 @@
+interface CanvasEntity {
+  title: String!
+  originator: User!
+  color: String!
+  notes: String
+}

@@ -1,0 +1,9 @@
+#import "../Fragment/KeyPartnerCard.graphql"
+
+query KeyPartnerCard($_id: ID!) {
+  keyPartner(_id: $_id) {
+    keyPartner {
+      ...KeyPartnerCard
+    }
+  }
+}

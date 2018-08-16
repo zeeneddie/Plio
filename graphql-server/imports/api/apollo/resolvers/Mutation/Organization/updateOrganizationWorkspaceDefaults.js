@@ -11,5 +11,7 @@ export const resolver = async (root, args, { services: { OrganizationService } }
 export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
-  ensureCanChangeOrgSettings(),
+  ensureCanChangeOrgSettings(((root, { _id }) => ({
+    organizationId: _id,
+  }))),
 )(resolver);

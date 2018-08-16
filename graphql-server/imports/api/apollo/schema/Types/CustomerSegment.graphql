@@ -1,0 +1,14 @@
+type CustomerSegment implements BaseEntity, CanvasEntity {
+  _id: ID!
+  organization: Organization!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime!
+  updatedBy: User!
+  title: String!
+  originator: User!
+  color: String!
+  percentOfMarketSize: Int!
+  notes: String
+  matchedTo: ValueProposition
+}

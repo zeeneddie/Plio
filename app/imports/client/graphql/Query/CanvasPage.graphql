@@ -1,0 +1,70 @@
+#import "../Fragment/CanvasSettings.graphql"
+#import "../Fragment/CustomerSegmentPresentation.graphql"
+#import "../Fragment/ValuePropositionPresentation.graphql"
+
+query CanvasPage($organizationId: ID!) {
+  canvasSettings(organizationId: $organizationId) {
+    canvasSettings {
+      ...CanvasSettings
+    }
+  }
+  keyPartners(organizationId: $organizationId) {
+    keyPartners {
+      _id
+      title
+      color
+    }
+  }
+  keyActivities(organizationId: $organizationId) {
+    keyActivities {
+      _id
+      title
+      color
+    }
+  }
+  keyResources(organizationId: $organizationId) {
+    keyResources {
+      _id
+      title
+      color
+    }
+  }
+  valuePropositions(organizationId: $organizationId) {
+    valuePropositions {
+      ...ValuePropositionPresentation
+    }
+  }
+  customerRelationships(organizationId: $organizationId) {
+    customerRelationships {
+      _id
+      title
+      color
+    }
+  }
+  customerSegments(organizationId: $organizationId) {
+    customerSegments {
+      ...CustomerSegmentPresentation
+    }
+  }
+  costLines(organizationId: $organizationId) {
+    costLines {
+      _id
+      title
+      color
+    }
+  }
+  revenueStreams(organizationId: $organizationId) {
+    revenueStreams {
+      _id
+      title
+      color
+    }
+  }
+  channels(organizationId: $organizationId) {
+    channels {
+      _id
+      title
+      color
+    }
+  }
+}

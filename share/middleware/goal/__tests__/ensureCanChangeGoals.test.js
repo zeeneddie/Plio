@@ -7,11 +7,10 @@ import Errors from '../../../errors';
 
 describe('ensureCanChangeGoals', () => {
   it('throws', async () => {
-    const root = {};
+    const root = { organizationId: 1 };
     const args = {};
     const context = {
       userId: null,
-      doc: {},
     };
     const promise = ensureCanChangeGoals()(T, root, args, context);
 
@@ -19,12 +18,11 @@ describe('ensureCanChangeGoals', () => {
   });
 
   it('passes', async () => {
-    const root = {};
     const args = {};
     const userId = 1;
     const organizationId = 2;
-    const doc = { organizationId };
-    const context = { userId, doc };
+    const root = { organizationId };
+    const context = { userId };
 
     Roles.addUsersToRoles(userId, [UserRoles.CREATE_DELETE_GOALS], organizationId);
 

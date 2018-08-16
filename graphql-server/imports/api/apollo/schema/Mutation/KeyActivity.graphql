@@ -1,0 +1,24 @@
+type KeyActivityPayload {
+  keyActivity: KeyActivity
+}
+
+input CreateKeyActivityInput {
+  organizationId: ID!
+  title: String!
+  originatorId: ID!
+  color: String!
+  notes: String
+}
+
+input UpdateKeyActivityInput {
+  _id: ID!
+  title: String
+  originatorId: ID
+  color: String
+  notes: String
+}
+
+type Mutation {
+  createKeyActivity(input: CreateKeyActivityInput!): KeyActivityPayload
+  updateKeyActivity(input: UpdateKeyActivityInput!): KeyActivity
+}

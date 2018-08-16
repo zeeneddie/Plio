@@ -1,11 +1,12 @@
 import { applyMiddleware } from 'plio-util';
-import checkDocExistanceById from './checkDocExistanceById';
+import checkDocExistence from './checkDocExistence';
 import checkOrgMembership from '../auth/checkOrgMembership';
 
-export default (
-  getCollection,
-  getOrgId = (root, args, context) => context.doc.organizationId,
-) => async (next, root, args, context) => applyMiddleware(
-  checkDocExistanceById(getCollection(root, args, context)),
-  checkOrgMembership(getOrgId),
+export default (config = () => ({})) => async (next, root, args, context) => applyMiddleware(
+  checkDocExistence(config),
+  // eslint-disable-next-line no-shadow
+  checkOrgMembership(async (root, args, context) => ({
+    organizationId: root.organizationId,
+    ...await config(root, args, context),
+  })),
 )(next)(root, args, context);

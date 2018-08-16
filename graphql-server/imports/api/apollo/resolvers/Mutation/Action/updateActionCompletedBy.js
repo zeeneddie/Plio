@@ -4,7 +4,7 @@ import {
   flattenInput,
   checkActionAccess,
   actionUpdateAfterware,
-  checkUserOrgMembership,
+  checkOrgMembership,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { ActionService } }) =>
@@ -14,8 +14,9 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkActionAccess(),
-  checkUserOrgMembership({
-    getUserId: (root, { completedBy }) => completedBy,
-  }),
+  checkOrgMembership(({ organizationId }, { completedBy }) => ({
+    organizationId,
+    userId: completedBy,
+  })),
   actionUpdateAfterware(),
 )(resolver);

@@ -1,0 +1,7 @@
+mutation createKeyActivity($input: CreateKeyActivityInput!) {
+  createKeyActivity(input: $input) {
+    keyActivity {
+      _id
+    }
+  }
+}

@@ -1,0 +1,7 @@
+mutation createCustomerRelationship($input: CreateCustomerRelationshipInput!) {
+  createCustomerRelationship(input: $input) {
+    customerRelationship {
+      _id
+    }
+  }
+}

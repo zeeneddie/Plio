@@ -1,4 +1,4 @@
-type RiskType {
+type RiskType implements BaseEntity {
   _id: ID!
   createdAt: DateTime!
   createdBy: User!

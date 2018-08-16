@@ -1,0 +1,13 @@
+type CustomerSegmentsQueryPayload {
+  totalCount: Int
+  customerSegments: [CustomerSegment]
+}
+
+type CustomerSegmentQueryPayload {
+  customerSegment: CustomerSegment
+}
+
+type Query {
+  customerSegments(organizationId: ID!): CustomerSegmentsQueryPayload!
+  customerSegment(_id: ID!): CustomerSegmentQueryPayload
+}

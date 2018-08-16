@@ -1,0 +1,13 @@
+type KeyPartnersQueryPayload {
+  totalCount: Int
+  keyPartners: [KeyPartner]
+}
+
+type KeyPartnerQueryPayload {
+  keyPartner: KeyPartner
+}
+
+type Query {
+  keyPartners(organizationId: ID!): KeyPartnersQueryPayload
+  keyPartner(_id: ID!): KeyPartnerQueryPayload
+}

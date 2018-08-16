@@ -3,13 +3,16 @@ import { curry } from 'ramda';
 import { check } from 'meteor/check';
 import { applyMiddleware, unpromisify } from 'plio-util';
 
+import * as collections from '../../../share/collections';
+import * as services from '../../../share/services';
+
 const createPublisher = fn => curry((handler, { name, middleware = [] }) => {
   check(name, String);
 
   return fn(name, function publicationHandler(...args) {
     const { userId } = this;
     const root = {};
-    const context = { userId };
+    const context = { userId, collections, services };
 
     try {
       return Meteor.wrapAsync(

@@ -1,0 +1,8 @@
+query CustomerSegmentList($organizationId: ID!) {
+  customerSegments(organizationId: $organizationId) {
+    customerSegments {
+      _id
+      title
+    }
+  }
+}

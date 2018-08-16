@@ -17,6 +17,16 @@ import {
   Risks,
   Goals,
   Milestones,
+  Channels,
+  CustomerRelationships,
+  CostLines,
+  CustomerSegments,
+  KeyActivities,
+  KeyPartners,
+  KeyResources,
+  RevenueStreams,
+  ValuePropositions,
+  CanvasSettings,
 } from '../../share/collections';
 
 
@@ -361,4 +371,64 @@ Goals._ensureIndex({
 
 Milestones._ensureIndex({
   isDeleted: 1,
+});
+
+// Channels indexes
+
+Channels._ensureIndex({
+  organizationId: 1,
+});
+
+// CustomerRelationships indexes
+
+CustomerRelationships._ensureIndex({
+  organizationId: 1,
+});
+
+// CostLines indexes
+
+CostLines._ensureIndex({
+  organizationId: 1,
+});
+
+// CustomerSegments indexes
+
+CustomerSegments._ensureIndex({
+  organizationId: 1,
+});
+
+// KeyActivities indexes
+
+KeyActivities._ensureIndex({
+  organizationId: 1,
+});
+
+// KeyPartners indexes
+
+KeyPartners._ensureIndex({
+  organizationId: 1,
+});
+
+// KeyResources indexes
+
+KeyResources._ensureIndex({
+  organizationId: 1,
+});
+
+// RevenueStreams indexes
+
+RevenueStreams._ensureIndex({
+  organizationId: 1,
+});
+
+// ValuePropositions indexes
+
+ValuePropositions._ensureIndex({
+  organizationId: 1,
+});
+
+// CanvasSettings indexes
+
+CanvasSettings._ensureIndex({
+  organizationId: 1,
 });

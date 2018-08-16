@@ -5,7 +5,7 @@ import {
   checkActionAccess,
 } from '../../../../../share/middleware';
 
-export const resolver = async (root, args, { doc }) => ({ action: doc });
+export const resolver = async action => ({ action });
 
 export default applyMiddleware(
   checkLoggedIn(),

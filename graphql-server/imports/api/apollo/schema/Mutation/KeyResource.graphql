@@ -1,0 +1,24 @@
+type KeyResourcePayload {
+  keyResource: KeyResource
+}
+
+input CreateKeyResourceInput {
+  organizationId: ID!
+  title: String!
+  originatorId: ID!
+  color: String!
+  notes: String
+}
+
+input UpdateKeyResourceInput {
+  _id: ID!
+  title: String
+  originatorId: ID
+  color: String
+  notes: String
+}
+
+type Mutation {
+  createKeyResource(input: CreateKeyResourceInput!): KeyResourcePayload
+  updateKeyResource(input: UpdateKeyResourceInput!): KeyResource
+}

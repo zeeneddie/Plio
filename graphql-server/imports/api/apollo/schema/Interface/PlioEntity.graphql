@@ -1,0 +1,7 @@
+interface PlioEntity {
+  organization: Organization!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  deletedBy: User
+  notify: [User]
+}

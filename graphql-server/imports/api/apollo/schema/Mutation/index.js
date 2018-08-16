@@ -6,6 +6,16 @@ import Lesson from './Lesson.graphql';
 import Department from './Department.graphql';
 import User from './User.graphql';
 import Action from './Action.graphql';
+import KeyPartner from './KeyPartner.graphql';
+import KeyActivity from './KeyActivity.graphql';
+import KeyResource from './KeyResource.graphql';
+import CostLine from './CostLine.graphql';
+import CustomerRelationship from './CustomerRelationship.graphql';
+import Channel from './Channel.graphql';
+import ValueProposition from './ValueProposition.graphql';
+import CustomerSegment from './CustomerSegment.graphql';
+import RevenueStream from './RevenueStream.graphql';
+import CanvasSettings from './CanvasSettings.graphql';
 
 export default [
   Goal,
@@ -16,4 +26,14 @@ export default [
   Department,
   User,
   Action,
+  KeyPartner,
+  KeyActivity,
+  KeyResource,
+  CostLine,
+  CustomerRelationship,
+  Channel,
+  ValueProposition,
+  CustomerSegment,
+  RevenueStream,
+  CanvasSettings,
 ];

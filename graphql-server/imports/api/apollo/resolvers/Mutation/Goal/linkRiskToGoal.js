@@ -15,5 +15,5 @@ export default applyMiddleware(
   flattenInput(),
   checkGoalAccess(),
   ensureCanChangeGoals(),
-  riskUpdateAfterware((root, args) => args.riskId),
+  riskUpdateAfterware((root, { riskId }) => ({ _id: riskId })),
 )(resolver);

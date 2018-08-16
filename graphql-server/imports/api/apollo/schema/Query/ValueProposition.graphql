@@ -1,0 +1,13 @@
+type ValuePropositionsQueryPayload {
+  totalCount: Int
+  valuePropositions: [ValueProposition]
+}
+
+type ValuePropositionsQueryPayload {
+  valueProposition: ValueProposition
+}
+
+type Query {
+  valuePropositions(organizationId: ID!): ValuePropositionsQueryPayload!
+  valueProposition(_id: ID!): ValuePropositionsQueryPayload
+}

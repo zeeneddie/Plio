@@ -1,0 +1,20 @@
+type CanvasSectionSettings {
+  order: [ID]!
+}
+
+type CanvasSettings implements BaseEntity {
+  _id: ID!
+  keyPartners: CanvasSectionSettings
+  keyActivities: CanvasSectionSettings
+  keyResources: CanvasSectionSettings
+  valuePropositions: CanvasSectionSettings
+  customerRelationships: CanvasSectionSettings
+  channels: CanvasSectionSettings
+  customerSegments: CanvasSectionSettings
+  costStructure: CanvasSectionSettings
+  revenueStreams: CanvasSectionSettings
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime!
+  updatedBy: User!
+}

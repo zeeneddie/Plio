@@ -4,7 +4,7 @@ import {
   checkActionAccess,
   flattenInput,
   actionUpdateAfterware,
-  checkDocExistance,
+  checkDocExistence,
 } from '../../../../../share/middleware';
 import { getCollectionByDocType } from '../../../../../share/helpers';
 
@@ -15,9 +15,9 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkActionAccess(),
-  checkDocExistance(
-    ({ documentId }) => ({ _id: documentId }),
-    (root, { documentType }) => getCollectionByDocType(documentType),
-  ),
+  checkDocExistence((root, { documentId, documentType }) => ({
+    collection: getCollectionByDocType(documentType),
+    query: { _id: documentId },
+  })),
   actionUpdateAfterware(),
 )(resolver);

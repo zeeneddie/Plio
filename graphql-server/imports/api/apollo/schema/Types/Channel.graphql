@@ -1,0 +1,12 @@
+type Channel implements BaseEntity, CanvasEntity {
+  _id: ID!
+  organization: Organization!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime!
+  updatedBy: User!
+  title: String!
+  originator: User!
+  color: String!
+  notes: String
+}

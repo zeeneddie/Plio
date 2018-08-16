@@ -1,0 +1,8 @@
+fragment ValuePropositionPresentation on ValueProposition {
+  _id
+  title
+  color
+  matchedTo {
+    title
+  }
+}

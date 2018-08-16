@@ -1,0 +1,8 @@
+query ValuePropositionList($organizationId: ID!) {
+  valuePropositions(organizationId: $organizationId) {
+    valuePropositions {
+      _id
+      title
+    }
+  }
+}

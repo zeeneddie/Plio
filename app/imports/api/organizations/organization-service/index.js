@@ -3,7 +3,6 @@ import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
 import { _ } from 'meteor/underscore';
 
-import { Organizations } from '/imports/share/collections/organizations';
 import StandardsBookSectionService from
   '../../standards-book-sections/standards-book-section-service';
 import StandardsTypeService from '../../standards-types/standards-type-service';
@@ -22,6 +21,7 @@ import { generateSerialNumber } from '../../../share/helpers';
 import OrgNotificationsSender from '../org-notifications-sender';
 import importDocuments from './importDocuments';
 import {
+  Organizations,
   Actions,
   AuditLogs,
   Departments,
@@ -39,6 +39,7 @@ import {
   WorkItems,
   Goals,
   Milestones,
+  CanvasSettings,
 } from '../../../share/collections';
 
 const OrganizationService = {
@@ -109,6 +110,8 @@ const OrganizationService = {
     Roles.addUsersToRoles(ownerId, OrgOwnerRoles, organizationId);
 
     new OrgNotificationsSender(organizationId).orgCreated();
+
+    CanvasSettings.insert({ organizationId });
 
     return organizationId;
   },

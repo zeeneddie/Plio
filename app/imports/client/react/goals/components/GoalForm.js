@@ -13,7 +13,7 @@ import {
   ColorPickerField,
 } from '../../components';
 import { OrgUsersSelectInputContainer } from '../../containers';
-import { GoalColors, StringLimits } from '../../../../share/constants';
+import { StringLimits } from '../../../../share/constants';
 
 const enhance = onlyUpdateForKeys(['sequentialId', 'organizationId', 'isEditMode']);
 
@@ -85,7 +85,6 @@ export const GoalForm = ({
       Color
       <ColorPickerField
         name="color"
-        colors={Object.values(GoalColors)}
         onChange={onChangeColor}
       />
     </FormField>

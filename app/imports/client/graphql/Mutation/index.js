@@ -5,6 +5,16 @@ import Risk from './Risk';
 import Lesson from './Lesson';
 import Department from './Department';
 import Action from './Action';
+import KeyPartner from './KeyPartner';
+import KeyActivity from './KeyActivity';
+import KeyResource from './KeyResource';
+import CostLine from './CostLine';
+import CustomerRelationship from './CustomerRelationship';
+import Channel from './Channel';
+import ValueProposition from './ValueProposition';
+import CustomerSegment from './CustomerSegment';
+import RevenueStream from './RevenueStream';
+import CanvasSettings from './CanvasSettings';
 
 export default {
   ...Goal,
@@ -14,4 +24,14 @@ export default {
   ...Lesson,
   ...Department,
   ...Action,
+  ...KeyPartner,
+  ...KeyActivity,
+  ...KeyResource,
+  ...CostLine,
+  ...CustomerRelationship,
+  ...Channel,
+  ...ValueProposition,
+  ...CustomerSegment,
+  ...RevenueStream,
+  ...CanvasSettings,
 };

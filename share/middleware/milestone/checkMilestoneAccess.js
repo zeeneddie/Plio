@@ -1,4 +1,7 @@
 import { checkDocAccess } from '../document';
-import { Milestones } from '../../../share/collections';
 
-export default () => checkDocAccess(() => Milestones);
+export default (config = () => ({})) =>
+  checkDocAccess(async (root, args, context) => ({
+    ...await config(root, args, context),
+    collection: context.collections.Milestones,
+  }));

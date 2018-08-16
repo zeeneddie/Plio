@@ -14,9 +14,9 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkRiskAccess(),
-  checkDocsAccess({
-    getIds: (root, args) => args.departmentsIds,
-    getCollection: (root, args, { collections: { Departments } }) => Departments,
-  }),
+  checkDocsAccess((root, { departmentsIds }, { collections: { Departments } }) => ({
+    ids: departmentsIds,
+    collection: Departments,
+  })),
   riskUpdateAfterware(),
 )(resolver);

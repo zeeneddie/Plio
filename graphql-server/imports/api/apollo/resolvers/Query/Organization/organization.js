@@ -1,12 +1,15 @@
+import { applyMiddleware } from 'plio-util';
 import {
-  applyMiddleware,
-  loadOrganizationById,
-} from 'plio-util';
-import { checkLoggedIn, checkOrgMembership } from '../../../../../share/middleware';
+  checkLoggedIn,
+  checkOrgMembership,
+} from '../../../../../share/middleware';
 
-export const resolver = loadOrganizationById((root, args) => args._id);
+export const resolver = (root, args, { organization }) => organization;
 
 export default applyMiddleware(
   checkLoggedIn(),
-  checkOrgMembership((root, args) => args._id),
+  checkOrgMembership((root, { _id, serialNumber }) => ({
+    serialNumber,
+    organizationId: _id,
+  })),
 )(resolver);

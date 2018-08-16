@@ -1,0 +1,7 @@
+mutation createCostLine($input: CreateCostLineInput!) {
+  createCostLine(input: $input) {
+    costLine {
+      _id
+    }
+  }
+}

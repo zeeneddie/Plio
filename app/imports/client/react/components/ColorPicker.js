@@ -7,8 +7,8 @@ import { StyledMixins } from 'plio-util';
 import { defaultTo, compose, prop, identity } from 'ramda';
 import { withHandlers, branch } from 'recompose';
 
-
 import withStateToggle from '../helpers/withStateToggle';
+import { GoalColors } from '../../../share/constants';
 
 const DESKTOP_SWATCH_SIZE = '40px';
 const MOBILE_SWATCH_SIZE = '30px';
@@ -173,10 +173,14 @@ const ColorPicker = ({
   </Fragment>
 );
 
+ColorPicker.defaultProps = {
+  colors: Object.values(GoalColors),
+};
+
 ColorPicker.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  colors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  colors: PropTypes.arrayOf(PropTypes.string),
   width: PropTypes.number,
   triangle: PropTypes.string,
   value: PropTypes.string,

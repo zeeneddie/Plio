@@ -1,0 +1,9 @@
+query RevenueStreams($organizationId: ID!) {
+  revenueStreams(organizationId: $organizationId) {
+    revenueStreams {
+      _id
+      title
+      color
+    }
+  }
+}

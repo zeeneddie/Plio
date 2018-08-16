@@ -1,0 +1,7 @@
+mutation createRevenueStream($input: CreateRevenueStreamInput!) {
+  createRevenueStream(input: $input) {
+    revenueStream {
+      _id
+    }
+  }
+}
