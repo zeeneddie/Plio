@@ -4,7 +4,7 @@ import { getTargetValue } from 'plio-util';
 import { Input } from 'reactstrap';
 
 const InputAdapter = ({
-  meta: { dirty },
+  meta: { dirty, dirtySinceLastSubmit },
   input,
   onChange,
   onBlur,
@@ -19,7 +19,7 @@ const InputAdapter = ({
     }}
     onBlur={(e) => {
       input.onBlur(getTargetValue(e));
-      if (dirty && onBlur) {
+      if ((dirty || dirtySinceLastSubmit) && onBlur) {
         onBlur(e);
       }
     }}
