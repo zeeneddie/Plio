@@ -17,4 +17,28 @@ export default {
     matchedTo,
     createdBy: userId,
   }),
+  async update({
+    _id,
+    title,
+    originatorId,
+    color,
+    matchedTo,
+    percentOfMarketSize,
+    notes,
+  }, { userId, collections: { CustomerSegments } }) {
+    const query = { _id };
+    const modifier = {
+      $set: {
+        title,
+        originatorId,
+        color,
+        matchedTo,
+        percentOfMarketSize,
+        notes,
+        updatedBy: userId,
+      },
+    };
+
+    return CustomerSegments.update(query, modifier);
+  },
 };

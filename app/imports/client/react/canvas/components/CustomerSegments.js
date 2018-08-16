@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import { pure } from 'recompose';
 
 import CustomerSegmentAddModal from './CustomerSegmentAddModal';
+import CustomerSegmentEditModal from './CustomerSegmentEditModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -29,6 +30,16 @@ const CustomerSegments = ({ organizationId }) => (
         items={customerSegments}
         renderModal={({ isOpen, toggle }) => (
           <CustomerSegmentAddModal {...{ isOpen, toggle, organizationId }} />
+        )}
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <CustomerSegmentEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
         )}
       />
     )}

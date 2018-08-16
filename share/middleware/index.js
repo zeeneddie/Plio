@@ -17,5 +17,6 @@ export * from './channel';
 export * from './customerRelationship';
 export * from './keyResource';
 export * from './keyActivity';
+export * from './customerSegment';
 export * from './valueProposition';
 export * from './canvasSettings';

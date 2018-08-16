@@ -17,6 +17,17 @@ input CreateCustomerSegmentInput {
   matchedTo: CustomerSegmentMatchedToInput
 }
 
+input UpdateCustomerSegmentInput {
+  _id: ID!
+  title: String
+  originatorId: ID
+  color: String
+  percentOfMarketSize: Int
+  notes: String
+  matchedTo: CustomerSegmentMatchedToInput
+}
+
 type Mutation {
   createCustomerSegment(input: CreateCustomerSegmentInput!): CustomerSegmentPayload
+  updateCustomerSegment(input: UpdateCustomerSegmentInput!): CustomerSegment
 }

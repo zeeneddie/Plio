@@ -3,6 +3,11 @@ type CustomerSegmentsQueryPayload {
   customerSegments: [CustomerSegment]
 }
 
+type CustomerSegmentQueryPayload {
+  customerSegment: CustomerSegment
+}
+
 type Query {
   customerSegments(organizationId: ID!): CustomerSegmentsQueryPayload!
+  customerSegment(_id: ID!): CustomerSegmentQueryPayload
 }

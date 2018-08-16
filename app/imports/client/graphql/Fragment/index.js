@@ -13,6 +13,7 @@ import CHANNEL_CARD from './ChannelCard.graphql';
 import CUSTOMER_RELATIONSHIP_CARD from './CustomerRelationshipCard.graphql';
 import KEY_RESOURCE_CARD from './KeyResourceCard.graphql';
 import KEY_ACTIVITY_CARD from './KeyActivityCard.graphql';
+import CUSTOMER_SEGMENT from './CustomerSegmentCard.graphql';
 import VALUE_PROPOSITION_CARD from './ValuePropositionCard.graphql';
 import CANVAS_SETTINGS from './CanvasSettings.graphql';
 import ORGANIZATION from './Organization.graphql';
@@ -32,6 +33,7 @@ CHANNEL_CARD.fragmentName = 'ChannelCard';
 CUSTOMER_RELATIONSHIP_CARD.fragmentName = 'CustomerRelationshipCard';
 KEY_RESOURCE_CARD.fragmentName = 'KeyResourceCard';
 KEY_ACTIVITY_CARD.fragmentName = 'KeyActivityCard';
+CUSTOMER_SEGMENT.faragmentName = 'CustomerSegmentCard';
 VALUE_PROPOSITION_CARD.fragmentName = 'ValuePropositionCard';
 CANVAS_SETTINGS.fragmentName = 'CanvasSettings';
 ORGANIZATION.fragmentName = 'Organization';
@@ -52,6 +54,7 @@ export default {
   CUSTOMER_RELATIONSHIP_CARD,
   KEY_RESOURCE_CARD,
   KEY_ACTIVITY_CARD,
+  CUSTOMER_SEGMENT,
   VALUE_PROPOSITION_CARD,
   CANVAS_SETTINGS,
   ORGANIZATION,
