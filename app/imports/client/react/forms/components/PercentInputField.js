@@ -1,8 +1,9 @@
 import React from 'react';
 import { Field } from 'react-final-form';
-import { InputGroup, InputGroupAddon } from 'reactstrap';
+import { InputGroup } from 'reactstrap';
 import styled from 'styled-components';
 
+import { InputGroupAddon } from '../../components';
 import InputAdapter from './InputAdapter';
 
 const StyledInputGroup = styled(InputGroup)`

@@ -12,6 +12,8 @@ export * from './FlowRouter';
 export * from './EntityModalNext';
 
 export { default as CardBlock } from './CardBlock';
+export { default as InputGroupAddon } from './InputGroupAddon';
+export { default as InputGroupButton } from './InputGroupButton';
 export { default as Collapse } from './Collapse';
 export { default as SwitchView } from './SwitchView';
 export { default as Preloader } from './Preloader';
