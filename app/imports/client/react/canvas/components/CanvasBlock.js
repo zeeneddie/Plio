@@ -20,13 +20,14 @@ import CanvasSectionHelp from './CanvasSectionHelp';
 import CanvasSectionItems from './CanvasSectionItems';
 import CanvasSectionItem from './CanvasSectionItem';
 import CanvasSquareIcon from './CanvasSquareIcon';
+import CanvasLinkedItem from './CanvasLinkedItem';
 
 const CanvasBlock = ({
   label,
   help,
   items,
-  renderModal,
-  renderEditModal,
+  renderModal: AddModal,
+  renderEditModal: EditModal,
   goals,
   standards,
   risks,
@@ -45,7 +46,7 @@ const CanvasBlock = ({
         >
           <CanvasSectionHeading>
             <h4>{label}</h4>
-            {renderModal({ isOpen, toggle })}
+            <AddModal {...{ isOpen, toggle }} />
             <CanvasAddButton onClick={isEmpty ? undefined : toggle} />
           </CanvasSectionHeading>
           {isEmpty && (
@@ -88,22 +89,36 @@ const CanvasBlock = ({
                     <WithState initialState={{ _id: null }}>
                       {({ state, setState }) => (
                         <Fragment>
-                          {renderEditModal && renderEditModal({
-                            _id: state._id,
-                            isOpen: !!state._id,
-                            toggle: () => setState({ _id: null }),
-                          })}
+                          {EditModal && (
+                            <EditModal
+                              _id={state._id}
+                              isOpen={!!state._id}
+                              toggle={() => setState({ _id: null })}
+                            />
+                          )}
                           {items && sortByIds(
                             pathOr([], [sectionName, 'order'], canvasSettings),
                             items,
-                          ).map((({ _id, color, title }) => (
+                          ).map((({
+                            _id,
+                            color,
+                            title,
+                            matchedTo,
+                          }) => (
                             <CanvasSectionItem
                               key={_id}
                               data-id={_id}
                               onClick={() => setState({ _id })}
                             >
                               <CanvasSquareIcon color={color} />
-                              <span>{title}</span>
+                              <span>
+                                {title}
+                                {matchedTo && (
+                                  <CanvasLinkedItem>
+                                    {matchedTo.title}
+                                  </CanvasLinkedItem>
+                                )}
+                              </span>
                             </CanvasSectionItem>
                           )))}
                         </Fragment>

@@ -17,6 +17,8 @@ import CUSTOMER_SEGMENT from './CustomerSegmentCard.graphql';
 import VALUE_PROPOSITION_CARD from './ValuePropositionCard.graphql';
 import CANVAS_SETTINGS from './CanvasSettings.graphql';
 import ORGANIZATION from './Organization.graphql';
+import CUSTOMER_SEGMENT_PRESENTATION from './CustomerSegmentPresentation.graphql';
+import VALUE_PROPOSITION_PRESENTATION from './ValuePropositionPresentation.graphql';
 
 DASHBOARD_GOAL.fragmentName = 'DashboardGoal';
 GOAL_CARD.fragmentName = 'GoalCard';
@@ -37,6 +39,8 @@ CUSTOMER_SEGMENT.faragmentName = 'CustomerSegmentCard';
 VALUE_PROPOSITION_CARD.fragmentName = 'ValuePropositionCard';
 CANVAS_SETTINGS.fragmentName = 'CanvasSettings';
 ORGANIZATION.fragmentName = 'Organization';
+CUSTOMER_SEGMENT_PRESENTATION.fragmentName = 'CustomerSegmentPresentation';
+VALUE_PROPOSITION_PRESENTATION.fragmentName = 'ValuePropositionPresentation';
 
 export default {
   DASHBOARD_GOAL,
@@ -58,4 +62,6 @@ export default {
   VALUE_PROPOSITION_CARD,
   CANVAS_SETTINGS,
   ORGANIZATION,
+  CUSTOMER_SEGMENT_PRESENTATION,
+  VALUE_PROPOSITION_PRESENTATION,
 };
