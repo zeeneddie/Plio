@@ -15,8 +15,9 @@ export default {
     originator: loadUserById(view(originatorId)),
     organization: loadOrganizationById(view(organizationId)),
     matchedTo: async (root, args, context) => {
-      const { matchedTo: { documentId } = {} } = root;
+      const { documentId } = root.matchedTo || {};
       const { loaders: { CustomerSegment: { byId } } } = context;
+      if (!documentId) return null;
 
       return byId.load(documentId);
     },

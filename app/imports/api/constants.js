@@ -364,3 +364,5 @@ export const RouteNames = {
   CUSTOMERS: 'customers',
   HELLO: 'hello',
 };
+
+export const OptionNone = { label: 'None', value: null };

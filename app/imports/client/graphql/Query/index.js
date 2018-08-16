@@ -39,6 +39,7 @@ import CHANNEL_CARD from './ChannelCard.graphql';
 import CUSTOMER_RELATIONSHIP_CARD from './CustomerRelationshipCard.graphql';
 import KEY_RESOURCE_CARD from './KeyResourceCard.graphql';
 import KEY_ACTIVITY_CARD from './KeyActivityCard.graphql';
+import VALUE_PROPOSITION_CARD from './ValuePropositionCard.graphql';
 import CANVAS_SETTINGS from './CanvasSettings.graphql';
 import ORGANIZATIONS_MENU from './OrganizationsMenu.graphql';
 import ORGANIZATIONS from './Organizations.graphql';
@@ -85,6 +86,7 @@ export default {
   COST_LINE_CARD,
   KEY_RESOURCE_CARD,
   KEY_ACTIVITY_CARD,
+  VALUE_PROPOSITION_CARD,
   CANVAS_SETTINGS,
   ORGANIZATIONS_MENU,
   ORGANIZATIONS,

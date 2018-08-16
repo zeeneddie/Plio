@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions } from 'plio-util';
+import { getUserOptions, convertDocumentOptions } from 'plio-util';
 
 import { CanvasColors, CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { EntityModal } from '../../components';
+import { EntityModalNext } from '../../components';
 import ValuePropositionForm from './ValuePropositionForm';
-import { ApolloFetchPolicies } from '../../../../api/constants';
+import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
+import { validateValueProposition } from '../../../validation';
 
 const ValuePropositionAddModal = ({
   isOpen,
@@ -18,24 +19,28 @@ const ValuePropositionAddModal = ({
     {({ data: { user } }) => (
       <Mutation mutation={Mutations.CREATE_VALUE_PROPOSITION}>
         {createValueProposition => (
-          <EntityModal
+          <EntityModalNext
             {...{ isOpen, toggle }}
-            title="Value proposition"
+            label="Value proposition"
             initialValues={{
               originator: getUserOptions(user),
               title: '',
               color: CanvasColors.INDIGO,
-              matchedTo: { label: 'None', value: undefined },
+              matchedTo: OptionNone,
               notes: '',
             }}
-            onSave={({
-              title,
-              originator: { value: originatorId },
-              color,
-              notes,
-              matchedTo,
-            }) => {
-              if (!title) throw new Error('title is required');
+            onSubmit={(values) => {
+              const errors = validateValueProposition(values);
+
+              if (errors) return errors;
+
+              const {
+                title,
+                originator: { value: originatorId },
+                color,
+                matchedTo,
+                notes,
+              } = values;
 
               return createValueProposition({
                 variables: {
@@ -45,21 +50,19 @@ const ValuePropositionAddModal = ({
                     originatorId,
                     color,
                     notes,
-                    matchedTo: matchedTo.value ? {
-                      documentId: matchedTo.value,
+                    matchedTo: convertDocumentOptions({
                       documentType: CanvasTypes.CUSTOMER_SEGMENT,
-                    } : undefined,
+                    }, matchedTo),
                   },
                 },
                 refetchQueries: [
-                  { query: Queries.VALUE_PROPOSITION_LIST, variables: { organizationId } },
                   { query: Queries.CANVAS_PAGE, variables: { organizationId } },
                 ],
               }).then(toggle);
             }}
           >
             <ValuePropositionForm {...{ organizationId }} />
-          </EntityModal>
+          </EntityModalNext>
         )}
       </Mutation>
     )}

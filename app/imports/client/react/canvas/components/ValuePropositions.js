@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import { pure } from 'recompose';
 
 import ValuePropositionAddModal from './ValuePropositionAddModal';
+import ValuePropositionEditModal from './ValuePropositionEditModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -31,6 +32,16 @@ const ValuePropositions = ({ organizationId }) => (
         items={valuePropositions}
         renderModal={({ isOpen, toggle }) => (
           <ValuePropositionAddModal {...{ isOpen, toggle, organizationId }} />
+        )}
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <ValuePropositionEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
         )}
       />
     )}
