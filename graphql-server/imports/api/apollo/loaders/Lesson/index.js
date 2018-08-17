@@ -1,5 +1,5 @@
-import byDocumentId from './byDocumentId';
+import byQuery from './byQuery';
 
 export default {
-  byDocumentId,
+  byQuery,
 };
