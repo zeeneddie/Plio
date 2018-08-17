@@ -20,7 +20,7 @@ export const handleGQError = (error) => {
   const { networkError, graphQLErrors, message } = error;
 
   if (networkError) {
-    return networkError;
+    return networkError.message;
   }
 
   if (graphQLErrors) {

@@ -39,3 +39,5 @@ export { default as Diamond } from './Diamond';
 export { default as StylessPopover } from './StylessPopover';
 export { default as EntityModal } from './EntityModal';
 export { default as RenderSwitch } from './RenderSwitch';
+export { default as ErrorPage } from './ErrorPage';
+export { default as NotFoundPage } from './NotFoundPage';

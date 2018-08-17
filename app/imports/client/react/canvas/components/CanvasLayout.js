@@ -3,7 +3,14 @@ import { ApolloProvider, Query } from 'react-apollo';
 
 import { client } from '../../../apollo';
 import { Query as Queries } from '../../../graphql';
-import { PreloaderPage, FlowRouterContext, RenderSwitch } from '../../components';
+import {
+  PreloaderPage,
+  FlowRouterContext,
+  RenderSwitch,
+  NotFoundPage,
+  ErrorPage,
+} from '../../components';
+import Errors from '../../../../share/errors';
 import MainHeader from '../../main-header/components/MainHeader';
 import CanvasPage from './CanvasPage';
 
@@ -21,7 +28,14 @@ const CanvasLayout = () => (
               {...{ loading, error }}
               require={data && data.organization}
               renderLoading={<PreloaderPage />}
-              // TODO: handle errors
+              renderError={queryError => queryError === Errors.NOT_ORG_MEMBER ?
+                <NotFoundPage
+                  subject="organization"
+                  subjectId={orgSerialNumber}
+                />
+                :
+                <ErrorPage error={queryError} />
+              }
             >
               {organization => (
                 <Fragment>
