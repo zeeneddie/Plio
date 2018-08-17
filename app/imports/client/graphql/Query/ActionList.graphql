@@ -1,0 +1,13 @@
+query ActionList($organizationId: ID!, $type: String) {
+  actions(input: {
+    organizationId: $organizationId,
+    type: $type,
+    isDeleted: false,
+  }) {
+    actions {
+      _id
+      title
+      sequentialId
+    }
+  }
+}

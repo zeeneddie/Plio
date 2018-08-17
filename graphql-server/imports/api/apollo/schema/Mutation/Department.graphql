@@ -1,0 +1,12 @@
+type DepartmentPayload {
+  department: Department
+}
+
+input CreateDepartmentInput {
+  organizationId: ID!
+  name: String
+}
+
+type Mutation {
+  createDepartment(input: CreateDepartmentInput!): DepartmentPayload
+}

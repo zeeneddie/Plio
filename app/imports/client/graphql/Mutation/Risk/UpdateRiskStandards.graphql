@@ -1,0 +1,11 @@
+mutation updateRiskStandards($input: UpdateRiskStandardsInput!) {
+  updateRiskStandards(input: $input) {
+    risk {
+      _id
+      standards {
+        _id
+        title
+      }
+    }
+  }
+}

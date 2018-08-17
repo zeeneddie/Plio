@@ -9,8 +9,8 @@ Template.OrgSettings_RKScoringGuidelines.viewmodel({
   guidelines: '',
   organizationId: '',
   helpText: OrganizationSettingsHelp.riskScoringGuidelines,
-  update({ notes:rkScoringGuidelines }) {
+  update({ notes: rkScoringGuidelines }) {
     const _id = this.organizationId();
     this.modal().callMethod(setRKScoringGuidelines, { _id, rkScoringGuidelines });
-  }
+  },
 });

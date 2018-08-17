@@ -1,5 +1,7 @@
+import { without } from 'ramda';
+
 import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '/imports/share/helpers';
+import { getUserFullNameOrEmail } from '../../../../share/helpers';
 import { getReceivers } from '../helpers';
 
 
@@ -23,7 +25,8 @@ export default {
         [ChangesKinds.FIELD_ADDED]:
           '{{{userName}}} set to be completed by of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed to be completed by of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
+          '{{{userName}}} changed to be completed by of {{{docDesc}}} {{{docName}}} ' +
+          'from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           '{{{userName}}} removed to be completed by of {{{docDesc}}} {{{docName}}}',
       },
@@ -39,10 +42,6 @@ export default {
   },
   receivers({ diffs: { toBeCompletedBy }, newDoc, user }) {
     const receivers = getReceivers(newDoc, user);
-    const index = receivers.indexOf(toBeCompletedBy.newValue);
-
-    return index > -1
-      ? receivers.slice(0, index).concat(receivers.slice(index + 1))
-      : receivers;
+    return without(toBeCompletedBy.newValue, receivers);
   },
 };

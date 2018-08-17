@@ -1,0 +1,24 @@
+#import "../Fragment/ActionCard.graphql"
+
+query GoalActionsCard($_id: ID!, $organizationId: ID!) {
+    user: me {
+    _id
+    profile {
+      fullName
+    }
+    roles(organizationId: $organizationId)
+  }
+
+  goal(_id: $_id) {
+    goal {
+      title
+      sequentialId
+      organization {
+        _id
+      }
+      actions(input: { isDeleted: false }) {
+        ...ActionCard
+      }
+    }
+  }
+}

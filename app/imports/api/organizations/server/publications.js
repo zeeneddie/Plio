@@ -3,18 +3,22 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { check } from 'meteor/check';
 import { _ } from 'meteor/underscore';
 
-import { Organizations } from '/imports/share/collections/organizations';
-import { StandardTypes } from '/imports/share/collections/standards-types';
-import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
-import { RiskTypes } from '/imports/share/collections/risk-types';
+import {
+  Organizations,
+  StandardTypes,
+  StandardsBookSections,
+  RiskTypes,
+  Departments,
+} from '../../../share/collections';
 import { getUserOrganizations } from '../utils';
 import { isPlioUser, isOrgMember } from '../../checkers';
-import { makeOptionsFields } from '../../helpers';
-import { createOrgQueryWhereUserIsOwner } from '../../queries';
+import { createOrgQueryWhereUserIsOwner } from '../../../share/mongo/queries';
+import { WORKSPACE_DEFAULTS } from '../../../share/constants';
 
+Meteor.publish('invitationInfo', function (invitationId) {
+  check(invitationId, String);
 
-Meteor.publish('invitationInfo', (invitationId) => {
-  const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
+  const sendInternalError = message => this.error(new Meteor.Error(500, message));
 
   if (!SimpleSchema.RegEx.Id.test(invitationId)) {
     sendInternalError('Incorrect invitation ID!');
@@ -78,6 +82,7 @@ Meteor.publish('currentUserOrganizationBySerialNumber', function (serialNumber) 
     workflowDefaults: 1,
     reminders: 1,
     ncGuidelines: 1,
+    pgGuidelines: 1,
     rkGuidelines: 1,
     rkScoringGuidelines: 1,
     review: 1,
@@ -88,6 +93,8 @@ Meteor.publish('currentUserOrganizationBySerialNumber', function (serialNumber) 
     updatedAt: 1,
     updatedBy: 1,
     lastAccessedDate: 1,
+    transfer: 1,
+    [WORKSPACE_DEFAULTS]: 1,
   };
 
   if (this.userId) {
@@ -98,7 +105,7 @@ Meteor.publish('currentUserOrganizationBySerialNumber', function (serialNumber) 
 });
 
 Meteor.publish('dataImportUserOwnOrganizations', function publishDataImportUserOwnOrgs() {
-  const userId = this.userId;
+  const { userId } = this;
 
   if (!userId) return this.ready();
 
@@ -116,7 +123,7 @@ Meteor.publish('dataImportUserOwnOrganizations', function publishDataImportUserO
 Meteor.publish('transferredOrganization', function (transferId) {
   check(transferId, String);
 
-  const userId = this.userId;
+  const { userId } = this;
   const organizationCursor = Organizations.find({
     'transfer._id': transferId,
   });
@@ -128,7 +135,7 @@ Meteor.publish('transferredOrganization', function (transferId) {
     }
     const error = new Meteor.Error(
       403,
-      'Your account is not authorized for this action. Sign out and login as a proper user'
+      'Your account is not authorized for this action. Sign out and login as a proper user',
     );
 
     this.error(error);
@@ -145,7 +152,7 @@ Meteor.publish('transferredOrganization', function (transferId) {
 Meteor.publish('organizationDeps', function (organizationId) {
   check(organizationId, String);
 
-  const userId = this.userId;
+  const { userId } = this;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -156,23 +163,21 @@ Meteor.publish('organizationDeps', function (organizationId) {
 
   const query = { organizationId };
 
-  const standardsBookSections = StandardsBookSections.find(
-    query,
-    makeOptionsFields(StandardsBookSections.publicFields)
-  );
-  const standardsTypes = StandardTypes.find(query, makeOptionsFields(StandardTypes.publicFields));
+  const standardsBookSections = StandardsBookSections.find(query, {
+    fields: StandardsBookSections.publicFields,
+  });
+  const standardsTypes = StandardTypes.find(query, { fields: StandardTypes.publicFields });
   const riskTypes = RiskTypes.find(query);
+  const departments = Departments.find(query, { fields: Departments.publicFields });
   const users = Meteor.users.find({ _id: { $in: userIds } }, {
-    fields: {
-      ...Meteor.users.publicFields,
-      [`roles.${organizationId}`]: 1,
-    },
+    fields: Meteor.users.publicFields,
   });
 
   return [
     standardsBookSections,
     standardsTypes,
     riskTypes,
+    departments,
     users,
   ];
 });

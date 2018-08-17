@@ -1,6 +1,8 @@
 /* eslint-disable no-new */
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
 import Clipboard from 'clipboard';
@@ -186,10 +188,12 @@ class MessagesListWrapper extends React.Component {
   }
 
   render() {
-    const { discussion, messages, loading, userId, users } = this.props;
-    const loader = (getRef) => (
+    const {
+      discussion, messages, loading, userId, users,
+    } = this.props;
+    const loader = innerRef => (
       <InfiniteLoader
-        {...{ getRef }}
+        {...{ innerRef }}
         loading
         className={cx('text-xs-center', { invisible: !loading })}
       />
@@ -203,7 +207,10 @@ class MessagesListWrapper extends React.Component {
           {loader(node => (this.loaderOlder = node))}
 
           <div className="chat-messages-list">
-            <MessagesListContainer {...{ messages, discussion, userId, users }} />
+            <MessagesListContainer {...{
+              messages, discussion, userId, users,
+            }}
+            />
           </div>
 
           {loader(node => (this.loaderNewer = node))}

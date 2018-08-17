@@ -1,0 +1,39 @@
+type Risk {
+  _id: ID!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime
+  # WARNING: updatedBy may be string 'Plio'. What should we do with that?
+  updatedBy: User
+  organization: Organization!
+  serialNumber: Int!
+  sequentialId: String!
+  standards: [Standard]
+  title: String!
+  description: String
+  magnitude: String!
+  originator: User
+  owner: User
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  deletedBy: User
+  notify: [User]
+  status: Int!
+  workflowType: String
+  statusComment: String
+  departments: [Department]
+  # isViewed: Boolean
+  files: [File]
+  type: RiskType
+  improvementPlan: ImprovementPlan
+  analysis: Analysis
+  updateOfStandards: Analysis
+  riskEvaluation: RiskEvaluation
+}
+
+type RiskEvaluation {
+  comments: String
+  prevLossExp: String
+  priority: String
+  decision: String
+}

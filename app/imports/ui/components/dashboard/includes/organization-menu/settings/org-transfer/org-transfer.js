@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 
-import { isOrgOwner } from '/imports/api/checkers.js';
+import { isOrgOwner } from '/imports/api/checkers';
 
 
 Template.OrgSettings_OrgTransfer.viewmodel({
@@ -38,10 +38,10 @@ Template.OrgSettings_OrgTransfer.viewmodel({
       disabled,
       query: { _id: { $in: membersIds } },
       onUpdate: (viewmodel) => {
-        const { selected:ownerId } = viewmodel.getData();
+        const { selected: ownerId } = viewmodel.getData();
 
         return this.newOwnerId(ownerId);
-      }
+      },
     };
   },
   transferOrg(e) {
@@ -59,7 +59,7 @@ Template.OrgSettings_OrgTransfer.viewmodel({
       this.isOrgOwner(),
       !!this.newOwnerId(),
       !this.invitationSent(),
-      this.newOwnerId() !== this.ownerId()
+      this.newOwnerId() !== this.ownerId(),
     ]);
   },
   transfer() {
@@ -67,6 +67,7 @@ Template.OrgSettings_OrgTransfer.viewmodel({
   },
   invitationSent() {
     const transfer = this.transfer();
+
     return !!(transfer && transfer._id && transfer.newOwnerId && transfer.createdAt);
   },
   invitationSentText() {
@@ -75,7 +76,7 @@ Template.OrgSettings_OrgTransfer.viewmodel({
     const newOwnerId = transfer && transfer.newOwnerId;
 
     const newOwner = Meteor.users.findOne({
-      _id: newOwnerId
+      _id: newOwnerId,
     });
 
     if (!newOwner || !date) {
@@ -88,5 +89,5 @@ Template.OrgSettings_OrgTransfer.viewmodel({
   },
   cancelOrgTransfer() {
     this.parent().cancelOrgTransfer();
-  }
+  },
 });

@@ -1,13 +1,11 @@
 // We need to overwright the atPwdFormBtnHelpers method to disable button during the loading
-const atPwdFormBtnHelpers = AccountsTemplates.atPwdFormBtnHelpers
+const atPwdFormBtnHelpers = AccountsTemplates.atPwdFormBtnHelpers;
 atPwdFormBtnHelpers.submitDisabled = () => {
   if (AccountsTemplates.disabled()) {
     return 'disabled';
   }
 
-  const disable = _.chain(AccountsTemplates.getFields()).map((field) => {
-    return field.hasError() || field.isValidating();
-  }).some().value();
+  const disable = _.chain(AccountsTemplates.getFields()).map(field => field.hasError() || field.isValidating()).some().value();
 
   if (disable) {
     return 'disabled';
@@ -15,15 +13,13 @@ atPwdFormBtnHelpers.submitDisabled = () => {
 };
 
 atPwdFormBtnHelpers.isDisabled = () => AccountsTemplates.disabled();
-atPwdFormBtnHelpers.getButtonLabel = (text) => {
-  return AccountsTemplates.disabled() && text.split('/')[1] || text.split('/')[0];
-};
+atPwdFormBtnHelpers.getButtonLabel = text => AccountsTemplates.disabled() && text.split('/')[1] || text.split('/')[0];
 
 Template.atModalPwdFormBtn.helpers(atPwdFormBtnHelpers);
 
 // bugfix for Edge/IE
 Template.atModalPwdFormBtn.events({
-  'click #at-btn': function(event, t) {
+  'click #at-btn': function (event, t) {
     event.preventDefault();
     $('#at-pwd-form').trigger('submit');
   },

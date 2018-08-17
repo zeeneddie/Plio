@@ -23,7 +23,7 @@ SyncedCron.config({
     run `db.cronHistory.dropIndex({startedAt: 1})`) and re-run your
     project. SyncedCron will recreate the index with the updated TTL.
   */
-  collectionTTL: 172800
+  collectionTTL: 172800,
 });
 
 if (Meteor.isProduction) {

@@ -9,9 +9,9 @@ import {
   shouldUpdate,
 } from 'recompose';
 import { connect } from 'react-redux';
-import { composeWithTracker, compose as kompose } from 'react-komposer';
+import { compose as kompose } from '@storybook/react-komposer';
 import { setInitializing } from '/imports/client/store/actions/risksActions';
-import { pickDeep, mapC, invokeStop, identity } from '/imports/api/helpers';
+import { mapC, invokeStop, identity } from '/imports/api/helpers';
 import { RiskFilters, RiskFilterIndexes } from '/imports/api/constants';
 import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers';
 import RisksLayout from '../../components/RisksLayout';
@@ -25,6 +25,25 @@ import loadInitialData from '../../../loaders/loadInitialData';
 import loadUsersData from '../../../loaders/loadUsersData';
 import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
 import { observeRisks, observeRiskTypes } from '../../observers';
+import {
+  getFilter,
+  getUrlItemId,
+  getDataLoading,
+} from '../../../../../client/store/selectors/global';
+import {
+  getOrganizationId,
+  getOrgSerialNumber,
+  getOrganization,
+} from '../../../../../client/store/selectors/organizations';
+import {
+  getRisksInitializing,
+  getRisksAreDepsReady,
+  getSelectedRisk,
+} from '../../../../../client/store/selectors/risks';
+import { getIsDiscussionOpened } from '../../../../../client/store/selectors/discussion';
+import { getWindowWidth } from '../../../../../client/store/selectors/window';
+import { getMobileShowCard } from '../../../../../client/store/selectors/mobile';
+import { composeWithTracker } from '../../../../../client/util';
 
 const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
   const isDeleted = filter === RiskFilterIndexes.DELETED;
@@ -37,48 +56,49 @@ const enhance = compose(
   connect(),
   defaultProps({ filters: RiskFilters }),
   kompose(loadIsDiscussionOpened),
-  composeWithTracker(loadInitialData, null, null, {
-    shouldResubscribe: false,
+  composeWithTracker(loadInitialData, {
+    propsToWatch: [],
   }),
-  connect(pickDeep([
-    'global.filter',
-    'organizations.orgSerialNumber',
-  ])),
-  composeWithTracker(
-    getLayoutData(),
-    null,
-    null,
-    {
-      shouldResubscribe: (props, nextProps) =>
-      props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
-    }
-  ),
+  connect(state => ({
+    filter: getFilter(state),
+    orgSerialNumber: getOrgSerialNumber(state),
+  })),
+  composeWithTracker(getLayoutData(), {
+    propsToWatch: ['orgSerialNumber', 'filter'],
+  }),
   branch(
     props => props.loading,
     renderComponent(RisksLayout),
-    identity
+    identity,
   ),
   composeWithTracker(loadUsersData),
-  connect(pickDeep(['organizations.organizationId'])),
+  connect(state => ({
+    organizationId: getOrganizationId(state),
+  })),
   lifecycle({
     componentWillMount() {
       loadMainData(this.props, () => null);
     },
   }),
-  connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
-  composeWithTracker(loadCardData, null, null, {
-    shouldResubscribe: (props, nextProps) => Boolean(
-      props.organizationId !== nextProps.organizationId ||
-      props.urlItemId !== nextProps.urlItemId
-    ),
+  connect(state => ({
+    organizationId: getOrganizationId(state),
+    urlItemId: getUrlItemId(state),
+  })),
+  composeWithTracker(loadCardData, {
+    propsToWatch: ['organizationId', 'urlItemId'],
   }),
-  connect(pickDeep(['organizations.organizationId', 'risks.initializing'])),
-  composeWithTracker(loadDeps, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-    props.organizationId !== nextProps.organizationId ||
-    props.initializing !== nextProps.initializing,
+  connect(state => ({
+    organizationId: getOrganizationId(state),
+    initializing: getRisksInitializing(state),
+  })),
+  composeWithTracker(loadDeps, {
+    propsToWatch: ['initializing', 'organizationId'],
   }),
-  connect(pickDeep(['global.dataLoading', 'risks.areDepsReady', 'risks.initializing'])),
+  connect(state => ({
+    dataLoading: getDataLoading(state),
+    areDepsReady: getRisksAreDepsReady(state),
+    initializing: getRisksInitializing(state),
+  })),
   lifecycle({
     componentWillReceiveProps(nextProps) {
       if (!nextProps.dataLoading && nextProps.initializing && nextProps.areDepsReady) {
@@ -104,23 +124,23 @@ const enhance = compose(
     },
   }),
   connect(state => ({
-    risk: state.collections.risksByIds[state.global.urlItemId],
-    ...pickDeep([
-      'organizations.organization',
-      'organizations.orgSerialNumber',
-      'discussion.isDiscussionOpened',
-      'global.urlItemId',
-      'global.filter',
-    ])(state),
+    risk: getSelectedRisk(state),
+    organization: getOrganization(state),
+    orgSerialNumber: getOrgSerialNumber(state),
+    isDiscussionOpened: getIsDiscussionOpened(state),
+    urlItemId: getUrlItemId(state),
+    filter: getFilter(state),
   })),
-  shouldUpdate((props, nextProps) => Boolean(
-    props.isDiscussionOpened !== nextProps.isDiscussionOpened ||
-    props.loading !== nextProps.loading ||
-    typeof props.organization !== typeof nextProps.organization ||
-    props.orgSerialNumber !== nextProps.orgSerialNumber ||
-    props.filter !== nextProps.filter
-  )),
-  connect(pickDeep(['window.width', 'mobile.showCard'])),
+  shouldUpdate((props, nextProps) =>
+    Boolean(props.isDiscussionOpened !== nextProps.isDiscussionOpened ||
+      props.loading !== nextProps.loading ||
+      typeof props.organization !== typeof nextProps.organization ||
+      props.orgSerialNumber !== nextProps.orgSerialNumber ||
+      props.filter !== nextProps.filter)),
+  connect(state => ({
+    width: getWindowWidth(state),
+    showCard: getMobileShowCard(state),
+  })),
   withHandlers({
     onHandleFilterChange,
     onHandleReturn,

@@ -1,0 +1,50 @@
+type LessonPayload {
+  lesson: Lesson
+}
+
+input LessonLinkedToInput {
+  documentId: ID!
+  documentType: String!
+}
+
+input CreateLessonInput {
+  organizationId: ID!
+  title: String!
+  date: DateTime!
+  owner: ID!
+  notes: String
+  linkedTo: LessonLinkedToInput
+}
+
+input RemoveLessonInput {
+  _id: ID!
+}
+
+input UpdateLessonTitleInput {
+  _id: ID!
+  title: String!
+}
+
+input UpdateLessonDateInput {
+  _id: ID!
+  date: DateTime!
+}
+
+input UpdateLessonOwnerInput {
+  _id: ID!
+  owner: ID!
+}
+
+input UpdateLessonNotesInput {
+  _id: ID!
+  notes: String!
+}
+
+type Mutation {
+  createLesson(input: CreateLessonInput!): LessonPayload
+  removeLesson(input: RemoveLessonInput!): LessonPayload
+  updateLessonTitle(input: UpdateLessonTitleInput!): LessonPayload
+  updateLessonDate(input: UpdateLessonDateInput!): LessonPayload
+  updateLessonOwner(input: UpdateLessonOwnerInput!): LessonPayload
+  updateLessonNotes(input: UpdateLessonNotesInput!): LessonPayload
+}

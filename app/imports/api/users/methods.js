@@ -42,7 +42,7 @@ export const updateProfile = new Method({
       UserProfileSchema,
     ]).newContext();
 
-    for (let key in doc) {
+    for (const key in doc) {
       if (!validationContext.validateOne(doc, key)) {
         const errors = validationContext.invalidKeys();
         const message = validationContext.keyErrorMessage(errors[0].name);
@@ -52,9 +52,7 @@ export const updateProfile = new Method({
   },
 
   check(checker) {
-    return checker(
-      ensureUpdatingHimself(this.userId)
-    );
+    return checker(ensureUpdatingHimself(this.userId));
   },
 
   run({ _id, ...args }) {
@@ -76,9 +74,7 @@ export const unsetProfileProperty = new Method({
   ]).validator(),
 
   check(checker) {
-    return checker(
-      ensureUpdatingHimself(this.userId)
-    );
+    return checker(ensureUpdatingHimself(this.userId));
   },
 
   run({ _id, fieldName }) {
@@ -86,7 +82,7 @@ export const unsetProfileProperty = new Method({
     if (!(fieldDef.optional === true)) {
       throw new Meteor.Error(
         400,
-        UserProfileSchema.messageForError('required', fieldName, null, '')
+        UserProfileSchema.messageForError('required', fieldName, null, ''),
       );
     }
 
@@ -105,9 +101,7 @@ export const updateEmail = new Method({
   }]).validator(),
 
   check(checker) {
-    return checker(
-      ensureUpdatingHimself(this.userId)
-    );
+    return checker(ensureUpdatingHimself(this.userId));
   },
 
   run({ _id, email }) {
@@ -185,7 +179,7 @@ export const assignRole = new Method({
   check(checker) {
     return compose(checker, chain)(
       USR_EnsureIsNotOrgOwnerChecker,
-      ensureCanChangeRoles(this.userId)
+      ensureCanChangeRoles(this.userId),
     );
   },
 
@@ -202,7 +196,7 @@ export const revokeRole = new Method({
   check(checker) {
     return compose(checker, chain)(
       USR_EnsureIsNotOrgOwnerChecker,
-      ensureCanChangeRoles(this.userId)
+      ensureCanChangeRoles(this.userId),
     );
   },
 
@@ -234,9 +228,7 @@ export const setNotifications = new Method({
   ]).validator(),
 
   check(checker) {
-    return checker(
-      ensureUpdatingHimself(this.userId)
-    );
+    return checker(ensureUpdatingHimself(this.userId));
   },
 
   run({ _id, enabled }) {
@@ -255,9 +247,7 @@ export const setNotificationSound = new Method({
   ]).validator(),
 
   check(checker) {
-    return checker(
-      ensureUpdatingHimself(this.userId)
-    );
+    return checker(ensureUpdatingHimself(this.userId));
   },
 
   run({ _id, soundFile }) {

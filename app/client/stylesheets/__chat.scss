@@ -245,5 +245,10 @@
       margin-bottom: 0;
       text-overflow: clip;
     }
+
+    .dropdown > .dropdown-menu {
+      top: auto !important;
+      transform: none !important;
+    }
   }
 }

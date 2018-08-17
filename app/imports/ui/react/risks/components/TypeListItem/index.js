@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 
 import { createRiskTypeItem } from '../../helpers';
@@ -8,7 +9,9 @@ import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
 
 const TypeListItem = ({
   onToggleCollapse,
-  type: { _id, abbreviation, unreadMessagesCount, title, risks },
+  type: {
+    _id, abbreviation, unreadMessagesCount, title, risks,
+  },
 }) => (
   <LHSItemContainer
     hideRTextOnCollapse

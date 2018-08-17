@@ -12,11 +12,11 @@ export default {
       },
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Update of standards completed by set to {{{newValue}}}',
+          'Approval completed by set to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'Update of standards completed by changed from {{{oldValue}}} to {{{newValue}}}',
+          'Approval completed by changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'Update of standards completed by removed',
+          'Approval completed by removed',
       },
     },
   ],
@@ -27,11 +27,11 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} set update of standards completed by of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
+          '{{{userName}}} set approval completed by of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed update of standards completed by of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
+          '{{{userName}}} changed approval completed by of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{{userName}}} removed update of standards completed by of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed approval completed by of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

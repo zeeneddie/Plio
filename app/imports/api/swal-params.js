@@ -8,4 +8,5 @@ export const ORG_DELETE = {
   confirmButtonText: 'Delete',
   closeOnConfirm: false,
   confirmButtonClass: 'btn-md btn-danger',
+  showLoaderOnConfirm: false,
 };

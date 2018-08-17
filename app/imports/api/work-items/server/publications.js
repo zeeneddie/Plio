@@ -19,7 +19,7 @@ import {
   getC,
 } from '../../helpers';
 import { getCollectionByDocType } from '/imports/share/helpers';
-import { ActionTypes } from '/imports/share/constants';
+import { ActionTypes, WorkItemStatuses } from '/imports/share/constants';
 import { createNonConformityCardPublicationTree } from '../../non-conformities/utils';
 import { createRiskCardPublicationTree } from '../../risks/utils';
 import { createActionCardPublicationTree } from '../../actions/utils';
@@ -55,10 +55,10 @@ const getWorkInboxLayoutPub = (userId, __, isDeleted) => [
 
 Meteor.publishComposite(
   'workInboxLayout',
-  getPublishCompositeOrganizationUsers(getWorkInboxLayoutPub)
+  getPublishCompositeOrganizationUsers(getWorkInboxLayoutPub),
 );
 
-Meteor.publishComposite('workItemCard', function ({ _id, organizationId }) {
+Meteor.publishComposite('workItemCard', ({ _id, organizationId }) => {
   check(_id, String);
   check(organizationId, String);
 
@@ -151,7 +151,7 @@ Meteor.publish('workItemsOverdue', function (organizationId, limit) {
   check(organizationId, String);
   check(limit, Number);
 
-  const userId = this.userId;
+  const { userId } = this;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -160,17 +160,13 @@ Meteor.publish('workItemsOverdue', function (organizationId, limit) {
   const query = {
     organizationId,
     assigneeId: userId,
-    isDeleted: { $in: [null, false] },
-    status: 2, // overdue
+    isDeleted: { $ne: true },
+    status: WorkItemStatuses.OVERDUE, // overdue
   };
   const options = {
+    limit,
     sort: { targetDate: -1 },
   };
-
-  // Check if limit is an integer number
-  if (Number(limit) === limit && limit % 1 === 0) {
-    options.limit = limit;
-  }
 
   return WorkItems.find(query, options);
 });

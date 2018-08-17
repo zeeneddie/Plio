@@ -26,6 +26,7 @@ Standards.publicFields = {
   viewedBy: 1,
   createdAt: 1,
   owner: 1,
+  uniqueNumber: 1,
   isDeleted: 1,
   deletedAt: 1,
   deletedBy: 1,

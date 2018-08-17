@@ -4,16 +4,21 @@
   "scripts": {
     "start": "MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor run --port 4000 --settings settings-local.json",
     "debug": "MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor debug --settings settings-local.json",
-    "start-windows": "cmd /c \"SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&SET MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local&&meteor --port 4000 --settings settings-local.json\""
+    "start:windows": "cmd /c \"SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&meteor --port 4000 --settings settings-local.json\""
   },
   "dependencies": {
-    "babel-runtime": "^6.20.0",
+    "@babel/runtime": "^7.0.0-beta.46",
+    "babel-runtime": "^6.26.0",
     "deep-diff": "^0.3.4",
     "handlebars": "^4.0.5",
     "lodash.get": "^4.4.2",
     "lodash.property": "^4.4.2",
     "meteor-node-stubs": "~0.2.0",
     "moment-timezone": "^0.5.7",
-    "pluralize": "^3.0.0"
+    "plio-util": "https://github.com/Pliohub/plio-util.git#devel",
+    "pluralize": "^3.0.0",
+    "ramda": "^0.25.0",
+    "react": "^16.3.2",
+    "styled-components": "^3.2.6"
   }
 }

@@ -1,0 +1,14 @@
+fragment LessonCard on Lesson {
+  _id
+  sequentialId
+  serialNumber
+  title
+  date
+  notes      
+  owner {
+    _id
+    profile {
+      fullName
+    }
+  }
+}

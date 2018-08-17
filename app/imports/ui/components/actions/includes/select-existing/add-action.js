@@ -8,5 +8,5 @@ Template.Actions_DropdownAddAction.viewmodel({
   addAction() {
     const actionTitle = this.value();
     actionTitle && this.onAdd && this.onAdd(actionTitle);
-  }
+  },
 });

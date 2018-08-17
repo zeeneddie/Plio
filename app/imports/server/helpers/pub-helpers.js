@@ -9,17 +9,15 @@ export const getUsersCursorByIdsAndOrgId = (
   ids,
   organizationId,
   query,
-  { fields, ...projection } = {},
 ) => {
   const _query = { _id: { $in: ids }, ...query };
   const _projection = {
     fields: {
       ...Meteor.users.publicFields,
-      [`roles.${organizationId}`]: 1,
-      ...fields,
     },
-    ...projection,
   };
+
+  _projection.fields[`roles.${organizationId}`] = 1;
 
   return Meteor.users.find(_query, _projection);
 };
@@ -39,7 +37,7 @@ export const getPublishCompositeOrganizationUsersObject = (userId, selector) => 
   ],
 });
 
-export const getPublishCompositeOrganizationUsers = (fn) =>
+export const getPublishCompositeOrganizationUsers = fn =>
   function publishCompositeOrganizationUsers(serialNumber, isDeleted) {
     check(serialNumber, Number);
     check(isDeleted, Match.OneOf(Boolean, undefined)); // eslint-disable-line new-cap

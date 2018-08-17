@@ -10,7 +10,7 @@ import {
   updateEmail,
   updatePhoneNumber,
   addPhoneNumber,
-  removePhoneNumber
+  removePhoneNumber,
 } from '/imports/api/users/methods.js';
 import { removeUser } from '/imports/api/organizations/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
@@ -45,14 +45,14 @@ Template.UserDirectory_Card_Edit.viewmodel({
         phoneNumbers: user.phoneNumbers(),
         skype: user.skype(),
         isNotificationsEnabled: user.isNotificationsEnabled,
-        notificationSound: user.notificationSound
+        notificationSound: user.notificationSound,
       });
     }
   },
   user() {
     const userId = this.userId && this.userId();
     return Meteor.users.findOne({
-      _id: userId
+      _id: userId,
     });
   },
   organizationId() {
@@ -61,19 +61,19 @@ Template.UserDirectory_Card_Edit.viewmodel({
   updateProfile(prop, val) {
     this.modal().callMethod(updateProfile, {
       _id: this.userId(),
-      [prop]: val
+      [prop]: val,
     });
   },
   unsetProfileProperty(prop) {
     this.modal().callMethod(unsetProfileProperty, {
       _id: this.userId(),
-      fieldName: prop
+      fieldName: prop,
     });
   },
   updateEmail(email) {
     this.modal().callMethod(updateEmail, {
       _id: this.userId(),
-      email
+      email,
     });
   },
   uploadAvatarFile(viewModel) {
@@ -83,7 +83,7 @@ Template.UserDirectory_Card_Edit.viewmodel({
     }
 
     const uploader = new Slingshot.Upload('userAvatars', {
-      userId: this.userId()
+      userId: this.userId(),
     });
 
     const modal = this.modal();
@@ -101,7 +101,7 @@ Template.UserDirectory_Card_Edit.viewmodel({
 
       this.modal().callMethod(updateProfile, {
         _id: this.userId(),
-        avatar: downloadUrl
+        avatar: downloadUrl,
       });
     });
   },
@@ -110,16 +110,20 @@ Template.UserDirectory_Card_Edit.viewmodel({
     const _id = viewModel._id();
     const userId = this.userId();
 
-    this.modal().callMethod(updatePhoneNumber, { _id, userId, number, type }, cb);
+    this.modal().callMethod(updatePhoneNumber, {
+      _id, userId, number, type,
+    }, cb);
   },
   addPhoneNumber(viewModel, cb) {
     const { number, type } = viewModel.getData();
     const userId = this.userId();
     const _id = Random.id();
 
-    if(_.isEmpty(number)) return;
+    if (_.isEmpty(number)) return;
 
-    this.modal().callMethod(addPhoneNumber, { _id, userId, number, type }, cb);
+    this.modal().callMethod(addPhoneNumber, {
+      _id, userId, number, type,
+    }, cb);
   },
   removePhoneNumber(viewModel, cb) {
     const _id = viewModel._id();
@@ -156,7 +160,7 @@ Template.UserDirectory_Card_Edit.viewmodel({
     if (userId && organization) {
       const orgName = organization.name;
       if (userId === organization.ownerId()) {
-        return `${firstNameOrEmail} is the organization owner for organization ${orgName} and has the full set of superpowers`;;
+        return `${firstNameOrEmail} is the organization owner for organization ${orgName} and has the full set of superpowers`;
       }
     }
   },
@@ -164,24 +168,20 @@ Template.UserDirectory_Card_Edit.viewmodel({
     return Roles.userIsInRole(
       Meteor.userId(),
       UserRoles.EDIT_USER_ROLES,
-      this.organizationId()
+      this.organizationId(),
     ) && !this.isUserOrgOwner();
   },
   userHasRole(role) {
-    return Roles.userIsInRole(
-      this.userId && this.userId(), role, this.organizationId()
-    );
+    return Roles.userIsInRole(this.userId && this.userId(), role, this.organizationId());
   },
   userRoles() {
-    return _.filter(UserRoles, (role) => {
-      return this.userHasRole(role);
-    });
+    return _.filter(UserRoles, role => this.userHasRole(role));
   },
   updateRole(role) {
     const doc = {
       _id: this.userId(),
       organizationId: this.organizationId(),
-      role
+      role,
     };
 
     if (this.userHasRole(role)) {
@@ -201,7 +201,7 @@ Template.UserDirectory_Card_Edit.viewmodel({
     return Roles.userIsInRole(
       Meteor.userId(),
       UserRoles.DELETE_USERS,
-      this.organizationId()
+      this.organizationId(),
     ) || this.isCurrentUser();
   },
   removeUserFn() {
@@ -216,16 +216,16 @@ Template.UserDirectory_Card_Edit.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Delete',
-      closeOnConfirm: true
+      closeOnConfirm: true,
     }, () => {
       this.modal().close();
       this.modal().callMethod(removeUser, {
         userId: this.userId(),
-        organizationId: this.organizationId()
+        organizationId: this.organizationId(),
       }, (err, res) => {
         if (!err) {
           FlowRouter.go('userDirectoryPage', {
-            orgSerialNumber: this.organization().serialNumber
+            orgSerialNumber: this.organization().serialNumber,
           });
 
           // have to wait some time before opening new sweet alert
@@ -241,5 +241,5 @@ Template.UserDirectory_Card_Edit.viewmodel({
         }
       });
     });
-  }
+  },
 });

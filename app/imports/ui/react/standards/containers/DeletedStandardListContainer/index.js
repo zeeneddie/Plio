@@ -1,16 +1,17 @@
 import { lifecycle, compose } from 'recompose';
 import { connect } from 'react-redux';
 
+import { getState } from '../../../../../client/store';
+import { STANDARD_FILTER_MAP } from '../../../../../api/constants';
 import StandardListContainer from '../StandardListContainer';
 import {
   getSelectedAndDefaultStandardByFilter,
   redirectToStandardOrDefault,
 } from '../../helpers';
-import { pickDeep } from '/imports/api/helpers';
-import { getState } from '/imports/client/store';
-import { STANDARD_FILTER_MAP } from '/imports/api/constants';
+import { getSearchText } from '../../../../../client/store/selectors/global';
+import { getStandardsFiltered } from '../../../../../client/store/selectors/standards';
 
-const redirectHandle = (props) => setTimeout(() => {
+const redirectHandle = props => setTimeout(() => {
   const { urlItemId } = getState('global');
   const standardsByIds = getState('collections.standardsByIds');
   const {
@@ -36,8 +37,13 @@ const redirectHandle = (props) => setTimeout(() => {
   redirectToStandardOrDefault(redirectOptions);
 }, 0);
 
+const mapStateToProps = state => ({
+  searchText: getSearchText(state),
+  standardsFiltered: getStandardsFiltered(state),
+});
+
 export default compose(
-  connect(pickDeep(['global.searchText', 'standards.standardsFiltered'])),
+  connect(mapStateToProps),
   lifecycle({
     componentWillMount() {
       // handle redirect to default standard
@@ -49,5 +55,5 @@ export default compose(
         redirectHandle(nextProps);
       }
     },
-  })
+  }),
 )(StandardListContainer);

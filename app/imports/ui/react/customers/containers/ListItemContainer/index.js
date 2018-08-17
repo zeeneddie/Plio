@@ -1,6 +1,6 @@
 import { compose, withHandlers, mapProps, shouldUpdate, setPropTypes } from 'recompose';
 import { connect } from 'react-redux';
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 
 import CustomersListItem from '../../components/ListItem';
 import { setUrlItemId } from '/imports/client/store/actions/globalActions';
@@ -28,7 +28,9 @@ const CustomersListItemContainer = compose(
     props.createdAt !== nextProps.createdAt ||
     notEquals(props.users, nextProps.users)
   )),
-  mapProps(({ _id, urlItemId, users, ...props }) => {
+  mapProps(({
+    _id, urlItemId, users, ...props
+  }) => {
     const href = getPath('customer')({ urlItemId: _id });
     const isActive = urlItemId === _id;
     const createdAt = getFormattedDate(props.createdAt, 'DD MMM YYYY');
@@ -48,7 +50,7 @@ const CustomersListItemContainer = compose(
   connect(),
 
   withHandlers({
-    onClick: props => handler => {
+    onClick: props => (handler) => {
       props.dispatch(setUrlItemId(props._id));
 
       handler({ urlItemId: props._id });

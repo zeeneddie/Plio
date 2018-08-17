@@ -5,7 +5,7 @@ Template.ScoreTable_Item.viewmodel({
   disabled: false,
   score: {
     rowId: '',
-    value: ''
+    value: '',
   },
   rowId: '',
   label: '',
@@ -22,7 +22,7 @@ Template.ScoreTable_Item.viewmodel({
   onClick(value) {
     const data = {
       rowId: this.rowId(),
-      value
+      value,
     };
     this.onUpdate(data);
   },
@@ -33,5 +33,5 @@ Template.ScoreTable_Item.viewmodel({
   },
   isLast() {
     return _.last(this.tableData().data)._id === this.rowId();
-  }
+  },
 });

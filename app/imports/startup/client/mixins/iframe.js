@@ -6,5 +6,5 @@ export default {
     Meteor.setTimeout(() => {
       this.isIframeReady(true);
     }, 1000);
-  }
-}
+  },
+};

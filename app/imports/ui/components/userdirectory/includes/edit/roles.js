@@ -1,17 +1,17 @@
 import { Template } from 'meteor/templating';
 
-import { UserRoles } from '/imports/share/constants.js';
+import { UserRoles } from '../../../../../share/constants';
 
 
 Template.UserEdit_Roles.viewmodel({
   mixin: ['collapse'],
-  
+
   isEditable() {
     return this.parent().isRolesEditable();
   },
 
   roles() {
-    return _.values(UserRoles);
+    return Object.values(UserRoles);
   },
 
   rolesCount() {

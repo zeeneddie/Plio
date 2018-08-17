@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-import { canChangeOrgSettings } from '/imports/api/checkers.js';
+import { canChangeOrgSettings } from '/imports/api/checkers';
 
 Template.Departments_Edit.viewmodel({
   mixin: ['search', 'organization', 'department', 'collapsing'],
@@ -11,7 +11,7 @@ Template.Departments_Edit.viewmodel({
   departmentsIds: [],
   selected() {
     const departmentsIds = Array.from(this.departmentsIds() || []);
-    return this._getDepartmentsByQuery({ _id: { $in: departmentsIds }});
+    return this._getDepartmentsByQuery({ _id: { $in: departmentsIds } });
   },
   value() {
     const child = this.child('Select_Multi');
@@ -24,8 +24,8 @@ Template.Departments_Edit.viewmodel({
   },
   content() {
     return canChangeOrgSettings(Meteor.userId(), this.organizationId())
-            ? 'Departments_Create'
-            : null;
+      ? 'Departments_Create'
+      : null;
   },
   onUpdateCb() {
     return this.update.bind(this);
@@ -48,8 +48,8 @@ Template.Departments_Edit.viewmodel({
 
     const options = {
       [`${option}`]: {
-        departmentsIds: selectedItemId
-      }
+        departmentsIds: selectedItemId,
+      },
     };
 
     this.parent().update({ options }, () => {
@@ -88,5 +88,5 @@ Template.Departments_Edit.viewmodel({
   getData() {
     const { departmentsIds } = this.data();
     return { departmentsIds };
-  }
+  },
 });

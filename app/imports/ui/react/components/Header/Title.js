@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-const Title = (props) => (
+const Title = props => (
   <span className="navbar-title">
     {props.children}
   </span>

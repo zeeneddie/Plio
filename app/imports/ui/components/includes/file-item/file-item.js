@@ -8,5 +8,5 @@ Template.FileItem.viewmodel({
   },
   onRemoveClick() {
     this.removeFile(this.file());
-  }
-})
+  },
+});

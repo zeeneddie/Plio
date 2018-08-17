@@ -3,7 +3,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { CheckedMethod } from '../../../method';
 import { IdSchema } from '/imports/share/schemas/schemas';
 import { NonConformities } from '/imports/share/collections/non-conformities';
-import NonConformitiesService from '../../non-conformities-service';
+import NonConformitiesService from '/imports/share/services/non-conformities-service';
 import UpdateSchema from './schema';
 
 export default new CheckedMethod({

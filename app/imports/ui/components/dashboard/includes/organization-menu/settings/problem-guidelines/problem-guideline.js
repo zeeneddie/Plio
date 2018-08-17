@@ -27,7 +27,7 @@ Template.OrgSettings_ProblemGuideline.viewmodel({
   },
   getData() {
     return {
-      text: this.text()
+      text: this.text(),
     };
-  }
+  },
 });

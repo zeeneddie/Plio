@@ -1,16 +1,19 @@
 import { Template } from 'meteor/templating';
 
+import { update } from '../../../../../../../api/risks/methods';
 
 Template.Risk_Subcard.viewmodel({
-  update({ ...args }) {
-    this.parent().update({ ...args });
-  },
+  mixin: 'modal',
   callMethod() {
-    return (...args) => {
-      this.parent().callUpdate(...args);
+    return (updateFn, args, cb) => {
+      updateFn(args, cb);
     };
+  },
+  update({ ...args }, cb = () => {}) {
+    const { _id } = this.risk();
+    this.modal().callMethod(update, { _id, ...args }, cb);
   },
   getData() {
     return this.child('Risk_Card_Edit_Main').getData();
-  }
+  },
 });

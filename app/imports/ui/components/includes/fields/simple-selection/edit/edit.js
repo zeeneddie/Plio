@@ -9,7 +9,6 @@ Template.SimpleSelection_Edit.viewmodel({
   addButtonText: '',
   placeholder: '',
   showAbbreviation: false,
-
   onAddButtonClick({ ...args } = {}) {
     this.addForm('SimpleSelection_Edit_Item', this.getArgs({ ...args }));
   },
@@ -23,11 +22,11 @@ Template.SimpleSelection_Edit.viewmodel({
   },
   getArgs({ ...args } = {}) {
     return {
-      ...args,
       placeholder: this.placeholder(),
       showAbbreviation: this.showAbbreviation(),
       onDelete: this.onDelete.bind(this),
       onChange: this.onChange.bind(this),
+      ...args,
     };
   },
   onChange() {},

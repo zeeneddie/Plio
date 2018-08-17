@@ -3,7 +3,7 @@ import invoke from 'lodash.invoke';
 
 import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { insert, update, remove } from '/imports/api/occurrences/methods.js';
-import { invokeId } from '/imports/api/helpers.js';
+import { invokeId } from '/imports/api/helpers';
 import { NonConformitiesHelp } from '/imports/api/help-messages.js';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
@@ -19,7 +19,7 @@ Template.Subcards_Occurrences_Edit.viewmodel({
       _lText: 'Occurrences',
       _rText: items.length,
       onAdd: this.onAdd.bind(this),
-      getSubcardArgs: this.getSubcardArgs.bind(this)
+      getSubcardArgs: this.getSubcardArgs.bind(this),
     };
   },
   getSubcardArgs(doc) {
@@ -31,7 +31,7 @@ Template.Subcards_Occurrences_Edit.viewmodel({
       content: 'Subcards_Occurrence',
       insertFn: this.insert.bind(this),
       updateFn: this.update.bind(this),
-      removeFn: this.remove.bind(this)
+      removeFn: this.remove.bind(this),
     };
   },
   renderText({ sequentialId }) {
@@ -56,8 +56,8 @@ Template.Subcards_Occurrences_Edit.viewmodel({
         isNew: false,
         insertFn: this.insert.bind(this),
         updateFn: this.update.bind(this),
-        removeFn: this.remove.bind(this)
-      }
+        removeFn: this.remove.bind(this),
+      },
     );
   },
   insert({ ...args }, cb) {
@@ -80,7 +80,7 @@ Template.Subcards_Occurrences_Edit.viewmodel({
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Remove',
-        closeOnConfirm: false
+        closeOnConfirm: false,
       }, () => {
         const cb = (err) => {
           if (!err) {
@@ -97,5 +97,5 @@ Template.Subcards_Occurrences_Edit.viewmodel({
         this.modal().callMethod(remove, { _id }, cb);
       });
     }
-  }
+  },
 });

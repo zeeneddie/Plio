@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { updateUserSettings } from '/imports/api/organizations/methods';
-import { createOrgQueryWhereUserIsMember } from '/imports/api/queries';
+import { createOrgQueryWhereUserIsMember } from '../../../../../share/mongo/queries';
 
 Template.UserPreferences_DailyRecap.viewmodel({
   mixin: ['modal', 'collapse'],
@@ -20,9 +20,7 @@ Template.UserPreferences_DailyRecap.viewmodel({
     const userOrganizations = Organizations.find(query, options);
 
     return userOrganizations.map((org) => {
-      const orgUserDoc = _(org.users).find((userDoc) => {
-        return userDoc.userId === this.userId();
-      });
+      const orgUserDoc = _(org.users).find(userDoc => userDoc.userId === this.userId());
 
       return {
         orgId: org._id,

@@ -1,0 +1,7 @@
+mutation updateOrganizationLastAccessedDate($input: UpdateOrganizationLastAccessedDateInput!) {
+  updateOrganizationLastAccessedDate(input: $input) {
+    organization {
+      lastAccessedDate
+    }
+  }
+}

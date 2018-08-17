@@ -2,9 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { Email } from 'meteor/email';
 
-import { Notifications } from '../collections/notifications.js';
-import HandlebarsCache from './handlebars-cache.js';
-
+import { Notifications } from '../collections/notifications';
 
 /**
  * Universal notification sender
@@ -37,7 +35,14 @@ export default class NotificationSender {
    * recipient's email notification preference should be ignored
    * @constructor
    */
-  constructor({ recipients, emailSubject, templateData, templateName, notificationData, options = {} }) {
+  constructor({
+    recipients,
+    emailSubject,
+    templateData,
+    templateName,
+    notificationData,
+    options = {},
+  }) {
     if (Meteor.isClient) {
       throw new Meteor.Error(500, 'You cannot send notifications from client side');
     }
@@ -60,9 +65,9 @@ export default class NotificationSender {
    * @returns {String}
    * @private
    */
-  _renderTemplateWithData() {
-    const templateData = this._options.templateData;
-    const templateName = this._options.templateName;
+  async _renderTemplateWithData() {
+    const { default: HandlebarsCache } = await import('./handlebars-cache');
+    const { templateData, templateName } = this._options;
     return HandlebarsCache.render(templateName, templateData, this._options.helpers);
   }
 
@@ -78,7 +83,7 @@ export default class NotificationSender {
    */
   _getUserEmail(userId) {
     // check if recipient has email notifications enabled or the notification is important
-    const shouldSend = (user) => user && (
+    const shouldSend = user => user && (
       this._options.isImportant ||
       user.preferences && user.preferences.areEmailNotificationsEnabled
     );
@@ -109,7 +114,7 @@ export default class NotificationSender {
   _getDefaultEmail() {
     const orgName = this._options.templateData.organizationName;
 
-    if (orgName) return `Plio (${orgName})<noreply@pliohub.com>`;
+    if (orgName) return `"Plio (${orgName})"<noreply@pliohub.com>`;
 
     return 'Plio <noreply@pliohub.com>';
   }
@@ -133,9 +138,8 @@ export default class NotificationSender {
 
     if (!emails.length) return;
 
-    let bcc = [];
+    const bcc = [];
     if (isReportEnabled) {
-
       // Reporting of beta user activity
       bcc.push('steve.ives@pliohub.com', 'jamesalexanderives@gmail.com');
     }
@@ -155,10 +159,10 @@ export default class NotificationSender {
   /**
    * Sends email to specified recipients
    */
-  sendEmail({ isReportEnabled } = {}) {
+  async sendEmail({ isReportEnabled } = {}) {
     const recipients = this._options.recipients || [];
-    const templateName = this._options.templateName;
-    const html = this._renderTemplateWithData(templateName);
+    const { templateName } = this._options;
+    const html = await this._renderTemplateWithData(templateName);
 
     this._sendEmailBasic({ recipients, html, isReportEnabled });
 
@@ -167,7 +171,8 @@ export default class NotificationSender {
   }
 
   _sendOnSiteBasic(recipients) {
-    const notificationData = this._options.notificationData;
+    const { notificationData } = this._options;
+
     if (!notificationData) {
       return;
     }

@@ -1,0 +1,9 @@
+#import "../Fragment/DashboardGoal.graphql"
+
+query DashboardGoal($_id: ID!) {
+  goal(_id: $_id) {
+    goal {
+      ...DashboardGoal
+    }
+  }
+}

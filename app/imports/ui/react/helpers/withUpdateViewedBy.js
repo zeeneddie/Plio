@@ -1,7 +1,7 @@
 import { lifecycle, setPropTypes, compose } from 'recompose';
 import { Meteor } from 'meteor/meteor';
-import { handleMethodResult } from '/imports/api/helpers';
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import { handleMethodResult } from '../../../api/helpers';
 
 const updater = (method, props) =>
   props.isNew && props.isActive && Meteor.defer(() =>
@@ -22,5 +22,5 @@ export default method => compose(
     componentWillReceiveProps(nextProps) {
       updater(method, nextProps);
     },
-  })
+  }),
 );

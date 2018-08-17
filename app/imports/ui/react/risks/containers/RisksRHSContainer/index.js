@@ -1,56 +1,55 @@
 import {
   compose,
-  mapProps,
   branch,
   renderComponent,
   shouldUpdate,
 } from 'recompose';
 import { connect } from 'react-redux';
+import { prop } from 'ramda';
 
 import {
-  lengthRisks,
   notEquals,
   omitC,
-  pickDeep,
   identity,
-  pickC,
 } from '/imports/api/helpers';
 import RisksRHS from '../../components/RHS';
-import { getRisksByFilter } from '../../helpers';
+import {
+  getIsFullScreenMode,
+  getIsCardReady,
+  getUrlItemId,
+  getFilter,
+} from '../../../../../client/store/selectors/global';
+import { getFilteredRisks, getSelectedRisk } from '../../../../../client/store/selectors/risks';
 
-const mapStateToProps = state => ({
-  ...pickC(['isFullScreenMode', 'isCardReady', 'urlItemId'])(state.global),
-  risk: state.collections.risksByIds[state.global.urlItemId],
-});
+const mapStateToProps = (state) => {
+  const risk = getSelectedRisk(state);
+  const risks = getFilteredRisks(state);
+  const isCardReady = getIsCardReady(state);
+  const urlItemId = getUrlItemId(state);
+  const risksLength = risks.length;
+  const doesNotExist = isCardReady && urlItemId && !risk;
+
+  return {
+    risk,
+    isCardReady,
+    risksLength,
+    urlItemId,
+    doesNotExist,
+    isFullScreenMode: getIsFullScreenMode(state),
+    filter: getFilter(state),
+    isReady: !!(isCardReady && risksLength && risk),
+  };
+};
 
 export default compose(
-  connect(pickDeep(['global.filter', 'collections.risks'])),
-  shouldUpdate((props, nextProps) => !!(
-    lengthRisks(props) !== lengthRisks(nextProps) ||
-    props.filter !== nextProps.filter
-  )),
-  mapProps(props => ({ risks: getRisksByFilter(props) })),
+  connect(mapStateToProps),
   branch(
-    lengthRisks,
+    prop('risksLength'),
     identity,
     renderComponent(RisksRHS.NotFound),
   ),
-  connect(mapStateToProps),
-  mapProps(({
-    isCardReady,
-    risk,
-    risks,
-    urlItemId,
-    ...props
-  }) => ({
-    ...props,
-    risk,
-    isCardReady,
-    urlItemId,
-    isReady: !!(isCardReady && risks.length && risk),
-  })),
   branch(
-    props => props.isCardReady && props.urlItemId && !props.risk,
+    prop('doesNotExist'),
     renderComponent(RisksRHS.NotExist),
     identity,
   ),

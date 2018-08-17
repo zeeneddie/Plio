@@ -1,21 +1,52 @@
 {
+  "env": {
+    "jest": true,
+    "node": true,
+    "browser": true
+  },
   "parser": "babel-eslint",
-  "extends": "airbnb",
   "plugins": [
     "react",
     "jsx-a11y",
-    "import"
+    "import",
+    "promise",
+    "meteor"
+  ],
+  "extends": [
+    "airbnb",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:meteor/recommended"
   ],
   "rules": {
-    "indent": ["error", 2, { "SwitchCase": 1 }],
-    "no-trailing-spaces": "off",
-    "no-unresolved": "off",
     "no-underscore-dangle": "off",
     "jsx-a11y/rule-name": "off",
     "react/jsx-indent": ["error", 2],
     "react/jsx-indent-props": ["error", 2],
-    "import/no-unresolved": [2, { "ignore": ["meteor"] }],
-    "global-require": "off"
+    "import/no-unresolved": [2, { "ignore": ["meteor"], "caseSensitive": false }],
+    "global-require": "off",
+    "max-len": ["error", 100],
+    "import/extensions": 0,
+    "import/no-absolute-path": 0,
+    "no-mixed-operators": 0,
+    "no-confusing-arrow": 0,
+    "import/no-extraneous-dependencies": 0,
+    "import/prefer-default-export": 0,
+    "react/jsx-filename-extension": 0,
+    "react/forbid-prop-types": 0,
+    "react/no-unused-prop-types": 1,
+    "react/require-default-props": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "jsx-a11y/anchor-has-content": 0,
+    "jsx-a11y/label-has-for": 0,
+    "jsx-a11y/href-no-hash": 0,
+    "class-methods-use-this": 0,
+    "jsx-a11y/click-events-have-key-events": 0,
+    "react/display-name": 0,
+    "func-names": 0,
+    "jsx-a11y/anchor-is-valid": 0,
+    "import/no-named-as-default": 0,
+    "function-paren-newline": 0
   },
   "settings": {
     "import/resolver": "meteor"

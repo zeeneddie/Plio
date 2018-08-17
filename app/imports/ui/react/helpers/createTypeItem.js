@@ -6,4 +6,4 @@ const createTypeItem = curry((type, key) => ({
 }));
 
 export default createTypeItem;
- 
+

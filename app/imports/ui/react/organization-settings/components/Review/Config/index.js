@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { compose, withProps } from 'recompose';
 import property from 'lodash.property';
 
@@ -17,7 +18,7 @@ const enhance = withProps(transsoc({
   remindersFormData: getData('reminders'),
 }));
 
-const ReviewConfig = enhance((props) => (
+const ReviewConfig = enhance(props => (
   <div>
     <ReviewReviewerForm
       onReviewerChanged={props.onReviewerChanged}

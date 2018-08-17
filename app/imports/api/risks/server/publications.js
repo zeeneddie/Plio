@@ -98,7 +98,7 @@ Meteor.publish('risksDeps', function (organizationId) {
   ];
 });
 
-Meteor.publishComposite('risksByIds', function (ids = []) {
+Meteor.publishComposite('risksByIds', (ids = []) => {
   check(ids, [String]);
 
   return {

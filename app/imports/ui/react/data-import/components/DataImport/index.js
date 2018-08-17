@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { ListGroup } from 'reactstrap';
 
 import { DocumentTypes } from '/imports/share/constants';
@@ -16,7 +17,14 @@ const ModalDataImport = ({
   <div className="relative">
     <ListGroup className="list-group-flush">
       {children}
-      <CardBlockCollapse {...{ leftText, ...other }}>
+      <CardBlockCollapse
+        {...{ leftText, ...other }}
+        props={{
+          leftText: {
+            className: 'list-group-item-heading',
+          },
+        }}
+      >
         <List {...{ documentType, onOrgClick, ...other }} />
       </CardBlockCollapse>
     </ListGroup>

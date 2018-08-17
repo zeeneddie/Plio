@@ -31,16 +31,16 @@ export const isDateScheduled = (dateConfig, targetDate, timezone, date) => {
   const { start, interval, until } = dateConfig;
 
   const startDate = moment(targetDate)
-      .subtract(start.timeValue, start.timeUnit)
-      .tz(timezone)
-      .startOf('day')
-      .toDate();
+    .subtract(start.timeValue, start.timeUnit)
+    .tz(timezone)
+    .startOf('day')
+    .toDate();
 
   const endDate = moment(targetDate)
-      .add(until.timeValue, until.timeUnit)
-      .tz(timezone)
-      .startOf('day')
-      .toDate();
+    .add(until.timeValue, until.timeUnit)
+    .tz(timezone)
+    .startOf('day')
+    .toDate();
 
   let temp = startDate;
 

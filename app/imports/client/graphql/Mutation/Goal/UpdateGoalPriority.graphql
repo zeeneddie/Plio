@@ -1,0 +1,8 @@
+mutation updateGoalPriority($input: UpdateGoalPriorityInput!) {
+  updateGoalPriority(input: $input) {
+    goal {
+      _id
+      priority
+    }
+  }
+}

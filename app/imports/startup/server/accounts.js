@@ -1,5 +1,5 @@
 import { Accounts } from 'meteor/accounts-base';
-import { getRandomAvatarUrl, generateUserInitials } from '/imports/share/helpers.js';
+import { getRandomAvatarUrl, generateUserInitials } from '/imports/share/helpers';
 import UserNotificationsSender from '/imports/api/users/user-notifications-sender.js';
 
 
@@ -15,18 +15,14 @@ function onCreateUser(options, user) {
 
 Accounts.onCreateUser(onCreateUser);
 
-Accounts.urls.verifyEmail = (token) => {
-  return Meteor.absoluteUrl(`verify-email/${token}`);
-};
+Accounts.urls.verifyEmail = token => Meteor.absoluteUrl(`verify-email/${token}`);
 
-Accounts.urls.resetPassword = (token) => {
-  return Meteor.absoluteUrl(`reset-password/${token}`);
-};
+Accounts.urls.resetPassword = token => Meteor.absoluteUrl(`reset-password/${token}`);
 
 // send notification if user reset password
-const resetPassword = Meteor.server.method_handlers['resetPassword'];
+const resetPassword = Meteor.server.method_handlers.resetPassword;
 
-Meteor.server.method_handlers['resetPassword'] = function(...args) {
+Meteor.server.method_handlers.resetPassword = function (...args) {
   const res = resetPassword.call(this, ...args);
 
   Meteor.defer(() => new UserNotificationsSender(res.id).passwordReset());

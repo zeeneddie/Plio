@@ -6,7 +6,7 @@ import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 Template.ESBookSectionCreate.viewmodel({
   mixin: ['organization', 'modal'],
   sectionHintText() {
-    return !!this.value() ? `Add "${this.value()}" section` : 'Start typing...';
+    return this.value() ? `Add "${this.value()}" section` : 'Start typing...';
   },
   addNewSection() {
     if (!this.value()) return;
@@ -15,12 +15,12 @@ Template.ESBookSectionCreate.viewmodel({
   },
   showAlert() {
     swal({
-      title: "Are you sure?",
+      title: 'Are you sure?',
       text: `New section "${this.value()}" will be added.`,
-      type: "warning",
+      type: 'warning',
       showCancelButton: true,
-      confirmButtonText: "Add",
-      closeOnConfirm: false
+      confirmButtonText: 'Add',
+      closeOnConfirm: false,
     }, () => {
       this.onAlertConfirm();
     });
@@ -57,5 +57,5 @@ Template.ESBookSectionCreate.viewmodel({
   getData() {
     const { value, selected } = this.data();
     return { value, selected };
-  }
+  },
 });

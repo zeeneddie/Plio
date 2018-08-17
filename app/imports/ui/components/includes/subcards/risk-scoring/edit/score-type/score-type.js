@@ -37,5 +37,5 @@ Template.RiskScoring_ScoreType_Edit.viewmodel({
   getData() {
     const { scoreTypeId } = this.data();
     return { scoreTypeId };
-  }
+  },
 });

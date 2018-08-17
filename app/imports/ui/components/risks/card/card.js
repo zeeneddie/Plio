@@ -76,7 +76,7 @@ Template.Risks_Card_Read.viewmodel({
   delete({ _id, title, isDeleted }, cb = () => {}) {
     if (!isDeleted) return;
 
-    const callback = (err) => cb(err, () => this.handleRouteRisks());
+    const callback = err => cb(err, () => this.handleRouteRisks());
 
     remove.call({ _id }, callback);
   },

@@ -1,0 +1,40 @@
+input GoalRisksInput {
+  isDeleted: Boolean
+}
+
+input GoalActionsInput {
+  isDeleted: Boolean
+}
+
+type Goal {
+  _id: ID!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime
+  updatedBy: User
+  organization: Organization!
+  files: [File]
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  deletedBy: User
+  notify: [User]
+  title: String!
+  description: String
+  serialNumber: Int!
+  sequentialId: String!
+  owner: User!
+  startDate: DateTime!
+  endDate: DateTime!
+  priority: String!
+  status: Int!
+  statusComment: String
+  isCompleted: Boolean!
+  completedAt: DateTime
+  completedBy: User
+  completionComment: String
+  color: String!
+  actions(input: GoalActionsInput): [Action]
+  risks(input: GoalRisksInput!): [Risk]
+  lessons: [Lesson]
+  milestones: [Milestone]!
+}

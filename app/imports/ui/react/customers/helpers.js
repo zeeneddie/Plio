@@ -74,9 +74,7 @@ export const collapseExpandedCustomers = () => {
 
 export const initCustomerTypes = (props) => {
   const types = _.values(CustomerTypes).reduce((prev, customerType) => {
-    const organizations = Object.assign([], props.organizations).filter(
-      propEq('customerType', customerType)
-    );
+    const organizations = Object.assign([], props.organizations).filter(propEq('customerType', customerType));
 
     return organizations.length
       ? prev.concat({ customerType, organizations })

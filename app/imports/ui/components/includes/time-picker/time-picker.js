@@ -1,12 +1,14 @@
-import { TimeUnits } from '/imports/share/constants.js';
+import { Template } from 'meteor/templating';
+import { and } from 'ramda';
 
+import { TimeUnits } from '../../../../share/constants';
 
 Template.TimePicker.viewmodel({
   mixin: 'callWithFocusCheck',
   timeValue: '',
   timeUnit: '',
   timeUnits() {
-    return _.values(TimeUnits);
+    return Object.values(TimeUnits);
   },
   isSelectedUnit(timeUnit) {
     return this.timeUnit() === timeUnit;
@@ -20,15 +22,18 @@ Template.TimePicker.viewmodel({
     const savedTimeUnit = context.timeUnit;
     const timeUnit = this.timeUnit();
 
-    return _.every([
+    return and(
       timeValue && timeUnit,
-      (savedTimeValue !== timeValue) || (savedTimeUnit !== timeUnit)
-    ]);
+      (savedTimeValue !== timeValue) || (savedTimeUnit !== timeUnit),
+    );
   },
-  onFocusOut(e) {
+  onBlur(e) {
     if (this.isChanged()) {
       this.callWithFocusCheck(e, () => this.onChange(this));
     }
+  },
+  onMouseDown(e) {
+    e.target.focus();
   },
   updateTimeUnit(timeUnit) {
     this.timeUnit(timeUnit);
@@ -39,7 +44,7 @@ Template.TimePicker.viewmodel({
   getData() {
     return {
       timeValue: Number(this.timeValue()),
-      timeUnit: this.timeUnit()
+      timeUnit: this.timeUnit(),
     };
-  }
+  },
 });

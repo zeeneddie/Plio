@@ -9,7 +9,7 @@ Template.Datepicker.viewmodel({
       endDate: this.endDate(),
       todayHighlight: true,
       format: 'dd M yyyy',
-      autoclose: true
+      autoclose: true,
     });
 
     if (this.date()) {
@@ -39,5 +39,5 @@ Template.Datepicker.viewmodel({
   getData() {
     const date = this.datepicker.datepicker('getDate');
     return { date };
-  }
+  },
 });

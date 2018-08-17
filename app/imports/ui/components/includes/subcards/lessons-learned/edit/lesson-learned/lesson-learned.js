@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 
 import { updateViewedBy } from '/imports/api/lessons/methods.js';
-import { isViewed } from '/imports/api/checkers.js';
+import { isViewed } from '/imports/api/checkers';
 
 Template.Subcards_LessonLearned.viewmodel({
   mixin: ['search', 'user', 'members'],
@@ -25,19 +25,19 @@ Template.Subcards_LessonLearned.viewmodel({
     }
   },
   titleArgs() {
-    const { title:value } = this.data();
-    const withFocusCheck = this._id ? true : false;
+    const { title: value } = this.data();
+    const withFocusCheck = !!this._id;
 
     return {
       value,
       withFocusCheck,
-      onFocusOut: (e, { value:title }) => {
+      onFocusOut: (e, { value: title }) => {
         this.title(title);
 
         const cb = err => err && this.title(this.templateInstance.data.title) && false;
 
         return invoke(this.parent(), 'update', { title }, cb);
-      }
+      },
     };
   },
   selectArgs() {
@@ -45,7 +45,7 @@ Template.Subcards_LessonLearned.viewmodel({
 
     return {
       value,
-      onUpdate: this.onUpdateOwner.bind(this)
+      onUpdate: this.onUpdateOwner.bind(this),
     };
   },
   onChangeDateCb() {
@@ -60,7 +60,7 @@ Template.Subcards_LessonLearned.viewmodel({
     this.parent().update({ date });
   },
   onUpdateOwner(viewmodel) {
-    const { selected:owner } = viewmodel.getData();
+    const { selected: owner } = viewmodel.getData();
 
     this.owner(owner);
     this.parent().update({ owner });
@@ -69,7 +69,7 @@ Template.Subcards_LessonLearned.viewmodel({
     return this.updateNotes.bind(this);
   },
   updateNotes(e, viewmodel) {
-    const { html:notes } = viewmodel.getData();
+    const { html: notes } = viewmodel.getData();
 
     if (this.templateInstance.notes === notes) return;
 
@@ -78,7 +78,11 @@ Template.Subcards_LessonLearned.viewmodel({
     this.parent().update({ e, withFocusCheck: true, notes });
   },
   getData() {
-    const { title, date, owner, notes } = this.data();
-    return { title, date, owner, notes };
-  }
+    const {
+      title, date, owner, notes,
+    } = this.data();
+    return {
+      title, date, owner, notes,
+    };
+  },
 });

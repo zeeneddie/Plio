@@ -1,0 +1,15 @@
+mutation updateOrganizationWorkspaceDefaults($input: UpdateOrganizationWorkspaceDefaultsInput!) {
+  updateOrganizationWorkspaceDefaults(input: $input) {
+    organization {
+      _id
+      workspaceDefaults {
+        displayUsers
+        displayMessages
+        displayActions
+        displayGoals
+        displayCompletedDeletedGoals
+        timeScale
+      }
+    }
+  }
+}

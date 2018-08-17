@@ -1,0 +1,7 @@
+mutation linkFileToGoal($input: GoalFileInput!) {
+  linkFileToGoal(input: $input) {
+    goal {
+      _id
+    }
+  }
+}

@@ -1,0 +1,20 @@
+#import "../../Fragment/CompletedDeletedGoal.graphql"
+
+mutation completeGoal($input: CompleteGoalInput!) {
+  completeGoal(input: $input) {
+    goal {
+      _id
+      isCompleted
+      completionComment
+      completedAt
+      completedBy {
+        _id
+        profile {
+          fullName
+        }
+      }
+      status
+      ...CompletedDeletedGoal
+    }
+  }
+}

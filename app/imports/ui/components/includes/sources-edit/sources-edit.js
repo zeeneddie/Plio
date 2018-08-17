@@ -105,13 +105,11 @@ Template.Sources_Edit.viewmodel({
         if (error) {
           // HTTP errors
           this.renderDocxError(`Failed to get .docx file: ${error}`);
+        } else if (result.error) {
+          // Mammoth errors
+          this.renderDocxError(`Rendering document: ${result.error}`);
         } else {
-          if (result.error) {
-            // Mammoth errors
-            this.renderDocxError(`Rendering document: ${result.error}`);
-          } else {
-            this.docxRenderInProgress('');
-          }
+          this.docxRenderInProgress('');
         }
       });
     }
@@ -191,6 +189,8 @@ Template.Sources_Edit.viewmodel({
       sourceExtension: extension,
     } = this.data();
 
-    return { type, fileId, url, extension };
+    return {
+      type, fileId, url, extension,
+    };
   },
 });

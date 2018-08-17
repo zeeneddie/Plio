@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import NonConformitiesService from '../non-conformities-service';
+import NonConformitiesService from '/imports/share/services/non-conformities-service';
 import { RequiredSchema } from '/imports/share/schemas/non-conformities-schema';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import {
@@ -26,7 +26,7 @@ import {
   P_OnSetAnalysisCommentsChecker,
   P_OnSetStandardsUpdateCompletedByChecker,
   P_OnSetStandardsUpdateCompletedDateChecker,
-  P_OnSetStandardsUpdateCommentsChecker
+  P_OnSetStandardsUpdateCommentsChecker,
 } from '../../checkers';
 
 export { default as update } from './update';

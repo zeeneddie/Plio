@@ -1,0 +1,7 @@
+mutation updateActionCompletionComments($input: UpdateActionCompletionCommentsInput!) {
+  updateActionCompletionComments(input: $input) {
+    action {
+      completionComments
+    }
+  }
+}

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 import { _ } from 'meteor/underscore';
 
@@ -32,45 +33,41 @@ getMenuItems.propTypes = {
   filter: PropTypes.string,
 };
 
-const RisksLayout = (props) => {
-  return (
-    <div>
-      <Header>
-        {props.isDiscussionOpened ? (
-          <span className="navbar-title">
-            {cx(
-              props.risk ? `${props.risk.title}` : ''
-            )}
-          </span>
-        ) : (
-          <Dropdown
-            className="navbar-title"
-            activeItemIndex={props.filter - 1}
-            onChange={props.onHandleFilterChange}
-          >
-            <Dropdown.Title className="dropdown-toggle pointer">
+const RisksLayout = props => (
+  <div>
+    <Header>
+      {props.isDiscussionOpened ? (
+        <span className="navbar-title">
+          {cx(props.risk ? `${props.risk.title}` : '')}
+        </span>
+      ) : (
+        <Dropdown
+          className="navbar-title"
+          activeItemIndex={props.filter - 1}
+          onChange={props.onHandleFilterChange}
+        >
+          <Dropdown.Title className="dropdown-toggle pointer">
               Risks <span className="text-muted">- @value</span>
-            </Dropdown.Title>
-            <Dropdown.Menu>
-              {getMenuItems(props)}
-            </Dropdown.Menu>
-          </Dropdown>
+          </Dropdown.Title>
+          <Dropdown.Menu>
+            {getMenuItems(props)}
+          </Dropdown.Menu>
+        </Dropdown>
+      )}
+      <Header.ArrowBack pull="left" onClick={props.onHandleReturn} />
+      <HeaderMenu />
+    </Header>
+    <div className="content">
+      <div className="container-fluid">
+        {props.loading ? (
+          <PreloaderPage />
+        ) : (
+          <RisksPage {...props} />
         )}
-        <Header.ArrowBack pull="left" onClick={props.onHandleReturn} />
-        <HeaderMenu />
-      </Header>
-      <div className="content">
-        <div className="container-fluid">
-          {props.loading ? (
-            <PreloaderPage />
-          ) : (
-            <RisksPage {...props} />
-          )}
-        </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 RisksLayout.propTypes = propTypes;
 

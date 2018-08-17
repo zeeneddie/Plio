@@ -18,5 +18,5 @@ Template.Organization_Menu_Item.viewmodel({
     localStorage.setItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`, selectedOrganizationSerialNumber);
 
     this.goToDashboard(selectedOrganizationSerialNumber);
-  }
+  },
 });

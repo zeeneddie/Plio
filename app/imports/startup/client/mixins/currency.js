@@ -2,7 +2,7 @@ import { OrgCurrencies } from '/imports/share/constants.js';
 
 export default {
   getCurrencySymbol(currency) {
-    switch(currency) {
+    switch (currency) {
       case 'EUR':
         return '€';
       case 'GBP':
@@ -14,6 +14,6 @@ export default {
     }
   },
   currencies() {
-    return _.values(OrgCurrencies).map(c => ({ [c]: this.getCurrencySymbol(c) }) );
-  }
+    return _.values(OrgCurrencies).map(c => ({ [c]: this.getCurrencySymbol(c) }));
+  },
 };

@@ -36,23 +36,6 @@
             {{/if}}
 
             <div class="row">
-              {{#with this.identifiedBy}}
-                <div class="col-sm-6">
-                  {{> Fields_ListGroupItem_Read
-                    label="Identified by"
-                    text=(userNameOrEmail this)}}
-                </div>
-              {{/with}}
-              {{#with this.identifiedAt}}
-                <div class="col-sm-6">
-                  {{> Fields_ListGroupItem_Read
-                      label="Date identified"
-                      text=(renderDate this)}}
-                </div>
-              {{/with}}
-            </div>
-
-            <div class="row">
               {{#with this.magnitude}}
                 <div class="col-sm-6">
                   {{> Fields_ListGroupItem_Read
@@ -87,10 +70,6 @@
               RCALabel=RiskRCALabel
               UOSLabel=RiskUOSLabel}}
 
-          {{#with notify}}
-            {{> Subcards_Notify_Read users=this}}
-          {{/with}}
-
           {{> Subcards_RiskScoring_Read scores=this.scores}}
 
           {{> Subcards_RiskEvaluation_Read riskEvaluation=this.riskEvaluation}}
@@ -111,6 +90,10 @@
             {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
             {{> Subcards_OtherFiles_Read fileIds=this.fileIds}}
+
+            {{#with notify}}
+              {{> Subcards_Notify_Read users=this}}
+            {{/with}}
           {{else}}
             <div class="m-t-3">
               {{> PreloaderPage size=1}}

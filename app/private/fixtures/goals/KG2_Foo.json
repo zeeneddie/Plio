@@ -1,0 +1,25 @@
+{
+  "_id": "84Gypjcdnx7DXyZYY",
+  "organizationId": "KwKXz5RefrE5hjWJ2",
+  "title": "Foo",
+  "startDate": { "$date": 1515670311424 },
+  "endDate": { "$date": 1570098822791 },
+  "status": 1,
+  "priority": "major",
+  "isCompleted": false,
+  "ownerId": "SQHmBKJ94gJvpLKLt",
+  "serialNumber": 2,
+  "sequentialId": "KG2",
+  "color": "#88afdd",
+  "fileIds": [],
+  "notify" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "isDeleted": false,
+  "createdAt" : {"$date": 1515670311424},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "updatedAt" : {"$date": 1515670311424},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt",
+  "riskIds": ["aqtqWNPrc9fNi6wyp"],
+  "milestoneIds": ["rdbFsRoszz5BReiJS"]
+}

@@ -1,0 +1,54 @@
+fragment ActionCard on Action {
+  _id
+  title
+  sequentialId
+  serialNumber
+  description
+  status
+  owner {
+    _id
+    profile {
+      fullName
+    }
+  }
+  planInPlace
+  completionTargetDate
+  toBeCompletedBy {
+    _id
+    profile {
+      fullName
+    }
+  }
+  isCompleted
+  completedAt
+  completedBy {
+    _id
+    profile {
+      fullName
+    }
+  }
+  completionComments
+  verificationTargetDate
+  toBeVerifiedBy {
+    _id
+    profile {
+      fullName
+    }
+  }
+  isVerified
+  isVerifiedAsEffective
+  verifiedAt
+  verifiedBy {
+    _id
+    profile {
+      fullName
+    }
+  }
+  verificationComments
+  goals(input: { isDeleted: false }) {
+    _id
+    title
+    sequentialId
+  }
+  workflowType
+}

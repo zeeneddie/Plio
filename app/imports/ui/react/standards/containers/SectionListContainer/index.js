@@ -1,27 +1,25 @@
-import { compose, lifecycle, mapProps } from 'recompose';
+import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
-import {
-  propEq,
-  lengthStandards,
-  sortArrayByTitlePrefix,
-  pickDeep,
-  propEqType,
-} from '/imports/api/helpers';
+import { propEqType } from '/imports/api/helpers';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import SectionList from '../../components/SectionList';
-import { getState } from '/imports/client/store';
+import { getState } from '../../../../../client/store';
 import {
   getSelectedAndDefaultStandardByFilter,
   redirectToStandardOrDefault,
   openStandardByFilter,
-  getSelectedStandardDeletedState,
-  createUncategorizedSection,
   getStandardsByFilter,
 } from '../../helpers';
-import { CollectionNames } from '/imports/share/constants';
+import { CollectionNames } from '../../../../../share/constants';
+import {
+  makeGetSectionsWithUncategorized,
+  getStandardsFiltered,
+  getSelectedStandardIsDeleted,
+} from '../../../../../client/store/selectors/standards';
+import { getSearchText } from '../../../../../client/store/selectors/global';
 
-const redirectAndOpen = (props) => setTimeout(() => {
+const redirectAndOpen = props => setTimeout(() => {
   const { urlItemId, filter, collapsed } = getState('global');
   const { standardsByIds, standards } = getState('collections');
   const {
@@ -35,10 +33,7 @@ const redirectAndOpen = (props) => setTimeout(() => {
     filter: STANDARD_FILTER_MAP.SECTION,
   });
 
-  let redirectOptions = { selectedStandard, defaultStandard };
-  if (props.searchText) {
-    redirectOptions = { defaultStandard };
-  }
+  const redirectOptions = { selectedStandard, defaultStandard };
 
   const redirect = () => redirectToStandardOrDefault(redirectOptions);
 
@@ -72,52 +67,33 @@ const redirectAndOpen = (props) => setTimeout(() => {
       const { type, defaultType } = props;
       const typeIsDefault = type && defaultType && type._id === defaultType._id;
 
-      if (props.searchText && typeIsDefault) {
-        redirect();
-        return;
-      }
-
       // find opened type and open a section in its section list
       const openedType = collapsed.find(propEqType(CollectionNames.STANDARD_TYPES));
       if (openedType && type && type._id === openedType.key) {
         // check if the current type is the default one
         // and redirect to default standard if needed
-        if (typeIsDefault) {
-          redirect();
+        if (!props.searchText) {
+          if (typeIsDefault) redirect();
+          openSection();
         }
-        openSection();
       }
     }
   }
 }, 0);
 
-const mapStateToProps = (state) => ({
-  standardBookSections: state.collections.standardBookSections,
-  ...getSelectedStandardDeletedState(state),
-});
+const makeMapStateToProps = () => {
+  const getSectionsWithUncategorized = makeGetSectionsWithUncategorized();
+  const mapStateToProps = (state, props) => ({
+    sections: getSectionsWithUncategorized(state, props),
+    searchText: getSearchText(state),
+    isSelectedStandardDeleted: getSelectedStandardIsDeleted(state),
+    standardsFiltered: getStandardsFiltered(state),
+  });
+  return mapStateToProps;
+};
 
 export default compose(
-  connect(mapStateToProps),
-  mapProps(({ standardBookSections, standards, ...props }) => {
-    let sections = standardBookSections;
-    const uncategorized = createUncategorizedSection({ standards, sections });
-
-    // add own standards to each section
-    sections = sections.map(section => ({
-      ...section,
-      standards: standards.filter(propEq('sectionId', section._id)),
-    }));
-
-    // add uncategorized section
-    sections = sections.concat(uncategorized);
-
-    sections = sections.filter(lengthStandards);
-
-    sections = sortArrayByTitlePrefix(sections);
-
-    return { ...props, sections };
-  }),
-  connect(pickDeep(['global.searchText', 'standards.standardsFiltered'])),
+  connect(makeMapStateToProps),
   lifecycle({
     componentWillMount() {
       redirectAndOpen(this.props);

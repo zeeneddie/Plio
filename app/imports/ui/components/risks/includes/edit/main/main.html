@@ -10,11 +10,11 @@
       {{> DescriptionTextBox
           description=this.description}}
 
-      {{> StatusComment statusComment=this.statusComment}}
-
       {{> NC_Status_Edit
           _id=this._id
           status=this.status}}
+
+      {{> StatusComment statusComment=this.statusComment}}
 
       {{> Fields_Standards_Edit
           _id=this._id
@@ -26,15 +26,16 @@
           helpText=departmentsFieldHelp
           departmentsIds=this.departmentsIds}}
 
-      {{> NC_IdentifiedBy_Edit
+      {{> NC_Originator_Edit
           _id=this._id
-          identifiedBy=this.identifiedBy}}
+          originatorId=this.originatorId}}
 
-      {{> NC_IdentifiedDate_Edit
+      {{> NC_Owner_Edit
           _id=this._id
-          identifiedAt=this.identifiedAt}}
+          ownerId=this.ownerId}}
 
       {{> Problems_Magnitude_Edit
+          disabled=true
           _id=this._id
           label="Initial categorization"
           magnitude=this.magnitude

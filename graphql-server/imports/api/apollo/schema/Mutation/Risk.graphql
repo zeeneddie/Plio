@@ -1,0 +1,125 @@
+type RiskPayload {
+  risk: Risk
+}
+
+input CreateRiskInput {
+  organizationId: ID!
+  title: String!
+  description: String
+  originatorId: ID!
+  ownerId: ID!
+  magnitude: String!
+  typeId: ID!
+  standardsIds: [ID]
+  goalId: ID
+}
+
+input DeleteRiskInput {
+  _id: ID!
+}
+
+input LinkStandardToRiskInput {
+  _id: ID!
+  standardId: ID!
+}
+
+input UpdateRiskTitleInput {
+  _id: ID!
+  title: String!
+}
+
+input UpdateRiskDescriptionInput {
+  _id: ID!
+  description: String!
+}
+
+input UpdateRiskStatusCommentInput {
+  _id: ID!
+  statusComment: String!
+}
+
+input UpdateRiskOriginatorInput {
+  _id: ID!
+  originatorId: ID!
+}
+
+input UpdateRiskOwnerInput {
+  _id: ID!
+  ownerId: ID!
+}
+
+input UpdateRiskMagnitudeInput {
+  _id: ID!
+  magnitude: String!
+}
+
+input LinkRiskTypeToRiskInput {
+  _id: ID!
+  typeId: ID!
+}
+
+input UpdateRiskStandardsInput {
+  _id: ID!
+  standardsIds: [ID]!
+}
+
+input UpdateRiskDepartmentsInput {
+  _id: ID!
+  departmentsIds: [ID]!
+}
+
+input SetRiskAnalysisTargetDateInput {
+  _id: ID!
+  targetDate: DateTime!
+}
+
+input SetRiskAnalysisExecutorInput {
+  _id: ID!
+  executor: ID!
+}
+
+input SetRiskAnalysisCompletedAtInput {
+  _id: ID!
+  completedAt: DateTime!
+}
+
+input SetRiskAnalysisCompletedByInput {
+  _id: ID!
+  completedBy: ID!
+}
+
+input SetRiskAnalysisCompletionCommentsInput {
+  _id: ID!
+  completionComments: String!
+}
+
+input CompleteRiskAnalysisInput {
+  _id: ID!
+  completionComments: String
+}
+
+input UndoRiskAnalysisCompletionInput {
+  _id: ID!
+}
+
+type Mutation {
+  createRisk(input: CreateRiskInput!): RiskPayload
+  deleteRisk(input: DeleteRiskInput!): RiskPayload
+  linkStandardToRisk(input: LinkStandardToRiskInput!): RiskPayload
+  linkRiskTypeToRisk(input: LinkRiskTypeToRiskInput!): RiskPayload
+  updateRiskTitle(input: UpdateRiskTitleInput!): RiskPayload
+  updateRiskDescription(input: UpdateRiskDescriptionInput!): RiskPayload
+  updateRiskStatusComment(input: UpdateRiskStatusCommentInput!): RiskPayload
+  updateRiskOriginator(input: UpdateRiskOriginatorInput!): RiskPayload
+  updateRiskOwner(input: UpdateRiskOwnerInput!): RiskPayload
+  updateRiskMagnitude(input: UpdateRiskMagnitudeInput!): RiskPayload
+  updateRiskStandards(input: UpdateRiskStandardsInput!): RiskPayload
+  updateRiskDepartments(input: UpdateRiskDepartmentsInput!): RiskPayload
+  setRiskAnalysisTargetDate(input: SetRiskAnalysisTargetDateInput!): RiskPayload
+  setRiskAnalysisExecutor(input: SetRiskAnalysisExecutorInput!): RiskPayload
+  setRiskAnalysisCompletedAt(input: SetRiskAnalysisCompletedAtInput!): RiskPayload
+  setRiskAnalysisCompletedBy(input: SetRiskAnalysisCompletedByInput!): RiskPayload
+  setRiskAnalysisCompletionComments(input: SetRiskAnalysisCompletionCommentsInput!): RiskPayload
+  completeRiskAnalysis(input: CompleteRiskAnalysisInput!): RiskPayload
+  undoRiskAnalysisCompletion(input: UndoRiskAnalysisCompletionInput!): RiskPayload
+}

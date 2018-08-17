@@ -14,8 +14,8 @@ export default DocumentDiffer = {
       FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED,
     } = ChangesKinds;
 
-    const getFieldName = (path) => (
-      path.map(field => _.isNumber(field) ? '$': field).join('.')
+    const getFieldName = path => (
+      path.map(field => _.isNumber(field) ? '$' : field).join('.')
     );
 
     const getValue = (obj, path) => {
@@ -72,7 +72,9 @@ export default DocumentDiffer = {
     });
 
     rawFieldDiffs.forEach((rawDiff) => {
-      const { kind, path, lhs: oldValue, rhs: newValue } = rawDiff;
+      const {
+        kind, path, lhs: oldValue, rhs: newValue,
+      } = rawDiff;
 
       const field = getFieldName(path);
 

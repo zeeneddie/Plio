@@ -6,9 +6,9 @@ Template.UserEdit_PhoneNumber.viewmodel({
   number: '',
   type: PhoneTypes.WORK,
   events: {
-    'change .c-select'(e, tpl) {
+    'change .c-select': function (e, tpl) {
       this.onTypeChanged();
-    }
+    },
   },
   phoneTypes() {
     return _.values(PhoneTypes);
@@ -43,7 +43,7 @@ Template.UserEdit_PhoneNumber.viewmodel({
   getData() {
     return {
       number: this.number(),
-      type: this.type()
+      type: this.type(),
     };
-  }
+  },
 });

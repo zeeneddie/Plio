@@ -1,0 +1,8 @@
+mutation updateActionVerificationTargetDate($input: UpdateActionVerificationTargetDateInput!) {
+  updateActionVerificationTargetDate(input: $input) {
+    action {
+      verificationTargetDate
+      status
+    }
+  }
+}

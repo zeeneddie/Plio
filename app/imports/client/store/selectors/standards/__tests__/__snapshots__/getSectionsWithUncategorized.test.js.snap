@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getSectionsWithUncategorized matches snapshot 1`] = `
+Array [
+  Object {
+    "_id": 8,
+    "standards": Array [
+      Object {
+        "_id": 1,
+        "sectionId": 8,
+        "typeId": 9,
+      },
+      Object {
+        "_id": 2,
+        "sectionId": 8,
+        "typeId": 9,
+      },
+      Object {
+        "_id": 3,
+        "deletedAt": 1513074233019,
+        "isDeleted": true,
+        "sectionId": 8,
+        "typeId": 9,
+      },
+      Object {
+        "_id": 4,
+        "deletedAt": 1513074233018,
+        "isDeleted": true,
+        "sectionId": 8,
+        "typeId": 9,
+      },
+    ],
+  },
+  Object {
+    "_id": "StandardBookSections.Uncategorized",
+    "organizationId": undefined,
+    "standards": Array [
+      Object {
+        "_id": 5,
+      },
+    ],
+    "title": "Uncategorized",
+  },
+]
+`;

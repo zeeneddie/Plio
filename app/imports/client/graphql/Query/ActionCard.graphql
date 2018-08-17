@@ -1,0 +1,9 @@
+#import "../Fragment/ActionCard.graphql"
+
+query ActionCard($_id: ID!) {
+  action(_id: $_id) {
+    action {
+      ...ActionCard
+    }
+  }
+}

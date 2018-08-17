@@ -6,7 +6,9 @@
           <a class="btn btn-secondary btn-inline pointer" {{b "attr: { href: getLink(this) }"}}>
             <strong>{{this.sequentialId}}</strong>
             <span>{{this.title}}</span>
-            <i class="fa fa-circle margin-left" {{b "class: 'text-'+getClassByStatus(this.status)"}}></i>
+            {{#if (showStatusIcon this)}}
+              <i class="fa fa-circle margin-left" {{b "class: 'text-'+getClassByStatus(this.status)"}}></i>
+            {{/if}}
           </a>
         {{/each}}
     </h4>

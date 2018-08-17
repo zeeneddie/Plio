@@ -1,0 +1,14 @@
+mutation setRiskAnalysisCompletedBy($input: SetRiskAnalysisCompletedByInput!) {
+  setRiskAnalysisCompletedBy(input: $input) {
+    risk {
+      analysis {
+        completedBy {
+          _id
+          profile {
+            fullName
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,14 +1,11 @@
 {
   "_id" : "P98SExuNHZ4y8bhjc",
-  "analysis": {
-    "executor": "SQHmBKJ94gJvpLKLt"
-  },
   "organizationId" : "KwKXz5RefrE5hjWJ2",
+  "type": "non-conformity",
   "serialNumber" : 2,
   "sequentialId" : "NC2",
   "title" : "Inquiry not recorded",
-  "identifiedBy" : "SQHmBKJ94gJvpLKLt",
-  "identifiedAt" : {"$date": 1459508400000},
+  "originatorId" : "SQHmBKJ94gJvpLKLt",
   "magnitude" : "critical",
   "workflowType" : "6-step",
   "createdAt" : {"$date": 1459508400000},

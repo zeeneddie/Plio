@@ -16,7 +16,7 @@ export default compose(
     users: state.collections.usersByOrgIds[organizationId],
   })),
   withProps(({ doc, users }) => {
-    const mapper = (user) => ({
+    const mapper = user => ({
       value: getId(user),
       text: getFullName(user),
       email: getEmail(user),

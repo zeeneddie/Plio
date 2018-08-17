@@ -9,6 +9,12 @@ const lookup = [
   'ownerId',
   'planInPlace',
   'notes',
+  'completedAt',
+  'completedBy',
+  'completionComments',
+  'verifiedAt',
+  'verifiedBy',
+  'verificationComments',
 ];
 
 export const UpdateSchema = schemas.getSchemaFrom(

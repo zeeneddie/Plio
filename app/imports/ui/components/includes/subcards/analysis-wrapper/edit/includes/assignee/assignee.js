@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.Analysis_ToBeCompletedBy_Edit.viewmodel({
-  assignee() { return Meteor.userId() },
+  assignee() { return Meteor.userId(); },
   comments: '',
   selectFirstIfNoSelected: false,
   placeholder: 'Assignee',
@@ -10,10 +10,10 @@ Template.Analysis_ToBeCompletedBy_Edit.viewmodel({
   disabled: false,
   selectArgs() {
     const {
-      assignee:value = '',
+      assignee: value = '',
       selectFirstIfNoSelected,
       placeholder,
-      disabled
+      disabled,
     } = this.data();
     return {
       value,
@@ -21,14 +21,14 @@ Template.Analysis_ToBeCompletedBy_Edit.viewmodel({
       selectFirstIfNoSelected,
       disabled,
       onUpdate: (viewmodel) => {
-        const { selected:executor } = viewmodel.getData();
+        const { selected: executor } = viewmodel.getData();
 
         this.assignee(executor);
 
         const cb = err => err && this.assignee(this.templateInstance.data.assignee) && false;
 
         return this.onUpdate({ executor }, cb);
-      }
+      },
     };
   },
   canButtonBeShown() {
@@ -41,7 +41,7 @@ Template.Analysis_ToBeCompletedBy_Edit.viewmodel({
   onComplete() {},
   complete() {
     return (viewmodel) => {
-      const { text:completionComments } = viewmodel.getData();
+      const { text: completionComments } = viewmodel.getData();
 
       this.onComplete({ completionComments });
     };
@@ -49,5 +49,5 @@ Template.Analysis_ToBeCompletedBy_Edit.viewmodel({
   onUndo() {},
   undo() {
     return viewmodel => this.onUndo();
-  }
+  },
 });

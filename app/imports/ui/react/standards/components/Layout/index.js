@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 import { _ } from 'meteor/underscore';
 
@@ -31,14 +32,12 @@ getMenuItems.propTypes = {
   filter: PropTypes.string,
 };
 
-const StandardsLayout = (props) => (
+const StandardsLayout = props => (
   <div>
     <Header>
       {props.isDiscussionOpened ? (
         <span className="navbar-title">
-          {cx(
-            props.standard ? `${props.standard.title}` : ''
-          )}
+          {cx(props.standard ? `${props.standard.title}` : '')}
         </span>
       ) : (
         <Dropdown

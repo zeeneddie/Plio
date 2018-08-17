@@ -1,4 +1,4 @@
-import { composeWithTracker, compose as kompose } from 'react-komposer';
+import { compose as kompose } from '@storybook/react-komposer';
 import {
   compose,
   lifecycle,
@@ -10,21 +10,18 @@ import {
   onlyUpdateForKeys,
 } from 'recompose';
 import { connect } from 'react-redux';
-import property from 'lodash.property';
 import { Meteor } from 'meteor/meteor';
+import { always, view } from 'ramda';
+import { lenses } from 'plio-util';
 
 import StandardsLayout from '../../components/Layout';
 import {
-  pickDeep,
   identity,
   invokeStop,
-  combineObjects,
-  pickFrom,
   every,
   not,
-  always,
-} from '/imports/api/helpers';
-import { StandardFilters, STANDARD_FILTER_MAP } from '/imports/api/constants';
+} from '../../../../../api/helpers';
+import { StandardFilters, STANDARD_FILTER_MAP } from '../../../../../api/constants';
 import onHandleFilterChange from '../../../handlers/onHandleFilterChange';
 import onHandleReturn from '../../../handlers/onHandleReturn';
 import loadInitialData from '../../../loaders/loadInitialData';
@@ -39,7 +36,28 @@ import {
   observeStandardBookSections,
   observeStandardTypes,
 } from '../../observers';
-import { setInitializing } from '/imports/client/store/actions/standardsActions';
+import { setInitializing } from '../../../../../client/store/actions/standardsActions';
+import { composeWithTracker } from '../../../../../client/util';
+import {
+  getFilter,
+  getUrlItemId,
+  getDataLoading,
+} from '../../../../../client/store/selectors/global';
+import {
+  getOrgSerialNumber,
+  getOrganizationId,
+  getOrganization,
+} from '../../../../../client/store/selectors/organizations';
+import { getIsInProgress } from '../../../../../client/store/selectors/dataImport';
+import {
+  getStandardsInitializing,
+  getStandardsAreDepsReady,
+  getSelectedStandard,
+} from '../../../../../client/store/selectors/standards';
+import { getIsDiscussionOpened } from '../../../../../client/store/selectors/discussion';
+import { getWindowWidth } from '../../../../../client/store/selectors/window';
+import { getMobileShowCard } from '../../../../../client/store/selectors/mobile';
+import { namedCompose } from '../../../helpers';
 
 const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
   const isDeleted = filter === STANDARD_FILTER_MAP.DELETED;
@@ -47,27 +65,26 @@ const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
   return Meteor.subscribe('standardsLayout', orgSerialNumber, isDeleted);
 });
 
-export default compose(
+export default namedCompose('StandardsDataLoader')(
   connect(),
   defaultProps({ filters: StandardFilters }),
   kompose(loadIsDiscussionOpened),
-  composeWithTracker(loadInitialData, null, null, {
-    shouldResubscribe: false,
+  composeWithTracker(loadInitialData, {
+    propsToWatch: [],
   }),
-  connect(pickDeep([
-    'global.filter',
-    'organizations.orgSerialNumber',
-    'dataImport.isInProgress',
-  ])),
+  connect(state => ({
+    filter: getFilter(state),
+    orgSerialNumber: getOrgSerialNumber(state),
+    isInProgress: getIsInProgress(state),
+  })),
   branch(
-    property('isInProgress'),
+    view(lenses.isInProgress),
     withProps(always({ loading: true })),
     composeWithTracker(
       getLayoutData(),
-      null,
-      null,
       {
-        shouldResubscribe: (props, nextProps) => (
+        propsToWatch: ['orgSerialNumber', 'filter'],
+        shouldSubscribe: (props, nextProps) => (
           props.orgSerialNumber !== nextProps.orgSerialNumber ||
           ((props.filter === 1 || props.filter === 2) && nextProps.filter === 3) ||
           (props.filter === 3 && (nextProps.filter === 1 || nextProps.filter === 2))
@@ -76,12 +93,14 @@ export default compose(
     ),
   ),
   branch(
-    property('loading'),
+    view(lenses.loading),
     renderComponent(StandardsLayout),
     identity,
   ),
   composeWithTracker(loadUsersData),
-  connect(pickDeep(['organizations.organizationId'])),
+  connect(state => ({
+    organizationId: getOrganizationId(state),
+  })),
   lifecycle({
     componentWillMount() {
       this.props.dispatch(setInitializing(true));
@@ -89,31 +108,33 @@ export default compose(
       loadMainData(this.props, () => null);
     },
   }),
-  connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
+  connect(state => ({
+    organizationId: getOrganizationId(state),
+    urlItemId: getUrlItemId(state),
+  })),
   branch(
-    property('organizationId'),
-    composeWithTracker(loadCardData, null, null, {
-      shouldResubscribe: (props, nextProps) => !!(
-        props.organizationId !== nextProps.organizationId ||
-        props.urlItemId !== nextProps.urlItemId
-      ),
+    view(lenses.organizationId),
+    composeWithTracker(loadCardData, {
+      propsToWatch: ['organizationId', 'urlItemId'],
     }),
     identity,
   ),
-  connect(pickDeep(['organizations.organizationId', 'standards.initializing'])),
+  connect(state => ({
+    organizationId: getOrganizationId(state),
+    initializing: getStandardsInitializing(state),
+  })),
   branch(
-    property('organizationId'),
-    composeWithTracker(loadDeps, null, null, {
-      shouldResubscribe: (props, nextProps) =>
-        props.organizationId !== nextProps.organizationId ||
-        props.initializing !== nextProps.initializing,
+    view(lenses.organizationId),
+    composeWithTracker(loadDeps, {
+      propsToWatch: ['organizationId', 'initializing'],
     }),
     identity,
   ),
-  connect(combineObjects([
-    pickFrom('standards', ['areDepsReady', 'initializing']),
-    pickDeep(['global.dataLoading']),
-  ])),
+  connect(state => ({
+    areDepsReady: getStandardsAreDepsReady(state),
+    initializing: getStandardsInitializing(state),
+    dataLoading: getDataLoading(state),
+  })),
   lifecycle({
     componentWillMount() {
       this._startObservers(this.props);
@@ -131,9 +152,9 @@ export default compose(
 
     _startObservers(props) {
       const pred = every([
-        compose(not, property('dataLoading')),
-        property('areDepsReady'),
-        property('initializing'),
+        compose(not, view(lenses.dataLoading)),
+        view(lenses.areDepsReady),
+        view(lenses.initializing),
       ]);
 
       if (pred(props) && (!this.observers || !this.observers.length)) {
@@ -153,14 +174,12 @@ export default compose(
     },
   }),
   connect(state => ({
-    standard: state.collections.standardsByIds[state.global.urlItemId],
-    ...pickDeep([
-      'organizations.organization',
-      'organizations.orgSerialNumber',
-      'discussion.isDiscussionOpened',
-      'global.urlItemId',
-      'global.filter',
-    ])(state),
+    standard: getSelectedStandard(state),
+    organization: getOrganization(state),
+    orgSerialNumber: getOrgSerialNumber(state),
+    isDiscussionOpened: getIsDiscussionOpened(state),
+    urlItemId: getUrlItemId(state),
+    filter: getFilter(state),
   })),
   onlyUpdateForKeys([
     'isDiscussionOpened',
@@ -169,7 +188,10 @@ export default compose(
     'orgSerialNumber',
     'filter',
   ]),
-  connect(pickDeep(['window.width', 'mobile.showCard'])),
+  connect(state => ({
+    width: getWindowWidth(state),
+    showCard: getMobileShowCard(state),
+  })),
   withHandlers({
     onHandleFilterChange,
     onHandleReturn,

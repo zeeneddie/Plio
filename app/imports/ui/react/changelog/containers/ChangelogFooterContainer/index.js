@@ -1,5 +1,4 @@
 import { compose, mapProps, withHandlers, shouldUpdate } from 'recompose';
-import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 
@@ -14,6 +13,7 @@ import { pickC, shallowCompare } from '/imports/api/helpers';
 import { lastLogsLimit } from '../../constants';
 import ChangelogFooter from '../../components/ChangelogFooter';
 import propTypes from './propTypes';
+import { composeWithTracker } from '../../../../../client/util';
 
 const onPropsChange = (props, onData) => {
   let subscription;
@@ -28,7 +28,7 @@ const onPropsChange = (props, onData) => {
       'auditLogsCount',
       counterName,
       documentId,
-      collection
+      collection,
     );
 
     dispatch(setLoadingLogsCount(true));
@@ -51,9 +51,8 @@ const onViewRecentClick = props => () => props.dispatch(setShowAll(false));
 const ChangelogFooterContainer = compose(
   connect(),
 
-  composeWithTracker(onPropsChange, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.documentId !== nextProps.documentId,
+  composeWithTracker(onPropsChange, {
+    propsToWatch: ['documentId'],
   }),
 
   connect(state => pickC([

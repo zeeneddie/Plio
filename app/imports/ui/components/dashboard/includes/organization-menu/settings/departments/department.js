@@ -5,7 +5,7 @@ Template.OrgSettings_Department.viewmodel({
   mixin: ['modal', 'callWithFocusCheck'],
   name: '',
   isChanged() {
-    let savedName = this.templateInstance.data.name;
+    const savedName = this.templateInstance.data.name;
     const name = this.name();
 
     return name && name !== savedName;
@@ -23,7 +23,7 @@ Template.OrgSettings_Department.viewmodel({
   },
   getData() {
     return {
-      name: this.name()
+      name: this.name(),
     };
-  }
+  },
 });

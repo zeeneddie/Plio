@@ -19,7 +19,7 @@ Template.Actions_Card_Read.viewmodel({
     return this._getNameByType(get(this.action(), 'type'));
   },
   getClassForPlanInPlace(plan) {
-    switch(plan) {
+    switch (plan) {
       case ActionPlanOptions.YES:
         return 'text-success';
         break;
@@ -49,7 +49,7 @@ Template.Actions_Card_Read.viewmodel({
       _title,
       helpText: WorkInboxHelp.workInbox,
       template: 'Actions_Edit',
-      _id: get(this.action(), '_id')
+      _id: get(this.action(), '_id'),
     });
   },
   restore({ _id, isDeleted, title }, cb = () => {}) {

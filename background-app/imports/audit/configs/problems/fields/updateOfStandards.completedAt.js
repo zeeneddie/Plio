@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
 import { getPrettyTzDate } from '/imports/helpers/date';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 import { getReceivers } from '../helpers';
 
 
@@ -12,11 +12,11 @@ export default {
       },
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Update of standards date set to "{{{newValue}}}"',
+          'Approval date set to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'Update of standards date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
+          'Approval date changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'Update of standards date removed',
+          'Approval date removed',
       },
     },
   ],
@@ -27,11 +27,12 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} set update of standards date of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
+          '{{{userName}}} set approval date of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed update of standards date of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
+          '{{{userName}}} changed approval date ' +
+          'of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{{userName}}} removed update of standards date of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed approval date of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

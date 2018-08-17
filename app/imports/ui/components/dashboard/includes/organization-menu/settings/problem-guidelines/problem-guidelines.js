@@ -22,5 +22,5 @@ Template.OrgSettings_ProblemGuidelines.viewmodel({
     const _id = this.organizationId();
 
     this.modal().callMethod(this.method(), { _id, type, text });
-  }
+  },
 });

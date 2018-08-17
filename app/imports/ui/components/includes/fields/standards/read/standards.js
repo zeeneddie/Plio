@@ -1,18 +1,18 @@
 import { Template } from 'meteor/templating';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 Template.Fields_Standards_Read.viewmodel({
   mixin: ['organization', 'standard'],
-  standardsIds: '',
+  standardsIds: [],
   standards() {
-    const standardsIds = Array.from(this.standardsIds() || []);
-    const standards = this._getStandardsByQuery({ _id: { $in: standardsIds } });
+    const ids = Array.from(this.standardsIds() || []);
+    const orgSerialNumber = this.organizationSerialNumber();
+    const standards = this._getStandardsByQuery({ _id: { $in: ids } });
 
-    return standards.map(({ _id, title, ...args }) => {
-      const href = ((() => {
-        const orgSerialNumber = this.organizationSerialNumber();
-        return FlowRouter.path('standard', { orgSerialNumber, standardId: _id });
-      })());
-      return { _id, title, href, ...args };
+    return standards.map(({ _id, title }) => {
+      const href = FlowRouter.path('standard', { orgSerialNumber, urlItemId: _id });
+
+      return { title, href };
     });
-  }
+  },
 });

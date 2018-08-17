@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { SystemName } from '../constants.js';
-import { OrganizationIdSchema } from './schemas.js';
+import { SystemName } from '../constants';
+import { OrganizationIdSchema } from './schemas';
 
 
 export const AuditLogSchema = new SimpleSchema([

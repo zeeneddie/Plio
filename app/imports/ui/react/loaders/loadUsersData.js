@@ -15,4 +15,4 @@ export default function loadUsersData({ dispatch }, onData = () => null) {
 
   onData(null, {});
 }
- 
+

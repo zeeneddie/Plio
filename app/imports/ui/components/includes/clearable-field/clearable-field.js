@@ -1,13 +1,13 @@
+import { Template } from 'meteor/templating';
+
 Template.ClearableField.viewmodel({
   isFocused: false,
   events: {
-    'focusin input'(e) {
-      e.stopImmediatePropagation();
+    'focusin input': function () {
       this.isFocused(true);
     },
-    'focusout input'(e) {
-      e.stopImmediatePropagation();
+    'focusout input': function () {
       this.isFocused(false);
-    }
-  }
+    },
+  },
 });

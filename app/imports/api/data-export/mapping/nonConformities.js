@@ -1,7 +1,7 @@
 import { _ } from 'meteor/underscore';
 import { CollectionNames, ProblemsStatuses, ProblemIndexes } from '/imports/share/constants';
 import { NonConformities } from '/imports/share/collections/non-conformities';
-import { formatUser, formatLessonsLearned, formatMap, formatDate } from '../formatters';
+import { formatUser, formatLessonsLearned, formatMap } from '../formatters';
 
 export const mapping = {
   collection: NonConformities,
@@ -16,12 +16,12 @@ export const mapping = {
   ),
   fields: {
     _id: {
-      label: 'Non-conformity ID',
+      label: 'Nonconformity ID',
       isDefault: true,
       reference: 'sequentialId',
     },
     name: {
-      label: 'Non-conformity name',
+      label: 'Title',
       isDefault: true,
       reference: 'title',
     },
@@ -59,28 +59,32 @@ export const mapping = {
         many: true,
       },
     },
-    identifiedBy: {
-      label: 'Identified by',
+    originatorId: {
+      label: 'Originator',
       isDefault: true,
       format: formatUser,
       reference: {
         from: CollectionNames.USERS,
-        internalField: 'identifiedBy',
+        internalField: 'originatorId',
         externalField: '_id',
       },
     },
-    identifiedDate: {
-      label: 'Identified date',
+    owner: {
+      label: 'Owner',
       isDefault: true,
-      reference: 'identifiedAt',
-      format: formatDate,
+      format: formatUser,
+      reference: {
+        from: CollectionNames.USERS,
+        internalField: 'ownerId',
+        externalField: '_id',
+      },
     },
     magnitude: {
       label: 'Magnitude',
       isDefault: true,
     },
     approxCost: {
-      label: 'Approx cost per occurrence?',
+      label: 'Financial impact',
       reference: 'cost',
     },
     occurrences: {

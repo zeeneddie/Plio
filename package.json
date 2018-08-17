@@ -2,18 +2,63 @@
   "name": "plio-dev-toolsgit",
   "private": true,
   "scripts": {
-    "lint-app": "./node_modules/.bin/eslint app",
-    "lint-background-app": "./node_modules/.bin/eslint background-app"
+    "lint": "./node_modules/.bin/eslint --ignore-pattern '**/imports/share'",
+    "lint:staged": "./node_modules/.bin/lint-staged",
+    "lint:app": "yarn lint app",
+    "lint:background-app": "yarn lint background-app",
+    "lint:graphql-server": "yarn lint graphql-server",
+    "jest": "./node_modules/.bin/jest",
+    "test": "yarn jest"
   },
+  "lint-staged": {
+    "*.js": [
+      "yarn lint --fix",
+      "git add"
+    ]
+  },
+  "pre-commit": [
+    "lint:staged",
+    "test"
+  ],
   "devDependencies": {
-    "eslint": "^2.13.1",
-    "babel-eslint": "^6.1.2",
-    "eslint-config-airbnb": "^9.0.1",
-    "eslint-config-meteor": "0.0.9",
-    "eslint-import-resolver-meteor": "^0.3.3",
-    "eslint-plugin-import": "^1.16.0",
-    "eslint-plugin-jsx-a11y": "^1.5.5",
-    "eslint-plugin-meteor": "^3.6.0",
-    "eslint-plugin-react": "^5.2.2"
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.3",
+    "babel-jest": "^21.2.0",
+    "babel-plugin-css-modules-transform": "^1.4.0",
+    "babel-plugin-dynamic-import-node": "^1.2.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "eslint": "^4.12.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-meteor": "^0.1.0",
+    "eslint-import-resolver-meteor": "^0.4.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-meteor": "^4.1.4",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-react": "^7.5.1",
+    "faker": "^4.1.0",
+    "graphql": "^0.12.3",
+    "graphql-tag": "^2.6.1",
+    "husky": "^0.14.3",
+    "jest": "^21.2.1",
+    "jest-css-modules-transform": "^1.0.5",
+    "jest-styled-components": "^4.11.0-1",
+    "jest-transform-graphql": "^2.1.0",
+    "lint-staged": "^7.0.0",
+    "lodash.get": "^4.4.2",
+    "moment-timezone": "^0.5.14",
+    "mongodb": "^3.0.1",
+    "mongodb-memory-server": "^1.6.4",
+    "pre-commit": "^1.2.2",
+    "ramda": "^0.25.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-test-renderer": "^16.2.0",
+    "styled-components": "^3.1.5"
   }
 }

@@ -7,8 +7,8 @@ export default {
     const query = { _id };
     const options = {
       $addToSet: {
-        viewedBy: userId
-      }
+        viewedBy: userId,
+      },
     };
 
     return this.collection.update(query, options);
@@ -18,8 +18,8 @@ export default {
     const query = { _id };
     const options = {
       $set: {
-        ...args
-      }
+        ...args,
+      },
     };
     return this.collection.update(query, options);
   },

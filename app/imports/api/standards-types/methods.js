@@ -1,17 +1,27 @@
+/* eslint-disable camelcase */
+
+import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { when } from 'ramda';
 
 import StandardsTypeService from './standards-type-service';
-import { StandardsTypeSchema } from '/imports/share/schemas/standards-type-schema';
-import { StandardTypes } from '/imports/share/collections/standards-types';
-import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas';
+import { StandardsTypeSchema } from '../../share/schemas/standards-type-schema';
+import { StandardTypes } from '../../share/collections';
+import { IdSchema, OrganizationIdSchema } from '../../share/schemas/schemas';
+import Errors from '../../share/errors';
 import Method, { CheckedMethod } from '../method';
-import { inject } from '/imports/api/helpers';
+import { inject } from '../helpers';
 import {
   ORG_EnsureCanChangeChecker,
   ORG_EnsureCanChangeCheckerCurried,
 } from '../checkers';
+import { isStandardOperatingProcedure } from './helpers';
 
 const injectST = inject(StandardTypes);
+
+const ensureCanChange = when(isStandardOperatingProcedure, () => {
+  throw new Meteor.Error(Errors.ST_CANNOT_CHANGE_DEFAULT);
+});
 
 export const insert = new Method({
   name: 'StandardTypes.insert',
@@ -19,9 +29,7 @@ export const insert = new Method({
   validate: StandardsTypeSchema.validator(),
 
   check(checker) {
-    return checker(
-      ORG_EnsureCanChangeCheckerCurried(this.userId)
-    );
+    return checker(ORG_EnsureCanChangeCheckerCurried(this.userId));
   },
 
   run(doc) {
@@ -36,8 +44,10 @@ export const update = new CheckedMethod({
 
   check: checker => injectST(checker)(ORG_EnsureCanChangeChecker),
 
-  run(doc) {
-    return StandardsTypeService.update(doc);
+  run(args, doc) {
+    ensureCanChange(doc);
+
+    return StandardsTypeService.update(args);
   },
 });
 
@@ -48,7 +58,9 @@ export const remove = new CheckedMethod({
 
   check: checker => injectST(checker)(ORG_EnsureCanChangeChecker),
 
-  run(doc) {
-    return StandardsTypeService.remove(doc);
+  run(args, doc) {
+    ensureCanChange(doc);
+
+    return StandardsTypeService.remove(args);
   },
 });

@@ -10,7 +10,7 @@ export default {
       return Roles.userIsInRole(
         userId,
         UserRoles.INVITE_USERS,
-        organizationId
+        organizationId,
       );
     }
   },
@@ -21,7 +21,7 @@ export default {
       return Roles.userIsInRole(
         userId,
         UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
-        organizationId
+        organizationId,
       );
     }
   },
@@ -32,8 +32,8 @@ export default {
       return Roles.userIsInRole(
         userId,
         UserRoles.CHANGE_ORG_SETTINGS,
-        organizationId
+        organizationId,
       );
     }
-  }
+  },
 };

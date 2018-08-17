@@ -5,7 +5,7 @@ import PreloaderPage from '../../../components/PreloaderPage';
 import HelpDocsPage from '../HelpDocsPage';
 import propTypes from './propTypes';
 
-const HelpDocsLayout = (props) => (
+const HelpDocsLayout = props => (
   <div>
     <Header>
       <Header.Title>

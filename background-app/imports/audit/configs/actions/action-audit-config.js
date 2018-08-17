@@ -89,7 +89,7 @@ export default ActionAuditConfig = {
 
   docUnsubscribeUrl: _.compose(
     getDocUnsubscribePath,
-    getDocUrlByOrganizationId('actions')
+    getDocUrlByOrganizationId('actions'),
   ),
 
 };

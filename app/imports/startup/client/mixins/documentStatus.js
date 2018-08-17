@@ -9,8 +9,7 @@ export default {
       return actionStatus.getClassByStatus('status');
     } else if (type === ProblemTypes.RISK || type === ProblemTypes.NON_CONFORMITY) {
       return problemsStatus.getClassByStatus('status');
-    } else {
-      return 'default';
     }
-  }
+    return 'default';
+  },
 };

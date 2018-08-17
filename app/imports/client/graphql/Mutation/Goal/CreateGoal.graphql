@@ -1,0 +1,10 @@
+#import "../../Fragment/DashboardGoal.graphql"
+
+mutation createGoal($input: CreateGoalInput!) {
+  createGoal(input: $input) {
+    goal {
+      sequentialId
+      ...DashboardGoal
+    }
+  }
+}

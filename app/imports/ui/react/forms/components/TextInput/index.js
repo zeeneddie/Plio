@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { compose, withState, lifecycle, branch, renameProp } from 'recompose';
 import property from 'lodash.property';
 import { Input } from 'reactstrap';
@@ -27,7 +28,7 @@ const TextInput = enhance(({
   internalValue,
   onChange,
   setInternalValue,
-  getRef,
+  innerRef,
   ...other
 }) => (
   <Input
@@ -39,7 +40,7 @@ const TextInput = enhance(({
 
       return typeof onChange === 'function' && onChange(e);
     }}
-    {...{ ...other, getRef }}
+    {...{ ...other, innerRef }}
   />
 ));
 
@@ -47,7 +48,7 @@ TextInput.propTypes = {
   uncontrolled: PropTypes.bool,
   value: PropTypes.string,
   onChange: PropTypes.func,
-  getRef: PropTypes.func,
+  innerRef: PropTypes.func,
 };
 
 export default TextInput;

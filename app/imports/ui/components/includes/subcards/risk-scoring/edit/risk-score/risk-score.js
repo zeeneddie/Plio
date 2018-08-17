@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { RisksHelp } from '/imports/api/help-messages';
-import { mapByIndex } from '/imports/api/helpers.js';
+import { mapByIndex } from '/imports/api/helpers';
 
 Template.Subcards_RiskScore.viewmodel({
   mixin: 'utils',
@@ -36,7 +36,7 @@ Template.Subcards_RiskScore.viewmodel({
   },
   onScoreUpdate() {
     return ({ rowId, value }) => {
-      const { score: { rowId:ri, value:v, ...rest } } = this.data();
+      const { score: { rowId: ri, value: v, ...rest } } = this.data();
 
       this.score({ rowId, value, ...rest });
     };
@@ -49,5 +49,5 @@ Template.Subcards_RiskScore.viewmodel({
   getData() {
     const { score } = this.data();
     return { ...score };
-  }
+  },
 });

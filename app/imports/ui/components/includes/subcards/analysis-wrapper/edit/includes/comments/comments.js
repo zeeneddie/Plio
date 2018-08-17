@@ -5,7 +5,7 @@ Template.Analysis_Comments_Edit.viewmodel({
   placeholder: 'Completion comments',
   onUpdate() {},
   update() {
-    const { comments:completionComments } = this.getData();
+    const { comments: completionComments } = this.getData();
 
     if (completionComments === this.templateInstance.data.comments) return;
 
@@ -14,5 +14,5 @@ Template.Analysis_Comments_Edit.viewmodel({
   getData() {
     const { comments } = this.data();
     return { comments };
-  }
+  },
 });

@@ -4,21 +4,21 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-base@1.0.4             # Packages every Meteor app needs to have
-mobile-experience@1.0.4       # Packages for a great mobile UX
-mongo@1.1.14                   # The database Meteor supports right now
+meteor-base@1.3.0             # Packages every Meteor app needs to have
+mobile-experience@1.0.5       # Packages for a great mobile UX
+mongo@1.4.2                   # The database Meteor supports right now
 blaze-html-templates@1.0.4    # Compile .html files into Meteor Blaze views
 reactive-var@1.0.11            # Reactive variable for tracker
 jquery@1.11.10                  # Helpful client-side library
-tracker@1.1.1                 # Meteor's client-side reactive programming library
+tracker@1.1.3                 # Meteor's client-side reactive programming library
 
-standard-minifier-css@1.3.2   # CSS minifier run for production mode
-standard-minifier-js@1.2.1    # JS minifier run for production mode
-es5-shim@4.6.15                # ECMAScript 5 compatibility for older browsers.
-ecmascript@0.6.1              # Enable ECMAScript2015+ syntax in app code
-random@1.0.10
-accounts-base@1.2.14
-email@1.1.18
+standard-minifier-css@1.4.0   # CSS minifier run for production mode
+standard-minifier-js@2.3.1    # JS minifier run for production mode
+es5-shim@4.7.0                # ECMAScript 5 compatibility for older browsers.
+ecmascript@0.10.6              # Enable ECMAScript2015+ syntax in app code
+random@1.1.0
+accounts-base@1.4.2
+email@1.2.3
 
 kadira:flow-router
 kadira:blaze-layout
@@ -27,7 +27,7 @@ twbs:bootstrap@=4.0.0-alpha2
 fourseven:scss
 useraccounts:core
 useraccounts:flow-routing
-accounts-password@1.3.3
+accounts-password@1.5.0
 fortawesome:fontawesome
 arillo:flow-router-helpers
 konecty:user-presence
@@ -44,21 +44,23 @@ dburles:collection-helpers
 alanning:roles
 edgee:slingshot
 rajit:bootstrap3-datepicker
-browser-policy@1.0.9
+browser-policy@1.1.0
 matb33:collection-hooks
 manuel:reactivearray
 percolate:synced-cron
-force-ssl@1.0.13
+force-ssl@1.1.0
 plio:bootstrap-sweetalert
 meteorhacks:subs-manager
 tunifight:loggedin-mixin
-djedi:sanitize-html-client
-shell-server@0.2.1
+shell-server@0.3.1
 
 # meteorhacks:sikka
 
-meteorhacks:kadira
 percolate:migrations
-blaze-react-component
-react-template-helper
 meteorhacks:aggregate
+dynamic-import@0.3.0
+gadicc:blaze-react-component
+react-template-helper
+apollo
+swydo:graphql
+konecty:multiple-instances-status

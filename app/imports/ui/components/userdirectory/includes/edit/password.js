@@ -8,5 +8,5 @@ Template.UserEdit_Password.viewmodel({
     AccountsTemplates.clearState();
     this.templateInstance.$('input[type="password"]').val('');
     this.toggleCollapse();
-  }
+  },
 });

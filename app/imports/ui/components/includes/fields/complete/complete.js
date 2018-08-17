@@ -11,8 +11,8 @@ Template.Completion_Edit.viewmodel({
   canButtonBeShown: false,
   getButtonText() {
     return this.isFormVisible()
-            ? 'Cancel'
-            : this.buttonDefaultText();
+      ? 'Cancel'
+      : this.buttonDefaultText();
   },
   onComplete(vm) {},
   complete() {
@@ -31,5 +31,5 @@ Template.Completion_Edit.viewmodel({
   getData() {
     const { text } = this.data();
     return { text };
-  }
+  },
 });

@@ -1,0 +1,8 @@
+mutation updateRiskTitle($input: UpdateRiskTitleInput!) {
+  updateRiskTitle(input: $input) {
+    risk {
+      _id
+      title
+    }
+  }
+}

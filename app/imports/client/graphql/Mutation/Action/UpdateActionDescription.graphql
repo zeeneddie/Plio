@@ -1,0 +1,7 @@
+mutation updateActionDescription($input: UpdateActionDescriptionInput!) {
+  updateActionDescription(input: $input) {
+    action {
+      description
+    }
+  }
+}

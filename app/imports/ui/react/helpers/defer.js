@@ -1,6 +1,6 @@
 import { compose, withState, lifecycle, branch, renderNothing } from 'recompose';
+import { identity, T } from 'ramda';
 
-import { identity, T } from '/imports/api/helpers';
 import omitProps from './omitProps';
 
 export default compose(
@@ -16,7 +16,7 @@ export default compose(
   branch(
     props => !props.show,
     renderNothing,
-    identity
+    identity,
   ),
   omitProps(['show', 'setShow']),
 );

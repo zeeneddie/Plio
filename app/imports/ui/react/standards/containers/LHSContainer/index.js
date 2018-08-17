@@ -1,7 +1,18 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers, mapProps, shouldUpdate } from 'recompose';
-import { _ } from 'meteor/underscore';
+import { withHandlers } from 'recompose';
 
+import { getIsModalOpened } from '../../../../../client/store/selectors/dataImport';
+import { getOrganizationId } from '../../../../../client/store/selectors/organizations';
+import {
+  getSearchText,
+  getFilter,
+  getAnimating,
+  getUrlItemId,
+  getUserId,
+} from '../../../../../client/store/selectors/global';
+import { getSearchMatchText } from '../../../../../api/helpers';
+
+import { onToggleCollapse } from '../../../share/LHS/handlers';
 import StandardsLHS from '../../components/LHS';
 import {
   onSearchTextChange,
@@ -12,66 +23,34 @@ import {
   onDataImportModalClose,
   openDocumentCreationModal,
 } from './handlers';
-import { getStandardsByFilter } from '../../helpers';
 import {
-  sortArrayByTitlePrefix,
-  getSearchMatchText,
-  combineObjects,
-  pickFrom,
-  equals,
-  pickC,
-  filterC,
-  includes,
-} from '/imports/api/helpers';
-import { onToggleCollapse } from '/imports/ui/react/share/LHS/handlers';
-import { STANDARD_FILTER_MAP } from '/imports/api/constants';
+  getFilteredStandards,
+  getSortedStandardsByFilter,
+} from '../../../../../client/store/selectors/standards';
+import { getStandardTypesByIds } from '../../../../../client/store/selectors/standardTypes';
+import { namedCompose } from '../../../helpers';
 
-const mapStateToProps = combineObjects([
-  pickFrom('standards', ['standardsFiltered']),
-  pickFrom('collections', ['standards', 'standardsByIds']),
-  pickFrom('global', ['searchText', 'filter', 'animating', 'urlItemId', 'userId']),
-  pickFrom('organizations', ['organizationId']),
-  pickFrom('dataImport', ['isModalOpened']),
-]);
+const mapStateToProps = (state) => {
+  const standards = getSortedStandardsByFilter(state);
+  const searchText = getSearchText(state);
 
-const pickComparableProps = pickC(['_id', 'sectionId', 'typeId', 'isDeleted']);
+  return {
+    standards,
+    searchText,
+    standardTypesByIds: getStandardTypesByIds(state),
+    filteredStandards: getFilteredStandards(state),
+    organizationId: getOrganizationId(state),
+    filter: getFilter(state),
+    animating: getAnimating(state),
+    urlItemId: getUrlItemId(state),
+    userId: getUserId(state),
+    isDataImportModalOpened: getIsModalOpened(state),
+    searchResultsText: getSearchMatchText(searchText, standards.length),
+  };
+};
 
-export default compose(
+export default namedCompose('StandardsLHSContainer')(
   connect(mapStateToProps),
-  shouldUpdate((props, nextProps) => !!(
-    props.searchText !== nextProps.searchText ||
-    props.filter !== nextProps.filter ||
-    props.animating !== nextProps.animating ||
-    props.standards.length !== nextProps.standards.length ||
-    props.isModalOpened !== nextProps.isModalOpened ||
-    !equals(
-      pickComparableProps(props.standardsByIds[props.urlItemId]),
-      pickComparableProps(nextProps.standardsByIds[nextProps.urlItemId])
-    )
-  )),
-  mapProps(({ isModalOpened: isDataImportModalOpened, ...props }) => {
-    const filteredStandards = getStandardsByFilter({
-      standards: props.standards,
-      filter: props.filter,
-    });
-
-    let standards = props.searchText
-      ? filterC(std => includes(std._id, props.standardsFiltered), filteredStandards)
-      : filteredStandards;
-
-    if (props.filter !== STANDARD_FILTER_MAP.DELETED) standards = sortArrayByTitlePrefix(standards);
-    else standards = _.sortBy(standards, 'deletedAt').reverse();
-
-    const searchResultsText = getSearchMatchText(props.searchText, standards.length);
-
-    return {
-      ...props,
-      standards,
-      searchResultsText,
-      isDataImportModalOpened,
-      filteredStandards,
-    };
-  }),
   withHandlers({
     onToggleCollapse,
     onClear,

@@ -1,0 +1,12 @@
+type DepartmentsQueryPayload {
+  totalCount: Int
+  departments: [Department]!
+}
+
+input DepartmentsQueryInput {
+  organizationId: ID!
+}
+
+type Query {
+  departments(input: DepartmentsQueryInput!): DepartmentsQueryPayload
+}

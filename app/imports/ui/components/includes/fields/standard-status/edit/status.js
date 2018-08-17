@@ -6,13 +6,13 @@ import { StandardStatuses } from '/imports/share/constants.js';
 Template.StandardStatus_Edit.viewmodel({
   status: 'issued',
   statuses() {
-    return _.keys(StandardStatuses).map(status => ({ value: status, text: StandardStatuses[status] }) );
+    return _.keys(StandardStatuses).map(status => ({ value: status, text: StandardStatuses[status] }));
   },
   onUpdateCb() {
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { value:status } = viewmodel.getData();
+    const { value: status } = viewmodel.getData();
 
     if (status === this.templateInstance.data.status) return;
 
@@ -30,5 +30,5 @@ Template.StandardStatus_Edit.viewmodel({
   getData() {
     const { status } = this.data();
     return { status };
-  }
+  },
 });

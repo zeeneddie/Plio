@@ -4,7 +4,7 @@ import Button from '../../../components/Buttons/Button';
 import ToggleExpandButton from '../../../components/Buttons/ToggleExpandButton';
 import propTypes from './propTypes';
 
-const HelpDocsRHSHeaderButtons = (props) => (
+const HelpDocsRHSHeaderButtons = props => (
   <div>
     {props.hasDocxAttachment ? (
       <ToggleExpandButton onClick={props.onToggleScreenMode} />

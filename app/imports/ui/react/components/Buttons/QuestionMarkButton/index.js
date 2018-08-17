@@ -1,21 +1,21 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Button } from 'reactstrap';
+import cx from 'classnames';
 
-import Button from '../Button';
 import Icon from '../../Icons/Icon';
 
-const QuestionMarkButton = ({ onClick, className }) => (
+const QuestionMarkButton = ({ color, ...props }) => (
   <Button
-    {...{ className, onClick }}
-    component="button"
-    color="link collapse"
+    color={cx('link', color)}
+    {...props}
   >
     <Icon name="question-circle" />
   </Button>
 );
 
 QuestionMarkButton.propTypes = {
-  className: PropTypes.string,
-  onClick: PropTypes.func,
+  color: PropTypes.string,
 };
 
 export default QuestionMarkButton;

@@ -1,0 +1,22 @@
+type OrganizationPayload {
+  organization: Organization
+}
+
+input UpdateOrganizationWorkspaceDefaultsInput {
+  _id: ID!
+  displayUsers: Int
+  displayMessages: Int
+  displayActions: Int
+  displayGoals: Int
+  displayCompletedDeletedGoals: Int
+  timeScale: Int
+}
+
+input UpdateOrganizationLastAccessedDateInput {
+  _id: ID!
+}
+
+type Mutation {
+  updateOrganizationWorkspaceDefaults(input: UpdateOrganizationWorkspaceDefaultsInput!): OrganizationPayload
+  updateOrganizationLastAccessedDate(input: UpdateOrganizationLastAccessedDateInput!): OrganizationPayload
+}

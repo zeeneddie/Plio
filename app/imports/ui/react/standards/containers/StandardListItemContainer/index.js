@@ -1,12 +1,12 @@
-import { compose, withHandlers, withProps, shouldUpdate, lifecycle } from 'recompose';
+import { compose, withHandlers, withProps, shouldUpdate } from 'recompose';
 import { connect } from 'react-redux';
 
 import { getSubNestingClassName } from '../../helpers';
 import StandardListItem from '../../components/StandardListItem';
 import _user_ from '/imports/startup/client/mixins/user';
 import _date_ from '/imports/startup/client/mixins/date';
-import { setUrlItemId } from '/imports/client/store/actions/globalActions';
-import { updateViewedBy } from '/imports/api/standards/methods';
+import { setUrlItemId } from '../../../../../client/store/actions/globalActions';
+import { updateViewedBy } from '../../../../../api/standards/methods';
 import withUpdateViewedBy from '../../../helpers/withUpdateViewedBy';
 import { pickC, notEquals } from '/imports/api/helpers';
 import { STANDARD_FILTER_MAP, UncategorizedTypeSection } from '/imports/api/constants';
@@ -51,7 +51,7 @@ export default compose(
     );
   }),
   withHandlers({
-    onClick: props => handler => {
+    onClick: props => (handler) => {
       props.dispatch(setUrlItemId(props._id));
 
       handler({ urlItemId: props._id });

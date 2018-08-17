@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { withProps } from 'recompose';
 
 import { getFormProps } from '../helpers';
@@ -7,7 +8,9 @@ import ReviewReviewerSelect from '../ReviewerSelect';
 
 const enhance = withProps(getFormProps);
 
-const ReviewerForm = enhance(({ initialFormData, onReviewerChanged, fieldNames, users }) => (
+const ReviewerForm = enhance(({
+  initialFormData, onReviewerChanged, fieldNames, users,
+}) => (
   <Form
     {...{ initialFormData }}
     autosave

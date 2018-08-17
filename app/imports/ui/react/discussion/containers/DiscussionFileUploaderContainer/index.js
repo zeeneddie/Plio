@@ -11,5 +11,5 @@ export default compose(
   withProps(transsoc({
     uploaderMetaContext: pickC(['organizationId', 'discussionId']),
     slingshotDirective: () => 'discussionFiles',
-  }))
+  })),
 )(DiscussionFileUploader);

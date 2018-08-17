@@ -1,0 +1,9 @@
+mutation setRiskAnalysisTargetDate($input: SetRiskAnalysisTargetDateInput!) {
+  setRiskAnalysisTargetDate(input: $input) {
+    risk {
+      analysis {
+        targetDate
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
 import './server/publications.js';
-import './checkers.js';
+import './checkers';
 import './occurrences-service.js';
 import './methods.js';

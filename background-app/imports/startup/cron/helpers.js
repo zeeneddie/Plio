@@ -4,9 +4,7 @@ import { check, Match } from 'meteor/check';
 
 // returns array of timezones where specified time has come
 export const getTimezones = (launchTime = '00:00') => {
-  const validLaunchTime = Match.Where(
-    str => /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(str)
-  );
+  const validLaunchTime = Match.Where(str => /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(str));
   check(launchTime, validLaunchTime);
 
   const timeParts = launchTime.split(':');

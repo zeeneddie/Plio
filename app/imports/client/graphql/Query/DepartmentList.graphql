@@ -1,0 +1,8 @@
+query DepartmentList($organizationId: ID!) {
+  departments(input: { organizationId: $organizationId }) {
+    departments {
+      _id
+      title
+    }
+  }
+}

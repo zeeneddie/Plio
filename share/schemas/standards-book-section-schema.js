@@ -1,24 +1,24 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, OrganizationIdSchema } from './schemas.js';
-import { StringLimits } from '/imports/share/constants.js';
+import { BaseEntitySchema, OrganizationIdSchema } from './schemas';
+import { StringLimits } from '../constants';
 
 
 const StandardsBookSectionEditableFields = new SimpleSchema({
   title: {
     type: String,
     min: StringLimits.title.min,
-    max: StringLimits.title.max
+    max: StringLimits.title.max,
   }
 });
 
 const StandardsBookSectionSchema = new SimpleSchema([
   BaseEntitySchema,
   StandardsBookSectionEditableFields,
-  OrganizationIdSchema
+  OrganizationIdSchema,
 ]);
 
 export {
   StandardsBookSectionEditableFields,
-  StandardsBookSectionSchema
+  StandardsBookSectionSchema,
 };

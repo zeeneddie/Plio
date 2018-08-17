@@ -6,7 +6,7 @@ SimpleSchema.messages({
     { exp: SimpleSchema.RegEx.Email, msg: '"[value]" must be a valid e-mail address' },
   ],
   'regEx number': [
-    { bmsg: '"[value]" is not a valid phone number' },
+    { msg: '[label] must be a valid phone number' },
   ],
   'minNumber timeValue': 'Reminders for actions should be in range of [min] and [max]',
   'maxNumber timeValue': 'Reminders for actions should be in range of [min] and [max]',

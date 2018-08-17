@@ -1,0 +1,18 @@
+type GoalsQueryReturnType {
+  totalCount: Int
+  goals: [Goal]!
+}
+
+type GoalQueryReturnType {
+  goal: Goal
+}
+
+type Query {
+  # returns a list of goals
+  goals(
+    organizationId: ID!,
+    limit: Int,
+    isCompletedOrDeleted: Boolean,
+  ): GoalsQueryReturnType
+  goal(_id: ID!): GoalQueryReturnType
+}

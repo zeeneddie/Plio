@@ -1,5 +1,5 @@
 import './server/publications.js';
-import './checkers.js';
+import './checkers';
 import './errors.js';
 import './methods.js';
 import './user-notifications-sender.js';

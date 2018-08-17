@@ -7,10 +7,9 @@ import {
   DocumentIdSchema,
   DocumentTypeSchema,
   IdSchema,
-} from '/imports/share/schemas/schemas';
+} from '../../share/schemas/schemas';
 import { inject, chain, checkAndThrow } from '../helpers';
-import { Discussions } from '/imports/share/collections/discussions';
-import { Organizations } from '/imports/share/collections/organizations';
+import { Discussions, Organizations } from '../../share/collections';
 import {
   DSC_OnUpdateViewedByChecker,
   checkDocExistance,
@@ -48,10 +47,9 @@ export const updateViewedByOrganization = new Method({
 
   check(checker) {
     return checker(({ _id }) => chain(
-        checkDocExistance(Organizations, _id),
-        checkOrgMembership(this.userId, _id)
-      )
-    );
+      checkDocExistance(Organizations, _id),
+      checkOrgMembership(this.userId, _id),
+    ));
   },
 
   run({ _id }) {

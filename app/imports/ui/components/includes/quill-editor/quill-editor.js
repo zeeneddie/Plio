@@ -1,20 +1,20 @@
 import { Template } from 'meteor/templating';
-import Quill from 'quill';
+import { $ } from 'meteor/jquery';
 
 Template.QuillEditor.viewmodel({
   editor: null,
   isExpanded: false,
-
-  onRendered(tpl) {
+  async onRendered(tpl) {
+    const { default: Quill } = await import('quill');
     this.editor(new Quill(this.templateInstance.find('.editor-container')));
     this.editor().addModule('toolbar', {
-      container: this.templateInstance.find('.editor-toolbar')
+      container: this.templateInstance.find('.editor-toolbar'),
     });
     this.editor().addModule('link-tooltip', true);
 
     const $modalDialog = $(tpl.firstNode.closest('.modal-dialog'));
 
-    tpl.autorun(()=> {
+    tpl.autorun(() => {
       if (this.isExpanded()) {
         $modalDialog.addClass('ql-expanded');
       } else {
@@ -23,7 +23,8 @@ Template.QuillEditor.viewmodel({
     });
   },
   toggleExpand() {
-    return this.isExpanded(!this.isExpanded()) && $(this.editor().container).closest('.modal').scrollTop(0);
+    return this.isExpanded(!this.isExpanded()) &&
+      $(this.editor().container).closest('.modal').scrollTop(0);
   },
   onUpdate() {},
   update(e) {
@@ -32,5 +33,5 @@ Template.QuillEditor.viewmodel({
   getData() {
     const html = this.editor().getHTML();
     return { html };
-  }
+  },
 });

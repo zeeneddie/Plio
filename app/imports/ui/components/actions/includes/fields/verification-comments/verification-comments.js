@@ -12,10 +12,10 @@ Template.Actions_VerificationComments.viewmodel({
     }
 
     this.parent().update && this.parent().update({
-      e, verificationComments, withFocusCheck: true
+      e, verificationComments, withFocusCheck: true,
     });
   },
   getData() {
     return { verificationComments: this.verificationComments() };
-  }
+  },
 });

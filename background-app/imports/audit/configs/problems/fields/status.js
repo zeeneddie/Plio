@@ -1,7 +1,9 @@
-import { ProblemsStatuses } from '/imports/share/constants';
-import { capitalize } from '/imports/share/helpers';
-import { ChangesKinds } from '../../../utils/changes-kinds';
+/* eslint-disable no-new */
 
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { capitalize } from '../../../../share/helpers';
+import { ProblemsStatuses, ProblemIndexes } from '../../../../share/constants';
+import { sendUpdateOfStandardsReminders } from '../helpers';
 
 export default {
   field: 'status',
@@ -20,9 +22,10 @@ export default {
   notifications: [
     {
       shouldSendNotification({ diffs: { status: { newValue } } }) {
-        // 19 - Closed - action(s) completed
-        // 20 - Closed - action(s) verified, standard(s) reviewed
-        return (newValue === 19) || (newValue === 20);
+        return (
+          newValue === ProblemIndexes.CLOSED_ACTIONS_COMPLETED ||
+          newValue === ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED
+        );
       },
       text: 'Status of {{{docDesc}}} {{{docName}}} was changed to "{{{newValue}}}"',
       title: '{{{docDescCapitalized}}} {{{docName}}} closed',
@@ -41,7 +44,7 @@ export default {
         };
       },
       receivers({ newDoc }) {
-        return [newDoc.identifiedBy];
+        return [newDoc.originatorId];
       },
     },
   ],
@@ -52,5 +55,10 @@ export default {
       newValue: ProblemsStatuses[newValue],
       oldValue: ProblemsStatuses[oldValue],
     };
+  },
+  trigger({ diffs: { status: { newValue } }, ...args }) {
+    if (newValue === ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED) {
+      sendUpdateOfStandardsReminders(args);
+    }
   },
 };

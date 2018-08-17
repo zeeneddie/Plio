@@ -1,8 +1,13 @@
 import React from 'react';
-import { Input } from 'reactstrap';
+import { Input, DropdownToggle } from 'reactstrap';
 
-const MentionInput = (props) => (
-  <Input {...props} />
+const MentionInput = props => (
+  <DropdownToggle
+    tag="div"
+    data-toggle="dropdown"
+  >
+    <Input {...props} />
+  </DropdownToggle>
 );
 
 export default MentionInput;

@@ -16,7 +16,7 @@ import _modal_ from '/imports/startup/client/mixins/modal';
 import _search_ from '/imports/startup/client/mixins/search';
 import { onSearchTextClear } from '/imports/ui/react/share/LHS/handlers';
 
-export const onToggleCollapse = (props) => (e, { key, type }) => {
+export const onToggleCollapse = props => (e, { key, type }) => {
   props.dispatch(toggleCollapsed({ key, type, close: { type } }));
 };
 

@@ -12,5 +12,5 @@ Template.FormField.viewmodel({
     this.templateInstance.$('.guidance-panel').collapse('hide');
 
     this.templateInstance.$('.btn-collapse').addClass('collapsed');
-  }
+  },
 });

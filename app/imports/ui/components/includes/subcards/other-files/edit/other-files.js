@@ -8,5 +8,5 @@ Template.Subcards_OtherFiles_Edit.viewmodel({
   slingshotDirective: '',
   update(...args) {
     this.parent().update(...args);
-  }
+  },
 });

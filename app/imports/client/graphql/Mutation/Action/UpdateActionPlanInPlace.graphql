@@ -1,0 +1,7 @@
+mutation updateActionPlanInPlace($input: UpdateActionPlanInPlaceInput!) {
+  updateActionPlanInPlace(input: $input) {
+    action {
+      planInPlace
+    }
+  }
+}

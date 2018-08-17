@@ -3,11 +3,11 @@ import moment from 'moment-timezone';
 
 AccountsTemplates.configure({
   texts: {
-    signInLink_pre: "Already have an account?",
-    signInLink_link: "Login",
+    signInLink_pre: 'Already have an account?',
+    signInLink_link: 'Login',
     title: {
       signUp: 'Sign up for a Plio account - 30 day free trial',
-      signIn: 'Login'
+      signIn: 'Login',
     },
     button: {
       signUp: 'Sign up/Signing up...',
@@ -19,12 +19,12 @@ AccountsTemplates.configure({
       emailSent: 'info.emailSent',
       emailVerified: 'info.emailVerified',
       pwdChanged: 'info.passwordChanged',
-      pwdReset:'info.passwordReset',
+      pwdReset: 'info.passwordReset',
       pwdSet: 'info.passwordReset',
-      signUpVerifyEmail: "Successful Registration! Please check your email and follow the instructions.",
+      signUpVerifyEmail: 'Successful Registration! Please check your email and follow the instructions.',
       verificationEmailSent: "A new email has been sent to you. If the email doesn't show up in your inbox, be sure to check your spam folder.",
-    }
-  }
+    },
+  },
 });
 
 const email = AccountsTemplates.removeField('email');
@@ -53,14 +53,14 @@ AccountsTemplates.addField({
   maxLength: 40,
   transform(value) {
     return value.capitalize();
-  }
+  },
 });
 
 AccountsTemplates.addField({
   _id: 'email',
   type: 'email',
   required: true,
-  displayName: "email",
+  displayName: 'email',
   re: /.+@(.+){2,}\.(?!con)(.+){2,}/,
   errStr: 'Invalid email',
 });
@@ -74,11 +74,11 @@ AccountsTemplates.addField({
   placeholder: 'Organization name',
   required: true,
   minLength: 1,
-  maxLength: 40
+  maxLength: 40,
 });
 
 AccountsTemplates.configure({
   preSignUpHook(password, info) {
-    info.profile['organizationTimezone'] = moment.tz.guess();
-  }
+    info.profile.organizationTimezone = moment.tz.guess();
+  },
 });

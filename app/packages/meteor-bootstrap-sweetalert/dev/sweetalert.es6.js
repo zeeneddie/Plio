@@ -60,9 +60,7 @@ var lastFocusedButton;
  * Global sweetAlert function
  * (this is what the user calls)
  */
-var sweetAlert, swal;
-
-export default sweetAlert = swal = function() {
+export const sweetAlert = swal = function() {
   var customizations = arguments[0];
 
   addClass(document.body, 'stop-scrolling');

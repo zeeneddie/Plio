@@ -1,36 +1,45 @@
 /* eslint-disable react/prop-types */
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import React from 'react';
+import Loadable from 'react-loadable';
 
+import { getMentionData, getMentionDataWithUsers } from '/imports/share/mentions';
 import { getFormattedDate } from '/imports/share/helpers';
 import { TruncatedStringLengths } from '/imports/api/constants';
 import FileProvider from '../../../containers/providers/FileProvider';
 import { openUserDetails } from './handlers';
-import ReactAutolinker from '../../../components/ReactAutolinker';
-import { getMentionData, getMentionDataWithUsers } from '/imports/share/mentions';
 
 // Helpers
 
 const renderMentions = (text, defaultRenderer) => {
   const data = getMentionDataWithUsers(getMentionData(text));
-  const content = data.map(({ firstName, email, user, mentionString }, i) => (user ? (
+  const content = data.map(({
+    firstName, email, user, mentionString,
+  }, i) => (user ? (
     <a key={email} onClick={openUserDetails({ user })}>{firstName}</a>
   ) : defaultRenderer(mentionString, i, text)));
 
   return content;
 };
 
-const renderText = ({ text }) => {
-  const options = { mention: 'twitter', truncate: TruncatedStringLengths.c40 };
+const LoadableAutolinker = Loadable({
+  loader: () => import('../../../components/ReactAutolinker'),
+  loading: () => <div>Loading...</div>,
+  render({ default: Component }, { text }) {
+    const options = { mention: 'twitter', truncate: TruncatedStringLengths.c40 };
 
-  return renderMentions(text, (str, i) => <ReactAutolinker key={i} text={str} {...{ options }} />);
-};
+    return <Component {...{ text, options }} />;
+  },
+});
+
+const renderText = ({ text }) =>
+  renderMentions(text, (str, i) => <LoadableAutolinker key={i} text={str} />);
 
 // Prop creators
 
 export const getMessagePath = (props) => {
   const currentRouteName = FlowRouter.getRouteName();
-  const params = FlowRouter.current().params;
+  const { params } = FlowRouter.current();
   const queryParams = { at: props._id };
 
   return FlowRouter.path(currentRouteName, params, queryParams);
@@ -51,7 +60,7 @@ export const getMessageContents = ({ text = '', type, fileId }) => {
 
 export const getPathToMessage = (props) => {
   const currentRouteName = FlowRouter.getRouteName();
-  const params = FlowRouter.current().params;
+  const { params } = FlowRouter.current();
   const queryParams = { at: props._id };
 
   return FlowRouter.path(currentRouteName, params, queryParams);
@@ -59,7 +68,7 @@ export const getPathToMessage = (props) => {
 
 export const getPathToMessageToCopy = (props) => {
   const path = getPathToMessage(props);
-  const url = `${location.protocol}//${location.hostname}:${location.port}`;
+  const url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
 
   return `${url}${path}`;
 };

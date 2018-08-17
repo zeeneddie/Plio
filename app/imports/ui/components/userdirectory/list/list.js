@@ -1,5 +1,4 @@
 import { Template } from 'meteor/templating';
-import { Organizations } from '/imports/share/collections/organizations';
 
 import { extractIds } from '/imports/api/helpers';
 
@@ -13,8 +12,10 @@ Template.UserDirectory_List.viewmodel({
       onAfterSearch: this.onAfterSearch(),
     };
   },
-  onInviteClick(event) {
+  async onInviteClick(event) {
     event.preventDefault();
+
+    await import('../includes/invite');
 
     const organizationId = this.organizationId();
 
@@ -25,7 +26,7 @@ Template.UserDirectory_List.viewmodel({
       submitCaption: 'Invite',
       submitCaptionOnSave: 'Inviting...',
       closeCaption: 'Cancel',
-      variation: 'save'
+      variation: 'save',
     });
   },
   onSearchInputValue(value) {

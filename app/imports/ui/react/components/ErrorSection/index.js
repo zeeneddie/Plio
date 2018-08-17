@@ -1,20 +1,56 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
+import cx from 'classnames';
+import { lifecycle, defaultProps, compose } from 'recompose';
 
-import Collapse from '../Collapse';
-import Icon from '../Icons/Icon';
+import { Collapse, CardBlock, Icon } from '../';
 
-const ErrorSection = ({ errorText, size = '4' }) => (
-  <Collapse className="modal-error-section" collapsed={!errorText}>
-    <div className="card-block">
+const enhance = compose(
+  defaultProps({
+    scroll: true,
+  }),
+  lifecycle({
+    componentDidUpdate({ errorText }) {
+      if (
+        this.props.errorText &&
+        this.props.scroll &&
+        this.props.errorText !== errorText
+      ) {
+        document.getElementsByClassName('modal-error-section')[0].scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
+    },
+  }),
+);
+
+export const ErrorSection = ({
+  errorText,
+  size = '4',
+  className,
+  scroll, // eslint-disable-line no-unused-vars
+  tag: Tag = 'pre',
+  ...props
+}) => (
+  <Collapse
+    className={cx('modal-error-section', className)}
+    isOpen={!!errorText}
+    {...props}
+  >
+    <CardBlock>
       <Icon {...{ size }} name="exclamation-circle" aria-hidden="true" />
-      {errorText}
-    </div>
+      {errorText && (<Tag>{errorText}</Tag>)}
+    </CardBlock>
   </Collapse>
 );
 
 ErrorSection.propTypes = {
   errorText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   size: PropTypes.string,
+  className: PropTypes.string,
+  scroll: PropTypes.bool,
+  tag: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 };
 
-export default ErrorSection;
+export default enhance(ErrorSection);

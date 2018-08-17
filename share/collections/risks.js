@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { _ } from 'meteor/underscore';
 
@@ -47,7 +46,6 @@ Risks.publicFields = {
   serialNumber: 1,
   sequentialId: 1,
   title: 1,
-  identifiedAt: 1,
   typeId: 1,
   scores: 1,
   departmentsIds: 1,
@@ -58,6 +56,5 @@ Risks.publicFields = {
   deletedAt: 1,
   deletedBy: 1,
 };
-
 
 export { Risks };

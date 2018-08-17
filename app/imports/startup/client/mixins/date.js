@@ -6,5 +6,5 @@ export default {
       format = 'DD MMM YYYY';
     }
     return moment.isDate(date) ? moment(date).format(format) : 'Invalid date';
-  }
+  },
 };

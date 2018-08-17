@@ -1,5 +1,6 @@
 import { compose, withProps, lifecycle } from 'recompose';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import { handleMethodResult } from '/imports/api/helpers';
 import { unsubscribeFromDailyRecap } from '/imports/api/organizations/methods';
@@ -10,9 +11,8 @@ const enhancer = compose(
   lifecycle({
     componentDidMount() {
       const orgSerialNumber = parseInt(this.props.orgSerialNumber, 10);
-      unsubscribeFromDailyRecap.call({ orgSerialNumber }, handleMethodResult((error) =>
-        this.props.setState({ error, loading: false })
-      ));
+      unsubscribeFromDailyRecap.call({ orgSerialNumber }, handleMethodResult(error =>
+        this.props.setState({ error, loading: false })));
     },
   }),
   withProps({

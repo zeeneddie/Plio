@@ -1,12 +1,12 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 
-import { ActionTypes } from '/imports/share/constants.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Occurrences } from '/imports/share/collections/occurrences.js';
-import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Occurrences } from '/imports/share/collections/occurrences';
+import { DocumentCardSubs } from '/imports/startup/client/subsmanagers';
 import { restore, remove } from '/imports/api/non-conformities/methods';
-import { NonConformitiesHelp } from '/imports/api/help-messages.js';
+import { NonConformitiesHelp, PotentialGainsHelp } from '/imports/api/help-messages';
+import { ActionTypes } from '../../../../share/constants';
 
 Template.NC_Card_Read.viewmodel({
   share: 'search',
@@ -43,17 +43,21 @@ Template.NC_Card_Read.viewmodel({
     return currency ? this.getCurrencySymbol(currency) + cost : '';
   },
   openEditModal() {
+    const doc = this.NC() || {};
+    const helpText = this.isPG(doc)
+      ? PotentialGainsHelp.potentialGain
+      : NonConformitiesHelp.nonConformity;
     this.modal().open({
-      _title: 'Non-conformity',
+      helpText,
+      _title: this.getNameByType(doc),
       template: 'NC_Card_Edit',
-      helpText: NonConformitiesHelp.nonConformity,
-      _id: this.NC() && this.NC()._id
+      _id: doc._id,
     });
   },
   pathToDiscussion() {
     const params = {
       orgSerialNumber: this.organizationSerialNumber(),
-      urlItemId: this.NCId()
+      urlItemId: this.NCId(),
     };
     const queryParams = { filter: this.activeNCFilterId() };
     return FlowRouter.path('nonConformityDiscussion', params, queryParams);

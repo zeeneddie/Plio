@@ -12,5 +12,5 @@ Template.Departments_Read.viewmodel({
   },
   renderDepartments() {
     return this.departments() && this.departments().fetch().map(({ name }) => name).join(', ');
-  }
+  },
 });

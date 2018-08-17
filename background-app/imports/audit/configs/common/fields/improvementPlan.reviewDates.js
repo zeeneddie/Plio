@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
 import { getPrettyTzDate } from '/imports/helpers/date';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -7,9 +7,9 @@ export default {
     default: {
       message: {
         [ChangesKinds.ITEM_ADDED]:
-          'Improvement plan review date added: "{{{date}}}"',
+          'Improvement plan review date added: {{{date}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          'Improvement plan review date removed: "{{{date}}}"',
+          'Improvement plan review date removed: {{{date}}}',
       },
     },
   },
@@ -17,9 +17,11 @@ export default {
     default: {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{{userName}}} added improvement plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{{date}}}"',
+          '{{{userName}}} added improvement plan\'s review date for ' +
+          '{{{docDesc}}} {{{docName}}}: {{{date}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{{userName}}} removed improvement plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{{date}}}"',
+          '{{{userName}}} removed improvement plan\'s review date for ' +
+          '{{{docDesc}}} {{{docName}}}: {{{date}}}',
       },
     },
   },

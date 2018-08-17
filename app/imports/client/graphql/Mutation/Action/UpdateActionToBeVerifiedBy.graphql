@@ -1,0 +1,12 @@
+mutation updateActionToBeVerifiedBy($input: UpdateActionToBeVerifiedByInput!) {
+  updateActionToBeVerifiedBy(input: $input) {
+    action {
+      toBeVerifiedBy {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

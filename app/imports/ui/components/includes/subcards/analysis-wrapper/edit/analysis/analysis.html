@@ -13,7 +13,9 @@
             assignee=this.executor
             comments=this.completionComments
             isButtonVisible=true
-            placeholder="Who will do it?"
+            buttonDefaultText="Complete"
+            buttonSuccessText="Complete"
+            placeholder="Enter any completion comments"
             label="Who will do it?"
             onUpdate=methods.setExecutor
             onComplete=methods.complete}}
@@ -24,7 +26,13 @@
             label="Completed date"
             disabled=areCompletionFieldsDisabled
             onUpdate=methods.setCompletedDate}}
+      {{/unless}}
 
+      <div>
+        {{> React component=Status status=this.status}}
+      </div>
+
+      {{#if isAnalysisCompleted}}
         {{> Analysis_ToBeCompletedBy_Edit
             assignee=this.completedBy
             isButtonVisible=false
@@ -39,7 +47,7 @@
             comments=this.completionComments
             disabled=areCompletionFieldsDisabled
             onUpdate=methods.setComments}}
-      {{/unless}}
+      {{/if}}
     {{/with}}
   </div>
 </template>

@@ -2,7 +2,7 @@ import React from 'react';
 
 import propTypes from './propTypes';
 
-const ChangelogTableRow = (props) => (
+const ChangelogTableRow = props => (
   <tr>
     <td className="log-user">{props.userName}</td>
     <td>{props.message}</td>

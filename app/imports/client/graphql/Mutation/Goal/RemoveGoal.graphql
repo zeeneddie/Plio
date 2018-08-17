@@ -1,0 +1,9 @@
+#import "../../Fragment/CompletedDeletedGoal.graphql"
+
+mutation removeGoal($input: RemoveGoalInput!) {
+  removeGoal(input: $input) {
+    goal {
+      ...CompletedDeletedGoal
+    }
+  }
+}

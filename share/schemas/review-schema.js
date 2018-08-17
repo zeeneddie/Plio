@@ -8,7 +8,7 @@ import {
   DocumentTypeSchema,
   OrganizationIdSchema,
   ViewedBySchema,
-} from './schemas.js';
+} from './schemas';
 
 export const RequiredSchema = new SimpleSchema([
   DocumentIdSchema,

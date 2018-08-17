@@ -1,0 +1,28 @@
+{
+  "_id": "vcGCkBYfKbwypAk9t",
+  "organizationId": "KwKXz5RefrE5hjWJ2",
+  "title": "Deleted",
+  "startDate": { "$date": 1606390422791 },
+  "endDate": { "$date": 1570098822791 },
+  "status": 1,
+  "priority": "major",
+  "isCompleted": false,
+  "completedAt": { "$date": 1515670311424 },
+  "completedBy": "SQHmBKJ94gJvpLKLt",
+  "ownerId": "SQHmBKJ94gJvpLKLt",
+  "serialNumber": 4,
+  "sequentialId": "KG4",
+  "color": "#9e898f",
+  "fileIds": [],
+  "notify" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "isDeleted": true,
+  "deletedAt" : {"$date": 1515670311424},
+  "deletedBy" : "SQHmBKJ94gJvpLKLt",
+  "createdAt" : {"$date": 1515670311424},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "updatedAt" : {"$date": 1515670311424},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt",
+  "riskIds": ["movmNy9rFvYHshu6X"]
+}

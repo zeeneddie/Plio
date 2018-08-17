@@ -5,11 +5,6 @@
         {{> Risk_Card_Edit_Main
             risk=this}}
 
-        {{> Subcards_Notify_Edit
-            doc=this
-            documentType="risk"
-            onUpdate=onUpdateNotifyUserCb}}
-
         {{> Subcards_RiskScoring_Edit
             _id=this._id
             scores=this.scores
@@ -45,10 +40,14 @@
             fileIds=this.fileIds
             uploaderMetaContext=uploaderMetaContext
             slingshotDirective=slingshotDirective}}
-
         {{> Subcards_Reviews_Edit
             documentId=this._id
             documentType="risk"}}
+
+        {{> Subcards_Notify_Edit
+            doc=this
+            documentType="risk"
+            onUpdate=onUpdateNotifyUserCb}}
       {{/with}}
       <div class="card-block text-xs-center">
         <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>

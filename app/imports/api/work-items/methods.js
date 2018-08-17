@@ -1,5 +1,5 @@
 import { CheckedMethod } from '../method';
-import WorkItemService from './work-item-service';
+import WorkItemService from '/imports/share/services/work-item-service';
 import { WorkItems } from '/imports/share/collections/work-items';
 import { IdSchema } from '/imports/share/schemas/schemas';
 import { inject, always, T } from '/imports/api/helpers';

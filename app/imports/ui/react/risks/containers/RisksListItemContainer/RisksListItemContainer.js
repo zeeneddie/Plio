@@ -3,17 +3,26 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 
 import RisksListItem from '../../components/RisksListItem';
-import { getFormattedDate } from '/imports/share/helpers';
-import { getFullNameOrEmail } from '/imports/api/users/helpers';
-import { setUrlItemId } from '/imports/client/store/actions/globalActions';
-import { updateViewedBy } from '/imports/api/risks/methods';
+import { getFormattedDate } from '../../../../../share/helpers';
+import { getFullNameOrEmail } from '../../../../../api/users/helpers';
+import { setUrlItemId } from '../../../../../client/store/actions/globalActions';
+import { updateViewedBy } from '../../../../../api/risks/methods';
 import withUpdateViewedBy from '../../../helpers/withUpdateViewedBy';
-import { pickC, notEquals, getC } from '/imports/api/helpers';
-import { RiskFilterIndexes } from '/imports/api/constants';
-import { isNewDoc } from '/imports/api/checkers';
-import { getPath } from '/imports/ui/utils/router/paths';
-import { getClassByScore, getPrimaryScore } from '/imports/api/risks/helpers';
-import { getClassByStatus } from '/imports/api/problems/helpers';
+import { pickC, notEquals, getC } from '../../../../../api/helpers';
+import { RiskFilterIndexes } from '../../../../../api/constants';
+import { isNewDoc } from '../../../../../api/checkers';
+import { getPath } from '../../../../utils/router/paths';
+import { getClassByScore, getPrimaryScore } from '../../../../../api/risks/helpers';
+import { getClassByStatus } from '../../../../../api/problems/helpers';
+
+const makeMapStateToProps = (_, { _id }) => (state) => {
+  const risk = Object.assign({}, state.collections.risksByIds[_id]);
+
+  return {
+    ...risk,
+    deletedBy: state.collections.usersByIds[risk.deletedBy],
+  };
+};
 
 export default compose(
   shouldUpdate((props, nextProps) => !!(
@@ -22,15 +31,8 @@ export default compose(
     (props._id !== props.urlItemId && props._id === nextProps.urlItemId) ||
     (props._id === props.urlItemId && props._id !== nextProps.urlItemId)
   )),
-  connect((_, { _id }) => (state) => {
-    const risk = { ...state.collections.risksByIds[_id] };
-
-    return {
-      ...risk,
-      deletedBy: state.collections.usersByIds[risk.deletedBy],
-    };
-  }),
-  withProps((props) => ({
+  connect(makeMapStateToProps),
+  withProps(props => ({
     isNew: isNewDoc(props.organization, props.userId, props),
     primaryScore: getPrimaryScore(props.scores),
   })),
@@ -51,7 +53,7 @@ export default compose(
     );
   }),
   withHandlers({
-    onClick: props => handler => {
+    onClick: props => (handler) => {
       props.dispatch(setUrlItemId(props._id));
 
       handler({ urlItemId: props._id });

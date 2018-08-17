@@ -12,5 +12,5 @@ Template.RiskEvaluation_Comments_Edit.viewmodel({
   getData() {
     const { comments } = this.data();
     return { comments };
-  }
+  },
 });

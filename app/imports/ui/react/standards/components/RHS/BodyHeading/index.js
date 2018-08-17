@@ -11,7 +11,7 @@ const StandardsRHSBodyHeading = ({ title, status, issueNumber }) => (
         <LabelDraft issueNumber={issueNumber} margin="left" />
       )}
     </h4>
-    <div className="flex"></div>
+    <div className="flex" />
   </div>
 );
 

@@ -1,6 +1,5 @@
-import MessagesService from '/imports/api/messages/messages-service.js';
-import { Discussions } from '/imports/share/collections/discussions.js'
-import { Messages } from '/imports/share/collections/messages.js'
+import { MessageService } from '../../../share/services';
+import { Discussions, Messages } from '../../../share/collections';
 
 export const insertMessageFixtures = (limit = 1000) => {
   const standardId = 'Zty4NCagWvrcuLYoy';
@@ -8,17 +7,17 @@ export const insertMessageFixtures = (limit = 1000) => {
   const discussionId = discussion && discussion._id;
 
   if (discussionId && Messages.find({ discussionId }).count() === 0) {
-    for (let i = 0; i < limit; i++) {
-      MessagesService.insert({
+    for (let i = 0; i < limit; i += 1) {
+      MessageService.insert({
         discussionId,
         text: `Text message ${i + 1}`,
         type: 'text',
-        createdAt: new Date,
+        createdAt: new Date(),
         createdBy: 'SQHmBKJ94gJvpLKLt',
-        updatedAt: new Date,
+        updatedAt: new Date(),
         updatedBy: 'SQHmBKJ94gJvpLKLt',
-        organizationId: 'KwKXz5RefrE5hjWJ2'
-      });
+        organizationId: 'KwKXz5RefrE5hjWJ2',
+      }, { userId: 'SQHmBKJ94gJvpLKLt' });
     }
 
     console.log(`Inserted ${limit} messages into the discussion`);
@@ -26,4 +25,4 @@ export const insertMessageFixtures = (limit = 1000) => {
   }
 
   return false;
-}
+};

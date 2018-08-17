@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DashboardStatsExpandable renders correctly 1`] = `
+<DashboardStats>
+  <DashboardStatsTitle
+    onClick={[Function]}
+    toggle={[Function]}
+  >
+     
+    <ToggleAngleIcon
+      isOpen={false}
+      name="angle-down"
+      toggle={[Function]}
+    />
+  </DashboardStatsTitle>
+  <div
+    key="0 1 2 3 4"
+  >
+    foo
+  </div>
+  <Collapse
+    isOpen={false}
+  >
+    <div
+      key="5 6 7 8 9"
+    >
+      foo
+    </div>
+    <div
+      key="10 11 12 13 14"
+    >
+      foo
+    </div>
+    <div
+      key="15 16 17 18 19"
+    >
+      foo
+    </div>
+    <div
+      key="20 21 22 23 24"
+    >
+      foo
+    </div>
+  </Collapse>
+</DashboardStats>
+`;

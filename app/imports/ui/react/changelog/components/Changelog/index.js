@@ -6,7 +6,7 @@ import ChangelogContentContainer from '../../containers/ChangelogContentContaine
 import ChangelogFooterContainer from '../../containers/ChangelogFooterContainer';
 import propTypes from './propTypes';
 
-const Changelog = (props) => (
+const Changelog = props => (
   <CollapseBlock
     classNames={{ head: '', body: 'card-changelog collapse' }}
     collapsed={props.isChangelogCollapsed}

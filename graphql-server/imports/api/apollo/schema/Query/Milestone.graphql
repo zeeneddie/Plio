@@ -1,0 +1,7 @@
+type MilestoneQueryPayload {
+  milestone: Milestone
+}
+
+type Query {
+  milestone(_id: ID!): MilestoneQueryPayload
+}

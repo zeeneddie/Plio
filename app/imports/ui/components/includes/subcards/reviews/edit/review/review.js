@@ -6,8 +6,13 @@ import { updateViewedBy } from '/imports/api/reviews/methods';
 import { isViewed } from '/imports/api/checkers';
 
 Template.Subcards_Review.viewmodel({
+  onCreated() {
+    if (!this.reviewedAt()) {
+      this.reviewedAt(new Date());
+    }
+  },
   onRendered(templateInstance) {
-    const doc = templateInstance.data.doc;
+    const { doc } = templateInstance.data;
     const userId = Meteor.userId();
 
     if (doc && !isViewed(doc, userId)) {

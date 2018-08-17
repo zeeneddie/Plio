@@ -1,0 +1,8 @@
+type RisksQueryPayload {
+  totalCount: Int
+  risks: [Risk]
+}
+
+type Query {
+  risks(organizationId: ID!, isDeleted: Boolean): RisksQueryPayload!
+}

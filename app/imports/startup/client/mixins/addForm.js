@@ -16,7 +16,7 @@ export default {
       context,
       parentNode || _.first(this.forms),
       nextNode,
-      parentView || this.templateInstance.view
+      parentView || this.templateInstance.view,
     );
-  }
+  },
 };

@@ -1,55 +1,28 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Actions } from '/imports/share/collections/actions.js';
-import { WorkItems } from '/imports/share/collections/work-items.js';
+import { Meteor } from 'meteor/meteor';
+import { Actions } from '/imports/share/collections/actions';
+import { WorkItems } from '/imports/share/collections/work-items';
 import {
   WorkItemsStore,
-  ProblemTypes,
   ActionTypes,
-} from '/imports/share/constants.js';
-import { AnalysisTitles, ActionTitles, WorkInboxFilters } from '/imports/api/constants.js';
-import { capitalize, lowercase } from '/imports/share/helpers';
-import { propEq } from '/imports/api/helpers';
-
-const {
-  riskAnalysis,
-  rootCauseAnalysis,
-  updateOfRiskRecord,
-  updateOfStandards,
-} = AnalysisTitles;
+} from '/imports/share/constants';
+import { WorkInboxFilters } from '/imports/api/constants';
+import { capitalize } from '/imports/share/helpers';
+import { getTypeText } from '../../../api/work-items/helpers';
 
 export default {
-  getTypeText({ type, linkedDoc }) {
-    const result = ((() => {
-      let title;
-      const COMPLETE = 'Complete';
-      const VERIFY = 'Verify';
-      const getText = (action, text) => `${action} ${lowercase(text)}`;
-      switch (linkedDoc && type) {
-        case WorkItemsStore.TYPES.COMPLETE_ANALYSIS:
-          title = linkedDoc.type === ProblemTypes.RISK
-            ? riskAnalysis
-            : rootCauseAnalysis;
-          return getText(COMPLETE, title);
-        case WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
-          title = linkedDoc.type === ProblemTypes.RISK
-            ? updateOfRiskRecord
-            : updateOfStandards;
-          return getText(COMPLETE, title);
-        case WorkItemsStore.TYPES.COMPLETE_ACTION:
-          title = ActionTitles[linkedDoc.type];
-          return getText(COMPLETE, title);
-        case WorkItemsStore.TYPES.VERIFY_ACTION:
-          title = ActionTitles[linkedDoc.type];
-          return getText(VERIFY, title);
-        default:
-          return type;
-      }
-    })());
-
-    return result;
-  },
+  getTypeText,
   getLinkedDocTypeText({ type, linkedDoc }) {
-    return capitalize(this.getTypeText({ type, linkedDoc }).replace(/^(complete|verify)\s/i, ''));
+    const { TYPES } = WorkItemsStore;
+
+    switch (type) {
+      case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
+        // nonconformity type is non-conformity
+        return `Closing of this ${linkedDoc.type}`.replace('-', '');
+      default:
+        return capitalize(this.getTypeText({ type, linkedDoc })
+          .replace(/^(complete|verify)\s/i, ''));
+    }
   },
   currentWorkItem() {
     return WorkItems.findOne({ _id: this.workItemId() });
@@ -81,7 +54,7 @@ export default {
       organizationId = this.organizationId(),
       ...args
     } = {},
-    options = { sort: { createdAt: -1 } }
+    options = { sort: { createdAt: -1 } },
   ) {
     const query = { isDeleted, organizationId, ...args };
     return WorkItems.find(query, options);
@@ -90,7 +63,10 @@ export default {
     const query = { ...filter };
     return WorkItems.findOne(query, options);
   },
-  _getActionsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+  _getActionsByQuery(
+    { isDeleted = { $in: [null, false] }, ...args } = {},
+    options = { sort: { createdAt: -1 } },
+  ) {
     const query = { isDeleted, ...args, organizationId: this.organizationId() };
     return Actions.find(query, options);
   },
@@ -102,31 +78,29 @@ export default {
     switch (type) {
       case ActionTypes.CORRECTIVE_ACTION:
         return 'Corrective action';
-        break;
       case ActionTypes.PREVENTATIVE_ACTION:
         return 'Preventative action';
-        break;
       case ActionTypes.RISK_CONTROL:
         return 'Risk control';
-        break;
+      case ActionTypes.GENERAL_ACTION:
+        return 'General action';
+      default:
+        return 'Action';
     }
   },
   _getQueryParams({ isCompleted, assigneeId }) {
-    assigneeId = assigneeId || Meteor.userId();
+    const assignee = assigneeId || Meteor.userId();
     return (userId) => {
       if (isCompleted) { // completed
-        if (assigneeId === userId) {
+        if (assignee === userId) {
           return { filter: 3 }; // My completed work
-        } else {
-          return { filter: 4 }; // Team completed work
         }
-      } else {
-        if (assigneeId === userId) {
-          return { filter: 1 }; // My current work
-        } else {
-          return { filter: 2 }; // Team current work
-        }
+        return { filter: 4 }; // Team completed work
       }
+      if (assignee === userId) {
+        return { filter: 1 }; // My current work
+      }
+      return { filter: 2 }; // Team current work
     };
   },
 };

@@ -4,7 +4,7 @@ const defaults = {
   placeholder: 'Select',
   selectFirstIfNoSelected: true,
   disabled: false,
-  query: ''
+  query: '',
 };
 
 Template.Select_Member.viewmodel({
@@ -15,7 +15,7 @@ Template.Select_Member.viewmodel({
       value: selected = Meteor.userId(),
       placeholder = this.placeholder(),
       selectFirstIfNoSelected = this.selectFirstIfNoSelected(),
-      disabled = this.disabled()
+      disabled = this.disabled(),
     } = this.data();
 
     const { onUpdate = () => {} } = this.templateInstance.data;
@@ -26,15 +26,16 @@ Template.Select_Member.viewmodel({
       selectFirstIfNoSelected,
       disabled,
       items: this._members(this.query() || {}),
+      getAllItems: () => this._members(this.query() || {}, {}, false) || [],
       onUpdate: (viewmodel) => {
-        const { selected:value } = viewmodel.getData();
+        const { selected: value } = viewmodel.getData();
 
         if (Object.is(value, selected)) return;
 
         this.value(value);
 
         return onUpdate(viewmodel);
-      }
+      },
     };
-  }
+  },
 });

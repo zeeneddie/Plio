@@ -5,5 +5,5 @@ Template.Subcards_Notify_Read.viewmodel({
   users: '',
   renderNotifyUsers() {
     return this.users().map(user => this.userNameOrEmail(user)).join(', ');
-  }
+  },
 });

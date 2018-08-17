@@ -14,8 +14,11 @@
             assignee=this.executor
             comments=this.completionComments
             isButtonVisible=true
+            commentsPlaceholder="Enter any approval comments"
             placeholder="Who will do it?"
             label="Who will do it?"
+            buttonSuccessText="Approve"
+            buttonDefaultText="Approve"
             onUpdate=methods.setExecutor
             onComplete=methods.complete}}
       {{else}}

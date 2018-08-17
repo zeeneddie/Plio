@@ -3,7 +3,7 @@ import React from 'react';
 import HelpDocsLHSListItemContainer from '../../containers/HelpDocsLHSListItemContainer';
 import propTypes from './propTypes';
 
-const HelpDocsLHSHelpList = (props) => (
+const HelpDocsLHSHelpList = props => (
   <div className="list-group">
     {props.helpDocs.map(help => (
       <HelpDocsLHSListItemContainer

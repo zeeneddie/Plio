@@ -1,0 +1,10 @@
+mutation addGoalNotifyUser($input: AddGoalNotifyUserInput!) {
+  addGoalNotifyUser(input: $input) {
+    user {
+      _id
+      profile {
+        fullName
+      }
+    }
+  }
+}

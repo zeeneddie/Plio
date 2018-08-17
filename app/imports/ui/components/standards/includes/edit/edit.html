@@ -11,7 +11,7 @@
         {{> ESType typeId=standard.typeId _id=standard._id}}
 
         {{> UniqueNumberField uniqueNumber=standard.uniqueNumber _id=standard._id}}
-
+        
         {{> Standards_Owner_Edit owner=standard.owner _id=standard._id}}
 
         {{> IssueNumber_Edit issueNumber=standard.issueNumber _id=standard._id}}
@@ -39,21 +39,16 @@
               label="Source file 2"
               id=2}}
         {{/if}}
-
       </div>
-
-      {{> Subcards_Notify_Edit
-          doc=standard
-          documentType="standard"
-          onUpdate=onUpdateNotifyUserCb}}
 
       {{> Subcards_NonConformities_Edit
           _id=this._id
           _query=_getNCsQuery}}
-
-      {{> Subcards_Risks_Edit
-          _id=this._id
-          _query=_getRisksQuery}}
+      
+      <hr style="margin: 0" />
+      <div>
+        {{> React component=RisksSubcardContainer standardId=standard._id}}
+      </div>
 
       {{> Subcards_Actions_Edit (getActionsArgs 'CA')}}
 
@@ -70,6 +65,11 @@
       {{> Subcards_Reviews_Edit
           documentId=standard._id
           documentType="standard"}}
+
+      {{> Subcards_Notify_Edit
+          doc=standard
+          documentType="standard"
+          onUpdate=onUpdateNotifyUserCb}}
       <div class="card-block text-xs-center">
         <button type="button" class="btn btn-secondary" {{b "click: remove"}}>
           Delete

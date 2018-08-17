@@ -1,6 +1,6 @@
 import { checkDocExistance } from '../checkers';
 import { checkAndThrow } from '../helpers';
-import { Messages } from '/imports/share/collections/messages';
+import { Messages } from '../../share/collections/messages';
 import { DSC_CANNOT_SET_EARLIER_DATE } from '../errors';
 
 export const DSC_OnUpdateViewedByChecker = ({ userId, messageId }, doc) => {

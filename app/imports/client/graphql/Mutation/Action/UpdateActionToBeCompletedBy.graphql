@@ -1,0 +1,12 @@
+mutation updateActionToBeCompletedBy($input: UpdateActionToBeCompletedByInput!) {
+  updateActionToBeCompletedBy(input: $input) {
+    action {
+      toBeCompletedBy {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

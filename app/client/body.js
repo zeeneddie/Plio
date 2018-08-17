@@ -44,7 +44,7 @@ Template.body.viewmodel({
             text: body,
             userAvatar: icon,
             route = {},
-           } = newDoc;
+          } = newDoc;
 
           if (createdBy === Meteor.userId()) return;
 

@@ -10,9 +10,9 @@ import rkScoringGuidelines from './fields/rkScoringGuidelines';
 import workflowDefaults from './fields/workflowDefaults';
 import reminders from './fields/reminders';
 import guidelines from './fields/guidelines';
+import workspaceDefaults from './fields/workspaceDefaults';
 
-
-export default OrgAuditConfig = {
+export default {
 
   collection: Organizations,
 
@@ -34,6 +34,7 @@ export default OrgAuditConfig = {
     ...workflowDefaults,
     ...reminders,
     ...guidelines,
+    ...workspaceDefaults,
   ],
 
   onRemoved: { },
@@ -46,8 +47,8 @@ export default OrgAuditConfig = {
     return 'organization';
   },
 
-  docName({ name }) {
-    return `"${name}"`;
+  docName(org) {
+    return `"${org.name}"`;
   },
 
   docOrgId({ _id }) {

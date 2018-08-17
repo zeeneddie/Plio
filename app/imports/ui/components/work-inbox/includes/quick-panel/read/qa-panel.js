@@ -1,8 +1,9 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
-import { WorkItemsStore } from '/imports/share/constants.js';
-import { WorkInboxHelp } from '/imports/api/help-messages.js';
+import { WorkItemsStore, ActionTypes, ProblemTypes } from '../../../../../../share/constants';
+import { WorkInboxHelp } from '../../../../../../api/help-messages';
+import { canCompleteActions } from '../../../../../../share/checkers';
 
 const { TYPES } = WorkItemsStore;
 
@@ -11,30 +12,64 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     'user', 'date', 'utils', 'modal', 'workItemStatus', 'workInbox', 'router', 'organization',
   ],
   doc: '',
-  isCurrentUserAssignee({ assigneeId }) {
-    return Meteor.userId() === assigneeId;
+  showCompleteButton({
+    assigneeId,
+    organizationId,
+    type,
+    linkedDoc = {},
+  }) {
+    if (type === WorkItemsStore.TYPES.COMPLETE_ANALYSIS) return false;
+
+    const userId = Meteor.userId();
+    let valid = userId === assigneeId;
+
+    if (Object.values(ActionTypes).includes(linkedDoc.type)) {
+      valid = valid || canCompleteActions(organizationId, userId);
+    }
+
+    return !!valid;
   },
   getButtonText({ type }) {
     switch (type) {
       case TYPES.VERIFY_ACTION:
         return 'Verify';
       case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
-        return 'Update completed';
+        return 'Approve';
       default:
         return 'Complete';
     }
   },
-  getDescription({ type, linkedDoc, assigneeId, targetDate, isCompleted, completedAt }) {
-    const chooseOne = this.chooseOne(isCompleted);
+  getDescription({
+    type,
+    linkedDoc = {},
+    assigneeId,
+    targetDate,
+    isCompleted,
+    completedAt,
+  }) {
+    if (!isCompleted && type === WorkItemsStore.TYPES.COMPLETE_ANALYSIS) {
+      switch (linkedDoc.type) {
+        case ProblemTypes.NON_CONFORMITY:
+          return 'Complete the root cause analysis by updating the nonconformity record ' +
+            'displayed below, entering the relevant details in the root cause analysis section';
+        case ProblemTypes.POTENTIAL_GAIN:
+          return 'Complete the potential gain analysis by updating the potential gain record ' +
+            'displayed below, entering the relevant details in the potential gain analysis section';
+        case ProblemTypes.RISK:
+          return 'Complete the risk analysis by updating ' +
+            'the relevant sections in the risk record displayed below';
+        default:
+          break;
+      }
+    }
+
     const typeText = this.getLinkedDocTypeText({ type, linkedDoc });
     const operation = this.getOperationText({ type });
     const assignee = this.userNameOrEmail(assigneeId);
-
-    let desc = `${typeText} ${chooseOne('', 'to be')} ${operation} by ${assignee}`;
-
-    const date = chooseOne(completedAt, targetDate);
+    let desc = `${typeText} ${isCompleted ? '' : 'to be'} ${operation} by ${assignee}`;
+    const date = isCompleted ? completedAt : targetDate;
     if (date) {
-      desc = `${desc} ${chooseOne('on', 'by')} ${this.renderDate(date)}`;
+      desc = `${desc} ${isCompleted ? 'on' : 'by'} ${this.renderDate(date)}`;
     }
 
     return desc;
@@ -44,7 +79,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       case TYPES.VERIFY_ACTION:
         return 'verified';
       case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
-        return 'completed';
+        return 'approved';
       default:
         return `${this.lowercase(this.getButtonText({ type }))}d`;
     }

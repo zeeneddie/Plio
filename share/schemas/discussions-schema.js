@@ -1,8 +1,8 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { _ } from 'meteor/underscore';
 
-import { idSchemaDoc, BaseEntitySchema, OrganizationIdSchema } from './schemas.js';
-import { DocumentTypes } from '../constants.js';
+import { idSchemaDoc, BaseEntitySchema, OrganizationIdSchema } from './schemas';
+import { DocumentTypes } from '../constants';
 
 export const ViewedBySchema = new SimpleSchema({
   userId: idSchemaDoc,
@@ -18,6 +18,7 @@ export const DiscussionsSchema = new SimpleSchema([
   {
     documentType: {
       type: String,
+      // TODO: pick only needed document types
       allowedValues: _.values(DocumentTypes),
     },
     linkedTo: idSchemaDoc,

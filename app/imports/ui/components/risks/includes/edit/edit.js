@@ -7,6 +7,7 @@ import {
   removeScore,
 } from '/imports/api/risks/methods';
 import { AnalysisTitles, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { ProblemIndexes } from '/imports/share/constants.js';
 
 Template.Risks_Card_Edit.viewmodel({
   mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils', 'router'],
@@ -25,15 +26,19 @@ Template.Risks_Card_Edit.viewmodel({
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),
-      riskId: this._id()
+      riskId: this._id(),
     };
   },
   onUpdateCb() {
     return this.update.bind(this);
   },
-  update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
+  update({
+    query = {}, options = {}, e = {}, withFocusCheck = false, ...args
+  }, cb = () => {}) {
     const _id = this._id();
-    const allArgs = { ...args, _id, options, query };
+    const allArgs = {
+      ...args, _id, options, query,
+    };
 
     const updateFn = () => this.modal().callMethod(update, allArgs, cb);
 
@@ -53,13 +58,13 @@ Template.Risks_Card_Edit.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       this.modal().callMethod(remove, { _id }, (err) => {
         if (err) {
           swal.close();
           return;
-        };
+        }
 
         swal({
           title: 'Removed!',
@@ -90,5 +95,5 @@ Template.Risks_Card_Edit.viewmodel({
     const _id = this._id();
 
     this.modal().callMethod(removeScore, { _id, ...args }, cb);
-  }
+  },
 });

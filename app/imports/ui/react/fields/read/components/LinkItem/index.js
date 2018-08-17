@@ -1,16 +1,23 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import Button from '../../../../components/Buttons/Button';
 import Icon from '../../../../components/Icons/Icon';
 
-const LinkItem = ({ href, indicator, title, sequentialId }) => (
+const LinkItem = ({
+  href,
+  indicator,
+  title,
+  sequentialId,
+  ...props
+}) => (
   <Button
     href={href}
     color="secondary"
     className="btn-inline pointer"
+    {...props}
   >
     {sequentialId && (<strong>{sequentialId} </strong>)}
-
     <span>{title}</span>
 
     {indicator && (

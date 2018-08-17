@@ -1,6 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { getSelectedOrgSerialNumber } from '/imports/api/helpers';
+import { getSelectedOrgSerialNumber } from '../../../api/helpers';
 
 export const getOrgSerialNumber = ({ orgSerialNumber } = {}) => (
   orgSerialNumber ||
@@ -25,7 +25,7 @@ export const createPathGetter = (path, withOrgSerialNumber, withFilter) =>
     return FlowRouter.path(path, _params, _queryParams);
   };
 
-export const createRedirectHandler = (pathGetter) => (params, queryParams) => {
+export const createRedirectHandler = pathGetter => (params, queryParams) => {
   const path = pathGetter(params, queryParams);
 
   return FlowRouter.withReplaceState(() => FlowRouter.go(path));

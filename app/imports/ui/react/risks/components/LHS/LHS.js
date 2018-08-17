@@ -40,7 +40,9 @@ const RisksLHS = ({
 
   return (
     <LHSContainer
-      {...{ animating, searchText, searchResultsText, onChange, onClear, onModalButtonClick }}
+      {...{
+        animating, searchText, searchResultsText, onChange, onClear, onModalButtonClick,
+      }}
     >
       {renderContent()}
     </LHSContainer>

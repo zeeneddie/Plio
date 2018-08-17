@@ -2,7 +2,7 @@ import React from 'react';
 
 import StandardListItemContainer from '../../containers/StandardListItemContainer';
 
-const StandardList = (props) => (
+const StandardList = props => (
   <div className="list-group">
     {props.standards.map(standard => (
       <StandardListItemContainer

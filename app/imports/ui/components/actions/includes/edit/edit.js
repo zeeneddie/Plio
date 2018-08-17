@@ -1,5 +1,7 @@
 import { Template } from 'meteor/templating';
-import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { mergeDeepLeft } from 'ramda';
+import { swal } from '../../../../../client/util';
+import { client } from '../../../../../client/apollo';
 
 import {
   update,
@@ -8,19 +10,36 @@ import {
   verify,
   undoCompletion,
   undoVerification,
+  // TODO fix linkStandard, unlinkStandard import
+  // eslint-disable-next-line import/named
   linkStandard,
+  // eslint-disable-next-line import/named
   unlinkStandard,
   linkDocument,
   unlinkDocument,
   setCompletionDate,
   setCompletionExecutor,
   setVerificationDate,
-  setVerificationExecutor
-} from '/imports/api/actions/methods';
-import { getTzTargetDate } from '/imports/share/helpers.js';
+  setVerificationExecutor,
+} from '../../../../../api/actions/methods';
+import { getTzTargetDate } from '../../../../../share/helpers';
+import { ActionTypes, DocumentTypes } from '../../../../../share/constants';
+import {
+  deleteActionFromGoalFragment,
+  updateActionFragment,
+} from '../../../../../client/apollo/utils';
+import { Fragment } from '../../../../../client/graphql';
+
+const updateFragment = (actionId, action) => {
+  updateActionFragment(mergeDeepLeft(action), {
+    id: actionId,
+    fragment: Fragment.DASHBOARD_ACTION,
+  }, client);
+};
 
 Template.Actions_Edit.viewmodel({
-  mixin: ['organization', 'workInbox', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
+  mixin: ['organization', 'workInbox', 'modal',
+    'callWithFocusCheck', 'router', 'collapsing', 'utils'],
   isLinkedToEditable: true,
   action() {
     return this._getActionByQuery({ _id: this._id() });
@@ -32,7 +51,7 @@ Template.Actions_Edit.viewmodel({
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),
-      action: this._id()
+      action: this._id(),
     };
   },
   callUpdate(method, args = {}, cb = () => {}) {
@@ -48,8 +67,9 @@ Template.Actions_Edit.viewmodel({
   onUpdateCb() {
     return this.update.bind(this);
   },
-  update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
-
+  update({
+    query = {}, options = {}, e = {}, withFocusCheck = false, ...args
+  }, cb = () => {}) {
     const updateFn = () => this.callUpdate(update, { query, options, ...args }, cb);
 
     if (withFocusCheck) {
@@ -62,13 +82,13 @@ Template.Actions_Edit.viewmodel({
     return ({ ...args }, cb) => this.callUpdate(complete, { ...args }, cb);
   },
   getUndoCompletionFn() {
-    return (cb) => this.callUpdate(undoCompletion, {}, cb);
+    return cb => this.callUpdate(undoCompletion, {}, cb);
   },
   getVerifyFn() {
     return ({ ...args }, cb) => this.callUpdate(verify, { ...args }, cb);
   },
   getUndoVerificationFn() {
-    return (cb) => this.callUpdate(undoVerification, {}, cb);
+    return cb => this.callUpdate(undoVerification, {}, cb);
   },
   getLinkStandardFn() {
     return ({ standardId }, cb) => {
@@ -95,8 +115,21 @@ Template.Actions_Edit.viewmodel({
       const { timezone } = this.organization();
       const tzDate = getTzTargetDate(targetDate, timezone);
 
-      this.callUpdate(setCompletionDate, { targetDate: tzDate }, cb);
+      this.callUpdate(setCompletionDate, { targetDate: tzDate }, (err, res) => {
+        if (cb) cb(err, res);
+        if (!err) {
+          try {
+            updateFragment(this._id(), { completionTargetDate: tzDate });
+          } catch (e) {
+            // if dashboard page was not visited before in the current session
+            // this will break without try/catch
+          }
+        }
+      });
     };
+  },
+  getUpdateTitleFn() {
+    return newAction => updateFragment(this._id(), newAction);
   },
   getUpdateCompletionExecutorFn() {
     return ({ userId }, cb) => {
@@ -117,34 +150,43 @@ Template.Actions_Edit.viewmodel({
     };
   },
   remove() {
-    const { title } = this.action();
+    const { title, type, linkedTo } = this.action();
     const _id = this._id();
 
-    swal({
-      title: 'Are you sure?',
-      text: `An action "${title}" will be removed.`,
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Remove',
-      closeOnConfirm: false,
-    },
-    () => {
-      this.modal().callMethod(remove, { _id }, (err) => {
-        if (err) {
-          swal.close();
-          return;
-        }
+    swal(
+      {
+        title: 'Are you sure?',
+        text: `An action "${title}" will be removed.`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Remove',
+        closeOnConfirm: false,
+      },
+      () => {
+        this.modal().callMethod(remove, { _id }, (err) => {
+          if (err) {
+            swal.close();
+            return;
+          }
 
-        swal({
-          title: 'Removed!',
-          text: `An action "${title}" was removed successfully.`,
-          type: 'success',
-          timer: ALERT_AUTOHIDE_TIME,
-          showConfirmButton: false,
+          if (type === ActionTypes.GENERAL_ACTION) {
+            linkedTo.forEach(({ documentId, documentType }) => {
+              if (documentType === DocumentTypes.GOAL) {
+                try {
+                  deleteActionFromGoalFragment(documentId, _id, client);
+                } catch (e) {
+                  // if dashboard page was not visited before in the current session
+                  // this will break without try/catch
+                }
+              }
+            });
+          }
+
+          swal.success('Removed', `An action "${title}" was removed successfully.`);
+
+          this.modal().close();
         });
-
-        this.modal().close();
-      });
-    });
+      },
+    );
   },
 });

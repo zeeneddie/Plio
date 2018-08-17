@@ -10,21 +10,21 @@ export default {
   },
   goToStandard(urlItemId, withQueryParams = true) {
     const params = { orgSerialNumber: this.organizationSerialNumber(), urlItemId };
-    const queryParams = !!withQueryParams ? { filter: this.activeStandardFilterId() } : {};
+    const queryParams = withQueryParams ? { filter: this.activeStandardFilterId() } : {};
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('standard', params, queryParams);
     });
   },
   goToNC(urlItemId, withQueryParams = true) {
     const params = { orgSerialNumber: this.organizationSerialNumber(), urlItemId };
-    const queryParams = !!withQueryParams ? { filter: this.activeNCFilterId() } : {};
+    const queryParams = withQueryParams ? { filter: this.activeNCFilterId() } : {};
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('nonconformity', params, queryParams);
     });
   },
   goToNCs(withQueryParams = true) {
     const params = { orgSerialNumber: this.organizationSerialNumber() };
-    const queryParams = !!withQueryParams ? { filter: this.activeNCFilterId() } : {};
+    const queryParams = withQueryParams ? { filter: this.activeNCFilterId() } : {};
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('nonconformities', params, queryParams);
     });
@@ -37,7 +37,7 @@ export default {
   },
   goToWorkInbox(withQueryParams = true) {
     const params = { orgSerialNumber: this.organizationSerialNumber() };
-    const queryParams = !!withQueryParams ? { filter: this.activeWorkInboxFilterId() } : {};
+    const queryParams = withQueryParams ? { filter: this.activeWorkInboxFilterId() } : {};
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('workInbox', params, queryParams);
     });
@@ -45,21 +45,20 @@ export default {
   goToDefaultWorkItem(
     list = 'WorkInbox_List',
     getRouteOptions = '_findWorkItemForFilter',
-    redirectHandler = 'goToWorkItem'
+    redirectHandler = 'goToWorkItem',
   ) {
     return redirectToDefaultDocument.call(this, list, getRouteOptions, redirectHandler);
   },
   goToRisk(urlItemId, withQueryParams = true) {
     const params = { urlItemId, orgSerialNumber: this.organizationSerialNumber() };
-    const queryParams = !!withQueryParams ? { filter: this.activeRiskFilterId() } : {};
-    console.log('risk', params, queryParams);
+    const queryParams = withQueryParams ? { filter: this.activeRiskFilterId() } : {};
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('risk', params, queryParams);
     });
   },
   goToRisks(withQueryParams = true) {
     const params = { orgSerialNumber: this.organizationSerialNumber() };
-    const queryParams = !!withQueryParams ? { filter: this.activeRiskFilterId() } : {};
+    const queryParams = withQueryParams ? { filter: this.activeRiskFilterId() } : {};
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('risks', params, queryParams);
     });
@@ -87,5 +86,5 @@ export default {
   },
   handleRouteStandards() {
     return this.handleRouteRedirect('StandardsList');
-  }
+  },
 };

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { compose, withProps, withState, lifecycle } from 'recompose';
@@ -34,12 +35,12 @@ const enhance = compose(
   lifecycle({
     componentWillUpdate(props) {
       _.each(
-          props.attachments,
-          props.fileUploader.upload,
-          props.fileUploader
+        props.attachments,
+        props.fileUploader.upload,
+        props.fileUploader,
       );
     },
-  })
+  }),
 );
 
 const DiscussionFileUploader = enhance(({ setAttachments }) => (

@@ -1,9 +1,10 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { withContext } from 'recompose';
 
 const enhance = withContext(
   { subFormName: PropTypes.string },
-  (props) => ({
+  props => ({
     subFormName: props.name,
   }),
 );

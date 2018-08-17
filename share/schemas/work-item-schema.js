@@ -1,7 +1,8 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { _ } from 'meteor/underscore';
 
-import { BaseEntitySchema, ViewedBySchema, OrganizationIdSchema, DeletedSchema } from './schemas.js';
-import { WorkItemsStore } from '../constants.js';
+import { BaseEntitySchema, ViewedBySchema, OrganizationIdSchema, DeletedSchema } from './schemas';
+import { WorkItemsStore } from '../constants';
 
 const { TYPES, LINKED_TYPES, STATUSES } = WorkItemsStore;
 

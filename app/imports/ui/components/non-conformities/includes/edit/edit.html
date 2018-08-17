@@ -4,28 +4,34 @@
       {{#with NC}}
         {{> NC_Card_Edit_Main
             NC=this}}
-
         {{> Subcards_RootCauseAnalysis_Edit
+            prefix=ui.analysis.prefix
+            label=(getAnalysisTitleByType this)
             rootCauseAnalysis=this.rootCauseAnalysis}}
 
-        {{> Subcards_Notify_Edit
-            doc=this
-            documentType="non-conformity"
-            onUpdate=onUpdateNotifyUserCb}}
+        {{#unless (isPG this)}}
+          {{> Subcards_Occurrences_Edit
+              _id=this._id
+              occurrencesIds=this.occurrences}}
+        {{/unless}}
 
-        {{> Subcards_Occurrences_Edit
-            _id=this._id
-            occurrencesIds=this.occurrences}}
-
-        {{> Subcards_Actions_Edit
+        {{#if (isPG this)}}
+          {{> Subcards_Actions_Edit
+            type="GA"
+            _lText="Actions"
+            documentId=this._id
+            documentType=this.type}}
+        {{else}}
+          {{> Subcards_Actions_Edit
             type="CA"
             documentId=this._id
-            documentType="non-conformity"}}
+            documentType=this.type}}
 
-        {{> Subcards_Actions_Edit
+          {{> Subcards_Actions_Edit
             type="PA"
             documentId=this._id
-            documentType="non-conformity"}}
+            documentType=this.type}}
+        {{/if}}
 
         {{> Subcards_ImprovementPlan_Edit
             improvementPlan=this.improvementPlan}}
@@ -41,6 +47,11 @@
             fileIds=this.fileIds
             uploaderMetaContext=uploaderMetaContext
             slingshotDirective=slingshotDirective}}
+
+        {{> Subcards_Notify_Edit
+            doc=this
+            documentType="non-conformity"
+            onUpdate=onUpdateNotifyUserCb}}
       {{/with}}
       <div class="card-block text-xs-center">
         <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>

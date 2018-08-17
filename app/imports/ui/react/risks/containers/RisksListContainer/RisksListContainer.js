@@ -1,15 +1,22 @@
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
 
-import { pickDeep } from '/imports/api/helpers';
 import RisksList from '../../components/RisksList';
+import {
+  getOrgSerialNumber,
+  getOrganization,
+} from '../../../../../client/store/selectors/organizations';
+import {
+  getUserId,
+  getFilter,
+  getUrlItemId,
+} from '../../../../../client/store/selectors/global';
 
-export default compose(
-  connect(pickDeep([
-    'organizations.organization',
-    'organizations.orgSerialNumber',
-    'global.userId',
-    'global.filter',
-    'global.urlItemId',
-  ])),
-)(RisksList);
+const mapStateToProps = state => ({
+  organization: getOrganization(state),
+  orgSerialNumber: getOrgSerialNumber(state),
+  userId: getUserId(state),
+  filter: getFilter(state),
+  urlItemId: getUrlItemId(state),
+});
+
+export default connect(mapStateToProps)(RisksList);

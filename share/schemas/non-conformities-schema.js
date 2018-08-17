@@ -5,10 +5,28 @@ import {
   BaseProblemsRequiredSchema,
   BaseProblemsOptionalSchema,
   FileIdsSchema,
+  getNotifySchema,
 } from './schemas';
-import { ProblemsStatuses, RCAMaxCauses, WorkflowTypes, StringLimits } from '../constants';
+import {
+  ProblemsStatuses,
+  RCAMaxCauses,
+  WorkflowTypes,
+  StringLimits,
+  ProblemTypes,
+} from '../constants';
 
-const RequiredSchema = BaseProblemsRequiredSchema;
+const RequiredSchema = new SimpleSchema([
+  BaseProblemsRequiredSchema,
+  {
+    type: {
+      type: String,
+      allowedValues: [
+        ProblemTypes.NON_CONFORMITY,
+        ProblemTypes.POTENTIAL_GAIN,
+      ],
+    },
+  },
+]);
 
 const RootCauseAnalysisSchema = new SimpleSchema([
   {
@@ -24,7 +42,7 @@ const RootCauseAnalysisSchema = new SimpleSchema([
     },
     'causes.$.text': {
       type: String,
-      // max: ?
+      optional: true,
     },
   },
   FileIdsSchema,
@@ -69,6 +87,7 @@ const NonConformitiesSchema = new SimpleSchema([
   BaseEntitySchema,
   RequiredSchema,
   OptionalSchema,
+  getNotifySchema(['ownerId', 'originatorId']),
   {
     serialNumber: {
       type: Number,

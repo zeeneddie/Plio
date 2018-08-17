@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 
-import { getTzTargetDate } from '/imports/share/helpers.js';
+import { getTzTargetDate } from '/imports/share/helpers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 
@@ -13,7 +13,7 @@ Template.IP_ReviewDate_Edits.viewmodel({
       placeholder: this.renderDate(new Date()),
       defaultDate: false,
       onChange: this.update.bind(this),
-      onDelete: this.delete.bind(this)
+      onDelete: this.delete.bind(this),
     });
   },
   onChangeCb() {
@@ -41,12 +41,12 @@ Template.IP_ReviewDate_Edits.viewmodel({
     const options = {};
     const _id = Random.id();
 
-    options['$addToSet'] = {
-      'improvementPlan.reviewDates': { _id, date }
+    options.$addToSet = {
+      'improvementPlan.reviewDates': { _id, date },
     };
 
     if (this.parent().doc()) {
-      this.parent().update({ options }, cb)
+      this.parent().update({ options }, cb);
     } else {
       this.parent().insert({ reviewDates: [{ _id, date }] }, cb);
     }
@@ -54,15 +54,15 @@ Template.IP_ReviewDate_Edits.viewmodel({
   set({ _id, date }, cb) {
     const query = {
       'improvementPlan.reviewDates': {
-        $elemMatch: { _id }
-      }
+        $elemMatch: { _id },
+      },
     };
 
     const options = {};
 
-    options['$set'] = {
-      'improvementPlan.reviewDates.$.date': date
-    }
+    options.$set = {
+      'improvementPlan.reviewDates.$.date': date,
+    };
 
     this.parent().update({ query, options }, cb);
   },
@@ -81,33 +81,33 @@ Template.IP_ReviewDate_Edits.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       const options = {
         $pull: {
-          'improvementPlan.reviewDates': { _id }
-        }
+          'improvementPlan.reviewDates': { _id },
+        },
       };
 
       const cb = (err) => {
-          if (err) {
-            swal({
-              title: 'Oops... Something went wrong!',
-              text: err.reason,
-              type: 'error',
-              timer: ALERT_AUTOHIDE_TIME,
-              showConfirmButton: false,
-            });
-          } else {
-            swal({
-              title: 'Removed!',
-              text: `Review date "${date}" was removed successfully.`,
-              type: 'success',
-              timer: ALERT_AUTOHIDE_TIME,
-              showConfirmButton: false,
-            });
-          }
-        };
+        if (err) {
+          swal({
+            title: 'Oops... Something went wrong!',
+            text: err.reason,
+            type: 'error',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
+        } else {
+          swal({
+            title: 'Removed!',
+            text: `Review date "${date}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
+        }
+      };
 
       this.parent().update({ options }, cb);
     });
@@ -117,5 +117,5 @@ Template.IP_ReviewDate_Edits.viewmodel({
     const data = _.map(datepickers, vm => vm.getData());
     const reviewDates = _.map(data, ({ date }) => date);
     return { reviewDates };
-  }
+  },
 });

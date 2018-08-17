@@ -11,7 +11,7 @@ export default function loadCountersData({ dispatch, standards }, onData) {
   const subscriptions = standards.map(({ _id }) => Meteor.subscribe(
     'messagesNotViewedCount',
     NOT_VIEWED_COUNTER_PREFIX + _id,
-    _id
+    _id,
   ));
 
   if (subscriptions.every(subscription => subscription.ready())) {

@@ -21,10 +21,10 @@ Template.DiscussionFileUploader.viewmodel({
           this.fileInput.val(null);
         },
         afterInsert: this.afterInsert,
-        afterUpload: this.afterUpload
-      }
+        afterUpload: this.afterUpload,
+      },
     });
 
     _(this.attachmentFiles()).each(file => uploadService.upload(file));
-  }
+  },
 });

@@ -21,5 +21,5 @@ Template.Actions_VerifiedOn.viewmodel({
   },
   getData() {
     return { verifiedAt: this.verifiedAt() };
-  }
+  },
 });

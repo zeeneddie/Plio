@@ -15,16 +15,16 @@ Template.CardChangelog.viewmodel({
   loadingAllLogs: false,
   showAllLogs: false,
   autorun: [
-    function() {
+    function () {
       this.documentId.depend();
       this.resetProps();
     },
-    function() {
+    function () {
       const { _id } = this.document() || {};
       if (this.documentId.value !== _id) {
         this.documentId(_id);
       }
-    }
+    },
   ],
   resetProps() {
     this.collapsed(true);
@@ -37,9 +37,9 @@ Template.CardChangelog.viewmodel({
   lastUserLog() {
     return AuditLogs.findOne({
       documentId: this.documentId(),
-      executor: { $ne: SystemName }
+      executor: { $ne: SystemName },
     }, {
-      sort: { date: -1 }
+      sort: { date: -1 },
     });
   },
   lastUserLogExecutor() {
@@ -78,10 +78,9 @@ Template.CardChangelog.viewmodel({
   getUser(userId) {
     if (userId === SystemName) {
       return userId;
-    } else {
-      const user = Meteor.users.findOne({ _id: userId });
-      return (user && user.fullNameOrEmail()) || userId;
     }
+    const user = Meteor.users.findOne({ _id: userId });
+    return (user && user.fullNameOrEmail()) || userId;
   },
   getPrettyDate(dateObj) {
     return this.renderDate(dateObj, 'DD MMM YYYY, h:mm A');
@@ -104,5 +103,5 @@ Template.CardChangelog.viewmodel({
   },
   viewButtonHidden() {
     return this.logsLength() <= this.limit();
-  }
+  },
 });

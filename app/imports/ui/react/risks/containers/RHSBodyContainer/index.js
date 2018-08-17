@@ -4,8 +4,6 @@ import property from 'lodash.property';
 import set from 'lodash.set';
 
 import {
-  combineObjects,
-  pickFrom,
   pickDocuments,
   mapC,
   transsoc,
@@ -28,20 +26,28 @@ import { splitActionsByType } from '/imports/api/actions/helpers';
 import { getPath } from '/imports/ui/utils/router';
 
 import BodyContents from '../../components/RHS/Body';
+import { getUserId, getUrlItemId } from '../../../../../client/store/selectors/global';
+import { getOrgSerialNumber } from '../../../../../client/store/selectors/organizations';
+import { getUsersByIds } from '../../../../../client/store/selectors/users';
+import { getDepartmentsByIds } from '../../../../../client/store/selectors/departments';
+import { getStandardsByIds } from '../../../../../client/store/selectors/standards';
+import { getRiskTypesByIds } from '../../../../../client/store/selectors/riskTypes';
+import { getWorkItems } from '../../../../../client/store/selectors/workItems';
+import { getLessons } from '../../../../../client/store/selectors/lessons';
+import { getActions } from '../../../../../client/store/selectors/actions';
 
-const mapStateToProps = combineObjects([
-  pickFrom('global', ['userId', 'urlItemId']),
-  pickFrom('organizations', ['orgSerialNumber']),
-  pickFrom('collections', [
-    'usersByIds',
-    'departmentsByIds',
-    'standardsByIds',
-    'riskTypesByIds',
-    'workItems',
-    'lessons',
-    'actions',
-  ]),
-]);
+const mapStateToProps = state => ({
+  userId: getUserId(state),
+  urlItemId: getUrlItemId(state),
+  orgSerialNumber: getOrgSerialNumber(state),
+  usersByIds: getUsersByIds(state),
+  departmentsByIds: getDepartmentsByIds(state),
+  standardsByIds: getStandardsByIds(state),
+  riskTypesByIds: getRiskTypesByIds(state),
+  workItems: getWorkItems(state),
+  lessons: getLessons(state),
+  actions: getActions(state),
+});
 
 const propsMapper = ({
   risk,
@@ -56,7 +62,7 @@ const propsMapper = ({
     notDeleted,
     compose(
       find(propEq('documentId', risk._id)),
-      property('linkedTo')
+      property('linkedTo'),
     ),
   ]);
   const linkedActions = getLinkedActions(predicate, props, props.actions);
@@ -74,7 +80,6 @@ const propsMapper = ({
     className: compose(getClassByScore, propValue),
     value: propValue,
   }), risk.scores);
-  const identifiedAt = getFormattedDate(risk.identifiedAt);
   const departments = pickDocuments(['_id', 'name'], departmentsByIds, risk.departmentsIds);
   const standards = compose(
     mapC(s => ({ ...s, href: getPath('standard')({ urlItemId: s._id }) })),
@@ -83,7 +88,8 @@ const propsMapper = ({
   )(risk.standardsIds);
 
   const setUsers = () => [
-    'identifiedBy',
+    'originatorId',
+    'ownerId',
     'notify',
     'improvementPlan.owner',
     'analysis.executor',
@@ -102,7 +108,6 @@ const propsMapper = ({
     correctiveActions,
     magnitude,
     scores,
-    identifiedAt,
     departments,
     standards,
     lessons,

@@ -32,7 +32,7 @@ export default {
   },
   _getRisksByQuery({
     isDeleted = { $in: [null, false] },
-    ...args,
+    ...args
   } = {},
   options = { sort: { createdAt: -1 } }) {
     const query = { isDeleted, ...args, organizationId: this.organizationId() };

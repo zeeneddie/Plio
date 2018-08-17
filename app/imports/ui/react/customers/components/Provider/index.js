@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import store from '/imports/client/store';
 import CustomersDataLoader from '../../containers/DataLoader';
 
-const CustomersProvider = (props) => (
+const CustomersProvider = props => (
   <Provider store={store}>
     <CustomersDataLoader {...props} />
   </Provider>

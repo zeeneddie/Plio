@@ -1,7 +1,11 @@
+/* global $, _ */
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
+import { Tracker } from 'meteor/tracker';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
-import { isViewed } from '/imports/api/checkers.js';
+import { isViewed } from '../../../../../api/checkers';
 
 Template.Subcard.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck'],
@@ -43,14 +47,11 @@ Template.Subcard.viewmodel({
         this.destroy();
 
         Tracker.afterFlush(() => {
-          const newSubcard = ViewModel.findOne(
-            'Subcard', vm => vm._id && vm._id() === res
-          );
+          const newSubcard = ViewModel.findOne('Subcard', vm => vm._id && vm._id() === res);
 
           if (newSubcard) {
-            newSubcard.toggleCollapse(null, 250);
             newSubcard.subcard.closest('.modal').animate({
-              scrollTop: newSubcard.subcard.position().top + 70
+              scrollTop: newSubcard.subcard.position().top + 70,
             }, 500, 'swing');
           } else if ($parentFirstNode.length) {
             $parentFirstNode.closest('.modal').scrollTop($parentFirstNode.position().top + 20);
@@ -80,6 +81,7 @@ Template.Subcard.viewmodel({
   afterSave(err, res, cb, timeout) {
     const afterSaveFn = () => {
       if (err) {
+        // eslint-disable-next-line no-param-reassign
         err.isFromSubcard = true;
       }
 
@@ -91,7 +93,7 @@ Template.Subcard.viewmodel({
 
         const currentSubcard = this.subcard;
         currentSubcard.closest('.modal').animate({
-          scrollTop: currentSubcard.position().top + 70
+          scrollTop: currentSubcard.position().top + 70,
         }, 500, 'swing');
       } else if (this.closeAfterCall()) {
         this.toggleCollapse();
@@ -102,6 +104,7 @@ Template.Subcard.viewmodel({
       if (_.isFunction(cb)) {
         return cb(err, res);
       }
+      return null;
     };
 
     if (_.isFinite(timeout) && (timeout >= 0)) {
@@ -121,8 +124,8 @@ Template.Subcard.viewmodel({
       } else {
         this.toggleCollapse();
       }
-    } else {
-      this.save && this.save();
+    } else if (this.save) {
+      this.save();
     }
   },
   setError(errMsg) {
@@ -150,7 +153,9 @@ Template.Subcard.viewmodel({
   },
   save() {
     const insertData = this.getData();
-    insertData && this.callInsert(this.insertFn, insertData);
+    if (insertData) {
+      this.callInsert(this.insertFn, insertData);
+    }
   },
   delete() {
     this.removeFn(this);
@@ -171,7 +176,7 @@ Template.Subcard.viewmodel({
     const updateFn = () => {
       this.callUpdate(this.updateFn, {
         _id,
-        ...args
+        ...args,
       }, cb);
     };
 
@@ -185,5 +190,5 @@ Template.Subcard.viewmodel({
   getData() {
     const child = this.child(this.content());
     return child && child.getData && child.getData();
-  }
+  },
 });

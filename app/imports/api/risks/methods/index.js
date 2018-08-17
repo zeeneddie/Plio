@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import RisksService from '../risks-service';
+import RisksService from '/imports/share/services/risks-service';
 import {
   RequiredSchema,
   RiskScoreSchema,
@@ -28,11 +28,12 @@ import {
   P_OnSetAnalysisCommentsChecker,
   P_OnSetStandardsUpdateCompletedByChecker,
   P_OnSetStandardsUpdateCompletedDateChecker,
-  P_OnSetStandardsUpdateCommentsChecker
+  P_OnSetStandardsUpdateCommentsChecker,
 } from '../../checkers';
 import { inject, always, T } from '/imports/api/helpers';
 
 export { default as update } from './update';
+export { default as linkStandard } from './linkStandard';
 
 const injectRK = inject(Risks);
 

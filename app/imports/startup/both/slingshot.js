@@ -1,53 +1,31 @@
 import { Meteor } from 'meteor/meteor';
 import { Slingshot } from 'meteor/edgee:slingshot';
+import { invert, map, compose, mergeDeepLeft } from 'ramda';
 
+import { AWSDirectives } from '../../share/constants';
 
-Slingshot.fileRestrictions('discussionFiles', {
-  allowedFileTypes: null,
-  maxSize: Meteor.settings.public.discussionFilesMaxSize,
-});
+const getConfig = compose(
+  mergeDeepLeft({
+    [AWSDirectives.DISCUSSION_FILES]: {
+      maxSize: Meteor.settings.public.discussionFilesMaxSize,
+    },
+    [AWSDirectives.USER_AVATARS]: {
+      allowedFileTypes: ['image/png', 'image/jpeg', 'image/gif'],
+      maxSize: Meteor.settings.public.userAvatarsMaxSize,
+    },
+    [AWSDirectives.HTML_ATTACHMENT_PREVIEW]: {
+      allowedFileTypes: 'text/html',
+    },
+  }),
+  map(() => ({
+    allowedFileTypes: null,
+    maxSize: Meteor.settings.public.otherFilesMaxSize,
+  })),
+  invert,
+);
 
-Slingshot.fileRestrictions('userAvatars', {
-  allowedFileTypes: ['image/png', 'image/jpeg', 'image/gif'],
-  maxSize: Meteor.settings.public.userAvatarsMaxSize,
-});
+const config = getConfig(AWSDirectives);
 
-Slingshot.fileRestrictions('standardFiles', {
-  allowedFileTypes: null,
-  maxSize: Meteor.settings.public.otherFilesMaxSize,
-});
-
-Slingshot.fileRestrictions('htmlAttachmentPreview', {
-  allowedFileTypes: 'text/html',
-  maxSize: Meteor.settings.public.otherFilesMaxSize,
-});
-
-Slingshot.fileRestrictions('improvementPlanFiles', {
-  allowedFileTypes: null,
-  maxSize: Meteor.settings.public.otherFilesMaxSize,
-});
-
-Slingshot.fileRestrictions('nonConformityFiles', {
-  allowedFileTypes: null,
-  maxSize: Meteor.settings.public.otherFilesMaxSize,
-});
-
-Slingshot.fileRestrictions('riskFiles', {
-  allowedFileTypes: null,
-  maxSize: Meteor.settings.public.otherFilesMaxSize,
-});
-
-Slingshot.fileRestrictions('actionFiles', {
-  allowedFileTypes: null,
-  maxSize: Meteor.settings.public.otherFilesMaxSize,
-});
-
-Slingshot.fileRestrictions('rootCauseAnalysisFiles', {
-  allowedFileTypes: null,
-  maxSize: Meteor.settings.public.otherFilesMaxSize,
-});
-
-Slingshot.fileRestrictions('helpDocFiles', {
-  allowedFileTypes: null,
-  maxSize: Meteor.settings.public.otherFilesMaxSize,
+Object.keys(config).forEach((key) => {
+  Slingshot.fileRestrictions(key, config[key]);
 });

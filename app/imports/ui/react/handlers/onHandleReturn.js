@@ -2,7 +2,7 @@ import { setShowCard } from '/imports/client/store/actions/mobileActions';
 import { goTo } from '../../utils/router/actions';
 import { MOBILE_BREAKPOINT } from '/imports/api/constants';
 
-const onHandleReturn = (props) => () => {
+const onHandleReturn = props => () => {
   const { orgSerialNumber, urlItemId } = props;
 
   if (props.width <= MOBILE_BREAKPOINT) {

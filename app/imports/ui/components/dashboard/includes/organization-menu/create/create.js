@@ -24,5 +24,5 @@ Template.Organizations_Create.viewmodel({
   },
   getData() {
     return this.child('OrgSettings_MainSettings').getData();
-  }
+  },
 });

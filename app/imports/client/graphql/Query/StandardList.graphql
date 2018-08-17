@@ -1,0 +1,11 @@
+query StandardList($organizationId: ID!) {
+  standards(input: {
+    organizationId: $organizationId,
+    isDeleted: false
+  }) {
+    standards {
+      _id
+      title
+    }
+  }
+}

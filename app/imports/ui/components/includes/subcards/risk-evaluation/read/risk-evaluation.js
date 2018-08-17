@@ -5,5 +5,5 @@ Template.Subcards_RiskEvaluation_Read.viewmodel({
   riskEvaluation: '',
   hasFields() {
     return !_(this.riskEvaluation()).isEmpty();
-  }
+  },
 });

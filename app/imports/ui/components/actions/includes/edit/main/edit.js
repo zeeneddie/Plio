@@ -1,14 +1,15 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
-import { ActionPlanOptions, WorkflowTypes } from '/imports/share/constants.js';
-import { updateViewedBy } from '/imports/api/actions/methods';
-import { isViewed } from '/imports/api/checkers.js';
-
+import { WorkflowTypes, ActionTypes, StringLimits } from '../../../../../../share/constants';
+import { updateViewedBy } from '../../../../../../api/actions/methods';
+import { isViewed } from '../../../../../../api/checkers';
 
 Template.Actions_Card_Edit_Main.viewmodel({
-  mixin: ['utils', 'getChildrenData'],
+  mixin: ['utils', 'getChildrenData', 'workInbox'],
+  ActionTypes,
   onRendered(templateInstance) {
-    const action = templateInstance.data.action;
+    const { action } = templateInstance.data;
     const userId = Meteor.userId();
 
     if (action && !isViewed(action, userId)) {
@@ -17,7 +18,19 @@ Template.Actions_Card_Edit_Main.viewmodel({
   },
   autorun() {
     const action = this.action && this.action();
-    action && this.load(action);
+    if (action) {
+      this.load(action);
+    }
+  },
+  titleArgs({ _id, title, sequentialId }) {
+    return {
+      _id,
+      title,
+      sequentialId,
+      maxLength: StringLimits.longTitle.max,
+      label: 'Title',
+      onUpdate: this.updateTitleFn,
+    };
   },
   isCompletionEditable({ isVerified }) {
     return !isVerified;
@@ -67,5 +80,5 @@ Template.Actions_Card_Edit_Main.viewmodel({
   },
   getData() {
     return this.getChildrenData();
-  }
+  },
 });

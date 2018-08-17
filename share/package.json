@@ -1,0 +1,13 @@
+{
+  "name": "share",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "peerDependencies": {
+    "faker": "^4.1.0",
+    "moment-timezone": "^0.5.14",
+    "plio-util": "https://github.com/Pliohub/plio-util.git",
+    "ramda": "^0.25.0"
+  }
+}

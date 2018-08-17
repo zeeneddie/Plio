@@ -2,7 +2,7 @@ import curry from 'lodash.curry';
 
 import handleListRedirect from './handleListRedirect';
 import handleListCollapse from './handleListCollapse';
-import { getState } from '/imports/client/store';
+import { getState } from '../../../client/store';
 
 const handleRedirectAndOpen = (getListData, goToDoc, goToDocs, createItem, items, childItemsByIds, {
   redirect = handleListRedirect,

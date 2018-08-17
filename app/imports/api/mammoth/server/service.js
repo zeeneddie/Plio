@@ -10,7 +10,9 @@ import mammoth from 'mammoth';
 
 export default {
 
-  convertToHtml({ fileUrl, htmlFileName, s3Params, convertParams, afterConvertation }) {
+  convertToHtml({
+    fileUrl, htmlFileName, s3Params, convertParams, afterConvertation,
+  }) {
     const afterConvertBinded = Meteor.bindEnvironment(afterConvertation);
     const fut = new Future();
 
@@ -29,12 +31,10 @@ export default {
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'binary/octet-stream',
       ], res1.headers['content-type'])) {
-        return fut.return(
-          new Meteor.Error(
-            'TypeError',
-            `Invalid content type - ${res1.headers['content-type']}`
-          )
-        );
+        return fut.return(new Meteor.Error(
+          'TypeError',
+          `Invalid content type - ${res1.headers['content-type']}`,
+        ));
       }
 
       mammoth.convertToHtml({

@@ -1,7 +1,10 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 
-const MessageAvatar = ({ tag = 'a', className, children, ...other }) => {
+const MessageAvatar = ({
+  tag = 'a', className, children, ...other
+}) => {
   const Tag = tag;
 
   return (

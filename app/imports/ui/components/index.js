@@ -1,10 +1,8 @@
 import './includes';
 import './modals';
 import './dashboard';
-import './standards';
 import './login-header.html';
 import './useraccounts';
-import './userdirectory';
 import './risks';
 import './non-conformities';
 import './actions';

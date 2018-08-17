@@ -1,0 +1,17 @@
+mutation completeRiskAnalysis($input: CompleteRiskAnalysisInput!) {
+  completeRiskAnalysis(input: $input) {
+    risk {
+      analysis {
+        status
+        completedAt
+        completedBy {
+          _id
+          profile {
+            fullName
+          }
+        }
+        completionComments
+      }
+    }
+  }
+}

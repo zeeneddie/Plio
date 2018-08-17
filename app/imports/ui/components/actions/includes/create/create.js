@@ -1,19 +1,33 @@
 import { Template } from 'meteor/templating';
-import { Tracker } from 'meteor/tracker';
+import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
+import { omit } from 'ramda';
 
-import { ActionPlanOptions } from '/imports/share/constants.js';
-import { insert } from '/imports/api/actions/methods';
-import { Actions } from '/imports/share/collections/actions.js';
-import { getTzTargetDate, getWorkflowDefaultStepDate } from '/imports/share/helpers.js';
-import { setModalError, inspire } from '/imports/api/helpers.js';
-import { WorkItems } from '/imports/share/collections/work-items.js';
+import {
+  ActionPlanOptions,
+  ActionTypes,
+  DocumentTypes,
+  StringLimits,
+} from '../../../../../share/constants';
+import { insert } from '../../../../../api/actions/methods';
+import { getTzTargetDate, getWorkflowDefaultStepDate } from '../../../../../share/helpers';
+import { setModalError, inspire } from '../../../../../api/helpers';
+import { addActionToGoalFragment } from '../../../../../client/apollo/utils';
+import { client } from '../../../../../client/apollo';
+import { Query } from '../../../../../client/graphql';
 
 Template.Actions_Create.viewmodel({
   mixin: ['workInbox', 'organization', 'router', 'getChildrenData'],
   type: '',
   title: '',
-  ownerId() { return Meteor.userId() },
+  ActionTypes,
+  autorun() {
+    const data = this.getData();
+    if (data && data.ownerId) {
+      this.defaultToBeCompletedBy(data.ownerId);
+    }
+  },
+  ownerId() { return Meteor.userId(); },
   planInPlace: ActionPlanOptions.NO,
   completionTargetDate() {
     const organization = this.organization();
@@ -22,19 +36,31 @@ Template.Actions_Create.viewmodel({
 
     return getWorkflowDefaultStepDate({ organization, linkedTo });
   },
-  toBeCompletedBy() { return Meteor.userId() },
+  toBeCompletedBy() {
+    return this.defaultToBeCompletedBy() || this.ownerId();
+  },
+  defaultToBeCompletedBy: '',
   verificationTargetDate: '',
   toBeVerifiedBy: '',
+  titleArgs() {
+    return {
+      label: 'Title',
+      title: this.title(),
+      maxLength: StringLimits.longTitle.max,
+    };
+  },
   save() {
     const data = this.getData();
 
-    for (let key in data) {
+    /* eslint-disable */
+    for (const key in data) {
       if (!data[key]) {
         const errorMessage = `The new action cannot be created without a ${key}. Please enter a ${key} for your action.`;
         setModalError(errorMessage);
         return;
       }
     }
+    /* eslint-enable */
 
     this.insert(data);
   },
@@ -46,10 +72,10 @@ Template.Actions_Create.viewmodel({
     const tzDate = getTzTargetDate(completionTargetDate, timezone);
 
     const allArgs = {
-      ...args,
+      ...(type === ActionTypes.GENERAL_ACTION ? omit(['planInPlace'], args) : args),
       type,
       organizationId,
-      completionTargetDate: tzDate
+      completionTargetDate: tzDate,
     };
 
     const cb = (_id, open) => {
@@ -57,18 +83,32 @@ Template.Actions_Create.viewmodel({
       const workItem = this._getWorkItemByQuery({ 'linkedDoc._id': _id });
       const queryParams = this._getQueryParams(workItem)(Meteor.userId());
 
-      workItem && this.goToWorkItem(workItem._id, queryParams);
+      if (workItem) this.goToWorkItem(workItem._id, queryParams);
 
       open({
         _id,
         _title: action ? this._getNameByType(action.type) : '',
-        template: 'Actions_Edit'
+        template: 'Actions_Edit',
       });
+
+      // update cache to show new action on goals chart
+      if (type === ActionTypes.GENERAL_ACTION) {
+        client.query({
+          query: Query.ACTION_CARD,
+          variables: { _id },
+        }).then(({ data: { action: { action: fetchedAction } } }) => {
+          allArgs.linkedTo.forEach(({ documentId, documentType }) => {
+            if (documentType === DocumentTypes.GOAL) {
+              addActionToGoalFragment(documentId, fetchedAction, client);
+            }
+          });
+        });
+      }
     };
 
     return invoke(this.card, 'insert', insert, allArgs, cb);
   },
   getData() {
     return this.getChildrenData();
-  }
+  },
 });

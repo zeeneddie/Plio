@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { DropdownMenu as DropdownMenuBase } from 'reactstrap';
 import { compose, defaultProps, withState, withHandlers, mapProps, withContext } from 'recompose';
 import property from 'lodash.property';
@@ -17,7 +18,9 @@ const enhance = compose(
       ? onKeyDown(props, handleKeyDown(props))
       : handleKeyDown(props)),
   }),
-  mapProps(({ focused, children, setFocus, ...props }) => ({
+  mapProps(({
+    focused, children, setFocus, ...props
+  }) => ({
     ...props,
     children: React.Children.map(React.Children.toArray(children), (child, index) => {
       if (child.type !== Item) return child;

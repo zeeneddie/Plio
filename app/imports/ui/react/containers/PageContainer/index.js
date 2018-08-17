@@ -1,4 +1,4 @@
-import { compose, lifecycle, mapProps } from 'recompose';
+import { lifecycle, mapProps } from 'recompose';
 import { connect } from 'react-redux';
 import { $ } from 'meteor/jquery';
 import { _ } from 'meteor/underscore';
@@ -7,8 +7,9 @@ import { MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { setWindowWidth } from '/imports/client/store/actions/windowActions';
 import { pickDeep } from '/imports/api/helpers';
 import Page from '../../components/Page';
+import { namedCompose } from '../../helpers';
 
-export default compose(
+export default namedCompose('PageContainer')(
   connect(pickDeep(['window.width', 'mobile.showCard', 'discussion.isDiscussionOpened'])),
   lifecycle({
     componentDidMount() {
@@ -23,7 +24,9 @@ export default compose(
       $window.on('resize', setNewWidthThrottled);
     },
   }),
-  mapProps(({ width, showCard, isDiscussionOpened, ...props }) => ({
+  mapProps(({
+    width, showCard, isDiscussionOpened, ...props
+  }) => ({
     ...props,
     displayRHS: width <= MOBILE_BREAKPOINT && (showCard || isDiscussionOpened),
     children: _.isFunction(props.children.filter)

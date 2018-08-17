@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getRisksDepartmentsList matches snapshot 1`] = `
+Array [
+  Object {
+    "_id": 16,
+    "risks": Array [
+      Object {
+        "_id": 10,
+        "analysis": Object {
+          "completedBy": 6,
+          "executor": 6,
+        },
+        "departmentsIds": Array [
+          16,
+        ],
+        "standardsIds": Array [
+          1,
+        ],
+        "typeId": 15,
+      },
+      Object {
+        "_id": 11,
+        "departmentsIds": Array [
+          16,
+          17,
+        ],
+        "standardsIds": Array [
+          1,
+          2,
+        ],
+        "typeId": 15,
+      },
+    ],
+  },
+  Object {
+    "_id": 17,
+    "risks": Array [
+      Object {
+        "_id": 11,
+        "departmentsIds": Array [
+          16,
+          17,
+        ],
+        "standardsIds": Array [
+          1,
+          2,
+        ],
+        "typeId": 15,
+      },
+      Object {
+        "_id": 12,
+        "deletedAt": 1513074233019,
+        "departmentsIds": Array [
+          17,
+        ],
+        "isDeleted": true,
+        "standardsIds": Array [
+          5,
+        ],
+        "typeId": 15,
+      },
+    ],
+  },
+]
+`;

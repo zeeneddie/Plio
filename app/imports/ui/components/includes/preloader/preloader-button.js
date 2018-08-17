@@ -1,3 +1,3 @@
 Template.PreloaderButton.viewmodel({
-  size: 'md'
+  size: 'md',
 });

@@ -1,7 +1,7 @@
 import { getCursorNonDeleted } from '../helpers';
 import { WorkItems } from '/imports/share/collections/work-items';
 
-export const getWorkItemsCursorByIds = (fields) => ({ _id } = {}) =>
+export const getWorkItemsCursorByIds = fields => ({ _id } = {}) =>
   getCursorNonDeleted({ 'linkedDoc._id': _id }, fields, WorkItems);
 
 export const getWorkItemsCursorByIdsWithLimitedFields =

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { _ } from 'meteor/underscore';
 import property from 'lodash.property';
 
@@ -55,10 +56,12 @@ const ImprovementPlan = ({
   reviewDates = [],
   fileIds = [],
 }) => (
-  !!(desiredOutcome || targetDate || owner || reviewDates.length || fileIds.length) ? (
+  desiredOutcome || targetDate || owner || reviewDates.length || fileIds.length ? (
     <Block>
       {label}
-      {[...renderFields({ desiredOutcome, targetDate, owner, reviewDates, fileIds })]}
+      {[...renderFields({
+        desiredOutcome, targetDate, owner, reviewDates, fileIds,
+      })]}
     </Block>
   ) : null
 );

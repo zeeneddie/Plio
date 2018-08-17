@@ -6,8 +6,8 @@ import { Meteor } from 'meteor/meteor';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import invoke from 'lodash.invoke';
 
-import { NonConformityFilters } from '/imports/api/constants.js';
-import { isMobileRes } from '/imports/api/checkers.js';
+import { NonConformityFilters } from '/imports/api/constants';
+import { isMobileRes } from '/imports/api/checkers';
 import HeaderMenu from '/imports/ui/react/non-comformities/components/HeaderMenu';
 
 Template.NC_Header.viewmodel({
@@ -18,6 +18,7 @@ Template.NC_Header.viewmodel({
       filters: NonConformityFilters,
       onSelectFilter: this.onSelectFilter.bind(this),
       isActiveFilter: this.isActiveNCFilter.bind(this),
+      transformHeader: () => 'NCs & PGs - ',
       getOptionsMenu() {
         return {
           component: HeaderMenu,

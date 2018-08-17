@@ -2,28 +2,44 @@
   {{#Subcards_Wrapper _lText=_lText helpText=helpText}}
     <div class="card-block">
       {{> OrgSettings_WorkflowDefault
-          title="Minor non-conformities/risks"
+          title="Minor NCs & risks"
           workflowType=workflowDefaults.minorProblem.workflowType
           stepTime=workflowDefaults.minorProblem.stepTime
           type="minorProblem"
           onWorkflowTypeChange=onWorkflowTypeChangeCb
           onStepTimeChange=onStepTimeChangeCb}}
 
+      <br />
+
       {{> OrgSettings_WorkflowDefault
-          title="Major non-conformities/risks"
+          title="Major NCs & risks"
           workflowType=workflowDefaults.majorProblem.workflowType
           stepTime=workflowDefaults.majorProblem.stepTime
           type="majorProblem"
           onWorkflowTypeChange=onWorkflowTypeChangeCb
           onStepTimeChange=onStepTimeChangeCb}}
 
+      <br />
+
       {{> OrgSettings_WorkflowDefault
-          title="Critical non-conformities/risks"
+          title="Critical NCs & risks"
           workflowType=workflowDefaults.criticalProblem.workflowType
           stepTime=workflowDefaults.criticalProblem.stepTime
           type="criticalProblem"
           onWorkflowTypeChange=onWorkflowTypeChangeCb
           onStepTimeChange=onStepTimeChangeCb}}
+
+      <br />
+
+      {{#FormField label="Simplified completion of own actions"}}
+        <div>
+          {{> React
+              component=Checkbox
+              checked=workflowDefaults.isActionsCompletionSimplified
+              onChange=(callback 'onActionsSimplifiedCompletionChange')
+          }}
+        </div>
+      {{/FormField}}
     </div>
   {{/Subcards_Wrapper}}
 </template>

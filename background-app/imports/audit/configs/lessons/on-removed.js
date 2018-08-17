@@ -1,4 +1,4 @@
-import { getLogData } from './helpers.js';
+import { getLogData } from './helpers';
 
 
 export default {

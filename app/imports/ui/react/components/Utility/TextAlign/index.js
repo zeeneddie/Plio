@@ -1,8 +1,9 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 
-import { pickC, omitC } from '/imports/api/helpers';
-import { TextAlignMap } from '/imports/api/constants';
+import { pickC, omitC } from '../../../../../api/helpers';
+import { TextAlignMap } from '../../../../../api/constants';
 
 const TextAlign = ({ className: cn, children, ...other }) => {
   const child = React.Children.only(children);

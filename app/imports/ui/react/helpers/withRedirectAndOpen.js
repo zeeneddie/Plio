@@ -16,8 +16,9 @@ const withRedirectAndOpen = curry(
           handler(nextProps);
         }
       },
-    })
+    }),
   ),
-3);
+  3,
+);
 
 export default withRedirectAndOpen;

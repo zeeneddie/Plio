@@ -9,11 +9,13 @@ const Iframe = ({
   allowFullScreen = true,
   src = null,
   frameBorder = 0,
-  ...other,
+  ...other
 }) => (
   <iframe
-    {...{ width, height, src, frameBorder, allowFullScreen, ...other }}
-  ></iframe>
+    {...{
+      width, height, src, frameBorder, allowFullScreen, ...other,
+    }}
+  />
 );
 
 Iframe.propTypes = propTypes;

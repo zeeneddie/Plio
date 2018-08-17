@@ -5,17 +5,12 @@ export default {
     return Array.from(scores || []).sort(({ scoredAt: sc1 }, { scoredAt: sc2 }) => {
       if (direction === -1) {
         return sc2 - sc1;
-      } else {
-        return sc1 - sc2;
       }
+      return sc1 - sc2;
     });
   },
   getPrimaryScore(scores) {
-    return _.find(scores, (score) => {
-        return score && score.scoreTypeId === riskScoreTypes.residual.id
-      }) || _.find(scores, (score) => {
-        return score && score.scoreTypeId === riskScoreTypes.inherent.id
-      }) || {};
+    return _.find(scores, score => score && score.scoreTypeId === riskScoreTypes.residual.id) || _.find(scores, score => score && score.scoreTypeId === riskScoreTypes.inherent.id) || {};
   },
   getScoreTypeAdjLabel(scoreTypeId) {
     const riskScoreType = riskScoreTypes[scoreTypeId];
@@ -32,9 +27,8 @@ export default {
       return 'Medium';
     } else if (score > 45 && score <= 66) {
       return 'High';
-    } else {
-      return 'Very high';
     }
+    return 'Very high';
   },
   getClassByScore(score) {
     if (score >= 0 && score < 25) {
@@ -43,8 +37,7 @@ export default {
       return 'low';
     } else if (score >= 50 && score < 75) {
       return 'medium';
-    } else {
-      return 'high';
     }
-  }
+    return 'high';
+  },
 };

@@ -14,5 +14,5 @@ Template.Select_Single_Radio.viewmodel({
   getData() {
     const { value } = this.data();
     return { value };
-  }
+  },
 });

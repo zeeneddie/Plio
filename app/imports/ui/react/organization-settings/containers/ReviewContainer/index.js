@@ -8,20 +8,20 @@ import {
   branch,
   renderNothing,
 } from 'recompose';
-import { composeWithTracker } from 'react-komposer';
 import property from 'lodash.property';
 
+import { pickDeep, getId, identity } from '/imports/api/helpers';
 import store from '/imports/client/store';
 import ReviewSubcard from '../../components/Review/Subcard';
 import initMainData from '../loaders/initMainData';
 import loadUsersData from '../../../loaders/loadUsersData';
-import { pickDeep, getId, identity } from '/imports/api/helpers';
 import {
   onFrequencyChanged,
   onAnnualDateChanged,
   onReminderChanged,
   onReviewerChanged,
 } from './handlers';
+import { composeWithTracker } from '../../../../../client/util';
 
 const enhance = compose(
   withProps({ store }),

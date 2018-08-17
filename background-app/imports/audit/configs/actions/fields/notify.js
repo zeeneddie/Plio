@@ -1,6 +1,7 @@
+import { without } from 'ramda';
+
 import { getReceivers } from '../helpers';
 import notify from '../../common/fields/notify';
-
 
 export default {
   field: 'notify',
@@ -12,12 +13,8 @@ export default {
     notify.notifications.personal,
   ],
   data: notify.data,
-  receivers({ diffs: { notify }, newDoc, user }) {
+  receivers({ diffs: { notify: { item } }, newDoc, user }) {
     const receivers = getReceivers(newDoc, user);
-    const index = receivers.indexOf(notify.item);
-
-    return index > -1
-      ? receivers.slice(0, index).concat(receivers.slice(index + 1))
-      : receivers;
+    return without(item, receivers);
   },
 };

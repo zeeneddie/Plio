@@ -14,5 +14,5 @@ Template.HelpInfo.viewmodel({
       .closest('.card')
       .find('.guidance-panel-open')
       .addClass('collapsed');
-  }
+  },
 });

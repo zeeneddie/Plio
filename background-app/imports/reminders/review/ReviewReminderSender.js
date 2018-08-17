@@ -9,13 +9,14 @@ import { Risks } from '/imports/share/collections/risks';
 import { Standards } from '/imports/share/collections/standards';
 import ReviewWorkflow from '/imports/share/utils/ReviewWorkflow';
 import { reviewConfigSchema } from '/imports/share/schemas/organization-schema';
-import { DocumentTypes, SystemName, DefaultDateFormat } from '/imports/share/constants';
+import { DocumentTypes, SystemName } from '/imports/share/constants';
+import NotificationSender from '/imports/share/utils/NotificationSender';
 import { capitalize, getDocTypePlural } from '/imports/share/helpers';
 import { getCollectionUrlByDocType } from '../../helpers/url';
-import { isDateScheduled, getPrettyTzDate } from '../../helpers/date';
-import NotificationSender from '/imports/share/utils/NotificationSender';
+import { getPrettyTzDate } from '../../helpers/date';
+import { DEFAULT_EMAIL_TEMPLATE } from '../../constants';
 
-const REMINDER_EMAIL_TEMPLATE = 'defaultEmail';
+const REMINDER_EMAIL_TEMPLATE = DEFAULT_EMAIL_TEMPLATE;
 
 export default class ReviewReminderSender {
   constructor(organizationId) {
@@ -73,15 +74,6 @@ export default class ReviewReminderSender {
   }
 
   _shouldSendReminder(collection, reviewConfig) {
-    const isScheduled = isDateScheduled(
-      reviewConfig.reminders,
-      reviewConfig.annualDate,
-      this._timezone,
-      this._date,
-    );
-
-    if (!isScheduled) return false;
-
     const isStatusAwaitingReview = (doc) => {
       const workflow = new ReviewWorkflow(doc, reviewConfig, this._timezone);
 
@@ -106,7 +98,7 @@ export default class ReviewReminderSender {
 
     if (!receivers.length) return false;
 
-    const prettyAnnualDate = moment(reviewConfig.annualDate).format(DefaultDateFormat);
+    const prettyAnnualDate = getPrettyTzDate(reviewConfig.annualDate, this._timezone);
     const title = `${getDocTypePlural(docType)}`;
     const emailSubject = `The ${title} documents need a review`;
     const emailText = `

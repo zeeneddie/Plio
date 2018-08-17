@@ -11,5 +11,7 @@
   "Risks": "risks",
   "WorkItems": "workItems",
   "LessonsLearned": "lessonsLearned",
-  "Discussions": "discussions"
+  "Discussions": "discussions",
+  "Goals": "goals",
+  "Milestones": "milestones"
 }

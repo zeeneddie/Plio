@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker';
 
 import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { updateViewedBy } from '/imports/api/non-conformities/methods';
@@ -8,7 +9,7 @@ import { updateViewedBy } from '/imports/api/non-conformities/methods';
 Template.NC_Item.viewmodel({
   share: 'window',
   mixin: ['date', 'user', 'nonconformity', 'currency', 'organization', 'problemsStatus', {
-    counter: 'counter'
+    counter: 'counter',
   }],
   onCreated(template) {
     const currency = this.organization() && this.organization().currency;
@@ -25,14 +26,12 @@ Template.NC_Item.viewmodel({
 
       if (!_id) return;
 
-      template.subscribe('messagesNotViewedCount', 'nc-messages-not-viewed-count-' + _id, _id);
+      template.subscribe('messagesNotViewedCount', `nc-messages-not-viewed-count-${_id}`, _id);
     });
   },
   _id: '',
   cost: '',
   currency: '',
-  identifiedAt: '',
-  identifiedBy: '',
   magnitude: '',
   sequentialId: '',
   status: '',
@@ -46,11 +45,11 @@ Template.NC_Item.viewmodel({
       href: (() => {
         const params = {
           urlItemId: _id,
-          orgSerialNumber: this.organizationSerialNumber()
+          orgSerialNumber: this.organizationSerialNumber(),
         };
         const queryParams = { filter: this.activeNCFilterId() };
         return FlowRouter.path('nonconformity', params, queryParams);
-      })()
+      })(),
     };
   },
   isNew() {
@@ -63,8 +62,8 @@ Template.NC_Item.viewmodel({
     const title = this.title();
     return count > 0 ? `${title} (x ${count})` : title;
   },
-  getDate({ identifiedAt, deletedAt, isDeleted }) {
-    return isDeleted ? this.renderDate(deletedAt) : this.renderDate(identifiedAt);
+  getDate({ createdAt, deletedAt, isDeleted }) {
+    return isDeleted ? this.renderDate(deletedAt) : this.renderDate(createdAt);
   },
   occurrences() {
     const query = { nonConformityId: this._id && this._id() };
@@ -78,17 +77,17 @@ Template.NC_Item.viewmodel({
 
     return symbol + count * this.cost();
   },
-  getUserText({ isDeleted, createdBy, deletedBy }) {
+  getUserText({ isDeleted, deletedBy }) {
     return isDeleted
-            ? `Deleted by: ${this.userNameOrEmail(deletedBy)}`
-            : '';
+      ? `Deleted by: ${this.userNameOrEmail(deletedBy)}`
+      : '';
   },
   unreadMessagesCount() {
-    return this.counter.get('nc-messages-not-viewed-count-' + this._id());
+    return this.counter.get(`nc-messages-not-viewed-count-${this._id()}`);
   },
   updateViewedBy() {
     const _id = this._id();
 
     Meteor.defer(() => updateViewedBy.call({ _id }));
-  }
+  },
 });

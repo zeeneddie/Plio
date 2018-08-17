@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { ListGroup } from 'reactstrap';
 
 import { DocumentTypes } from '/imports/share/constants';
@@ -68,7 +69,9 @@ const StandardsLHS = ({
 
   return (
     <LHSContainer
-      {...{ animating, searchText, searchResultsText, onClear }}
+      {...{
+        animating, searchText, searchResultsText, onClear,
+      }}
       onChange={onSearchTextChange}
       onModalButtonClick={onModalOpen}
     >

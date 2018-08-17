@@ -4,7 +4,7 @@
       {{#with NC}}
         {{#Card_Read
           isReadOnly=isReadOnly
-          cardTitle="Non-conformity"
+          cardTitle=(getNameByType this)
           doc=NC
           collection="NonConformities"
           isReady=isReady
@@ -19,7 +19,7 @@
           <div class="list-group">
 
             {{#Fields_ListGroupItem_Read
-              label="Non conformity name"}}
+              label="Title"}}
               <span>{{this.title}}</span>
               <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
               <span class="label text-default">
@@ -41,20 +41,20 @@
             {{/if}}
 
             <div class="row">
-              {{#with this.identifiedBy}}
+              {{#with this.originatorId}}
                 <div class="col-sm-6">
                   {{> Fields_ListGroupItem_Read
-                      label="Identified by"
+                      label="Originator"
                       text=(userNameOrEmail this)}}
                 </div>
               {{/with}}
-              {{#with this.identifiedAt}}
-                <div class="col-sm-6">
-                  {{> Fields_ListGroupItem_Read
-                      label="Date identified"
-                      text=(renderDate this)}}
-                </div>
-              {{/with}}
+                {{#with this.ownerId}}
+                  <div class="col-sm-6">
+                    {{> Fields_ListGroupItem_Read
+                      label="Owner"
+                      text=(userNameOrEmail this)}}
+                  </div>
+                {{/with}}
             </div>
 
             <div class="row">
@@ -85,7 +85,7 @@
               <div class="row">
                 <div class="col-sm-12">
                   {{> Fields_ListGroupItem_Read
-                      label="Approx cost per occurrence"
+                      label="Financial impact"
                       text=(renderCost this)}}
                 </div>
               </div>
@@ -106,14 +106,17 @@
           {{> Subcards_AnalysisWrapper_Read
               analysis=this.analysis
               rootCauseAnalysis=this.rootCauseAnalysis
-              updateOfStandards=this.updateOfStandards}}
-
-          {{#with notify}}
-            {{> Subcards_Notify_Read users=this}}
-          {{/with}}
+              updateOfStandards=this.updateOfStandards
+              RCALabel=(getAnalysisTitleByType this)
+          }}
 
           {{#if isReady}}
             {{> Subcards_Occurrences_Read occurrences=occurrences}}
+
+            {{> Subcards_Actions_Read
+                type=ActionTypes.GENERAL_ACTION
+                label="Actions"
+                documentId=this._id}}
 
             {{> Subcards_Actions_Read
                 type=ActionTypes.CORRECTIVE_ACTION
@@ -128,6 +131,10 @@
             {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
             {{> Subcards_OtherFiles_Read fileIds=this.fileIds}}
+
+            {{#with notify}}
+              {{> Subcards_Notify_Read users=this}}
+            {{/with}}
           {{else}}
             <div class="m-t-3">
               {{> PreloaderPage size=1}}
@@ -140,19 +147,19 @@
           {{> PreloaderPage}}
         {{else}} {{#if NCId}}
           {{#CardHeading}}
-            <h5>This non-conformity no longer exists in Plio</h5>
+            <h5>This nonconformity no longer exists in Plio</h5>
           {{/CardHeading}}
         {{/if}} {{/unless}}
       {{/with}}
     {{else}}
       {{#CardHeading}}
         {{#if noSearchResults}}
-          <h5>Your search did not match any non-conformities</h5>
+          <h5>Your search did not match any nonconformities</h5>
         {{else}}
           {{#if isActiveNCFilter 4}}
-            <h5>There are no deleted non-conformities yet.</h5>
+            <h5>There are no deleted nonconformities yet.</h5>
           {{else}}
-            <h5>There are no non-conformities yet! Click on the 'Add' button to create your first non-conformity.</h5>
+            <h5>There are no nonconformities yet! Click on the 'Add' button to create your first nonconformity.</h5>
           {{/if}}
         {{/if}}
       {{/CardHeading}}

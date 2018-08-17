@@ -30,9 +30,9 @@ function saveData(file, fields, mapping, data) {
   const stream = createWriteStream(file.path);
   const writer = csv
     .format({ headers: true, quoteColumns: true })
-    .transform((row) => _.object(
+    .transform(row => _.object(
       fields.map(field => mapping.fields[field].label),
-      fields.map(field => {
+      fields.map((field) => {
         const { format } = mapping.fields[field];
 
         return _.isFunction(format) && format(row[field]) || row[field];
@@ -58,7 +58,9 @@ function saveData(file, fields, mapping, data) {
 export const generateLink = new Method({
   name: 'DataExport.generateLink',
 
-  validate({ org, docType, fields, filters }) {
+  validate({
+    org, docType, fields, filters,
+  }) {
     const docTypeSchema = new SimpleSchema({
       docType: {
         type: String,
@@ -91,7 +93,9 @@ export const generateLink = new Method({
     }
   },
 
-  run({ org, docType, fields, filters }) {
+  run({
+    org, docType, fields, filters,
+  }) {
     const { mapping } = Mapping[docType];
     const file = createFileInfo(org.name, docType);
 
@@ -101,7 +105,7 @@ export const generateLink = new Method({
       fields,
       filters,
       mapping,
-      org._id
+      org._id,
     );
 
     return saveData(file, sortedFields, mapping, dataAggregator);

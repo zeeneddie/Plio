@@ -8,43 +8,48 @@
       {{> DescriptionTextBox
           description=this.description}}
 
-      {{> StatusComment statusComment=this.statusComment}}
-
       {{> NC_Status_Edit
           _id=this._id
           workflowType=this.workflowType
           status=this.status}}
 
+      {{> StatusComment statusComment=this.statusComment}}
+
       {{> Fields_Standards_Edit
           _id=this._id
           isEditable=isStandardsEditable
           standardsIds=this.standardsIds}}
+    </div>
 
-      {{> Departments_Edit
+    <div class="card-block">
+        {{> Departments_Edit
           _id=this._id
           departmentsIds=this.departmentsIds}}
 
-      {{> NC_IdentifiedBy_Edit
+      {{> NC_Originator_Edit
           _id=this._id
-          identifiedBy=this.identifiedBy}}
+          originatorId=this.originatorId}}
 
-      {{> NC_IdentifiedDate_Edit
+      {{> NC_Owner_Edit
           _id=this._id
-          identifiedAt=this.identifiedAt}}
+          ownerId=this.ownerId}}
 
       {{> Problems_Magnitude_Edit
+          disabled=true
           _id=this._id
           magnitude=this.magnitude
-          guidelines=NCGuidelines}}
+          guidelines=(guidelines this)}}
 
       {{> NC_Cost_Edit
           _id=this._id
           cost=this.cost}}
 
-      {{> NC_Ref_Edit
-          _id=this._id
-          text=this.ref.text
-          url=this.ref.url}}
+      {{#unless (isPG this)}}
+        {{> NC_Ref_Edit
+            _id=this._id
+            text=this.ref.text
+            url=this.ref.url}}
+      {{/unless}}
     </div>
 
     {{#if showRootCauseAnalysis}}

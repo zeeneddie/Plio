@@ -7,10 +7,10 @@ import { setOrganizations } from '/imports/client/store/actions/collectionsActio
 import { getId, invokeStop, invokeReady } from '/imports/api/helpers';
 
 export default subscribe => function loadLayoutData({
-    dispatch,
-    orgSerialNumber,
-    ...props
-  }, onData) {
+  dispatch,
+  orgSerialNumber,
+  ...props
+}, onData) {
   const subscription = subscribe({ orgSerialNumber, ...props });
 
   if (!subscription) return false;

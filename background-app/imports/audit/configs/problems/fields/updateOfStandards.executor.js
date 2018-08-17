@@ -9,11 +9,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Update of standards executor set to {{{newValue}}}',
+          'Approval assigned to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'Update of standards executor changed from {{{oldValue}}} to {{{newValue}}}',
+          'Approval executor reassigned to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'Update of standards executor removed',
+          'Approval executor removed',
       },
     },
   ],
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} set update of standards executor of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
+          '{{{userName}}} assigned {{{newValue}}} to approve {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed update of standards executor of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
+          '{{{userName}}} assigned {{{newValue}}} to approve {{{docDesc}}} {{{docName}}} instead of {{{oldValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{{userName}}} removed update of standards executor of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed approval executor of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

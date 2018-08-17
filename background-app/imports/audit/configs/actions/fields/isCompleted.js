@@ -25,6 +25,7 @@ export default {
       shouldSendNotification({ diffs: { completedAt, completedBy } }) {
         return completedAt && completedBy;
       },
+      sendBoth: true,
       text: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +

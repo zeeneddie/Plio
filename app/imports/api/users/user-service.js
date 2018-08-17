@@ -49,7 +49,9 @@ export default {
     Accounts.removeEmail(_id, currEmail);
   },
 
-  updatePhoneNumber({ userId, _id, number, type }) {
+  updatePhoneNumber({
+    userId, _id, number, type,
+  }) {
     return this.collection.update({
       _id: userId,
       'profile.phoneNumbers._id': _id,
@@ -61,7 +63,9 @@ export default {
     });
   },
 
-  addPhoneNumber({ userId, _id, number, type }) {
+  addPhoneNumber({
+    userId, _id, number, type,
+  }) {
     return this.collection.update({
       _id: userId,
     }, {

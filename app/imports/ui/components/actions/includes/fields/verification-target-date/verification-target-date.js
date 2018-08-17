@@ -21,5 +21,5 @@ Template.Actions_VerificationTargetDate.viewmodel({
   },
   getData() {
     return { verificationTargetDate: this.verificationTargetDate() };
-  }
+  },
 });

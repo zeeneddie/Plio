@@ -8,5 +8,5 @@ Template.Subcards_OtherFiles_Read.viewmodel({
   files() {
     const fileIds = this.fileIds() && this.fileIds().array() || [];
     return Files.find({ _id: { $in: fileIds } }).fetch();
-  }
+  },
 });

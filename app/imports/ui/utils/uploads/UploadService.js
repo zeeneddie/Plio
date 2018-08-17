@@ -4,7 +4,7 @@ import { Slingshot } from 'meteor/edgee:slingshot';
 import {
   insert as insertFile,
   updateProgress,
-  updateUrl
+  updateUrl,
 } from '/imports/api/files/methods';
 import UploadsStore from './uploads-store.js';
 
@@ -12,13 +12,12 @@ import UploadsStore from './uploads-store.js';
 const defaultMaxFileSize = Meteor.settings.public.otherFilesMaxSize;
 
 export default class UploadService {
-
   constructor({
     slingshotDirective,
-    slingshotContext={},
-    maxFileSize=defaultMaxFileSize,
-    fileData={},
-    hooks={}
+    slingshotContext = {},
+    maxFileSize = defaultMaxFileSize,
+    fileData = {},
+    hooks = {},
   }) {
     this.slingshotDirective = slingshotDirective;
     this.slingshotContext = slingshotContext;
@@ -35,9 +34,7 @@ export default class UploadService {
     }
 
     if (file.size > this.maxFileSize) {
-      toastr.error(
-        `${file.name} size exceeds the allowed maximum of ${this.maxFileSize/1024/1024} MB`
-      );
+      toastr.error(`${file.name} size exceeds the allowed maximum of ${this.maxFileSize / 1024 / 1024} MB`);
       return;
     }
 
@@ -59,11 +56,11 @@ export default class UploadService {
 
   _insert(file) {
     const name = file.name;
-    
+
     insertFile.call({
       name,
       extension: name.split('.').pop().toLowerCase(),
-      organizationId: this.fileData.organizationId
+      organizationId: this.fileData.organizationId,
     }, this._afterInsert.bind(this, file));
   }
 
@@ -79,14 +76,12 @@ export default class UploadService {
         afterInsertHook && afterInsertHook(fileId);
 
         this._upload(file, fileId);
-      }
+      },
     });
   }
 
   _upload(file, fileId) {
-    const uploader = new Slingshot.Upload(
-      this.slingshotDirective, this.slingshotContext
-    );
+    const uploader = new Slingshot.Upload(this.slingshotDirective, this.slingshotContext);
 
     UploadsStore.addUploader(fileId, uploader);
 
@@ -134,5 +129,4 @@ export default class UploadService {
     fileSub && fileSub.stop();
     delete this._fileSubscriptions[fileId];
   }
-
 }

@@ -122,13 +122,13 @@
             </div>
           {{/if}}
 
-          {{#with this.notify}}
-            {{> Subcards_Notify_Read users=this}}
-          {{/with}}
-
           {{> Subcards_Notes_Read notes=this.notes}}
 
           {{> Subcards_OtherFiles_Read label="Files" fileIds=this.fileIds}}
+
+          {{#with this.notify}}
+            {{> Subcards_Notify_Read users=this}}
+          {{/with}}
         {{/Card_Read}}
 
       {{/with}}

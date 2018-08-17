@@ -2,8 +2,10 @@
   {{#FormField label=label}}
     <div class="form-group-flex">
       <div class="form-group-flex-flex">
-        <select class="form-control c-select"
-          {{b "change: update, options: _magnitude, optionsValue: value, optionsText: name, value: magnitude"}}>
+        <select
+          class="form-control c-select"
+          {{b "change: update, options: _magnitude, optionsValue: value, optionsText: name, value: magnitude, disable: disabled"}}
+        >
         </select>
       </div>
 

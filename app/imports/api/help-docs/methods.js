@@ -32,7 +32,7 @@ export const update = new CheckedMethod({
       optionsSchema,
     ]).newContext();
 
-    for (let key in args) {
+    for (const key in args) {
       if (!validationContext.validateOne(args, key)) {
         const errors = validationContext.invalidKeys();
         const message = validationContext.keyErrorMessage(errors[0].name);

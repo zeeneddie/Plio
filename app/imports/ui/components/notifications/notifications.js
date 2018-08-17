@@ -20,7 +20,7 @@ Template.Notifications.viewmodel({
       added: (doc) => {
         this.sendNotification(doc);
         Meteor.defer(() => updateViewedBy.call({ _id: doc._id }));
-      }
+      },
     });
   },
 
@@ -32,5 +32,5 @@ Template.Notifications.viewmodel({
     const audio = this.audio();
 
     audio && audio.play();
-  }
+  },
 });

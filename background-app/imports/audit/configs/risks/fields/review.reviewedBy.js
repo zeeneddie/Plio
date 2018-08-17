@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Review executor set to {{{newValue}}}',
+          'Review assigned to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'Review executor changed from {{{oldValue}}} to {{{newValue}}}',
+          'Review reassigned to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           'Review executor removed',
       },
@@ -21,9 +21,9 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{userName}}} set review executor of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
+          '{{{userName}}} assigned {{{newValue}}} to review {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{userName}}} changed review executor of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
+          '{{{userName}}} assigned {{{newValue}}} to review {{{docDesc}}} {{{docName}}} instead of {{{oldValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           '{{{userName}}} removed review executor of {{{docDesc}}} {{{docName}}}',
       },

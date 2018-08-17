@@ -8,19 +8,29 @@
       isEditable=true}}
 
   <div class="card-divider"></div>
-  <div>{{> React component=homeTitlesSubcard}}</div>
-
+  <div>{{> React component=workspaceSubcard}}</div>
+  <div class="card-divider">
+    <div>{{> React component=keyGoalsSettings organization=organization}}</div>
+  </div>
   {{> OrgSettings_Departments
       departments=departments
       organizationId=organizationId}}
 
-  {{> OrgSettings_StandardTypes
-      standardsTypes=standardsTypes
-      organizationId=organizationId}}
+  <div class="card-divider"></div>
+  <div>
+    {{> React
+        component=StandardTypesSubcardContainer
+        standardTypes=standardsTypes
+        organizationId=organizationId}}
+  </div>
 
-  {{> OrgSettings_StandardsBookSections
-      standardsBookSections=standardsBookSections
+  <div class="card-divider"></div>
+  <div>
+    {{> React
+      component=StandardSectionsSubcardContainer
+      standardSections=standardsBookSections
       organizationId=organizationId}}
+  </div>
 
   {{> OrgSettings_WorkflowDefaults
       workflowDefaults=workflowDefaults
@@ -31,11 +41,20 @@
       organizationId=organizationId}}
 
   {{> OrgSettings_ProblemGuidelines
-      label="Non-conformity guidelines"
-      documentType="non-conformity"
+      label="Nonconformity guidelines"
+      helpText=OrganizationSettingsHelp.nonConformityGuidelines
+      documentType=DocumentTypes.NON_CONFORMITY
       guidelines=NCGuidelines
       organizationId=organizationId
       method=setNCGuidelineMethod}}
+
+  {{> OrgSettings_ProblemGuidelines
+      label="Gain guidelines"
+      helpText=OrganizationSettingsHelp.potentialGainGuidelines
+      documentType=DocumentTypes.POTENTIAL_GAIN
+      guidelines=PGGuidelines
+      organizationId=organizationId
+      method=setPGGuidelineMethod}}
 
   {{> OrgSettings_RisksTypes
       organizationId=organizationId
@@ -43,7 +62,7 @@
 
   {{> OrgSettings_ProblemGuidelines
       label="Risk guidelines"
-      documentType="risk"
+      documentType=DocumentTypes.RISK
       guidelines=RKGuidelines
       organizationId=organizationId
       method=setRKGuidelineMethod}}

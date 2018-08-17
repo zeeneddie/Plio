@@ -1,0 +1,29 @@
+# Incomplete
+type Standard {
+  _id: ID!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime
+  updatedBy: User
+  approved: Boolean
+  approvedAt: DateTime
+  organization: Organization!
+  uniqueNumber: Int
+  title: String!
+  description: String
+  owner: User
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  deletedBy: User
+  notify: [User]
+  status: String!
+  # departments: [Department]
+  files: [File]
+  # type: StandardType
+  # section: StandardBookSection
+  # review: StandardReview
+  # source1
+  # source2
+  # lessons
+  improvementPlan: ImprovementPlan
+}

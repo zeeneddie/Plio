@@ -1,12 +1,21 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cx from 'classnames';
 import { _ } from 'meteor/underscore';
-import { PullMap } from '/imports/api/constants';
+import styled from 'styled-components';
 
-export const ArrowBack = ({ pull, href = '#', onClick, ...other }) => (
+import { PullMap } from '../../../../api/constants';
+
+const StyledAnchor = styled.a`
+  min-width: 50px;
+`;
+
+export const ArrowBack = ({
+  pull, href = '#', onClick, ...other
+}) => (
   <ul className={cx('nav', 'navbar-nav', PullMap[pull])}>
     <li className="nav-item">
-      <a
+      <StyledAnchor
         {...other}
         className="nav-link pointer"
         href={href}
@@ -18,7 +27,7 @@ export const ArrowBack = ({ pull, href = '#', onClick, ...other }) => (
         }}
       >
         <i className="fa fa-angle-left" />
-      </a>
+      </StyledAnchor>
     </li>
   </ul>
 );

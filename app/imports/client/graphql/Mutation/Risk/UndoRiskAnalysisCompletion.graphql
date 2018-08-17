@@ -1,0 +1,17 @@
+mutation undoRiskAnalysisCompletion($input: UndoRiskAnalysisCompletionInput!) {
+  undoRiskAnalysisCompletion(input: $input) {
+    risk {
+      analysis {
+        status
+        completedAt
+        completionComments        
+        completedBy {
+          _id
+          profile {
+            fullName
+          }
+        }
+      }
+    }
+  }
+}

@@ -19,7 +19,7 @@ const enhance = mapProps(props => (
   }) : props
 ));
 
-const RisksPage = enhance((props) => (
+const RisksPage = enhance(props => (
   props.organization ? (
     <PageContainer classNames={props.classNames}>
       {(!props.isDiscussionOpened ? ([

@@ -4,7 +4,7 @@ import { _ } from 'meteor/underscore';
 import ChangelogTableRowContainer from '../../containers/ChangelogTableRowContainer';
 import propTypes from './propTypes';
 
-const ChangelogTable = (props) => (
+const ChangelogTable = props => (
   <table className="table table-sm">
     <thead>
       <tr>

@@ -3,7 +3,7 @@ import React from 'react';
 import LabelDraft from '../../../components/Labels/LabelDraft';
 import propTypes from './propTypes';
 
-const HelpDocsRHSBodyHeading = (props) => (
+const HelpDocsRHSBodyHeading = props => (
   <div className="flexbox-row">
     <h4 className="list-group-item-heading pull-left">
       <span>{props.title}</span>

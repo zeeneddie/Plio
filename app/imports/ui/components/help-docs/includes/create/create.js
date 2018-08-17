@@ -17,16 +17,16 @@ Template.HelpDocs_Create.viewmodel({
   save() {
     const data = this.getChildrenData();
 
-    const { sourceType, sourceFile, sourceUrl, sourceVideoUrl } = data;
+    const {
+      sourceType, sourceFile, sourceUrl, sourceVideoUrl,
+    } = data;
     const isSourcePresent = _.every([
       sourceType,
       sourceFile || sourceUrl || sourceVideoUrl,
     ]);
     if (!isSourcePresent) {
-      setModalError(
-        'The new help document cannot be created without a source file. ' +
-        'Please add a source file to your help document.'
-      );
+      setModalError('The new help document cannot be created without a source file. ' +
+        'Please add a source file to your help document.');
       return;
     }
 
@@ -116,11 +116,9 @@ Template.HelpDocs_Create.viewmodel({
       if (error) {
         // HTTP errors
         toastr.error(`Failed to get .docx file: ${error}`);
-      } else {
-        if (result.error) {
-          // Mammoth errors
-          toastr.error(`Rendering document: ${result.error}`);
-        }
+      } else if (result.error) {
+        // Mammoth errors
+        toastr.error(`Rendering document: ${result.error}`);
       }
     });
   },

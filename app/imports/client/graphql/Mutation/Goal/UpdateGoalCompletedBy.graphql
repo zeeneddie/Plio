@@ -1,0 +1,13 @@
+mutation updateGoalCompletedBy($input: UpdateGoalCompletedByInput!) {
+  updateGoalCompletedBy(input: $input) {
+    goal {
+      _id
+      completedBy {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

@@ -1,11 +1,11 @@
 import { _ } from 'meteor/underscore';
 
-import { CollectionNames } from '/imports/share/constants';
+import { CollectionNames, ProblemTypes } from '/imports/share/constants';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
-import { getNCDesc } from '/imports/helpers/description';
-import ProblemAuditConfig from '../problems/problem-audit-config';
+import { getNCDesc, getPGDesc } from '/imports/helpers/description';
 import NCWorkflow from '/imports/workflow/NCWorkflow';
+import ProblemAuditConfig from '../problems/problem-audit-config';
 
 import cost from './fields/cost.js';
 import improvementPlanDesiredOutcome from './fields/improvementPlan.desiredOutcome';
@@ -18,10 +18,9 @@ import ref from './fields/ref';
 import refText from './fields/ref.text';
 import refUrl from './fields/ref.url';
 
-
 const generateNCDocUrl = getDocUrlByOrganizationId('non-conformities');
 
-export default NCAuditConfig = Object.assign({}, ProblemAuditConfig, {
+export default Object.assign({}, ProblemAuditConfig, {
 
   collection: NonConformities,
 
@@ -43,9 +42,9 @@ export default NCAuditConfig = Object.assign({}, ProblemAuditConfig, {
     refUrl,
   ],
 
-  docDescription() {
-    return getNCDesc();
-  },
+  docDescription: ({ type }) => type === ProblemTypes.POTENTIAL_GAIN
+    ? getPGDesc()
+    : getNCDesc(),
 
   docUrl: generateNCDocUrl,
 

@@ -3,17 +3,15 @@ import { _ } from 'meteor/underscore';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { Organizations } from '/imports/share/collections/organizations';
+import { getUserFullNameOrEmail } from '/imports/share/helpers';
 import { DocChangesKinds, SystemName } from '/imports/share/constants';
 import { ChangesKinds } from './utils/changes-kinds';
-import { getUserFullNameOrEmail, renderTemplate } from '/imports/share/helpers';
 import DocumentDiffer from './utils/document-differ';
-import NotificationSender from '/imports/share/utils/NotificationSender';
-
-
-const DEFAULT_EMAIL_TEMPLATE = 'defaultEmail';
+import { renderTemplate } from '../helpers/render';
+import NotificationsTempStore from './notifications-temp-store';
+import { DEFAULT_EMAIL_TEMPLATE } from '../constants';
 
 export default class DocChangeHandler {
-
   constructor(auditConfig, docChangeKind, docChangeData) {
     this._config = auditConfig;
     this._docChangeKind = docChangeKind;
@@ -43,7 +41,7 @@ export default class DocChangeHandler {
     this._processHandlers();
 
     this._saveLogs();
-    this._sendNotifications();
+    this._addNotificationsToTempStore();
   }
 
   _prepare() {
@@ -126,9 +124,7 @@ export default class DocChangeHandler {
     };
 
     diffs.forEach((diff) => {
-      const handler = this._config.updateHandlers.find(
-        hdl => hdl.field === diff.field
-      );
+      const handler = this._config.updateHandlers.find(hdl => hdl.field === diff.field);
 
       if (!handler) {
         return;
@@ -229,7 +225,9 @@ export default class DocChangeHandler {
       message,
     };
 
-    const { kind, field, newValue, oldValue } = diff || {};
+    const {
+      kind, field, newValue, oldValue,
+    } = diff || {};
     if (field) {
       Object.assign(log, { field });
     }
@@ -295,17 +293,17 @@ export default class DocChangeHandler {
     let pushTitleTemplate = pushTitle || title;
 
     emailSubjectTemplate = _.isObject(emailSubjectTemplate)
-        ? emailSubjectTemplate[kind]
-        : emailSubjectTemplate;
+      ? emailSubjectTemplate[kind]
+      : emailSubjectTemplate;
 
     pushTitleTemplate = _.isObject(pushTitleTemplate)
-        ? pushTitleTemplate[kind]
-        : pushTitleTemplate;
+      ? pushTitleTemplate[kind]
+      : pushTitleTemplate;
 
     let data = getData && getData(args);
     data = _.isArray(data) ? data : [data];
 
-    let receiversArr = getReceivers(args) || [];
+    let receiversArr = _.isFunction(getReceivers) && getReceivers(args) || [];
     receiversArr = _.isArray(receiversArr[0]) ? receiversArr : [receiversArr];
 
     let emailTplDataArr;
@@ -329,9 +327,15 @@ export default class DocChangeHandler {
       const templateData = Object.assign({}, defaultData, dataObj);
 
       this._buildNotification({
-        emailTemplate, emailSubjectTemplate, emailTemplateData,
-        pushTemplate, pushTitleTemplate, pushData,
-        emailTemplateName, receivers, templateData,
+        emailTemplate,
+        emailSubjectTemplate,
+        emailTemplateData,
+        pushTemplate,
+        pushTitleTemplate,
+        pushData,
+        emailTemplateName,
+        receivers,
+        templateData,
         sendBoth,
       });
     });
@@ -423,62 +427,14 @@ export default class DocChangeHandler {
     this._logs.forEach(log => AuditLogs.insert(log));
   }
 
-  _sendNotifications() {
-    const notificationsMap = {};
-
-    this._notifications.forEach((notification) => {
-      notification.recipients.forEach((receiverId) => {
-        const userNotifications = notificationsMap[receiverId];
-
-        if (_.isArray(userNotifications)) {
-          userNotifications.push(notification);
-        } else {
-          notificationsMap[receiverId] = [notification];
-        }
-      });
-    });
-
-    const receiversCursor = Meteor.users.find({
-      _id: { $in: Object.keys(notificationsMap) },
-    });
-
-    receiversCursor.forEach((user) => {
-      this._sendNotificationsToUser(notificationsMap[user._id], user);
-    });
-  }
-
-  _sendNotificationsToUser(notifications, user) {
-    const isUserOnline = user.status === 'online';
-
-    notifications.forEach(({
-      sendBoth,
-      templateData: {
-        unsubscribeUrl,
-        ...templateData
-      },
-      ...args
-    }) => {
-      const options = { recipients: user._id, templateData, ...args };
-
-      if (unsubscribeUrl) {
-        Object.assign(options.templateData, { unsubscribeUrl });
-      }
-
-      const sender = new NotificationSender(options);
-
-      if (sendBoth) {
-        return sender.sendAll();
-      }
-
-      return isUserOnline ? sender.sendOnSite() : sender.sendEmail();
-    });
+  _addNotificationsToTempStore() {
+    NotificationsTempStore.addNotifications(this._notifications);
   }
 
   _callTrigger(handler, args) {
-    const trigger = handler.trigger;
+    const { trigger } = handler;
     if (_.isFunction(trigger)) {
       trigger(args);
     }
   }
-
 }

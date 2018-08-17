@@ -25,5 +25,5 @@ Template.Subcards_Wrapper.viewmodel({
     if (this.saveAllUnsavedNewSubcards()) return;
 
     this.toggleCollapse(null, timeout);
-  }
+  },
 });

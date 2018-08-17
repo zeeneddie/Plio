@@ -1,25 +1,30 @@
-import { ActionTypes } from '/imports/share/constants';
-import { equals } from '/imports/api/helpers';
+import { equals, compose, ifElse, view, allPass } from 'ramda';
+import { lenses, filterBy } from 'plio-util';
+
+import { ActionTypes, ActionStatuses, ActionIndexes } from '../../share/constants';
+import { getFormattedDate } from '../../share/helpers';
 
 export const getClassByStatus = (status) => {
   switch (status) {
-    case 1:
-    case 4:
+    case ActionIndexes.IN_PROGRESS:
+    case ActionIndexes.NOT_YET_VERIFY:
       return 'yellow';
-    case 8:
-    case 9:
+    case ActionIndexes.COMPLETED_EFFECTIVE:
+    case ActionIndexes.COMPLETED:
       return 'success';
-    case 2:
-    case 5:
+    case ActionIndexes.DUE_COMPLETION_TODAY:
+    case ActionIndexes.VERIFY_DUE_TODAY:
       return 'warning';
-    case 3:
-    case 6:
-    case 7:
+    case ActionIndexes.COMPLETION_OVERDUE:
+    case ActionIndexes.VERIFY_OVERDUE:
+    case ActionIndexes.COMPLETED_FAILED:
       return 'danger';
     default:
       return 'default';
   }
 };
+
+export const getStatusName = status => ActionStatuses[status];
 
 export const splitActionsByType = (actions) => {
   const map = {
@@ -40,3 +45,26 @@ export const splitActionsByType = (actions) => {
     }) : ({ ...prev });
   }, map);
 };
+
+export const getDisplayDate = compose(
+  getFormattedDate,
+  ifElse(
+    allPass([
+      view(lenses.isCompleted),
+      view(lenses.completedAt),
+    ]),
+    view(lenses.completedAt),
+    view(lenses.completionTargetDate),
+  ),
+);
+
+export const getDueActions = filterBy('status', [
+  ActionIndexes.DUE_COMPLETION_TODAY,
+  ActionIndexes.VERIFY_DUE_TODAY,
+]);
+
+export const getOverdueActions = filterBy('status', [
+  ActionIndexes.COMPLETION_OVERDUE,
+  ActionIndexes.VERIFY_OVERDUE,
+  ActionIndexes.COMPLETED_FAILED,
+]);

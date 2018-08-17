@@ -1,13 +1,17 @@
 import { Template } from 'meteor/templating';
-import moment from 'moment-timezone';
+import { Meteor } from 'meteor/meteor';
+import { swal } from 'meteor/plio:bootstrap-sweetalert';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 import invoke from 'lodash.invoke';
 
 import {
   update,
-  remove
-} from '/imports/api/non-conformities/methods';
-import { getTzTargetDate } from '/imports/share/helpers.js';
-import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+  remove,
+} from '../../../../../api/non-conformities/methods';
+import {
+  ALERT_AUTOHIDE_TIME,
+  AnalysisFieldPrefixes,
+} from '../../../../../api/constants';
 
 Template.NC_Card_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck', 'router', 'collapsing'],
@@ -18,7 +22,15 @@ Template.NC_Card_Edit.viewmodel({
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),
-      nonConformityId: this._id()
+      nonConformityId: this._id(),
+    };
+  },
+  ui() {
+    const isPG = this.isPG(this.NC());
+    return {
+      analysis: {
+        prefix: isPG ? AnalysisFieldPrefixes.GAIN : AnalysisFieldPrefixes.CAUSE,
+      },
     };
   },
   onUpdateNotifyUserCb() {
@@ -30,9 +42,18 @@ Template.NC_Card_Edit.viewmodel({
   onUpdateCb() {
     return this.update.bind(this);
   },
-  update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
+  update({
+    query = {}, options = {}, e = {}, withFocusCheck = false, ...args
+  }, cb = () => {}) {
     const _id = this._id();
-    const allArgs = { ...args, _id, options, query };
+
+    if ((Object.keys(query).length > 0) && (!('_id' in query))) {
+      Object.assign(query, { _id });
+    }
+
+    const allArgs = {
+      ...args, _id, options, query,
+    };
 
     const updateFn = () => this.modal().callMethod(update, allArgs, cb);
 
@@ -48,21 +69,21 @@ Template.NC_Card_Edit.viewmodel({
 
     swal({
       title: 'Are you sure?',
-      text: `The non-conformity "${title}" will be removed.`,
+      text: `The nonconformity "${title}" will be removed.`,
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       this.modal().callMethod(remove, { _id }, (err) => {
         if (err) {
           swal.close();
           return;
-        };
+        }
 
         swal({
           title: 'Removed!',
-          text: `The non-conformity "${title}" was removed successfully.`,
+          text: `The nonconformity "${title}" was removed successfully.`,
           type: 'success',
           timer: ALERT_AUTOHIDE_TIME,
           showConfirmButton: false,
@@ -80,14 +101,14 @@ Template.NC_Card_Edit.viewmodel({
     if (list) {
       const { first } = Object.assign({}, invoke(list, '_findNCForFilter'));
 
-      if (!!first) {
+      if (first) {
         const { _id } = first;
 
-        Meteor.setTimeout(() => {
+        Meteor.defer(() => {
           this.goToNC(_id);
           this.expandCollapsed(_id);
-        }, 0);
+        });
       }
     }
-  }
+  },
 });

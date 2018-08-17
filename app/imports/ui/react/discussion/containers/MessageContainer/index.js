@@ -54,5 +54,5 @@ export default compose(
     contents: getMessageContents,
     pathToMessageToCopy: getPathToMessageToCopy,
     className: getClassName,
-  }))
+  })),
 )(Message);

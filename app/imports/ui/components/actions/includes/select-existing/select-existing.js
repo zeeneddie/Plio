@@ -16,32 +16,36 @@ Template.Actions_SelectExisting.viewmodel({
     const query = {
       ...this.searchObject('actionSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
       organizationId: this.organizationId(),
-      type: this.type()
+      type: this.type(),
     };
 
     const documentId = this.documentId && this.documentId();
 
     if (documentId) {
       _.extend(query, {
-        'linkedTo.documentId': { $ne: documentId }
+        'linkedTo.documentId': { $ne: documentId },
       });
     }
 
     const actions = Actions.find(query, {
       sort: {
-        sequentialId: 1
-      }
-    }).map(({ _id, sequentialId, title, ...args }) => {
+        sequentialId: 1,
+      },
+    }).map(({
+      _id, sequentialId, title, ...args
+    }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
-      return { _id, html, title: fullTitle, ...args };
+      return {
+        _id, html, title: fullTitle, ...args,
+      };
     });
 
     return actions;
   },
   dropdownAddActionData() {
     return {
-      onAdd: this.onDropdownAdd.bind(this)
+      onAdd: this.onDropdownAdd.bind(this),
     };
   },
   onDropdownAdd(title) {
@@ -69,5 +73,5 @@ Template.Actions_SelectExisting.viewmodel({
   },
   getData() {
     return { _id: this.actionId(), linkTo: this.linkTo() };
-  }
+  },
 });

@@ -1,3 +1,3 @@
 import './list.html';
-import './list.js';
+import './list';
 import './item';

@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { _ } from 'meteor/underscore';
 
-import { BaseEntitySchema, OrganizationIdSchema, ProgressSchema } from './schemas.js';
+import { BaseEntitySchema, OrganizationIdSchema, ProgressSchema } from './schemas';
 import { FILE_STATUS_MAP } from '../constants';
 
 export const RequiredSchema = new SimpleSchema([

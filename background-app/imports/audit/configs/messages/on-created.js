@@ -95,7 +95,7 @@ export default {
         const receivers = data.reduce(reducer, new Set());
 
         const { mutedBy = [] } = { ...Discussions.findOne({ _id: discussionId }) };
-        
+
         mutedBy.forEach(receivers.delete.bind(receivers));
 
         return Array.from(receivers);

@@ -1,17 +1,13 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { Standards } from '/imports/share/collections/standards.js';
-import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
+import { sortArrayByTitlePrefix } from '/imports/api/helpers';
 
 
 Template.Fields_Standards_Edit.viewmodel({
   mixin: ['organization', 'search', 'standard'],
   isEditable: true,
   standardsIds: [],
-  isDeleteButtonVisible() {
-    return !this._id || invoke(this.selected(), 'count') > 1;
-  },
   selected() {
     const standardsIds = Array.from(this.standardsIds() || []);
     return this._getStandardsByQuery({ _id: { $in: standardsIds } });
@@ -33,12 +29,7 @@ Template.Fields_Standards_Edit.viewmodel({
     this.callUpdate(selectedItemId, selected, '$addToSet');
   },
   callUpdate(selectedItemId, selected, option) {
-    if (selected.length === 0 && this._id) {
-      ViewModel.findOne('ModalWindow').setError('Link cannot be removed. There must be at least one Standard linked to this document.');
-      return;
-    }
-
-    if (selected.length === this.selected().count() &&  selected.every(({ _id:itemId }) => this.selected().fetch().find(({ _id }) => _id === itemId))) return;
+    if (selected.length === this.selected().count() && selected.every(({ _id: itemId }) => this.selected().fetch().find(({ _id }) => _id === itemId))) return;
 
     const standardsIds = selected.map(({ _id }) => _id);
 
@@ -48,8 +39,8 @@ Template.Fields_Standards_Edit.viewmodel({
 
     const options = {
       [`${option}`]: {
-        standardsIds: selectedItemId
-      }
+        standardsIds: selectedItemId,
+      },
     };
 
     this.parent().update({ options });
@@ -70,5 +61,5 @@ Template.Fields_Standards_Edit.viewmodel({
   getData() {
     const { standardsIds } = this.data();
     return { standardsIds };
-  }
+  },
 });

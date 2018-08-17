@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, OrganizationIdSchema } from './schemas.js';
-import { StringLimits } from '/imports/share/constants.js';
+import { BaseEntitySchema, OrganizationIdSchema } from './schemas';
+import { StringLimits } from '../constants';
 
 
 const EditableFields = new SimpleSchema({
@@ -9,24 +9,24 @@ const EditableFields = new SimpleSchema({
     type: String,
     label: 'Risk type label',
     min: StringLimits.title.min,
-    max: StringLimits.title.max
+    max: StringLimits.title.max,
   },
   abbreviation: {
     type: String,
     label: 'Risk type abbreviation',
     min: StringLimits.abbreviation.min,
     max: StringLimits.abbreviation.max,
-    optional: true
+    optional: true,
   }
 });
 
 const RiskTypesSchema = new SimpleSchema([
   BaseEntitySchema,
   EditableFields,
-  OrganizationIdSchema
+  OrganizationIdSchema,
 ]);
 
 export {
   EditableFields,
-  RiskTypesSchema
+  RiskTypesSchema,
 };

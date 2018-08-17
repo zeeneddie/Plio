@@ -6,11 +6,11 @@ Template.atForm.helpers(AccountsTemplates.atFormHelpers);
 Template.atForm.helpers({
   showForgotPasswordLink() {
     return !!AccountsTemplates.options.showForgotPasswordLink && FlowRouter.getRouteName() === 'signIn';
-  }
+  },
 });
 
 Template.atForm.events({
-  'focusout input#at-field-email'(e, tpl) {
+  'focusout input#at-field-email': function (e, tpl) {
     const email = e.target.value;
 
     if (!email.length) return;
@@ -19,12 +19,11 @@ Template.atForm.events({
     const match = email.match(regex);
     const orgName = match ? match[1] : null;
 
-    if (orgName)
-      tpl.$('input#at-field-companyName').val(orgName);
-  }
+    if (orgName) { tpl.$('input#at-field-companyName').val(orgName); }
+  },
 });
 
-Template.atForm.onCreated(function() {
+Template.atForm.onCreated(function () {
   this.autorun(() => {
     if (Meteor.user()) {
       FlowRouter.withReplaceState(() => {

@@ -1,22 +1,17 @@
-import { CollectionNames } from '/imports/share/constants';
-
-const mirrorKeys = (obj = {}) => Object.keys(obj)
-  .reduce((prev, cur) => ({ ...prev, [cur]: cur }), {});
-
 export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
 export const ALERT_AUTOHIDE_TIME = 1500;
 
 export const DocumentTitles = {
   STANDARD: 'Standard',
-  NC: 'Non-conformity',
+  NC: 'Nonconformity',
   RISK: 'Risk',
 };
 
 export const NonConformityFilters = {
-  1: { title: 'NCs', name: 'magnitude', prepend: 'by' },
-  2: { title: 'NCs', name: 'status', prepend: 'by' },
-  3: { title: 'NCs', name: 'department', prepend: 'by' },
-  4: { title: 'NCs', name: 'deleted' },
+  1: { title: '', name: 'magnitude', prepend: 'by' },
+  2: { title: '', name: 'status', prepend: 'by' },
+  3: { title: '', name: 'department', prepend: 'by' },
+  4: { title: '', name: 'deleted' },
 };
 
 export const RiskFilterIndexes = {
@@ -54,13 +49,22 @@ export const StandardFilters = {
   3: { title: 'Standards', name: 'deleted', prepend: '' },
 };
 
+export const WorkInboxFilterIndexes = {
+  MY_CURRENT: 1,
+  TEAM_CURRENT: 2,
+  MY_COMPLETED: 3,
+  TEAM_COMPLETED: 4,
+  MY_DELETED: 5,
+  TEAM_DELETED: 6,
+};
+
 export const WorkInboxFilters = {
-  1: { title: 'Work', name: 'my current', prepend: '' },
-  2: { title: 'Work', name: 'team current', prepend: '' },
-  3: { title: 'Work', name: 'my completed', prepend: '' },
-  4: { title: 'Work', name: 'team completed', prepend: '' },
-  5: { name: 'My deleted actions' },
-  6: { name: 'Team deleted actions' },
+  [WorkInboxFilterIndexes.MY_CURRENT]: { title: 'Work', name: 'my current', prepend: '' },
+  [WorkInboxFilterIndexes.TEAM_CURRENT]: { title: 'Work', name: 'team current', prepend: '' },
+  [WorkInboxFilterIndexes.MY_COMPLETED]: { title: 'Work', name: 'my completed', prepend: '' },
+  [WorkInboxFilterIndexes.TEAM_COMPLETED]: { title: 'Work', name: 'team completed', prepend: '' },
+  [WorkInboxFilterIndexes.MY_DELETED]: { name: 'My deleted actions' },
+  [WorkInboxFilterIndexes.TEAM_DELETED]: { name: 'Team deleted actions' },
 };
 
 export const STANDARD_FILTER_MAP = {
@@ -98,7 +102,6 @@ export const RisksListProjection = {
   serialNumber: 1,
   sequentialId: 1,
   title: 1,
-  identifiedAt: 1,
   typeId: 1,
   scores: 1,
   departmentsIds: 1,
@@ -138,7 +141,6 @@ export const NonConformitiesListProjection = {
   cost: 1,
   ref: 1,
   createdAt: 1,
-  identifiedAt: 1,
   magnitude: 1,
   status: 1,
   departmentsIds: 1,
@@ -181,14 +183,22 @@ export const DepartmentsListProjection = {
 export const AnalysisTitles = {
   rootCauseAnalysis: 'Root cause analysis',
   riskAnalysis: 'Initial risk analysis',
-  updateOfStandards: 'Update of standard(s)',
-  updateOfRiskRecord: 'Update of risk record',
+  potentialGainAnalysis: 'Potential gain analysis',
+  updateOfStandards: 'Final approval to close this nonconformity',
+  updateOfRiskRecord: 'Final approval to close this risk',
 };
 
-export const ActionTitles = {
-  CA: 'Corrective action',
-  PA: 'Preventative action',
-  RK: 'Risk control',
+export const AnalysisFieldPrefixes = {
+  CAUSE: 'Cause',
+  GAIN: 'Gain',
+};
+
+export const WorkItemDescriptions = {
+  rootCauseAnalysis: 'Complete root cause analysis',
+  potentialGainAnalysis: 'Complete potential gain analysis',
+  riskAnalysis: 'Complete initial risk analysis',
+  updateOfStandards: 'Request for approval to close this nonconformity',
+  updateOfRiskRecord: 'Request for approval to close this risk',
 };
 
 export const riskScoreTypes = {
@@ -238,8 +248,6 @@ export const ORDER = {
   DESC: 'DECS',
 };
 
-export const COLLECTION_NAME_MAP = mirrorKeys(CollectionNames);
-
 export const KeyMap = {
   tab: 9,
   enter: 13,
@@ -250,3 +258,86 @@ export const KeyMap = {
 };
 
 export const DEPARTMENT_UNCATEGORIZED = 'DEPARTMENTS.UNCATEGORIZED';
+
+export const UserPresenceStatuses = {
+  ONLINE: 'online',
+  AWAY: 'away',
+  OFFLINE: 'offline',
+};
+
+export const TransitionTimeouts = {
+  modal: 300,
+};
+
+export const TransitionBaseActiveClass = 'in';
+
+export const StatusColors = {
+  DEFAULT: 'default',
+  AMBER: 'warning',
+  RED: 'danger',
+  GREEN: 'success',
+};
+
+export const StatusColorsHex = {
+  AMBER: '#ff8c00',
+  DARKER_AMBER: '#e67300',
+  RED: '#dc3545',
+  DARKER_RED: '#c31c2c',
+  GREEN: '#16a916',
+};
+
+export const DEFAULT_UPDATE_TIMEOUT = 1200;
+
+export const ApolloFetchPolicies = {
+  CACHE_ONLY: 'cache-only',
+};
+
+export const MilestoneStatusColors = {
+  IN_PROGRESS: StatusColorsHex.DARKER_AMBER,
+  OVERDUE: StatusColorsHex.DARKER_RED,
+  COMPLETED: StatusColorsHex.GREEN,
+};
+
+export const ActionStatusColors = {
+  IN_PROGRESS: StatusColorsHex.AMBER,
+  OVERDUE: StatusColorsHex.RED,
+  COMPLETED: StatusColorsHex.GREEN,
+};
+
+export const SymbolTypes = {
+  DIAMOND: 'diamond',
+  SQUARE: 'square',
+};
+
+export const TimelineSymbols = {
+  MILESTONE: SymbolTypes.DIAMOND,
+  ACTION: SymbolTypes.SQUARE,
+};
+
+export const Timeline = {
+  PART_OF_PAST_TIME: 15 / 100,
+  WIDTH: 1140,
+  LINE_HEIGHT: 25,
+  AXIS_HEIGHT: 20,
+  AXIS_OFFSET_Y: 30,
+  LIST_ICON_SIZE: 11,
+};
+
+export const GQ_ERROR_MESSAGE_PREFIX = 'GraphQL error: ';
+export const DEFAULT_ERROR_MESSAGE = 'Internal server error';
+
+export const SUPPORT_FORUM_URL = 'https://gitter.im/Pliohub/SupportForum';
+
+/* eslint-disable max-len */
+export const Styles = {
+  font: {
+    family: {
+      segoe: {
+        semibold: '"Segoe UI Semibold WestEuropean", "Segoe UI Semibold", "Segoe WP Semibold", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif',
+      },
+    },
+  },
+};
+/* eslint-enable max-len */
+
+export const SUPPORT_EMAIL = 'hello@pliohub.com';

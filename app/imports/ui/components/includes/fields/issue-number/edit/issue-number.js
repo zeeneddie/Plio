@@ -13,5 +13,5 @@ Template.IssueNumber_Edit.viewmodel({
   getData() {
     const { issueNumber } = this.data();
     return { issueNumber: parseInt(issueNumber, 10) };
-  }
+  },
 });

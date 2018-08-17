@@ -1,7 +1,7 @@
 import { Organizations } from '/imports/share/collections/organizations';
 import { Reviews } from '/imports/share/collections/reviews';
 import { getDocByIdAndType, getReviewConfig } from '/imports/share/helpers';
-import BaseEntityService from '../base-entity-service.js';
+import BaseEntityService from '/imports/share/services/base-entity-service.js';
 import ReviewWorkflow from '/imports/share/utils/ReviewWorkflow';
 
 
@@ -16,9 +16,7 @@ export default {
       _id: linkedDoc.organizationId,
     });
     const reviewConfig = getReviewConfig(organization, documentType);
-    const reviewWorkflow = new ReviewWorkflow(
-      linkedDoc, reviewConfig, organization.timezone
-    );
+    const reviewWorkflow = new ReviewWorkflow(linkedDoc, reviewConfig, organization.timezone);
 
     return this._service.insert({
       scheduledDate: reviewWorkflow.getReviewSchedule(),

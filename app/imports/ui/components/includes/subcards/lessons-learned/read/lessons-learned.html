@@ -1,16 +1,11 @@
 <template name="Subcards_LessonsLearned_Read">
-  {{#if LessonsLearned.count}}
+  {{#if lessons.length}}
     <div class="card-block card-subheading">
       <h4 class="card-title">Lessons learned</h4>
     </div>
     <div class="list-group">
       <div class="list-group-item">
-        {{#each lessons}}
-          <a class="btn btn-secondary btn-inline pointer">
-            <strong>LL{{this.serialNumber}}</strong>
-            <span>{{this.title}}</span>
-          </a>
-        {{/each}}
+        <h4 class="list-group-item-heading" {{b "text: renderLessons"}}></h4>
       </div>
     </div>
   {{/if}}

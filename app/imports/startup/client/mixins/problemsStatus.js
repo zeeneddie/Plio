@@ -10,7 +10,7 @@ export default {
       case 4:
         return 'awaiting analysis';
       case 11:
-        return 'awaiting update of standard(s)';
+        return 'awaiting approval';
       default:
         return '';
     }

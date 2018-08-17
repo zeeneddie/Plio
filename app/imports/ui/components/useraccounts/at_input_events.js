@@ -1,9 +1,9 @@
 export default {
-  'focusin input'(e, tpl) {
+  'focusin input': function (e, tpl) {
     this.clearStatus();
   },
-  'focusout input, change select'(e, tpl) {
-    var parentData = Template.parentData();
+  'focusout input, change select': function (e, tpl) {
+    const parentData = Template.parentData();
 
     Meteor.setTimeout(() => {
       if (tpl.view.isDestroyed) {
@@ -14,37 +14,34 @@ export default {
         return;
       }
 
-      var fieldId = this._id;
-      var rawValue = this.getValue(tpl);
-      var value = this.fixValue(rawValue);
+      const fieldId = this._id;
+      const rawValue = this.getValue(tpl);
+      const value = this.fixValue(rawValue);
       // Possibly updates the input value
       if (value !== rawValue) {
         this.setValue(tpl, value);
       }
 
       // Client-side only validation
-      if (!this.validation)
-        return;
+      if (!this.validation) { return; }
 
-      var state = (parentData && parentData.state) || AccountsTemplates.getState();
+      const state = (parentData && parentData.state) || AccountsTemplates.getState();
       // No validation during signIn
-      if (state === "signIn")
-        return;
+      if (state === 'signIn') { return; }
       // Special case for password confirmation
-      if (value && fieldId === "password_again"){
-        if (value !== $("#at-field-password").val())
-          return this.setError(AccountsTemplates.texts.errors.pwdMismatch);
+      if (value && fieldId === 'password_again') {
+        if (value !== $('#at-field-password').val()) { return this.setError(AccountsTemplates.texts.errors.pwdMismatch); }
       }
       this.validate(value);
     }, 200);
   },
-  'keyup input'(e, tpl) {
+  'keyup input': function (e, tpl) {
     e.preventDefault();
-    
-    var parentData = Template.parentData();
+
+    const parentData = Template.parentData();
 
     if (e.keyCode === 13) {
-      $("#at-pwd-form").trigger("submit");
+      $('#at-pwd-form').trigger('submit');
     }
 
     Meteor.setTimeout(() => {
@@ -57,30 +54,27 @@ export default {
       }
 
       // Client-side only continuous validation
-      if (!this.continuousValidation)
-        return;
+      if (!this.continuousValidation) { return; }
 
-      var state = (parentData && parentData.state) || AccountsTemplates.getState();
+      const state = (parentData && parentData.state) || AccountsTemplates.getState();
       // No validation during signIn
-      if (state === "signIn")
-        return;
-      var fieldId = this._id;
-      var rawValue = this.getValue(tpl);
-      var value = this.fixValue(rawValue);
+      if (state === 'signIn') { return; }
+      const fieldId = this._id;
+      const rawValue = this.getValue(tpl);
+      const value = this.fixValue(rawValue);
       // Possibly updates the input value
       if (value !== rawValue) {
         this.setValue(tpl, value);
       }
       // Special case for password confirmation
-      if (value && fieldId === "password_again"){
-        if (value !== $("#at-field-password").val())
-          return this.setError(AccountsTemplates.texts.errors.pwdMismatch);
+      if (value && fieldId === 'password_again') {
+        if (value !== $('#at-field-password').val()) { return this.setError(AccountsTemplates.texts.errors.pwdMismatch); }
       }
       this.validate(value);
     }, 200);
   },
-  'click .clear-field'(e, tpl) {
+  'click .clear-field': function (e, tpl) {
     e.preventDefault();
     tpl.$('input').focus().val('');
-  }
+  },
 };

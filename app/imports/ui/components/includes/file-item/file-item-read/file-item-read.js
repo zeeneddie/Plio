@@ -6,7 +6,9 @@ import UploadsStore from '/imports/ui/utils/uploads/uploads-store.js';
 Template.FileItem_Read.viewmodel({
   file: {},
   onRendered() {
-    const { createdBy, progress, _id, status } = Object.assign({}, this.file());
+    const {
+      createdBy, progress, _id, status,
+    } = Object.assign({}, this.file());
 
     if (createdBy === Meteor.userId()) {
       const uploader = UploadsStore.getUploader(_id);

@@ -3,7 +3,7 @@ import React from 'react';
 import CustomersListItemContainer from '../../containers/ListItemContainer';
 import propTypes from './propTypes';
 
-const CustomersList = (props) => (
+const CustomersList = props => (
   <div className="list-group">
     {props.organizations.map(organization => (
       <CustomersListItemContainer

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { _ } from 'meteor/underscore';
 import { Item } from './Item';
 import { Menu } from './Menu';
@@ -11,7 +12,7 @@ const getMenuValue = (menu, index) => get(menu, `props.children[${index}].props.
 
 const enhance = mapProps(props => ({
   ...props,
-  children: React.Children.map(props.children.filter(Boolean), child => {
+  children: React.Children.map(props.children.filter(Boolean), (child) => {
     switch (child.type) {
       case Menu:
         return React.cloneElement(child, {
@@ -23,7 +24,7 @@ const enhance = mapProps(props => ({
         return React.cloneElement(child, {
           dropdownValue: getMenuValue(
             _.findWhere(props.children, { type: Menu }),
-            props.activeItemIndex
+            props.activeItemIndex,
           ),
         });
 

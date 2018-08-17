@@ -3,16 +3,15 @@ import get from 'lodash.get';
 import { check } from 'meteor/check';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { _ } from 'meteor/underscore';
+import { findByUserId, getNewestDate } from 'plio-util';
 
 import { Discussions } from '/imports/share/collections/discussions';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils';
 import { Messages } from '/imports/share/collections/messages';
 import { Organizations } from '/imports/share/collections/organizations';
 import { Files } from '/imports/share/collections/files';
 import { isOrgMember } from '../../checkers';
-import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils';
 import Counter from '../../counter/server';
-import { getNewerDate } from '../../helpers';
-import { getUserViewedByData } from '../../discussions/helpers';
 
 const getLastMessageId = (query, options) => ({
   lastMessageId: get(Messages.findOne(query, _.omit(options, 'limit')), '_id'),
@@ -26,7 +25,7 @@ const getMessageData = (id) => {
     const file = Files.findOne({ _id: message.fileId }, { fields: { name: 1 } });
     text = file.name;
   } else {
-    text = message.text;
+    ({ text } = message);
   }
 
   const organization = Object.assign({}, Organizations.findOne({
@@ -65,12 +64,12 @@ const getMessageData = (id) => {
   return messageData;
 };
 
-Meteor.publishComposite('messages', function (discussionId, {
+Meteor.publishComposite('messages', (discussionId, {
   sort = { createdAt: -1 },
   at = null,
   priorLimit = 50,
   followingLimit = 50,
-} = {}) {
+} = {}) => {
   check(discussionId, String);
 
   new SimpleSchema({
@@ -86,7 +85,9 @@ Meteor.publishComposite('messages', function (discussionId, {
         createdAt: { type: Number },
       }),
     },
-  }).validate({ sort, at, priorLimit, followingLimit });
+  }).validate({
+    sort, at, priorLimit, followingLimit,
+  });
 
   return {
     find() {
@@ -213,13 +214,13 @@ Meteor.publishComposite('unreadMessages', function ({ organizationId, limit }) {
   check(organizationId, String);
   check(limit, Number);
 
-  const userId = this.userId;
+  const { userId } = this;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
 
-  const getUserData = getUserViewedByData(userId);
+  const getUserData = findByUserId(userId);
   const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
     organizationId,
     userId,
@@ -231,31 +232,27 @@ Meteor.publishComposite('unreadMessages', function ({ organizationId, limit }) {
     },
     children: [{
       find(discussion) {
-        const { _id: discussionId } = discussion;
-        const { viewedUpTo } = Object.assign({}, getUserData(discussion));
+        const { _id: discussionId, viewedBy = [] } = discussion;
+        const { viewedUpTo } = Object.assign({}, getUserData(viewedBy));
         const query = {
           discussionId,
           organizationId,
           createdAt: {
-            $gt: getNewerDate(currentOrgUserJoinedAt, viewedUpTo),
+            $gt: getNewestDate(currentOrgUserJoinedAt, viewedUpTo),
           },
         };
         const options = {
+          limit,
           sort: {
             createdAt: -1,
           },
         };
 
-        // Check if limit is an integer number
-        if (Number(limit) === limit && limit % 1 === 0) {
-          options.limit = limit;
-        }
-
         return Messages.find(query, options);
       },
       children: [{
         find(message) {
-          return Meteor.users.find({ _id: message.userId }, { fields: { profile: 1 } });
+          return Meteor.users.find({ _id: message.createdBy }, { fields: { profile: 1 } });
         },
       }, {
         find(message) {
@@ -274,13 +271,13 @@ Meteor.publish('messagesNotViewedCount', function (counterName, documentId) {
   check(counterName, String);
   check(documentId, String);
 
-  const userId = this.userId;
+  const { userId } = this;
   const discussion = Object.assign({}, Discussions.findOne({
     linkedTo: documentId,
     isPrimary: true,
   }));
   const discussionId = discussion._id;
-  const organizationId = discussion.organizationId;
+  const { organizationId, viewedBy = [] } = discussion;
 
   if (!discussionId || !userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -289,13 +286,13 @@ Meteor.publish('messagesNotViewedCount', function (counterName, documentId) {
   const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
     organizationId, userId,
   });
-  const { viewedUpTo = null } = Object.assign({}, getUserViewedByData(userId, discussion));
+  const { viewedUpTo = null } = Object.assign({}, findByUserId(userId, viewedBy));
 
   return new Counter(counterName, Messages.find({
     discussionId,
     organizationId,
     createdAt: {
-      $gt: getNewerDate(viewedUpTo, currentOrgUserJoinedAt),
+      $gt: getNewestDate(viewedUpTo, currentOrgUserJoinedAt),
     },
   }));
 });
@@ -304,7 +301,7 @@ Meteor.publish('messagesNotViewedCountTotal', function (counterName, organizatio
   check(counterName, String);
   check(organizationId, String);
 
-  const userId = this.userId;
+  const { userId } = this;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -315,7 +312,8 @@ Meteor.publish('messagesNotViewedCountTotal', function (counterName, organizatio
   });
   const discussions = Discussions.find({ organizationId });
   const viewedByData = discussions.map((discussion) => {
-    const { viewedUpTo } = Object.assign({}, getUserViewedByData(userId, discussion));
+    const { viewedBy = [] } = discussion;
+    const { viewedUpTo } = Object.assign({}, findByUserId(userId, viewedBy));
 
     return {
       viewedUpTo,
@@ -326,7 +324,7 @@ Meteor.publish('messagesNotViewedCountTotal', function (counterName, organizatio
   const $or = viewedByData.map(({ viewedUpTo, discussionId }) => ({
     discussionId,
     createdAt: {
-      $gt: getNewerDate(viewedUpTo, currentOrgUserJoinedAt),
+      $gt: getNewestDate(viewedUpTo, currentOrgUserJoinedAt),
     },
   }));
 

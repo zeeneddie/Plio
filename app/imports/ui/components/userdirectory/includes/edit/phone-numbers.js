@@ -7,7 +7,7 @@ Template.UserEdit_PhoneNumbers.viewmodel({
   mixin: ['addForm'],
   addPhoneForm() {
     this.addForm('UserEdit_PhoneNumber', {
-      isEditable: this.isEditable()
+      isEditable: this.isEditable(),
     });
   },
   isEditable() {
@@ -44,7 +44,7 @@ Template.UserEdit_PhoneNumbers.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
-      closeOnConfirm: false
+      closeOnConfirm: false,
     }, () => {
       this.parent().removePhoneNumber(viewModel, (err) => {
         if (err) {
@@ -68,8 +68,6 @@ Template.UserEdit_PhoneNumbers.viewmodel({
     });
   },
   getData() {
-    return _.map(this.children('UserEdit_PhoneNumber'), (child) => {
-      return child.getData();
-    });
-  }
+    return _.map(this.children('UserEdit_PhoneNumber'), child => child.getData());
+  },
 });

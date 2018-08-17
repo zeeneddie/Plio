@@ -1,6 +1,6 @@
 import './title';
-import './identified-by';
-import './identified-date';
+import './originator';
+import './owner';
 import './magnitude';
 import './status';
 import './cost';

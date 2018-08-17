@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { _ } from 'meteor/underscore';
 
+import { AnalysisFieldPrefixes } from '../../../../../../../api/constants';
 
 Template.RCA_Cause_Edit.viewmodel({
   mixin: 'callWithFocusCheck',
@@ -19,6 +20,7 @@ Template.RCA_Cause_Edit.viewmodel({
   index: '',
   text: '',
   isNew: true,
+  prefix: AnalysisFieldPrefixes.CAUSE,
   loadData(cause) {
     this.load({
       index: cause.index,
@@ -27,7 +29,7 @@ Template.RCA_Cause_Edit.viewmodel({
     });
   },
   label() {
-    return `Cause ${this.index()}`;
+    return `${this.prefix()} ${this.index()}`;
   },
   update(e) {
     const { index, text } = this.getData();
@@ -42,17 +44,15 @@ Template.RCA_Cause_Edit.viewmodel({
           options: { $addToSet: { 'rootCauseAnalysis.causes': { index, text } } },
         };
       }
+    } else if (text) {
+      args = {
+        query: { 'rootCauseAnalysis.causes': { $elemMatch: { index } } },
+        options: { $set: { 'rootCauseAnalysis.causes.$.text': text } },
+      };
     } else {
-      if (text) {
-        args = {
-          query: { 'rootCauseAnalysis.causes': { $elemMatch: { index } } },
-          options: { $set: { 'rootCauseAnalysis.causes.$.text': text } },
-        };
-      } else {
-        args = {
-          options: { $pull: { 'rootCauseAnalysis.causes': { index } } },
-        };
-      }
+      args = {
+        options: { $pull: { 'rootCauseAnalysis.causes': { index } } },
+      };
     }
 
     if (args) {

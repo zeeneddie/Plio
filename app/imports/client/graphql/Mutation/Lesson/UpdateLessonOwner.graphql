@@ -1,0 +1,13 @@
+mutation updateLessonOwner($input: UpdateLessonOwnerInput!) {
+  updateLessonOwner(input: $input) {
+    lesson {
+      _id
+      owner {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

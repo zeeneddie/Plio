@@ -1,5 +1,6 @@
-import './config.js';
+import './config';
 import './check-backgroud-alive';
-import './email-verification-expiration.js';
-import './invitation-expiration.js';
-import './notification-expiration.js';
+import './check-graphql-server-alive';
+import './email-verification-expiration';
+import './invitation-expiration';
+import './notification-expiration';

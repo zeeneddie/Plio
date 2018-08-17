@@ -6,46 +6,44 @@ import {
   insert as insertFile,
   updateUrl,
   updateProgress,
-  terminateUploading
+  terminateUploading,
 } from '/imports/api/files/methods.js';
 
 export default {
   uploadData(fileId) { // find the file with fileId is being uploaded
-    return _.find(this.uploads().array(), (data) => {
-      return data.fileId === fileId;
-    });
+    return _.find(this.uploads().array(), data => data.fileId === fileId);
   },
   terminateUploading(fileId) {
     const uploadData = this.uploadData(fileId);
-    const uploader   = uploadData && uploadData.uploader;
+    const uploader = uploadData && uploadData.uploader;
     if (uploader) {
       uploader.xhr && uploader.xhr.abort();
       this.removeUploadData(fileId);
     }
     terminateUploading.call({
-      _id: fileId
+      _id: fileId,
     });
   },
   removeUploadData(fileId) {
-    this.uploads().remove((item) => {
-      return item.fileId === fileId;
-    });
+    this.uploads().remove(item => item.fileId === fileId);
   },
   uploads() {
-    this.load({share: 'uploader'});
+    this.load({ share: 'uploader' });
 
     return this.uploads();
   },
   upload({
     files,
     maxSize,
-    beforeUpload
+    beforeUpload,
   }) {
     if (!files.length) {
       return;
     }
 
-    const {slingshotDirective, metaContext, addFile, afterUpload} = this.templateInstance.data;
+    const {
+      slingshotDirective, metaContext, addFile, afterUpload,
+    } = this.templateInstance.data;
 
     beforeUpload && beforeUpload();
 
@@ -59,20 +57,18 @@ export default {
       }
 
       insertFile.call({
-        name: name,
+        name,
         extension: name.split('.').pop().toLowerCase(),
-        organizationId: this.organizationId()
+        organizationId: this.organizationId(),
       }, (err, fileId) => {
         if (err) {
           this.terminateUploading(fileId);
           throw err;
         }
 
-        addFile && addFile({fileId});
+        addFile && addFile({ fileId });
 
-        const uploader = new Slingshot.Upload(
-          slingshotDirective, metaContext
-        );
+        const uploader = new Slingshot.Upload(slingshotDirective, metaContext);
 
         const progressInterval = Meteor.setInterval(() => {
           const progress = uploader.progress();
@@ -80,7 +76,7 @@ export default {
           if (!progress && progress != 0 || progress === 1) {
             Meteor.clearInterval(progressInterval);
           } else {
-            updateProgress.call({_id: fileId, progress}, (err, res) => {
+            updateProgress.call({ _id: fileId, progress }, (err, res) => {
               if (err) {
                 Meteor.clearInterval(progressInterval);
                 this.terminateUploading(fileId);
@@ -91,7 +87,7 @@ export default {
           }
         }, 1500);
 
-        this.uploads().push({fileId: fileId, uploader});
+        this.uploads().push({ fileId, uploader });
 
         uploader.send(file, (err, url) => {
           if (err) {
@@ -106,14 +102,14 @@ export default {
             url = encodeURI(url);
           }
 
-          afterUpload && afterUpload({fileId, url});
+          afterUpload && afterUpload({ fileId, url });
 
-          updateUrl.call({_id: fileId, url});
-          updateProgress.call({_id: fileId, progress: 1}, (err, res) => {
+          updateUrl.call({ _id: fileId, url });
+          updateProgress.call({ _id: fileId, progress: 1 }, (err, res) => {
             this.removeUploadData(fileId);
           });
         });
       });
     });
-  }
+  },
 };

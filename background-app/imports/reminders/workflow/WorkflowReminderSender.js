@@ -3,22 +3,27 @@ import moment from 'moment-timezone';
 import { _ } from 'meteor/underscore';
 
 import { Actions } from '/imports/share/collections/actions';
-import { DocumentTypes, ProblemMagnitudes, ReminderTimeUnits } from '/imports/share/constants';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Organizations } from '/imports/share/collections/organizations';
-import { renderTemplate } from '/imports/share/helpers';
+import NotificationSender from '/imports/share/utils/NotificationSender';
 import { Risks } from '/imports/share/collections/risks';
 import { Standards } from '/imports/share/collections/standards';
 import { ReminderTypes, TimeRelations } from './config/constants';
 import ReminderConfig from './config';
-import NotificationSender from '/imports/share/utils/NotificationSender';
+import {
+  DocumentTypes,
+  ProblemMagnitudes,
+  ReminderTimeUnits,
+  ANALYSIS_STATUSES,
+} from '../../share/constants';
 import { isDateScheduled } from '../../helpers/date';
+import { renderTemplate } from '../../helpers/render';
+import { getButtonLabelByReminderType } from './config/helpers';
+import { DEFAULT_EMAIL_TEMPLATE } from '../../constants';
 
-
-const REMINDER_EMAIL_TEMPLATE = 'defaultEmail';
+const REMINDER_EMAIL_TEMPLATE = DEFAULT_EMAIL_TEMPLATE;
 
 export default class WorkflowReminderSender {
-
   constructor(organizationId) {
     this._organizationId = organizationId;
   }
@@ -46,7 +51,9 @@ export default class WorkflowReminderSender {
     const { reminders } = this._organization;
     this._checkRemindersConfiguration(reminders);
 
-    const { minorNc, majorNc, criticalNc, improvementPlan } = reminders;
+    const {
+      minorNc, majorNc, criticalNc, improvementPlan,
+    } = reminders;
 
     this._createProblemReminders(minorNc, ProblemMagnitudes.MINOR);
     this._createProblemReminders(majorNc, ProblemMagnitudes.MAJOR);
@@ -88,7 +95,7 @@ export default class WorkflowReminderSender {
     const { start, until } = timeConfig;
     const { startDate, endDate } = this._getDateRange(start, until);
 
-    const getIds = (collection) => (
+    const getIds = collection => (
       collection.find({
         magnitude,
         organizationId: this._organizationId,
@@ -100,24 +107,24 @@ export default class WorkflowReminderSender {
     const NCsIds = getIds(NonConformities);
     const risksIds = getIds(Risks);
 
-    const createProblemReminders = (collection, ids, docType) => {
+    const createProblemReminders = (collection, ids, documentType) => {
       const query = {
         _id: { $in: ids },
         isDeleted: false,
         deletedAt: { $exists: false },
         deletedBy: { $exists: false },
         $or: [{
-          'analysis.status': 0, // Not completed
+          'analysis.status': ANALYSIS_STATUSES.NOT_COMPLETED,
           'analysis.executor': { $exists: true },
           'analysis.targetDate': {
             $gte: startDate,
             $lte: endDate,
           },
         }, {
-          'analysis.status': 1, // Completed
+          'analysis.status': ANALYSIS_STATUSES.COMPLETED,
           'analysis.completedAt': { $exists: true },
           'analysis.completedBy': { $exists: true },
-          'updateOfStandards.status': 0, // Not completed
+          'updateOfStandards.status': ANALYSIS_STATUSES.NOT_COMPLETED,
           'updateOfStandards.executor': { $exists: true },
           'updateOfStandards.targetDate': {
             $gte: startDate,
@@ -127,22 +134,25 @@ export default class WorkflowReminderSender {
       };
 
       collection.find(query).forEach((doc) => {
-        const isAnalysisCompleted = doc.analysis.status === 1;
+        const isAnalysisCompleted = doc.analysis.status === ANALYSIS_STATUSES.COMPLETED;
+        const docType = doc.type || documentType;
         let targetDate;
         let reminderType;
 
         if (isAnalysisCompleted) {
-          targetDate = doc.updateOfStandards.targetDate;
+          ({ targetDate } = doc.updateOfStandards);
 
           reminderType = {
             [DocumentTypes.NON_CONFORMITY]: ReminderTypes.UPDATE_OF_STANDARDS,
+            [DocumentTypes.POTENTIAL_GAIN]: ReminderTypes.UPDATE_OF_STANDARDS,
             [DocumentTypes.RISK]: ReminderTypes.UPDATE_OF_RISK_RECORD,
           }[docType];
         } else {
-          targetDate = doc.analysis.targetDate;
+          ({ targetDate } = doc.analysis);
 
           reminderType = {
             [DocumentTypes.NON_CONFORMITY]: ReminderTypes.ROOT_CAUSE_ANALYSIS,
+            [DocumentTypes.POTENTIAL_GAIN]: ReminderTypes.POTENTIAL_GAIN_ANALYSIS,
             [DocumentTypes.RISK]: ReminderTypes.INITIAL_RISK_ANALYSIS,
           }[docType];
         }
@@ -277,7 +287,7 @@ export default class WorkflowReminderSender {
 
     const receivers = config.receivers(args) || [];
     if (!receivers.length) {
-      return;
+      return undefined;
     }
 
     const emailTemplateData = {
@@ -290,7 +300,7 @@ export default class WorkflowReminderSender {
     if (url) {
       Object.assign(emailTemplateData, {
         button: {
-          label: 'Go to this action',
+          label: getButtonLabelByReminderType(reminderType),
           url,
         },
       });
@@ -333,16 +343,16 @@ export default class WorkflowReminderSender {
     duration.add(after.timeValue, after.timeUnit);
 
     const startDate = moment(this._date)
-        .subtract(duration)
-        .tz(this._timezone)
-        .startOf('day')
-        .toDate();
+      .subtract(duration)
+      .tz(this._timezone)
+      .startOf('day')
+      .toDate();
 
     const endDate = moment(this._date)
-        .add(duration)
-        .tz(this._timezone)
-        .startOf('day')
-        .toDate();
+      .add(duration)
+      .tz(this._timezone)
+      .startOf('day')
+      .toDate();
 
     return { startDate, endDate };
   }
@@ -350,5 +360,4 @@ export default class WorkflowReminderSender {
   _shouldSendReminder(targetDate, dateConfig) {
     return isDateScheduled(dateConfig, targetDate, this._timezone, this._date);
   }
-
 }

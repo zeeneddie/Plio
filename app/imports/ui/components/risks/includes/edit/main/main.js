@@ -15,10 +15,10 @@ import {
   setAnalysisComments,
   setStandardsUpdateCompletedBy,
   setStandardsUpdateCompletedDate,
-  setStandardsUpdateComments
+  setStandardsUpdateComments,
 } from '/imports/api/risks/methods';
-import { WorkflowTypes } from '/imports/share/constants.js';
-import { isViewed } from '/imports/api/checkers.js';
+import { WorkflowTypes, ProblemIndexes } from '/imports/share/constants.js';
+import { isViewed } from '/imports/api/checkers';
 import { AnalysisTitles } from '/imports/api/constants.js';
 import { RisksHelp } from '/imports/api/help-messages';
 
@@ -41,12 +41,18 @@ Template.Risk_Card_Edit_Main.viewmodel({
   update(...args) {
     this.parent().update(...args);
   },
-  RCAArgs({ _id, analysis, updateOfStandards, magnitude } = {}) {
+  RCAArgs({
+    _id, analysis, updateOfStandards, magnitude,
+  } = {}) {
+    const risk = this.risk && this.risk();
+    const isApprovalVisible = risk && (risk.status >= ProblemIndexes.ACTIONS_AWAITING_UPDATE);
+
     return {
       _id,
       analysis,
       updateOfStandards,
       magnitude,
+      isApprovalVisible,
       methodRefs: this.methodRefs,
       RCALabel: AnalysisTitles.riskAnalysis,
       UOSLabel: AnalysisTitles.updateOfRiskRecord,
@@ -68,14 +74,18 @@ Template.Risk_Card_Edit_Main.viewmodel({
       setAnalysisComments,
       setStandardsUpdateCompletedBy,
       setStandardsUpdateCompletedDate,
-      setStandardsUpdateComments
+      setStandardsUpdateComments,
     };
   },
   showRootCauseAnalysis() {
     const risk = this.risk && this.risk();
     return risk && (risk.workflowType === WorkflowTypes.SIX_STEP);
   },
+  showApproval() {
+    const risk = this.risk && this.risk();
+    return risk && (risk.status === ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED);
+  },
   getData() {
     return this.getChildrenData();
-  }
+  },
 });

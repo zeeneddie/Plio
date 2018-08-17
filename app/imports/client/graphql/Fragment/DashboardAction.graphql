@@ -1,0 +1,13 @@
+fragment DashboardAction on Action {
+  _id
+  title
+  completionTargetDate
+  isCompleted
+  status
+  toBeCompletedBy {
+    _id
+    profile {
+      fullName
+    }
+  }
+}

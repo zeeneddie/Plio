@@ -154,6 +154,10 @@ select {
 .dropdown {
   outline: none !important;
 
+  &.show > &-menu {
+    display: block;
+  }
+
   &-menu {
     padding: 0;
     margin-top: 0;
@@ -489,6 +493,10 @@ fieldset[disabled] {
 
 .help-block {
   margin: 0 0 10px;
+
+  & > span {
+    word-wrap: break-word;
+  }
 }
 
 .field-help-message {

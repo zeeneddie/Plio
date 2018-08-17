@@ -1,3 +1,4 @@
+import { reduce } from 'ramda';
 import {
   SET_DEPARTMENTS,
   SET_FILES,
@@ -32,8 +33,7 @@ import {
   REMOVE_RISK,
   SET_REVIEWS,
 } from '../actions/types';
-import { reduceC } from '/imports/api/helpers';
-import { CollectionNames } from '/imports/share/constants';
+import { CollectionNames } from '../../../share/constants';
 import { STORE_COLLECTION_NAMES } from '../lib/constants';
 import {
   getNormalizedDataKey,
@@ -56,7 +56,7 @@ const initialStateReducer = (acc, key) => {
 
 const initialState = {
   usersByOrgIds: [],
-  ...reduceC(initialStateReducer, {}, Object.keys(STORE_COLLECTION_NAMES)),
+  ...reduce(initialStateReducer, {}, Object.keys(STORE_COLLECTION_NAMES)),
 };
 
 const getSCName = name => STORE_COLLECTION_NAMES[name];

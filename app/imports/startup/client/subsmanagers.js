@@ -46,6 +46,10 @@ const LogsCountSubs = new SubsManager({
   expireIn: 10,
 });
 
+const RisksSubs = new SubsManager({
+  expireIn: 10,
+});
+
 export {
   OrgSubs,
   UserSubs,
@@ -61,4 +65,5 @@ export {
   AuditLogsSubs,
   LastHumanLogSubs,
   LogsCountSubs,
+  RisksSubs,
 };

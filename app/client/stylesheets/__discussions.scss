@@ -33,6 +33,9 @@
 			padding-left: 0;
 		}
 	}
+	.form-group .input-group input[name="message"] {
+		border-radius: 0;
+	}
 }
 
 .label-chat-count {

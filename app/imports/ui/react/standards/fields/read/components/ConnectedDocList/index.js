@@ -1,17 +1,30 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import { ActionTypes } from '/imports/share/constants';
-import { splitActionsByType } from '/imports/api/actions/helpers';
+import { ActionTypes } from '../../../../../../../share/constants';
+import { getClassByStatus } from '../../../../../../../api/problems/helpers';
+import { splitActionsByType } from '../../../../../../../api/actions/helpers';
 import LinkItemList from '../../../../../fields/read/components/LinkItemList';
 import { getPath } from '../../../../../../utils/router/paths';
-import { getClassByStatus } from '/imports/api/problems/helpers';
+import Lessons from '../../../../../fields/read/components/Lessons';
+import Block from '/imports/ui/react/fields/read/components/Block';
 
 const ConnectedDocList = (props) => {
-  const ncs = props.ncs.map(nc => ({
-    ...nc,
-    indicator: getClassByStatus(nc.status),
-    href: getPath('nonconformity')({ urlItemId: nc._id }),
-  }));
+  const ncs = props.ncs.map(({
+    title,
+    sequentialId,
+    status,
+    _id,
+  }) => {
+    const href = getPath('nonconformity')({ urlItemId: _id });
+    return {
+      _id,
+      title,
+      sequentialId,
+      href,
+      indicator: getClassByStatus(status),
+    };
+  });
   const risks = props.risks.map(risk => ({
     ...risk,
     indicator: getClassByStatus(risk.status),
@@ -21,7 +34,7 @@ const ConnectedDocList = (props) => {
 
   const lists = [
     {
-      label: 'Non-conformities',
+      label: 'Nonconformities',
       items: [...ncs],
     },
     {
@@ -41,22 +54,23 @@ const ConnectedDocList = (props) => {
   return (
     <div>
       {lists.map(({ label, items = [] }) => !!items.length && (
-        <LinkItemList key={`list-${label}`} {...{ label, items }} />
+        <Block>
+          <span>{label}</span>
+          <LinkItemList key={`list-${label}`} {...{ items }} />
+        </Block>
       ))}
       {props.children}
       {props.lessons && !!props.lessons.length && (
-        <LinkItemList label="Lessons Learned" items={props.lessons} />
+        <Lessons lessons={props.lessons} />
       )}
     </div>
   );
 };
 
 ConnectedDocList.propTypes = {
-  userId: PropTypes.string,
   ncs: PropTypes.array,
   risks: PropTypes.array,
   actions: PropTypes.array,
-  workItems: PropTypes.array,
   lessons: PropTypes.array,
   children: PropTypes.node,
 };

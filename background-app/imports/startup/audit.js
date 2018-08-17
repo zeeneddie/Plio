@@ -11,7 +11,8 @@ import LessonAuditConfig from '/imports/audit/configs/lessons/lesson-audit-confi
 import MessageAuditConfig from '/imports/audit/configs/messages/message-audit-config';
 import OrgAuditConfig from '/imports/audit/configs/organizations/org-audit-config';
 import WorkItemAuditConfig from '/imports/audit/configs/work-items/work-item-audit-config';
-
+import GoalAuditConfig from '../audit/configs/goals/goal-audit-config';
+import MilestoneAuditConfig from '../audit/configs/milestones/milestone-audit-config';
 
 const auditConfigs = [
   ActionAuditConfig,
@@ -23,6 +24,8 @@ const auditConfigs = [
   MessageAuditConfig,
   OrgAuditConfig,
   WorkItemAuditConfig,
+  GoalAuditConfig,
+  MilestoneAuditConfig,
 ];
 
 auditConfigs.forEach((config) => {
@@ -33,7 +36,14 @@ auditConfigs.forEach((config) => {
 AuditManager.startAudit();
 
 Changelog.find().observe({
-  added: ({ _id, collection, changeKind, newDocument, oldDocument, userId }) => {
+  added: ({
+    _id,
+    collection,
+    changeKind,
+    newDocument,
+    oldDocument,
+    userId,
+  }) => {
     try {
       const auditConfig = AuditConfigs.get(collection);
 

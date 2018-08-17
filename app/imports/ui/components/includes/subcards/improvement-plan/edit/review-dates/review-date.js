@@ -28,7 +28,7 @@ Template.IP_ReviewDate_Edit.viewmodel({
   getData() {
     return {
       _id: this._id(),
-      date: this.date()
+      date: this.date(),
     };
-  }
+  },
 });

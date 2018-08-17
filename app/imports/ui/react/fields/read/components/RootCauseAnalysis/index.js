@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import createReadFields from '/imports/ui/react/helpers';
 import FileProvider from '/imports/ui/react/containers/providers/FileProvider';
@@ -16,7 +17,7 @@ const RootCauseAnalysis = ({ causes, fileIds }) => {
   return (
     <div>
       {fields}
-      {!!fileIds.length && fileIds.map((fileId) => (
+      {!!fileIds.length && fileIds.map(fileId => (
         <FileProvider key={fileId} {...{ fileId }} />
       ))}
     </div>
