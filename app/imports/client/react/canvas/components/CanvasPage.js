@@ -15,7 +15,7 @@ import CustomerSegments from './CustomerSegments';
 import CostStructure from './CostStructure';
 import RevenueStreams from './RevenueStreams';
 import { Query as Queries } from '../../../graphql';
-import { RenderSwitch, PreloaderPage } from '../../components';
+import { RenderSwitch, PreloaderPage, ErrorPage } from '../../components';
 
 const CanvasPage = ({ organizationId }) => (
   <Query query={Queries.CANVAS_PAGE} variables={{ organizationId }}>
@@ -23,6 +23,7 @@ const CanvasPage = ({ organizationId }) => (
       <RenderSwitch
         {...{ error, loading }}
         renderLoading={<PreloaderPage />}
+        renderError={queryError => <ErrorPage error={queryError} />}
       >
         <div className="content scroll">
           <Canvas>

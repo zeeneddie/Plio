@@ -28,13 +28,15 @@ const CanvasLayout = () => (
               {...{ loading, error }}
               require={data && data.organization}
               renderLoading={<PreloaderPage />}
-              renderError={queryError => queryError === Errors.NOT_ORG_MEMBER ?
-                <NotFoundPage
-                  subject="organization"
-                  subjectId={orgSerialNumber}
-                />
-                :
-                <ErrorPage error={queryError} />
+              renderError={queryError =>
+                queryError === Errors.NOT_ORG_MEMBER ? (
+                  <NotFoundPage
+                    subject="organization"
+                    subjectId={orgSerialNumber}
+                  />
+                ) : (
+                  <ErrorPage error={queryError} />
+                )
               }
             >
               {organization => (
