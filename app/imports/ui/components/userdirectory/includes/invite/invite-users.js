@@ -1,14 +1,14 @@
 import { Template } from 'meteor/templating';
 import pluralize from 'pluralize';
 import moment from 'moment-timezone';
-import { pluck, reject, isNil, uniq, compose } from 'ramda';
+import { pluck, reject, isNil, uniq, compose, map, trim } from 'ramda';
 import { swal } from 'meteor/plio:bootstrap-sweetalert';
 
 import { inviteMultipleUsersByEmail } from '../../../../../api/organizations/methods';
 import { ALERT_AUTOHIDE_TIME } from '../../../../../api/constants';
 import UsersInviteForm from '../../../../react/forms/components/UsersInviteForm';
 
-const getEmails = compose(uniq, reject(isNil), pluck('value'));
+const getEmails = compose(map(trim), uniq, reject(isNil), pluck('value'));
 
 Template.UserDirectory_InviteUsers.viewmodel({
   mixin: ['modal', 'organization'],
