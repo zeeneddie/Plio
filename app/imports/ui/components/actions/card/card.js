@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
-import { compose, length, props } from 'ramda';
+import { compose, length, props, reject, isNil } from 'ramda';
 
 import { WorkInboxHelp } from '../../../../api/help-messages.js';
 import { ActionPlanOptions } from '../../../../share/constants.js';
@@ -67,11 +67,13 @@ Template.Actions_Card_Read.viewmodel({
 
     remove.call({ _id }, cb);
   },
-  isCompletionBlock: compose(length, props([
-    'completedAt',
-    'completionTargetDate',
-    'completedBy',
-    'toBeCompletedBy',
-    'completionComments',
-  ])),
+  isCompletionBlock(action) {
+    const fields = ['completionComments'];
+    if (action.isCompleted) {
+      fields.push('completedAt', 'completedBy');
+    } else {
+      fields.push('completionTargetDate', 'toBeCompletedBy');
+    }
+    return compose(length, reject(isNil), props(fields))(action);
+  },
 });
