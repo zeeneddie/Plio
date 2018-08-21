@@ -26,8 +26,8 @@ const CanvasBlock = ({
   label,
   help,
   items,
-  renderModal: AddModal,
-  renderEditModal: EditModal,
+  renderModal,
+  renderEditModal,
   goals,
   standards,
   risks,
@@ -46,7 +46,7 @@ const CanvasBlock = ({
         >
           <CanvasSectionHeading>
             <h4>{label}</h4>
-            <AddModal {...{ isOpen, toggle }} />
+            {renderModal({ isOpen, toggle })}
             <CanvasAddButton onClick={isEmpty ? undefined : toggle} />
           </CanvasSectionHeading>
           {isEmpty && (
@@ -89,13 +89,11 @@ const CanvasBlock = ({
                     <WithState initialState={{ _id: null }}>
                       {({ state, setState }) => (
                         <Fragment>
-                          {EditModal && (
-                            <EditModal
-                              _id={state._id}
-                              isOpen={!!state._id}
-                              toggle={() => setState({ _id: null })}
-                            />
-                          )}
+                          {renderEditModal && renderEditModal({
+                            _id: state._id,
+                            isOpen: !!state._id,
+                            toggle: () => setState({ _id: null }),
+                          })}
                           {items && sortByIds(
                             pathOr([], [sectionName, 'order'], canvasSettings),
                             items,
