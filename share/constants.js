@@ -894,3 +894,5 @@ export const CanvasSections = {
   COST_STRUCTURE: 'costStructure',
   REVENUE_STREAMS: 'revenueStreams',
 };
+
+export const MAX_TOTAL_PERCENT = 100;

@@ -3,6 +3,8 @@ import {
   checkLoggedIn,
   flattenInput,
   checkRevenueStreamAccess,
+  checkPercentOfRevenue,
+  checkPercentOfProfit,
   revenueStreamUpdateAfterware,
 } from '../../../../../share/middleware';
 
@@ -13,5 +15,7 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkRevenueStreamAccess(),
+  checkPercentOfRevenue(),
+  checkPercentOfProfit(),
   revenueStreamUpdateAfterware(),
 )(resolver);

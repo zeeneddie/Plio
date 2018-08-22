@@ -3,6 +3,7 @@ import {
   checkLoggedIn,
   flattenInput,
   checkOrgMembership,
+  checkPercentOfTotalCost,
   insertAfterware,
 } from '../../../../../share/middleware';
 
@@ -13,6 +14,7 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkOrgMembership(),
+  checkPercentOfTotalCost(),
   insertAfterware({
     collection: 'CostLines',
     key: 'costLine',

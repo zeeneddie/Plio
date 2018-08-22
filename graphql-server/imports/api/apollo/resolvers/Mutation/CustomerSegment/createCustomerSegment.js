@@ -3,6 +3,7 @@ import {
   checkLoggedIn,
   flattenInput,
   checkOrgMembership,
+  checkPercentOfMarketSize,
   insertAfterware,
 } from '../../../../../share/middleware';
 
@@ -13,6 +14,7 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkOrgMembership(),
+  checkPercentOfMarketSize(),
   insertAfterware({
     collection: 'CustomerSegments',
     key: 'customerSegment',

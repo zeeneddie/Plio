@@ -3,6 +3,7 @@ import {
   checkLoggedIn,
   flattenInput,
   checkCostLineAccess,
+  checkPercentOfTotalCost,
   costLineUpdateAfterware,
 } from '../../../../../share/middleware';
 
@@ -13,5 +14,6 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkCostLineAccess(),
+  checkPercentOfTotalCost(),
   costLineUpdateAfterware(),
 )(resolver);
