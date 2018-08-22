@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getEntityOptions, getUserOptions, lenses, noop, convertDocumentOptions } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
@@ -13,6 +13,7 @@ import { CanvasTypes } from '../../../../share/constants';
 import { validateValueProposition } from '../../../validation';
 import { WithState } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
+import ValueComponentsSubcard from './ValueComponentsSubcard';
 
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
@@ -87,7 +88,10 @@ const ValuePropositionEditModal = ({
                 }}
               >
                 {({ form: { form } }) => (
-                  <ValuePropositionForm {...{ organizationId }} save={form.submit} />
+                  <Fragment>
+                    <ValuePropositionForm {...{ organizationId }} save={form.submit} />
+                    <ValueComponentsSubcard />
+                  </Fragment>
                 )}
               </EntityModalNext>
             )}

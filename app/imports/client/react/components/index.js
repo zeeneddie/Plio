@@ -10,6 +10,8 @@ export * from './styled';
 export * from './Modal';
 export * from './FlowRouter';
 export * from './EntityModalNext';
+export * from './MatchMaker';
+export * from './svg';
 
 export { default as CardBlock } from './CardBlock';
 export { default as InputGroupAddon } from './InputGroupAddon';

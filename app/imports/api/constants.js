@@ -345,6 +345,8 @@ export const Styles = {
     muted: '#818a91',
     lightBlue: '#00BCF2',
     hoverLightBlue: '#59daff',
+    white: '#fff',
+    lightGrey: '#eee',
   },
 };
 /* eslint-enable max-len */

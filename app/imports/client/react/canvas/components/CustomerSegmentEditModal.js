@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getEntityOptions, getUserOptions, lenses, noop, convertDocumentOptions } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
@@ -13,6 +13,7 @@ import { validateCustomerSegment } from '../../../validation';
 import { EntityModalNext } from '../../components';
 import { WithState } from '../../helpers';
 import CustomerSegmentForm from './CustomerSegmentForm';
+import CustomerInsightsSubcard from './CustomerInsightsSubcard';
 
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
@@ -90,7 +91,10 @@ const CustomerSegmentEditModal = ({
                 }}
               >
                 {({ form: { form } }) => (
-                  <CustomerSegmentForm {...{ organizationId }} save={form.submit} />
+                  <Fragment>
+                    <CustomerSegmentForm {...{ organizationId }} save={form.submit} />
+                    <CustomerInsightsSubcard />
+                  </Fragment>
                 )}
               </EntityModalNext>
             )}
