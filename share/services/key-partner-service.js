@@ -43,4 +43,7 @@ export default {
 
     return KeyPartners.update(query, modifier);
   },
+  async delete({ _id }, { collections: { KeyPartners } }) {
+    return KeyPartners.remove({ _id });
+  },
 };

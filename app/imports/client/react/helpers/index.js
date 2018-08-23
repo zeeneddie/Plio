@@ -26,3 +26,4 @@ export { default as onlyUpdateForKeysDeep } from './onlyUpdateForKeysDeep';
 export { default as debounceHandlers } from './debounceHandlers';
 export { default as withApolloPreloader } from './withApolloPreloader';
 export { default as WithState } from './WithState';
+export { default as Composer } from './Composer';
