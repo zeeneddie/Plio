@@ -20,7 +20,12 @@ input UpdateCostLineInput {
   notes: String
 }
 
+input DeleteCostLineInput {
+  _id: ID!
+}
+
 type Mutation {
   createCostLine(input: CreateCostLineInput!): CostLinePayload
   updateCostLine(input: UpdateCostLineInput!): CostLine
+  deleteCostLine(input: DeleteCostLineInput!): CostLine
 }

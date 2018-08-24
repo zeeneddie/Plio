@@ -6,15 +6,17 @@ import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
 
+import { swal } from '../../../util';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { EntityModalNext } from '../../components';
 import { CanvasTypes } from '../../../../share/constants';
 import { validateValueProposition } from '../../../validation';
-import { WithState } from '../../helpers';
+import { WithState, Composer } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
 import ValueComponentsSubcard from './ValueComponentsSubcard';
 
+const getValueProposition = pathOr({}, repeat('valueProposition', 2));
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
   over(lenses.originator, getUserOptions),
@@ -25,7 +27,7 @@ const getInitialValues = compose(
     'matchedTo',
     'notes',
   ]),
-  pathOr({}, repeat('valueProposition', 2)),
+  getValueProposition,
 );
 
 const ValuePropositionEditModal = ({
@@ -36,68 +38,90 @@ const ValuePropositionEditModal = ({
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
-      <Query
-        query={Queries.VALUE_PROPOSITION_CARD}
-        variables={{ _id }}
-        skip={!isOpen}
-        onCompleted={data => setState({ initialValues: getInitialValues(data) })}
-        fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
+      <Composer
+        components={[
+          /* eslint-disable react/no-children-prop */
+          <Query
+            query={Queries.VALUE_PROPOSITION_CARD}
+            variables={{ _id }}
+            skip={!isOpen}
+            onCompleted={data => setState({ initialValues: getInitialValues(data) })}
+            fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
+            children={noop}
+          />,
+          <Mutation mutation={Mutations.UPDATE_VALUE_PROPOSITION} children={noop} />,
+          <Mutation mutation={Mutations.DELETE_VALUE_PROPOSITION} children={noop} />,
+          /* eslint-disable react/no-children-prop */
+        ]}
       >
-        {({ data, ...query }) => (
-          <Mutation mutation={Mutations.UPDATE_VALUE_PROPOSITION}>
-            {updateValueProposition => (
-              <EntityModalNext
-                {...{ isOpen, toggle, initialValues }}
-                isEditMode
-                loading={query.loading}
-                error={query.error}
-                label="Value proposition"
-                guidance="Value proposition"
-                validate={validateValueProposition}
-                onSubmit={(values, form) => {
-                  const currentValues = getInitialValues(data);
-                  const isDirty = diff(values, currentValues);
+        {([{ data, ...query }, updateValueProposition, deleteValueProposition]) => (
+          <EntityModalNext
+            {...{ isOpen, toggle, initialValues }}
+            isEditMode
+            loading={query.loading}
+            error={query.error}
+            label="Value proposition"
+            guidance="Value proposition"
+            validate={validateValueProposition}
+            onDelete={() => {
+              const { title } = getValueProposition(data);
+              swal.promise(
+                {
+                  text: `The value proposition "${title}" will be deleted`,
+                  confirmButtonText: 'Delete',
+                  successTitle: 'Deleted!',
+                  successText: `The value proposition "${title}" was deleted successfully.`,
+                },
+                () => deleteValueProposition({
+                  variables: { input: { _id } },
+                  refetchQueries: [
+                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                  ],
+                }).then(toggle),
+              );
+            }}
+            onSubmit={(values, form) => {
+              const currentValues = getInitialValues(data);
+              const isDirty = diff(values, currentValues);
 
-                  if (!isDirty) return undefined;
+              if (!isDirty) return undefined;
 
-                  const {
+              const {
+                title,
+                originator,
+                color,
+                matchedTo,
+                notes = '',
+              } = values;
+
+              return updateValueProposition({
+                variables: {
+                  input: {
+                    _id,
                     title,
-                    originator,
+                    notes,
                     color,
-                    matchedTo,
-                    notes = '',
-                  } = values;
-
-                  return updateValueProposition({
-                    variables: {
-                      input: {
-                        _id,
-                        title,
-                        notes,
-                        color,
-                        originatorId: originator.value,
-                        matchedTo: convertDocumentOptions({
-                          documentType: CanvasTypes.CUSTOMER_SEGMENT,
-                        }, matchedTo),
-                      },
-                    },
-                  }).then(noop).catch((err) => {
-                    form.reset(currentValues);
-                    throw err;
-                  });
-                }}
-              >
-                {({ form: { form } }) => (
-                  <Fragment>
-                    <ValuePropositionForm {...{ organizationId }} save={form.submit} />
-                    <ValueComponentsSubcard />
-                  </Fragment>
-                )}
-              </EntityModalNext>
+                    originatorId: originator.value,
+                    matchedTo: convertDocumentOptions({
+                      documentType: CanvasTypes.CUSTOMER_SEGMENT,
+                    }, matchedTo),
+                  },
+                },
+              }).then(noop).catch((err) => {
+                form.reset(currentValues);
+                throw err;
+              });
+            }}
+          >
+            {({ form: { form } }) => (
+              <Fragment>
+                <ValuePropositionForm {...{ organizationId }} save={form.submit} />
+                <ValueComponentsSubcard />
+              </Fragment>
             )}
-          </Mutation>
+          </EntityModalNext>
         )}
-      </Query>
+      </Composer>
     )}
   </WithState>
 );

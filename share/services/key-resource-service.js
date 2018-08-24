@@ -35,4 +35,7 @@ export default {
 
     return KeyResources.update(query, modifier);
   },
+  async delete({ _id }, { collections: { KeyResources } }) {
+    return KeyResources.remove({ _id });
+  },
 };

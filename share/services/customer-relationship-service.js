@@ -33,4 +33,7 @@ export default {
 
     return CustomerRelationships.update(query, modifier);
   },
+  async delete({ _id }, { collections: { CustomerRelationships } }) {
+    return CustomerRelationships.remove({ _id });
+  },
 };

@@ -35,4 +35,7 @@ export default {
 
     return KeyActivities.update(query, modifier);
   },
+  async delete({ _id }, { collections: { KeyActivities } }) {
+    return KeyActivities.remove({ _id });
+  },
 };

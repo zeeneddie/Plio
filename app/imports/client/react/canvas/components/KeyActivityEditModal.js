@@ -6,13 +6,15 @@ import { getUserOptions, lenses, noop } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
 
+import { swal } from '../../../util';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateKeyActivity } from '../../../validation';
 import { EntityModalNext } from '../../components';
-import { WithState } from '../../helpers';
+import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
 
+const getKeyActivity = pathOr({}, repeat('keyActivity', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   pick([
@@ -21,7 +23,7 @@ const getInitialValues = compose(
     'color',
     'notes',
   ]),
-  pathOr({}, repeat('keyActivity', 2)),
+  getKeyActivity,
 );
 
 const KeyActivityEditModal = ({
@@ -32,61 +34,83 @@ const KeyActivityEditModal = ({
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
-      <Query
-        query={Queries.KEY_ACTIVITY_CARD}
-        variables={{ _id }}
-        skip={!isOpen}
-        onCompleted={data => setState({ initialValues: getInitialValues(data) })}
-        fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
+      <Composer
+        components={[
+          /* eslint-disable react/no-children-prop */
+          <Query
+            query={Queries.KEY_ACTIVITY_CARD}
+            variables={{ _id }}
+            skip={!isOpen}
+            onCompleted={data => setState({ initialValues: getInitialValues(data) })}
+            fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
+            children={noop}
+          />,
+          <Mutation mutation={Mutations.UPDATE_KEY_ACTIVITY} children={noop} />,
+          <Mutation mutation={Mutations.DELETE_KEY_ACTIVITY} children={noop} />,
+          /* eslint-disable react/no-children-prop */
+        ]}
       >
-        {({ data, ...query }) => (
-          <Mutation mutation={Mutations.UPDATE_KEY_ACTIVITY}>
-            {updateKeyActivity => (
-              <EntityModalNext
-                {...{ isOpen, toggle, initialValues }}
-                isEditMode
-                label="Key activity"
-                loading={query.loading}
-                error={query.error}
-                guidance="Key activity"
-                validate={validateKeyActivity}
-                onSubmit={(values, form) => {
-                  const currentValues = getInitialValues(data);
-                  const isDirty = diff(values, currentValues);
+        {([{ data, ...query }, updateKeyActivity, deleteKeyActivity]) => (
+          <EntityModalNext
+            {...{ isOpen, toggle, initialValues }}
+            isEditMode
+            label="Key activity"
+            loading={query.loading}
+            error={query.error}
+            guidance="Key activity"
+            validate={validateKeyActivity}
+            onDelete={() => {
+              const { title } = getKeyActivity(data);
+              swal.promise(
+                {
+                  text: `The key activity "${title}" will be deleted`,
+                  confirmButtonText: 'Delete',
+                  successTitle: 'Deleted!',
+                  successText: `The key activity "${title}" was deleted successfully.`,
+                },
+                () => deleteKeyActivity({
+                  variables: { input: { _id } },
+                  refetchQueries: [
+                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                  ],
+                }).then(toggle),
+              );
+            }}
+            onSubmit={(values, form) => {
+              const currentValues = getInitialValues(data);
+              const isDirty = diff(values, currentValues);
 
-                  if (!isDirty) return undefined;
+              if (!isDirty) return undefined;
 
-                  const {
+              const {
+                title,
+                originator,
+                color,
+                notes = '',
+              } = values;
+
+              return updateKeyActivity({
+                variables: {
+                  input: {
+                    _id,
                     title,
-                    originator,
+                    notes,
                     color,
-                    notes = '',
-                  } = values;
-
-                  return updateKeyActivity({
-                    variables: {
-                      input: {
-                        _id,
-                        title,
-                        notes,
-                        color,
-                        originatorId: originator.value,
-                      },
-                    },
-                  }).then(noop).catch((err) => {
-                    form.reset(currentValues);
-                    throw err;
-                  });
-                }}
-              >
-                {({ form: { form } }) => (
-                  <CanvasForm {...{ organizationId }} save={form.submit} />
-                )}
-              </EntityModalNext>
+                    originatorId: originator.value,
+                  },
+                },
+              }).then(noop).catch((err) => {
+                form.reset(currentValues);
+                throw err;
+              });
+            }}
+          >
+            {({ form: { form } }) => (
+              <CanvasForm {...{ organizationId }} save={form.submit} />
             )}
-          </Mutation>
+          </EntityModalNext>
         )}
-      </Query>
+      </Composer>
     )}
   </WithState>
 );

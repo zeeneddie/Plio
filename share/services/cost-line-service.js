@@ -37,4 +37,7 @@ export default {
 
     return CostLines.update(query, modifier);
   },
+  async delete({ _id }, { collections: { CostLines } }) {
+    return CostLines.remove({ _id });
+  },
 };

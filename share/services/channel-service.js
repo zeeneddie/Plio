@@ -33,4 +33,7 @@ export default {
 
     return Channels.update(query, modifier);
   },
+  async delete({ _id }, { collections: { Channels } }) {
+    return Channels.remove({ _id });
+  },
 };

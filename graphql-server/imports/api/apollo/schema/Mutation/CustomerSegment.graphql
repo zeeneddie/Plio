@@ -27,7 +27,12 @@ input UpdateCustomerSegmentInput {
   matchedTo: CustomerSegmentMatchedToInput
 }
 
+input DeleteCustomerSegmentInput {
+  _id: ID!
+}
+
 type Mutation {
   createCustomerSegment(input: CreateCustomerSegmentInput!): CustomerSegmentPayload
   updateCustomerSegment(input: UpdateCustomerSegmentInput!): CustomerSegment
+  deleteCustomerSegment(input: DeleteCustomerSegmentInput!): CustomerSegment
 }

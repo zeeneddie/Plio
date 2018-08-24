@@ -41,4 +41,7 @@ export default {
 
     return RevenueStreams.update(query, modifier);
   },
+  async delete({ _id }, { collections: { RevenueStreams } }) {
+    return RevenueStreams.remove({ _id });
+  },
 };

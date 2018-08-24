@@ -18,7 +18,12 @@ input UpdateChannelInput {
   notes: String
 }
 
+input DeleteChannelInput {
+  _id: ID!
+}
+
 type Mutation {
   createChannel(input: CreateChannelInput!): ChannelPayload
   updateChannel(input: UpdateChannelInput!): Channel
+  deleteChannel(input: DeleteChannelInput!): Channel
 }

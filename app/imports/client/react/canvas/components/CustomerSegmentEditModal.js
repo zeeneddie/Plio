@@ -6,15 +6,17 @@ import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
 
+import { swal } from '../../../util';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
 import { CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCustomerSegment } from '../../../validation';
 import { EntityModalNext } from '../../components';
-import { WithState } from '../../helpers';
+import { WithState, Composer } from '../../helpers';
 import CustomerSegmentForm from './CustomerSegmentForm';
 import CustomerInsightsSubcard from './CustomerInsightsSubcard';
 
+const getCustomerSegment = pathOr({}, repeat('customerSegment', 2));
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
   over(lenses.originator, getUserOptions),
@@ -26,7 +28,7 @@ const getInitialValues = compose(
     'matchedTo',
     'notes',
   ]),
-  pathOr({}, repeat('customerSegment', 2)),
+  getCustomerSegment,
 );
 
 const CustomerSegmentEditModal = ({
@@ -37,70 +39,92 @@ const CustomerSegmentEditModal = ({
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
-      <Query
-        query={Queries.CUSTOMER_SEGMENT_CARD}
-        variables={{ _id }}
-        skip={!isOpen}
-        onCompleted={data => setState({ initialValues: getInitialValues(data) })}
-        fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
+      <Composer
+        components={[
+          /* eslint-disable react/no-children-prop */
+          <Query
+            query={Queries.CUSTOMER_SEGMENT_CARD}
+            variables={{ _id }}
+            skip={!isOpen}
+            onCompleted={data => setState({ initialValues: getInitialValues(data) })}
+            fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
+            children={noop}
+          />,
+          <Mutation mutation={Mutations.UPDATE_CUSTOMER_SEGMENT} children={noop} />,
+          <Mutation mutation={Mutations.DELETE_CUSTOMER_SEGMENT} children={noop} />,
+          /* eslint-disable react/no-children-prop */
+        ]}
       >
-        {({ data, ...query }) => (
-          <Mutation mutation={Mutations.UPDATE_CUSTOMER_SEGMENT}>
-            {updateCustomerSegment => (
-              <EntityModalNext
-                {...{ isOpen, toggle, initialValues }}
-                isEditMode
-                loading={query.loading}
-                error={query.error}
-                label="Customer segment"
-                guidance="Customer segment"
-                validate={validateCustomerSegment}
-                onSubmit={(values, form) => {
-                  const currentValues = getInitialValues(data);
-                  const isDirty = diff(values, currentValues);
+        {([{ data, ...query }, updateCustomerSegment, deleteCustomerSegment]) => (
+          <EntityModalNext
+            {...{ isOpen, toggle, initialValues }}
+            isEditMode
+            loading={query.loading}
+            error={query.error}
+            label="Customer segment"
+            guidance="Customer segment"
+            validate={validateCustomerSegment}
+            onDelete={() => {
+              const { title } = getCustomerSegment(data);
+              swal.promise(
+                {
+                  text: `The customer segment "${title}" will be deleted`,
+                  confirmButtonText: 'Delete',
+                  successTitle: 'Deleted!',
+                  successText: `The customer segment "${title}" was deleted successfully.`,
+                },
+                () => deleteCustomerSegment({
+                  variables: { input: { _id } },
+                  refetchQueries: [
+                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                  ],
+                }).then(toggle),
+              );
+            }}
+            onSubmit={(values, form) => {
+              const currentValues = getInitialValues(data);
+              const isDirty = diff(values, currentValues);
 
-                  if (!isDirty) return undefined;
+              if (!isDirty) return undefined;
 
-                  const {
+              const {
+                title,
+                originator = {},
+                color = {},
+                matchedTo,
+                percentOfMarketSize,
+                notes = '',
+              } = values;
+
+              return updateCustomerSegment({
+                variables: {
+                  input: {
+                    _id,
                     title,
-                    originator = {},
-                    color = {},
-                    matchedTo,
+                    notes,
+                    color,
                     percentOfMarketSize,
-                    notes = '',
-                  } = values;
-
-                  return updateCustomerSegment({
-                    variables: {
-                      input: {
-                        _id,
-                        title,
-                        notes,
-                        color,
-                        percentOfMarketSize,
-                        originatorId: originator.value,
-                        matchedTo: convertDocumentOptions({
-                          documentType: CanvasTypes.VALUE_PROPOSITION,
-                        }, matchedTo),
-                      },
-                    },
-                  }).then(noop).catch((err) => {
-                    form.reset(currentValues);
-                    throw err;
-                  });
-                }}
-              >
-                {({ form: { form } }) => (
-                  <Fragment>
-                    <CustomerSegmentForm {...{ organizationId }} save={form.submit} />
-                    <CustomerInsightsSubcard />
-                  </Fragment>
-                )}
-              </EntityModalNext>
+                    originatorId: originator.value,
+                    matchedTo: convertDocumentOptions({
+                      documentType: CanvasTypes.VALUE_PROPOSITION,
+                    }, matchedTo),
+                  },
+                },
+              }).then(noop).catch((err) => {
+                form.reset(currentValues);
+                throw err;
+              });
+            }}
+          >
+            {({ form: { form } }) => (
+              <Fragment>
+                <CustomerSegmentForm {...{ organizationId }} save={form.submit} />
+                <CustomerInsightsSubcard />
+              </Fragment>
             )}
-          </Mutation>
+          </EntityModalNext>
         )}
-      </Query>
+      </Composer>
     )}
   </WithState>
 );

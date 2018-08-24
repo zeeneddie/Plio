@@ -37,4 +37,7 @@ export default {
 
     return ValuePropositions.update(query, modifier);
   },
+  async delete({ _id }, { collections: { ValuePropositions } }) {
+    return ValuePropositions.remove({ _id });
+  },
 };

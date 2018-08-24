@@ -41,4 +41,7 @@ export default {
 
     return CustomerSegments.update(query, modifier);
   },
+  async delete({ _id }, { collections: { CustomerSegments } }) {
+    return CustomerSegments.remove({ _id });
+  },
 };
