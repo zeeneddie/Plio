@@ -1,4 +1,6 @@
 import { applyMiddleware } from 'plio-util';
+
+import { createOrgQueryWhereUserIsMember } from '../../../../../share/mongo';
 import { checkLoggedIn } from '../../../../../share/middleware';
 
 export const resolver = async (
@@ -6,7 +8,7 @@ export const resolver = async (
   vars,
   { collections: { Organizations }, userId },
 ) => {
-  const cursor = Organizations.find({ 'users.userId': userId });
+  const cursor = Organizations.find(createOrgQueryWhereUserIsMember(userId));
 
   return {
     totalCount: cursor.count(),
