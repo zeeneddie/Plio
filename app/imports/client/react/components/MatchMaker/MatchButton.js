@@ -1,10 +1,13 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
 import is from 'styled-is';
 import { StyledMixins } from 'plio-util';
 
-const MatchButton = styled(({ alignRight, alignLeft, ...rest }) => <Button {...rest} />)`
+import { Consumer } from './MatchMaker';
+
+const StyledMatchButton = styled(({ alignRight, alignLeft, ...rest }) => <Button {...rest} />)`
   ${is('hidden')`
     opacity: 0;
     ${StyledMixins.media.mobile`
@@ -30,5 +33,18 @@ const MatchButton = styled(({ alignRight, alignLeft, ...rest }) => <Button {...r
     `}
   `}
 `;
+
+const MatchButton = props => (
+  <Consumer>
+    {({ state: { activeTab } }) => (
+      <StyledMatchButton hidden={!!activeTab} {...props} />
+    )}
+  </Consumer>
+);
+
+MatchButton.propTypes = {
+  alignLeft: PropTypes.bool,
+  alignRight: PropTypes.bool,
+};
 
 export default MatchButton;

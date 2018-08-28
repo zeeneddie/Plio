@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import { CardTitle, Col, TabContent } from 'reactstrap';
+import React from 'react';
+import { CardTitle, Col } from 'reactstrap';
 
 import {
   Subcard,
@@ -13,7 +13,10 @@ import {
   MatchMakerLeftPieSlice,
   MatchMakerRightPieSlice,
   MatchButton,
+  MatchMakerTabs,
 } from '../../components';
+import CustomerNeeds from './CustomerNeeds';
+import CustomerWants from './CustomerWants';
 
 const CustomerInsightsSubcard = () => (
   <Subcard>
@@ -33,31 +36,19 @@ const CustomerInsightsSubcard = () => (
       <CardBlock>
         <Col xs={12} sm={12}>
           <MatchMaker>
-            {({ activeTab }) => (
-              <Fragment>
-                <MatchMakerPie circle>
-                  <MatchMakerLeftPieSlice label="Needs" text="(3)" />
-                  <MatchMakerRightPieSlice label="Wants" text="(3)" />
-                </MatchMakerPie>
-                <MatchButton alignLeft hidden={!!activeTab}>Match</MatchButton>
-                <TabContent {...{ activeTab }}>
-                  <MatchMakerPane
-                    alignLeft
-                    label="Needs"
-                    newEntityButtonTitle="Add a customer need"
-                  >
-                    Needs
-                  </MatchMakerPane>
-                  <MatchMakerPane
-                    alignRight
-                    label="Wants"
-                    newEntityButtonTitle="Add a customer want"
-                  >
-                    Wants
-                  </MatchMakerPane>
-                </TabContent>
-              </Fragment>
-            )}
+            <MatchMakerPie circle>
+              <MatchMakerLeftPieSlice label="Needs" text="(3)" />
+              <MatchMakerRightPieSlice label="Wants" text="(3)" />
+            </MatchMakerPie>
+            <MatchButton alignRight>Match</MatchButton>
+            <MatchMakerTabs>
+              <MatchMakerPane alignLeft>
+                <CustomerNeeds />
+              </MatchMakerPane>
+              <MatchMakerPane alignRight>
+                <CustomerWants />
+              </MatchMakerPane>
+            </MatchMakerTabs>
           </MatchMaker>
         </Col>
       </CardBlock>

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { createContext } from 'react';
 import styled from 'styled-components';
 import { StyledMixins } from 'plio-util';
+import { is } from 'ramda';
 
 import { WithState } from '../../helpers';
 
@@ -27,7 +28,7 @@ const MatchMaker = ({ children }) => (
     {({ state, setState }) => (
       <Provider value={{ state, setState }}>
         <Wrapper>
-          {children({ ...state, setState })}
+          {is(Function, children) ? children({ ...state, setState }) : children}
         </Wrapper>
       </Provider>
     )}
@@ -35,7 +36,7 @@ const MatchMaker = ({ children }) => (
 );
 
 MatchMaker.propTypes = {
-  children: PropTypes.func.isRequired,
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
 };
 
 export { Consumer };

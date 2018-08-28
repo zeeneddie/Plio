@@ -7,3 +7,4 @@ export { default as MatchMakerTopPieSlice } from './MatchMakerTopPieSlice';
 export { default as MatchMakerRightPieSlice } from './MatchMakerRightPieSlice';
 export { default as MatchMakerBottomPieSlice } from './MatchMakerBottomPieSlice';
 export { default as MatchMakerLeftPieSlice } from './MatchMakerLeftPieSlice';
+export { default as MatchMakerTabs } from './MatchMakerTabs';

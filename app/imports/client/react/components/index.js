@@ -12,6 +12,7 @@ export * from './FlowRouter';
 export * from './EntityModalNext';
 export * from './MatchMaker';
 export * from './svg';
+export * from './EntityManager';
 
 export { default as CardBlock } from './CardBlock';
 export { default as InputGroupAddon } from './InputGroupAddon';
