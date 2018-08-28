@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions, lenses, noop } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
@@ -9,10 +9,15 @@ import diff from 'deep-diff';
 import { swal } from '../../../util';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { EntityModalNext } from '../../components';
 import { validateCustomerRelationship } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
+import {
+  EntityModalNext,
+  EntityModalHeader,
+  EntityModalBody,
+  EntityModalForm,
+} from '../../components';
 
 const getCustomerRelationship = pathOr({}, repeat('customerRelationship', 2));
 const getInitialValues = compose(
@@ -52,13 +57,11 @@ const CustomerRelationshipEditModal = ({
       >
         {([{ data, ...query }, updateCustomerRelationship, deleteCustomerRelationship]) => (
           <EntityModalNext
-            {...{ isOpen, toggle, initialValues }}
+            {...{ isOpen, toggle }}
             isEditMode
             loading={query.loading}
             error={query.error}
-            label="Customer relationship"
             guidance="Customer relationship"
-            validate={validateCustomerRelationship}
             onDelete={() => {
               const { title } = getCustomerRelationship(data);
               swal.promise(
@@ -76,38 +79,48 @@ const CustomerRelationshipEditModal = ({
                 }).then(toggle),
               );
             }}
-            onSubmit={(values, form) => {
-              const currentValues = getInitialValues(data);
-              const isDirty = diff(values, currentValues);
-
-              if (!isDirty) return undefined;
-
-              const {
-                title,
-                originator,
-                color,
-                notes = '',
-              } = values;
-
-              return updateCustomerRelationship({
-                variables: {
-                  input: {
-                    _id,
-                    title,
-                    notes,
-                    color,
-                    originatorId: originator.value,
-                  },
-                },
-              }).then(noop).catch((err) => {
-                form.reset(currentValues);
-                throw err;
-              });
-            }}
           >
-            {({ form: { form } }) => (
-              <CanvasForm {...{ organizationId }} save={form.submit} />
-            )}
+            <EntityModalForm
+              {...{ initialValues }}
+              validate={validateCustomerRelationship}
+              onSubmit={(values, form) => {
+                const currentValues = getInitialValues(data);
+                const isDirty = diff(values, currentValues);
+
+                if (!isDirty) return undefined;
+
+                const {
+                  title,
+                  originator,
+                  color,
+                  notes = '',
+                } = values;
+
+                return updateCustomerRelationship({
+                  variables: {
+                    input: {
+                      _id,
+                      title,
+                      notes,
+                      color,
+                      originatorId: originator.value,
+                    },
+                  },
+                }).then(noop).catch((err) => {
+                  form.reset(currentValues);
+                  throw err;
+                });
+              }}
+            >
+              {({ handleSubmit }) => (
+                <Fragment>
+                  <EntityModalHeader label="Customer relationship" />
+                  <EntityModalBody>
+                    <CanvasForm {...{ organizationId }} save={handleSubmit} />
+                  </EntityModalBody>
+                </Fragment>
+              )}
+            </EntityModalForm>
           </EntityModalNext>
         )}
       </Composer>

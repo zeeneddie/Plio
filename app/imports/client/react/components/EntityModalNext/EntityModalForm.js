@@ -1,36 +1,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Form as FinalForm } from 'react-final-form';
-import { Form } from 'reactstrap';
-import { compose, pure, withHandlers } from 'recompose';
+import { Form } from 'react-final-form';
+import { withHandlers } from 'recompose';
 import { FORM_ERROR } from 'final-form';
 
 import { handleGQError } from '../../../../api/handleGQError';
 
-const enhance = compose(
-  withHandlers({
-    onSubmit: ({ onSubmit }) => async (...args) => {
-      try {
-        return await onSubmit(...args);
-      } catch (err) {
-        return { [FORM_ERROR]: handleGQError(err) };
-      }
-    },
-  }),
-  pure,
-);
+const enhance = withHandlers({
+  onSubmit: ({ onSubmit }) => async (...args) => {
+    try {
+      return await onSubmit(...args);
+    } catch (err) {
+      return { [FORM_ERROR]: handleGQError(err) };
+    }
+  },
+});
 
-const EntityModalForm = ({ children, ...props }) => (
-  <FinalForm
-    {...{ ...props }}
-  >
-    {({ handleSubmit, ...form }) => (
-      <Form onSubmit={handleSubmit}>
-        {children(form)}
-      </Form>
-    )}
-  </FinalForm>
-);
+const EntityModalForm = props => <Form {...props} />;
 
 EntityModalForm.defaultProps = {
   subscription: {},
@@ -38,7 +24,6 @@ EntityModalForm.defaultProps = {
 
 EntityModalForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  children: PropTypes.func.isRequired,
   subscription: PropTypes.object,
 };
 

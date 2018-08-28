@@ -9,12 +9,17 @@ import diff from 'deep-diff';
 import { swal } from '../../../util';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { EntityModalNext } from '../../components';
 import { CanvasTypes } from '../../../../share/constants';
 import { validateValueProposition } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
 import ValueComponentsSubcard from './ValueComponentsSubcard';
+import {
+  EntityModalNext,
+  EntityModalHeader,
+  EntityModalBody,
+  EntityModalForm,
+} from '../../components';
 
 const getValueProposition = pathOr({}, repeat('valueProposition', 2));
 const getInitialValues = compose(
@@ -56,13 +61,11 @@ const ValuePropositionEditModal = ({
       >
         {([{ data, ...query }, updateValueProposition, deleteValueProposition]) => (
           <EntityModalNext
-            {...{ isOpen, toggle, initialValues }}
+            {...{ isOpen, toggle }}
             isEditMode
             loading={query.loading}
             error={query.error}
-            label="Value proposition"
             guidance="Value proposition"
-            validate={validateValueProposition}
             onDelete={() => {
               const { title } = getValueProposition(data);
               swal.promise(
@@ -80,45 +83,53 @@ const ValuePropositionEditModal = ({
                 }).then(toggle),
               );
             }}
-            onSubmit={(values, form) => {
-              const currentValues = getInitialValues(data);
-              const isDirty = diff(values, currentValues);
-
-              if (!isDirty) return undefined;
-
-              const {
-                title,
-                originator,
-                color,
-                matchedTo,
-                notes = '',
-              } = values;
-
-              return updateValueProposition({
-                variables: {
-                  input: {
-                    _id,
-                    title,
-                    notes,
-                    color,
-                    originatorId: originator.value,
-                    matchedTo: convertDocumentOptions({
-                      documentType: CanvasTypes.CUSTOMER_SEGMENT,
-                    }, matchedTo),
-                  },
-                },
-              }).then(noop).catch((err) => {
-                form.reset(currentValues);
-                throw err;
-              });
-            }}
           >
-            {({ form: { form } }) => (
-              <Fragment>
-                <ValuePropositionForm {...{ organizationId }} save={form.submit} />
-                <ValueComponentsSubcard />
-              </Fragment>
-            )}
+            <EntityModalForm
+              {...{ initialValues }}
+              validate={validateValueProposition}
+              onSubmit={(values, form) => {
+                const currentValues = getInitialValues(data);
+                const isDirty = diff(values, currentValues);
+
+                if (!isDirty) return undefined;
+
+                const {
+                  title,
+                  originator,
+                  color,
+                  matchedTo,
+                  notes = '',
+                } = values;
+
+                return updateValueProposition({
+                  variables: {
+                    input: {
+                      _id,
+                      title,
+                      notes,
+                      color,
+                      originatorId: originator.value,
+                      matchedTo: convertDocumentOptions({
+                        documentType: CanvasTypes.CUSTOMER_SEGMENT,
+                      }, matchedTo),
+                    },
+                  },
+                }).then(noop).catch((err) => {
+                  form.reset(currentValues);
+                  throw err;
+                });
+              }}
+            >
+              {({ handleSubmit }) => (
+                <Fragment>
+                  <EntityModalHeader label="Value proposition" />
+                  <EntityModalBody>
+                    <ValuePropositionForm {...{ organizationId }} save={handleSubmit} />
+                    <ValueComponentsSubcard />
+                  </EntityModalBody>
+                </Fragment>
+              )}
+            </EntityModalForm>
           </EntityModalNext>
         )}
       </Composer>

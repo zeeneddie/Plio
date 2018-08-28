@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions, lenses, noop } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
@@ -9,10 +9,15 @@ import diff from 'deep-diff';
 import { swal } from '../../../util';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { EntityModalNext } from '../../components';
 import { validateKeyResource } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
+import {
+  EntityModalNext,
+  EntityModalHeader,
+  EntityModalBody,
+  EntityModalForm,
+} from '../../components';
 
 const getKeyResource = pathOr({}, repeat('keyResource', 2));
 const getInitialValues = compose(
@@ -52,13 +57,11 @@ const KeyResourceEditModal = ({
       >
         {([{ data, ...query }, updateKeyResource, deleteKeyResource]) => (
           <EntityModalNext
-            {...{ isOpen, toggle, initialValues }}
+            {...{ isOpen, toggle }}
             isEditMode
             loading={query.loading}
             error={query.error}
-            label="Key resource"
             guidance="Key resource"
-            validate={validateKeyResource}
             onDelete={() => {
               const { title } = getKeyResource(data);
               swal.promise(
@@ -76,38 +79,48 @@ const KeyResourceEditModal = ({
                 }).then(toggle),
               );
             }}
-            onSubmit={(values, form) => {
-              const currentValues = getInitialValues(data);
-              const isDirty = diff(values, currentValues);
-
-              if (!isDirty) return undefined;
-
-              const {
-                title,
-                originator,
-                color,
-                notes = '', // final form sends undefined value instead of an empty string
-              } = values;
-
-              return updateKeyResource({
-                variables: {
-                  input: {
-                    _id,
-                    title,
-                    notes,
-                    color,
-                    originatorId: originator.value,
-                  },
-                },
-              }).then(noop).catch((err) => {
-                form.reset(currentValues);
-                throw err;
-              });
-            }}
           >
-            {({ form: { form } }) => (
-              <CanvasForm {...{ organizationId }} save={form.submit} />
-            )}
+            <EntityModalForm
+              {...{ initialValues }}
+              validate={validateKeyResource}
+              onSubmit={(values, form) => {
+                const currentValues = getInitialValues(data);
+                const isDirty = diff(values, currentValues);
+
+                if (!isDirty) return undefined;
+
+                const {
+                  title,
+                  originator,
+                  color,
+                  notes = '', // final form sends undefined value instead of an empty string
+                } = values;
+
+                return updateKeyResource({
+                  variables: {
+                    input: {
+                      _id,
+                      title,
+                      notes,
+                      color,
+                      originatorId: originator.value,
+                    },
+                  },
+                }).then(noop).catch((err) => {
+                  form.reset(currentValues);
+                  throw err;
+                });
+              }}
+            >
+              {({ handleSubmit }) => (
+                <Fragment>
+                  <EntityModalHeader label="Key resource" />
+                  <EntityModalBody>
+                    <CanvasForm {...{ organizationId }} save={handleSubmit} />
+                  </EntityModalBody>
+                </Fragment>
+              )}
+            </EntityModalForm>
           </EntityModalNext>
         )}
       </Composer>

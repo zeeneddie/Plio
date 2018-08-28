@@ -11,10 +11,15 @@ import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
 import { CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCustomerSegment } from '../../../validation';
-import { EntityModalNext } from '../../components';
 import { WithState, Composer } from '../../helpers';
 import CustomerSegmentForm from './CustomerSegmentForm';
 import CustomerInsightsSubcard from './CustomerInsightsSubcard';
+import {
+  EntityModalNext,
+  EntityModalHeader,
+  EntityModalBody,
+  EntityModalForm,
+} from '../../components';
 
 const getCustomerSegment = pathOr({}, repeat('customerSegment', 2));
 const getInitialValues = compose(
@@ -57,13 +62,11 @@ const CustomerSegmentEditModal = ({
       >
         {([{ data, ...query }, updateCustomerSegment, deleteCustomerSegment]) => (
           <EntityModalNext
-            {...{ isOpen, toggle, initialValues }}
+            {...{ isOpen, toggle }}
             isEditMode
             loading={query.loading}
             error={query.error}
-            label="Customer segment"
             guidance="Customer segment"
-            validate={validateCustomerSegment}
             onDelete={() => {
               const { title } = getCustomerSegment(data);
               swal.promise(
@@ -81,47 +84,55 @@ const CustomerSegmentEditModal = ({
                 }).then(toggle),
               );
             }}
-            onSubmit={(values, form) => {
-              const currentValues = getInitialValues(data);
-              const isDirty = diff(values, currentValues);
-
-              if (!isDirty) return undefined;
-
-              const {
-                title,
-                originator = {},
-                color = {},
-                matchedTo,
-                percentOfMarketSize,
-                notes = '',
-              } = values;
-
-              return updateCustomerSegment({
-                variables: {
-                  input: {
-                    _id,
-                    title,
-                    notes,
-                    color,
-                    percentOfMarketSize,
-                    originatorId: originator.value,
-                    matchedTo: convertDocumentOptions({
-                      documentType: CanvasTypes.VALUE_PROPOSITION,
-                    }, matchedTo),
-                  },
-                },
-              }).then(noop).catch((err) => {
-                form.reset(currentValues);
-                throw err;
-              });
-            }}
           >
-            {({ form: { form } }) => (
-              <Fragment>
-                <CustomerSegmentForm {...{ organizationId }} save={form.submit} />
-                <CustomerInsightsSubcard />
-              </Fragment>
-            )}
+            <EntityModalForm
+              {...{ initialValues }}
+              validate={validateCustomerSegment}
+              onSubmit={(values, form) => {
+                const currentValues = getInitialValues(data);
+                const isDirty = diff(values, currentValues);
+
+                if (!isDirty) return undefined;
+
+                const {
+                  title,
+                  originator = {},
+                  color = {},
+                  matchedTo,
+                  percentOfMarketSize,
+                  notes = '',
+                } = values;
+
+                return updateCustomerSegment({
+                  variables: {
+                    input: {
+                      _id,
+                      title,
+                      notes,
+                      color,
+                      percentOfMarketSize,
+                      originatorId: originator.value,
+                      matchedTo: convertDocumentOptions({
+                        documentType: CanvasTypes.VALUE_PROPOSITION,
+                      }, matchedTo),
+                    },
+                  },
+                }).then(noop).catch((err) => {
+                  form.reset(currentValues);
+                  throw err;
+                });
+              }}
+            >
+              {({ handleSubmit }) => (
+                <Fragment>
+                  <EntityModalHeader label="Customer segment" />
+                  <EntityModalBody>
+                    <CustomerSegmentForm {...{ organizationId }} save={handleSubmit} />
+                    <CustomerInsightsSubcard />
+                  </EntityModalBody>
+                </Fragment>
+              )}
+            </EntityModalForm>
           </EntityModalNext>
         )}
       </Composer>

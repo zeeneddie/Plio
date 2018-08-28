@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions, lenses, noop } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
@@ -10,7 +10,12 @@ import { swal } from '../../../util';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateKeyPartner } from '../../../validation';
-import { EntityModalNext } from '../../components';
+import {
+  EntityModalNext,
+  EntityModalHeader,
+  EntityModalBody,
+  EntityModalForm,
+} from '../../components';
 import { WithState, Composer } from '../../helpers';
 import KeyPartnerForm from './KeyPartnerForm';
 
@@ -54,13 +59,11 @@ const KeyPartnerEditModal = ({
       >
         {([{ data, ...query }, updateKeyPartner, deleteKeyPartner]) => (
           <EntityModalNext
-            {...{ isOpen, toggle, initialValues }}
+            {...{ isOpen, toggle }}
             isEditMode
-            label="Key partner"
             loading={query.loading}
             error={query.error}
-            guidance="Hello World"
-            validate={validateKeyPartner}
+            guidance="Key partner"
             onDelete={() => {
               const { title } = getKeyPartner(data);
               swal.promise(
@@ -78,42 +81,52 @@ const KeyPartnerEditModal = ({
                 }).then(toggle),
               );
             }}
-            onSubmit={(values, form) => {
-              const currentValues = getInitialValues(data);
-              const isDirty = diff(values, currentValues);
-
-              if (!isDirty) return undefined;
-
-              const {
-                title,
-                originator,
-                color,
-                criticality,
-                levelOfSpend,
-                notes = '', // final form sends undefined value instead of an empty string
-              } = values;
-
-              return updateKeyPartner({
-                variables: {
-                  input: {
-                    _id,
-                    title,
-                    notes,
-                    color,
-                    criticality,
-                    levelOfSpend,
-                    originatorId: originator.value,
-                  },
-                },
-              }).then(noop).catch((err) => {
-                form.reset(currentValues);
-                throw err;
-              });
-            }}
           >
-            {({ form: { form } }) => (
-              <KeyPartnerForm {...{ organizationId }} save={form.submit} />
-            )}
+            <EntityModalForm
+              {...{ initialValues }}
+              validate={validateKeyPartner}
+              onSubmit={(values, form) => {
+                const currentValues = getInitialValues(data);
+                const isDirty = diff(values, currentValues);
+
+                if (!isDirty) return undefined;
+
+                const {
+                  title,
+                  originator,
+                  color,
+                  criticality,
+                  levelOfSpend,
+                  notes = '', // final form sends undefined value instead of an empty string
+                } = values;
+
+                return updateKeyPartner({
+                  variables: {
+                    input: {
+                      _id,
+                      title,
+                      notes,
+                      color,
+                      criticality,
+                      levelOfSpend,
+                      originatorId: originator.value,
+                    },
+                  },
+                }).then(noop).catch((err) => {
+                  form.reset(currentValues);
+                  throw err;
+                });
+              }}
+            >
+              {({ handleSubmit }) => (
+                <Fragment>
+                  <EntityModalHeader label="Key partner" />
+                  <EntityModalBody>
+                    <KeyPartnerForm {...{ organizationId }} save={handleSubmit} />
+                  </EntityModalBody>
+                </Fragment>
+              )}
+            </EntityModalForm>
           </EntityModalNext>
         )}
       </Composer>

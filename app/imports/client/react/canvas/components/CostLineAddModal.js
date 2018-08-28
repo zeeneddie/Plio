@@ -1,14 +1,21 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions } from 'plio-util';
+import { Form } from 'reactstrap';
+import { pure } from 'recompose';
 
 import { CanvasColors } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { EntityModalNext } from '../../components';
 import CostLineForm from './CostLineForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { validateCostLine } from '../../../validation';
+import {
+  EntityModalNext,
+  EntityModalHeader,
+  EntityModalBody,
+  EntityModalForm,
+} from '../../components';
 
 const CostLineAddModal = ({
   isOpen,
@@ -19,47 +26,58 @@ const CostLineAddModal = ({
     {({ data: { user } }) => (
       <Mutation mutation={Mutations.CREATE_COST_LINE}>
         {createCostLine => (
-          <EntityModalNext
-            {...{ isOpen, toggle }}
-            label="Cost line"
-            initialValues={{
-              originator: getUserOptions(user),
-              title: '',
-              color: CanvasColors.INDIGO,
-              notes: '',
-              percentOfTotalCost: null,
-            }}
-            onSubmit={(values) => {
-              const errors = validateCostLine(values);
+          <EntityModalNext {...{ isOpen, toggle }}>
+            <EntityModalForm
+              initialValues={{
+                originator: getUserOptions(user),
+                title: '',
+                color: CanvasColors.INDIGO,
+                notes: '',
+                percentOfTotalCost: null,
+              }}
+              onSubmit={(values) => {
+                const errors = validateCostLine(values);
 
-              if (errors) return errors;
+                if (errors) return errors;
 
-              const {
-                title,
-                originator: { value: originatorId },
-                color,
-                percentOfTotalCost,
-                notes,
-              } = values;
+                const {
+                  title,
+                  originator: { value: originatorId },
+                  color,
+                  percentOfTotalCost,
+                  notes,
+                } = values;
 
-              return createCostLine({
-                variables: {
-                  input: {
-                    organizationId,
-                    title,
-                    originatorId,
-                    percentOfTotalCost,
-                    color,
-                    notes,
+                return createCostLine({
+                  variables: {
+                    input: {
+                      organizationId,
+                      title,
+                      originatorId,
+                      percentOfTotalCost,
+                      color,
+                      notes,
+                    },
                   },
-                },
-                refetchQueries: [
-                  { query: Queries.CANVAS_PAGE, variables: { organizationId } },
-                ],
-              }).then(toggle);
-            }}
-          >
-            <CostLineForm {...{ organizationId }} />
+                  refetchQueries: [
+                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                  ],
+                }).then(toggle);
+              }}
+            >
+              {({ handleSubmit }) => (
+                <Fragment>
+                  <EntityModalHeader label="Cost line" />
+                  <EntityModalBody>
+                    <Form onSubmit={handleSubmit}>
+                      {/* hidden input is needed for return key to work */}
+                      <input hidden type="submit" />
+                      <CostLineForm {...{ organizationId }} />
+                    </Form>
+                  </EntityModalBody>
+                </Fragment>
+              )}
+            </EntityModalForm>
           </EntityModalNext>
         )}
       </Mutation>
@@ -73,4 +91,4 @@ CostLineAddModal.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default CostLineAddModal;
+export default pure(CostLineAddModal);
