@@ -1,3 +1,5 @@
+import { CanvasTypes } from '../constants';
+
 export default {
   insert: async ({
     organizationId,
@@ -37,7 +39,25 @@ export default {
 
     return ValuePropositions.update(query, modifier);
   },
-  async delete({ _id }, { collections: { ValuePropositions } }) {
-    return ValuePropositions.remove({ _id });
+  async unmatch({ _id }, { collections: { CustomerSegments } }) {
+    return CustomerSegments.update(
+      {
+        matchedTo: {
+          documentId: _id,
+          documentType: CanvasTypes.VALUE_PROPOSITION,
+        },
+      },
+      { $unset: { matchedTo: '' } },
+      { multi: true },
+    );
+  },
+  async delete(args, context) {
+    const { _id } = args;
+    const { collections: { ValuePropositions } } = context;
+
+    const res = ValuePropositions.remove({ _id });
+    await this.unmatch(args, context);
+
+    return res;
   },
 };
