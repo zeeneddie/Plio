@@ -56,37 +56,47 @@
             {{/with}}
           </div>
 
-          <div class="list-group">
-            <div class="row">
-              <div class="col-sm-6">
-                {{#if this.isCompleted}}
-                  {{> Fields_ListGroupItem_Read
-                      label="Completed date"
-                      text=(renderDate this.completedAt)}}
-                {{else}}
-                  {{> Fields_ListGroupItem_Read
-                      label="Completion target date"
-                      text=(renderDate this.completionTargetDate)}}
-                {{/if}}
+          {{#if isCompletionBlock this}}
+            <div class="list-group">
+              <div class="row">
+                <div class="col-sm-6">
+                  {{#if this.isCompleted}}
+                    {{#with this.completedAt}}
+                      {{> Fields_ListGroupItem_Read
+                        label="Completed date"
+                        text=(renderDate this)}}
+                    {{/with}}
+                  {{else}}
+                    {{#with this.completionTargetDate}}
+                      {{> Fields_ListGroupItem_Read
+                        label="Completion target date"
+                        text=(renderDate this)}}
+                    {{/with}}
+                  {{/if}}
+                </div>
+                <div class="col-sm-6">
+                  {{#if this.isCompleted}}
+                    {{#with this.completedBy}}
+                      {{> Fields_ListGroupItem_Read
+                        label="Completed by"
+                        text=(userNameOrEmail this)}}
+                    {{/with}}
+                  {{else}}
+                    {{#with this.toBeCompletedBy}}
+                      {{> Fields_ListGroupItem_Read
+                        label="To be completed by"
+                        text=(userNameOrEmail this)}}
+                    {{/with}}
+                  {{/if}}
+                </div>
               </div>
-              <div class="col-sm-6">
-                {{#if this.isCompleted}}
-                  {{> Fields_ListGroupItem_Read
-                      label="Completed by"
-                      text=(userNameOrEmail this.completedBy)}}
-                {{else}}
-                  {{> Fields_ListGroupItem_Read
-                      label="To be completed by"
-                      text=(userNameOrEmail this.toBeCompletedBy)}}
-                {{/if}}
-              </div>
-            </div>
-            {{#with this.completionComments}}
-              {{> Fields_ListGroupItem_Read
+              {{#with this.completionComments}}
+                {{> Fields_ListGroupItem_Read
                   label="Comments"
                   text=this}}
-            {{/with}}
-          </div>
+              {{/with}}
+            </div>
+          {{/if}}
 
           {{#if this.toBeVerifiedBy}}
             <div class="list-group">
