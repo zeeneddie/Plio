@@ -20,7 +20,10 @@ import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
 import RevenueStream from './RevenueStream';
 import Channel from './Channel';
-
+import Benefit from './Benefit';
+import Feature from './Feature';
+import Need from './Need';
+import Want from './Want';
 
 export default {
   ...User,
@@ -45,4 +48,8 @@ export default {
   ...CustomerSegment,
   ...RevenueStream,
   ...Channel,
+  ...Benefit,
+  ...Feature,
+  ...Need,
+  ...Want,
 };

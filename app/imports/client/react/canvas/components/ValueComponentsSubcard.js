@@ -1,5 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { CardTitle, Col } from 'reactstrap';
+import { pure } from 'recompose';
 
 import {
   Subcard,
@@ -18,7 +20,7 @@ import {
 import Benefits from './Benefits';
 import Features from './Features';
 
-const ValueComponentsSubcard = () => (
+const ValueComponentsSubcard = ({ documentId, documentType, organizationId }) => (
   <Subcard>
     <SubcardHeader>
       <Pull left>
@@ -49,10 +51,10 @@ const ValueComponentsSubcard = () => (
             <MatchButton alignRight>Match</MatchButton>
             <MatchMakerTabs>
               <MatchMakerPane alignLeft>
-                <Benefits />
+                <Benefits {...{ documentId, documentType, organizationId }} />
               </MatchMakerPane>
               <MatchMakerPane alignRight>
-                <Features />
+                <Features {...{ documentId, documentType, organizationId }} />
               </MatchMakerPane>
             </MatchMakerTabs>
           </MatchMaker>
@@ -62,4 +64,10 @@ const ValueComponentsSubcard = () => (
   </Subcard>
 );
 
-export default ValueComponentsSubcard;
+ValueComponentsSubcard.propTypes = {
+  documentId: PropTypes.string.isRequired,
+  documentType: PropTypes.string.isRequired,
+  organizationId: PropTypes.string.isRequired,
+};
+
+export default pure(ValueComponentsSubcard);

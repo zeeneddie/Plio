@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { FormSpy } from 'react-final-form';
 
+import { renderComponent } from '../../helpers';
 import Subcard from '../Subcard';
 import SubcardHeader from '../SubcardHeader';
 import SubcardBody from '../SubcardBody';
@@ -11,7 +12,7 @@ import Pull from '../Utility/Pull';
 import EntityManagerDeleteButton from './EntityManagerDeleteButton';
 import EntityManagerSaveButton from './EntityManagerSaveButton';
 
-const EntityManagerCard = ({ label, children, ...props }) => (
+const EntityManagerCard = ({ label, ...props }) => (
   <Subcard disabled {...props}>
     <SubcardHeader isNew>
       {label}
@@ -22,7 +23,7 @@ const EntityManagerCard = ({ label, children, ...props }) => (
           <ErrorSection errorText={submitError || error} />
         )}
       </FormSpy>
-      {children}
+      {renderComponent(props)}
       <CardBlock>
         <Pull left>
           <EntityManagerDeleteButton />
@@ -37,7 +38,6 @@ const EntityManagerCard = ({ label, children, ...props }) => (
 
 EntityManagerCard.propTypes = {
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-  children: PropTypes.node,
 };
 
 export default EntityManagerCard;

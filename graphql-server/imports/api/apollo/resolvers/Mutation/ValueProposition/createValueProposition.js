@@ -13,8 +13,8 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkOrgMembership(),
-  insertAfterware({
-    collection: 'ValuePropositions',
+  insertAfterware((root, args, { collections: { ValuePropositions } }) => ({
+    collection: ValuePropositions,
     key: 'valueProposition',
-  }),
+  })),
 )(resolver);

@@ -13,6 +13,10 @@ import Standard from './Standard';
 import Department from './Department';
 import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
+import Benefit from './Benefit';
+import Feature from './Feature';
+import Need from './Need';
+import Want from './Want';
 
 const loaders = {
   User,
@@ -28,6 +32,10 @@ const loaders = {
   Department,
   ValueProposition,
   CustomerSegment,
+  Benefit,
+  Feature,
+  Need,
+  Want,
 };
 
 export const createLoaders = (ctx) => {

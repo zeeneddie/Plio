@@ -10,4 +10,6 @@ type ValueProposition implements BaseEntity, CanvasEntity {
   color: String!
   notes: String
   matchedTo: CustomerSegment
+  benefits: [Benefit]
+  features: [Feature]
 }

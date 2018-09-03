@@ -1,0 +1,7 @@
+type FeaturePayload {
+  feature: Feature
+}
+
+type Mutation {
+  createFeature(input: CreateCustomerElementInput!): FeaturePayload
+}

@@ -15,8 +15,8 @@ export default applyMiddleware(
   flattenInput(),
   checkOrgMembership(),
   checkPercentOfTotalCost(),
-  insertAfterware({
-    collection: 'CostLines',
+  insertAfterware((root, args, { collections: { CostLines } }) => ({
+    collection: CostLines,
     key: 'costLine',
-  }),
+  })),
 )(resolver);

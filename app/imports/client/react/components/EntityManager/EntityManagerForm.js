@@ -54,7 +54,7 @@ const EntityManagerForm = ({
 
 EntityManagerForm.propTypes = {
   component: PropTypes.func,
-  children: PropTypes.func,
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
   render: PropTypes.func,
   onSubmit: PropTypes.func.isRequired,
 };

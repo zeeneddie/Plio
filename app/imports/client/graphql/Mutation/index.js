@@ -15,6 +15,8 @@ import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
 import RevenueStream from './RevenueStream';
 import CanvasSettings from './CanvasSettings';
+import Benefit from './Benefit';
+import Feature from './Feature';
 
 export default {
   ...Goal,
@@ -34,4 +36,6 @@ export default {
   ...CustomerSegment,
   ...RevenueStream,
   ...CanvasSettings,
+  ...Benefit,
+  ...Feature,
 };

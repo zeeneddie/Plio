@@ -118,6 +118,10 @@ export const CollectionNames = {
   CUSTOMER_SEGMENTS: 'CustomerSegments',
   REVENUE_STREAMS: 'RevenueStreams',
   CANVAS_SETTINGS: 'CanvasSettings',
+  BENEFITS: 'Benefits',
+  FEATURES: 'Features',
+  NEEDS: 'Needs',
+  WANTS: 'Wants',
 };
 
 export const DefaultRiskTypes = [
@@ -402,7 +406,7 @@ export const StringLimits = {
     max: 120,
   },
   description: {
-    max: 240,
+    max: 500,
   },
   url: {
     min: 1,
@@ -856,6 +860,10 @@ export const Abbreviations = {
   LESSON: 'LL',
   NONCONFORMITY: 'NC',
   POTENTIAL_GAIN: 'PG',
+  BENEFIT: 'BE',
+  FEATURE: 'FE',
+  NEED: 'NE',
+  WANT: 'WA',
 };
 
 export const AWSDirectives = {
@@ -896,3 +904,12 @@ export const CanvasSections = {
 };
 
 export const MAX_TOTAL_PERCENT = 100;
+
+export const CustomerElementStatuses = {
+  UNMATCHED: 1,
+  MATCHED: 2,
+  1: 'Unmatched',
+  2: 'Matched',
+};
+
+export const ImportanceValues = [1, 2, 3, 4, 5];

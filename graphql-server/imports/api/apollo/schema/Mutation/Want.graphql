@@ -1,0 +1,7 @@
+type WantPayload {
+  want: Want
+}
+
+type Mutation {
+  createWant(input: CreateCustomerElementInput!): WantPayload
+}

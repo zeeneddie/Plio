@@ -125,7 +125,11 @@ const ValuePropositionEditModal = ({
                   <EntityModalHeader label="Value proposition" />
                   <EntityModalBody>
                     <ValuePropositionForm {...{ organizationId }} save={handleSubmit} />
-                    <ValueComponentsSubcard />
+                    <ValueComponentsSubcard
+                      {...{ organizationId }}
+                      documentId={_id}
+                      documentType={CanvasTypes.VALUE_PROPOSITION}
+                    />
                   </EntityModalBody>
                 </Fragment>
               )}

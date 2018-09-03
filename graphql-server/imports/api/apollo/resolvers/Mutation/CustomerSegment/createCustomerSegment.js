@@ -15,8 +15,8 @@ export default applyMiddleware(
   flattenInput(),
   checkOrgMembership(),
   checkPercentOfMarketSize(),
-  insertAfterware({
-    collection: 'CustomerSegments',
+  insertAfterware((root, args, { collections: { CustomerSegments } }) => ({
+    collection: CustomerSegments,
     key: 'customerSegment',
-  }),
+  })),
 )(resolver);

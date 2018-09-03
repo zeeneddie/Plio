@@ -17,8 +17,8 @@ export default applyMiddleware(
   checkOrgMembership(),
   checkPercentOfRevenue(),
   checkPercentOfProfit(),
-  insertAfterware({
-    collection: 'RevenueStreams',
+  insertAfterware((root, args, { collections: { RevenueStreams } }) => ({
+    collection: RevenueStreams,
     key: 'revenueStream',
-  }),
+  })),
 )(resolver);
