@@ -3,6 +3,7 @@ fragment CustomerSegmentPresentation on CustomerSegment {
   title
   color
   matchedTo {
+    _id
     title
   }
 }

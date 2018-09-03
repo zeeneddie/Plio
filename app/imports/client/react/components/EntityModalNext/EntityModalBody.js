@@ -11,7 +11,7 @@ import ErrorSection from '../ErrorSection';
 import { handleGQError } from '../../../../api/handleGQError';
 import { Consumer } from './EntityModal';
 
-const EntityModalBody = ({ children, ...props }) => (
+const EntityModalBody = ({ children, error: bodyError, ...props }) => (
   <Consumer>
     {({
       state: { isGuidanceOpen },
@@ -19,15 +19,22 @@ const EntityModalBody = ({ children, ...props }) => (
       error,
       onDelete,
       guidance,
+      noForm,
     }) => (
       <ModalBody {...props}>
-        <FormSpy subscription={{ submitError: true, error: true }}>
-          {formState => (
-            <ErrorSection
-              errorText={handleGQError(formState.submitError || formState.error || error)}
-            />
-          )}
-        </FormSpy>
+        {noForm ? (
+          <ErrorSection errorText={handleGQError(bodyError || error)} />
+        ) : (
+          <FormSpy subscription={{ submitError: true, error: true }}>
+            {formState => (
+              <ErrorSection
+                errorText={
+                  handleGQError(formState.submitError || formState.error || bodyError || error)
+                }
+              />
+            )}
+          </FormSpy>
+        )}
         {guidance && (
           <GuidancePanel isOpen={isGuidanceOpen} toggle={toggleGuidance}>
             {guidance}
@@ -50,6 +57,7 @@ const EntityModalBody = ({ children, ...props }) => (
 
 EntityModalBody.propTypes = {
   children: PropTypes.node,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 export default EntityModalBody;

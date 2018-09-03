@@ -1,12 +1,19 @@
 import React from 'react';
 import { FormSpy } from 'react-final-form';
 
-import { SaveButton } from '../Buttons';
+import { SaveButton, Button } from '../Buttons';
 import { Consumer } from './EntityModal';
 
 const EntityModalRightHeaderButton = props => (
   <Consumer>
-    {({ loading, isEditMode, toggle }) => (
+    {({
+      loading,
+      isEditMode,
+      toggle,
+      noForm,
+    }) => noForm ? (
+      <Button color="secondary" onClick={toggle}>Close</Button>
+    ) : (
       <FormSpy subscription={{ submitting: true, active: true, dirty: true }}>
         {({
           submitting,

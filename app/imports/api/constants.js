@@ -347,6 +347,7 @@ export const Styles = {
     hoverLightBlue: '#59daff',
     white: '#fff',
     lightGrey: '#eee',
+    darkGrey: '#373a3c',
   },
 };
 /* eslint-enable max-len */
@@ -368,3 +369,8 @@ export const RouteNames = {
 };
 
 export const OptionNone = { label: 'None', value: null };
+
+export const CanvasDoughnutChartSize = {
+  WIDTH: 566,
+  HEIGHT: 424,
+};

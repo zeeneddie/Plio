@@ -1,0 +1,10 @@
+query RevenueStreamsProfitChart($organizationId: ID!) {
+  revenueStreams(organizationId: $organizationId) {
+    revenueStreams {
+      _id
+      title
+      color
+      percentOfProfit
+    }
+  }
+}

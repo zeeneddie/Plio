@@ -11,6 +11,7 @@ const propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   isEditMode: PropTypes.bool,
+  noForm: PropTypes.bool,
   loading: PropTypes.bool,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   guidance: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
@@ -49,6 +50,7 @@ export default class EntityModal extends Component {
       render,
       children,
       guidance,
+      noForm,
       ...rest
     } = this.props;
 
@@ -62,6 +64,7 @@ export default class EntityModal extends Component {
       isEditMode,
       onDelete,
       guidance,
+      noForm,
     };
 
     return (

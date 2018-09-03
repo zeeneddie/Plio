@@ -5,6 +5,7 @@ import { pure } from 'recompose';
 
 import CostLineAddModal from './CostLineAddModal';
 import CostLineEditModal from './CostLineEditModal';
+import CostStructureChartModal from './CostStructureChartModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -41,6 +42,9 @@ const CostStructure = ({ organizationId }) => (
               _id,
             }}
           />
+        )}
+        renderChartModal={({ isOpen, toggle }) => (
+          <CostStructureChartModal {...{ isOpen, toggle, organizationId }} />
         )}
       />
     )}

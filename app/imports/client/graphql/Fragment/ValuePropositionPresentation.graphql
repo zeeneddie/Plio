@@ -3,6 +3,7 @@ fragment ValuePropositionPresentation on ValueProposition {
   title
   color
   matchedTo {
+    _id
     title
   }
 }

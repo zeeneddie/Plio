@@ -12,7 +12,8 @@ const EntityModalLeftHeaderButton = ({ label, ...props }) => (
       toggleGuidance,
       isEditMode,
       toggle,
-    }) => isEditMode ? (
+      noForm,
+    }) => isEditMode || noForm ? (
       <GuidanceIcon isOpen={isGuidanceOpen} onClick={toggleGuidance} {...props} />
     ) : (
       <Button onClick={toggle} {...props}>{label}</Button>

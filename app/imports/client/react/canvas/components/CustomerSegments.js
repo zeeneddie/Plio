@@ -5,6 +5,7 @@ import { pure } from 'recompose';
 
 import CustomerSegmentAddModal from './CustomerSegmentAddModal';
 import CustomerSegmentEditModal from './CustomerSegmentEditModal';
+import CustomerSegmentsChartModal from './CustomerSegmentsChartModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -40,6 +41,9 @@ const CustomerSegments = ({ organizationId }) => (
               _id,
             }}
           />
+        )}
+        renderChartModal={({ isOpen, toggle }) => (
+          <CustomerSegmentsChartModal {...{ isOpen, toggle, organizationId }} />
         )}
       />
     )}

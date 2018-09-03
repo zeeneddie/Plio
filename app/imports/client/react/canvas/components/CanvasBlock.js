@@ -28,12 +28,14 @@ const CanvasBlock = ({
   items,
   renderModal,
   renderEditModal,
+  renderChartModal,
   goals,
   standards,
   risks,
   nonConformities,
   organizationId,
   sectionName,
+  chartButtonIcon,
 }) => {
   const isEmpty = !items.length;
 
@@ -176,9 +178,16 @@ const CanvasBlock = ({
                 )}
               </ButtonGroup>
             </CanvasSectionFooterLabels>
-            {/* TODO: render icon dynamically
-            there should be a modal for chart too */}
-            <CanvasChartButton icon="th-large" />
+            {renderChartModal && !isEmpty && (
+              <WithToggle>
+                {chartModalState => (
+                  <Fragment>
+                    {renderChartModal(chartModalState)}
+                    <CanvasChartButton icon={chartButtonIcon} onClick={chartModalState.toggle} />
+                  </Fragment>
+                )}
+              </WithToggle>
+            )}
           </CanvasSectionFooter>
         </CanvasSection>
       )}
@@ -191,6 +200,7 @@ CanvasBlock.defaultProps = {
   standards: [],
   risks: [],
   nonConformities: [],
+  chartButtonIcon: 'pie-chart',
 };
 
 CanvasBlock.propTypes = {
@@ -205,6 +215,8 @@ CanvasBlock.propTypes = {
   })).isRequired,
   renderModal: PropTypes.func.isRequired,
   renderEditModal: PropTypes.func,
+  renderChartModal: PropTypes.func,
+  chartButtonIcon: PropTypes.string,
   goals: PropTypes.arrayOf(PropTypes.shape({
     sequentialId: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,

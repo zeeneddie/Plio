@@ -5,6 +5,7 @@ import { pure } from 'recompose';
 
 import RevenueStreamAddModal from './RevenueStreamAddModal';
 import RevenueStreamEditModal from './RevenueStreamEditModal';
+import RevenueStreamsChartModal from './RevenueStreamsChartModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -40,6 +41,9 @@ const RevenueStreams = ({ organizationId }) => (
               _id,
             }}
           />
+        )}
+        renderChartModal={({ isOpen, toggle }) => (
+          <RevenueStreamsChartModal {...{ isOpen, toggle, organizationId }} />
         )}
       />
     )}
