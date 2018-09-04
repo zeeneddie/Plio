@@ -17,6 +17,8 @@ import RevenueStream from './RevenueStream';
 import CanvasSettings from './CanvasSettings';
 import Benefit from './Benefit';
 import Feature from './Feature';
+import Need from './Need';
+import Want from './Want';
 
 export default {
   ...Goal,
@@ -38,4 +40,6 @@ export default {
   ...CanvasSettings,
   ...Benefit,
   ...Feature,
+  ...Need,
+  ...Want,
 };

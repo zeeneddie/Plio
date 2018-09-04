@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { CardTitle, Col } from 'reactstrap';
 
@@ -18,7 +19,7 @@ import {
 import CustomerNeeds from './CustomerNeeds';
 import CustomerWants from './CustomerWants';
 
-const CustomerInsightsSubcard = () => (
+const CustomerInsightsSubcard = ({ organizationId, documentId, documentType }) => (
   <Subcard>
     <SubcardHeader>
       <Pull left>
@@ -43,10 +44,10 @@ const CustomerInsightsSubcard = () => (
             <MatchButton alignRight>Match</MatchButton>
             <MatchMakerTabs>
               <MatchMakerPane alignLeft>
-                <CustomerNeeds />
+                <CustomerNeeds {...{ organizationId, documentId, documentType }} />
               </MatchMakerPane>
               <MatchMakerPane alignRight>
-                <CustomerWants />
+                <CustomerWants {...{ organizationId, documentId, documentType }} />
               </MatchMakerPane>
             </MatchMakerTabs>
           </MatchMaker>
@@ -56,6 +57,10 @@ const CustomerInsightsSubcard = () => (
   </Subcard>
 );
 
-CustomerInsightsSubcard.propTypes = {};
+CustomerInsightsSubcard.propTypes = {
+  organizationId: PropTypes.string.isRequired,
+  documentId: PropTypes.string.isRequired,
+  documentType: PropTypes.string.isRequired,
+};
 
 export default CustomerInsightsSubcard;

@@ -128,7 +128,11 @@ const CustomerSegmentEditModal = ({
                   <EntityModalHeader label="Customer segment" />
                   <EntityModalBody>
                     <CustomerSegmentForm {...{ organizationId }} save={handleSubmit} />
-                    <CustomerInsightsSubcard />
+                    <CustomerInsightsSubcard
+                      {...{ organizationId }}
+                      documentId={_id}
+                      documentType={CanvasTypes.CUSTOMER_SEGMENT}
+                    />
                   </EntityModalBody>
                 </Fragment>
               )}
