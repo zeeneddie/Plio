@@ -1,0 +1,31 @@
+type CostLinePayload {
+  costLine: CostLine
+}
+
+input CreateCostLineInput {
+  organizationId: ID!
+  title: String!
+  originatorId: ID!
+  color: String!
+  percentOfTotalCost: Int!
+  notes: String
+}
+
+input UpdateCostLineInput {
+  _id: ID!
+  title: String
+  originatorId: ID
+  color: String
+  percentOfTotalCost: Int
+  notes: String
+}
+
+input DeleteCostLineInput {
+  _id: ID!
+}
+
+type Mutation {
+  createCostLine(input: CreateCostLineInput!): CostLinePayload
+  updateCostLine(input: UpdateCostLineInput!): CostLine
+  deleteCostLine(input: DeleteCostLineInput!): CostLine
+}

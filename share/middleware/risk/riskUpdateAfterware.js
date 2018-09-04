@@ -1,6 +1,8 @@
-export default (getId = (root, args) => args._id) => async (next, root, args, context) => {
-  const _id = getId(root, args, context);
+export default (config = () => ({})) => async (next, root, args, context) => {
+  let { _id } = await config(root, args, context);
   const { collections: { Risks } } = context;
+
+  if (!_id) ({ _id } = args);
 
   await next(root, args, context);
 

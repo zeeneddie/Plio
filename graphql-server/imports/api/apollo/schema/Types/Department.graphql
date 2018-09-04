@@ -1,4 +1,4 @@
-type Department {
+type Department implements BaseEntity {
   _id: ID!
   createdAt: DateTime!
   createdBy: User!

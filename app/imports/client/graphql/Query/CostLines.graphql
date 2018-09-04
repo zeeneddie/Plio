@@ -1,0 +1,9 @@
+query CostLines($organizationId: ID!) {
+  costLines(organizationId: $organizationId) {
+    costLines {
+      _id
+      title
+      color
+    }
+  }
+}

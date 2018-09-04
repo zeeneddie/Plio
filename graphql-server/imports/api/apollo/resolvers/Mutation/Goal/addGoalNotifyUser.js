@@ -3,11 +3,9 @@ import {
   checkLoggedIn,
   flattenInput,
   checkGoalAccess,
-  checkUserOrgMembership,
+  checkOrgMembership,
   userUpdateAfterware,
 } from '../../../../../share/middleware';
-
-const getUserId = (root, args) => args.userId;
 
 export const resolver = async (root, args, { services: { GoalService } }) =>
   GoalService.addToNotify(args);
@@ -16,6 +14,9 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkGoalAccess(),
-  checkUserOrgMembership({ getUserId }),
-  userUpdateAfterware({ getId: getUserId }),
+  checkOrgMembership(({ organizationId }, { userId }) => ({
+    organizationId,
+    userId,
+  })),
+  userUpdateAfterware((root, { userId }) => ({ _id: userId })),
 )(resolver);

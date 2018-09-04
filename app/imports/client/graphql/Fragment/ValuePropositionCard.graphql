@@ -1,0 +1,16 @@
+fragment ValuePropositionCard on ValueProposition {
+  _id
+  title
+  color
+  notes
+  matchedTo {
+    _id
+    title
+  }
+  originator {
+    _id
+    profile {
+      fullName
+    }
+  }
+}

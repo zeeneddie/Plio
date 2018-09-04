@@ -1,0 +1,10 @@
+query CustomerSegmentsChart($organizationId: ID!) {
+  customerSegments(organizationId: $organizationId) {
+    customerSegments {
+      _id
+      title
+      color
+      percentOfMarketSize
+    }
+  }
+}

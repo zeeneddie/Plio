@@ -11,7 +11,6 @@ describe('ensureGoalCanBeCompleted', () => {
     const args = {};
     const context = {
       userId: null,
-      doc: {},
     };
     const promise = ensureGoalCanBeCompleted()(T, root, args, context);
 
@@ -19,15 +18,14 @@ describe('ensureGoalCanBeCompleted', () => {
   });
 
   it('passes', async () => {
-    const root = {};
     const args = {};
     const userId = 1;
     const organizationId = 3;
-    const doc = {
+    const root = {
       isCompleted: false,
       organizationId,
     };
-    const context = { userId, doc };
+    const context = { userId };
 
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 

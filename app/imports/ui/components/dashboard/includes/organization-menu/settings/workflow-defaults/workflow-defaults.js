@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { setWorkflowDefaults } from '/imports/api/organizations/methods';
 import { OrganizationSettingsHelp } from '/imports/api/help-messages';
 
-import Checkbox from '../../../../../../react/forms/components/Checkbox';
+import Checkbox from '../../../../../../../client/react/forms/components/Checkbox';
 
 Template.OrgSettings_WorkflowDefaults.viewmodel({
   mixin: 'modal',

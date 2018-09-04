@@ -1,0 +1,7 @@
+#import "../../Fragment/KeyPartnerCard.graphql"
+
+mutation updateKeyPartner($input: UpdateKeyPartnerInput!) {
+  updateKeyPartner(input: $input) {
+    ...KeyPartnerCard
+  }
+}

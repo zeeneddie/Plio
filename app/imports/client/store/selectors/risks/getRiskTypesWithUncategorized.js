@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { lenses, lensEqById, withUncategorized } from 'plio-util';
 
 import { getRiskTypes } from '../riskTypes';
-import { createUncategorizedType } from '../../../../ui/react/risks/helpers';
+import { createUncategorizedType } from '../../../../client/react/risks/helpers';
 
 const getRisks = (_, { risks }) => risks;
 

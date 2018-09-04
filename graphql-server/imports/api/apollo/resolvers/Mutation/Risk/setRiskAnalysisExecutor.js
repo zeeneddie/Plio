@@ -5,7 +5,7 @@ import {
   checkRiskAccess,
   riskUpdateAfterware,
   ensureAnalysisNotCompleted,
-  checkUserOrgMembership,
+  checkOrgMembership,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { RiskService }, userId }) =>
@@ -16,8 +16,9 @@ export default applyMiddleware(
   flattenInput(),
   checkRiskAccess(),
   ensureAnalysisNotCompleted(),
-  checkUserOrgMembership({
-    getUserId: (root, args) => args.executor,
-  }),
+  checkOrgMembership(({ organizationId }, { executor }) => ({
+    organizationId,
+    userId: executor,
+  })),
   riskUpdateAfterware(),
 )(resolver);

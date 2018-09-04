@@ -1,0 +1,7 @@
+type BenefitPayload {
+  benefit: Benefit
+}
+
+type Mutation {
+  createBenefit(input: CreateCustomerElementInput!): BenefitPayload
+}

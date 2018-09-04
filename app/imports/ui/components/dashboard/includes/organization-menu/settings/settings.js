@@ -9,10 +9,11 @@ import { StandardsBookSections } from '/imports/share/collections/standards-book
 import { isOrgOwner } from '/imports/api/checkers';
 
 import WorkspaceContainer
-  from '/imports/ui/react/organization-settings/containers/WorkspaceContainer';
+  from '/imports/client/react/organization-settings/containers/WorkspaceContainer';
 import ReviewContainer
-  from '/imports/ui/react/organization-settings/containers/ReviewContainer';
-import KeyGoalsSettingsContainer from '/imports/ui/react/organization-settings/containers/KeyGoals';
+  from '/imports/client/react/organization-settings/containers/ReviewContainer';
+import KeyGoalsSettingsContainer from
+  '/imports/client/react/organization-settings/containers/KeyGoals';
 import { DocumentTypes } from '../../../../../../share/constants';
 import { OrganizationSettingsHelp } from '../../../../../../api/help-messages';
 import {
@@ -22,9 +23,9 @@ import {
 } from '../../../../../../api/organizations/methods';
 import { OrgSettingsDocSubs } from '../../../../../../startup/client/subsmanagers';
 import StandardSectionsSubcardContainer from
-  '../../../../../react/organization-settings/containers/StandardSectionsSubcardContainer';
+  '../../../../../../client/react/organization-settings/containers/StandardSectionsSubcardContainer'; // eslint-disable-line max-len
 import StandardTypesSubcardContainer from
-  '../../../../../react/organization-settings/containers/StandardTypesSubcardContainer';
+  '../../../../../../client/react/organization-settings/containers/StandardTypesSubcardContainer';
 
 Template.OrgSettings.viewmodel({
   mixin: 'organization',
@@ -33,6 +34,10 @@ Template.OrgSettings.viewmodel({
   timezone: '',
   OrganizationSettingsHelp,
   onCreated(template) {
+    OrgSettingsDocSubs.subscribe(
+      'currentUserOrganizationBySerialNumber',
+      this.organizationSerialNumber(),
+    );
     template.autorun(() => {
       const organization = this.organization();
 

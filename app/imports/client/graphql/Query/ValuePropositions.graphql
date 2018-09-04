@@ -1,0 +1,9 @@
+#import "../Fragment/ValuePropositionPresentation.graphql"
+
+query ValuePropositions($organizationId: ID!) {
+  valuePropositions(organizationId: $organizationId) {
+    valuePropositions {
+      ...ValuePropositionPresentation
+    }
+  }
+}

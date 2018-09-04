@@ -3,7 +3,7 @@ import { compose } from 'ramda';
 import { lenses, lensEqById, withUncategorized } from 'plio-util';
 
 import { getStandardBookSections } from '../standardBookSections';
-import { createUncategorizedSection } from '../../../../ui/react/standards/helpers';
+import { createUncategorizedSection } from '../../../../client/react/standards/helpers';
 import sortByTitlePrefix from '../../../../api/helpers/sortByTitlePrefix';
 import { getStandardsFromProps } from './state';
 

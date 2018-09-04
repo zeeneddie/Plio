@@ -1,0 +1,13 @@
+type CostLinesQueryPayload {
+  totalCount: Int
+  costLines: [CostLine]
+}
+
+type CostLineQueryPayload {
+  costLine: CostLine
+}
+
+type Query {
+  costLines(organizationId: ID!): CostLinesQueryPayload
+  costLine(_id: ID!): CostLineQueryPayload
+}

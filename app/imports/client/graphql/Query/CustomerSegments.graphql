@@ -1,0 +1,9 @@
+#import "../Fragment/CustomerSegmentPresentation.graphql"
+
+query CustomerSegments($organizationId: ID!) {
+  customerSegments(organizationId: $organizationId) {
+    customerSegments {
+      ...CustomerSegmentPresentation
+    }
+  }
+}

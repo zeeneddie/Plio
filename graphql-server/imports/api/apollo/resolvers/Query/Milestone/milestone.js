@@ -5,7 +5,7 @@ import {
   checkMilestoneAccess,
 } from '../../../../../share/middleware';
 
-export const resolver = async (root, args, { doc }) => ({ milestone: doc });
+export const resolver = async milestone => ({ milestone });
 
 export default applyMiddleware(
   checkLoggedIn(),

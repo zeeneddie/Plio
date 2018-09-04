@@ -13,7 +13,7 @@ export default applyMiddleware(
   flattenInput(),
   checkLoggedIn(),
   checkOrgMembership(),
-  ensureCanChangeGoals((root, args) => args.organizationId),
+  ensureCanChangeGoals((root, { organizationId }) => ({ organizationId })),
   async (next, root, args, context) => {
     const { collections: { Goals } } = context;
     const _id = await next(root, args, context);

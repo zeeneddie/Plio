@@ -1,0 +1,26 @@
+union CustomerElementLinkedDocument = ValueProposition | CustomerSegment
+
+input CustomerElementLinkedToInput {
+  documentId: ID!
+  documentType: String!
+}
+
+input CreateCustomerElementInput {
+  organizationId: ID!
+  title: String!
+  description: String
+  importance: Int!
+  linkedTo: [CustomerElementLinkedToInput!]!
+}
+
+interface CustomerElement {
+  _id: ID!
+  organization: Organization!
+  serialNumber: Int!
+  sequentialId: String!
+  title: String!
+  description: String
+  importance: Int!
+  status: Int!
+  linkedTo: [CustomerElementLinkedDocument!]!
+}

@@ -1,14 +1,28 @@
-import { compose, nthArg, prop } from 'ramda';
+import invariant from 'invariant';
+import { noop } from 'plio-util';
 
 import checkDocAccess from './checkDocAccess';
 
-const getDoc = compose(prop('doc'), nthArg(2));
+export default (config = () => ({})) => async (next, root, args, context) => {
+  const {
+    ids,
+    queries,
+    entities,
+    ...configuration
+  } = await config(root, args, context);
 
-export default ({ getIds, getCollection }) => async (next, root, args, context) => {
-  const ids = await getIds(root, args, context);
-  const docs = await Promise.all(ids.map(
-    _id => checkDocAccess(getCollection)(getDoc, root, { _id }, context),
-  ));
+  invariant(ids || queries || entities, 'ids, queries or entities required');
 
-  return next(root, args, { ...context, docs });
+  if (entities) {
+    await Promise.all(entities.map(entity =>
+      checkDocAccess(() => ({ ...configuration, entity }))(noop, root, args, context)));
+  } else if (queries) {
+    await Promise.all(queries.map(query =>
+      checkDocAccess(() => ({ ...configuration, query }))(noop, root, args, context)));
+  } else {
+    await Promise.all(ids.map(_id =>
+      checkDocAccess(() => ({ ...configuration, query: { _id } }))(noop, root, args, context)));
+  }
+
+  return next(root, args, context);
 };

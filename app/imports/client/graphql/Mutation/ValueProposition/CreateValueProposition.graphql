@@ -1,0 +1,7 @@
+mutation createValueProposition($input: CreateValuePropositionInput!) {
+  createValueProposition(input: $input) {
+    valueProposition {
+      _id
+    }
+  }
+}

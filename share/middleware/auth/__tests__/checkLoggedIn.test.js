@@ -1,5 +1,6 @@
 import { T } from 'ramda';
 import checkLoggedIn from '../checkLoggedIn';
+import Errors from '../../../errors';
 
 describe('checkLoggedIn', () => {
   it('passes', async () => {
@@ -18,8 +19,7 @@ describe('checkLoggedIn', () => {
     const args = {};
     const context = {};
     const promise = checkLoggedIn()(next, root, args, context);
-    const expected = new Error(403);
 
-    await expect(promise).rejects.toEqual(expected);
+    await expect(promise).rejects.toEqual(new Error(Errors.NOT_LOGGED_IN));
   });
 });

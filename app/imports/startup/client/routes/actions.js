@@ -27,7 +27,7 @@ export const renderBlazeComponent = render(BlazeLayout.render.bind(BlazeLayout))
 
 export const renderStandards = renderComponent(async () => {
   const [StandardsProvider] = await Promise.all([
-    import('../../../ui/react/standards/components/Provider'),
+    import('../../../client/react/standards/components/Provider'),
     import('../../../ui/components/standards'),
   ]);
 
@@ -35,16 +35,19 @@ export const renderStandards = renderComponent(async () => {
 });
 
 export const renderRisks = renderComponent(async () =>
-  import('../../../ui/react/risks/components/Provider'));
+  import('../../../client/react/risks/components/Provider'));
 
 export const renderCustomers = renderComponent(async () =>
-  import('../../../ui/react/customers/components/Provider'));
+  import('../../../client/react/customers/components/Provider'));
 
 export const renderHelpDocs = renderComponent(async () =>
-  import('../../../ui/react/help-docs/components/HelpDocsProvider'));
+  import('../../../client/react/help-docs/components/HelpDocsProvider'));
 
 export const renderTransitionalLayout = renderComponent(async () =>
-  import('../../../ui/react/layouts/TransitionalLayout'));
+  import('../../../client/react/layouts/TransitionalLayout'));
+
+export const renderCanvasLayout = renderComponent(async () =>
+  import('../../../client/react/canvas/components/CanvasLayout'));
 
 /* BLAZE */
 

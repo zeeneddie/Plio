@@ -11,7 +11,6 @@ describe('ensureGoalCompletionCanBeUndone', () => {
     const args = {};
     const context = {
       userId: null,
-      doc: {},
     };
     const promise = ensureGoalCompletionCanBeUndone()(T, root, args, context);
 
@@ -19,17 +18,16 @@ describe('ensureGoalCompletionCanBeUndone', () => {
   });
 
   it('passes', async () => {
-    const root = {};
     const args = {};
     const userId = 1;
     const organizationId = 2;
-    const doc = {
+    const root = {
       organizationId,
       isCompleted: true,
       completedAt: new Date(),
       completedBy: 1,
     };
-    const context = { userId, doc };
+    const context = { userId };
 
     Roles.addUsersToRoles(userId, [UserRoles.COMPLETE_ANY_ACTION], organizationId);
 

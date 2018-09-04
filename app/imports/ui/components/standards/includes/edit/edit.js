@@ -11,7 +11,7 @@ import { update, remove, updateViewedBy } from '/imports/api/standards/methods';
 import { isViewed } from '/imports/api/checkers';
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 import StandardRisksSubcardContainer from
-  '../../../../react/standards/containers/StandardRisksSubcardContainer';
+  '../../../../../client/react/standards/containers/StandardRisksSubcardContainer';
 
 Template.EditStandard.viewmodel({
   mixin: [

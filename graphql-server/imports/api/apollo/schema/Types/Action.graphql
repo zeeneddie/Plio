@@ -2,14 +2,14 @@ input ActionGoalsInput {
   isDeleted: Boolean
 }
 
-type Action {
+type Action implements BaseEntity, PlioEntity {
   _id: ID!
   createdAt: DateTime!
   createdBy: User!
   updatedAt: DateTime
   # WARNING: updatedBy may be string 'Plio'. What should we do with that?
   updatedBy: User
-  organization: Organization
+  organization: Organization!
   serialNumber: Int!
   sequentialId: String!
   status: Int!

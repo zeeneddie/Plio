@@ -1,0 +1,7 @@
+type CanvasSettingsQueryPayload {
+  canvasSettings: CanvasSettings
+}
+
+type Query {
+  canvasSettings(organizationId: ID!): CanvasSettingsQueryPayload
+}

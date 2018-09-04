@@ -1,0 +1,29 @@
+type ChannelPayload {
+  channel: Channel
+}
+
+input CreateChannelInput {
+  organizationId: ID!
+  title: String!
+  originatorId: ID!
+  color: String!
+  notes: String
+}
+
+input UpdateChannelInput {
+  _id: ID!
+  title: String
+  originatorId: ID
+  color: String
+  notes: String
+}
+
+input DeleteChannelInput {
+  _id: ID!
+}
+
+type Mutation {
+  createChannel(input: CreateChannelInput!): ChannelPayload
+  updateChannel(input: UpdateChannelInput!): Channel
+  deleteChannel(input: DeleteChannelInput!): Channel
+}

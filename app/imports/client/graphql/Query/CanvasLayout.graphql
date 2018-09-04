@@ -1,0 +1,13 @@
+query CanvasLayout($orgSerialNumber: Int!) {
+  me {
+    _id
+    profile {
+      fullName
+    }
+  }
+
+  organization(serialNumber: $orgSerialNumber) {
+    _id
+    name
+  }
+}

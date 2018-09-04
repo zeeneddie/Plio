@@ -1,3 +1,4 @@
+/* eslint-disable */
 import curry from 'lodash.curry';
 import get from 'lodash.get';
 import property from 'lodash.property';
@@ -20,6 +21,7 @@ export { default as getTitlePrefix } from './getTitlePrefix';
 export { default as getSearchMatchText } from './getSearchMatchText';
 export { default as pickDocuments } from './pickDocuments';
 export { default as pickDeep } from './pickDeep';
+export { default as createStoreMutationObserver } from './createStoreMutationObserver';
 
 export const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
 
@@ -417,6 +419,13 @@ export const compareRisksByScore = (risk1, risk2) => {
 
 export const getSelectedOrgSerialNumber = () => (
   localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`)
+);
+
+export const setSelectedOrgSerialNumber = (serialNumber, userId) => (
+  localStorage.setItem(
+    `${userId || Meteor.userId()}: selectedOrganizationSerialNumber`,
+    serialNumber,
+  )
 );
 
 export const getUserJoinedAt = (organization = {}, userId) => {

@@ -1,0 +1,38 @@
+type CustomerSegmentPayload {
+  customerSegment: CustomerSegment
+}
+
+input CustomerSegmentMatchedToInput {
+  documentId: ID!
+  documentType: String!
+}
+
+input CreateCustomerSegmentInput {
+  organizationId: ID!
+  title: String!
+  originatorId: ID!
+  color: String!
+  percentOfMarketSize: Int!
+  notes: String
+  matchedTo: CustomerSegmentMatchedToInput
+}
+
+input UpdateCustomerSegmentInput {
+  _id: ID!
+  title: String
+  originatorId: ID
+  color: String
+  percentOfMarketSize: Int
+  notes: String
+  matchedTo: CustomerSegmentMatchedToInput
+}
+
+input DeleteCustomerSegmentInput {
+  _id: ID!
+}
+
+type Mutation {
+  createCustomerSegment(input: CreateCustomerSegmentInput!): CustomerSegmentPayload
+  updateCustomerSegment(input: UpdateCustomerSegmentInput!): CustomerSegment
+  deleteCustomerSegment(input: DeleteCustomerSegmentInput!): CustomerSegment
+}

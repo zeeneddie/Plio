@@ -1,0 +1,14 @@
+type KeyPartner implements BaseEntity, CanvasEntity {
+  _id: ID!
+  organization: Organization!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime!
+  updatedBy: User!
+  title: String!
+  originator: User!
+  color: String!
+  criticality: Int!
+  levelOfSpend: Int!
+  notes: String
+}

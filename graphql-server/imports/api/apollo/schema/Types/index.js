@@ -11,6 +11,20 @@ import Milestone from './Milestone.graphql';
 import RiskType from './RiskType.graphql';
 import Standard from './Standard.graphql';
 import Department from './Department.graphql';
+import KeyPartner from './KeyPartner.graphql';
+import KeyActivity from './KeyActivity.graphql';
+import KeyResource from './KeyResource.graphql';
+import CostLine from './CostLine.graphql';
+import CustomerRelationship from './CustomerRelationship.graphql';
+import Channel from './Channel.graphql';
+import ValueProposition from './ValueProposition.graphql';
+import CustomerSegment from './CustomerSegment.graphql';
+import RevenueStream from './RevenueStream.graphql';
+import CanvasSettings from './CanvasSettings.graphql';
+import Benefit from './Benefit.graphql';
+import Feature from './Feature.graphql';
+import Need from './Need.graphql';
+import Want from './Want.graphql';
 
 export default [
   User,
@@ -26,4 +40,18 @@ export default [
   RiskType,
   Standard,
   Department,
+  KeyPartner,
+  KeyActivity,
+  KeyResource,
+  CostLine,
+  CustomerRelationship,
+  Channel,
+  ValueProposition,
+  CustomerSegment,
+  RevenueStream,
+  CanvasSettings,
+  Benefit,
+  Feature,
+  Need,
+  Want,
 ];

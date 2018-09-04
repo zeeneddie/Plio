@@ -108,6 +108,20 @@ export const CollectionNames = {
   USERS: 'users',
   GOALS: 'Goals',
   MILESTONES: 'Milestones',
+  KEY_PARTNERS: 'KeyPartners',
+  KEY_ACTIVITIES: 'KeyActivities',
+  KEY_RESOURCES: 'KeyResources',
+  COST_LINES: 'CostLines',
+  CUSTOMER_RELATIONSHIPS: 'CustomerRelationships',
+  CHANNELS: 'Channels',
+  VALUE_PROPOSITIONS: 'ValuePropositions',
+  CUSTOMER_SEGMENTS: 'CustomerSegments',
+  REVENUE_STREAMS: 'RevenueStreams',
+  CANVAS_SETTINGS: 'CanvasSettings',
+  BENEFITS: 'Benefits',
+  FEATURES: 'Features',
+  NEEDS: 'Needs',
+  WANTS: 'Wants',
 };
 
 export const DefaultRiskTypes = [
@@ -301,6 +315,18 @@ export const ProblemTypes = {
   POTENTIAL_GAIN: 'potential gain',
 };
 
+export const CanvasTypes = {
+  KEY_PARTNER: 'key-partner',
+  KEY_ACTIVITY: 'key-activity',
+  KEY_RESOURCE: 'key-resource',
+  VALUE_PROPOSITION: 'value-proposition',
+  CUSTOMER_RELATIONSHIP: 'customer-relationship',
+  CHANNEL: 'channel',
+  CUSTOMER_SEGMENT: 'customer-segment',
+  COST_LINE: 'cost-line',
+  REVENUE_STREAM: 'revenue-stream',
+};
+
 export const DocumentTypes = {
   STANDARD: 'standard',
   GOAL: 'goal',
@@ -380,7 +406,7 @@ export const StringLimits = {
     max: 120,
   },
   description: {
-    max: 240,
+    max: 500,
   },
   url: {
     min: 1,
@@ -790,7 +816,7 @@ export const GoalStatuses = {
   3: 'Closed - marked as complete',
 };
 
-export const GoalColors = {
+export const Colors = {
   PINK: '#F06292',
   PLUM: '#9C27B0',
   PURPLE: '#673AB7',
@@ -808,6 +834,8 @@ export const GoalColors = {
   MUTED_CYAN: '#80DEEA',
   MUTED_TEAL: '#80CBC4',
 };
+
+export const GoalColors = { ...Colors };
 
 export const AllowedActionLinkedDocTypes = [
   ...Object.values(ProblemTypes),
@@ -832,6 +860,10 @@ export const Abbreviations = {
   LESSON: 'LL',
   NONCONFORMITY: 'NC',
   POTENTIAL_GAIN: 'PG',
+  BENEFIT: 'BE',
+  FEATURE: 'FE',
+  NEED: 'NE',
+  WANT: 'WA',
 };
 
 export const AWSDirectives = {
@@ -847,3 +879,37 @@ export const AWSDirectives = {
   HELP_DOC_FILES: 'helpDocFiles',
   GOAL_FILES: 'goalFiles',
 };
+
+export const Criticality = {
+  LOW: 1,
+  MEDIUM: 2,
+  HIGH: 3,
+  VERY_HIGH: 4,
+};
+
+export const LevelOfSpend = { ...Criticality };
+
+export const CanvasColors = { ...Colors };
+
+export const CanvasSections = {
+  KEY_PARTNERS: 'keyPartners',
+  KEY_ACTIVITIES: 'keyActivities',
+  KEY_RESOURCES: 'keyResources',
+  VALUE_PROPOSITIONS: 'valuePropositions',
+  CUSTOMER_RELATIONSHIPS: 'customerRelationships',
+  CHANNELS: 'channels',
+  CUSTOMER_SEGMENTS: 'customerSegments',
+  COST_STRUCTURE: 'costStructure',
+  REVENUE_STREAMS: 'revenueStreams',
+};
+
+export const MAX_TOTAL_PERCENT = 100;
+
+export const CustomerElementStatuses = {
+  UNMATCHED: 1,
+  MATCHED: 2,
+  1: 'Unmatched',
+  2: 'Matched',
+};
+
+export const ImportanceValues = [1, 2, 3, 4, 5];

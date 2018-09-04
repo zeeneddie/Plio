@@ -1,0 +1,29 @@
+type CustomerRelationshipPayload {
+  customerRelationship: CustomerRelationship
+}
+
+input CreateCustomerRelationshipInput {
+  organizationId: ID!
+  title: String!
+  originatorId: ID!
+  color: String!
+  notes: String
+}
+
+input UpdateCustomerRelationshipInput {
+  _id: ID!
+  title: String
+  originatorId: ID
+  color: String
+  notes: String
+}
+
+input DeleteCustomerRelationshipInput {
+  _id: ID!
+}
+
+type Mutation {
+  createCustomerRelationship(input: CreateCustomerRelationshipInput!): CustomerRelationshipPayload
+  updateCustomerRelationship(input: UpdateCustomerRelationshipInput!): CustomerRelationship
+  deleteCustomerRelationship(input: DeleteCustomerRelationshipInput!): CustomerRelationship
+}

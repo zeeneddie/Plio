@@ -1,9 +1,7 @@
 import { checkDocAccess } from '../document';
 
-export default () => async (next, root, args, context) => {
-  const { collections: { LessonsLearned } } = context;
-
-  await checkDocAccess(LessonsLearned);
-
-  return next(root, args, context);
-};
+export default (config = () => ({})) =>
+  checkDocAccess(async (root, args, context) => ({
+    ...await config(root, args, context),
+    collection: context.collections.LessonsLearned,
+  }));

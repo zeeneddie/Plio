@@ -1,4 +1,7 @@
-import checkDocAccess from '../document/checkDocAccess';
-import { Goals } from '../../collections';
+import { checkDocAccess } from '../document';
 
-export default () => checkDocAccess(() => Goals);
+export default (config = () => ({})) =>
+  checkDocAccess(async (root, args, context) => ({
+    ...await config(root, args, context),
+    collection: context.collections.Goals,
+  }));

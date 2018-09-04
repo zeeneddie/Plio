@@ -1,0 +1,9 @@
+#import "../Fragment/ValuePropositionCard.graphql"
+
+query ValuePropositionCard($_id: ID!) {
+  valueProposition(_id: $_id) {
+    valueProposition {
+      ...ValuePropositionCard
+    }
+  }
+}
