@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Form as FinalForm } from 'react-final-form';
 import { Form } from 'reactstrap';
 import { is } from 'ramda';
 import { FORM_ERROR } from 'final-form';
 
-import { handleGQError } from '../../../../api/handleGQError';
 import { renderComponent } from '../../helpers';
 import { Consumer } from './EntityManagerCards';
+import EntityForm from './EntityForm';
 
 const EntityManagerForm = ({
   onSubmit,
@@ -18,8 +17,7 @@ const EntityManagerForm = ({
 }) => (
   <Consumer>
     {({ fields, field: { index } }) => (
-      <FinalForm
-        subscription={{}}
+      <EntityForm
         onSubmit={async (values, form) => {
           try {
             const result = await onSubmit(values, form);
@@ -32,7 +30,7 @@ const EntityManagerForm = ({
 
             return result;
           } catch (err) {
-            return { [FORM_ERROR]: handleGQError(err) };
+            throw err;
           }
         }}
         {...props}
@@ -47,7 +45,7 @@ const EntityManagerForm = ({
             })}
           </Form>
         )}
-      </FinalForm>
+      </EntityForm>
     )}
   </Consumer>
 );

@@ -22,6 +22,8 @@ import {
 } from '../../components';
 
 const getValueProposition = pathOr({}, repeat('valueProposition', 2));
+const getBenefits = pathOr([], repeat('benefits', 2));
+const getFeatures = pathOr([], repeat('features', 2));
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
   over(lenses.originator, getUserOptions),
@@ -48,7 +50,7 @@ const ValuePropositionEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.VALUE_PROPOSITION_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -127,6 +129,8 @@ const ValuePropositionEditModal = ({
                     <ValuePropositionForm {...{ organizationId }} save={handleSubmit} />
                     <ValueComponentsSubcard
                       {...{ organizationId }}
+                      benefits={getBenefits(data)}
+                      features={getFeatures(data)}
                       documentId={_id}
                       documentType={CanvasTypes.VALUE_PROPOSITION}
                     />

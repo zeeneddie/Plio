@@ -22,6 +22,8 @@ import {
 } from '../../components';
 
 const getCustomerSegment = pathOr({}, repeat('customerSegment', 2));
+const getNeeds = pathOr([], repeat('needs', 2));
+const getWants = pathOr([], repeat('wants', 2));
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
   over(lenses.originator, getUserOptions),
@@ -49,7 +51,7 @@ const CustomerSegmentEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.CUSTOMER_SEGMENT_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -132,6 +134,8 @@ const CustomerSegmentEditModal = ({
                       {...{ organizationId }}
                       documentId={_id}
                       documentType={CanvasTypes.CUSTOMER_SEGMENT}
+                      needs={getNeeds(data)}
+                      wants={getWants(data)}
                     />
                   </EntityModalBody>
                 </Fragment>

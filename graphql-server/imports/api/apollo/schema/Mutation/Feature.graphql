@@ -4,4 +4,5 @@ type FeaturePayload {
 
 type Mutation {
   createFeature(input: CreateCustomerElementInput!): FeaturePayload
+  updateFeature(input: UpdateCustomerElementInput!): Feature
 }

@@ -9,7 +9,6 @@ import {
 } from '../../constants';
 
 export { default as WorkspaceDefaultsSchema } from './workspace-defaults';
-export { default as CustomerElementSchema } from './customer-element-schema';
 
 export const IdSchema = new SimpleSchema({
   _id: {

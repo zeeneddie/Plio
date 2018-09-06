@@ -23,4 +23,26 @@ export default {
       linkedTo,
     });
   },
+
+  async update(args, context) {
+    const {
+      _id,
+      title,
+      description,
+      importance,
+    } = args;
+    const { userId } = context;
+    const collection = await this.collection(context);
+    const query = { _id };
+    const modifier = {
+      $set: {
+        title,
+        description,
+        importance,
+        updatedBy: userId,
+      },
+    };
+
+    return collection.update(query, modifier);
+  },
 };

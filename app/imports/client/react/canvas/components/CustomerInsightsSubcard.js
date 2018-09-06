@@ -19,7 +19,13 @@ import {
 import CustomerNeeds from './CustomerNeeds';
 import CustomerWants from './CustomerWants';
 
-const CustomerInsightsSubcard = ({ organizationId, documentId, documentType }) => (
+const CustomerInsightsSubcard = ({
+  organizationId,
+  documentId,
+  documentType,
+  needs,
+  wants,
+}) => (
   <Subcard>
     <SubcardHeader>
       <Pull left>
@@ -44,10 +50,24 @@ const CustomerInsightsSubcard = ({ organizationId, documentId, documentType }) =
             <MatchButton alignRight>Match</MatchButton>
             <MatchMakerTabs>
               <MatchMakerPane alignLeft>
-                <CustomerNeeds {...{ organizationId, documentId, documentType }} />
+                <CustomerNeeds
+                  {...{
+                    organizationId,
+                    documentId,
+                    documentType,
+                    needs,
+                  }}
+                />
               </MatchMakerPane>
               <MatchMakerPane alignRight>
-                <CustomerWants {...{ organizationId, documentId, documentType }} />
+                <CustomerWants
+                  {...{
+                    organizationId,
+                    documentId,
+                    documentType,
+                    wants,
+                  }}
+                />
               </MatchMakerPane>
             </MatchMakerTabs>
           </MatchMaker>
@@ -61,6 +81,8 @@ CustomerInsightsSubcard.propTypes = {
   organizationId: PropTypes.string.isRequired,
   documentId: PropTypes.string.isRequired,
   documentType: PropTypes.string.isRequired,
+  needs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  wants: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default CustomerInsightsSubcard;

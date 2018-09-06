@@ -4,4 +4,5 @@ type BenefitPayload {
 
 type Mutation {
   createBenefit(input: CreateCustomerElementInput!): BenefitPayload
+  updateBenefit(input: UpdateCustomerElementInput!): Benefit
 }

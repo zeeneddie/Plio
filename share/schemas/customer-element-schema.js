@@ -1,13 +1,13 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { pickNonInt } from 'plio-util';
 
-import { BaseEntitySchema, OrganizationIdSchema } from './';
+import { BaseEntitySchema, OrganizationIdSchema } from './schemas';
 import {
   StringLimits,
   ImportanceValues,
   CustomerElementStatuses,
   CanvasTypes,
-} from '../../constants';
+} from '../constants';
 
 const LinkedToSchema = new SimpleSchema({
   documentId: {
@@ -24,6 +24,10 @@ const CustomerElementSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
   {
+    serialNumber: {
+      type: Number,
+      min: 1,
+    },
     title: {
       type: String,
       min: StringLimits.title.min,
