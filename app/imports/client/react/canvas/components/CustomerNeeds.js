@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Mutation } from 'react-apollo';
 import { pure } from 'recompose';
+import { noop } from 'plio-util';
 
 import {
   EntityManager,
@@ -12,19 +13,38 @@ import {
   EntityManagerItem,
   EntityManagerForm,
 } from '../../components';
-import CustomerNeedSubcard from './CustomerNeedSubcard';
+import CustomerElementSubcard from './CustomerElementSubcard';
 import CustomerElementForm from './CustomerElementForm';
 import { validateCustomerElement } from '../../../validation';
-import { Mutation as Mutations } from '../../../graphql';
+import { Mutation as Mutations, Query as Queries } from '../../../graphql';
 import { getCustomerElementInitialValues } from '../helpers';
+import { Composer } from '../../helpers';
 
-const CustomerNeeds = ({ documentId, documentType, organizationId }) => (
-  <EntityManager>
-    {[].map(need => (
-      <EntityManagerItem entity={need} component={CustomerNeedSubcard} />
-    ))}
-    <Mutation mutation={Mutations.CREATE_NEED}>
-      {createNeed => (
+const CustomerNeeds = ({
+  needs,
+  documentId,
+  documentType,
+  organizationId,
+}) => (
+  <Composer
+    components={[
+      /* eslint-disable react/no-children-prop */
+      <Mutation mutation={Mutations.CREATE_NEED} children={noop} />,
+      <Mutation mutation={Mutations.UPDATE_NEED} children={noop} />,
+      /* eslint-enable react/no-children-prop */
+    ]}
+  >
+    {([createNeed, updateNeed]) => (
+      <EntityManager>
+        {needs.map(need => (
+          <EntityManagerItem
+            key={need._id}
+            entity={need}
+            customerElement={need}
+            onUpdate={updateNeed}
+            component={CustomerElementSubcard}
+          />
+        ))}
         <EntityManagerForms>
           <EntityManagerCards
             label="New customer need"
@@ -55,6 +75,10 @@ const CustomerNeeds = ({ documentId, documentType, organizationId }) => (
                     }],
                   },
                 },
+                refetchQueries: [{
+                  query: Queries.CUSTOMER_SEGMENT_CARD,
+                  variables: { _id: documentId, organizationId },
+                }],
               });
             }}
           >
@@ -62,15 +86,16 @@ const CustomerNeeds = ({ documentId, documentType, organizationId }) => (
           </EntityManagerCards>
           <EntityManagerAddButton>Add a customer need</EntityManagerAddButton>
         </EntityManagerForms>
-      )}
-    </Mutation>
-  </EntityManager>
+      </EntityManager>
+    )}
+  </Composer>
 );
 
 CustomerNeeds.propTypes = {
   documentId: PropTypes.string.isRequired,
   documentType: PropTypes.string.isRequired,
   organizationId: PropTypes.string.isRequired,
+  needs: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default pure(CustomerNeeds);

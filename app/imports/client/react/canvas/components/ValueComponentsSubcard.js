@@ -20,7 +20,13 @@ import {
 import Benefits from './Benefits';
 import Features from './Features';
 
-const ValueComponentsSubcard = ({ documentId, documentType, organizationId }) => (
+const ValueComponentsSubcard = ({
+  documentId,
+  documentType,
+  organizationId,
+  benefits,
+  features,
+}) => (
   <Subcard>
     <SubcardHeader>
       <Pull left>
@@ -30,7 +36,7 @@ const ValueComponentsSubcard = ({ documentId, documentType, organizationId }) =>
       </Pull>
       <Pull right>
         <CardTitle>
-          11
+          {benefits.length + features.length || ''}
         </CardTitle>
       </Pull>
     </SubcardHeader>
@@ -41,20 +47,34 @@ const ValueComponentsSubcard = ({ documentId, documentType, organizationId }) =>
             <MatchMakerPie square>
               <MatchMakerTopPieSlice
                 label="Benefits"
-                text="(3, 2 matched)"
+                text={`${benefits.length}, 0 matched`}
               />
               <MatchMakerBottomPieSlice
                 label="Features"
-                text="(4, 2 matched)"
+                text={`${features.length}, 0 matched`}
               />
             </MatchMakerPie>
             <MatchButton alignRight>Match</MatchButton>
             <MatchMakerTabs>
               <MatchMakerPane alignLeft>
-                <Benefits {...{ documentId, documentType, organizationId }} />
+                <Benefits
+                  {...{
+                    documentId,
+                    documentType,
+                    organizationId,
+                    benefits,
+                  }}
+                />
               </MatchMakerPane>
               <MatchMakerPane alignRight>
-                <Features {...{ documentId, documentType, organizationId }} />
+                <Features
+                  {...{
+                    documentId,
+                    documentType,
+                    organizationId,
+                    features,
+                  }}
+                />
               </MatchMakerPane>
             </MatchMakerTabs>
           </MatchMaker>
@@ -68,6 +88,8 @@ ValueComponentsSubcard.propTypes = {
   documentId: PropTypes.string.isRequired,
   documentType: PropTypes.string.isRequired,
   organizationId: PropTypes.string.isRequired,
+  benefits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  features: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default pure(ValueComponentsSubcard);

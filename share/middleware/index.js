@@ -20,3 +20,7 @@ export * from './keyActivity';
 export * from './customerSegment';
 export * from './valueProposition';
 export * from './canvasSettings';
+export * from './benefit';
+export * from './feature';
+export * from './need';
+export * from './want';

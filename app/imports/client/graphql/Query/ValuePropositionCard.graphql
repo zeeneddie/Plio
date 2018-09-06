@@ -1,9 +1,22 @@
 #import "../Fragment/ValuePropositionCard.graphql"
+#import "../Fragment/CustomerElementCard.graphql"
 
-query ValuePropositionCard($_id: ID!) {
+query ValuePropositionCard($_id: ID!, $organizationId: ID!) {
   valueProposition(_id: $_id) {
     valueProposition {
       ...ValuePropositionCard
+    }
+  }
+
+  benefits(organizationId: $organizationId) {
+    benefits {
+      ...CustomerElementCard
+    }
+  }
+
+  features(organizationId: $organizationId) {
+    features {
+      ...CustomerElementCard
     }
   }
 }

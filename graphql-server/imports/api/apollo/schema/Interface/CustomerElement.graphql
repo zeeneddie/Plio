@@ -13,6 +13,13 @@ input CreateCustomerElementInput {
   linkedTo: [CustomerElementLinkedToInput!]!
 }
 
+input UpdateCustomerElementInput {
+  _id: ID!
+  title: String
+  description: String
+  importance: Int
+}
+
 interface CustomerElement {
   _id: ID!
   organization: Organization!

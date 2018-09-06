@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Mutation } from 'react-apollo';
 import { pure } from 'recompose';
+import { noop } from 'plio-util';
 
 import {
   EntityManager,
@@ -12,19 +13,38 @@ import {
   EntityManagerItem,
   EntityManagerForm,
 } from '../../components';
-import FeatureSubcard from './FeatureSubcard';
+import CustomerElementSubcard from './CustomerElementSubcard';
 import CustomerElementForm from './CustomerElementForm';
 import { validateCustomerElement } from '../../../validation';
-import { Mutation as Mutations } from '../../../graphql';
+import { Mutation as Mutations, Query as Queries } from '../../../graphql';
 import { getCustomerElementInitialValues } from '../helpers';
+import { Composer } from '../../helpers';
 
-const Features = ({ documentId, documentType, organizationId }) => (
-  <EntityManager>
-    {[].map(feature => (
-      <EntityManagerItem entity={feature} component={FeatureSubcard} />
-    ))}
-    <Mutation mutation={Mutations.CREATE_FEATURE}>
-      {createFeature => (
+const Features = ({
+  documentId,
+  documentType,
+  organizationId,
+  features,
+}) => (
+  <Composer
+    components={[
+      /* eslint-disable react/no-children-prop */
+      <Mutation mutation={Mutations.CREATE_FEATURE} children={noop} />,
+      <Mutation mutation={Mutations.UPDATE_FEATURE} children={noop} />,
+      /* eslint-enable react/no-children-prop */
+    ]}
+  >
+    {([createFeature, updateFeature]) => (
+      <EntityManager>
+        {features.map(feature => (
+          <EntityManagerItem
+            key={feature._id}
+            entity={feature}
+            customerElement={feature}
+            onUpdate={updateFeature}
+            component={CustomerElementSubcard}
+          />
+        ))}
         <EntityManagerForms>
           <EntityManagerCards
             label="New feature"
@@ -55,6 +75,10 @@ const Features = ({ documentId, documentType, organizationId }) => (
                     }],
                   },
                 },
+                refetchQueries: [{
+                  query: Queries.VALUE_PROPOSITION_CARD,
+                  variables: { _id: documentId, organizationId },
+                }],
               });
             }}
           >
@@ -62,15 +86,16 @@ const Features = ({ documentId, documentType, organizationId }) => (
           </EntityManagerCards>
           <EntityManagerAddButton>Add a feature</EntityManagerAddButton>
         </EntityManagerForms>
-      )}
-    </Mutation>
-  </EntityManager>
+      </EntityManager>
+    )}
+  </Composer>
 );
 
 Features.propTypes = {
   documentId: PropTypes.string.isRequired,
   documentType: PropTypes.string.isRequired,
   organizationId: PropTypes.string.isRequired,
+  features: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default pure(Features);

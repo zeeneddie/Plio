@@ -47,4 +47,24 @@ describe('Customer element service', () => {
       createdBy: context.userId,
     });
   });
+
+  test('update', async () => {
+    const { _id } = await context.collections.Benefits.findOne();
+    const args = {
+      _id,
+      title: faker.random.word(),
+      description: faker.random.words(),
+      importance: faker.random.number(),
+    };
+
+    await CustomerElementService.update(args, context);
+
+    const benefit = await context.collections.Benefits.findOne({ _id });
+
+    expect(benefit).toEqual({
+      ...benefit,
+      ...args,
+      updatedBy: context.userId,
+    });
+  });
 });

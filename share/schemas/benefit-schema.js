@@ -1,1 +1,1 @@
-export { CustomerElementSchema as default } from './schemas';
+export { default } from './customer-element-schema';

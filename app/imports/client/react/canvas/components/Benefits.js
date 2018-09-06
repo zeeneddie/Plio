@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Mutation } from 'react-apollo';
 import { pure } from 'recompose';
+import { noop } from 'plio-util';
 
 import {
   EntityManager,
@@ -12,19 +13,38 @@ import {
   EntityManagerItem,
   EntityManagerForm,
 } from '../../components';
-import BenefitSubcard from './BenefitSubcard';
+import CustomerElementSubcard from './CustomerElementSubcard';
 import CustomerElementForm from './CustomerElementForm';
 import { validateCustomerElement } from '../../../validation';
-import { Mutation as Mutations } from '../../../graphql';
+import { Mutation as Mutations, Query as Queries } from '../../../graphql';
 import { getCustomerElementInitialValues } from '../helpers';
+import { Composer } from '../../helpers';
 
-const Benefits = ({ documentId, documentType, organizationId }) => (
-  <EntityManager>
-    {[].map(benefit => (
-      <EntityManagerItem entity={benefit} component={BenefitSubcard} />
-    ))}
-    <Mutation mutation={Mutations.CREATE_BENEFIT}>
-      {createBenefit => (
+const Benefits = ({
+  documentId,
+  documentType,
+  organizationId,
+  benefits,
+}) => (
+  <Composer
+    components={[
+      /* eslint-disable react/no-children-prop */
+      <Mutation mutation={Mutations.CREATE_BENEFIT} children={noop} />,
+      <Mutation mutation={Mutations.UPDATE_BENEFIT} children={noop} />,
+      /* eslint-enable react/no-children-prop */
+    ]}
+  >
+    {([createBenefit, updateBenefit]) => (
+      <EntityManager>
+        {benefits.map(benefit => (
+          <EntityManagerItem
+            key={benefit._id}
+            entity={benefit}
+            customerElement={benefit}
+            onUpdate={updateBenefit}
+            component={CustomerElementSubcard}
+          />
+        ))}
         <EntityManagerForms>
           <EntityManagerCards
             label="New benefit"
@@ -55,6 +75,10 @@ const Benefits = ({ documentId, documentType, organizationId }) => (
                     }],
                   },
                 },
+                refetchQueries: [{
+                  query: Queries.VALUE_PROPOSITION_CARD,
+                  variables: { _id: documentId, organizationId },
+                }],
               });
             }}
           >
@@ -62,15 +86,16 @@ const Benefits = ({ documentId, documentType, organizationId }) => (
           </EntityManagerCards>
           <EntityManagerAddButton>Add a benefit</EntityManagerAddButton>
         </EntityManagerForms>
-      )}
-    </Mutation>
-  </EntityManager>
+      </EntityManager>
+    )}
+  </Composer>
 );
 
 Benefits.propTypes = {
   documentId: PropTypes.string.isRequired,
   documentType: PropTypes.string.isRequired,
   organizationId: PropTypes.string.isRequired,
+  benefits: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default pure(Benefits);
