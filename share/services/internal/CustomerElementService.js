@@ -45,4 +45,10 @@ export default {
 
     return collection.update(query, modifier);
   },
+  async delete(args, context) {
+    const { _id } = args;
+    const collection = this.collection(context);
+
+    return collection.remove({ _id });
+  },
 };

@@ -19,10 +19,11 @@ const CustomerElementSubcard = ({
   isOpen,
   toggle,
   onUpdate,
+  onDelete,
 }) => (
   <Card>
     <EntityForm
-      {...{ isOpen, toggle }}
+      {...{ isOpen, toggle, onDelete }}
       label={customerElement.title}
       validate={validateCustomerElement}
       onSubmit={({ title, description = '', importance }) => onUpdate({
@@ -48,6 +49,7 @@ CustomerElementSubcard.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
+  onDelete: PropTypes.func,
 };
 
 export default pure(CustomerElementSubcard);

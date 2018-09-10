@@ -49,7 +49,7 @@ describe('Customer element service', () => {
   });
 
   test('update', async () => {
-    const { _id } = await context.collections.Benefits.findOne();
+    const { _id } = await context.collections.Benefits.findOne({});
     const args = {
       _id,
       title: faker.random.word(),
@@ -66,5 +66,16 @@ describe('Customer element service', () => {
       ...args,
       updatedBy: context.userId,
     });
+  });
+
+  test('delete', async () => {
+    const { _id } = await context.collections.Benefits.findOne({});
+    const args = { _id };
+
+    await CustomerElementService.delete(args, context);
+
+    const benefit = await context.collections.Benefits.findOne({ _id });
+
+    expect(benefit).toBe(null);
   });
 });

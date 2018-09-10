@@ -35,7 +35,7 @@ const CustomerInsightsSubcard = ({
       </Pull>
       <Pull right>
         <CardTitle>
-          10
+          {needs.length + wants.length || ''}
         </CardTitle>
       </Pull>
     </SubcardHeader>
@@ -44,8 +44,8 @@ const CustomerInsightsSubcard = ({
         <Col xs={12} sm={12}>
           <MatchMaker>
             <MatchMakerPie circle>
-              <MatchMakerLeftPieSlice label="Needs" text="(3)" />
-              <MatchMakerRightPieSlice label="Wants" text="(3)" />
+              <MatchMakerLeftPieSlice label="Needs" text={`(${needs.length})`} />
+              <MatchMakerRightPieSlice label="Wants" text={`(${wants.length})`} />
             </MatchMakerPie>
             <MatchButton alignRight>Match</MatchButton>
             <MatchMakerTabs>

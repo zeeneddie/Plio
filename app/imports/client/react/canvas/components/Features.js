@@ -19,6 +19,7 @@ import { validateCustomerElement } from '../../../validation';
 import { Mutation as Mutations, Query as Queries } from '../../../graphql';
 import { getCustomerElementInitialValues } from '../helpers';
 import { Composer } from '../../helpers';
+import { swal } from '../../../util';
 
 const Features = ({
   documentId,
@@ -31,18 +32,36 @@ const Features = ({
       /* eslint-disable react/no-children-prop */
       <Mutation mutation={Mutations.CREATE_FEATURE} children={noop} />,
       <Mutation mutation={Mutations.UPDATE_FEATURE} children={noop} />,
+      <Mutation mutation={Mutations.DELETE_FEATURE} children={noop} />,
       /* eslint-enable react/no-children-prop */
     ]}
   >
-    {([createFeature, updateFeature]) => (
+    {([createFeature, updateFeature, deleteFeature]) => (
       <EntityManager>
         {features.map(feature => (
           <EntityManagerItem
             key={feature._id}
             entity={feature}
             customerElement={feature}
-            onUpdate={updateFeature}
             component={CustomerElementSubcard}
+            onUpdate={updateFeature}
+            onDelete={() => swal.promise(
+              {
+                text: `The feature "${feature.title}" will be deleted`,
+                confirmButtonText: 'Delete',
+                successTitle: 'Deleted!',
+                successText: `The feature "${feature.title}" was deleted successfully.`,
+              },
+              () => deleteFeature({
+                variables: {
+                  input: { _id: feature._id },
+                },
+                refetchQueries: [{
+                  query: Queries.VALUE_PROPOSITION_CARD,
+                  variables: { organizationId, _id: documentId },
+                }],
+              }),
+            )}
           />
         ))}
         <EntityManagerForms>

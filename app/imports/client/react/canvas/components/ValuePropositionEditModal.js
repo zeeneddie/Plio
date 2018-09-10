@@ -127,13 +127,15 @@ const ValuePropositionEditModal = ({
                   <EntityModalHeader label="Value proposition" />
                   <EntityModalBody>
                     <ValuePropositionForm {...{ organizationId }} save={handleSubmit} />
-                    <ValueComponentsSubcard
-                      {...{ organizationId }}
-                      benefits={getBenefits(data)}
-                      features={getFeatures(data)}
-                      documentId={_id}
-                      documentType={CanvasTypes.VALUE_PROPOSITION}
-                    />
+                    {_id && (
+                      <ValueComponentsSubcard
+                        {...{ organizationId }}
+                        benefits={getBenefits(data)}
+                        features={getFeatures(data)}
+                        documentId={_id}
+                        documentType={CanvasTypes.VALUE_PROPOSITION}
+                      />
+                    )}
                   </EntityModalBody>
                 </Fragment>
               )}

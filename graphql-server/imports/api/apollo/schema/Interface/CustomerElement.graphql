@@ -20,6 +20,10 @@ input UpdateCustomerElementInput {
   importance: Int
 }
 
+input DeleteCustomerElementInput {
+  _id: ID!
+}
+
 interface CustomerElement {
   _id: ID!
   organization: Organization!

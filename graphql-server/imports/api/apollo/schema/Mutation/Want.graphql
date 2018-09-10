@@ -5,4 +5,5 @@ type WantPayload {
 type Mutation {
   createWant(input: CreateCustomerElementInput!): WantPayload
   updateWant(input: UpdateCustomerElementInput!): Want
+  deleteWant(input: DeleteCustomerElementInput!): Want
 }
