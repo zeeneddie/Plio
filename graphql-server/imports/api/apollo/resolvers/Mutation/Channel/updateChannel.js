@@ -3,6 +3,7 @@ import {
   checkLoggedIn,
   flattenInput,
   checkChannelAccess,
+  checkFilesAccess,
   channelUpdateAfterware,
 } from '../../../../../share/middleware';
 
@@ -13,5 +14,6 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkChannelAccess(),
+  checkFilesAccess(),
   channelUpdateAfterware(),
 )(resolver);

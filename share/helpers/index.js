@@ -16,6 +16,7 @@ import {
   DocumentTypesPlural,
   AllDocumentTypes,
   WORKSPACE_DEFAULTS,
+  CanvasSections,
 } from '../constants';
 import {
   Actions,
@@ -26,6 +27,15 @@ import {
   Discussions,
   Goals,
   Milestones,
+  KeyPartners,
+  KeyActivities,
+  KeyResources,
+  ValuePropositions,
+  CustomerRelationships,
+  Channels,
+  CustomerSegments,
+  CostLines,
+  RevenueStreams,
 } from '../collections';
 
 export * from './actions';
@@ -84,6 +94,33 @@ export const getCollectionByDocType = (docType) => {
 
     case AllDocumentTypes.MILESTONE:
       return Milestones;
+
+    case CanvasSections.KEY_PARTNERS:
+      return KeyPartners;
+
+    case CanvasSections.KEY_ACTIVITIES:
+      return KeyActivities;
+
+    case CanvasSections.KEY_RESOURCES:
+      return KeyResources;
+
+    case CanvasSections.VALUE_PROPOSITIONS:
+      return ValuePropositions;
+
+    case CanvasSections.CUSTOMER_RELATIONSHIPS:
+      return CustomerRelationships;
+
+    case CanvasSections.CHANNELS:
+      return Channels;
+
+    case CanvasSections.CUSTOMER_SEGMENTS:
+      return CustomerSegments;
+
+    case CanvasSections.COST_STRUCTURE:
+      return CostLines;
+
+    case CanvasSections.REVENUE_STREAMS:
+      return RevenueStreams;
 
     default:
       return undefined;

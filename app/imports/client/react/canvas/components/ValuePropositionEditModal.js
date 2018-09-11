@@ -7,13 +7,14 @@ import { pure } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
+import { AWSDirectives, CanvasSections, CanvasTypes } from '../../../../share/constants';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { CanvasTypes } from '../../../../share/constants';
 import { validateValueProposition } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
 import ValueComponentsSubcard from './ValueComponentsSubcard';
+import CanvasFilesSubcard from './CanvasFilesSubcard';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -128,13 +129,22 @@ const ValuePropositionEditModal = ({
                   <EntityModalBody>
                     <ValuePropositionForm {...{ organizationId }} save={handleSubmit} />
                     {_id && (
-                      <ValueComponentsSubcard
-                        {...{ organizationId }}
-                        benefits={getBenefits(data)}
-                        features={getFeatures(data)}
-                        documentId={_id}
-                        documentType={CanvasTypes.VALUE_PROPOSITION}
-                      />
+                      <Fragment>
+                        <ValueComponentsSubcard
+                          {...{ organizationId }}
+                          benefits={getBenefits(data)}
+                          features={getFeatures(data)}
+                          documentId={_id}
+                          documentType={CanvasTypes.VALUE_PROPOSITION}
+                        />
+                        <CanvasFilesSubcard
+                          {...{ organizationId }}
+                          documentId={_id}
+                          onUpdate={updateValueProposition}
+                          slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
+                          documentType={CanvasSections.VALUE_PROPOSITIONS}
+                        />
+                      </Fragment>
                     )}
                   </EntityModalBody>
                 </Fragment>

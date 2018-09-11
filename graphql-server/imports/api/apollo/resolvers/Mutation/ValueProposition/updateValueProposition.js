@@ -3,6 +3,7 @@ import {
   checkLoggedIn,
   flattenInput,
   checkValuePropositionAccess,
+  checkFilesAccess,
   valuePropositionUpdateAfterware,
 } from '../../../../../share/middleware';
 
@@ -13,5 +14,6 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkValuePropositionAccess(),
+  checkFilesAccess(),
   valuePropositionUpdateAfterware(),
 )(resolver);

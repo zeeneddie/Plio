@@ -5,6 +5,7 @@ import {
   checkRevenueStreamAccess,
   checkPercentOfRevenue,
   checkPercentOfProfit,
+  checkFilesAccess,
   revenueStreamUpdateAfterware,
 } from '../../../../../share/middleware';
 
@@ -17,5 +18,6 @@ export default applyMiddleware(
   checkRevenueStreamAccess(),
   checkPercentOfRevenue(),
   checkPercentOfProfit(),
+  checkFilesAccess(),
   revenueStreamUpdateAfterware(),
 )(resolver);

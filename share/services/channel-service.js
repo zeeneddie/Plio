@@ -19,6 +19,7 @@ export default {
     originatorId,
     color,
     notes,
+    fileIds,
   }, { userId, collections: { Channels } }) {
     const query = { _id };
     const modifier = {
@@ -27,6 +28,7 @@ export default {
         originatorId,
         color,
         notes,
+        fileIds,
         updatedBy: userId,
       },
     };

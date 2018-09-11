@@ -7,11 +7,13 @@ import { pure } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
+import { AWSDirectives, CanvasSections } from '../../../../share/constants';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCostLine } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CostLineForm from './CostLineForm';
+import CanvasFilesSubcard from './CanvasFilesSubcard';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -120,6 +122,15 @@ const CostLineEditModal = ({
                   <EntityModalHeader label="Cost line" />
                   <EntityModalBody>
                     <CostLineForm {...{ organizationId }} save={handleSubmit} />
+                    {_id && (
+                      <CanvasFilesSubcard
+                        {...{ organizationId }}
+                        documentId={_id}
+                        onUpdate={updateCostLine}
+                        slingshotDirective={AWSDirectives.COST_LINE_FILES}
+                        documentType={CanvasSections.COST_STRUCTURE}
+                      />
+                    )}
                   </EntityModalBody>
                 </Fragment>
               )}

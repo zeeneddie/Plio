@@ -8,10 +8,12 @@ import diff from 'deep-diff';
 
 import { swal } from '../../../util';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { AWSDirectives, CanvasSections } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateChannel } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
+import CanvasFilesSubcard from './CanvasFilesSubcard';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -117,6 +119,15 @@ const ChannelEditModal = ({
                   <EntityModalHeader label="Channel" />
                   <EntityModalBody>
                     <CanvasForm {...{ organizationId }} save={handleSubmit} />
+                    {_id && (
+                      <CanvasFilesSubcard
+                        {...{ organizationId }}
+                        documentId={_id}
+                        onUpdate={updateChannel}
+                        slingshotDirective={AWSDirectives.CHANNEL_FILES}
+                        documentType={CanvasSections.CHANNELS}
+                      />
+                    )}
                   </EntityModalBody>
                 </Fragment>
               )}

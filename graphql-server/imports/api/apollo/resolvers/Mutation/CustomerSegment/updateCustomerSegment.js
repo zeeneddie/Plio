@@ -4,6 +4,7 @@ import {
   flattenInput,
   checkCustomerSegmentAccess,
   checkPercentOfMarketSize,
+  checkFilesAccess,
   customerSegmentUpdateAfterware,
 } from '../../../../../share/middleware';
 
@@ -15,5 +16,6 @@ export default applyMiddleware(
   flattenInput(),
   checkCustomerSegmentAccess(),
   checkPercentOfMarketSize(),
+  checkFilesAccess(),
   customerSegmentUpdateAfterware(),
 )(resolver);

@@ -27,6 +27,7 @@ export default {
     matchedTo,
     percentOfMarketSize,
     notes,
+    fileIds,
   }, { userId, collections: { CustomerSegments } }) {
     const query = { _id };
     const modifier = {
@@ -37,6 +38,7 @@ export default {
         matchedTo,
         percentOfMarketSize,
         notes,
+        fileIds,
         updatedBy: userId,
       },
     };

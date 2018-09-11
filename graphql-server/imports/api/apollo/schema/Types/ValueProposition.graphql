@@ -12,4 +12,5 @@ type ValueProposition implements BaseEntity, CanvasEntity {
   matchedTo: CustomerSegment
   benefits: [Benefit]
   features: [Feature]
+  fileIds: [String]
 }

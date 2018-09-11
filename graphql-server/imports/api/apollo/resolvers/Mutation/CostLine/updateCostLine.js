@@ -4,6 +4,7 @@ import {
   flattenInput,
   checkCostLineAccess,
   checkPercentOfTotalCost,
+  checkFilesAccess,
   costLineUpdateAfterware,
 } from '../../../../../share/middleware';
 
@@ -15,5 +16,6 @@ export default applyMiddleware(
   flattenInput(),
   checkCostLineAccess(),
   checkPercentOfTotalCost(),
+  checkFilesAccess(),
   costLineUpdateAfterware(),
 )(resolver);

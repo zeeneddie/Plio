@@ -20,6 +20,7 @@ input UpdateKeyPartnerInput {
   criticality: Int
   levelOfSpend: Int
   notes: String
+  fileIds: [String]
 }
 
 input DeleteKeyPartnerInput {

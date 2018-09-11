@@ -16,6 +16,7 @@ input UpdateKeyResourceInput {
   originatorId: ID
   color: String
   notes: String
+  fileIds: [String]
 }
 
 input DeleteKeyResourceInput {

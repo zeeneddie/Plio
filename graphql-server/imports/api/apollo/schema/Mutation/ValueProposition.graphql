@@ -23,6 +23,7 @@ input UpdateValuePropositionInput {
   color: String
   notes: String
   matchedTo: ValuePropositionMatchedToInput
+  fileIds: [String]
 }
 
 input DeleteValuePropositionInput {

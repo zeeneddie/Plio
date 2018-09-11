@@ -878,6 +878,15 @@ export const AWSDirectives = {
   ROOT_CAUSE_ANALYSIS_FILES: 'rootCauseAnalysisFiles',
   HELP_DOC_FILES: 'helpDocFiles',
   GOAL_FILES: 'goalFiles',
+  KEY_PARTNER_FILES: 'keyPartnerFiles',
+  KEY_ACTIVITY_FILES: 'keyActivityFiles',
+  KEY_RESOURCE_FILES: 'keyResourceFiles',
+  VALUE_PROPOSITION_FILES: 'valuePropositionFiles',
+  CUSTOMER_RELATIONSHIP_FILES: 'customerRelationshipFiles',
+  CHANNEL_FILES: 'channelFiles',
+  CUSTOMER_SEGMENT_FILES: 'customerSegmentFiles',
+  COST_LINE_FILES: 'costLineFiles',
+  REVENUE_STREAM_FILES: 'revenueStreamFiles',
 };
 
 export const Criticality = {
@@ -898,6 +907,18 @@ export const CanvasSections = {
   CUSTOMER_SEGMENTS: 'customerSegments',
   COST_STRUCTURE: 'costStructure',
   REVENUE_STREAMS: 'revenueStreams',
+};
+
+export const UploaderMetaIdNames = {
+  [CanvasSections.KEY_PARTNERS]: 'keyPartnerId',
+  [CanvasSections.KEY_ACTIVITIES]: 'keyActivityId',
+  [CanvasSections.KEY_RESOURCES]: 'keyResourceId',
+  [CanvasSections.VALUE_PROPOSITIONS]: 'valuePropositionId',
+  [CanvasSections.CUSTOMER_RELATIONSHIPS]: 'customerRelationshipId',
+  [CanvasSections.CHANNELS]: 'channelId',
+  [CanvasSections.CUSTOMER_SEGMENTS]: 'customerSegmentId',
+  [CanvasSections.COST_STRUCTURE]: 'costLineId',
+  [CanvasSections.REVENUE_STREAMS]: 'revenueStreamId',
 };
 
 export const MAX_TOTAL_PERCENT = 100;
