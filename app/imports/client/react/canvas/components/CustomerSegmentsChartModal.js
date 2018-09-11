@@ -35,7 +35,7 @@ const CustomerSegmentsChartModal = ({ isOpen, toggle, organizationId }) => (
         <EntityModalHeader label="Customer segments" />
         <EntityModalBody>
           <RenderSwitch
-            {...{ loading }}
+            {...{ loading, error }}
             require={data && data.customerSegments}
             renderLoading={<PreloaderPage />}
           >

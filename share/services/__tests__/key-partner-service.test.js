@@ -20,8 +20,8 @@ describe('Key partner service', () => {
       organizationId: 1,
       originatorId: userId,
       color: CanvasColors.INDIGO,
-      criticality: Criticality.LOW,
-      levelOfSpend: LevelOfSpend.HIGH,
+      criticality: Criticality.DEFAULT,
+      levelOfSpend: LevelOfSpend.DEFAULT,
       notes: 'dlsadsad',
     };
     const context = {

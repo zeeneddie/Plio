@@ -881,10 +881,7 @@ export const AWSDirectives = {
 };
 
 export const Criticality = {
-  LOW: 1,
-  MEDIUM: 2,
-  HIGH: 3,
-  VERY_HIGH: 4,
+  DEFAULT: 30,
 };
 
 export const LevelOfSpend = { ...Criticality };

@@ -4,13 +4,13 @@ import React from 'react';
 import Loadable from 'react-loadable';
 import { pure } from 'recompose';
 
+import { ChartDefaultOptions } from './constants';
 import { PreloaderPage } from '../';
-import { Styles } from '../../../../api/constants';
 
 const LoadableDoughnutChart = Loadable({
   loader: () => import('react-chartjs-2'),
   loading: () => <PreloaderPage />,
-  render: ({ default: Doughnut }, {
+  render: ({ Doughnut }, {
     title,
     options,
     valueLabel = title,
@@ -20,16 +20,10 @@ const LoadableDoughnutChart = Loadable({
       options={{
         title: {
           display: !!title,
-          fontSize: 20,
-          fontColor: Styles.color.darkGrey,
           text: title,
+          ...ChartDefaultOptions.TITLE,
         },
-        legend: {
-          position: 'bottom',
-          labels: {
-            usePointStyle: true,
-          },
-        },
+        legend: ChartDefaultOptions.LEGEND,
         tooltips: {
           displayColors: false,
           callbacks: {
@@ -42,6 +36,9 @@ const LoadableDoughnutChart = Loadable({
               return `${chartData[tooltipItem.index]}${valueLabel || ''}`;
             },
           },
+        },
+        elements: {
+          arc: ChartDefaultOptions.ARC,
         },
         ...options,
       }}
