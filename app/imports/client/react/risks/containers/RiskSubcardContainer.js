@@ -5,7 +5,7 @@ import { mergeDeepLeft, compose, objOf, pluck, identity, always } from 'ramda';
 
 import RiskSubcard from '../components/RiskSubcard';
 import { namedCompose, withMutationState } from '../../helpers';
-import { Mutation, Fragment } from '../../../graphql';
+import { Mutation, Fragment, Query } from '../../../graphql';
 import { updateRiskFragment } from '../../../apollo/utils';
 import { swal } from '../../../util';
 
@@ -158,6 +158,9 @@ export default namedCompose('RiskSubcardContainer')(
             name: value,
           },
         },
+        refetchQueries: [
+          { query: Query.DEPARTMENT_LIST, variables: { organizationId } },
+        ],
         update: (proxy, { data: { createDepartment: { department } } }) => updateRiskFragment(
           Cache.addDepartment(department),
           {

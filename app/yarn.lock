@@ -3371,9 +3371,9 @@ pify@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
-"plio-util@https://github.com/Pliohub/plio-util.git#I1298-chart-reusable-card":
+"plio-util@https://github.com/Pliohub/plio-util.git#devel":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#4de78de4190e6576ba1ec6babc25bd713f235a7f"
+  resolved "https://github.com/Pliohub/plio-util.git#252198bcb50d8d2fcd43d4bd68a1bbaf5d4df235"
 
 pluralize@^2.0.0:
   version "2.0.0"
