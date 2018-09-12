@@ -2,18 +2,18 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { pick } from 'ramda';
 
-import { Departments } from '/imports/share/collections/departments';
-import { StandardTypes } from '/imports/share/collections/standards-types';
-import { RiskTypes } from '/imports/share/collections/risk-types';
-import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
-import { isOrgOwner } from '/imports/api/checkers';
+import { Departments } from '../../../../../../share/collections/departments';
+import { StandardTypes } from '../../../../../../share/collections/standards-types';
+import { RiskTypes } from '../../../../../../share/collections/risk-types';
+import { StandardsBookSections } from '../../../../../../share/collections/standards-book-sections';
+import { isOrgOwner } from '../../../../../../api/checkers';
 
-import WorkspaceContainer
-  from '/imports/client/react/organization-settings/containers/WorkspaceContainer';
+import HomeScreenSubcard from
+  '../../../../../../client/react/organization-settings/components/HomeScreenSubcard';
 import ReviewContainer
-  from '/imports/client/react/organization-settings/containers/ReviewContainer';
+  from '../../../../../../client/react/organization-settings/containers/ReviewContainer';
 import KeyGoalsSettingsContainer from
-  '/imports/client/react/organization-settings/containers/KeyGoals';
+  '../../../../../../client/react/organization-settings/containers/KeyGoals';
 import { DocumentTypes } from '../../../../../../share/constants';
 import { OrganizationSettingsHelp } from '../../../../../../api/help-messages';
 import {
@@ -48,8 +48,8 @@ Template.OrgSettings.viewmodel({
       }
     });
   },
-  workspaceSubcard() {
-    return WorkspaceContainer;
+  homeScreenSubcard() {
+    return HomeScreenSubcard;
   },
   departments() {
     const query = { organizationId: this.organizationId() };

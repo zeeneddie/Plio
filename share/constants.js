@@ -697,6 +697,15 @@ export const HomeScreenTitlesTypes = {
   WORK_INBOX: 'workInbox',
 };
 
+export const HomeScreenTitlesTypesLabels = {
+  [HomeScreenTitlesTypes.STANDARDS]: 'Standards',
+  [HomeScreenTitlesTypes.RISKS]: 'Risk register',
+  [HomeScreenTitlesTypes.NON_CONFORMITIES]: 'Nonconformities',
+  [HomeScreenTitlesTypes.WORK_INBOX]: 'Work inbox',
+};
+
+export const HOME_SCREEN_TITLES = 'homeScreenTitles';
+
 export const EmailsForPlioReporting = [
   'steve.ives@pliohub.com',
   'mike@jssolutionsdev.com',
@@ -931,3 +940,15 @@ export const CustomerElementStatuses = {
 };
 
 export const ImportanceValues = [1, 2, 3, 4, 5];
+
+export const HomeScreenTypes = {
+  IMPLEMENTATION: 'implementation',
+  CANVAS: 'canvas',
+};
+
+export const HomeScreenLabels = {
+  [HomeScreenTypes.IMPLEMENTATION]: 'Implementation view',
+  [HomeScreenTypes.CANVAS]: 'Canvas view',
+};
+
+export const DEFAULT_ORG_TIMEZONE = 'Europe/London';
