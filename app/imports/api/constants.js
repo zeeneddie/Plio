@@ -293,6 +293,7 @@ export const DEFAULT_UPDATE_TIMEOUT = 1200;
 export const ApolloFetchPolicies = {
   CACHE_ONLY: 'cache-only',
   CACHE_AND_NETWORK: 'cache-and-network',
+  NETWORK_ONLY: 'network-only',
 };
 
 export const MilestoneStatusColors = {
