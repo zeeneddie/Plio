@@ -3,6 +3,7 @@ import {
   checkLoggedIn,
   flattenInput,
   checkCustomerRelationshipAccess,
+  checkFilesAccess,
   customerRelationshipUpdateAfterware,
 } from '../../../../../share/middleware';
 
@@ -13,5 +14,6 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkCustomerRelationshipAccess(),
+  checkFilesAccess(),
   customerRelationshipUpdateAfterware(),
 )(resolver);

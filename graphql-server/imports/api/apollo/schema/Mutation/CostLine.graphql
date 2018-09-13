@@ -18,6 +18,7 @@ input UpdateCostLineInput {
   color: String
   percentOfTotalCost: Int
   notes: String
+  fileIds: [String]
 }
 
 input DeleteCostLineInput {

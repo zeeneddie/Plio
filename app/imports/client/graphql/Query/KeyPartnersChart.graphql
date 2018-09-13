@@ -1,0 +1,11 @@
+query KeyPartnersChart($organizationId: ID!) {
+  keyPartners(organizationId: $organizationId) {
+    keyPartners {
+      _id
+      title
+      color
+      criticality
+      levelOfSpend
+    }
+  }
+}

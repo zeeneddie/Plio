@@ -28,8 +28,8 @@ const KeyPartnerAddModal = ({ isOpen, toggle, organizationId }) => (
                 originator: getUserOptions(user),
                 title: '',
                 color: CanvasColors.INDIGO,
-                criticality: Criticality.MEDIUM,
-                levelOfSpend: Criticality.MEDIUM,
+                criticality: Criticality.DEFAULT,
+                levelOfSpend: Criticality.DEFAULT,
                 notes: '',
               }}
               onSubmit={(values) => {

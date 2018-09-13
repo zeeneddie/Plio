@@ -13,4 +13,5 @@ type CustomerSegment implements BaseEntity, CanvasEntity {
   matchedTo: ValueProposition
   needs: [Need]
   wants: [Want]
+  fileIds: [String]
 }

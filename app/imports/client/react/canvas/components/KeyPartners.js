@@ -5,6 +5,7 @@ import { pure } from 'recompose';
 
 import KeyPartnerAddModal from './KeyPartnerAddModal';
 import KeyPartnerEditModal from './KeyPartnerEditModal';
+import KeyPartnersChartModal from './KeyPartnersChartModal';
 import CanvasBlock from './CanvasBlock';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -52,6 +53,10 @@ const KeyPartners = ({ organizationId }) => (
             }}
           />
         )}
+        renderChartModal={({ isOpen, toggle }) => (
+          <KeyPartnersChartModal {...{ isOpen, toggle, organizationId }} />
+        )}
+        chartButtonIcon="th-large"
       />
     )}
   </Query>

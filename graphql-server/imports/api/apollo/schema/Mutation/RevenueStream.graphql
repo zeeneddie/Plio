@@ -20,6 +20,7 @@ input UpdateRevenueStreamInput {
   percentOfRevenue: Int
   percentOfProfit: Int
   notes: String
+  fileIds: [String]
 }
 
 input DeleteRevenueStreamInput {

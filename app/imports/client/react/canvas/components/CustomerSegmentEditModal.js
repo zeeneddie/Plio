@@ -7,13 +7,14 @@ import { pure } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
+import { AWSDirectives, CanvasSections, CanvasTypes } from '../../../../share/constants';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
-import { CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCustomerSegment } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CustomerSegmentForm from './CustomerSegmentForm';
 import CustomerInsightsSubcard from './CustomerInsightsSubcard';
+import CanvasFilesSubcard from './CanvasFilesSubcard';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -130,13 +131,24 @@ const CustomerSegmentEditModal = ({
                   <EntityModalHeader label="Customer segment" />
                   <EntityModalBody>
                     <CustomerSegmentForm {...{ organizationId }} save={handleSubmit} />
-                    <CustomerInsightsSubcard
-                      {...{ organizationId }}
-                      documentId={_id}
-                      documentType={CanvasTypes.CUSTOMER_SEGMENT}
-                      needs={getNeeds(data)}
-                      wants={getWants(data)}
-                    />
+                    {_id && (
+                      <Fragment>
+                        <CustomerInsightsSubcard
+                          {...{ organizationId }}
+                          documentId={_id}
+                          documentType={CanvasTypes.CUSTOMER_SEGMENT}
+                          needs={getNeeds(data)}
+                          wants={getWants(data)}
+                        />
+                        <CanvasFilesSubcard
+                          {...{ organizationId }}
+                          documentId={_id}
+                          onUpdate={updateCustomerSegment}
+                          slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
+                          documentType={CanvasSections.CUSTOMER_SEGMENTS}
+                        />
+                      </Fragment>
+                    )}
                   </EntityModalBody>
                 </Fragment>
               )}

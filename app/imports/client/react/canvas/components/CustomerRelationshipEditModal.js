@@ -7,11 +7,13 @@ import { pure } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
+import { AWSDirectives, CanvasSections } from '../../../../share/constants';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCustomerRelationship } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
+import CanvasFilesSubcard from './CanvasFilesSubcard';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -117,6 +119,15 @@ const CustomerRelationshipEditModal = ({
                   <EntityModalHeader label="Customer relationship" />
                   <EntityModalBody>
                     <CanvasForm {...{ organizationId }} save={handleSubmit} />
+                    {_id && (
+                      <CanvasFilesSubcard
+                        {...{ organizationId }}
+                        documentId={_id}
+                        onUpdate={updateCustomerRelationship}
+                        slingshotDirective={AWSDirectives.CUSTOMER_RELATIONSHIP_FILES}
+                        documentType={CanvasSections.CUSTOMER_RELATIONSHIPS}
+                      />
+                    )}
                   </EntityModalBody>
                 </Fragment>
               )}

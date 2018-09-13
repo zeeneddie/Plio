@@ -19,6 +19,7 @@ import { validateCustomerElement } from '../../../validation';
 import { Mutation as Mutations, Query as Queries } from '../../../graphql';
 import { getCustomerElementInitialValues } from '../helpers';
 import { Composer } from '../../helpers';
+import { swal } from '../../../util';
 
 const CustomerNeeds = ({
   needs,
@@ -31,18 +32,36 @@ const CustomerNeeds = ({
       /* eslint-disable react/no-children-prop */
       <Mutation mutation={Mutations.CREATE_NEED} children={noop} />,
       <Mutation mutation={Mutations.UPDATE_NEED} children={noop} />,
+      <Mutation mutation={Mutations.DELETE_NEED} children={noop} />,
       /* eslint-enable react/no-children-prop */
     ]}
   >
-    {([createNeed, updateNeed]) => (
+    {([createNeed, updateNeed, deleteNeed]) => (
       <EntityManager>
         {needs.map(need => (
           <EntityManagerItem
             key={need._id}
             entity={need}
             customerElement={need}
-            onUpdate={updateNeed}
             component={CustomerElementSubcard}
+            onUpdate={updateNeed}
+            onDelete={() => swal.promise(
+              {
+                text: `The customer need "${need.title}" will be deleted`,
+                confirmButtonText: 'Delete',
+                successTitle: 'Deleted!',
+                successText: `The customer need "${need.title}" was deleted successfully.`,
+              },
+              () => deleteNeed({
+                variables: {
+                  input: { _id: need._id },
+                },
+                refetchQueries: [{
+                  query: Queries.CUSTOMER_SEGMENT_CARD,
+                  variables: { organizationId, _id: documentId },
+                }],
+              }),
+            )}
           />
         ))}
         <EntityManagerForms>

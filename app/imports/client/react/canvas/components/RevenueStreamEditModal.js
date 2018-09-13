@@ -7,11 +7,13 @@ import { pure } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
+import { AWSDirectives, CanvasSections } from '../../../../share/constants';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateRevenueStream } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import RevenueStreamForm from './RevenueStreamForm';
+import CanvasFilesSubcard from './CanvasFilesSubcard';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -123,6 +125,15 @@ const RevenueStreamEditModal = ({
                   <EntityModalHeader label="Revenue stream" />
                   <EntityModalBody>
                     <RevenueStreamForm {...{ organizationId }} save={handleSubmit} />
+                    {_id && (
+                      <CanvasFilesSubcard
+                        {...{ organizationId }}
+                        documentId={_id}
+                        onUpdate={updateRevenueStream}
+                        slingshotDirective={AWSDirectives.REVENUE_STREAM_FILES}
+                        documentType={CanvasSections.REVENUE_STREAMS}
+                      />
+                    )}
                   </EntityModalBody>
                 </Fragment>
               )}

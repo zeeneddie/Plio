@@ -24,6 +24,7 @@ export default {
     color,
     matchedTo,
     notes,
+    fileIds,
   }, { userId, collections: { ValuePropositions } }) {
     const query = { _id };
     const modifier = {
@@ -33,6 +34,7 @@ export default {
         color,
         matchedTo,
         notes,
+        fileIds,
         updatedBy: userId,
       },
     };

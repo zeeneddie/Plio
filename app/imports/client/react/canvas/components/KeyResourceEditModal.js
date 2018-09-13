@@ -7,11 +7,13 @@ import { pure } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
+import { AWSDirectives, CanvasSections } from '../../../../share/constants';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateKeyResource } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
+import CanvasFilesSubcard from './CanvasFilesSubcard';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -117,6 +119,15 @@ const KeyResourceEditModal = ({
                   <EntityModalHeader label="Key resource" />
                   <EntityModalBody>
                     <CanvasForm {...{ organizationId }} save={handleSubmit} />
+                    {_id && (
+                      <CanvasFilesSubcard
+                        {...{ organizationId }}
+                        documentId={_id}
+                        onUpdate={updateKeyResource}
+                        slingshotDirective={AWSDirectives.KEY_RESOURCE_FILES}
+                        documentType={CanvasSections.KEY_RESOURCES}
+                      />
+                    )}
                   </EntityModalBody>
                 </Fragment>
               )}

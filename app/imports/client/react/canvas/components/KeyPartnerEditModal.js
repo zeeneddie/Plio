@@ -7,6 +7,7 @@ import { pure } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
+import { AWSDirectives, CanvasSections } from '../../../../share/constants';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateKeyPartner } from '../../../validation';
@@ -18,6 +19,7 @@ import {
 } from '../../components';
 import { WithState, Composer } from '../../helpers';
 import KeyPartnerForm from './KeyPartnerForm';
+import CanvasFilesSubcard from './CanvasFilesSubcard';
 
 const getKeyPartner = pathOr({}, repeat('keyPartner', 2));
 const getInitialValues = compose(
@@ -123,6 +125,15 @@ const KeyPartnerEditModal = ({
                   <EntityModalHeader label="Key partner" />
                   <EntityModalBody>
                     <KeyPartnerForm {...{ organizationId }} save={handleSubmit} />
+                    {_id && (
+                      <CanvasFilesSubcard
+                        {...{ organizationId }}
+                        documentId={_id}
+                        onUpdate={updateKeyPartner}
+                        slingshotDirective={AWSDirectives.KEY_PARTNER_FILES}
+                        documentType={CanvasSections.KEY_PARTNERS}
+                      />
+                    )}
                   </EntityModalBody>
                 </Fragment>
               )}

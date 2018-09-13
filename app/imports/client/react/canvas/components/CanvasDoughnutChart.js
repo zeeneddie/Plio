@@ -1,11 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { sum, append } from 'ramda';
 import { pure } from 'recompose';
 
 import { CanvasDoughnutChartSize } from '../../../../api/constants';
 import { MAX_TOTAL_PERCENT } from '../../../../share/constants';
-import { LoadableDoughnutChart } from '../../components';
+import { LoadableDoughnutChart, CardBlock } from '../../components';
+
+const StyledCardBlock = styled(CardBlock)`
+  .modal-dialog &.card-block.card-body {
+    border-top: none;
+    padding-top: 0;
+  }
+`;
 
 const CanvasDoughnutChart = ({
   data,
@@ -17,19 +25,20 @@ const CanvasDoughnutChart = ({
   const isOtherPart = otherPercentage > 0;
 
   return (
-    <LoadableDoughnutChart
-      {...props}
-      width={CanvasDoughnutChartSize.WIDTH}
-      height={CanvasDoughnutChartSize.HEIGHT}
-      data={{
-        datasets: [{
-          data: isOtherPart ? append(otherPercentage, data) : data,
-          backgroundColor: colors,
-          borderWidth: 0,
-        }],
-        labels: isOtherPart ? append('Other', labels) : labels,
-      }}
-    />
+    <StyledCardBlock>
+      <LoadableDoughnutChart
+        {...props}
+        width={CanvasDoughnutChartSize.WIDTH}
+        height={CanvasDoughnutChartSize.HEIGHT}
+        data={{
+          datasets: [{
+            data: isOtherPart ? append(otherPercentage, data) : data,
+            backgroundColor: colors,
+          }],
+          labels: isOtherPart ? append('Other', labels) : labels,
+        }}
+      />
+    </StyledCardBlock>
   );
 };
 

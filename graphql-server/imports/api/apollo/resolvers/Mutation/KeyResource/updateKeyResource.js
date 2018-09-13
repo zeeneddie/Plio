@@ -3,6 +3,7 @@ import {
   checkLoggedIn,
   flattenInput,
   checkKeyResourceAccess,
+  checkFilesAccess,
   keyResourceUpdateAfterware,
 } from '../../../../../share/middleware';
 
@@ -13,5 +14,6 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkKeyResourceAccess(),
+  checkFilesAccess(),
   keyResourceUpdateAfterware(),
 )(resolver);

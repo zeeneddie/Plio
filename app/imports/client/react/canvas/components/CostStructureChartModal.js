@@ -35,7 +35,7 @@ const CostStructureChartModal = ({ isOpen, toggle, organizationId }) => (
         <EntityModalHeader label="Cost Structure" />
         <EntityModalBody>
           <RenderSwitch
-            {...{ loading }}
+            {...{ loading, error }}
             require={data && data.costLines}
             renderLoading={<PreloaderPage />}
           >

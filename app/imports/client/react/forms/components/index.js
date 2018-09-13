@@ -32,3 +32,6 @@ export { default as SelectRadioField } from './SelectRadioField';
 export { default as PercentInputField } from './PercentInputField';
 export { default as ApolloSelectInputField } from './ApolloSelectInputField';
 export { default as AutoSave } from './AutoSave';
+export { default as SliderInput } from './SliderInput';
+export { default as SliderAdapter } from './SliderAdapter';
+export { default as SliderField } from './SliderField';

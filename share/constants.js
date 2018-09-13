@@ -697,6 +697,15 @@ export const HomeScreenTitlesTypes = {
   WORK_INBOX: 'workInbox',
 };
 
+export const HomeScreenTitlesTypesLabels = {
+  [HomeScreenTitlesTypes.STANDARDS]: 'Standards',
+  [HomeScreenTitlesTypes.RISKS]: 'Risk register',
+  [HomeScreenTitlesTypes.NON_CONFORMITIES]: 'Nonconformities',
+  [HomeScreenTitlesTypes.WORK_INBOX]: 'Work inbox',
+};
+
+export const HOME_SCREEN_TITLES = 'homeScreenTitles';
+
 export const EmailsForPlioReporting = [
   'steve.ives@pliohub.com',
   'mike@jssolutionsdev.com',
@@ -878,13 +887,19 @@ export const AWSDirectives = {
   ROOT_CAUSE_ANALYSIS_FILES: 'rootCauseAnalysisFiles',
   HELP_DOC_FILES: 'helpDocFiles',
   GOAL_FILES: 'goalFiles',
+  KEY_PARTNER_FILES: 'keyPartnerFiles',
+  KEY_ACTIVITY_FILES: 'keyActivityFiles',
+  KEY_RESOURCE_FILES: 'keyResourceFiles',
+  VALUE_PROPOSITION_FILES: 'valuePropositionFiles',
+  CUSTOMER_RELATIONSHIP_FILES: 'customerRelationshipFiles',
+  CHANNEL_FILES: 'channelFiles',
+  CUSTOMER_SEGMENT_FILES: 'customerSegmentFiles',
+  COST_LINE_FILES: 'costLineFiles',
+  REVENUE_STREAM_FILES: 'revenueStreamFiles',
 };
 
 export const Criticality = {
-  LOW: 1,
-  MEDIUM: 2,
-  HIGH: 3,
-  VERY_HIGH: 4,
+  DEFAULT: 30,
 };
 
 export const LevelOfSpend = { ...Criticality };
@@ -903,6 +918,18 @@ export const CanvasSections = {
   REVENUE_STREAMS: 'revenueStreams',
 };
 
+export const UploaderMetaIdNames = {
+  [CanvasSections.KEY_PARTNERS]: 'keyPartnerId',
+  [CanvasSections.KEY_ACTIVITIES]: 'keyActivityId',
+  [CanvasSections.KEY_RESOURCES]: 'keyResourceId',
+  [CanvasSections.VALUE_PROPOSITIONS]: 'valuePropositionId',
+  [CanvasSections.CUSTOMER_RELATIONSHIPS]: 'customerRelationshipId',
+  [CanvasSections.CHANNELS]: 'channelId',
+  [CanvasSections.CUSTOMER_SEGMENTS]: 'customerSegmentId',
+  [CanvasSections.COST_STRUCTURE]: 'costLineId',
+  [CanvasSections.REVENUE_STREAMS]: 'revenueStreamId',
+};
+
 export const MAX_TOTAL_PERCENT = 100;
 
 export const CustomerElementStatuses = {
@@ -913,3 +940,15 @@ export const CustomerElementStatuses = {
 };
 
 export const ImportanceValues = [1, 2, 3, 4, 5];
+
+export const HomeScreenTypes = {
+  IMPLEMENTATION: 'implementation',
+  CANVAS: 'canvas',
+};
+
+export const HomeScreenLabels = {
+  [HomeScreenTypes.IMPLEMENTATION]: 'Implementation view',
+  [HomeScreenTypes.CANVAS]: 'Canvas view',
+};
+
+export const DEFAULT_ORG_TIMEZONE = 'Europe/London';
