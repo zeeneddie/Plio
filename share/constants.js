@@ -951,12 +951,12 @@ export const CustomerElementStatuses = {
 export const ImportanceValues = [1, 2, 3, 4, 5];
 
 export const HomeScreenTypes = {
-  IMPLEMENTATION: 'implementation',
+  OPERATIONS: 'operations',
   CANVAS: 'canvas',
 };
 
 export const HomeScreenLabels = {
-  [HomeScreenTypes.IMPLEMENTATION]: 'Implementation view',
+  [HomeScreenTypes.OPERATIONS]: 'Operations view',
   [HomeScreenTypes.CANVAS]: 'Canvas view',
 };
 
