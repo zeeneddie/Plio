@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { CardTitle, Col } from 'reactstrap';
+import { CardTitle, Col, TabContent, TabPane, Button } from 'reactstrap';
 
 import {
   Subcard,
@@ -8,16 +8,16 @@ import {
   SubcardBody,
   Pull,
   CardBlock,
-  MatchMaker,
-  MatchMakerPane,
-  MatchMakerPie,
-  MatchMakerLeftPieSlice,
-  MatchMakerRightPieSlice,
-  MatchButton,
-  MatchMakerTabs,
+  Icon,
 } from '../../components';
-import CustomerNeeds from './CustomerNeeds';
-import CustomerWants from './CustomerWants';
+import { WithState } from '../../helpers';
+import CustomerInsightsMatcher from './CustomerInsightsMatcher';
+import CustomerInsightsPie from './CustomerInsightsPie';
+
+const Tabs = {
+  SVG_PIE: 'SvgPie',
+  MATCHER: 'Matcher',
+};
 
 const CustomerInsightsSubcard = ({
   organizationId,
@@ -25,6 +25,7 @@ const CustomerInsightsSubcard = ({
   documentType,
   needs,
   wants,
+  matchedTo,
 }) => (
   <Subcard>
     <SubcardHeader>
@@ -42,35 +43,40 @@ const CustomerInsightsSubcard = ({
     <SubcardBody>
       <CardBlock>
         <Col xs={12} sm={12}>
-          <MatchMaker>
-            <MatchMakerPie circle>
-              <MatchMakerLeftPieSlice label="Needs" text={`(${needs.length})`} />
-              <MatchMakerRightPieSlice label="Wants" text={`(${wants.length})`} />
-            </MatchMakerPie>
-            <MatchButton alignRight>Match</MatchButton>
-            <MatchMakerTabs>
-              <MatchMakerPane alignLeft>
-                <CustomerNeeds
-                  {...{
-                    organizationId,
-                    documentId,
-                    documentType,
-                    needs,
-                  }}
-                />
-              </MatchMakerPane>
-              <MatchMakerPane alignRight>
-                <CustomerWants
-                  {...{
-                    organizationId,
-                    documentId,
-                    documentType,
-                    wants,
-                  }}
-                />
-              </MatchMakerPane>
-            </MatchMakerTabs>
-          </MatchMaker>
+          <WithState initialState={{ activeTab: Tabs.SVG_PIE }}>
+            {({ state, setState }) => (
+              <TabContent activeTab={state.activeTab}>
+                <TabPane tabId={Tabs.SVG_PIE}>
+                  <CustomerInsightsPie
+                    {...{
+                      needs,
+                      wants,
+                      organizationId,
+                      documentId,
+                      documentType,
+                    }}
+                    onMatchButtonClick={() => setState({ activeTab: Tabs.MATCHER })}
+                  />
+                </TabPane>
+                <TabPane tabId={Tabs.MATCHER}>
+                  <CustomerInsightsMatcher
+                    {...{
+                      needs,
+                      wants,
+                      documentId,
+                      matchedTo,
+                    }}
+                  />
+                  <Pull right>
+                    <Button onClick={() => setState({ activeTab: Tabs.SVG_PIE })}>
+                      <Icon name="angle-left" margin="right" />
+                      Back
+                    </Button>
+                  </Pull>
+                </TabPane>
+              </TabContent>
+            )}
+          </WithState>
         </Col>
       </CardBlock>
     </SubcardBody>
@@ -83,6 +89,10 @@ CustomerInsightsSubcard.propTypes = {
   documentType: PropTypes.string.isRequired,
   needs: PropTypes.arrayOf(PropTypes.object).isRequired,
   wants: PropTypes.arrayOf(PropTypes.object).isRequired,
+  matchedTo: PropTypes.shape({
+    benefits: PropTypes.arrayOf(PropTypes.object),
+    features: PropTypes.arrayOf(PropTypes.object),
+  }),
 };
 
 export default CustomerInsightsSubcard;

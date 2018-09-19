@@ -1,17 +1,46 @@
+#import "./CustomerElementPresentation.graphql"
+#import "./CustomerElementCard.graphql"
+
 fragment CustomerSegmentCard on CustomerSegment {
   _id
   title
   color
   notes
   percentOfMarketSize
-  matchedTo {
-    _id
-    title
-  }
   originator {
     _id
     profile {
       fullName
+    }
+  }
+  needs {
+    benefits {
+      ...CustomerElementPresentation
+    }
+    features {
+      ...CustomerElementPresentation
+    }
+    ...CustomerElementPresentation
+    ...CustomerElementCard
+  }
+  wants {
+    benefits {
+      ...CustomerElementPresentation
+    }
+    features {
+      ...CustomerElementPresentation
+    }
+    ...CustomerElementPresentation
+    ...CustomerElementCard
+  }
+  matchedTo {
+    _id
+    title
+    features {
+      ...CustomerElementPresentation
+    }
+    benefits {
+      ...CustomerElementPresentation
     }
   }
 }

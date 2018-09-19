@@ -20,11 +20,10 @@ import {
   EntityModalHeader,
   EntityModalBody,
   EntityModalForm,
+  RenderSwitch,
 } from '../../components';
 
 const getCustomerSegment = pathOr({}, repeat('customerSegment', 2));
-const getNeeds = pathOr([], repeat('needs', 2));
-const getWants = pathOr([], repeat('wants', 2));
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
   over(lenses.originator, getUserOptions),
@@ -52,7 +51,7 @@ const CustomerSegmentEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.CUSTOMER_SEGMENT_CARD}
-            variables={{ _id, organizationId }}
+            variables={{ _id }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -131,24 +130,37 @@ const CustomerSegmentEditModal = ({
                   <EntityModalHeader label="Customer segment" />
                   <EntityModalBody>
                     <CustomerSegmentForm {...{ organizationId }} save={handleSubmit} />
-                    {_id && (
-                      <Fragment>
-                        <CustomerInsightsSubcard
-                          {...{ organizationId }}
-                          documentId={_id}
-                          documentType={CanvasTypes.CUSTOMER_SEGMENT}
-                          needs={getNeeds(data)}
-                          wants={getWants(data)}
-                        />
-                        <CanvasFilesSubcard
-                          {...{ organizationId }}
-                          documentId={_id}
-                          onUpdate={updateCustomerSegment}
-                          slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
-                          documentType={CanvasSections.CUSTOMER_SEGMENTS}
-                        />
-                      </Fragment>
-                    )}
+                    <RenderSwitch
+                      require={data.customerSegment && data.customerSegment.customerSegment}
+                      errorWhenMissing={noop}
+                      loading={query.loading}
+                    >
+                      {({
+                        _id: documentId,
+                        needs = [],
+                        wants = [],
+                        matchedTo,
+                      }) => (
+                        <Fragment>
+                          <CustomerInsightsSubcard
+                            {...{
+                              organizationId,
+                              needs,
+                              wants,
+                              documentId,
+                              matchedTo,
+                            }}
+                            documentType={CanvasTypes.CUSTOMER_SEGMENT}
+                          />
+                          <CanvasFilesSubcard
+                            {...{ organizationId, documentId }}
+                            onUpdate={updateCustomerSegment}
+                            slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
+                            documentType={CanvasSections.CUSTOMER_SEGMENTS}
+                          />
+                        </Fragment>
+                      )}
+                    </RenderSwitch>
                   </EntityModalBody>
                 </Fragment>
               )}

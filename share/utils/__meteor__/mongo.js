@@ -18,6 +18,11 @@ export const __closeDB = jest.fn(async () => {
   await mongoServer.stop();
 });
 
+export const __clearDB = jest.fn(async () => {
+  const collections = await db.collections();
+  return Promise.all(collections.map(collection => collection.remove()));
+});
+
 const Collection = jest.fn(function (name) {
   if (!db) return null;
 

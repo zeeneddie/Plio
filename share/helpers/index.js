@@ -17,6 +17,7 @@ import {
   AllDocumentTypes,
   WORKSPACE_DEFAULTS,
   CanvasSections,
+  CustomerElementTypes,
 } from '../constants';
 import {
   Actions,
@@ -36,6 +37,10 @@ import {
   CustomerSegments,
   CostLines,
   RevenueStreams,
+  Benefits,
+  Features,
+  Needs,
+  Wants,
 } from '../collections';
 
 export * from './actions';
@@ -95,6 +100,8 @@ export const getCollectionByDocType = (docType) => {
     case AllDocumentTypes.MILESTONE:
       return Milestones;
 
+    // vvvvvv FIX THIS!!!!!!!!!!!!!!!!!!!!!!!!!
+
     case CanvasSections.KEY_PARTNERS:
       return KeyPartners;
 
@@ -121,6 +128,18 @@ export const getCollectionByDocType = (docType) => {
 
     case CanvasSections.REVENUE_STREAMS:
       return RevenueStreams;
+
+    case CustomerElementTypes.BENEFIT:
+      return Benefits;
+
+    case CustomerElementTypes.FEATURE:
+      return Features;
+
+    case CustomerElementTypes.NEED:
+      return Needs;
+
+    case CustomerElementTypes.WANT:
+      return Wants;
 
     default:
       return undefined;

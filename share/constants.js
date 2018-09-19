@@ -122,6 +122,7 @@ export const CollectionNames = {
   FEATURES: 'Features',
   NEEDS: 'Needs',
   WANTS: 'Wants',
+  RELATIONS: 'Relations',
 };
 
 export const DefaultRiskTypes = [
@@ -309,6 +310,17 @@ export const ProblemsStatuses = {
   [ProblemIndexes.DELETED]: 'Deleted',
 };
 
+export const Abbreviations = {
+  GOAL: 'KG',
+  LESSON: 'LL',
+  NONCONFORMITY: 'NC',
+  POTENTIAL_GAIN: 'PG',
+  BENEFIT: 'BE',
+  FEATURE: 'FE',
+  NEED: 'NE',
+  WANT: 'WA',
+};
+
 export const ProblemTypes = {
   NON_CONFORMITY: 'non-conformity',
   RISK: 'risk',
@@ -327,12 +339,21 @@ export const CanvasTypes = {
   REVENUE_STREAM: 'revenue-stream',
 };
 
+export const CustomerElementTypes = {
+  BENEFIT: Abbreviations.BENEFIT,
+  FEATURE: Abbreviations.FEATURE,
+  NEED: Abbreviations.NEED,
+  WANT: Abbreviations.WANT,
+};
+
 export const DocumentTypes = {
   STANDARD: 'standard',
   GOAL: 'goal',
   MILESTONE: 'milestone',
   ...ProblemTypes,
   ...ActionTypes,
+  ...CanvasTypes,
+  ...CustomerElementTypes,
 };
 
 export const DocumentTypesPlural = {
@@ -861,18 +882,6 @@ export const MilestoneStatuses = {
   2: 'Open - due for completion today',
   3: 'Open - completion overdue',
   4: 'Completed',
-};
-
-// fill in other stuff
-export const Abbreviations = {
-  GOAL: 'KG',
-  LESSON: 'LL',
-  NONCONFORMITY: 'NC',
-  POTENTIAL_GAIN: 'PG',
-  BENEFIT: 'BE',
-  FEATURE: 'FE',
-  NEED: 'NE',
-  WANT: 'WA',
 };
 
 export const AWSDirectives = {

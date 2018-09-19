@@ -12,4 +12,5 @@ type Benefit implements BaseEntity, CustomerElement {
   importance: Int!
   status: Int!
   linkedTo: [ValueProposition!]!
+  documentType: String
 }
