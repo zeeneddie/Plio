@@ -6,6 +6,7 @@ import { map } from 'ramda';
 
 import { Query as Queries } from '../../../graphql';
 import { CanvasBubbleChartSize, CriticalityLabels } from '../../../../api/constants';
+import { getCriticalityValueLabel } from '../helpers';
 import {
   RenderSwitch,
   PreloaderPage,
@@ -56,6 +57,7 @@ const KeyPartnersChartModal = ({ isOpen, toggle, organizationId }) => (
                   xTitle="Spend"
                   yTitle="Criticality"
                   data={{ datasets: getChartData(keyPartners) }}
+                  valueFormatter={getCriticalityValueLabel}
                 />
               </CardBlock>
             )}

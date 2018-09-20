@@ -907,11 +907,38 @@ export const AWSDirectives = {
   REVENUE_STREAM_FILES: 'revenueStreamFiles',
 };
 
+export const CRITICALITY_DEFAULT = 30;
+
 export const Criticality = {
-  DEFAULT: 30,
+  VERY_LOW: 1,
+  LOW: 2,
+  MEDIUM: 3,
+  HIGH: 4,
+  VERY_HIGH: 5,
 };
 
-export const LevelOfSpend = { ...Criticality };
+export const CriticalityLevels = {
+  [Criticality.VERY_LOW]: {
+    label: 'Very low',
+    max: 20,
+  },
+  [Criticality.LOW]: {
+    label: 'Low',
+    max: 40,
+  },
+  [Criticality.MEDIUM]: {
+    label: 'Medium',
+    max: 60,
+  },
+  [Criticality.HIGH]: {
+    label: 'High',
+    max: 80,
+  },
+  [Criticality.VERY_HIGH]: {
+    label: 'Very high',
+    max: 100,
+  },
+};
 
 export const CanvasColors = { ...Colors };
 
