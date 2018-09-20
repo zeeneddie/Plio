@@ -24,6 +24,7 @@ const KeyPartnerAddModal = ({ isOpen, toggle, organizationId }) => (
         {createKeyPartner => (
           <EntityModalNext {...{ isOpen, toggle }}>
             <EntityModalForm
+              keepDirtyOnReinitialize
               initialValues={{
                 originator: getUserOptions(user),
                 title: '',
