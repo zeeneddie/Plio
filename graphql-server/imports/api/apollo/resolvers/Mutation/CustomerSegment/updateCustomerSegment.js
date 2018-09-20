@@ -6,6 +6,8 @@ import {
   checkPercentOfMarketSize,
   checkFilesAccess,
   customerSegmentUpdateAfterware,
+  checkDocAccess,
+  branch,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, context) =>
@@ -16,6 +18,13 @@ export default applyMiddleware(
   flattenInput(),
   checkCustomerSegmentAccess(),
   checkPercentOfMarketSize(),
+  branch(
+    (root, args) => args.matchedTo,
+    checkDocAccess((root, { matchedTo: { documentId } }, context) => ({
+      query: { _id: documentId },
+      collection: context.collections.ValuePropositions,
+    })),
+  ),
   checkFilesAccess(),
   customerSegmentUpdateAfterware(),
 )(resolver);

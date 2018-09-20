@@ -1,3 +1,5 @@
+import { pluck, concat } from 'ramda';
+
 import { CanvasTypes } from '../constants';
 
 export default {
@@ -19,16 +21,18 @@ export default {
     matchedTo,
     createdBy: userId,
   }),
-  async update({
-    _id,
-    title,
-    originatorId,
-    color,
-    matchedTo,
-    percentOfMarketSize,
-    notes,
-    fileIds,
-  }, { userId, collections: { CustomerSegments } }) {
+  async update(args, context) {
+    const {
+      _id,
+      title,
+      originatorId,
+      color,
+      matchedTo,
+      percentOfMarketSize,
+      notes,
+      fileIds,
+    } = args;
+    const { userId, collections: { CustomerSegments } } = context;
     const query = { _id };
     const modifier = {
       $set: {
@@ -42,6 +46,11 @@ export default {
         updatedBy: userId,
       },
     };
+
+    // Remove all relation documents if matched document is changed
+    const customerSegment = CustomerSegments.findOne({ _id, matchedTo });
+
+    if (!customerSegment) await this.deleteRelations({ _id }, context);
 
     return CustomerSegments.update(query, modifier);
   },
@@ -57,12 +66,31 @@ export default {
       { multi: true },
     );
   },
+  async deleteRelations(args, context) {
+    const { _id } = args;
+    const { collections: { Needs, Wants, Relations } } = context;
+    const query = { 'linkedTo.documentId': _id };
+    const options = { fields: { _id: 1 } };
+    const needs = await Needs.find(query, options).fetch();
+    const wants = await Wants.find(query, options).fetch();
+    const ids = pluck('_id', concat(needs, wants));
+
+    await Relations.remove({
+      $or: [
+        { 'rel1.documentId': { $in: ids } },
+        { 'rel2.documentId': { $in: ids } },
+      ],
+    });
+  },
   async delete(args, context) {
     const { _id } = args;
-    const { collections: { CustomerSegments } } = context;
+    const { collections: { CustomerSegments, Needs, Wants } } = context;
 
-    const res = CustomerSegments.remove({ _id });
+    const res = await CustomerSegments.remove({ _id });
     await this.unmatch(args, context);
+    await this.deleteRelations(args, context);
+    await Needs.remove({ 'linkedTo.documentId': _id });
+    await Wants.remove({ 'linkedTo.documentId': _id });
 
     return res;
   },

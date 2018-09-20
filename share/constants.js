@@ -122,6 +122,7 @@ export const CollectionNames = {
   FEATURES: 'Features',
   NEEDS: 'Needs',
   WANTS: 'Wants',
+  RELATIONS: 'Relations',
 };
 
 export const DefaultRiskTypes = [
@@ -309,6 +310,17 @@ export const ProblemsStatuses = {
   [ProblemIndexes.DELETED]: 'Deleted',
 };
 
+export const Abbreviations = {
+  GOAL: 'KG',
+  LESSON: 'LL',
+  NONCONFORMITY: 'NC',
+  POTENTIAL_GAIN: 'PG',
+  BENEFIT: 'BE',
+  FEATURE: 'FE',
+  NEED: 'NE',
+  WANT: 'WA',
+};
+
 export const ProblemTypes = {
   NON_CONFORMITY: 'non-conformity',
   RISK: 'risk',
@@ -327,12 +339,21 @@ export const CanvasTypes = {
   REVENUE_STREAM: 'revenue-stream',
 };
 
+export const CustomerElementTypes = {
+  BENEFIT: Abbreviations.BENEFIT,
+  FEATURE: Abbreviations.FEATURE,
+  NEED: Abbreviations.NEED,
+  WANT: Abbreviations.WANT,
+};
+
 export const DocumentTypes = {
   STANDARD: 'standard',
   GOAL: 'goal',
   MILESTONE: 'milestone',
   ...ProblemTypes,
   ...ActionTypes,
+  ...CanvasTypes,
+  ...CustomerElementTypes,
 };
 
 export const DocumentTypesPlural = {
@@ -863,18 +884,6 @@ export const MilestoneStatuses = {
   4: 'Completed',
 };
 
-// fill in other stuff
-export const Abbreviations = {
-  GOAL: 'KG',
-  LESSON: 'LL',
-  NONCONFORMITY: 'NC',
-  POTENTIAL_GAIN: 'PG',
-  BENEFIT: 'BE',
-  FEATURE: 'FE',
-  NEED: 'NE',
-  WANT: 'WA',
-};
-
 export const AWSDirectives = {
   DISCUSSION_FILES: 'discussionFiles',
   USER_AVATARS: 'userAvatars',
@@ -898,11 +907,38 @@ export const AWSDirectives = {
   REVENUE_STREAM_FILES: 'revenueStreamFiles',
 };
 
+export const CRITICALITY_DEFAULT = 30;
+
 export const Criticality = {
-  DEFAULT: 30,
+  VERY_LOW: 1,
+  LOW: 2,
+  MEDIUM: 3,
+  HIGH: 4,
+  VERY_HIGH: 5,
 };
 
-export const LevelOfSpend = { ...Criticality };
+export const CriticalityLevels = {
+  [Criticality.VERY_LOW]: {
+    label: 'Very low',
+    max: 20,
+  },
+  [Criticality.LOW]: {
+    label: 'Low',
+    max: 40,
+  },
+  [Criticality.MEDIUM]: {
+    label: 'Medium',
+    max: 60,
+  },
+  [Criticality.HIGH]: {
+    label: 'High',
+    max: 80,
+  },
+  [Criticality.VERY_HIGH]: {
+    label: 'Very high',
+    max: 100,
+  },
+};
 
 export const CanvasColors = { ...Colors };
 
@@ -942,12 +978,12 @@ export const CustomerElementStatuses = {
 export const ImportanceValues = [1, 2, 3, 4, 5];
 
 export const HomeScreenTypes = {
-  IMPLEMENTATION: 'implementation',
+  OPERATIONS: 'operations',
   CANVAS: 'canvas',
 };
 
 export const HomeScreenLabels = {
-  [HomeScreenTypes.IMPLEMENTATION]: 'Implementation view',
+  [HomeScreenTypes.OPERATIONS]: 'Operations view',
   [HomeScreenTypes.CANVAS]: 'Canvas view',
 };
 

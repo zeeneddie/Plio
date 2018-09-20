@@ -1,22 +1,9 @@
 #import "../Fragment/CustomerSegmentCard.graphql"
-#import "../Fragment/CustomerElementCard.graphql"
 
-query CustomerSegmentCard($_id: ID!, $organizationId: ID!) {
+query CustomerSegmentCard($_id: ID!) {
   customerSegment(_id: $_id) {
     customerSegment {
       ...CustomerSegmentCard
-    }
-  }
-
-  needs(organizationId: $organizationId) {
-    needs {
-      ...CustomerElementCard
-    }
-  }
-
-  wants(organizationId: $organizationId) {
-    wants {
-      ...CustomerElementCard
     }
   }
 }

@@ -39,7 +39,9 @@ const CustomerElementSubcard = ({
       initialValues={getInitialValues(customerElement)}
       component={EntityCard}
     >
-      {({ handleSubmit }) => <CustomerElementForm save={handleSubmit} />}
+      {({ handleSubmit }) => (
+        <CustomerElementForm status={customerElement.status} save={handleSubmit} />
+      )}
     </EntityForm>
   </Card>
 );
