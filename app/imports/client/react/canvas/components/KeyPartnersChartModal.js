@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
 import { pure } from 'recompose';
-import { map } from 'ramda';
+import { map, addIndex } from 'ramda';
+
 
 import { Query as Queries } from '../../../graphql';
+import { Colors } from '../../../../share/constants';
 import { CanvasBubbleChartSize, CriticalityLabels } from '../../../../api/constants';
 import { getCriticalityValueLabel } from '../helpers';
 import {
@@ -17,14 +19,15 @@ import {
   CardBlock,
 } from '../../components';
 
-const getChartData = map(({
+const palette = Object.values(Colors);
+
+const getChartData = addIndex(map)(({
   levelOfSpend,
   criticality,
-  color,
   title,
-}) => ({
+}, index) => ({
   data: [{ x: levelOfSpend, y: criticality }],
-  backgroundColor: color,
+  backgroundColor: palette[index % palette.length],
   label: title,
 }));
 

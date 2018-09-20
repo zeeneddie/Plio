@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
 import { pure } from 'recompose';
-import { pluck } from 'ramda';
+import { pluck, pathOr } from 'ramda';
+import { sortByIds, noop } from 'plio-util';
 
 import { Query as Queries } from '../../../graphql';
+import { CanvasSections } from '../../../../share/constants';
 import {
   RenderSwitch,
   PreloaderPage,
@@ -14,11 +16,17 @@ import {
 } from '../../components';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
 
-const getChartData = customerSegments => ({
-  data: pluck('percentOfMarketSize', customerSegments),
-  labels: pluck('title', customerSegments),
-  colors: pluck('color', customerSegments),
-});
+const getChartData = ({
+  customerSegments: { customerSegments },
+  canvasSettings: { canvasSettings },
+}) => {
+  const order = pathOr([], [CanvasSections.CUSTOMER_SEGMENTS, 'order'], canvasSettings);
+  const orderedCustomerSegments = sortByIds(order, customerSegments);
+  return {
+    data: pluck('percentOfMarketSize', orderedCustomerSegments),
+    labels: pluck('title', orderedCustomerSegments),
+  };
+};
 
 const CustomerSegmentsChartModal = ({ isOpen, toggle, organizationId }) => (
   <Query
@@ -36,12 +44,13 @@ const CustomerSegmentsChartModal = ({ isOpen, toggle, organizationId }) => (
         <EntityModalBody>
           <RenderSwitch
             {...{ loading, error }}
+            errorWhenMissing={noop}
             require={data && data.customerSegments}
             renderLoading={<PreloaderPage />}
           >
-            {({ customerSegments }) => (
+            {() => (
               <CanvasDoughnutChart
-                {...getChartData(customerSegments)}
+                {...getChartData(data)}
                 title="% of market"
               />
             )}
