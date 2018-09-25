@@ -20,7 +20,7 @@ const CustomerInsightsPie = ({
   organizationId,
   documentId,
   documentType,
-  onMatchButtonClick,
+  setActiveMatcher,
 }) => (
   <MatchMaker>
     <MatchMakerPie circle>
@@ -29,7 +29,7 @@ const CustomerInsightsPie = ({
     </MatchMakerPie>
     <MatchButton
       alignLeft
-      onClick={onMatchButtonClick}
+      onClick={setActiveMatcher}
     >
       Match
     </MatchButton>
@@ -64,7 +64,7 @@ CustomerInsightsPie.propTypes = {
   documentType: PropTypes.string.isRequired,
   needs: PropTypes.arrayOf(PropTypes.object).isRequired,
   wants: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onMatchButtonClick: PropTypes.func,
+  setActiveMatcher: PropTypes.func,
 };
 
 export default CustomerInsightsPie;

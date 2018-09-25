@@ -47,6 +47,21 @@ export const resolveMatchedFeatures = createRelationResolver(
   }),
 );
 
+export const resolveMatchedNeeds = createRelationResolver(
+  (root, args, { loaders: { Need: { byId } } }) => ({
+    documentType: CustomerElementTypes.NEED,
+    loader: byId,
+  }),
+);
+
+export const resolveMatchedWants = createRelationResolver(
+  (root, args, { loaders: { Want: { byId } } }) => ({
+    documentType: CustomerElementTypes.WANT,
+    loader: byId,
+  }),
+);
+
+
 export const resolveCustomerElementStatus = async (root, args, context) => {
   const { _id } = root;
   const { loaders: { Relation: { byQuery } } } = context;

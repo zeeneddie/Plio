@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { CardTitle, Col, TabContent, TabPane, Button } from 'reactstrap';
+import { CardTitle, Col } from 'reactstrap';
 
 import {
   Subcard,
@@ -8,16 +8,10 @@ import {
   SubcardBody,
   Pull,
   CardBlock,
-  Icon,
 } from '../../components';
-import { WithState } from '../../helpers';
 import CustomerInsightsMatcher from './CustomerInsightsMatcher';
 import CustomerInsightsPie from './CustomerInsightsPie';
-
-const Tabs = {
-  SVG_PIE: 'SvgPie',
-  MATCHER: 'Matcher',
-};
+import CustomerElementsMatch from './CustomerElementsMatch';
 
 const CustomerInsightsSubcard = ({
   organizationId,
@@ -43,40 +37,18 @@ const CustomerInsightsSubcard = ({
     <SubcardBody>
       <CardBlock>
         <Col xs={12} sm={12}>
-          <WithState initialState={{ activeTab: Tabs.SVG_PIE }}>
-            {({ state, setState }) => (
-              <TabContent activeTab={state.activeTab}>
-                <TabPane tabId={Tabs.SVG_PIE}>
-                  <CustomerInsightsPie
-                    {...{
-                      needs,
-                      wants,
-                      organizationId,
-                      documentId,
-                      documentType,
-                    }}
-                    onMatchButtonClick={() => setState({ activeTab: Tabs.MATCHER })}
-                  />
-                </TabPane>
-                <TabPane tabId={Tabs.MATCHER}>
-                  <CustomerInsightsMatcher
-                    {...{
-                      needs,
-                      wants,
-                      documentId,
-                      matchedTo,
-                    }}
-                  />
-                  <Pull right>
-                    <Button onClick={() => setState({ activeTab: Tabs.SVG_PIE })}>
-                      <Icon name="angle-left" margin="right" />
-                      Back
-                    </Button>
-                  </Pull>
-                </TabPane>
-              </TabContent>
-            )}
-          </WithState>
+          <CustomerElementsMatch
+            {...{
+              needs,
+              wants,
+              organizationId,
+              documentId,
+              documentType,
+              matchedTo,
+            }}
+            renderPie={CustomerInsightsPie}
+            renderMatcher={CustomerInsightsMatcher}
+          />
         </Col>
       </CardBlock>
     </SubcardBody>
