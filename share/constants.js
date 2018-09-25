@@ -339,6 +339,30 @@ export const CanvasTypes = {
   REVENUE_STREAM: 'revenue-stream',
 };
 
+export const CanvasSections = {
+  [CanvasTypes.KEY_PARTNER]: 'keyPartners',
+  [CanvasTypes.KEY_ACTIVITY]: 'keyActivities',
+  [CanvasTypes.KEY_RESOURCE]: 'keyResources',
+  [CanvasTypes.VALUE_PROPOSITION]: 'valuePropositions',
+  [CanvasTypes.CUSTOMER_RELATIONSHIP]: 'customerRelationships',
+  [CanvasTypes.CHANNEL]: 'channels',
+  [CanvasTypes.CUSTOMER_SEGMENT]: 'customerSegments',
+  [CanvasTypes.COST_LINE]: 'costStructure',
+  [CanvasTypes.REVENUE_STREAM]: 'revenueStreams',
+};
+
+export const UploaderMetaIdNames = {
+  [CanvasTypes.KEY_PARTNER]: 'keyPartnerId',
+  [CanvasTypes.KEY_ACTIVITY]: 'keyActivityId',
+  [CanvasTypes.KEY_RESOURCE]: 'keyResourceId',
+  [CanvasTypes.VALUE_PROPOSITION]: 'valuePropositionId',
+  [CanvasTypes.CUSTOMER_RELATIONSHIP]: 'customerRelationshipId',
+  [CanvasTypes.CHANNEL]: 'channelId',
+  [CanvasTypes.CUSTOMER_SEGMENT]: 'customerSegmentId',
+  [CanvasTypes.COST_LINE]: 'costLineId',
+  [CanvasTypes.REVENUE_STREAM]: 'revenueStreamId',
+};
+
 export const CustomerElementTypes = {
   BENEFIT: Abbreviations.BENEFIT,
   FEATURE: Abbreviations.FEATURE,
@@ -941,30 +965,6 @@ export const CriticalityLevels = {
 };
 
 export const CanvasColors = { ...Colors };
-
-export const CanvasSections = {
-  KEY_PARTNERS: 'keyPartners',
-  KEY_ACTIVITIES: 'keyActivities',
-  KEY_RESOURCES: 'keyResources',
-  VALUE_PROPOSITIONS: 'valuePropositions',
-  CUSTOMER_RELATIONSHIPS: 'customerRelationships',
-  CHANNELS: 'channels',
-  CUSTOMER_SEGMENTS: 'customerSegments',
-  COST_STRUCTURE: 'costStructure',
-  REVENUE_STREAMS: 'revenueStreams',
-};
-
-export const UploaderMetaIdNames = {
-  [CanvasSections.KEY_PARTNERS]: 'keyPartnerId',
-  [CanvasSections.KEY_ACTIVITIES]: 'keyActivityId',
-  [CanvasSections.KEY_RESOURCES]: 'keyResourceId',
-  [CanvasSections.VALUE_PROPOSITIONS]: 'valuePropositionId',
-  [CanvasSections.CUSTOMER_RELATIONSHIPS]: 'customerRelationshipId',
-  [CanvasSections.CHANNELS]: 'channelId',
-  [CanvasSections.CUSTOMER_SEGMENTS]: 'customerSegmentId',
-  [CanvasSections.COST_STRUCTURE]: 'costLineId',
-  [CanvasSections.REVENUE_STREAMS]: 'revenueStreamId',
-};
 
 export const MAX_TOTAL_PERCENT = 100;
 

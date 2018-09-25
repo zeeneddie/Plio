@@ -7,7 +7,7 @@ import { pure } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
-import { AWSDirectives, CanvasSections, CanvasTypes } from '../../../../share/constants';
+import { AWSDirectives, CanvasTypes } from '../../../../share/constants';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCustomerSegment } from '../../../validation';
@@ -156,7 +156,7 @@ const CustomerSegmentEditModal = ({
                             {...{ organizationId, documentId }}
                             onUpdate={updateCustomerSegment}
                             slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
-                            documentType={CanvasSections.CUSTOMER_SEGMENTS}
+                            documentType={CanvasTypes.CUSTOMER_SEGMENT}
                           />
                         </Fragment>
                       )}

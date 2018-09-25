@@ -7,7 +7,7 @@ import { pure } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
-import { AWSDirectives, CanvasSections, CanvasTypes } from '../../../../share/constants';
+import { AWSDirectives, CanvasTypes } from '../../../../share/constants';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateValueProposition } from '../../../validation';
@@ -142,7 +142,7 @@ const ValuePropositionEditModal = ({
                           documentId={_id}
                           onUpdate={updateValueProposition}
                           slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
-                          documentType={CanvasSections.VALUE_PROPOSITIONS}
+                          documentType={CanvasTypes.VALUE_PROPOSITION}
                         />
                       </Fragment>
                     )}

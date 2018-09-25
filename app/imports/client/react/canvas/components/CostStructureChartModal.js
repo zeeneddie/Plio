@@ -6,7 +6,7 @@ import { pluck, pathOr } from 'ramda';
 import { sortByIds, noop } from 'plio-util';
 
 import { Query as Queries } from '../../../graphql';
-import { CanvasSections } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes } from '../../../../share/constants';
 import {
   RenderSwitch,
   PreloaderPage,
@@ -20,7 +20,7 @@ const getChartData = ({
   costLines: { costLines },
   canvasSettings: { canvasSettings },
 }) => {
-  const order = pathOr([], [CanvasSections.COST_STRUCTURE, 'order'], canvasSettings);
+  const order = pathOr([], [CanvasSections[CanvasTypes.COST_LINE], 'order'], canvasSettings);
   const orderedCostLines = sortByIds(order, costLines);
   return {
     data: pluck('percentOfTotalCost', orderedCostLines),

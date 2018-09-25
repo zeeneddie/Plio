@@ -8,7 +8,7 @@ import { sortByIds, noop } from 'plio-util';
 
 import { WithState } from '../../helpers';
 import { Query as Queries } from '../../../graphql';
-import { CanvasSections } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes } from '../../../../share/constants';
 import {
   RenderSwitch,
   PreloaderPage,
@@ -31,7 +31,7 @@ const getChartData = (
     canvasSettings: { canvasSettings },
   },
 ) => {
-  const order = pathOr([], [CanvasSections.REVENUE_STREAMS, 'order'], canvasSettings);
+  const order = pathOr([], [CanvasSections[CanvasTypes.REVENUE_STREAM], 'order'], canvasSettings);
   const orderedRevenueStreams = sortByIds(order, revenueStreams);
   return {
     data: pluck(dataFieldName, orderedRevenueStreams),
