@@ -373,7 +373,7 @@ export const OptionNone = { label: 'None', value: null };
 
 export const CanvasDoughnutChartSize = {
   WIDTH: 566,
-  HEIGHT: 424,
+  HEIGHT: 566,
 };
 
 export const CanvasBubbleChartSize = {

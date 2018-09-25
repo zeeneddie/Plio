@@ -12,10 +12,10 @@ import { CanvasSections } from '../../../../share/constants';
 import {
   RenderSwitch,
   PreloaderPage,
-  EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
   SwitchView,
+  ChartModal,
 } from '../../components';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
 
@@ -53,10 +53,11 @@ const RevenueStreamsChartModal = ({ isOpen, toggle, organizationId }) => (
     }}
   >
     {({ state, setState }) => (
-      <EntityModalNext
+      <ChartModal
         {...{ isOpen, toggle }}
         error={state.error}
         guidance="Revenue streams"
+        bodyHeight="calc(100vh - 185px)"
         noForm
       >
         <EntityModalHeader label="Revenue streams" />
@@ -117,7 +118,7 @@ const RevenueStreamsChartModal = ({ isOpen, toggle, organizationId }) => (
             </Query>
           </StyledSwitchView>
         </EntityModalBody>
-      </EntityModalNext>
+      </ChartModal>
     )}
   </WithState>
 );

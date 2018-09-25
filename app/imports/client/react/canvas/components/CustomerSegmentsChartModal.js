@@ -10,9 +10,9 @@ import { CanvasSections } from '../../../../share/constants';
 import {
   RenderSwitch,
   PreloaderPage,
-  EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
+  ChartModal,
 } from '../../components';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
 
@@ -35,7 +35,7 @@ const CustomerSegmentsChartModal = ({ isOpen, toggle, organizationId }) => (
     skip={!isOpen}
   >
     {({ loading, error, data }) => (
-      <EntityModalNext
+      <ChartModal
         {...{ isOpen, toggle, error }}
         guidance="Customer segments"
         noForm
@@ -57,7 +57,7 @@ const CustomerSegmentsChartModal = ({ isOpen, toggle, organizationId }) => (
           </RenderSwitch>
         </EntityModalBody>
 
-      </EntityModalNext>
+      </ChartModal>
     )}
   </Query>
 );

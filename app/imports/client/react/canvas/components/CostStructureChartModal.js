@@ -10,9 +10,9 @@ import { CanvasSections } from '../../../../share/constants';
 import {
   RenderSwitch,
   PreloaderPage,
-  EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
+  ChartModal,
 } from '../../components';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
 
@@ -35,7 +35,7 @@ const CostStructureChartModal = ({ isOpen, toggle, organizationId }) => (
     skip={!isOpen}
   >
     {({ error, loading, data }) => (
-      <EntityModalNext
+      <ChartModal
         {...{ isOpen, toggle, error }}
         guidance="Cost Structure"
         noForm
@@ -56,7 +56,7 @@ const CostStructureChartModal = ({ isOpen, toggle, organizationId }) => (
             )}
           </RenderSwitch>
         </EntityModalBody>
-      </EntityModalNext>
+      </ChartModal>
     )}
   </Query>
 );
