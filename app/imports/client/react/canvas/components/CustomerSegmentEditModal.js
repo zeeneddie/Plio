@@ -7,7 +7,7 @@ import { pure } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
-import { AWSDirectives, CanvasSections, CanvasTypes } from '../../../../share/constants';
+import { AWSDirectives, CanvasTypes } from '../../../../share/constants';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCustomerSegment } from '../../../validation';
@@ -59,10 +59,23 @@ const CustomerSegmentEditModal = ({
           />,
           <Mutation mutation={Mutations.UPDATE_CUSTOMER_SEGMENT} children={noop} />,
           <Mutation mutation={Mutations.DELETE_CUSTOMER_SEGMENT} children={noop} />,
+          <Mutation
+            mutation={Mutations.MATCH_CUSTOMER_SEGMENT}
+            refetchQueries={() => [{
+              query: Queries.VALUE_PROPOSITIONS,
+              variables: { organizationId },
+            }]}
+            children={noop}
+          />,
           /* eslint-disable react/no-children-prop */
         ]}
       >
-        {([{ data, ...query }, updateCustomerSegment, deleteCustomerSegment]) => (
+        {([
+          { data, ...query },
+          updateCustomerSegment,
+          deleteCustomerSegment,
+          matchCustomerSegment,
+        ]) => (
           <EntityModalNext
             {...{ isOpen, toggle }}
             isEditMode
@@ -92,9 +105,9 @@ const CustomerSegmentEditModal = ({
               validate={validateCustomerSegment}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
-                const isDirty = diff(values, currentValues);
+                const difference = diff(values, currentValues);
 
-                if (!isDirty) return undefined;
+                if (!difference) return undefined;
 
                 const {
                   title,
@@ -105,6 +118,22 @@ const CustomerSegmentEditModal = ({
                   notes = '',
                 } = values;
 
+                if (difference[0].path[0] === 'matchedTo') {
+                  return matchCustomerSegment({
+                    variables: {
+                      input: {
+                        _id,
+                        matchedTo: convertDocumentOptions({
+                          documentType: CanvasTypes.VALUE_PROPOSITION,
+                        }, matchedTo),
+                      },
+                    },
+                  }).then(noop).catch((err) => {
+                    form.reset(currentValues);
+                    throw err;
+                  });
+                }
+
                 return updateCustomerSegment({
                   variables: {
                     input: {
@@ -114,9 +143,6 @@ const CustomerSegmentEditModal = ({
                       color,
                       percentOfMarketSize,
                       originatorId: originator.value,
-                      matchedTo: convertDocumentOptions({
-                        documentType: CanvasTypes.VALUE_PROPOSITION,
-                      }, matchedTo),
                     },
                   },
                 }).then(noop).catch((err) => {
@@ -129,11 +155,11 @@ const CustomerSegmentEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Customer segment" />
                   <EntityModalBody>
-                    <CustomerSegmentForm {...{ organizationId }} save={handleSubmit} />
                     <RenderSwitch
                       require={data.customerSegment && data.customerSegment.customerSegment}
                       errorWhenMissing={noop}
                       loading={query.loading}
+                      renderLoading={<CustomerSegmentForm {...{ organizationId }} />}
                     >
                       {({
                         _id: documentId,
@@ -142,6 +168,10 @@ const CustomerSegmentEditModal = ({
                         matchedTo,
                       }) => (
                         <Fragment>
+                          <CustomerSegmentForm
+                            {...{ organizationId, matchedTo }}
+                            save={handleSubmit}
+                          />
                           <CustomerInsightsSubcard
                             {...{
                               organizationId,
@@ -156,7 +186,7 @@ const CustomerSegmentEditModal = ({
                             {...{ organizationId, documentId }}
                             onUpdate={updateCustomerSegment}
                             slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
-                            documentType={CanvasSections.CUSTOMER_SEGMENTS}
+                            documentType={CanvasTypes.CUSTOMER_SEGMENT}
                           />
                         </Fragment>
                       )}

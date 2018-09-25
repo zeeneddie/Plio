@@ -21,6 +21,8 @@ import CUSTOMER_SEGMENT_PRESENTATION from './CustomerSegmentPresentation.graphql
 import VALUE_PROPOSITION_PRESENTATION from './ValuePropositionPresentation.graphql';
 import CUSTOMER_ELEMENT_CARD from './CustomerElementCard.graphql';
 import CUSTOMER_ELEMENT_PRESENTATION from './CustomerElementPresentation.graphql';
+import CUSTOMER_SEGMENT_RELATIONS from './CustomerSegmentRelations.graphql';
+import VALUE_PROPOSITION_RELATIONS from './ValuePropositionRelations.graphql';
 
 DASHBOARD_GOAL.fragmentName = 'DashboardGoal';
 GOAL_CARD.fragmentName = 'GoalCard';
@@ -45,6 +47,8 @@ CUSTOMER_SEGMENT_PRESENTATION.fragmentName = 'CustomerSegmentPresentation';
 VALUE_PROPOSITION_PRESENTATION.fragmentName = 'ValuePropositionPresentation';
 CUSTOMER_ELEMENT_CARD.fragmentName = 'CustomerElementCard';
 CUSTOMER_ELEMENT_PRESENTATION.fragmentName = 'CustomerElementPresentation';
+CUSTOMER_SEGMENT_RELATIONS.fragmentName = 'CustomerSegmentRelations';
+VALUE_PROPOSITION_RELATIONS.fragmentName = 'ValuePropositionRelations';
 
 export default {
   DASHBOARD_GOAL,
@@ -70,4 +74,6 @@ export default {
   VALUE_PROPOSITION_PRESENTATION,
   CUSTOMER_ELEMENT_CARD,
   CUSTOMER_ELEMENT_PRESENTATION,
+  CUSTOMER_SEGMENT_RELATIONS,
+  VALUE_PROPOSITION_RELATIONS,
 };

@@ -3,10 +3,9 @@ import faker from 'faker';
 import { Mongo } from 'meteor/mongo';
 import sift from 'sift';
 
-import * as Collections from '../../collections';
-import * as services from '../../services';
-
 export default (ctx) => {
+  const Collections = require('../../collections');
+  const services = require('../../services');
   const collections = {
     ...mapObjIndexed((c, key) => new Mongo.Collection(key), Collections),
     Users: new Mongo.Collection('users'),

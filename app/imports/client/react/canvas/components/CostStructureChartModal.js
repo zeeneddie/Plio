@@ -6,13 +6,13 @@ import { pluck, pathOr } from 'ramda';
 import { sortByIds, noop } from 'plio-util';
 
 import { Query as Queries } from '../../../graphql';
-import { CanvasSections } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes } from '../../../../share/constants';
 import {
   RenderSwitch,
   PreloaderPage,
-  EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
+  ChartModal,
 } from '../../components';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
 
@@ -20,7 +20,7 @@ const getChartData = ({
   costLines: { costLines },
   canvasSettings: { canvasSettings },
 }) => {
-  const order = pathOr([], [CanvasSections.COST_STRUCTURE, 'order'], canvasSettings);
+  const order = pathOr([], [CanvasSections[CanvasTypes.COST_LINE], 'order'], canvasSettings);
   const orderedCostLines = sortByIds(order, costLines);
   return {
     data: pluck('percentOfTotalCost', orderedCostLines),
@@ -35,7 +35,7 @@ const CostStructureChartModal = ({ isOpen, toggle, organizationId }) => (
     skip={!isOpen}
   >
     {({ error, loading, data }) => (
-      <EntityModalNext
+      <ChartModal
         {...{ isOpen, toggle, error }}
         guidance="Cost Structure"
         noForm
@@ -56,7 +56,7 @@ const CostStructureChartModal = ({ isOpen, toggle, organizationId }) => (
             )}
           </RenderSwitch>
         </EntityModalBody>
-      </EntityModalNext>
+      </ChartModal>
     )}
   </Query>
 );

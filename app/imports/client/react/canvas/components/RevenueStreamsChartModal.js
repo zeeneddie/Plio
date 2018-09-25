@@ -8,14 +8,14 @@ import { sortByIds, noop } from 'plio-util';
 
 import { WithState } from '../../helpers';
 import { Query as Queries } from '../../../graphql';
-import { CanvasSections } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes } from '../../../../share/constants';
 import {
   RenderSwitch,
   PreloaderPage,
-  EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
   SwitchView,
+  ChartModal,
 } from '../../components';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
 
@@ -31,7 +31,7 @@ const getChartData = (
     canvasSettings: { canvasSettings },
   },
 ) => {
-  const order = pathOr([], [CanvasSections.REVENUE_STREAMS, 'order'], canvasSettings);
+  const order = pathOr([], [CanvasSections[CanvasTypes.REVENUE_STREAM], 'order'], canvasSettings);
   const orderedRevenueStreams = sortByIds(order, revenueStreams);
   return {
     data: pluck(dataFieldName, orderedRevenueStreams),
@@ -53,10 +53,11 @@ const RevenueStreamsChartModal = ({ isOpen, toggle, organizationId }) => (
     }}
   >
     {({ state, setState }) => (
-      <EntityModalNext
+      <ChartModal
         {...{ isOpen, toggle }}
         error={state.error}
         guidance="Revenue streams"
+        bodyHeight="calc(100vh - 185px)"
         noForm
       >
         <EntityModalHeader label="Revenue streams" />
@@ -117,7 +118,7 @@ const RevenueStreamsChartModal = ({ isOpen, toggle, organizationId }) => (
             </Query>
           </StyledSwitchView>
         </EntityModalBody>
-      </EntityModalNext>
+      </ChartModal>
     )}
   </WithState>
 );

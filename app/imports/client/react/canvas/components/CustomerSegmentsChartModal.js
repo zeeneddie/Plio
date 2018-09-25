@@ -6,13 +6,13 @@ import { pluck, pathOr } from 'ramda';
 import { sortByIds, noop } from 'plio-util';
 
 import { Query as Queries } from '../../../graphql';
-import { CanvasSections } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes } from '../../../../share/constants';
 import {
   RenderSwitch,
   PreloaderPage,
-  EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
+  ChartModal,
 } from '../../components';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
 
@@ -20,7 +20,7 @@ const getChartData = ({
   customerSegments: { customerSegments },
   canvasSettings: { canvasSettings },
 }) => {
-  const order = pathOr([], [CanvasSections.CUSTOMER_SEGMENTS, 'order'], canvasSettings);
+  const order = pathOr([], [CanvasSections[CanvasTypes.CUSTOMER_SEGMENT], 'order'], canvasSettings);
   const orderedCustomerSegments = sortByIds(order, customerSegments);
   return {
     data: pluck('percentOfMarketSize', orderedCustomerSegments),
@@ -35,7 +35,7 @@ const CustomerSegmentsChartModal = ({ isOpen, toggle, organizationId }) => (
     skip={!isOpen}
   >
     {({ loading, error, data }) => (
-      <EntityModalNext
+      <ChartModal
         {...{ isOpen, toggle, error }}
         guidance="Customer segments"
         noForm
@@ -57,7 +57,7 @@ const CustomerSegmentsChartModal = ({ isOpen, toggle, organizationId }) => (
           </RenderSwitch>
         </EntityModalBody>
 
-      </EntityModalNext>
+      </ChartModal>
     )}
   </Query>
 );

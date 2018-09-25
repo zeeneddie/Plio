@@ -2,7 +2,7 @@ import { loadOrganizationById, loadUserById, lenses, generateSequentialId } from
 import { view } from 'ramda';
 
 import { Abbreviations, CustomerElementTypes } from '../../../../../share/constants';
-import { resolveCustomerElementStatus } from '../util';
+import { resolveCustomerElementStatus, resolveMatchedNeeds, resolveMatchedWants } from '../util';
 
 const {
   createdBy,
@@ -18,5 +18,7 @@ export default {
     sequentialId: generateSequentialId(Abbreviations.FEATURE),
     documentType: () => CustomerElementTypes.FEATURE,
     status: resolveCustomerElementStatus,
+    needs: resolveMatchedNeeds,
+    wants: resolveMatchedWants,
   },
 };

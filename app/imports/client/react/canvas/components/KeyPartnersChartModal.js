@@ -12,11 +12,11 @@ import { getCriticalityValueLabel } from '../helpers';
 import {
   RenderSwitch,
   PreloaderPage,
-  EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
   LoadableBubbleChart,
   CardBlock,
+  ChartModal,
 } from '../../components';
 
 const palette = Object.values(Colors);
@@ -38,7 +38,7 @@ const KeyPartnersChartModal = ({ isOpen, toggle, organizationId }) => (
     skip={!isOpen}
   >
     {({ loading, error, data }) => (
-      <EntityModalNext
+      <ChartModal
         {...{ isOpen, toggle, error }}
         guidance="Key partners"
         noForm
@@ -66,8 +66,7 @@ const KeyPartnersChartModal = ({ isOpen, toggle, organizationId }) => (
             )}
           </RenderSwitch>
         </EntityModalBody>
-
-      </EntityModalNext>
+      </ChartModal>
     )}
   </Query>
 );

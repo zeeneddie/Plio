@@ -12,8 +12,8 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 
-import { EntityLabel, Icon } from '../../components';
-import { WithToggle } from '../../helpers';
+import { EntityLabel, Icon, IconLoading } from '../../components';
+import { WithToggle, WithState } from '../../helpers';
 import { swal } from '../../../util';
 
 const StyledRow = styled(Row)`
@@ -124,24 +124,38 @@ const Matcher = ({
             sequentialId={matchedItem.sequentialId}
           >
             {' '}
-            <IconContainer
-              onClick={() => onUnmatch({
-                variables: {
-                  input: {
-                    rel1: {
-                      documentType,
-                      documentId: _id,
-                    },
-                    rel2: {
-                      documentId: matchedItem._id,
-                      documentType: matchedItem.documentType,
-                    },
-                  },
-                },
-              }).catch(swal.error)}
-            >
-              <Icon name="times-circle" size="2" />
-            </IconContainer>
+            <WithState initialState={{ loading: false }}>
+              {({ state: { loading }, setState }) => (
+                <IconContainer
+                  onClick={() => {
+                    if (loading) return;
+
+                    setState({ loading: true });
+
+                    onUnmatch({
+                      awaitRefetchQueries: true,
+                      variables: {
+                        input: {
+                          rel1: {
+                            documentType,
+                            documentId: _id,
+                          },
+                          rel2: {
+                            documentId: matchedItem._id,
+                            documentType: matchedItem.documentType,
+                          },
+                        },
+                      },
+                    }).catch((err) => {
+                      setState({ loading: false });
+                      swal.error(err);
+                    });
+                  }}
+                >
+                  {loading ? <IconLoading /> : <Icon name="times-circle" size="2" />}
+                </IconContainer>
+              )}
+            </WithState>
           </EntityLabel>
         ))}
       </Col>
