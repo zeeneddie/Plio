@@ -8,7 +8,7 @@ const StyledEntityModalNext = styled(({ bodyHeight, ...rest }) => <EntityModalNe
   display: inline-block;
   width: auto !important;
   height: calc(100vh - 60px);
-  .modal-body .card-block:last-of-type {
+  .modal-body > .card-block:last-of-type {
     ${({ bodyHeight = 'calc(100vh - 115px)' }) => `
       height: ${bodyHeight};
       width: ${bodyHeight};
