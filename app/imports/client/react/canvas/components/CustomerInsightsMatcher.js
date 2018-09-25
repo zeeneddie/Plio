@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Row, Col } from 'reactstrap';
+import { Row } from 'reactstrap';
 import { bySequentialId, noop } from 'plio-util';
 import { Mutation } from 'react-apollo';
 import { ifElse, isNil, always, converge, concat, propOr, compose, sort } from 'ramda';
@@ -8,6 +8,7 @@ import { ifElse, isNil, always, converge, concat, propOr, compose, sort } from '
 import { Composer } from '../../helpers';
 import { Mutation as Mutations, Query as Queries } from '../../../graphql';
 import Matcher from './Matcher';
+import { Col } from '../../components';
 
 const getRefetchQueries = _id => [{
   query: Queries.CUSTOMER_SEGMENT_CARD,
@@ -51,10 +52,10 @@ const CustomerInsightsMatcher = ({
     {([createRelation, deleteRelation]) => (
       <Fragment>
         <Row>
-          <Col xs="6" sm="6">
+          <Col xs="6">
             <legend>Needs & wants</legend>
           </Col>
-          <Col xs="6" sm="6">
+          <Col xs="6">
             <legend>Features & benefits</legend>
           </Col>
         </Row>
