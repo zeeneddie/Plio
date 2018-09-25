@@ -4,7 +4,6 @@ import { indexBy } from 'ramda';
 import { getId } from 'plio-util';
 import {
   Row,
-  Col,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
@@ -12,7 +11,7 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 
-import { EntityLabel, Icon, IconLoading } from '../../components';
+import { EntityLabel, Icon, IconLoading, Col } from '../../components';
 import { WithToggle, WithState } from '../../helpers';
 import { swal } from '../../../util';
 
@@ -62,7 +61,7 @@ const Matcher = ({
 
   return (
     <StyledRow>
-      <Col xs="6" sm="6">
+      <Col xs="6">
         <Wrapper>
           <EntityLabel {...{ title, sequentialId }} />
           <WithToggle>
@@ -116,7 +115,7 @@ const Matcher = ({
           </WithToggle>
         </Wrapper>
       </Col>
-      <Col xs="6" sm="6">
+      <Col xs="6">
         {matchedItems.map(matchedItem => (
           <EntityLabel
             key={matchedItem._id}
