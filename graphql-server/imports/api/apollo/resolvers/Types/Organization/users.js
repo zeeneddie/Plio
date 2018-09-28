@@ -21,15 +21,12 @@ import {
 const isRemovedOrNoUser = anyPass([isRemoved, complement(getUser)]);
 const findOrgUser = curry((users, user) => find(eqUserId(getId(user)), users));
 
-export default async ({ users: orgUsers }, args, { loaders: { User: { byQuery } } }) => {
+export default async ({ users: orgUsers }, args, { loaders: { User: { byId } } }) => {
   const userIds = getUserIds(orgUsers);
-  return byQuery.load({
-    _id: { $in: userIds },
-    invitationId: null,
-    'emails.verified': true,
-  }).then(map(converge(set(lenses.user), [
-    identity,
-    findOrgUser(orgUsers),
-  ])))
+  return byId.loadMany(userIds)
+    .then(map(converge(set(lenses.user), [
+      identity,
+      findOrgUser(orgUsers),
+    ])))
     .then(reject(isRemovedOrNoUser));
 };

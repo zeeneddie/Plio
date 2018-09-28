@@ -3,6 +3,7 @@ query OrganizationUsers ($organizationId: ID!) {
     users {
       user {
         _id
+        email
         profile {
           fullName
         }

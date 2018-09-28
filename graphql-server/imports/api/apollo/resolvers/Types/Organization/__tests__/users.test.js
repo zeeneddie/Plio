@@ -19,8 +19,8 @@ describe('Types/Organization/users', () => {
     const context = {
       loaders: {
         User: {
-          byQuery: {
-            load: () => Promise.resolve(users),
+          byId: {
+            loadMany: () => Promise.resolve(users),
           },
         },
       },

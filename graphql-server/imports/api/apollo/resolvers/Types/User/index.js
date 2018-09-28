@@ -10,6 +10,6 @@ export default {
     },
   },
   UserProfile: {
-    fullName: ({ firstName, lastName }) => `${firstName} ${lastName}`,
+    fullName: ({ firstName, lastName }) => firstName && lastName && `${firstName} ${lastName}`,
   },
 };
