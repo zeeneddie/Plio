@@ -49,7 +49,7 @@ export const SelectWrapper = styled.div`
   .Select-loading-zone {
     position: absolute;
     top: 6px;
-    left: 10px;
+    right: 50px;
   }
   .Select-option,
   .Select-create-option-placeholder {
