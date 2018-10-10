@@ -38,10 +38,14 @@ const CanvasSectionItems = ({ children, ...props }) => (
 CanvasSectionItems.propTypes = {
   tag: PropTypes.string,
   children: PropTypes.node.isRequired,
+  options: PropTypes.object,
 };
 
 CanvasSectionItems.defaultProps = {
   tag: 'ul',
+  options: {
+    handle: '.drag-handle',
+  },
 };
 
 export default CanvasSectionItems;
