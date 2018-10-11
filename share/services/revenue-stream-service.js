@@ -26,6 +26,7 @@ export default {
     percentOfProfit,
     notes,
     fileIds,
+    notify,
   }, { userId, collections: { RevenueStreams } }) {
     const query = { _id };
     const modifier = {
@@ -37,6 +38,7 @@ export default {
         percentOfProfit,
         notes,
         fileIds,
+        notify,
         updatedBy: userId,
       },
     };

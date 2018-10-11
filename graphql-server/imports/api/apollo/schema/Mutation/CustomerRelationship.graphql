@@ -17,6 +17,7 @@ input UpdateCustomerRelationshipInput {
   color: String
   notes: String
   fileIds: [String]
+  notify: [ID]
 }
 
 input DeleteCustomerRelationshipInput {

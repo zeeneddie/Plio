@@ -17,6 +17,7 @@ input UpdateKeyActivityInput {
   color: String
   notes: String
   fileIds: [String]
+  notify: [ID]
 }
 
 input DeleteKeyActivityInput {

@@ -38,8 +38,9 @@ export const insert = new ValidatedMethod({
 
     if (Meteor.isServer) {
       checkOrgMembership(userId, args.organizationId);
+      return FilesService.insert(args);
     }
-    return FilesService.insert(args);
+    return undefined;
   },
 });
 

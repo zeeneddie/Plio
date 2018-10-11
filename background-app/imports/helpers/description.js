@@ -58,3 +58,13 @@ export const getGoalName = getTitle;
 // milestones
 export const getMilestoneDesc = () => 'milestone';
 export const getMilestoneName = getTitle;
+
+export const getKeyPartnerDesc = () => 'key partner';
+export const getKeyActivityDesc = () => 'key activity';
+export const getKeyResourceDesc = () => 'key resource';
+export const getValuePropositionDesc = () => 'value proposition';
+export const getCustomerRelationshipDesc = () => 'customer relationship';
+export const getChannelDesc = () => 'channel';
+export const getCustomerSegmentDesc = () => 'customer segment';
+export const getCostLineDesc = () => 'cost line';
+export const getRevenueStreamDesc = () => 'revenue stream';

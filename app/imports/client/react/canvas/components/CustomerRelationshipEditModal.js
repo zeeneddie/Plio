@@ -19,6 +19,8 @@ import {
   EntityModalHeader,
   EntityModalBody,
   EntityModalForm,
+  RenderSwitch,
+  NotifySubcardAdapter,
 } from '../../components';
 
 const getCustomerRelationship = pathOr({}, repeat('customerRelationship', 2));
@@ -118,16 +120,29 @@ const CustomerRelationshipEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Customer relationship" />
                   <EntityModalBody>
-                    <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                    {_id && (
-                      <CanvasFilesSubcard
-                        {...{ organizationId }}
-                        documentId={_id}
-                        onUpdate={updateCustomerRelationship}
-                        slingshotDirective={AWSDirectives.CUSTOMER_RELATIONSHIP_FILES}
-                        documentType={CanvasTypes.CUSTOMER_RELATIONSHIP}
-                      />
-                    )}
+                    <RenderSwitch
+                      require={data.customerRelationship &&
+                        data.customerRelationship.customerRelationship}
+                      errorWhenMissing={noop}
+                      loading={query.loading}
+                      renderLoading={<CanvasForm {...{ organizationId }} />}
+                    >
+                      {({ _id: documentId, notify }) => (
+                        <Fragment>
+                          <CanvasForm {...{ organizationId }} save={handleSubmit} />
+                          <CanvasFilesSubcard
+                            {...{ documentId, organizationId }}
+                            onUpdate={updateCustomerRelationship}
+                            slingshotDirective={AWSDirectives.CUSTOMER_RELATIONSHIP_FILES}
+                            documentType={CanvasTypes.CUSTOMER_RELATIONSHIP}
+                          />
+                          <NotifySubcardAdapter
+                            {...{ documentId, notify, organizationId }}
+                            onUpdate={updateCustomerRelationship}
+                          />
+                        </Fragment>
+                      )}
+                    </RenderSwitch>
                   </EntityModalBody>
                 </Fragment>
               )}

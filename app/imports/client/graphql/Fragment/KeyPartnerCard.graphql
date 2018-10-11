@@ -1,14 +1,9 @@
+#import "./CanvasCard.graphql"
+
 fragment KeyPartnerCard on KeyPartner {
-  _id
-  title
-  color
   criticality
   levelOfSpend
-  notes
-  originator {
-    _id
-    profile {
-      fullName
-    }
+  ... on CanvasEntity {
+    ...CanvasCard
   }
 }

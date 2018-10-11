@@ -1,13 +1,8 @@
+#import "./CanvasCard.graphql"
+
 fragment CostLineCard on CostLine {
-  _id
-  title
-  color
-  notes
   percentOfTotalCost
-  originator {
-    _id
-    profile {
-      fullName
-    }
+  ... on CanvasEntity {
+    ...CanvasCard
   }
 }

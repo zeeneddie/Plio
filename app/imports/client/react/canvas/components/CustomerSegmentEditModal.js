@@ -21,6 +21,7 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
+  NotifySubcardAdapter,
 } from '../../components';
 
 const getCustomerSegment = pathOr({}, repeat('customerSegment', 2));
@@ -166,6 +167,7 @@ const CustomerSegmentEditModal = ({
                         needs = [],
                         wants = [],
                         matchedTo,
+                        notify,
                       }) => (
                         <Fragment>
                           <CustomerSegmentForm
@@ -187,6 +189,10 @@ const CustomerSegmentEditModal = ({
                             onUpdate={updateCustomerSegment}
                             slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
                             documentType={CanvasTypes.CUSTOMER_SEGMENT}
+                          />
+                          <NotifySubcardAdapter
+                            {...{ documentId, notify, organizationId }}
+                            onUpdate={updateCustomerSegment}
                           />
                         </Fragment>
                       )}

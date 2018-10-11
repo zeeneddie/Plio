@@ -19,6 +19,8 @@ import {
   EntityModalHeader,
   EntityModalBody,
   EntityModalForm,
+  RenderSwitch,
+  NotifySubcardAdapter,
 } from '../../components';
 
 const getCostLine = pathOr({}, repeat('costLine', 2));
@@ -121,16 +123,28 @@ const CostLineEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Cost line" />
                   <EntityModalBody>
-                    <CostLineForm {...{ organizationId }} save={handleSubmit} />
-                    {_id && (
-                      <CanvasFilesSubcard
-                        {...{ organizationId }}
-                        documentId={_id}
-                        onUpdate={updateCostLine}
-                        slingshotDirective={AWSDirectives.COST_LINE_FILES}
-                        documentType={CanvasTypes.COST_LINE}
-                      />
-                    )}
+                    <RenderSwitch
+                      require={data.costLine && data.costLine.costLine}
+                      errorWhenMissing={noop}
+                      loading={query.loading}
+                      renderLoading={<CostLineForm {...{ organizationId }} />}
+                    >
+                      {({ _id: documentId, notify }) => (
+                        <Fragment>
+                          <CostLineForm {...{ organizationId }} save={handleSubmit} />
+                          <CanvasFilesSubcard
+                            {...{ documentId, organizationId }}
+                            onUpdate={updateCostLine}
+                            slingshotDirective={AWSDirectives.COST_LINE_FILES}
+                            documentType={CanvasTypes.COST_LINE}
+                          />
+                          <NotifySubcardAdapter
+                            {...{ documentId, notify, organizationId }}
+                            onUpdate={updateCostLine}
+                          />
+                        </Fragment>
+                      )}
+                    </RenderSwitch>
                   </EntityModalBody>
                 </Fragment>
               )}

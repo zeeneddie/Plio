@@ -19,6 +19,8 @@ import {
   EntityModalHeader,
   EntityModalBody,
   EntityModalForm,
+  RenderSwitch,
+  NotifySubcardAdapter,
 } from '../../components';
 
 const getRevenueStream = pathOr({}, repeat('revenueStream', 2));
@@ -124,16 +126,28 @@ const RevenueStreamEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Revenue stream" />
                   <EntityModalBody>
-                    <RevenueStreamForm {...{ organizationId }} save={handleSubmit} />
-                    {_id && (
-                      <CanvasFilesSubcard
-                        {...{ organizationId }}
-                        documentId={_id}
-                        onUpdate={updateRevenueStream}
-                        slingshotDirective={AWSDirectives.REVENUE_STREAM_FILES}
-                        documentType={CanvasTypes.REVENUE_STREAM}
-                      />
-                    )}
+                    <RenderSwitch
+                      require={data.revenueStream && data.revenueStream.revenueStream}
+                      errorWhenMissing={noop}
+                      loading={query.loading}
+                      renderLoading={<RevenueStreamForm {...{ organizationId }} />}
+                    >
+                      {({ _id: documentId, notify }) => (
+                        <Fragment>
+                          <RevenueStreamForm {...{ organizationId }} save={handleSubmit} />
+                          <CanvasFilesSubcard
+                            {...{ documentId, organizationId }}
+                            onUpdate={updateRevenueStream}
+                            slingshotDirective={AWSDirectives.REVENUE_STREAM_FILES}
+                            documentType={CanvasTypes.REVENUE_STREAM}
+                          />
+                          <NotifySubcardAdapter
+                            {...{ documentId, notify, organizationId }}
+                            onUpdate={updateRevenueStream}
+                          />
+                        </Fragment>
+                      )}
+                    </RenderSwitch>
                   </EntityModalBody>
                 </Fragment>
               )}
