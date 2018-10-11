@@ -7,6 +7,7 @@ export default async function updateCustomerSegment(args, context) {
     percentOfMarketSize,
     notes,
     fileIds,
+    notify,
   } = args;
   const { userId, collections: { CustomerSegments } } = context;
   const query = { _id };
@@ -18,6 +19,7 @@ export default async function updateCustomerSegment(args, context) {
       percentOfMarketSize,
       notes,
       fileIds,
+      notify,
       updatedBy: userId,
     },
   };

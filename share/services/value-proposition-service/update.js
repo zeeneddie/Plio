@@ -6,6 +6,7 @@ export default async function updateValueProposition(args, context) {
     color,
     notes,
     fileIds,
+    notify,
   } = args;
   const { userId, collections: { ValuePropositions } } = context;
   const query = { _id };
@@ -16,6 +17,7 @@ export default async function updateValueProposition(args, context) {
       color,
       notes,
       fileIds,
+      notify,
       updatedBy: userId,
     },
   };

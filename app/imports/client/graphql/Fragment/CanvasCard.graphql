@@ -1,0 +1,18 @@
+fragment CanvasCard on CanvasEntity {
+  _id
+  title
+  color
+  notes
+  originator {
+    _id
+    profile {
+      fullName
+    }
+  }
+  notify {
+    _id
+    profile {
+      fullName
+    }
+  }
+}

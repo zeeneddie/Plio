@@ -80,3 +80,5 @@ export const getCollectionUrlByDocType = (docType, serialNumber) => {
 };
 
 export const removeQueryParams = str => `${str}`.split('?')[0];
+
+export const getCanvasUrl = () => 'canvas';

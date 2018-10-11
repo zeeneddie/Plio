@@ -25,6 +25,7 @@ input UpdateCustomerSegmentInput {
   percentOfMarketSize: Int
   notes: String
   fileIds: [String]
+  notify: [ID]
 }
 
 input DeleteCustomerSegmentInput {

@@ -5,6 +5,7 @@ import {
   OrganizationIdSchema,
   idSchemaDoc,
   FileIdsSchema,
+  getNotifySchema,
 } from './schemas';
 import { StringLimits, CanvasColors } from '../constants';
 
@@ -12,6 +13,7 @@ const CanvasSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
   FileIdsSchema,
+  getNotifySchema('originatorId'),
   {
     title: {
       type: String,

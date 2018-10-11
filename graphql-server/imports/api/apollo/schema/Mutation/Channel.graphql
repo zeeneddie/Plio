@@ -17,6 +17,7 @@ input UpdateChannelInput {
   color: String
   notes: String
   fileIds: [String]
+  notify: [ID]
 }
 
 input DeleteChannelInput {

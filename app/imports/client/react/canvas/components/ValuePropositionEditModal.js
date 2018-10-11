@@ -21,6 +21,7 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
+  NotifySubcardAdapter,
 } from '../../components';
 
 const getValueProposition = pathOr({}, repeat('valueProposition', 2));
@@ -140,9 +141,6 @@ const ValuePropositionEditModal = ({
                       notes,
                       color,
                       originatorId: originator.value,
-                      matchedTo: convertDocumentOptions({
-                        documentType: CanvasTypes.CUSTOMER_SEGMENT,
-                      }, matchedTo),
                     },
                   },
                 }).then(noop).catch((err) => {
@@ -166,6 +164,7 @@ const ValuePropositionEditModal = ({
                         benefits = [],
                         features = [],
                         matchedTo,
+                        notify,
                       }) => (
                         <Fragment>
                           <ValuePropositionForm
@@ -187,6 +186,10 @@ const ValuePropositionEditModal = ({
                             onUpdate={updateValueProposition}
                             slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
                             documentType={CanvasTypes.VALUE_PROPOSITION}
+                          />
+                          <NotifySubcardAdapter
+                            {...{ documentId, notify, organizationId }}
+                            onUpdate={updateValueProposition}
                           />
                         </Fragment>
                       )}

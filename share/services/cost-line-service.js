@@ -23,6 +23,7 @@ export default {
     percentOfTotalCost,
     notes,
     fileIds,
+    notify,
   }, { userId, collections: { CostLines } }) {
     const query = { _id };
     const modifier = {
@@ -33,6 +34,7 @@ export default {
         percentOfTotalCost,
         notes,
         fileIds,
+        notify,
         updatedBy: userId,
       },
     };

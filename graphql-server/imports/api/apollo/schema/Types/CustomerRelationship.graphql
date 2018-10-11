@@ -10,4 +10,5 @@ type CustomerRelationship implements BaseEntity, CanvasEntity {
   color: String!
   notes: String
   fileIds: [String]
+  notify: [User]
 }

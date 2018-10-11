@@ -1,4 +1,9 @@
-import { loadOrganizationById, loadUserById, lenses } from 'plio-util';
+import {
+  loadOrganizationById,
+  loadUserById,
+  loadUsersById,
+  lenses,
+} from 'plio-util';
 import { view } from 'ramda';
 
 const {
@@ -6,6 +11,7 @@ const {
   updatedBy,
   originatorId,
   organizationId,
+  notify,
 } = lenses;
 
 export default {
@@ -14,6 +20,7 @@ export default {
     updatedBy: loadUserById(view(updatedBy)),
     originator: loadUserById(view(originatorId)),
     organization: loadOrganizationById(view(organizationId)),
+    notify: loadUsersById(view(notify)),
     matchedTo: async (root, args, context) => {
       const { documentId } = root.matchedTo || {};
       const { loaders: { ValueProposition: { byId } } } = context;

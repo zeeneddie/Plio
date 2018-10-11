@@ -295,7 +295,7 @@ export const getNotifySchema = fieldNames => new SimpleSchema({
         return this.unset();
       }
 
-      return this.unset();
+      return undefined;
     },
   },
 });

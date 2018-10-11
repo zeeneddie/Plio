@@ -20,6 +20,7 @@ export default {
     color,
     notes,
     fileIds,
+    notify,
   }, { userId, collections: { Channels } }) {
     const query = { _id };
     const modifier = {
@@ -29,6 +30,7 @@ export default {
         color,
         notes,
         fileIds,
+        notify,
         updatedBy: userId,
       },
     };

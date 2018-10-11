@@ -1,12 +1,7 @@
+#import "./CanvasCard.graphql"
+
 fragment KeyActivityCard on KeyActivity {
-  _id
-  title
-  color
-  notes
-  originator {
-    _id
-    profile {
-      fullName
-    }
+  ... on CanvasEntity {
+    ...CanvasCard
   }
 }

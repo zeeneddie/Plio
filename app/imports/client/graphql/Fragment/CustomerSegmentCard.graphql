@@ -1,17 +1,12 @@
+#import "./CanvasCard.graphql"
+
 fragment CustomerSegmentCard on CustomerSegment {
-  _id
-  title
-  color
-  notes
   percentOfMarketSize
-  originator {
-    _id
-    profile {
-      fullName
-    }
-  }
   matchedTo {
     _id
     title
+  }
+  ... on CanvasEntity {
+    ...CanvasCard
   }
 }

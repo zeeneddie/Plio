@@ -19,6 +19,8 @@ import {
   EntityModalHeader,
   EntityModalBody,
   EntityModalForm,
+  RenderSwitch,
+  NotifySubcardAdapter,
 } from '../../components';
 
 const getChannel = pathOr({}, repeat('channel', 2));
@@ -118,16 +120,28 @@ const ChannelEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Channel" />
                   <EntityModalBody>
-                    <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                    {_id && (
-                      <CanvasFilesSubcard
-                        {...{ organizationId }}
-                        documentId={_id}
-                        onUpdate={updateChannel}
-                        slingshotDirective={AWSDirectives.CHANNEL_FILES}
-                        documentType={CanvasTypes.CHANNEL}
-                      />
-                    )}
+                    <RenderSwitch
+                      require={data.channel && data.channel.channel}
+                      errorWhenMissing={noop}
+                      loading={query.loading}
+                      renderLoading={<CanvasForm {...{ organizationId }} />}
+                    >
+                      {({ _id: documentId, notify }) => (
+                        <Fragment>
+                          <CanvasForm {...{ organizationId }} save={handleSubmit} />
+                          <CanvasFilesSubcard
+                            {...{ documentId, organizationId }}
+                            onUpdate={updateChannel}
+                            slingshotDirective={AWSDirectives.CHANNEL_FILES}
+                            documentType={CanvasTypes.CHANNEL}
+                          />
+                          <NotifySubcardAdapter
+                            {...{ documentId, notify, organizationId }}
+                            onUpdate={updateChannel}
+                          />
+                        </Fragment>
+                      )}
+                    </RenderSwitch>
                   </EntityModalBody>
                 </Fragment>
               )}

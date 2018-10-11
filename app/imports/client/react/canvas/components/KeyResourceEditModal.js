@@ -19,6 +19,8 @@ import {
   EntityModalHeader,
   EntityModalBody,
   EntityModalForm,
+  RenderSwitch,
+  NotifySubcardAdapter,
 } from '../../components';
 
 const getKeyResource = pathOr({}, repeat('keyResource', 2));
@@ -118,16 +120,28 @@ const KeyResourceEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key resource" />
                   <EntityModalBody>
-                    <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                    {_id && (
-                      <CanvasFilesSubcard
-                        {...{ organizationId }}
-                        documentId={_id}
-                        onUpdate={updateKeyResource}
-                        slingshotDirective={AWSDirectives.KEY_RESOURCE_FILES}
-                        documentType={CanvasTypes.KEY_RESOURCE}
-                      />
-                    )}
+                    <RenderSwitch
+                      require={data.keyResource && data.keyResource.keyResource}
+                      errorWhenMissing={noop}
+                      loading={query.loading}
+                      renderLoading={<CanvasForm {...{ organizationId }} />}
+                    >
+                      {({ _id: documentId, notify }) => (
+                        <Fragment>
+                          <CanvasForm {...{ organizationId }} save={handleSubmit} />
+                          <CanvasFilesSubcard
+                            {...{ documentId, organizationId }}
+                            onUpdate={updateKeyResource}
+                            slingshotDirective={AWSDirectives.KEY_RESOURCE_FILES}
+                            documentType={CanvasTypes.KEY_RESOURCE}
+                          />
+                          <NotifySubcardAdapter
+                            {...{ documentId, notify, organizationId }}
+                            onUpdate={updateKeyResource}
+                          />
+                        </Fragment>
+                      )}
+                    </RenderSwitch>
                   </EntityModalBody>
                 </Fragment>
               )}

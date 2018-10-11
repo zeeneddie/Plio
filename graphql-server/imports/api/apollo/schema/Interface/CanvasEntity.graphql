@@ -1,6 +1,8 @@
 interface CanvasEntity {
+  _id: ID!
   title: String!
   originator: User!
   color: String!
   notes: String
+  notify: [User]
 }
