@@ -9,7 +9,7 @@
     "deploy-staging": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy staging.pliohub.com --settings settings-staging.json"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.51",
+    "@babel/runtime": "^7.1.2",
     "@storybook/react-komposer": "^2.0.3",
     "apollo-cache-inmemory": "^1.1.5",
     "apollo-client": "^2.4.2",
