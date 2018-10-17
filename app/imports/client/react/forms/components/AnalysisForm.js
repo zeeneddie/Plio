@@ -9,8 +9,7 @@ import { getAnalysisStatusClass } from '../../../../api/problems/helpers';
 import FormField from './FormField';
 import DatePickerField from './DatePickerField';
 import Status from '../../fields/components/Status';
-import OrgUsersSelectInputContainer from '../../containers/OrgUsersSelectInputContainer';
-import SelectInputField from './SelectInputField';
+import { UserSelectInput } from '../../forms/components';
 import ToggleComplete from '../../components/ToggleComplete';
 import TextareaField from './TextareaField';
 import StyledFlexFormGroup from '../../components/styled/StyledFlexFormGroup';
@@ -39,19 +38,17 @@ const AnalysisForm = ({
     />
   );
   const executor = (
-    <OrgUsersSelectInputContainer
+    <UserSelectInput
       name="executor"
       placeholder="Who will do it?"
-      component={SelectInputField}
       onChange={onChangeExecutor}
       {...{ organizationId }}
     />
   );
   const completedBy = (
-    <OrgUsersSelectInputContainer
+    <UserSelectInput
       name="completedBy"
       placeholder="Completed by"
-      component={SelectInputField}
       onChange={onChangeCompletedBy}
       {...{ organizationId }}
     />

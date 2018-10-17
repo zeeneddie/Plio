@@ -8,10 +8,9 @@ import {
   InputField,
   DatePickerField,
   LinkedEntityInput,
-  SelectInputField,
   QuillField,
 } from '../../components';
-import { OrgUsersSelectInputContainer } from '../../containers';
+import { UserSelectInput } from '../../forms/components';
 
 const LessonForm = ({
   organizationId,
@@ -45,10 +44,9 @@ const LessonForm = ({
       </FormField>
       <FormField>
         Created by
-        <OrgUsersSelectInputContainer
+        <UserSelectInput
           name="owner"
           placeholder="Created by"
-          component={SelectInputField}
           onChange={onChangeOwner}
           {...{ organizationId }}
         />

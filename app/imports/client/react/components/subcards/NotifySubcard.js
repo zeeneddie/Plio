@@ -3,7 +3,7 @@ import React from 'react';
 import { CardTitle, FormGroup } from 'reactstrap';
 
 import { Subcard, SubcardHeader, SubcardBody, Pull, CardBlock } from '../../components';
-import OrgUsersSelectInputContainer from '../../containers/OrgUsersSelectInputContainer';
+import { UserSelectInput } from '../../forms/components';
 
 const NotifySubcard = ({ notify = [], ...props }) => (
   <Subcard>
@@ -22,7 +22,7 @@ const NotifySubcard = ({ notify = [], ...props }) => (
     <SubcardBody>
       <CardBlock>
         <FormGroup>
-          <OrgUsersSelectInputContainer
+          <UserSelectInput
             {...props}
             multi
             placeholder="User to notify"

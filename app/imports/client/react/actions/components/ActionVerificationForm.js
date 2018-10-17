@@ -5,7 +5,6 @@ import { FormGroup, Button } from 'reactstrap';
 
 import {
   FormField,
-  SelectInputField,
   DatePickerAdapter,
   ToggleComplete,
   TextareaAdapter,
@@ -14,7 +13,7 @@ import {
   Pull,
   StyledFlexFormGroup,
 } from '../../components';
-import { OrgUsersSelectInputContainer } from '../../containers';
+import { UserSelectInput } from '../../forms/components';
 
 const ActionVerificationForm = ({
   organizationId,
@@ -31,20 +30,18 @@ const ActionVerificationForm = ({
   onChangeVerifiedBy,
 }) => {
   const toBeVerifiedBy = (
-    <OrgUsersSelectInputContainer
+    <UserSelectInput
       name="toBeVerifiedBy"
       placeholder="To be verified by"
       onChange={onChangeToBeVerifiedBy}
-      component={SelectInputField}
       {...{ organizationId }}
     />
   );
   const verifiedBy = (
-    <OrgUsersSelectInputContainer
+    <UserSelectInput
       name="verifiedBy"
       placeholder="Verified by"
       onChange={onChangeVerifiedBy}
-      component={SelectInputField}
       {...{ organizationId }}
     />
   );
