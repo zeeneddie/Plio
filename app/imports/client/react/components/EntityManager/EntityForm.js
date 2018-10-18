@@ -12,6 +12,9 @@ const EntityManagerForm = ({ onSubmit, ...props }) => (
       try {
         return await onSubmit(values, form);
       } catch (err) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(err);
+        }
         return { [FORM_ERROR]: handleGQError(err) };
       }
     }}

@@ -27,6 +27,30 @@ export default {
     return _id;
   },
 
+  async update(args, context) {
+    const {
+      _id,
+      title,
+      description,
+      completionTargetDate,
+      completedAt,
+      completionComments,
+    } = args;
+    const { collections } = context;
+    const query = { _id };
+    const modifier = {
+      $set: {
+        title,
+        description,
+        completionTargetDate,
+        completedAt,
+        completionComments,
+      },
+    };
+
+    return collections.Milestones.update(query, modifier);
+  },
+
   async delete({ _id }, { userId }) {
     return this.set({
       _id,
@@ -65,28 +89,6 @@ export default {
       completedBy: userId,
       completedAt: new Date(),
     });
-  },
-
-  async addToNotify({ _id, userId }) {
-    const query = { _id };
-    const modifier = {
-      $addToSet: {
-        notify: userId,
-      },
-    };
-
-    return this.collection.update(query, modifier);
-  },
-
-  async removeFromNotify({ _id, userId }) {
-    const query = { _id };
-    const modifier = {
-      $pull: {
-        notify: userId,
-      },
-    };
-
-    return this.collection.update(query, modifier);
   },
 
   async set({ _id, ...args }) {

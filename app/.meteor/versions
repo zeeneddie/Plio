@@ -118,7 +118,7 @@ service-configuration@1.0.11
 sha@1.0.9
 shell-server@0.4.0
 socket-stream-client@0.2.2
-softwarerero:accounts-t9n@1.3.11
+softwarerero:accounts-t9n@1.3.3
 spacebars@1.0.15
 spacebars-compiler@1.1.3
 srp@1.0.12

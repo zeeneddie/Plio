@@ -1,15 +1,12 @@
 import { graphql } from 'react-apollo';
 import { byCompletionTargetDate } from 'plio-util';
-import { pure, withHandlers } from 'recompose';
+import { pure } from 'recompose';
 import { sort } from 'ramda';
 
-import GoalMilestonesSubcard from '../components/GoalMilestonesSubcard';
-import { Mutation, Query } from '../../../graphql';
+import MilestonesSubcard from '../../milestones/components/MilestonesSubcard';
+import { Query } from '../../../graphql';
 import { namedCompose } from '../../helpers';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { onDelete, onSave } from '../../milestones/handlers';
-
-const { DELETE_MILESTONE, CREATE_MILESTONE } = Mutation;
 
 export default namedCompose('GoalMilestonesSubcardContainer')(
   pure,
@@ -42,7 +39,4 @@ export default namedCompose('GoalMilestonesSubcardContainer')(
       color,
     }),
   }),
-  graphql(CREATE_MILESTONE, { name: CREATE_MILESTONE.name }),
-  graphql(DELETE_MILESTONE, { name: DELETE_MILESTONE.name }),
-  withHandlers({ onSave, onDelete }),
-)(GoalMilestonesSubcard);
+)(MilestonesSubcard);
