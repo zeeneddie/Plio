@@ -16,7 +16,6 @@ import { Query, Mutation } from 'react-apollo';
 import {
   lenses,
   noop,
-  toDate,
   getValues,
   mapUsersToOptions,
   getEntityOptions,
@@ -128,8 +127,8 @@ const MilestoneEditContainer = ({
                   _id: milestone._id,
                   title,
                   description,
-                  completionTargetDate: toDate(completionTargetDate),
-                  completedAt: unless(isNil, toDate, completedAt),
+                  completionTargetDate,
+                  completedAt,
                   completionComments,
                 },
               },

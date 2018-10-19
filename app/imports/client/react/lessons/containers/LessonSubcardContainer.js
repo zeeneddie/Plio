@@ -1,5 +1,5 @@
 import { graphql } from 'react-apollo';
-import { getTargetValue, toDate } from 'plio-util';
+import { getTargetValue } from 'plio-util';
 import { mergeDeepLeft } from 'ramda';
 import { lifecycle } from 'recompose';
 
@@ -52,11 +52,11 @@ export default namedCompose('LessonSubcardContainer')(
           },
           update: update('updateLessonTitle'),
         })),
-        onChangeDate: momentDate => mutateWithState(updateLessonDate({
+        onChangeDate: date => mutateWithState(updateLessonDate({
           variables: {
             input: {
               _id,
-              date: toDate(momentDate),
+              date,
             },
           },
           update: update('updateLessonDate'),

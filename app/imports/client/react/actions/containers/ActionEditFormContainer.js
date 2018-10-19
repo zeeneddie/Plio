@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { withHandlers, setPropTypes } from 'recompose';
 import { graphql } from 'react-apollo';
 import { mergeDeepLeft, compose, objOf, always, identity } from 'ramda';
-import { getTargetValue, getValue, toDate } from 'plio-util';
+import { getTargetValue, getValue } from 'plio-util';
 
 import { Mutation, Fragment } from '../../../graphql';
 import { updateActionFragment } from '../../../apollo/utils';
@@ -95,7 +95,7 @@ export default namedCompose('ActionEditFormContainer')(
       UPDATE_ACTION_PLAN_IN_PLACE.name,
     ),
     onChangeCompletionTargetDate: createHandler(
-      compose(objOf('completionTargetDate'), toDate),
+      objOf('completionTargetDate'),
       UPDATE_ACTION_COMPLETION_TARGET_DATE.name,
     ),
     onChangeToBeCompletedBy: createHandler(
@@ -103,7 +103,7 @@ export default namedCompose('ActionEditFormContainer')(
       UPDATE_ACTION_TO_BE_COMPLETED_BY.name,
     ),
     onChangeCompletedAt: createHandler(
-      compose(objOf('completedAt'), toDate),
+      objOf('completedAt'),
       UPDATE_ACTION_COMPLETED_AT.name,
     ),
     onChangeCompletedBy: createHandler(
@@ -115,7 +115,7 @@ export default namedCompose('ActionEditFormContainer')(
       UPDATE_ACTION_COMPLETION_COMMENTS.name,
     ),
     onChangeVerifiedAt: createHandler(
-      compose(objOf('verifiedAt'), toDate),
+      objOf('verifiedAt'),
       UPDATE_ACTION_VERIFIED_AT.name,
     ),
     onChangeVerifiedBy: createHandler(
@@ -131,7 +131,7 @@ export default namedCompose('ActionEditFormContainer')(
       UPDATE_ACTION_TO_BE_VERIFIED_BY.name,
     ),
     onChangeVerificationTargetDate: createHandler(
-      compose(objOf('verificationTargetDate'), toDate),
+      objOf('verificationTargetDate'),
       UPDATE_ACTION_VERIFICATION_TARGET_DATE.name,
     ),
     onComplete: createHandler(identity, COMPLETE_ACTION.name),

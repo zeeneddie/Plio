@@ -1,6 +1,6 @@
 import { graphql } from 'react-apollo';
 import { withHandlers, flattenProp, lifecycle } from 'recompose';
-import { getTargetValue, getValue, Cache, toDate } from 'plio-util';
+import { getTargetValue, getValue, Cache } from 'plio-util';
 import { mergeDeepLeft, compose, objOf, pluck, identity, always } from 'ramda';
 
 import RiskSubcard from '../components/RiskSubcard';
@@ -109,7 +109,7 @@ export default namedCompose('RiskSubcardContainer')(
       UPDATE_RISK_DEPARTMENTS.name,
     ),
     onChangeTargetDate: createHandler(
-      compose(objOf('targetDate'), toDate),
+      objOf('targetDate'),
       SET_RISK_ANALYSIS_TARGET_DATE.name,
     ),
     onChangeExecutor: createHandler(
@@ -121,7 +121,7 @@ export default namedCompose('RiskSubcardContainer')(
       SET_RISK_ANALYSIS_COMPLETED_BY.name,
     ),
     onChangeCompletedAt: createHandler(
-      compose(objOf('completedAt'), toDate),
+      objOf('completedAt'),
       SET_RISK_ANALYSIS_COMPLETED_AT.name,
     ),
     onChangeCompletionComments: createHandler(

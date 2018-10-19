@@ -38,6 +38,7 @@ export default enhance(({
       {...{ isOpen, toggle, organizationId }}
       milestoneId={activeMilestone}
       component={MilestoneEditModal}
+      key={activeMilestone}
     />
   );
 });
