@@ -71,7 +71,7 @@ const MilestoneEditContainer = ({
             {...{ fetchPolicy }}
             query={Queries.MILESTONE_CARD}
             variables={{ _id: milestoneId }}
-            skip={!!milestone}
+            skip={!!_milestone}
             onCompleted={data => setState({
               initialValues: getInitialValues(getMilestone(data)),
               milestone: getMilestone(data),
