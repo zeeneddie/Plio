@@ -29,7 +29,6 @@ export { default as CardHeadingButtons } from './CardHeadingButtons';
 export { default as LoadableDatePicker } from './LoadableDatePicker';
 export { default as ColorPicker } from './ColorPicker';
 export { default as ToggleComplete } from './ToggleComplete';
-export { default as DebounceTextarea } from './DebounceTextarea';
 export { default as UndoTime } from './UndoTime';
 export { default as EntityManagerSubcard } from './EntityManagerSubcard';
 export { default as EntitySubcard } from './EntitySubcard';
