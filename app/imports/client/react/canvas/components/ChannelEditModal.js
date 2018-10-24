@@ -14,6 +14,7 @@ import { validateChannel } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -67,7 +68,6 @@ const ChannelEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Channel"
             onDelete={() => {
               const { title } = getChannel(data);
               swal.promise(
@@ -124,6 +124,7 @@ const ChannelEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Channel" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.CHANNEL} />
                     <RenderSwitch
                       require={data.channel && data.channel.channel}
                       errorWhenMissing={noop}

@@ -1,0 +1,8 @@
+input UpdateGuidanceInput {
+  documentType: String!
+  html: String!
+}
+
+type Mutation {
+  updateGuidance(input: UpdateGuidanceInput!): Guidance
+}

@@ -32,6 +32,7 @@ import {
   Needs,
   Wants,
   Relations,
+  Guidances,
 } from '../../share/collections';
 
 
@@ -483,3 +484,7 @@ Relations._ensureIndex({
   'rel1.documentType': 1,
   'rel2.documentId': 1,
 });
+
+// Guidances
+
+Guidances._ensureIndex({ documentType: 1 }, { unique: true });

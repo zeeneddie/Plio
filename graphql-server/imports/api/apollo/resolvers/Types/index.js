@@ -24,6 +24,7 @@ import Benefit from './Benefit';
 import Feature from './Feature';
 import Need from './Need';
 import Want from './Want';
+import Guidance from './Guidance';
 
 export default {
   ...User,
@@ -52,4 +53,5 @@ export default {
   ...Feature,
   ...Need,
   ...Want,
+  ...Guidance,
 };

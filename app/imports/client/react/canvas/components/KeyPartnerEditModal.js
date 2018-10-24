@@ -22,6 +22,7 @@ import {
 import { WithState, Composer } from '../../helpers';
 import KeyPartnerForm from './KeyPartnerForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 
 const getKeyPartner = pathOr({}, repeat('keyPartner', 2));
 const getInitialValues = compose(
@@ -69,7 +70,6 @@ const KeyPartnerEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Key partner"
             onDelete={() => {
               const { title } = getKeyPartner(data);
               swal.promise(
@@ -130,6 +130,7 @@ const KeyPartnerEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key partner" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.KEY_PARTNER} />
                     <RenderSwitch
                       require={data.keyPartner && data.keyPartner.keyPartner}
                       errorWhenMissing={noop}

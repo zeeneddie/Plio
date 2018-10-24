@@ -14,6 +14,7 @@ import { validateKeyActivity } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -67,7 +68,6 @@ const KeyActivityEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Key activity"
             onDelete={() => {
               const { title } = getKeyActivity(data);
               swal.promise(
@@ -124,6 +124,7 @@ const KeyActivityEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key activity" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.KEY_ACTIVITY} />
                     <RenderSwitch
                       require={data.keyActivity && data.keyActivity.keyActivity}
                       errorWhenMissing={noop}

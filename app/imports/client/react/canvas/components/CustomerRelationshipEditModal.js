@@ -14,6 +14,7 @@ import { validateCustomerRelationship } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -67,7 +68,6 @@ const CustomerRelationshipEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Customer relationship"
             onDelete={() => {
               const { title } = getCustomerRelationship(data);
               swal.promise(
@@ -124,6 +124,7 @@ const CustomerRelationshipEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Customer relationship" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.CUSTOMER_RELATIONSHIP} />
                     <RenderSwitch
                       require={data.customerRelationship &&
                         data.customerRelationship.customerRelationship}

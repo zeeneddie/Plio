@@ -23,6 +23,7 @@ import { WithState, Composer } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
 import ValueComponentsSubcard from './ValueComponentsSubcard';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -91,7 +92,6 @@ const ValuePropositionEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Value proposition"
             onDelete={() => {
               const { title } = getValueProposition(data);
               swal.promise(
@@ -165,6 +165,7 @@ const ValuePropositionEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Value proposition" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.VALUE_PROPOSITION} />
                     <RenderSwitch
                       require={data.valueProposition && data.valueProposition.valueProposition}
                       errorWhenMissing={noop}

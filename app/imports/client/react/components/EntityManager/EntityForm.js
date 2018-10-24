@@ -5,7 +5,7 @@ import { FORM_ERROR } from 'final-form';
 
 import { handleGQError } from '../../../../api/handleGQError';
 
-const EntityManagerForm = ({ onSubmit, ...props }) => (
+const EntityForm = ({ onSubmit, ...props }) => (
   <Form
     subscription={{}}
     onSubmit={async (values, form) => {
@@ -22,8 +22,8 @@ const EntityManagerForm = ({ onSubmit, ...props }) => (
   />
 );
 
-EntityManagerForm.propTypes = {
+EntityForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
 
-export default EntityManagerForm;
+export default EntityForm;

@@ -14,6 +14,7 @@ import { validateCostLine } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CostLineForm from './CostLineForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -68,7 +69,6 @@ const CostLineEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Cost line"
             onDelete={() => {
               const { title } = getCostLine(data);
               swal.promise(
@@ -127,6 +127,7 @@ const CostLineEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Cost line" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.COST_LINE} />
                     <RenderSwitch
                       require={data.costLine && data.costLine.costLine}
                       errorWhenMissing={noop}

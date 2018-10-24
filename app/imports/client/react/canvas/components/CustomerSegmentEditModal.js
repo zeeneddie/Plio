@@ -23,6 +23,7 @@ import { WithState, Composer } from '../../helpers';
 import CustomerSegmentForm from './CustomerSegmentForm';
 import CustomerInsightsSubcard from './CustomerInsightsSubcard';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -92,7 +93,6 @@ const CustomerSegmentEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Customer segment"
             onDelete={() => {
               const { title } = getCustomerSegment(data);
               swal.promise(
@@ -168,6 +168,7 @@ const CustomerSegmentEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Customer segment" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.CUSTOMER_SEGMENT} />
                     <RenderSwitch
                       require={data.customerSegment && data.customerSegment.customerSegment}
                       errorWhenMissing={noop}

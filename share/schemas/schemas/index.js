@@ -150,6 +150,10 @@ export const CreatedAtSchema = new SimpleSchema({
         return new Date();
       }
 
+      if (this.isUpsert) {
+        return { $setOnInsert: new Date() };
+      }
+
       return this.unset();
     },
   },
@@ -165,9 +169,11 @@ export const CreatedBySchema = new SimpleSchema({
     regEx: dbChangeExecutor,
     optional: true,
     autoValue() {
-      if (this.isInsert) {
-        return this.userId || (this.isSet && this.value) || SystemName;
-      }
+      const value = this.userId || (this.isSet && this.value) || SystemName;
+
+      if (this.isInsert) return value;
+
+      if (this.isUpsert) return { $setOnInsert: value };
 
       return this.unset();
     },
@@ -181,7 +187,7 @@ export const UpdatedAtSchema = new SimpleSchema({
     type: Date,
     optional: true,
     autoValue() {
-      if (this.isUpdate) {
+      if (this.isUpdate || this.isUpsert) {
         return new Date();
       }
 
@@ -196,7 +202,7 @@ export const UpdatedBySchema = new SimpleSchema({
     regEx: dbChangeExecutor,
     optional: true,
     autoValue() {
-      if (this.isUpdate) {
+      if (this.isUpdate || this.isUpsert) {
         return this.userId || (this.isSet && this.value) || SystemName;
       }
 

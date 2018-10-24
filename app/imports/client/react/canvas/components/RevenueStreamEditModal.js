@@ -14,6 +14,7 @@ import { validateRevenueStream } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import RevenueStreamForm from './RevenueStreamForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -69,7 +70,6 @@ const RevenueStreamEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Revenue stream"
             onDelete={() => {
               const { title } = getRevenueStream(data);
               swal.promise(
@@ -130,6 +130,7 @@ const RevenueStreamEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Revenue stream" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.REVENUE_STREAM} />
                     <RenderSwitch
                       require={data.revenueStream && data.revenueStream.revenueStream}
                       errorWhenMissing={noop}

@@ -123,6 +123,7 @@ export const CollectionNames = {
   NEEDS: 'Needs',
   WANTS: 'Wants',
   RELATIONS: 'Relations',
+  GUIDANCES: 'Guidances',
 };
 
 export const DefaultRiskTypes = [

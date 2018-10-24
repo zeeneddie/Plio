@@ -14,6 +14,7 @@ import { validateKeyResource } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -67,7 +68,6 @@ const KeyResourceEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Key resource"
             onDelete={() => {
               const { title } = getKeyResource(data);
               swal.promise(
@@ -124,6 +124,7 @@ const KeyResourceEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key resource" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.KEY_RESOURCE} />
                     <RenderSwitch
                       require={data.keyResource && data.keyResource.keyResource}
                       errorWhenMissing={noop}

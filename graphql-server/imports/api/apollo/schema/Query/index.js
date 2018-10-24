@@ -21,6 +21,7 @@ import Benefit from './Benefit.graphql';
 import Feature from './Feature.graphql';
 import Need from './Need.graphql';
 import Want from './Want.graphql';
+import Guidance from './Guidance.graphql';
 
 export default [
   User,
@@ -46,4 +47,5 @@ export default [
   Feature,
   Need,
   Want,
+  Guidance,
 ];
