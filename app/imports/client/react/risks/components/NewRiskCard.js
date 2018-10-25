@@ -5,10 +5,9 @@ import {
   SwitchViewField,
   CardBlock,
   FormField,
-  SelectInputField,
   LinkedEntityInput,
+  RiskSelectInput,
 } from '../../components';
-import RiskSelectInputContainer from '../containers/RiskSelectInputContainer';
 import RiskForm from './RiskForm';
 
 const NewRiskCard = ({
@@ -33,9 +32,8 @@ const NewRiskCard = ({
     <CardBlock>
       <FormField>
         Existing risk
-        <RiskSelectInputContainer
+        <RiskSelectInput
           name="risk"
-          component={SelectInputField}
           placeholder="Existing risk"
           {...{ organizationId, risks }}
         />

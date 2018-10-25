@@ -8,12 +8,10 @@ import {
   FormField,
   Status,
   TextareaField,
-  SelectInputField,
   CardBlock,
   AnalysisForm,
 } from '../../components';
-import { StandardsSelectInputContainer } from '../../standards';
-import { DepartmentsSelectInputContainer } from '../../containers';
+import { StandardSelectInput, DepartmentSelectInput } from '../../forms/components';
 
 const RiskEditForm = ({
   status,
@@ -70,22 +68,20 @@ const RiskEditForm = ({
       </FormField>
       <FormField>
         Standard(s)
-        <StandardsSelectInputContainer
+        <StandardSelectInput
           multi
           name="standards"
           placeholder="Standard(s)"
-          component={SelectInputField}
           onChange={onChangeStandards}
           organizationId={organizationId}
         />
       </FormField>
       <FormField>
         Department/sector(s)
-        <DepartmentsSelectInputContainer
+        <DepartmentSelectInput
           name="departments"
           placeholder="Department/sector(s)"
           organizationId={organizationId}
-          component={SelectInputField}
           onChange={onChangeDepartments}
           onNewOptionClick={onAddDepartment}
         />
