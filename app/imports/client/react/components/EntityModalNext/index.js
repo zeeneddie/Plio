@@ -4,3 +4,4 @@ export { default as EntityModalHeader } from './EntityModalHeader';
 export { default as EntityModalNext } from './EntityModal';
 export { default as EntityModalLeftHeaderButton } from './EntityModalLeftHeaderButton';
 export { default as EntityModalRightHeaderButton } from './EntityModalRightHeaderButton';
+export { default as EntityModalGuidance } from './EntityModalGuidance';

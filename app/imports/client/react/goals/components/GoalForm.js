@@ -7,13 +7,12 @@ import {
   FormField,
   InputField,
   TextareaField,
-  SelectInputField,
   DatePickerField,
   Magnitudes,
   SelectField,
   ColorPickerField,
 } from '../../components';
-import { OrgUsersSelectInputContainer } from '../../containers';
+import { UserSelectInput } from '../../forms/components';
 import { StringLimits } from '../../../../share/constants';
 
 export const GoalForm = ({
@@ -42,10 +41,9 @@ export const GoalForm = ({
     </FormField>
     <FormField>
       Owner
-      <OrgUsersSelectInputContainer
+      <UserSelectInput
         name="owner"
         placeholder="Owner"
-        component={SelectInputField}
         onChange={save}
         {...{ organizationId }}
       />

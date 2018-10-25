@@ -1,4 +1,4 @@
-import { Cache, toDate, mapRejectedEntitiesToOptions } from 'plio-util';
+import { Cache, mapRejectedEntitiesToOptions } from 'plio-util';
 import { identity } from 'ramda';
 
 import { swal } from '../../util';
@@ -35,7 +35,7 @@ export const createGeneralAction = ({
         ownerId,
         organizationId,
         toBeCompletedBy,
-        completionTargetDate: toDate(completionTargetDate),
+        completionTargetDate,
         type: ActionTypes.GENERAL_ACTION,
         linkedTo: [{
           documentId: goalId,

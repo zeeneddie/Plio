@@ -7,13 +7,10 @@ import {
   CardBlock,
   InputField,
   TextareaField,
-  SelectInputField,
   SelectField,
 } from '../../components';
-import {
-  OrgUsersSelectInputContainer,
-  RiskTypeSelectContainer,
-} from '../../containers';
+import { RiskTypeSelectContainer } from '../../containers';
+import { UserSelectInput } from '../../forms/components';
 import { StringLimits } from '../../../../share/constants';
 
 const RiskForm = ({
@@ -50,20 +47,18 @@ const RiskForm = ({
     {children}
     <FormField>
       Originator
-      <OrgUsersSelectInputContainer
+      <UserSelectInput
         name="originator"
         placeholder="originator"
-        component={SelectInputField}
         onChange={onChangeOriginator}
         {...{ organizationId }}
       />
     </FormField>
     <FormField>
       Owner
-      <OrgUsersSelectInputContainer
+      <UserSelectInput
         name="owner"
         placeholder="Owner"
-        component={SelectInputField}
         onChange={onChangeOwner}
         {...{ organizationId }}
       />

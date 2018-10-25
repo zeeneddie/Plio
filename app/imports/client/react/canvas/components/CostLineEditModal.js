@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop } from 'plio-util';
+import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
@@ -14,24 +14,27 @@ import { validateCostLine } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CostLineForm from './CostLineForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcardAdapter,
+  NotifySubcard,
 } from '../../components';
 
 const getCostLine = pathOr({}, repeat('costLine', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
+  over(lenses.notify, mapUsersToOptions),
   pick([
     'originator',
     'title',
     'color',
     'percentOfTotalCost',
     'notes',
+    'notify',
   ]),
   getCostLine,
 );
@@ -66,7 +69,6 @@ const CostLineEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Cost line"
             onDelete={() => {
               const { title } = getCostLine(data);
               swal.promise(
@@ -100,6 +102,7 @@ const CostLineEditModal = ({
                   color,
                   percentOfTotalCost,
                   notes = '', // final form sends undefined value instead of an empty string
+                  notify = [],
                 } = values;
 
                 return updateCostLine({
@@ -110,6 +113,7 @@ const CostLineEditModal = ({
                       notes,
                       color,
                       percentOfTotalCost,
+                      notify: getValues(notify),
                       originatorId: originator.value,
                     },
                   },
@@ -123,13 +127,14 @@ const CostLineEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Cost line" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.COST_LINE} />
                     <RenderSwitch
                       require={data.costLine && data.costLine.costLine}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CostLineForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId, notify }) => (
+                      {({ _id: documentId }) => (
                         <Fragment>
                           <CostLineForm {...{ organizationId }} save={handleSubmit} />
                           <CanvasFilesSubcard
@@ -138,9 +143,9 @@ const CostLineEditModal = ({
                             slingshotDirective={AWSDirectives.COST_LINE_FILES}
                             documentType={CanvasTypes.COST_LINE}
                           />
-                          <NotifySubcardAdapter
-                            {...{ documentId, notify, organizationId }}
-                            onUpdate={updateCostLine}
+                          <NotifySubcard
+                            {...{ documentId, organizationId }}
+                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}

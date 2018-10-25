@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop } from 'plio-util';
+import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
@@ -14,23 +14,26 @@ import { validateKeyResource } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcardAdapter,
+  NotifySubcard,
 } from '../../components';
 
 const getKeyResource = pathOr({}, repeat('keyResource', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
+  over(lenses.notify, mapUsersToOptions),
   pick([
     'originator',
     'title',
     'color',
     'notes',
+    'notify',
   ]),
   getKeyResource,
 );
@@ -65,7 +68,6 @@ const KeyResourceEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Key resource"
             onDelete={() => {
               const { title } = getKeyResource(data);
               swal.promise(
@@ -98,6 +100,7 @@ const KeyResourceEditModal = ({
                   originator,
                   color,
                   notes = '', // final form sends undefined value instead of an empty string
+                  notify = [],
                 } = values;
 
                 return updateKeyResource({
@@ -107,6 +110,7 @@ const KeyResourceEditModal = ({
                       title,
                       notes,
                       color,
+                      notify: getValues(notify),
                       originatorId: originator.value,
                     },
                   },
@@ -120,13 +124,14 @@ const KeyResourceEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key resource" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.KEY_RESOURCE} />
                     <RenderSwitch
                       require={data.keyResource && data.keyResource.keyResource}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CanvasForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId, notify }) => (
+                      {({ _id: documentId }) => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
                           <CanvasFilesSubcard
@@ -135,9 +140,9 @@ const KeyResourceEditModal = ({
                             slingshotDirective={AWSDirectives.KEY_RESOURCE_FILES}
                             documentType={CanvasTypes.KEY_RESOURCE}
                           />
-                          <NotifySubcardAdapter
-                            {...{ documentId, notify, organizationId }}
-                            onUpdate={updateKeyResource}
+                          <NotifySubcard
+                            {...{ documentId, organizationId }}
+                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}

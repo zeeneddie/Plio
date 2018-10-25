@@ -8,9 +8,9 @@ const DatePickerAdapter = ({ input: { value, ...input }, onChange, ...rest }) =>
     {...{ ...input, ...rest }}
     selected={value}
     onChange={(momentDate) => {
-      input.onChange(momentDate);
+      input.onChange(+momentDate);
       if (onChange) {
-        onChange(momentDate);
+        onChange(+momentDate);
       }
     }}
   />

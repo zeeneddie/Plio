@@ -12,9 +12,17 @@ import {
   find,
   where,
   contains,
+  defaultTo,
 } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop, toDate, getValue } from 'plio-util';
+import {
+  getUserOptions,
+  lenses,
+  noop,
+  getValue,
+  getValues,
+  mapUsersToOptions,
+} from 'plio-util';
 import moment from 'moment';
 import diff from 'deep-diff';
 
@@ -30,6 +38,7 @@ const getInitialValues = compose(
   over(lenses.completedAt, unless(isNil, moment)),
   over(lenses.owner, getUserOptions),
   over(lenses.completedBy, getUserOptions),
+  over(lenses.notify, compose(mapUsersToOptions, defaultTo([]))),
   pick([
     'title',
     'description',
@@ -43,6 +52,7 @@ const getInitialValues = compose(
     'owner',
     'completedBy',
     'isCompleted',
+    'notify',
   ]),
   getGoal,
 );
@@ -134,6 +144,7 @@ const GoalEditContainer = ({
               completedBy,
               isCompleted,
               fileIds,
+              notify,
             } = values;
 
             const isCompletedDiff = find(where({ path: contains('isCompleted') }), difference);
@@ -163,25 +174,31 @@ const GoalEditContainer = ({
               });
             }
 
-            return updateGoal({
+            const args = {
               variables: {
                 input: {
                   _id: goal._id,
                   title,
                   description,
                   ownerId,
-                  startDate: toDate(startDate),
-                  endDate: toDate(endDate),
+                  startDate,
+                  endDate,
                   priority,
                   color,
                   statusComment,
                   completionComment,
-                  completedAt: unless(isNil, toDate, completedAt),
+                  completedAt,
                   completedBy: getValue(completedBy),
                   fileIds,
                 },
               },
-            }).then(noop).catch((err) => {
+            };
+
+            if (notify) {
+              Object.assign(args, { notify: getValues(notify) });
+            }
+
+            return updateGoal(args).then(noop).catch((err) => {
               form.reset(currentValues);
               throw err;
             });

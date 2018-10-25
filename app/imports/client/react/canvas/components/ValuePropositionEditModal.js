@@ -1,7 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getEntityOptions, getUserOptions, lenses, noop, convertDocumentOptions } from 'plio-util';
+import {
+  getEntityOptions,
+  getUserOptions,
+  lenses,
+  noop,
+  convertDocumentOptions,
+  getValues,
+  mapUsersToOptions,
+} from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
@@ -15,25 +23,28 @@ import { WithState, Composer } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
 import ValueComponentsSubcard from './ValueComponentsSubcard';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcardAdapter,
+  NotifySubcard,
 } from '../../components';
 
 const getValueProposition = pathOr({}, repeat('valueProposition', 2));
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
   over(lenses.originator, getUserOptions),
+  over(lenses.notify, mapUsersToOptions),
   pick([
     'originator',
     'title',
     'color',
     'matchedTo',
     'notes',
+    'notify',
   ]),
   getValueProposition,
 );
@@ -81,7 +92,6 @@ const ValuePropositionEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Value proposition"
             onDelete={() => {
               const { title } = getValueProposition(data);
               swal.promise(
@@ -115,6 +125,7 @@ const ValuePropositionEditModal = ({
                   color,
                   matchedTo,
                   notes = '',
+                  notify = [],
                 } = values;
 
                 if (difference[0].path[0] === 'matchedTo') {
@@ -140,6 +151,7 @@ const ValuePropositionEditModal = ({
                       title,
                       notes,
                       color,
+                      notify: getValues(notify),
                       originatorId: originator.value,
                     },
                   },
@@ -153,6 +165,7 @@ const ValuePropositionEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Value proposition" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.VALUE_PROPOSITION} />
                     <RenderSwitch
                       require={data.valueProposition && data.valueProposition.valueProposition}
                       errorWhenMissing={noop}
@@ -164,7 +177,6 @@ const ValuePropositionEditModal = ({
                         benefits = [],
                         features = [],
                         matchedTo,
-                        notify,
                       }) => (
                         <Fragment>
                           <ValuePropositionForm
@@ -187,9 +199,9 @@ const ValuePropositionEditModal = ({
                             slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
                             documentType={CanvasTypes.VALUE_PROPOSITION}
                           />
-                          <NotifySubcardAdapter
-                            {...{ documentId, notify, organizationId }}
-                            onUpdate={updateValueProposition}
+                          <NotifySubcard
+                            {...{ documentId, organizationId }}
+                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}

@@ -1,7 +1,7 @@
 import { pure } from 'recompose';
 import moment from 'moment';
 import { graphql } from 'react-apollo';
-import { Cache, toDate, getUserOptions, bySerialNumber } from 'plio-util';
+import { Cache, getUserOptions, bySerialNumber } from 'plio-util';
 import { sort } from 'ramda';
 
 import { namedCompose } from '../../helpers';
@@ -74,7 +74,7 @@ export default namedCompose('GoalLessonsSubcardContainer')(
               owner,
               notes,
               organizationId,
-              date: toDate(date),
+              date,
               linkedTo: {
                 documentId: linkedTo._id,
                 documentType: DocumentTypes.GOAL,

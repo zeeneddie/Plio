@@ -18,6 +18,7 @@ const GuidancePanel = ({
   toggle,
   children,
   className,
+  closeBtnText = 'Close',
   ...props
 }) => (
   <Collapse
@@ -31,7 +32,7 @@ const GuidancePanel = ({
           color="link"
           onClick={toggle}
         >
-          Close
+          {closeBtnText}
         </Button>
       </ButtonWrapper>
     </CardBlock>
@@ -43,6 +44,7 @@ GuidancePanel.propTypes = {
   toggle: PropTypes.func.isRequired,
   className: PropTypes.string,
   children: PropTypes.node,
+  closeBtnText: PropTypes.string,
 };
 
 export default GuidancePanel;

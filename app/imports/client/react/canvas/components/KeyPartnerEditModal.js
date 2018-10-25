@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop } from 'plio-util';
+import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
@@ -17,15 +17,17 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcardAdapter,
+  NotifySubcard,
 } from '../../components';
 import { WithState, Composer } from '../../helpers';
 import KeyPartnerForm from './KeyPartnerForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 
 const getKeyPartner = pathOr({}, repeat('keyPartner', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
+  over(lenses.notify, mapUsersToOptions),
   pick([
     'originator',
     'title',
@@ -33,6 +35,7 @@ const getInitialValues = compose(
     'criticality',
     'levelOfSpend',
     'notes',
+    'notify',
   ]),
   getKeyPartner,
 );
@@ -67,7 +70,6 @@ const KeyPartnerEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Key partner"
             onDelete={() => {
               const { title } = getKeyPartner(data);
               swal.promise(
@@ -102,6 +104,7 @@ const KeyPartnerEditModal = ({
                   criticality,
                   levelOfSpend,
                   notes = '', // final form sends undefined value instead of an empty string
+                  notify = [],
                 } = values;
 
                 return updateKeyPartner({
@@ -113,6 +116,7 @@ const KeyPartnerEditModal = ({
                       color,
                       criticality,
                       levelOfSpend,
+                      notify: getValues(notify),
                       originatorId: originator.value,
                     },
                   },
@@ -126,13 +130,14 @@ const KeyPartnerEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key partner" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.KEY_PARTNER} />
                     <RenderSwitch
                       require={data.keyPartner && data.keyPartner.keyPartner}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<KeyPartnerForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId, notify }) => (
+                      {({ _id: documentId }) => (
                         <Fragment>
                           <KeyPartnerForm {...{ organizationId }} save={handleSubmit} />
                           <CanvasFilesSubcard
@@ -141,9 +146,9 @@ const KeyPartnerEditModal = ({
                             slingshotDirective={AWSDirectives.KEY_PARTNER_FILES}
                             documentType={CanvasTypes.KEY_PARTNER}
                           />
-                          <NotifySubcardAdapter
-                            {...{ documentId, notify, organizationId }}
-                            onUpdate={updateKeyPartner}
+                          <NotifySubcard
+                            {...{ documentId, organizationId }}
+                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}

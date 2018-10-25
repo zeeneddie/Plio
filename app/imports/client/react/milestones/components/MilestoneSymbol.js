@@ -7,7 +7,7 @@ import { getMilestoneSymbolColor } from '../helpers';
 const MilestoneSymbol = ({ status, color, ...props }) => {
   const fill = getMilestoneSymbolColor(status, color);
 
-  return fill && <Diamond {...{ ...props, fill }} />;
+  return fill ? <Diamond {...{ ...props, fill }} /> : null;
 };
 
 MilestoneSymbol.propTypes = {

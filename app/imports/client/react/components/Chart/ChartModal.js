@@ -8,6 +8,9 @@ const StyledEntityModalNext = styled(({ bodyHeight, ...rest }) => <EntityModalNe
   display: inline-block;
   width: auto !important;
   height: calc(100vh - 60px);
+  .guidance-panel {
+    text-align: left;
+  }
   .modal-body > .card-block:last-of-type {
     ${({ bodyHeight = 'calc(100vh - 115px)' }) => `
       height: ${bodyHeight};
@@ -24,6 +27,7 @@ const StyledEntityModalNext = styled(({ bodyHeight, ...rest }) => <EntityModalNe
 `;
 
 const ChartModal = props => (
+  /* wrapClassName is chartjs prop. It is needed for creating wrapper element under chart canvas */
   <StyledEntityModalNext wrapClassName="chart-modal" {...props} />
 );
 

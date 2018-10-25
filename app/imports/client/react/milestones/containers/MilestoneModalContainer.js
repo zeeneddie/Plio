@@ -5,8 +5,10 @@ import connectUI from 'redux-ui';
 import { connect } from 'react-redux';
 
 import { namedCompose } from '../../helpers';
-import MilestoneAddModalContainer from './MilestoneAddModalContainer';
-import MilestoneEditModalContainer from './MilestoneEditModalContainer';
+import MilestoneAddContainer from './MilestoneAddContainer';
+import MilestoneEditContainer from './MilestoneEditContainer';
+import MilestoneEditModal from '../components/MilestoneEditModal';
+import MilestoneAddModal from '../components/MilestoneAddModal';
 
 const enhance = namedCompose('MilestoneModalContainer')(
   connect(),
@@ -23,18 +25,19 @@ export default enhance(({
 
   if (!activeMilestone) {
     return (
-      <MilestoneAddModalContainer
+      <MilestoneAddContainer
         {...{ isOpen, toggle, organizationId }}
+        component={MilestoneAddModal}
         goalId={activeGoal}
       />
     );
   }
 
   return (
-    <MilestoneEditModalContainer
+    <MilestoneEditContainer
       {...{ isOpen, toggle, organizationId }}
-      goalId={activeGoal}
       milestoneId={activeMilestone}
+      component={MilestoneEditModal}
     />
   );
 });

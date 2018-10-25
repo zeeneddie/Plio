@@ -12,7 +12,7 @@ const PreloaderPage = ({ size = 4, ...props } = {}) => (
 );
 
 PreloaderPage.propTypes = {
-  size: PropTypes.number,
+  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default PreloaderPage;

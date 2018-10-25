@@ -1,8 +1,5 @@
 import { __setupDB, __closeDB, Mongo } from 'meteor/mongo';
 
-// eslint-disable-next-line no-undef
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
-
 describe('meteor/mongo', async () => {
   beforeEach(async () => __setupDB());
   afterEach(async () => __closeDB());

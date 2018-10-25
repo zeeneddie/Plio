@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop } from 'plio-util';
+import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
@@ -14,18 +14,20 @@ import { validateRevenueStream } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import RevenueStreamForm from './RevenueStreamForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcardAdapter,
+  NotifySubcard,
 } from '../../components';
 
 const getRevenueStream = pathOr({}, repeat('revenueStream', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
+  over(lenses.notify, mapUsersToOptions),
   pick([
     'originator',
     'title',
@@ -33,6 +35,7 @@ const getInitialValues = compose(
     'percentOfRevenue',
     'percentOfProfit',
     'notes',
+    'notify',
   ]),
   getRevenueStream,
 );
@@ -67,7 +70,6 @@ const RevenueStreamEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Revenue stream"
             onDelete={() => {
               const { title } = getRevenueStream(data);
               swal.promise(
@@ -102,6 +104,7 @@ const RevenueStreamEditModal = ({
                   percentOfRevenue,
                   percentOfProfit,
                   notes = '', // final form sends undefined value instead of an empty string
+                  notify = [],
                 } = values;
 
                 return updateRevenueStream({
@@ -113,6 +116,7 @@ const RevenueStreamEditModal = ({
                       color,
                       percentOfRevenue,
                       percentOfProfit,
+                      notify: getValues(notify),
                       originatorId: originator.value,
                     },
                   },
@@ -126,13 +130,14 @@ const RevenueStreamEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Revenue stream" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.REVENUE_STREAM} />
                     <RenderSwitch
                       require={data.revenueStream && data.revenueStream.revenueStream}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<RevenueStreamForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId, notify }) => (
+                      {({ _id: documentId }) => (
                         <Fragment>
                           <RevenueStreamForm {...{ organizationId }} save={handleSubmit} />
                           <CanvasFilesSubcard
@@ -141,9 +146,9 @@ const RevenueStreamEditModal = ({
                             slingshotDirective={AWSDirectives.REVENUE_STREAM_FILES}
                             documentType={CanvasTypes.REVENUE_STREAM}
                           />
-                          <NotifySubcardAdapter
-                            {...{ documentId, notify, organizationId }}
-                            onUpdate={updateRevenueStream}
+                          <NotifySubcard
+                            {...{ documentId, organizationId }}
+                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}

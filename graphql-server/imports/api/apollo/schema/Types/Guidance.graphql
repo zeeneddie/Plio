@@ -1,0 +1,9 @@
+type Guidance implements BaseEntity {
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime
+  updatedBy: User
+  _id: ID!
+  documentType: String!
+  html: String
+}

@@ -19,6 +19,7 @@ const propTypes = {
   component: PropTypes.func,
   render: PropTypes.func,
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+  onClosed: PropTypes.func,
 };
 
 const omitProps = omit([...keys(propTypes), ...keys(Modal.propTypes)]);
@@ -33,6 +34,12 @@ export default class EntityModal extends Component {
   }
 
   state = { isGuidanceOpen: false }
+
+  onClosed = () => {
+    const { onClosed } = this.props;
+    this.setState({ isGuidanceOpen: false });
+    if (onClosed) onClosed();
+  }
 
   toggleGuidance = () => {
     this.setState({ isGuidanceOpen: !this.state.isGuidanceOpen });
@@ -53,9 +60,10 @@ export default class EntityModal extends Component {
       noForm,
       ...rest
     } = this.props;
+    const state = { ...this.state };
 
     const value = {
-      state: this.state,
+      state,
       toggleGuidance: this.toggleGuidance,
       isOpen,
       toggle,
@@ -71,16 +79,18 @@ export default class EntityModal extends Component {
       <ModalProvider
         {...{ isOpen, toggle }}
       >
-        <Modal {...rest}>
+        <Modal
+          {...rest}
+          onClosed={this.onClosed}
+        >
           <Provider {...{ value }}>
             {renderComponent({
               ...omitProps(rest),
-              ...this.state,
+              ...state,
               toggleGuidance: this.toggleGuidance,
               component,
               render,
               children,
-              form: { form: {} }, // TEMP
             })}
           </Provider>
         </Modal>

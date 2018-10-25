@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { GithubPicker } from 'react-color';
+import GithubPicker from 'react-color/lib/components/github/Github';
 import styled, { css } from 'styled-components';
 import { Popover } from 'reactstrap';
 import { StyledMixins } from 'plio-util';

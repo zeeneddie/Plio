@@ -21,6 +21,7 @@ import Feature from './Feature.graphql';
 import Need from './Need.graphql';
 import Want from './Want.graphql';
 import Relation from './Relation.graphql';
+import Guidance from './Guidance.graphql';
 
 export default [
   Goal,
@@ -46,4 +47,5 @@ export default [
   Need,
   Want,
   Relation,
+  Guidance,
 ];

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop } from 'plio-util';
+import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
@@ -14,23 +14,26 @@ import { validateCustomerRelationship } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcardAdapter,
+  NotifySubcard,
 } from '../../components';
 
 const getCustomerRelationship = pathOr({}, repeat('customerRelationship', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
+  over(lenses.notify, mapUsersToOptions),
   pick([
     'originator',
     'title',
     'color',
     'notes',
+    'notify',
   ]),
   getCustomerRelationship,
 );
@@ -65,7 +68,6 @@ const CustomerRelationshipEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Customer relationship"
             onDelete={() => {
               const { title } = getCustomerRelationship(data);
               swal.promise(
@@ -98,6 +100,7 @@ const CustomerRelationshipEditModal = ({
                   originator,
                   color,
                   notes = '',
+                  notify = [],
                 } = values;
 
                 return updateCustomerRelationship({
@@ -107,6 +110,7 @@ const CustomerRelationshipEditModal = ({
                       title,
                       notes,
                       color,
+                      notify: getValues(notify),
                       originatorId: originator.value,
                     },
                   },
@@ -120,6 +124,7 @@ const CustomerRelationshipEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Customer relationship" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.CUSTOMER_RELATIONSHIP} />
                     <RenderSwitch
                       require={data.customerRelationship &&
                         data.customerRelationship.customerRelationship}
@@ -127,7 +132,7 @@ const CustomerRelationshipEditModal = ({
                       loading={query.loading}
                       renderLoading={<CanvasForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId, notify }) => (
+                      {({ _id: documentId }) => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
                           <CanvasFilesSubcard
@@ -136,9 +141,9 @@ const CustomerRelationshipEditModal = ({
                             slingshotDirective={AWSDirectives.CUSTOMER_RELATIONSHIP_FILES}
                             documentType={CanvasTypes.CUSTOMER_RELATIONSHIP}
                           />
-                          <NotifySubcardAdapter
-                            {...{ documentId, notify, organizationId }}
-                            onUpdate={updateCustomerRelationship}
+                          <NotifySubcard
+                            {...{ documentId, organizationId }}
+                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}

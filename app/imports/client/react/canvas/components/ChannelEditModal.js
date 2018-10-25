@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop } from 'plio-util';
+import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
@@ -14,23 +14,26 @@ import { validateChannel } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
 import CanvasFilesSubcard from './CanvasFilesSubcard';
+import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
   EntityModalHeader,
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcardAdapter,
+  NotifySubcard,
 } from '../../components';
 
 const getChannel = pathOr({}, repeat('channel', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
+  over(lenses.notify, mapUsersToOptions),
   pick([
     'originator',
     'title',
     'color',
     'notes',
+    'notify',
   ]),
   getChannel,
 );
@@ -65,7 +68,6 @@ const ChannelEditModal = ({
             isEditMode
             loading={query.loading}
             error={query.error}
-            guidance="Channel"
             onDelete={() => {
               const { title } = getChannel(data);
               swal.promise(
@@ -98,6 +100,7 @@ const ChannelEditModal = ({
                   originator,
                   color,
                   notes = '',
+                  notify = [],
                 } = values;
 
                 return updateChannel({
@@ -107,6 +110,7 @@ const ChannelEditModal = ({
                       title,
                       notes,
                       color,
+                      notify: getValues(notify),
                       originatorId: originator.value,
                     },
                   },
@@ -120,13 +124,14 @@ const ChannelEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Channel" />
                   <EntityModalBody>
+                    <CanvasModalGuidance documentType={CanvasTypes.CHANNEL} />
                     <RenderSwitch
                       require={data.channel && data.channel.channel}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CanvasForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId, notify }) => (
+                      {({ _id: documentId }) => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
                           <CanvasFilesSubcard
@@ -135,9 +140,9 @@ const ChannelEditModal = ({
                             slingshotDirective={AWSDirectives.CHANNEL_FILES}
                             documentType={CanvasTypes.CHANNEL}
                           />
-                          <NotifySubcardAdapter
-                            {...{ documentId, notify, organizationId }}
-                            onUpdate={updateChannel}
+                          <NotifySubcard
+                            {...{ documentId, organizationId }}
+                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}
