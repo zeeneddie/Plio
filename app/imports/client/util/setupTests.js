@@ -8,6 +8,7 @@ import fetch from 'unfetch';
 import { Meteor } from 'meteor/meteor';
 
 global.fetch = fetch;
+jest.setTimeout(30000);
 
 Meteor.settings = mergeDeepRight(Meteor.settings, {
   public: {
