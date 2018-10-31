@@ -8,39 +8,41 @@ export const AuditLogSchema = new SimpleSchema([
   OrganizationIdSchema,
   {
     collection: {
-      type: String
+      type: String,
     },
     documentId: {
       type: String,
-      regEx: SimpleSchema.RegEx.Id
+      regEx: SimpleSchema.RegEx.Id,
+      index: 1,
     },
     message: {
-      type: String
+      type: String,
     },
     date: {
-      type: Date
+      type: Date,
     },
     executor: {
       type: String,
       regEx: new RegExp(
-        `^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|${SystemName}$`
-      )
+        `^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|${SystemName}$`,
+      ),
+      index: 1,
     },
     field: {
       type: String,
-      optional: true
+      optional: true,
     },
     oldValue: {
       // workaround for https://github.com/aldeed/meteor-simple-schema/issues/174
       // value may have different type (string, number, boolean, etc.)
       type: null,
-      optional: true
+      optional: true,
     },
     newValue: {
       // workaround for https://github.com/aldeed/meteor-simple-schema/issues/174
       // value may have different type (string, number, boolean, etc.)
       type: null,
-      optional: true
-    }
-  }
+      optional: true,
+    },
+  },
 ]);
