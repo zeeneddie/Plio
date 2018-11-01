@@ -13,7 +13,7 @@ Roles.userIsInRole = jest.fn((userId, role, key) => {
   const _roles = Array.isArray(role) ? role : [role];
   return !!roles[userId] &&
     !!roles[userId][key] &&
-    _roles.every(r => roles[userId][key].includes(r));
+    _roles.some(r => roles[userId][key].includes(r));
 });
 
 Roles.__clear = jest.fn(() => {
