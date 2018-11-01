@@ -10,6 +10,7 @@ describe('Middleware/auth/ensureUserIsInRole', () => {
   const next = jest.fn(T);
 
   beforeEach(Roles.__clear);
+
   beforeAll(async () => {
     await __setupDB();
 
@@ -28,6 +29,15 @@ describe('Middleware/auth/ensureUserIsInRole', () => {
     Roles.addUsersToRoles(context.userId, 'test');
 
     const config = () => ({ role: 'test' });
+    const promise = ensureUserIsInRole(config)(next, {}, {}, context);
+
+    await expect(promise).resolves.toBe(true);
+  });
+
+  it('passes with multiple role checks', async () => {
+    Roles.addUsersToRoles(context.userId, ['a', 'b']);
+
+    const config = () => ({ role: ['a', 'b'] });
     const promise = ensureUserIsInRole(config)(next, {}, {}, context);
 
     await expect(promise).resolves.toBe(true);
