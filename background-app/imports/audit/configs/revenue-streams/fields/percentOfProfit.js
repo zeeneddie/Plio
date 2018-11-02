@@ -1,5 +1,6 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
 import { getReceivers } from '../helpers';
+import { emailTemplateData } from '../../canvas/helpers';
 
 export default {
   field: 'percentOfProfit',
@@ -34,6 +35,7 @@ export default {
       oldValue: () => `${oldValue}%`,
     };
   },
+  emailTemplateData,
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
   },

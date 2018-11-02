@@ -1,6 +1,5 @@
-import { getReceivers } from '../helpers';
+import { getReceivers, emailTemplateData } from '../helpers';
 import fileIds from '../../common/fields/fileIds';
-
 
 export default {
   field: 'fileIds',
@@ -11,6 +10,7 @@ export default {
     fileIds.notifications.default,
   ],
   data: fileIds.data,
+  emailTemplateData,
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
   },

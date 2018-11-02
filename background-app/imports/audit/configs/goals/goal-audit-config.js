@@ -2,7 +2,7 @@ import { getId, getOrganizationId, getNotify } from 'plio-util';
 import { compose } from 'ramda';
 
 import { Goals, Organizations } from '../../../share/collections';
-import { CollectionNames } from '../../../share/constants';
+import { CollectionNames, DocumentTypes } from '../../../share/constants';
 import { getGoalName, getGoalDesc } from '../../../helpers/description';
 import onCreated from './on-created';
 import onRemoved from './on-removed';
@@ -51,5 +51,5 @@ export default {
 
     return `${serialNumber}`;
   },
-  docUnsubscribeUrl: compose(getDocUnsubscribePath, getDocUrlByOrganizationId('goals')),
+  docUnsubscribeUrl: compose(getDocUnsubscribePath, getDocUrlByOrganizationId(DocumentTypes.GOAL)),
 };

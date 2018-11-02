@@ -20,6 +20,11 @@ import {
   CustomerSegments,
   CostLines,
   RevenueStreams,
+  Benefits,
+  Features,
+  Needs,
+  Wants,
+  Relations,
 } from '../collections';
 import AuditManager from '../utils/audit-manager';
 
@@ -44,6 +49,11 @@ const collections = {
   [CollectionNames.CUSTOMER_SEGMENTS]: CustomerSegments,
   [CollectionNames.COST_LINES]: CostLines,
   [CollectionNames.REVENUE_STREAMS]: RevenueStreams,
+  [CollectionNames.BENEFITS]: Benefits,
+  [CollectionNames.FEATURES]: Features,
+  [CollectionNames.NEEDS]: Needs,
+  [CollectionNames.WANTS]: Wants,
+  [CollectionNames.RELATIONS]: Relations,
 };
 
 Object.keys(collections).forEach(name => AuditManager.registerCollection(collections[name], name));

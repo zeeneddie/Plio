@@ -24,7 +24,7 @@ export default {
     return this.collection.update(query, options);
   },
 
-  unsubscribe({ documentId, documentType, userId }, { collection }) {
+  unsubscribe({ documentId, userId }, { collection }) {
     const query = { _id: documentId };
     const modifier = {
       $pull: {

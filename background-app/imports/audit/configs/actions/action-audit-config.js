@@ -31,7 +31,7 @@ import verifiedAt from './fields/verifiedAt';
 import verifiedBy from './fields/verifiedBy';
 
 
-export default ActionAuditConfig = {
+const ActionAuditConfig = {
 
   collection: Actions,
 
@@ -89,7 +89,9 @@ export default ActionAuditConfig = {
 
   docUnsubscribeUrl: _.compose(
     getDocUnsubscribePath,
-    getDocUrlByOrganizationId('actions'),
+    getDocUrlByOrganizationId(ActionTypes.CORRECTIVE_ACTION),
   ),
 
 };
+
+export default ActionAuditConfig;

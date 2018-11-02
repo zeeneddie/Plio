@@ -1,5 +1,4 @@
-import { lenses, getId, getOrganizationId, getNotify, getTitle } from 'plio-util';
-import { view } from 'ramda';
+import { getId, getOrganizationId } from 'plio-util';
 
 import { getCanvasUrl } from '../../../helpers/url';
 import onCreated from './on-created';
@@ -11,9 +10,6 @@ export default {
   onRemoved,
   updateHandlers: Object.values(UpdateHandlers),
   docId: getId,
-  docName: getTitle,
   docOrgId: getOrganizationId,
-  docNotifyList: getNotify,
-  docOwner: view(lenses.originatorId),
   docUrl: getCanvasUrl,
 };

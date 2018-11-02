@@ -1,13 +1,12 @@
 import { compose } from 'ramda';
 
 import { CustomerSegments } from '../../../share/collections';
-import { CollectionNames } from '../../../share/constants';
+import { CollectionNames, CanvasTypes } from '../../../share/constants';
 import { getCustomerSegmentDesc } from '../../../helpers/description';
 import * as UpdateHandlers from './fields';
 import {
   getDocUrlByOrganizationId,
   getDocUnsubscribePath,
-  getCanvasUrl,
 } from '../../../helpers/url';
 import CanvasAuditConfig from '../canvas/canvas-audit-config';
 
@@ -20,6 +19,8 @@ export default {
   collection: CustomerSegments,
   collectionName: CollectionNames.CUSTOMER_SEGMENTS,
   docDescription: getCustomerSegmentDesc,
-  docUrl: getCanvasUrl,
-  docUnsubscribeUrl: compose(getDocUnsubscribePath, getDocUrlByOrganizationId('customerSegments')),
+  docUnsubscribeUrl: compose(
+    getDocUnsubscribePath,
+    getDocUrlByOrganizationId(CanvasTypes.CUSTOMER_SEGMENT),
+  ),
 };

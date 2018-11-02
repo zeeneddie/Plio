@@ -25,7 +25,6 @@ import {
   renderUserDirectory,
   renderDashboard,
 } from './actions';
-import { DOCUMENT_TYPE_BY_ROUTE_MAP } from './constants';
 
 BlazeLayout.setRoot('#app');
 
@@ -306,11 +305,10 @@ FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   action: renderWorkInbox,
 });
 
-FlowRouter.route('/:orgSerialNumber/:route/:documentId/unsubscribe', {
+FlowRouter.route('/:orgSerialNumber/:documentType/:documentId/unsubscribe', {
   name: 'unsubscribeFromNotifications',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action: renderTransitionalLayout(async ({ documentId, route, orgSerialNumber }) => {
-    const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
+  action: renderTransitionalLayout(async ({ documentId, documentType, orgSerialNumber }) => {
     const { default: UnsubscribeFromNotifications } =
       await import('../../../client/react/pages/components/Unsubscribe/Notifications');
 
@@ -337,11 +335,10 @@ FlowRouter.route('/:orgSerialNumber/unsubscribe', {
   }),
 });
 
-FlowRouter.route('/:orgSerialNumber/:route/:documentId/discussion/unsubscribe', {
+FlowRouter.route('/:orgSerialNumber/:documentType/:documentId/discussion/unsubscribe', {
   name: 'unsubscribeFromDiscussionNotifications',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action: renderTransitionalLayout(async ({ documentId, route, orgSerialNumber }) => {
-    const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
+  action: renderTransitionalLayout(async ({ documentId, documentType, orgSerialNumber }) => {
     const { default: UnsubscribeFromDiscussion } =
       await import('../../../client/react/pages/components/Unsubscribe/Discussion');
 

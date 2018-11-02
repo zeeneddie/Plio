@@ -1,13 +1,12 @@
 import { compose } from 'ramda';
 
 import { CostLines } from '../../../share/collections';
-import { CollectionNames } from '../../../share/constants';
+import { CollectionNames, CanvasTypes } from '../../../share/constants';
 import { getCostLineDesc } from '../../../helpers/description';
 import * as UpdateHandlers from './fields';
 import {
   getDocUrlByOrganizationId,
   getDocUnsubscribePath,
-  getCanvasUrl,
 } from '../../../helpers/url';
 import CanvasAuditConfig from '../canvas/canvas-audit-config';
 
@@ -20,6 +19,8 @@ export default {
   collection: CostLines,
   collectionName: CollectionNames.COST_LINES,
   docDescription: getCostLineDesc,
-  docUrl: getCanvasUrl,
-  docUnsubscribeUrl: compose(getDocUnsubscribePath, getDocUrlByOrganizationId('costLines')),
+  docUnsubscribeUrl: compose(
+    getDocUnsubscribePath,
+    getDocUrlByOrganizationId(CanvasTypes.COST_LINE),
+  ),
 };

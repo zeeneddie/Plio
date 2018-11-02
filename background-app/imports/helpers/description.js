@@ -1,4 +1,4 @@
-import { getTitle } from 'plio-util';
+import { getTitle, generateSequentialId } from 'plio-util';
 
 import {
   ActionTypes,
@@ -59,12 +59,22 @@ export const getGoalName = getTitle;
 export const getMilestoneDesc = () => 'milestone';
 export const getMilestoneName = getTitle;
 
-export const getKeyPartnerDesc = () => 'key partner';
-export const getKeyActivityDesc = () => 'key activity';
-export const getKeyResourceDesc = () => 'key resource';
-export const getValuePropositionDesc = () => 'value proposition';
-export const getCustomerRelationshipDesc = () => 'customer relationship';
-export const getChannelDesc = () => 'channel';
-export const getCustomerSegmentDesc = () => 'customer segment';
-export const getCostLineDesc = () => 'cost line';
-export const getRevenueStreamDesc = () => 'revenue stream';
+// canvas
+export const getKeyPartnerDesc = () => 'Key Partner';
+export const getKeyActivityDesc = () => 'Key Activity';
+export const getKeyResourceDesc = () => 'Key Resource';
+export const getValuePropositionDesc = () => 'Value Proposition';
+export const getCustomerRelationshipDesc = () => 'Customer Relationship';
+export const getChannelDesc = () => 'Channel';
+export const getCustomerSegmentDesc = () => 'Customer Segment';
+export const getCostLineDesc = () => 'Cost Line';
+export const getRevenueStreamDesc = () => 'Revenue Stream';
+
+// customer elements
+export const getBenefitDesc = () => 'Benefit';
+export const getFeatureDesc = () => 'Feature';
+export const getNeedDesc = () => 'Need';
+export const getWantDesc = () => 'Want';
+
+export const getCustomerElementName = abbr => ({ title, serialNumber }) =>
+  `${generateSequentialId(abbr, { serialNumber })} "${title}"`;

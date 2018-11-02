@@ -1,14 +1,15 @@
 import { getReceivers, emailTemplateData } from '../helpers';
-import notify from '../../common/fields/notify';
+import description from '../../common/fields/description';
 
 export default {
-  field: 'notify',
-  logs: [notify.logs.default],
-  notifications: [
-    notify.notifications.default,
-    notify.notifications.personal,
+  field: 'description',
+  logs: [
+    description.logs.default,
   ],
-  data: notify.data,
+  notifications: [
+    description.notifications.default,
+  ],
+  data: description.data,
   emailTemplateData,
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
