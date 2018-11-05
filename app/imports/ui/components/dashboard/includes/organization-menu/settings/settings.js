@@ -26,6 +26,8 @@ import StandardSectionsSubcardContainer from
   '../../../../../../client/react/organization-settings/containers/StandardSectionsSubcardContainer'; // eslint-disable-line max-len
 import StandardTypesSubcardContainer from
   '../../../../../../client/react/organization-settings/containers/StandardTypesSubcardContainer';
+import CanvasScreenSubcard from
+  '../../../../../../client/react/organization-settings/components/CanvasScreenSubcard';
 
 Template.OrgSettings.viewmodel({
   mixin: 'organization',
@@ -116,4 +118,5 @@ Template.OrgSettings.viewmodel({
   DocumentTypes: () => DocumentTypes,
   StandardSectionsSubcardContainer: () => StandardSectionsSubcardContainer,
   StandardTypesSubcardContainer: () => StandardTypesSubcardContainer,
+  CanvasScreenSubcard: () => CanvasScreenSubcard,
 });

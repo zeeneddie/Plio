@@ -49,6 +49,7 @@ import REVENUE_STREAMS_CHART from './RevenueStreamsChart.graphql';
 import REVENUE_STREAMS_PROFIT_CHART from './RevenueStreamsProfitChart.graphql';
 import KEY_PARTNERS_CHART from './KeyPartnersChart.graphql';
 import GUIDANCE from './Guidance.graphql';
+import CANVAS_SCREEN_SETTINGS from './CanvasScreenSettings.graphql';
 import STANDARD_TYPE_LIST from './StandardTypeList.graphql';
 import STANDARD_SECTION_LIST from './StandardSectionList.graphql';
 import NONCONFORMITY_LIST from './NonconformityList';
@@ -104,6 +105,7 @@ export default {
   CUSTOMER_SEGMENT_CARD,
   VALUE_PROPOSITION_CARD,
   CANVAS_SETTINGS,
+  CANVAS_SCREEN_SETTINGS,
   ORGANIZATIONS_MENU,
   ORGANIZATIONS,
   COST_LINES_CHART,

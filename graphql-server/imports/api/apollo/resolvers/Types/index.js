@@ -25,6 +25,7 @@ import Feature from './Feature';
 import Need from './Need';
 import Want from './Want';
 import Guidance from './Guidance';
+import CanvasSettings from './CanvasSettings';
 import Nonconformity from './Nonconformity';
 
 export default {
@@ -55,5 +56,6 @@ export default {
   ...Need,
   ...Want,
   ...Guidance,
+  ...CanvasSettings,
   ...Nonconformity,
 };

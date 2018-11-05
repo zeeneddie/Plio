@@ -116,7 +116,10 @@ const OrganizationService = {
 
     new OrgNotificationsSender(organizationId).orgCreated();
 
-    CanvasSettings.insert({ organizationId });
+    CanvasSettings.insert({
+      organizationId,
+      notify: [ownerId],
+    });
 
     return organizationId;
   },
