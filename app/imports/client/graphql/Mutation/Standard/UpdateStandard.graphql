@@ -1,0 +1,7 @@
+#import "../../Fragment/StandardCard.graphql"
+
+mutation updateStandard($input: UpdateStandardInput!) {
+  updateStandard(input: $input) {
+    ...StandardCard
+  }
+}

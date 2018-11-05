@@ -1,6 +1,10 @@
 import invariant from 'invariant';
 
-import { CustomerElementStatuses, CustomerElementTypes } from '../../../../share/constants';
+import {
+  CustomerElementStatuses,
+  CustomerElementTypes,
+  ProblemTypes,
+} from '../../../../share/constants';
 
 export const createRelationResolver = config => async (root, args, context) => {
   const { documentType, loader } = await config(root, args, context);
@@ -75,4 +79,63 @@ export const resolveCustomerElementStatus = async (root, args, context) => {
   const isMatched = !!relations.length;
 
   return isMatched ? CustomerElementStatuses.MATCHED : CustomerElementStatuses.UNMATCHED;
+};
+
+export const createEntityByIdsResolver = config => async (root, args, context) => {
+  const { ids = [], loader, ...rest } = await config(root, args, context);
+  invariant(loader, 'Your config function must return "loader"');
+
+  return loader.load({
+    _id: { $in: ids },
+    ...rest,
+  });
+};
+
+export const resolveGoalsByIds = createEntityByIdsResolver(
+  ({ goalIds }, { isDeleted = false }, { loaders: { Goal: { byQuery } } }) => ({
+    loader: byQuery,
+    ids: goalIds,
+    isDeleted,
+  }),
+);
+
+export const resolveStandardsByIds = createEntityByIdsResolver(
+  ({ standardsIds }, { isDeleted = false }, { loaders: { Standard: { byQuery } } }) => ({
+    loader: byQuery,
+    ids: standardsIds,
+    isDeleted,
+  }),
+);
+
+export const resolveRisksByIds = createEntityByIdsResolver(
+  ({ riskIds }, { isDeleted = false }, { loaders: { Risk: { byQuery } } }) => ({
+    loader: byQuery,
+    ids: riskIds,
+    isDeleted,
+  }),
+);
+
+export const resolveNonconformitiesByIds = createEntityByIdsResolver(
+  ({ nonconformityIds }, { isDeleted = false }, { loaders: { Nonconformity: { byQuery } } }) => ({
+    loader: byQuery,
+    ids: nonconformityIds,
+    type: ProblemTypes.NON_CONFORMITY,
+    isDeleted,
+  }),
+);
+
+export const resolvePotentialGainsByIds = createEntityByIdsResolver(
+  ({ potentialGainIds }, { isDeleted = false }, { loaders: { Nonconformity: { byQuery } } }) => ({
+    loader: byQuery,
+    ids: potentialGainIds,
+    type: ProblemTypes.POTENTIAL_GAIN,
+    isDeleted,
+  }),
+);
+
+export const resolveLessonsById = async (root, args, context) => {
+  const { _id: documentId } = root;
+  const { loaders: { Lesson: { byQuery } } } = context;
+
+  return byQuery.load({ documentId });
 };

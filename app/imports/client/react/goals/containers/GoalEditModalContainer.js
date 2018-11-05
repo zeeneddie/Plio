@@ -13,7 +13,6 @@ const enhance = compose(
 
 const GoalEditModalContainer = ({
   ui: { activeGoal },
-  canEditGoals,
   organizationId,
   isOpen,
   toggle,
@@ -23,7 +22,6 @@ const GoalEditModalContainer = ({
       organizationId,
       isOpen,
       toggle,
-      canEditGoals,
     }}
     goalId={activeGoal}
     component={GoalEditModal}
@@ -33,7 +31,6 @@ const GoalEditModalContainer = ({
 GoalEditModalContainer.propTypes = {
   ui: PropTypes.object.isRequired,
   organizationId: PropTypes.string.isRequired,
-  canEditGoals: PropTypes.bool.isRequired,
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
 };

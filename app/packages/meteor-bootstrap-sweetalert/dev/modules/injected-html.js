@@ -38,7 +38,7 @@ var injectedHTML =
     `<h2>Title</h2>
     <p class="lead">Text</p>
     <div class="form-group">
-      <input type="text" class="form-control" tabIndex="3" />
+      <input type="text" class="form-control" tabIndex="4" />
       <span class="sa-input-error help-block">
         <span class="glyphicon glyphicon-exclamation-sign"></span> <span class="sa-help-text">Not valid</span>
       </span>
@@ -46,7 +46,8 @@ var injectedHTML =
 
     // Cancel and confirm buttons
     `<div class="sa-button-container">
-      <button class="cancel btn btn-lg" tabIndex="2">Cancel</button>
+      <button class="cancel btn btn-lg" tabIndex="3">Cancel</button>
+      <button class="extra-button btn btn-lg" tabIndex="2"></button>
       <div class="sa-confirm-button-container">
         <button class="confirm btn btn-lg" tabIndex="1">OK</button>` +
 

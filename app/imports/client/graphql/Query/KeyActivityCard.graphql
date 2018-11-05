@@ -1,9 +1,13 @@
 #import "../Fragment/KeyActivityCard.graphql"
 
-query KeyActivityCard($_id: ID!) {
+query KeyActivityCard($_id: ID!, $organizationId: ID!) {
   keyActivity(_id: $_id) {
     keyActivity {
       ...KeyActivityCard
     }
+  }
+  user: me {
+    _id
+    roles(organizationId: $organizationId)
   }
 }

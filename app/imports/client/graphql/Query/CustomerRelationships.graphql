@@ -1,9 +1,9 @@
+#import "../Fragment/CanvasEntityPresentation.graphql"
+
 query CustomerRelationships($organizationId: ID!) {
   customerRelationships(organizationId: $organizationId) {
     customerRelationships {
-      _id
-      title
-      color
+      ...CanvasEntityPresentation
     }
   }
 }

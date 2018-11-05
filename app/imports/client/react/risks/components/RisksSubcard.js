@@ -1,7 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'react-final-form';
-import { getId, getUserOptions, mapEntitiesToOptions, lenses, spreadProp, noop } from 'plio-util';
+import {
+  getId,
+  getUserOptions,
+  mapEntitiesToOptions,
+  lenses, spreadProp,
+  noop,
+  getIds,
+} from 'plio-util';
 import { compose, pick, over, defaultTo } from 'ramda';
 
 import EntityManagerSubcard from '../../components/EntityManagerSubcard';
@@ -79,12 +86,8 @@ const RisksSubcard = ({
     )}
     renderNewEntity={() => (
       <NewRiskCard
-        {...{
-          linkedTo,
-          organizationId,
-          guidelines,
-          risks,
-        }}
+        {...{ linkedTo, organizationId, guidelines }}
+        riskIds={getIds(risks)}
       />
     )}
   />

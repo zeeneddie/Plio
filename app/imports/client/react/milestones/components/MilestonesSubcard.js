@@ -38,8 +38,9 @@ const MilestonesSubcard = ({ milestones, goalId, organizationId }) => (
           <EntityManager>
             {milestones.map(milestone => (
               <EntityManagerItem
+                {...{ organizationId }}
                 key={milestone._id}
-                entity={milestone}
+                itemId={milestone._id}
                 milestone={milestone}
                 component={MilestoneEditContainer}
                 render={MilestoneSubcard}

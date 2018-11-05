@@ -22,6 +22,12 @@ input UpdateRevenueStreamInput {
   notes: String
   fileIds: [String]
   notify: [ID]
+  goalIds: [ID]
+  standardsIds: [ID]
+  fileIds: [ID]
+  riskIds: [ID]
+  nonconformityIds: [ID]
+  potentialGainIds: [ID]
 }
 
 input DeleteRevenueStreamInput {

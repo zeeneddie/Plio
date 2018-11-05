@@ -5,4 +5,11 @@ interface CanvasEntity {
   color: String!
   notes: String
   notify: [User]
+  organization: Organization!
+  goals: [Goal]
+  standards: [Standard]
+  risks: [Risk]
+  lessons: [Lesson]
+  nonconformities: [Nonconformity]
+  potentialGains: [Nonconformity]
 }

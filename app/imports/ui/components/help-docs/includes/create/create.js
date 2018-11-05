@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { _ } from 'meteor/underscore';
 import invoke from 'lodash.invoke';
+import { toastr } from 'meteor/chrismbeckett:toastr';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { SourceTypes } from '/imports/share/constants';

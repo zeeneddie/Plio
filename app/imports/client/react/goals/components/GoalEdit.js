@@ -10,7 +10,6 @@ import GoalRisksSubcardContainer from '../containers/GoalRisksSubcardContainer';
 import GoalLessonsSubcardContainer from '../containers/GoalLessonsSubcardContainer';
 import GoalActionsSubcardContainer from '../containers/GoalActionsSubcardContainer';
 import GoalEditForm from './GoalEditForm';
-import GoalCompleteForm from './GoalCompleteForm';
 import CanvasFilesSubcard from '../../canvas/components/CanvasFilesSubcard';
 
 export const GoalEdit = ({
@@ -31,31 +30,32 @@ export const GoalEdit = ({
           save,
         }}
       />
-      <GoalCompleteForm {...{ organizationId, save }} />
     </CardBlock>
-    <GoalActionsSubcardContainer {...{ organizationId, goalId }} />
-    <GoalMilestonesSubcardContainer {...{ goalId }} />
-    {canEditGoals && <GoalRisksSubcardContainer {...{ organizationId, goalId }} />}
-    <GoalLessonsSubcardContainer {...{ goalId }} />
-    <FormSpy subscription={{}}>
-      {({ form }) => (
-        <CanvasFilesSubcard
-          {...{ organizationId }}
-          documentId={goalId}
-          onUpdate={({ variables: { input: { fileIds } } }) => {
-            form.change('fileIds', fileIds);
-            form.submit();
-          }}
-          slingshotDirective={AWSDirectives.GOAL_FILES}
-          documentType={DocumentTypes.GOAL}
-        />
-      )}
-    </FormSpy>
-    <NotifySubcard
-      {...{ organizationId }}
-      documentId={goalId}
-      onChange={save}
-    />
+    <Fragment>
+      <GoalActionsSubcardContainer {...{ organizationId, goalId }} />
+      <GoalMilestonesSubcardContainer {...{ goalId }} />
+      {canEditGoals && <GoalRisksSubcardContainer {...{ organizationId, goalId }} />}
+      <GoalLessonsSubcardContainer {...{ goalId }} />
+      <FormSpy subscription={{}}>
+        {({ form }) => (
+          <CanvasFilesSubcard
+            {...{ organizationId }}
+            documentId={goalId}
+            onUpdate={({ variables: { input: { fileIds } } }) => {
+              form.change('fileIds', fileIds);
+              form.submit();
+            }}
+            slingshotDirective={AWSDirectives.GOAL_FILES}
+            documentType={DocumentTypes.GOAL}
+          />
+        )}
+      </FormSpy>
+      <NotifySubcard
+        {...{ organizationId }}
+        documentId={goalId}
+        onChange={save}
+      />
+    </Fragment>
   </Fragment>
 );
 

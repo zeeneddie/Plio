@@ -1,6 +1,7 @@
 #import "../Fragment/CanvasSettings.graphql"
 #import "../Fragment/CustomerSegmentPresentation.graphql"
 #import "../Fragment/ValuePropositionPresentation.graphql"
+#import "../Fragment/CanvasEntityPresentation.graphql"
 
 query CanvasPage($organizationId: ID!) {
   canvasSettings(organizationId: $organizationId) {
@@ -10,23 +11,17 @@ query CanvasPage($organizationId: ID!) {
   }
   keyPartners(organizationId: $organizationId) {
     keyPartners {
-      _id
-      title
-      color
+      ...CanvasEntityPresentation
     }
   }
   keyActivities(organizationId: $organizationId) {
     keyActivities {
-      _id
-      title
-      color
+      ...CanvasEntityPresentation
     }
   }
   keyResources(organizationId: $organizationId) {
     keyResources {
-      _id
-      title
-      color
+      ...CanvasEntityPresentation
     }
   }
   valuePropositions(organizationId: $organizationId) {
@@ -36,9 +31,7 @@ query CanvasPage($organizationId: ID!) {
   }
   customerRelationships(organizationId: $organizationId) {
     customerRelationships {
-      _id
-      title
-      color
+      ...CanvasEntityPresentation
     }
   }
   customerSegments(organizationId: $organizationId) {
@@ -48,23 +41,17 @@ query CanvasPage($organizationId: ID!) {
   }
   costLines(organizationId: $organizationId) {
     costLines {
-      _id
-      title
-      color
+      ...CanvasEntityPresentation
     }
   }
   revenueStreams(organizationId: $organizationId) {
     revenueStreams {
-      _id
-      title
-      color
+      ...CanvasEntityPresentation
     }
   }
   channels(organizationId: $organizationId) {
     channels {
-      _id
-      title
-      color
+      ...CanvasEntityPresentation
     }
   }
 }

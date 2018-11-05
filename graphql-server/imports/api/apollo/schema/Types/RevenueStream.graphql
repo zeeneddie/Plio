@@ -13,4 +13,10 @@ type RevenueStream implements BaseEntity, CanvasEntity {
   notes: String
   fileIds: [String]
   notify: [User]
+  goals: [Goal]
+  standards: [Standard]
+  risks: [Risk]
+  lessons: [Lesson]
+  nonconformities: [Nonconformity]
+  potentialGains: [Nonconformity]
 }

@@ -273,6 +273,12 @@ export const TransitionTimeouts = {
 
 export const TransitionBaseActiveClass = 'in';
 
+export const ProblemStatusTypes = {
+  AMBER: 'amber',
+  RED: 'red',
+  GREEN: 'green',
+};
+
 export const StatusColors = {
   DEFAULT: 'default',
   AMBER: 'warning',
@@ -350,6 +356,7 @@ export const Styles = {
     white: '#fff',
     lightGrey: '#eee',
     darkGrey: '#373a3c',
+    brandPrimary: '#0275d8',
   },
 };
 /* eslint-enable max-len */

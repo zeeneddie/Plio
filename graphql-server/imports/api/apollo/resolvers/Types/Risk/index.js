@@ -6,7 +6,9 @@ import {
   loadDepartmentsById,
   lenses,
 } from 'plio-util';
-import { view, map, flatten } from 'ramda';
+import { view } from 'ramda';
+
+import { resolveStandardsByIds } from '../util';
 
 const {
   createdBy,
@@ -32,15 +34,6 @@ export default {
     files: loadFilesById(view(fileIds)),
     departments: loadDepartmentsById(view(departmentsIds)),
     type: ({ typeId }, args, { loaders: { RiskType: { byId } } }) => byId.load(typeId),
-    standards: (root, args, context) => {
-      const { standardsIds = [] } = root;
-      const { isDeleted = false } = args;
-      const { loaders: { Standard: { byQuery } } } = context;
-
-      return byQuery.loadMany(map(standardId => ({
-        isDeleted,
-        _id: standardId,
-      }), standardsIds)).then(flatten);
-    },
+    standards: resolveStandardsByIds,
   },
 };

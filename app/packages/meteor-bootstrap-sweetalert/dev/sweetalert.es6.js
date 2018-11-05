@@ -109,6 +109,8 @@ export const sweetAlert = swal = function() {
       params.confirmButtonText = params.showCancelButton ? 'Confirm' : defaultParams.confirmButtonText;
       params.confirmButtonText = argumentOrDefault('confirmButtonText');
 
+      params.extraButton = customizations.extraButton;
+
       // Callback function when clicking on "OK"/"Cancel"
       params.doneFunction = arguments[1] || null;
 

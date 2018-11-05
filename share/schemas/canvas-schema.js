@@ -30,6 +30,36 @@ const CanvasSchema = new SimpleSchema([
       type: String,
       allowedValues: Object.values(CanvasColors),
     },
+    goalIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+      defaultValue: [],
+    },
+    standardsIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+      defaultValue: [],
+    },
+    riskIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+      defaultValue: [],
+    },
+    nonconformityIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+      defaultValue: [],
+    },
+    potentialGainIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+      defaultValue: [],
+    },
   },
 ]);
 

@@ -9,6 +9,7 @@ import {
   convertDocumentOptions,
   getValues,
   mapUsersToOptions,
+  getIds,
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure } from 'recompose';
@@ -30,14 +31,21 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
+import activelyManage from '../../forms/decorators/activelyManage';
 
 const getValueProposition = pathOr({}, repeat('valueProposition', 2));
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.risks, getIds),
+  over(lenses.goals, getIds),
+  over(lenses.standards, getIds),
+  over(lenses.nonconformities, getIds),
+  over(lenses.potentialGains, getIds),
+  over(lenses.lessons, getIds),
   pick([
     'originator',
     'title',
@@ -45,6 +53,12 @@ const getInitialValues = compose(
     'matchedTo',
     'notes',
     'notify',
+    'risks',
+    'goals',
+    'standards',
+    'nonconformities',
+    'potentialGains',
+    'lessons',
   ]),
   getValueProposition,
 );
@@ -112,6 +126,7 @@ const ValuePropositionEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
+              decorators={[activelyManage]}
               validate={validateValueProposition}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -126,6 +141,11 @@ const ValuePropositionEditModal = ({
                   matchedTo,
                   notes = '',
                   notify = [],
+                  risks: riskIds,
+                  goals: goalIds,
+                  standards: standardsIds,
+                  nonconformities: nonconformityIds,
+                  potentialGains: potentialGainIds,
                 } = values;
 
                 if (difference[0].path[0] === 'matchedTo') {
@@ -151,6 +171,11 @@ const ValuePropositionEditModal = ({
                       title,
                       notes,
                       color,
+                      riskIds,
+                      goalIds,
+                      standardsIds,
+                      nonconformityIds,
+                      potentialGainIds,
                       notify: getValues(notify),
                       originatorId: originator.value,
                     },
@@ -167,41 +192,46 @@ const ValuePropositionEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.VALUE_PROPOSITION} />
                     <RenderSwitch
-                      require={data.valueProposition && data.valueProposition.valueProposition}
+                      require={isOpen &&
+                        data.valueProposition &&
+                        data.valueProposition.valueProposition}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<ValuePropositionForm {...{ organizationId }} />}
                     >
-                      {({
-                        _id: documentId,
-                        benefits = [],
-                        features = [],
-                        matchedTo,
-                      }) => (
+                      {valueProposition => (
                         <Fragment>
                           <ValuePropositionForm
-                            {...{ organizationId, matchedTo }}
+                            {...{ organizationId }}
+                            matchedTo={valueProposition.matchedTo}
                             save={handleSubmit}
                           />
                           <ValueComponentsSubcard
-                            {...{
-                              organizationId,
-                              benefits,
-                              features,
-                              documentId,
-                              matchedTo,
-                            }}
+                            {...{ organizationId }}
+                            benefits={valueProposition.benefits || []}
+                            features={valueProposition.features || []}
+                            documentId={valueProposition._id}
+                            matchedTo={valueProposition.matchedTo}
                             documentType={CanvasTypes.VALUE_PROPOSITION}
                           />
+                          <CanvasSubcards
+                            {...{ organizationId }}
+                            section={valueProposition}
+                            onChange={handleSubmit}
+                            refetchQuery={Queries.VALUE_PROPOSITION_CARD}
+                            documentType={CanvasTypes.VALUE_PROPOSITION}
+                            user={data && data.user}
+                          />
+                          {/*
+                             TODO Move CanvasFilesSubcard into CanvasSubcards
+                             when it will be refactored
+                          */}
                           <CanvasFilesSubcard
-                            {...{ organizationId, documentId }}
+                            {...{ organizationId }}
+                            documentId={valueProposition._id}
                             onUpdate={updateValueProposition}
                             slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
                             documentType={CanvasTypes.VALUE_PROPOSITION}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
-                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}

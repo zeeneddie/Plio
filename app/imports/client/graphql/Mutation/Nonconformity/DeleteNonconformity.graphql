@@ -1,0 +1,5 @@
+mutation deleteNonconformity($input: DeleteNonconformityInput!) {
+  deleteNonconformity(input: $input) {
+    _id
+  }
+}

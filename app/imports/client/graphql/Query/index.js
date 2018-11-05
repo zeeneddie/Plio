@@ -49,6 +49,12 @@ import REVENUE_STREAMS_CHART from './RevenueStreamsChart.graphql';
 import REVENUE_STREAMS_PROFIT_CHART from './RevenueStreamsProfitChart.graphql';
 import KEY_PARTNERS_CHART from './KeyPartnersChart.graphql';
 import GUIDANCE from './Guidance.graphql';
+import STANDARD_TYPE_LIST from './StandardTypeList.graphql';
+import STANDARD_SECTION_LIST from './StandardSectionList.graphql';
+import NONCONFORMITY_LIST from './NonconformityList';
+import POTENTIAL_GAIN_LIST from './PotentialGainList';
+import STANDARD_CARD from './StandardCard.graphql';
+import NONCONFORMITY_CARD from './NonconformityCard.graphql';
 
 DASHBOARD_GOALS.name = 'DashboardGoals';
 COMPLETED_DELETED_GOALS.name = 'CompletedDeletedGoals';
@@ -106,4 +112,10 @@ export default {
   REVENUE_STREAMS_PROFIT_CHART,
   KEY_PARTNERS_CHART,
   GUIDANCE,
+  STANDARD_TYPE_LIST,
+  STANDARD_SECTION_LIST,
+  NONCONFORMITY_LIST,
+  POTENTIAL_GAIN_LIST,
+  STANDARD_CARD,
+  NONCONFORMITY_CARD,
 };

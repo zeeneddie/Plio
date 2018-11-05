@@ -14,4 +14,10 @@ type ValueProposition implements BaseEntity, CanvasEntity {
   features: [Feature]
   fileIds: [String]
   notify: [User]
+  goals: [Goal]
+  standards: [Standard]
+  risks: [Risk]
+  lessons: [Lesson]
+  nonconformities: [Nonconformity]
+  potentialGains: [Nonconformity]
 }

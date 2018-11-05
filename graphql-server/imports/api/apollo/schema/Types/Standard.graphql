@@ -1,3 +1,9 @@
+type Source {
+  type: String!
+  fileId: String
+  url: String
+}
+
 # Incomplete
 type Standard implements BaseEntity, PlioEntity {
   _id: ID!
@@ -9,6 +15,7 @@ type Standard implements BaseEntity, PlioEntity {
   approvedAt: DateTime
   organization: Organization!
   uniqueNumber: Int
+  issueNumber: Int
   title: String!
   description: String
   owner: User
@@ -17,13 +24,13 @@ type Standard implements BaseEntity, PlioEntity {
   deletedBy: User
   notify: [User]
   status: String!
-  # departments: [Department]
+  departments: [Department]
   files: [File]
-  # type: StandardType
-  # section: StandardBookSection
+  type: StandardType
+  section: StandardSection
   # review: StandardReview
-  # source1
-  # source2
+  source1: Source!
+  source2: Source
   # lessons
   improvementPlan: ImprovementPlan
 }

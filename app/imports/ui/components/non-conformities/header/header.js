@@ -7,8 +7,8 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import invoke from 'lodash.invoke';
 
 import { NonConformityFilters } from '/imports/api/constants';
-import { isMobileRes } from '/imports/api/checkers';
-import HeaderMenu from '/imports/client/react/non-comformities/components/HeaderMenu';
+import { isMobileRes } from '../../../../api/checkers';
+import HeaderMenu from '../../../../client/react/noncomformities/components/HeaderMenu';
 
 Template.NC_Header.viewmodel({
   mixin: ['nonconformity', 'organization', 'router'],

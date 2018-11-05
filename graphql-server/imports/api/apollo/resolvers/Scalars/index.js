@@ -16,7 +16,7 @@ export default {
       return new Date(date).getTime();
     },
     parseValue(value) {
-      const date =  new Date(value).toISOString();
+      const date = new Date(value).toISOString();
       return GraphQLDateTime.parseValue(date);
     },
   },

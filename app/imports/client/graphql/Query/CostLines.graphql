@@ -1,9 +1,9 @@
+#import "../Fragment/CanvasEntityPresentation.graphql"
+
 query CostLines($organizationId: ID!) {
   costLines(organizationId: $organizationId) {
     costLines {
-      _id
-      title
-      color
+      ...CanvasEntityPresentation
     }
   }
 }

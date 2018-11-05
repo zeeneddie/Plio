@@ -1,0 +1,36 @@
+fragment NonconformityCard on Nonconformity {
+  _id
+  title
+  description
+  magnitude
+  sequentialId
+  serialNumber
+  statusComment
+  status
+  cost
+  type
+  ref {
+    text
+    url
+  }
+  standards {
+    _id
+    title
+  }
+  departments {
+    _id
+    title
+  }
+  owner {
+    _id
+    profile {
+      fullName
+    }
+  }
+  originator {
+    _id
+    profile {
+      fullName
+    }
+  }
+}

@@ -1,0 +1,8 @@
+type NonconformitiesQueryPayload {
+  totalCount: Int
+  nonconformities: [Nonconformity]
+}
+
+type Query {
+  nonconformities(organizationId: ID! type: String!): NonconformitiesQueryPayload
+}

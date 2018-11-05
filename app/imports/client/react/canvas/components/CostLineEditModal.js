@@ -1,7 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
+import {
+  getUserOptions,
+  lenses,
+  noop,
+  mapUsersToOptions,
+  getValues,
+  getIds,
+} from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
@@ -21,13 +28,20 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
+import activelyManage from '../../forms/decorators/activelyManage';
 
 const getCostLine = pathOr({}, repeat('costLine', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.risks, getIds),
+  over(lenses.goals, getIds),
+  over(lenses.standards, getIds),
+  over(lenses.nonconformities, getIds),
+  over(lenses.potentialGains, getIds),
+  over(lenses.lessons, getIds),
   pick([
     'originator',
     'title',
@@ -35,6 +49,12 @@ const getInitialValues = compose(
     'percentOfTotalCost',
     'notes',
     'notify',
+    'risks',
+    'goals',
+    'standards',
+    'nonconformities',
+    'potentialGains',
+    'lessons',
   ]),
   getCostLine,
 );
@@ -52,7 +72,7 @@ const CostLineEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.COST_LINE_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -89,6 +109,7 @@ const CostLineEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
+              decorators={[activelyManage]}
               validate={validateCostLine}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -103,6 +124,11 @@ const CostLineEditModal = ({
                   percentOfTotalCost,
                   notes = '', // final form sends undefined value instead of an empty string
                   notify = [],
+                  risks: riskIds,
+                  goals: goalIds,
+                  standards: standardsIds,
+                  nonconformities: nonconformityIds,
+                  potentialGains: potentialGainIds,
                 } = values;
 
                 return updateCostLine({
@@ -113,6 +139,11 @@ const CostLineEditModal = ({
                       notes,
                       color,
                       percentOfTotalCost,
+                      riskIds,
+                      goalIds,
+                      standardsIds,
+                      nonconformityIds,
+                      potentialGainIds,
                       notify: getValues(notify),
                       originatorId: originator.value,
                     },
@@ -129,23 +160,32 @@ const CostLineEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.COST_LINE} />
                     <RenderSwitch
-                      require={data.costLine && data.costLine.costLine}
+                      require={isOpen && data.costLine && data.costLine.costLine}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CostLineForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId }) => (
+                      {costLine => (
                         <Fragment>
                           <CostLineForm {...{ organizationId }} save={handleSubmit} />
+                          <CanvasSubcards
+                            {...{ organizationId }}
+                            section={costLine}
+                            onChange={handleSubmit}
+                            refetchQuery={Queries.COST_LINE_CARD}
+                            documentType={CanvasTypes.COST_LINE}
+                            user={data && data.user}
+                          />
+                          {/*
+                            TODO Move CanvasFilesSubcard into CanvasSubcards
+                            when it will be refactored
+                           */}
                           <CanvasFilesSubcard
-                            {...{ documentId, organizationId }}
+                            {...{ organizationId }}
+                            documentId={costLine._id}
                             onUpdate={updateCostLine}
                             slingshotDirective={AWSDirectives.COST_LINE_FILES}
                             documentType={CanvasTypes.COST_LINE}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
-                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}

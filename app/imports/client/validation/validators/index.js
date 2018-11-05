@@ -10,3 +10,7 @@ export { default as validateValueProposition } from './validateValueProposition'
 export { default as validateCustomerElement } from './validateCustomerElement';
 export { default as validateGoal } from './validateGoal';
 export { default as validateMilestone } from './validateMilestone';
+export { default as validateRisk } from './validateRisk';
+export { default as validateLesson } from './validateLesson';
+export { default as validateStandard } from './validateStandard';
+export { default as validateNonConformity } from './validateNonConformity';

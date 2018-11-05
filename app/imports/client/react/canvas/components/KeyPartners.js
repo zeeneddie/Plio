@@ -11,17 +11,6 @@ import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { CanvasSections, CanvasTypes } from '../../../../share/constants';
 
-const goals = [
-  { sequentialId: 'KG1', title: 'Finish UI design' },
-  { sequentialId: 'KG3', title: 'Close New York Office' },
-  { sequentialId: 'KG4', title: 'Launch Product X' },
-];
-
-const standards = [
-  { issueNumber: '2.1', title: 'Identification of needs' },
-  { issueNumber: '2.2.1.1', title: 'Due diligence' },
-];
-
 const KeyPartners = ({ organizationId }) => (
   <Query
     query={Queries.KEY_PARTNERS}
@@ -30,7 +19,7 @@ const KeyPartners = ({ organizationId }) => (
   >
     {({ data: { keyPartners: { keyPartners = [] } } }) => (
       <CanvasBlock
-        {...{ standards, goals, organizationId }}
+        {...{ organizationId }}
         label="Key partners"
         sectionName={CanvasSections[CanvasTypes.KEY_PARTNER]}
         help={(

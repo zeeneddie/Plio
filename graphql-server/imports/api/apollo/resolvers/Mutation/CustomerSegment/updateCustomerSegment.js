@@ -4,9 +4,9 @@ import {
   flattenInput,
   checkCustomerSegmentAccess,
   checkPercentOfMarketSize,
-  checkFilesAccess,
   customerSegmentUpdateAfterware,
 } from '../../../../../share/middleware';
+import { CanvasUpdateMiddlewares } from '../../../../../share/middleware/constants';
 
 export const resolver = async (root, args, context) =>
   context.services.CustomerSegmentService.update(args, context);
@@ -16,6 +16,6 @@ export default applyMiddleware(
   flattenInput(),
   checkCustomerSegmentAccess(),
   checkPercentOfMarketSize(),
-  checkFilesAccess(),
+  ...CanvasUpdateMiddlewares,
   customerSegmentUpdateAfterware(),
 )(resolver);

@@ -434,9 +434,14 @@ export const SourceTypes = {
   VIDEO: 'video',
 };
 
+export const StandardStatusTypes = {
+  ISSUED: 'issued',
+  DRAFT: 'draft',
+};
+
 export const StandardStatuses = {
-  issued: 'Issued',
-  draft: 'Draft',
+  [StandardStatusTypes.ISSUED]: 'Issued',
+  [StandardStatusTypes.DRAFT]: 'Draft',
 };
 
 export const StringLimits = {
@@ -990,3 +995,13 @@ export const HomeScreenLabels = {
 };
 
 export const DEFAULT_ORG_TIMEZONE = 'Europe/London';
+
+export const UniqueNumberRange = {
+  MIN: 1,
+  MAX: 10000,
+};
+
+export const IssueNumberRange = {
+  MIN: 1,
+  MAX: 1000,
+};

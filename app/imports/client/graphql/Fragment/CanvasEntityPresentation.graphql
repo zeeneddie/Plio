@@ -1,0 +1,43 @@
+fragment CanvasEntityPresentation on CanvasEntity {
+  _id
+  title
+  color
+  goals {
+    _id
+    title
+    sequentialId
+    serialNumber
+  }
+  standards {
+    _id
+    title
+    issueNumber
+    type {
+      _id
+      abbreviation
+    }
+  }
+  risks {
+    _id
+    title
+    sequentialId
+    serialNumber
+  }
+  lessons {
+    _id
+    title
+    serialNumber
+  }
+  nonconformities {
+    _id
+    title
+    sequentialId
+    serialNumber
+  }
+  potentialGains {
+    _id
+    title
+    sequentialId
+    serialNumber
+  }
+}

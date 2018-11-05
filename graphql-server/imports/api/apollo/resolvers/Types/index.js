@@ -25,6 +25,7 @@ import Feature from './Feature';
 import Need from './Need';
 import Want from './Want';
 import Guidance from './Guidance';
+import Nonconformity from './Nonconformity';
 
 export default {
   ...User,
@@ -54,4 +55,5 @@ export default {
   ...Need,
   ...Want,
   ...Guidance,
+  ...Nonconformity,
 };

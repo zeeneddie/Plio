@@ -4,6 +4,7 @@ import { UserRoles } from '../share/constants';
 
 const StandardsHelp = {
   standard: 'A standard is a document that sets standards for how you do things (policies, processes, etc) in your organization.  To add a standard into Plio, just fill in the card details, and link to a source file which may be a Word document, a URL link to a web document or a video.',
+  uniqueNumber: 'Please enter a unique number between 1 and 10000 for this standards document',
 };
 
 const NonConformitiesHelp = {

@@ -10,6 +10,7 @@ import {
 import { getStatusColor } from '../../../../api/goals/helpers';
 import { GoalStatuses } from '../../../../share/constants';
 import GoalForm from './GoalForm';
+import GoalCompleteForm from './GoalCompleteForm';
 
 export const GoalEditFrom = ({
   status,
@@ -33,6 +34,7 @@ export const GoalEditFrom = ({
         onBlur={save}
       />
     </FormField>
+    <GoalCompleteForm {...{ organizationId, save }} />
   </Fragment>
 );
 

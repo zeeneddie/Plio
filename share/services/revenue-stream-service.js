@@ -27,6 +27,11 @@ export default {
     notes,
     fileIds,
     notify,
+    goalIds,
+    standardsIds,
+    riskIds,
+    nonconformityIds,
+    potentialGainIds,
   }, { userId, collections: { RevenueStreams } }) {
     const query = { _id };
     const modifier = {
@@ -39,6 +44,11 @@ export default {
         notes,
         fileIds,
         notify,
+        goalIds,
+        standardsIds,
+        riskIds,
+        nonconformityIds,
+        potentialGainIds,
         updatedBy: userId,
       },
     };

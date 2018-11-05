@@ -1,7 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
+import {
+  getUserOptions,
+  lenses,
+  noop,
+  mapUsersToOptions,
+  getValues,
+  getIds,
+} from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
@@ -21,19 +28,32 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
+import activelyManage from '../../forms/decorators/activelyManage';
 
 const getChannel = pathOr({}, repeat('channel', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.risks, getIds),
+  over(lenses.goals, getIds),
+  over(lenses.standards, getIds),
+  over(lenses.nonconformities, getIds),
+  over(lenses.potentialGains, getIds),
+  over(lenses.lessons, getIds),
   pick([
     'originator',
     'title',
     'color',
     'notes',
     'notify',
+    'risks',
+    'goals',
+    'standards',
+    'nonconformities',
+    'potentialGains',
+    'lessons',
   ]),
   getChannel,
 );
@@ -51,7 +71,7 @@ const ChannelEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.CHANNEL_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -88,6 +108,7 @@ const ChannelEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
+              decorators={[activelyManage]}
               validate={validateChannel}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -101,6 +122,11 @@ const ChannelEditModal = ({
                   color,
                   notes = '',
                   notify = [],
+                  risks: riskIds,
+                  goals: goalIds,
+                  standards: standardsIds,
+                  nonconformities: nonconformityIds,
+                  potentialGains: potentialGainIds,
                 } = values;
 
                 return updateChannel({
@@ -110,6 +136,11 @@ const ChannelEditModal = ({
                       title,
                       notes,
                       color,
+                      riskIds,
+                      goalIds,
+                      standardsIds,
+                      nonconformityIds,
+                      potentialGainIds,
                       notify: getValues(notify),
                       originatorId: originator.value,
                     },
@@ -126,23 +157,32 @@ const ChannelEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.CHANNEL} />
                     <RenderSwitch
-                      require={data.channel && data.channel.channel}
+                      require={isOpen && data.channel && data.channel.channel}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CanvasForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId }) => (
+                      {channel => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
+                          <CanvasSubcards
+                            {...{ organizationId }}
+                            section={channel}
+                            onChange={handleSubmit}
+                            refetchQuery={Queries.CHANNEL_CARD}
+                            documentType={CanvasTypes.CHANNEL}
+                            user={data && data.user}
+                          />
+                          {/*
+                            TODO Move CanvasFilesSubcard into CanvasSubcards
+                            when it will be refactored
+                           */}
                           <CanvasFilesSubcard
-                            {...{ documentId, organizationId }}
+                            {...{ organizationId }}
+                            documentId={channel._id}
                             onUpdate={updateChannel}
                             slingshotDirective={AWSDirectives.CHANNEL_FILES}
                             documentType={CanvasTypes.CHANNEL}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
-                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}

@@ -1,11 +1,15 @@
 #import "../Fragment/ValuePropositionCard.graphql"
 #import "../Fragment/ValuePropositionRelations.graphql"
 
-query ValuePropositionCard($_id: ID!) {
+query ValuePropositionCard($_id: ID!, $organizationId: ID!) {
   valueProposition(_id: $_id) {
     valueProposition {
       ...ValuePropositionCard
       ...ValuePropositionRelations
     }
+  }
+  user: me {
+    _id
+    roles(organizationId: $organizationId)
   }
 }

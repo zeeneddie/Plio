@@ -22,6 +22,9 @@ import Feature from './Feature';
 import Need from './Need';
 import Want from './Want';
 import Guidance from './Guidance';
+import StandardType from './StandardType';
+import StandardSection from './StandardSection';
+import Nonconformity from './Nonconformity';
 
 export default {
   ...User,
@@ -48,4 +51,7 @@ export default {
   ...Need,
   ...Want,
   ...Guidance,
+  ...StandardType,
+  ...StandardSection,
+  ...Nonconformity,
 };

@@ -1,0 +1,44 @@
+type StandardPayload {
+  standard: Standard
+}
+
+input SourceInput {
+  type: String!
+  fileId: String
+  url: String
+}
+
+input CreateStandardInput {
+  organizationId: ID!
+  title: String!
+  status: String!
+  sectionId: ID!
+  typeId: ID!
+  owner: ID!
+  source1: SourceInput!
+}
+
+input UpdateStandardInput {
+  _id: ID!
+  title: String
+  status: String
+  sectionId: ID
+  typeId: ID
+  owner: ID
+  source1: SourceInput
+  source2: SourceInput
+  description: String
+  issueNumber: Int
+  uniqueNumber: Int
+  departmentsIds: [ID]
+}
+
+input DeleteStandardInput {
+  _id: ID!
+}
+
+type Mutation {
+  createStandard(input: CreateStandardInput!): StandardPayload
+  updateStandard(input: UpdateStandardInput!): Standard
+  deleteStandard(input: DeleteStandardInput!): Standard
+}

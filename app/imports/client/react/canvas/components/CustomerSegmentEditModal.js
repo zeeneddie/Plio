@@ -9,6 +9,7 @@ import {
   convertDocumentOptions,
   getValues,
   mapUsersToOptions,
+  getIds,
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure } from 'recompose';
@@ -30,14 +31,21 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
+import activelyManage from '../../forms/decorators/activelyManage';
 
 const getCustomerSegment = pathOr({}, repeat('customerSegment', 2));
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.risks, getIds),
+  over(lenses.goals, getIds),
+  over(lenses.standards, getIds),
+  over(lenses.nonconformities, getIds),
+  over(lenses.potentialGains, getIds),
+  over(lenses.lessons, getIds),
   pick([
     'originator',
     'title',
@@ -46,6 +54,12 @@ const getInitialValues = compose(
     'matchedTo',
     'notes',
     'notify',
+    'risks',
+    'goals',
+    'standards',
+    'nonconformities',
+    'potentialGains',
+    'lessons',
   ]),
   getCustomerSegment,
 );
@@ -63,7 +77,7 @@ const CustomerSegmentEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.CUSTOMER_SEGMENT_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -113,6 +127,7 @@ const CustomerSegmentEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
+              decorators={[activelyManage]}
               validate={validateCustomerSegment}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -128,6 +143,11 @@ const CustomerSegmentEditModal = ({
                   percentOfMarketSize,
                   notes = '',
                   notify = [],
+                  risks: riskIds,
+                  goals: goalIds,
+                  standards: standardsIds,
+                  nonconformities: nonconformityIds,
+                  potentialGains: potentialGainIds,
                 } = values;
 
                 if (difference[0].path[0] === 'matchedTo') {
@@ -154,6 +174,11 @@ const CustomerSegmentEditModal = ({
                       notes,
                       color,
                       percentOfMarketSize,
+                      riskIds,
+                      goalIds,
+                      standardsIds,
+                      nonconformityIds,
+                      potentialGainIds,
                       notify: getValues(notify),
                       originatorId: originator.value,
                     },
@@ -170,41 +195,46 @@ const CustomerSegmentEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.CUSTOMER_SEGMENT} />
                     <RenderSwitch
-                      require={data.customerSegment && data.customerSegment.customerSegment}
+                      require={isOpen &&
+                        data.customerSegment &&
+                        data.customerSegment.customerSegment}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CustomerSegmentForm {...{ organizationId }} />}
                     >
-                      {({
-                        _id: documentId,
-                        needs = [],
-                        wants = [],
-                        matchedTo,
-                      }) => (
+                      {customerSegment => (
                         <Fragment>
                           <CustomerSegmentForm
-                            {...{ organizationId, matchedTo }}
+                            {...{ organizationId }}
+                            matchedTo={customerSegment.matchedTo}
                             save={handleSubmit}
                           />
                           <CustomerInsightsSubcard
-                            {...{
-                              organizationId,
-                              needs,
-                              wants,
-                              documentId,
-                              matchedTo,
-                            }}
+                            {...{ organizationId }}
+                            benefits={customerSegment.benefits || []}
+                            features={customerSegment.features || []}
+                            documentId={customerSegment._id}
+                            matchedTo={customerSegment.matchedTo}
                             documentType={CanvasTypes.CUSTOMER_SEGMENT}
                           />
+                          <CanvasSubcards
+                            {...{ organizationId }}
+                            section={customerSegment}
+                            onChange={handleSubmit}
+                            refetchQuery={Queries.CUSTOMER_SEGMENT_CARD}
+                            documentType={CanvasTypes.CUSTOMER_SEGMENT}
+                            user={data && data.user}
+                          />
+                          {/*
+                            TODO Move CanvasFilesSubcard into CanvasSubcards
+                            when it will be refactored
+                           */}
                           <CanvasFilesSubcard
-                            {...{ organizationId, documentId }}
+                            {...{ organizationId }}
+                            documentId={customerSegment._id}
                             onUpdate={updateCustomerSegment}
                             slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
                             documentType={CanvasTypes.CUSTOMER_SEGMENT}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
-                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}

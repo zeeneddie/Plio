@@ -1,4 +1,4 @@
-var alertTypes = ['error', 'warning', 'info', 'success', 'input', 'prompt'];
+var alertTypes = ['error', 'warning', 'info', 'success', 'input', 'prompt', 'button'];
 
 import {
   isIE8
@@ -26,6 +26,7 @@ var setParameters = function(params) {
   var $text = modal.querySelector('p');
   var $cancelBtn = modal.querySelector('button.cancel');
   var $confirmBtn = modal.querySelector('button.confirm');
+  var $extraBtn = modal.querySelector('button.extra-button');
 
   /*
    * Title
@@ -165,6 +166,16 @@ var setParameters = function(params) {
   }
 
   /*
+   * Show mid button?
+   */
+  modal.setAttribute('data-has-extra-button', params.extraButton);
+  if (params.extraButton) {
+    $extraBtn.style.display = 'inline-block';
+  } else {
+    hide($extraBtn);
+  }
+
+  /*
    * Custom text on cancel/confirm buttons
    */
   if (params.cancelButtonText) {
@@ -172,6 +183,9 @@ var setParameters = function(params) {
   }
   if (params.confirmButtonText) {
     $confirmBtn.innerHTML = escapeHtml(params.confirmButtonText);
+  }
+  if (params.extraButton) {
+    $extraBtn.innerHTML = escapeHtml(params.extraButton);
   }
 
   /*
@@ -193,6 +207,11 @@ var setParameters = function(params) {
    * Set cancel button to selected class
    */
   addClass($cancelBtn, params.cancelButtonClass);
+
+  /*
+   * Set mid button to selected class
+   */
+  addClass($extraBtn, params.extraButtonClass);
 
   /*
    * Set title to selected class

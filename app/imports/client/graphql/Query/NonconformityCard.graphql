@@ -1,0 +1,9 @@
+#import "../Fragment/NonconformityCard.graphql"
+
+query NonconformityCard($_id: ID!) {
+  nonconformity(_id: $_id) {
+    nonconformity {
+      ...NonconformityCard
+    }
+  }
+}

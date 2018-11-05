@@ -4,20 +4,24 @@ import { Template } from 'meteor/templating';
 Template.ESSources.viewmodel({
   mixin: ['organization'],
   update(args, cb) {
-    this.parent().update(args, cb);
+    if (this.onChangeSource) {
+      return this.onChangeSource(args.source);
+    }
+    return this.parent().update(args, cb);
   },
   uploaderMetaContext() {
+    const parent = this.parent();
     return {
       organizationId: this.organizationId(),
-      standardId: this.parent().standardId(),
+      standardId: parent && parent.standardId(),
     };
   },
   convertDocxToHtml(url, fileObj, cb) {
     Meteor.call('Mammoth.convertStandardFileToHtml', {
       fileUrl: url,
       htmlFileName: `${fileObj.name}.html`,
-      source: `source${this.id()}`,
-      standardId: this.parent()._id(),
+      source: `source${this.id ? this.id() : ''}`,
+      standardId: this.standardId() || this.parent()._id(),
     }, cb);
   },
   onRemoveSourceFile(err) {

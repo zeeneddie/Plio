@@ -26,4 +26,66 @@ export default Object.assign({}, ProblemsService, {
     }
     return NC;
   },
+
+  async insert({
+    title,
+    description,
+    organizationId,
+    ownerId,
+    originatorId,
+    magnitude,
+    type,
+    standardsIds,
+  }, { userId } = {}) {
+    return ProblemsService.insert.call(this, {
+      title,
+      description,
+      organizationId,
+      ownerId,
+      originatorId,
+      magnitude,
+      type,
+      standardsIds,
+      createdBy: userId,
+    });
+  },
+
+  async update({
+    _id,
+    title,
+    description,
+    ownerId,
+    originatorId,
+    magnitude,
+    statusComment,
+    standardsIds,
+    departmentsIds,
+    cost,
+    ref,
+  }, { userId } = {}) {
+    const query = { _id };
+    const modifier = {
+      $set: {
+        title,
+        description,
+        ownerId,
+        originatorId,
+        magnitude,
+        statusComment,
+        departmentsIds,
+        standardsIds,
+        cost,
+        ref,
+        updatedBy: userId,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
+  remove({ _id }, { userId } = {}) {
+    return this._service.remove({
+      _id,
+      deletedBy: userId,
+    });
+  },
 });

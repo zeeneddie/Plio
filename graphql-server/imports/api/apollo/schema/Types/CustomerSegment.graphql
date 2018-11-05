@@ -15,4 +15,10 @@ type CustomerSegment implements BaseEntity, CanvasEntity {
   wants: [Want]
   fileIds: [String]
   notify: [User]
+  goals: [Goal]
+  standards: [Standard]
+  risks: [Risk]
+  lessons: [Lesson]
+  nonconformities: [Nonconformity]
+  potentialGains: [Nonconformity]
 }

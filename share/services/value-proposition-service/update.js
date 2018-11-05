@@ -7,6 +7,11 @@ export default async function updateValueProposition(args, context) {
     notes,
     fileIds,
     notify,
+    goalIds,
+    standardsIds,
+    riskIds,
+    nonconformityIds,
+    potentialGainIds,
   } = args;
   const { userId, collections: { ValuePropositions } } = context;
   const query = { _id };
@@ -18,6 +23,11 @@ export default async function updateValueProposition(args, context) {
       notes,
       fileIds,
       notify,
+      goalIds,
+      standardsIds,
+      riskIds,
+      nonconformityIds,
+      potentialGainIds,
       updatedBy: userId,
     },
   };

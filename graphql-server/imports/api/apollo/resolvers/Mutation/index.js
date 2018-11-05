@@ -21,6 +21,9 @@ import Need from './Need';
 import Want from './Want';
 import Relation from './Relation';
 import Guidance from './Guidance';
+import Standard from './Standard';
+import StandardSection from './StandardSection';
+import Nonconformity from './Nonconformity';
 
 export default {
   ...Goal,
@@ -46,4 +49,7 @@ export default {
   ...Want,
   ...Relation,
   ...Guidance,
+  ...Standard,
+  ...StandardSection,
+  ...Nonconformity,
 };

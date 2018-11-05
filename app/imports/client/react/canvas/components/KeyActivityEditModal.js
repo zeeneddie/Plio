@@ -2,7 +2,14 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import diff from 'deep-diff';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop, mapUsersToOptions, getValues } from 'plio-util';
+import {
+  getUserOptions,
+  lenses,
+  noop,
+  mapUsersToOptions,
+  getValues,
+  getIds,
+} from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
 
@@ -21,19 +28,32 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
+import activelyManage from '../../forms/decorators/activelyManage';
 
 const getKeyActivity = pathOr({}, repeat('keyActivity', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.risks, getIds),
+  over(lenses.goals, getIds),
+  over(lenses.standards, getIds),
+  over(lenses.nonconformities, getIds),
+  over(lenses.potentialGains, getIds),
+  over(lenses.lessons, getIds),
   pick([
     'originator',
     'title',
     'color',
     'notes',
     'notify',
+    'risks',
+    'goals',
+    'standards',
+    'nonconformities',
+    'potentialGains',
+    'lessons',
   ]),
   getKeyActivity,
 );
@@ -51,7 +71,7 @@ const KeyActivityEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.KEY_ACTIVITY_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -88,6 +108,7 @@ const KeyActivityEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
+              decorators={[activelyManage]}
               validate={validateKeyActivity}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -101,6 +122,11 @@ const KeyActivityEditModal = ({
                   color,
                   notes = '',
                   notify = [],
+                  risks: riskIds,
+                  goals: goalIds,
+                  standards: standardsIds,
+                  nonconformities: nonconformityIds,
+                  potentialGains: potentialGainIds,
                 } = values;
 
                 return updateKeyActivity({
@@ -110,6 +136,11 @@ const KeyActivityEditModal = ({
                       title,
                       notes,
                       color,
+                      riskIds,
+                      goalIds,
+                      standardsIds,
+                      nonconformityIds,
+                      potentialGainIds,
                       notify: getValues(notify),
                       originatorId: originator.value,
                     },
@@ -126,23 +157,32 @@ const KeyActivityEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.KEY_ACTIVITY} />
                     <RenderSwitch
-                      require={data.keyActivity && data.keyActivity.keyActivity}
+                      require={isOpen && data.keyActivity && data.keyActivity.keyActivity}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CanvasForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId }) => (
+                      {keyActivity => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
+                          <CanvasSubcards
+                            {...{ organizationId }}
+                            section={keyActivity}
+                            onChange={handleSubmit}
+                            refetchQuery={Queries.KEY_ACTIVITY_CARD}
+                            documentType={CanvasTypes.KEY_ACTIVITY}
+                            user={data && data.user}
+                          />
+                          {/*
+                            TODO Move CanvasFilesSubcard into CanvasSubcards
+                            when it will be refactored
+                           */}
                           <CanvasFilesSubcard
-                            {...{ documentId, organizationId }}
+                            {...{ organizationId }}
+                            documentId={keyActivity._id}
                             onUpdate={updateKeyActivity}
                             slingshotDirective={AWSDirectives.KEY_ACTIVITY_FILES}
                             documentType={CanvasTypes.KEY_ACTIVITY}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
-                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}

@@ -28,3 +28,4 @@ export { default as NeedService } from './need-service';
 export { default as WantService } from './want-service';
 export { default as RelationService } from './relation-service';
 export { default as GuidanceService } from './guidance-service';
+export { default as StandardSectionService } from './standard-section-service';

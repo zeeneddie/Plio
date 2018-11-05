@@ -70,7 +70,7 @@ swal.promise = ({
   showLoaderOnConfirm = true,
   ...props
 }, cb) => new Promise((resolve, reject) => {
-  swal({ showLoaderOnConfirm, ...props }, () => cb()
+  swal({ showLoaderOnConfirm, ...props }, callbackValue => cb(callbackValue)
     .then((res) => {
       swal.success(successTitle, successText);
       resolve(res);
@@ -80,6 +80,25 @@ swal.promise = ({
       reject(err);
     }),
   );
+});
+
+swal.withExtraAction = ({
+  extraButtonClass = 'btn-md btn-primary',
+  confirmButtonClass = 'btn-md btn-danger',
+  extraButton = 'Extra',
+  confirmHandler,
+  extraHandler,
+  ...props
+}) => swal.promise({
+  extraButtonClass,
+  confirmButtonClass,
+  extraButton,
+  ...props,
+}, (callbackValue) => {
+  if (callbackValue === 'extraButton') {
+    return extraHandler();
+  }
+  return confirmHandler();
 });
 
 export default Object.assign(swal, sweetAlert);

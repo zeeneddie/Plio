@@ -13,6 +13,7 @@ import {
   where,
   contains,
   defaultTo,
+  merge,
 } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
 import {
@@ -28,8 +29,9 @@ import diff from 'deep-diff';
 
 import { Composer, WithState, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { onDelete } from '../handlers';
+import { onDelete as onDeleteGoal } from '../handlers';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { UserRoles } from '../../../../share/constants';
 
 const getGoal = pathOr({}, repeat('goal', 2));
 const getInitialValues = compose(
@@ -54,7 +56,6 @@ const getInitialValues = compose(
     'isCompleted',
     'notify',
   ]),
-  getGoal,
 );
 const getRefetchQueries = () => [
   Queries.DASHBOARD_GOALS.name,
@@ -63,15 +64,21 @@ const getRefetchQueries = () => [
 ];
 
 const GoalEditContainer = ({
+  goal: _goal = null,
   goalId,
   organizationId,
   isOpen,
   toggle,
+  onDelete,
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
-  canEditGoals,
   ...props
 }) => (
-  <WithState initialState={{ goal: null, initialValues: {} }}>
+  <WithState
+    initialState={{
+      goal: _goal,
+      initialValues: unless(isNil, getInitialValues, _goal),
+    }}
+  >
     {({ state: { initialValues, goal }, setState }) => (
       <Composer
         components={[
@@ -79,9 +86,10 @@ const GoalEditContainer = ({
           <Query
             {...{ fetchPolicy }}
             query={Queries.GOAL_CARD}
-            variables={{ _id: goalId }}
+            variables={{ _id: goalId, organizationId }}
+            skip={!!_goal}
             onCompleted={data => setState({
-              initialValues: getInitialValues(data),
+              initialValues: getInitialValues(getGoal(data)),
               goal: getGoal(data),
             })}
             children={noop}
@@ -99,11 +107,21 @@ const GoalEditContainer = ({
             mutation={Mutations.COMPLETE_GOAL}
             refetchQueries={getRefetchQueries}
             children={noop}
+            onCompleted={({ completeGoal }) => {
+              const newGoal = merge(goal, completeGoal);
+              setState({ goal: newGoal, initialValues: getInitialValues(newGoal) });
+            }}
           />,
           <Mutation
             mutation={Mutations.UNDO_GOAL_COMPLETION}
             refetchQueries={getRefetchQueries}
             children={noop}
+            onCompleted={
+              ({ undoGoalCompletion }) => {
+                const newGoal = merge(goal, undoGoalCompletion);
+                setState({ goal: newGoal, initialValues: getInitialValues(newGoal) });
+              }
+            }
           />,
           /* eslint-enable react/no-children-prop */
         ]}
@@ -114,49 +132,63 @@ const GoalEditContainer = ({
           deleteGoal,
           completeGoal,
           undoGoalCompletion,
-        ]) => renderComponent({
-          ...props,
-          loading,
-          error,
-          organizationId,
-          isOpen,
-          toggle,
-          initialValues,
-          goal,
-          canEditGoals,
-          onSubmit: async (values, form) => {
-            const currentValues = getInitialValues(data);
-            const difference = diff(values, currentValues);
+        ]) => {
+          const canEditGoals = data && data.user && data.user.roles &&
+            data.user.roles.includes(UserRoles.CREATE_DELETE_GOALS);
 
-            if (!difference) return undefined;
+          return renderComponent({
+            ...props,
+            error,
+            organizationId,
+            isOpen,
+            toggle,
+            initialValues,
+            goal,
+            canEditGoals,
+            loading,
+            onSubmit: async (values, form) => {
+              const currentValues = getInitialValues(goal);
+              const difference = diff(values, currentValues);
 
-            const {
-              title,
-              description = '',
-              owner: { value: ownerId } = {},
-              startDate,
-              endDate,
-              priority,
-              color,
-              statusComment = '',
-              completionComment = '',
-              completedAt,
-              completedBy,
-              isCompleted,
-              fileIds,
-              notify,
-            } = values;
+              if (!difference) return undefined;
 
-            const isCompletedDiff = find(where({ path: contains('isCompleted') }), difference);
+              const {
+                title,
+                description = '',
+                owner: { value: ownerId } = {},
+                startDate,
+                endDate,
+                priority,
+                color,
+                statusComment = '',
+                completionComment = '',
+                completedAt,
+                completedBy,
+                isCompleted,
+                fileIds,
+                notify,
+              } = values;
 
-            if (isCompletedDiff) {
-              if (isCompleted) {
-                return completeGoal({
-                  variables: {
-                    input: {
-                      _id: goal._id,
-                      completionComment,
+              const isCompletedDiff = find(where({ path: contains('isCompleted') }), difference);
+
+              if (isCompletedDiff) {
+                if (isCompleted) {
+                  return completeGoal({
+                    variables: {
+                      input: {
+                        _id: goal._id,
+                        completionComment,
+                      },
                     },
+                  }).then(noop).catch((err) => {
+                    form.reset(currentValues);
+                    throw err;
+                  });
+                }
+
+                return undoGoalCompletion({
+                  variables: {
+                    input: { _id: goal._id },
                   },
                 }).then(noop).catch((err) => {
                   form.reset(currentValues);
@@ -164,50 +196,44 @@ const GoalEditContainer = ({
                 });
               }
 
-              return undoGoalCompletion({
+              const args = {
                 variables: {
-                  input: { _id: goal._id },
+                  input: {
+                    _id: goal._id,
+                    title,
+                    description,
+                    ownerId,
+                    startDate,
+                    endDate,
+                    priority,
+                    color,
+                    statusComment,
+                    completionComment,
+                    completedAt,
+                    completedBy: getValue(completedBy),
+                    fileIds,
+                  },
                 },
-              }).then(noop).catch((err) => {
+              };
+
+              if (notify) {
+                Object.assign(args, { notify: getValues(notify) });
+              }
+
+              return updateGoal(args).then(noop).catch((err) => {
                 form.reset(currentValues);
                 throw err;
               });
-            }
-
-            const args = {
-              variables: {
-                input: {
-                  _id: goal._id,
-                  title,
-                  description,
-                  ownerId,
-                  startDate,
-                  endDate,
-                  priority,
-                  color,
-                  statusComment,
-                  completionComment,
-                  completedAt,
-                  completedBy: getValue(completedBy),
-                  fileIds,
-                },
-              },
-            };
-
-            if (notify) {
-              Object.assign(args, { notify: getValues(notify) });
-            }
-
-            return updateGoal(args).then(noop).catch((err) => {
-              form.reset(currentValues);
-              throw err;
-            });
-          },
-          onDelete: canEditGoals ? () => onDelete({
-            mutate: deleteGoal,
-            ownProps: { organizationId, goal },
-          }).then(toggle) : undefined,
-        })}
+            },
+            onDelete: canEditGoals || onDelete ? () => {
+              if (onDelete) return onDelete();
+              return onDeleteGoal({
+                mutate: deleteGoal,
+                ownProps: { organizationId, goal },
+              }).then(toggle);
+            } : undefined,
+          });
+        }}
       </Composer>
     )}
   </WithState>
@@ -217,7 +243,9 @@ GoalEditContainer.propTypes = {
   organizationId: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  goalId: PropTypes.string.isRequired,
+  onDelete: PropTypes.func,
+  goalId: PropTypes.string,
+  goal: PropTypes.object,
   fetchPolicy: PropTypes.string,
   canEditGoals: PropTypes.bool,
 };

@@ -1,0 +1,37 @@
+fragment StandardCard on Standard {
+  _id
+  title
+  status
+  description
+  issueNumber
+  uniqueNumber
+  owner {
+    _id
+    profile {
+      fullName
+    }
+  }
+  section {
+    _id
+    title
+  }
+  type {
+    _id
+    title
+    abbreviation
+  }
+  departments {
+    _id
+    title
+  }
+  source1 {
+    type
+    fileId
+    url
+  }
+  source2 {
+    type
+    fileId
+    url
+  }
+}

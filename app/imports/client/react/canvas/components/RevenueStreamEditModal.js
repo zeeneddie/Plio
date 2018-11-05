@@ -1,7 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
+import {
+  getUserOptions,
+  lenses,
+  noop,
+  mapUsersToOptions,
+  getValues,
+  getIds,
+} from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
@@ -21,13 +28,20 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
+import activelyManage from '../../forms/decorators/activelyManage';
 
 const getRevenueStream = pathOr({}, repeat('revenueStream', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.risks, getIds),
+  over(lenses.goals, getIds),
+  over(lenses.standards, getIds),
+  over(lenses.nonconformities, getIds),
+  over(lenses.potentialGains, getIds),
+  over(lenses.lessons, getIds),
   pick([
     'originator',
     'title',
@@ -36,6 +50,12 @@ const getInitialValues = compose(
     'percentOfProfit',
     'notes',
     'notify',
+    'risks',
+    'goals',
+    'standards',
+    'nonconformities',
+    'potentialGains',
+    'lessons',
   ]),
   getRevenueStream,
 );
@@ -53,7 +73,7 @@ const RevenueStreamEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.REVENUE_STREAM_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -90,6 +110,7 @@ const RevenueStreamEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
+              decorators={[activelyManage]}
               validate={validateRevenueStream}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -105,6 +126,11 @@ const RevenueStreamEditModal = ({
                   percentOfProfit,
                   notes = '', // final form sends undefined value instead of an empty string
                   notify = [],
+                  risks: riskIds,
+                  goals: goalIds,
+                  standards: standardsIds,
+                  nonconformities: nonconformityIds,
+                  potentialGains: potentialGainIds,
                 } = values;
 
                 return updateRevenueStream({
@@ -116,6 +142,11 @@ const RevenueStreamEditModal = ({
                       color,
                       percentOfRevenue,
                       percentOfProfit,
+                      riskIds,
+                      goalIds,
+                      standardsIds,
+                      nonconformityIds,
+                      potentialGainIds,
                       notify: getValues(notify),
                       originatorId: originator.value,
                     },
@@ -132,23 +163,32 @@ const RevenueStreamEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.REVENUE_STREAM} />
                     <RenderSwitch
-                      require={data.revenueStream && data.revenueStream.revenueStream}
+                      require={isOpen && data.revenueStream && data.revenueStream.revenueStream}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<RevenueStreamForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId }) => (
+                      {revenueStream => (
                         <Fragment>
                           <RevenueStreamForm {...{ organizationId }} save={handleSubmit} />
+                          <CanvasSubcards
+                            {...{ organizationId }}
+                            section={revenueStream}
+                            onChange={handleSubmit}
+                            refetchQuery={Queries.REVENUE_STREAM_CARD}
+                            documentType={CanvasTypes.REVENUE_STREAM}
+                            user={data && data.user}
+                          />
+                          {/*
+                            TODO Move CanvasFilesSubcard into CanvasSubcards
+                            when it will be refactored
+                           */}
                           <CanvasFilesSubcard
-                            {...{ documentId, organizationId }}
+                            {...{ organizationId }}
+                            documentId={revenueStream._id}
                             onUpdate={updateRevenueStream}
                             slingshotDirective={AWSDirectives.REVENUE_STREAM_FILES}
                             documentType={CanvasTypes.REVENUE_STREAM}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
-                            onChange={handleSubmit}
                           />
                         </Fragment>
                       )}
