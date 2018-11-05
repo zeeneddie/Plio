@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FORM_ERROR } from 'final-form';
 import { Query, Mutation } from 'react-apollo';
 import { compose, view, find, propEq, either, sort } from 'ramda';
 import { noop, getUserOptions, getEntityOptions, lenses, byTitle } from 'plio-util';
@@ -8,7 +7,7 @@ import { pure } from 'recompose';
 
 import { insert as insertFile } from '../../../../api/files/methods';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { validateStandard } from '../../../validation';
+import { validateStandard, createFormError } from '../../../validation';
 import { Composer, renderComponent } from '../../helpers';
 import { uploadFile } from '../helpers';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -99,10 +98,12 @@ const StandardAddContainer = ({
           section: { value: sectionId } = {},
           owner: { value: owner } = {},
           type: { value: typeId } = {},
+          standard: existingStandard = {},
         } = values;
 
         if (active === 1) {
-          return onLink(values.standard.value).then(toggle || noop);
+          if (!existingStandard.value) return createFormError('Standard required');
+          return onLink(existingStandard.value).then(toggle || noop);
         }
 
         const errors = validateStandard(values);
@@ -122,7 +123,7 @@ const StandardAddContainer = ({
               });
             });
           } catch (err) {
-            return { [FORM_ERROR]: err.reason };
+            return createFormError(err.reason);
           }
         }
 

@@ -8,7 +8,7 @@ import { pure } from 'recompose';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { ProblemMagnitudes } from '../../../../share/constants';
-import { validateRisk } from '../../../validation';
+import { validateRisk, createFormError } from '../../../validation';
 import { Composer, renderComponent } from '../../helpers';
 import { swal } from '../../../util';
 
@@ -70,10 +70,12 @@ const RiskAddContainer = ({
           owner: { value: ownerId },
           magnitude,
           type: typeId,
+          risk: existingRisk = {},
         } = values;
 
         if (active === 1) {
-          return onLink(values.risk.value).then(toggle || noop);
+          if (!existingRisk.value) return createFormError('Risk required');
+          return onLink(existingRisk.value).then(toggle || noop);
         }
 
         const errors = validateRisk(values);

@@ -6,7 +6,7 @@ import { noop, getUserOptions } from 'plio-util';
 
 import { GoalColors, GoalPriorities } from '../../../../share/constants';
 import { moveGoalWithinCacheAfterCreating } from '../../../apollo/utils';
-import { validateGoal } from '../../../validation';
+import { validateGoal, createFormError } from '../../../validation';
 import { Composer, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -58,10 +58,12 @@ const GoalAddContainer = ({
           endDate,
           priority,
           color,
+          goal: existingGoal = {},
         } = values;
 
         if (active === 1) {
-          return onLink(values.goal.value).then(toggle || noop);
+          if (!existingGoal.value) return createFormError('Goal required');
+          return onLink(existingGoal.value).then(toggle || noop);
         }
 
         const errors = validateGoal(values);

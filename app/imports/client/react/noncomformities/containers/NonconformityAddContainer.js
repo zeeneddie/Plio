@@ -5,7 +5,7 @@ import { Query, Mutation } from 'react-apollo';
 import { noop, getUserOptions } from 'plio-util';
 import { pluck } from 'ramda';
 
-import { validateNonConformity } from '../../../validation';
+import { validateNonConformity, createFormError } from '../../../validation';
 import { Composer, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { ProblemMagnitudes } from '../../../../share/constants';
@@ -57,10 +57,12 @@ const NonconformityAddContainer = ({
           description = '',
           owner: { value: ownerId } = {},
           originator: { value: originatorId } = {},
+          nonconformity: existingNonconformity = {},
         } = values;
 
         if (active === 1) {
-          return onLink(values.nonconformity.value).then(toggle || noop);
+          if (!existingNonconformity.value) return createFormError('Nonconformity required');
+          return onLink(existingNonconformity.value).then(toggle || noop);
         }
 
         const errors = validateNonConformity(values);

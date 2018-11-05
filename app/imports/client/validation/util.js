@@ -6,6 +6,8 @@ const isNilOrEmpty = anyPass([isNil, isEmpty]);
 export const required = curry((label, value) =>
   isNilOrEmpty(value) ? `${label} required` : undefined);
 
+export const createFormError = message => ({ [FORM_ERROR]: message });
+
 export const validate = rules => (values) => {
   const errors = new Set();
 
@@ -18,5 +20,5 @@ export const validate = rules => (values) => {
 
   if (!errors.size) return undefined;
 
-  return { [FORM_ERROR]: [...errors].join('\n') };
+  return createFormError([...errors].join('\n'));
 };
