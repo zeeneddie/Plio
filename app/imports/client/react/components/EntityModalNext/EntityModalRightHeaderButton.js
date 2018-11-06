@@ -24,7 +24,7 @@ const EntityModalRightHeaderButton = props => (
           <SaveButton
             isSaving={loading || submitting}
             color={isEditMode ? 'secondary' : 'primary'}
-            onClick={submit}
+            onClick={event => !isEditMode && submit(event)}
             onMouseDown={() => {
               // display saving state when clicking on "Close" button
               // while being focused on the input
