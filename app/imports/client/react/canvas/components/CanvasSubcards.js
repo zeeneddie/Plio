@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { isNotEmpty } from 'plio-util';
 
 import { ProblemTypes, UserRoles } from '../../../../share/constants';
-import { NotifySubcard, EntitiesField, FieldCondition } from '../../components';
+import { NotifySubcard, EntitiesField } from '../../components';
 import { GoalsSubcard } from '../../goals';
 import StandardsSubcard from '../../standards/components/StandardsSubcard';
 import NonconformitiesSubcard from '../../noncomformities/components/NonconformitiesSubcard';
@@ -86,17 +86,18 @@ const CanvasSubcards = ({
         guidelines={pgGuidelines}
         {...{ organizationId, onChange }}
       />
-      <FieldCondition when="lessons" is={isNotEmpty}>
-        <CanvasLessonsSubcard
-          {...{
-            organizationId,
-            lessons,
-            linkedTo,
-            refetchQuery,
-            documentType,
-          }}
-        />
-      </FieldCondition>
+      <EntitiesField
+        name="lessons"
+        render={CanvasLessonsSubcard}
+        is={isNotEmpty}
+        {...{
+          organizationId,
+          lessons,
+          linkedTo,
+          refetchQuery,
+          documentType,
+        }}
+      />
       <NotifySubcard {...{ documentId, organizationId, onChange }} />
     </Fragment>
   );

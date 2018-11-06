@@ -17,6 +17,8 @@ const LessonAddContainer = ({
   documentId,
   documentType,
   refetchQuery,
+  onLink,
+  onUnlink,
   ...props
 }) => (
   <Composer
@@ -68,13 +70,12 @@ const LessonAddContainer = ({
               },
             },
           },
-          refetchQueries: [
-            {
-              query: refetchQuery,
-              variables: { _id: documentId, organizationId },
-            },
-          ],
-        }).then(toggle || noop);
+          refetchQueries: [{
+            query: refetchQuery,
+            variables: { _id: documentId, organizationId },
+          }],
+        }).then(({ data: { createLesson: { lesson } } }) => onLink(lesson._id))
+          .then(toggle || noop);
       },
       // TODO move it into LessonEditContainer when lesson will be refactored
       onDelete: (event, { entity: { _id, title } }) => swal.promise({
@@ -90,7 +91,7 @@ const LessonAddContainer = ({
           query: refetchQuery,
           variables: { _id: documentId, organizationId },
         }],
-      })).then(toggle),
+      })).then(() => onUnlink(_id)),
     })}
   </Composer>
 );
@@ -100,6 +101,8 @@ LessonAddContainer.propTypes = {
   documentId: PropTypes.string.isRequired,
   documentType: PropTypes.string.isRequired,
   refetchQuery: PropTypes.object.isRequired,
+  onLink: PropTypes.func.isRequired,
+  onUnlink: PropTypes.func.isRequired,
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
 };

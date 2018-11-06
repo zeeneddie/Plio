@@ -9,6 +9,8 @@ const CanvasLessonsSubcard = ({
   documentType,
   organizationId,
   lessons,
+  onLink,
+  onUnlink,
 }) => (
   <LessonAddContainer
     {...{
@@ -17,6 +19,8 @@ const CanvasLessonsSubcard = ({
       documentType,
       organizationId,
       lessons,
+      onLink,
+      onUnlink,
     }}
     documentId={linkedTo._id}
     render={({ onSubmit, ...restLessonProps }) => (
@@ -33,6 +37,8 @@ CanvasLessonsSubcard.propTypes = {
   organizationId: PropTypes.string.isRequired,
   refetchQuery: PropTypes.object.isRequired,
   documentType: PropTypes.string.isRequired,
+  onLink: PropTypes.func.isRequired,
+  onUnlink: PropTypes.func.isRequired,
   lessons: PropTypes.arrayOf(PropTypes.object),
 };
 

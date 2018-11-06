@@ -123,16 +123,17 @@ const ActivelyManageSubcard = ({
                     guidelines={pgGuidelines}
                     {...{ organizationId, onChange }}
                   />
-                  <FieldCondition when="lessons" is={isEmpty}>
-                    <LessonActivelyManageItem
-                      {...{
-                        organizationId,
-                        documentType,
-                        refetchQuery,
-                        linkedTo,
-                      }}
-                    />
-                  </FieldCondition>
+                  <EntitiesField
+                    name="lessons"
+                    render={LessonActivelyManageItem}
+                    is={isEmpty}
+                    {...{
+                      organizationId,
+                      documentType,
+                      refetchQuery,
+                      linkedTo,
+                    }}
+                  />
                 </EntityManager>
               </ListGroup>
             </StyledCol>

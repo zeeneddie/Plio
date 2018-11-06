@@ -29,7 +29,7 @@ const StandardSubcardContainer = ({
           confirmButtonText: 'Delete',
           successText: `The standard "${standard.title}" was deleted successfully.`,
           extraButton: 'Unlink',
-          extraHandler: () => onUnlink(standard._id).then(toggle),
+          extraHandler: () => onUnlink(standard._id),
           confirmHandler: () => deleteStandard({
             variables: {
               input: {
@@ -40,7 +40,7 @@ const StandardSubcardContainer = ({
               query: Queries.STANDARD_LIST,
               variables: { organizationId },
             }],
-          }).then(() => onUnlink(standard._id)).then(toggle),
+          }).then(() => onUnlink(standard._id)),
         })}
       />
     )}

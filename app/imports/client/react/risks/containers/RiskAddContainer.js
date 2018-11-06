@@ -104,7 +104,7 @@ const RiskAddContainer = ({
         confirmButtonText: 'Delete',
         successText: `The risk "${title}" was deleted successfully.`,
         extraButton: 'Unlink',
-        extraHandler: () => onUnlink(_id).then(toggle),
+        extraHandler: () => onUnlink(_id),
         confirmHandler: () => deleteRisk({
           variables: {
             input: { _id },
@@ -113,7 +113,7 @@ const RiskAddContainer = ({
             query: Queries.RISK_LIST,
             variables: { organizationId },
           }],
-        }).then(() => onUnlink(_id)).then(toggle),
+        }).then(() => onUnlink(_id)),
       }),
     })}
   </Composer>

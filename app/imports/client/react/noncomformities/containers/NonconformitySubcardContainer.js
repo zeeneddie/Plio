@@ -36,7 +36,7 @@ const NonconformitySubcardContainer = ({
             successText: `The ${nonconformityName} "${nonconformity.title}"` +
             'was deleted successfully.',
             extraButton: 'Unlink',
-            extraHandler: () => onUnlink(nonconformity._id).then(toggle),
+            extraHandler: () => onUnlink(nonconformity._id),
             confirmHandler: () => deleteNonconformity({
               variables: {
                 input: {
@@ -47,7 +47,7 @@ const NonconformitySubcardContainer = ({
                 query: Queries.NONCONFORMITY_LIST,
                 variables: { organizationId, type },
               }],
-            }).then(() => onUnlink(nonconformity._id)).then(toggle),
+            }).then(() => onUnlink(nonconformity._id)),
           });
         }}
       />

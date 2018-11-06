@@ -32,7 +32,7 @@ const GoalSubcardContainer = ({
           showConfirmButton: !!canEditGoals,
           successText: `The key goal "${goal.title}" was deleted successfully.`,
           extraButton: 'Unlink',
-          extraHandler: () => onUnlink(goal._id).then(toggle),
+          extraHandler: () => onUnlink(goal._id),
           confirmHandler: () => deleteGoal({
             variables: {
               input: { _id: goal._id },
@@ -41,7 +41,7 @@ const GoalSubcardContainer = ({
               query: Queries.GOAL_LIST,
               variables: { organizationId },
             }],
-          }).then(() => onUnlink(goal._id)).then(toggle),
+          }).then(() => onUnlink(goal._id)),
         })}
       />
     )}
