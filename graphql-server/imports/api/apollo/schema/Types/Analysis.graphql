@@ -6,4 +6,5 @@ type Analysis {
   completedAt: DateTime
   completedBy: User
   assignedBy: User
+  isCompleted: Boolean
 }

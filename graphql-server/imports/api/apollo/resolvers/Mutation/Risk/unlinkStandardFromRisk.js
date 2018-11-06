@@ -4,16 +4,14 @@ import {
   flattenInput,
   checkRiskAccess,
   riskUpdateAfterware,
-  ensureAnalysisNotCompleted,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, { services: { RiskService } }) =>
-  RiskService.setAnalysisDate(args);
+  RiskService.unlinkStandard(args);
 
 export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkRiskAccess(),
-  ensureAnalysisNotCompleted(),
   riskUpdateAfterware(),
 )(resolver);

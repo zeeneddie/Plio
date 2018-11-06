@@ -1,9 +1,0 @@
-mutation setRiskAnalysisCompletionComments($input: SetRiskAnalysisCompletionCommentsInput!) {
-  setRiskAnalysisCompletionComments(input: $input) {
-    risk {
-      analysis {
-        completionComments
-      }
-    }
-  }
-}

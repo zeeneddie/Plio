@@ -10,7 +10,6 @@ import DEPARTMENT_LIST from './DepartmentList.graphql';
 import COUNTS from './Counts.graphql';
 import GOAL_MILESTONES_CARD from './GoalMilestonesCard.graphql';
 import GOAL_LESSONS_CARD from './GoalLessonsCard.graphql';
-import GOAL_RISKS_CARD from './GoalRisksCard.graphql';
 import GOAL_ACTIONS_CARD from './GoalActionsCard.graphql';
 import ACTION_LIST from './ActionList.graphql';
 import GOAL_LIST from './GoalList.graphql';
@@ -56,6 +55,7 @@ import NONCONFORMITY_LIST from './NonconformityList';
 import POTENTIAL_GAIN_LIST from './PotentialGainList';
 import STANDARD_CARD from './StandardCard.graphql';
 import NONCONFORMITY_CARD from './NonconformityCard.graphql';
+import RISK_CARD from './RiskCard.graphql';
 
 DASHBOARD_GOALS.name = 'DashboardGoals';
 COMPLETED_DELETED_GOALS.name = 'CompletedDeletedGoals';
@@ -74,7 +74,6 @@ export default {
   COUNTS,
   GOAL_MILESTONES_CARD,
   GOAL_LESSONS_CARD,
-  GOAL_RISKS_CARD,
   GOAL_ACTIONS_CARD,
   ACTION_LIST,
   GOAL_LIST,
@@ -120,4 +119,5 @@ export default {
   POTENTIAL_GAIN_LIST,
   STANDARD_CARD,
   NONCONFORMITY_CARD,
+  RISK_CARD,
 };

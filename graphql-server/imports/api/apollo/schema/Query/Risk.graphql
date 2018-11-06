@@ -3,6 +3,11 @@ type RisksQueryPayload {
   risks: [Risk]
 }
 
+type RiskQueryPayload {
+  risk: Risk
+}
+
 type Query {
   risks(organizationId: ID!, isDeleted: Boolean): RisksQueryPayload!
+  risk(_id: ID!): RiskQueryPayload!
 }

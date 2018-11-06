@@ -1,17 +1,17 @@
 mutation completeRiskAnalysis($input: CompleteRiskAnalysisInput!) {
   completeRiskAnalysis(input: $input) {
-    risk {
-      analysis {
-        status
-        completedAt
-        completedBy {
-          _id
-          profile {
-            fullName
-          }
+    _id
+    analysis {
+      status
+      isCompleted
+      completedAt
+      completedBy {
+        _id
+        profile {
+          fullName
         }
-        completionComments
       }
+      completionComments
     }
   }
 }

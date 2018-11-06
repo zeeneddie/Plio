@@ -1,8 +1,0 @@
-mutation updateRiskMagnitude($input: UpdateRiskMagnitudeInput!) {
-  updateRiskMagnitude(input: $input) {
-    risk {
-      _id
-      magnitude
-    }
-  }
-}

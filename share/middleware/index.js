@@ -30,3 +30,4 @@ export * from './standard';
 export * from './nonconformity';
 export * from './standardSection';
 export * from './standardType';
+export * from './riskType';

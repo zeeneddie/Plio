@@ -7,9 +7,9 @@ import { NotifySubcard, EntitiesField, FieldCondition } from '../../components';
 import { GoalsSubcard } from '../../goals';
 import StandardsSubcard from '../../standards/components/StandardsSubcard';
 import NonconformitiesSubcard from '../../noncomformities/components/NonconformitiesSubcard';
-import CanvasRisksSubcard from './CanvasRisksSubcard';
 import CanvasLessonsSubcard from './CanvasLessonsSubcard';
 import ActivelyManageSubcard from './ActivleyManage/ActivelyManageSubcard';
+import RisksSubcard from '../../risks/components/RisksSubcard';
 
 const CanvasSubcards = ({
   organizationId,
@@ -59,7 +59,7 @@ const CanvasSubcards = ({
       />
       <EntitiesField
         name="risks"
-        render={CanvasRisksSubcard}
+        render={RisksSubcard}
         is={isNotEmpty}
         guidelines={rkGuidelines}
         {...{

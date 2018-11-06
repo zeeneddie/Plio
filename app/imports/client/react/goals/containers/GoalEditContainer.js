@@ -23,6 +23,7 @@ import {
   getValue,
   getValues,
   mapUsersToOptions,
+  getIds,
 } from 'plio-util';
 import moment from 'moment';
 import diff from 'deep-diff';
@@ -41,6 +42,7 @@ const getInitialValues = compose(
   over(lenses.owner, getUserOptions),
   over(lenses.completedBy, getUserOptions),
   over(lenses.notify, compose(mapUsersToOptions, defaultTo([]))),
+  over(lenses.risks, getIds),
   pick([
     'title',
     'description',
@@ -55,6 +57,7 @@ const getInitialValues = compose(
     'completedBy',
     'isCompleted',
     'notify',
+    'risks',
   ]),
 );
 const getRefetchQueries = () => [
@@ -167,6 +170,7 @@ const GoalEditContainer = ({
                 isCompleted,
                 fileIds,
                 notify,
+                risks: riskIds,
               } = values;
 
               const isCompletedDiff = find(where({ path: contains('isCompleted') }), difference);
@@ -212,6 +216,7 @@ const GoalEditContainer = ({
                     completedAt,
                     completedBy: getValue(completedBy),
                     fileIds,
+                    riskIds,
                   },
                 },
               };

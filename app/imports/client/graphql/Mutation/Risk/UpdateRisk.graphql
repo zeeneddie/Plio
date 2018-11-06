@@ -1,0 +1,7 @@
+#import "../../Fragment/RiskCard.graphql"
+
+mutation updateRisk($input: UpdateRiskInput!) {
+  updateRisk(input: $input) {
+    ...RiskCard
+  }
+}

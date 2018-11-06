@@ -55,6 +55,48 @@ export default Object.assign({}, ProblemsService, {
     return _id;
   },
 
+  update(args, context) {
+    const {
+      _id,
+      title,
+      description,
+      statusComment,
+      standardsIds,
+      departmentsIds,
+      originatorId,
+      ownerId,
+      typeId,
+      analysis: {
+        executor,
+        targetDate,
+        completedBy,
+        completedAt,
+        completionComments,
+      },
+    } = args;
+    const { collections } = context;
+    const query = { _id };
+    const modifier = {
+      $set: {
+        title,
+        description,
+        statusComment,
+        standardsIds,
+        departmentsIds,
+        originatorId,
+        ownerId,
+        typeId,
+        'analysis.executor': executor,
+        'analysis.targetDate': targetDate,
+        'analysis.completedBy': completedBy,
+        'analysis.completedAt': completedAt,
+        'analysis.completionComments': completionComments,
+      },
+    };
+
+    return collections.Risks.update(query, modifier);
+  },
+
   'scores.insert': function ({ _id, ...args }) {
     const id = Random.id();
     const query = { _id };

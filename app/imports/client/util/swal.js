@@ -22,13 +22,19 @@ const swal = ({
   ...other,
 }, cb);
 
-swal.error = (err, title = 'Oops... Something went wrong!') => sweetAlert({
-  title,
-  text: err.reason || 'Internal server error',
-  type: 'error',
-  timer: ALERT_AUTOHIDE_TIME,
-  showConfirmButton: false,
-});
+swal.error = (err, title = 'Oops... Something went wrong!') => {
+  if (process.env.NODE_ENV !== 'production') {
+    console.error(err);
+  }
+
+  return sweetAlert({
+    title,
+    text: err.reason || 'Internal server error',
+    type: 'error',
+    timer: ALERT_AUTOHIDE_TIME,
+    showConfirmButton: false,
+  });
+};
 
 swal.success = (title, body, {
   showConfirmButton = false,

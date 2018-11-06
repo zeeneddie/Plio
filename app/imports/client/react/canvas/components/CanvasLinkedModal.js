@@ -6,6 +6,8 @@ import GoalEditContainer from '../../goals/containers/GoalEditContainer';
 import GoalEditModal from '../../goals/components/GoalEditModal';
 import StandardEditContainer from '../../standards/containers/StandardEditContainer';
 import StandardEditModal from '../../standards/components/StandardEditModal';
+import RiskEditContainer from '../../risks/containers/RiskEditContainer';
+import RiskEditModal from '../../risks/components/RiskEditModal';
 
 const CanvasLinkedModal = ({
   isOpen,
@@ -29,6 +31,14 @@ const CanvasLinkedModal = ({
           {...{ organizationId, isOpen, toggle }}
           component={StandardEditModal}
           standardId={documentId}
+        />
+      );
+    case DocumentTypes.RISK:
+      return (
+        <RiskEditContainer
+          {...{ organizationId, isOpen, toggle }}
+          component={RiskEditModal}
+          riskId={documentId}
         />
       );
     default:

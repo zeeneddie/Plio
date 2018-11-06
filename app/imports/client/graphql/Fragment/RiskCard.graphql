@@ -16,6 +16,7 @@ fragment RiskCard on Risk {
       }
     }
     status
+    isCompleted
     completedBy {
       _id
       profile {
