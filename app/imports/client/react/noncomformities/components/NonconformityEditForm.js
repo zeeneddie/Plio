@@ -26,6 +26,7 @@ export const NonconformityEditForm = ({
   type,
   guidelines,
   save = noop,
+  currency,
 }) => (
   <Fragment>
     <FormField>
@@ -107,7 +108,7 @@ export const NonconformityEditForm = ({
       />
     </FormField>
     <Magnitudes label="Magnitude" {...{ guidelines }}>
-      <Magnitudes.Select name="magnitude" component={SelectField} />
+      <Magnitudes.Select disabled name="magnitude" component={SelectField} />
     </Magnitudes>
     <FormField guidance={NonConformitiesHelp.costPerOccurance}>
       Financial impact
@@ -116,6 +117,7 @@ export const NonconformityEditForm = ({
         type="number"
         placeholder="Financial impact"
         onBlur={save}
+        addon={currency}
       />
     </FormField>
     {type === ProblemTypes.NON_CONFORMITY && (
@@ -150,6 +152,7 @@ NonconformityEditForm.propTypes = {
   save: PropTypes.func,
   // eslint-disable-next-line react/no-typos
   guidelines: Magnitudes.propTypes.guidelines,
+  currency: PropTypes.string.isRequired,
 };
 
 export default pure(NonconformityEditForm);

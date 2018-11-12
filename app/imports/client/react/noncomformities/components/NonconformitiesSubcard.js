@@ -31,6 +31,7 @@ const NonconformitiesSubcard = ({
   type,
   guidelines,
   onUnlink,
+  currency,
   ...rest
 }) => {
   const isPotentialGain = type === ProblemTypes.POTENTIAL_GAIN;
@@ -61,6 +62,7 @@ const NonconformitiesSubcard = ({
                       guidelines,
                       onUnlink,
                       type,
+                      currency,
                     }}
                     key={nonconformity._id}
                     itemId={nonconformity._id}
@@ -114,6 +116,7 @@ NonconformitiesSubcard.propTypes = {
   // eslint-disable-next-line react/no-typos
   guidelines: Magnitudes.propTypes.guidelines,
   onUnlink: PropTypes.func,
+  currency: PropTypes.string,
 };
 
 export default NonconformitiesSubcard;

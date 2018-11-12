@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { pure } from 'recompose';
-import { pick, compose, over, pluck, unless, isNil, pathOr, repeat } from 'ramda';
+import { pick, compose, over, pluck, unless, isNil, pathOr, repeat, path } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
 import {
   getUserOptions,
@@ -51,6 +51,8 @@ const NonconformityEditContainer = ({
   type,
   onDelete,
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
+  guidelines,
+  currency,
   ...props
 }) => (
   <WithState
@@ -66,7 +68,7 @@ const NonconformityEditContainer = ({
           <Query
             {...{ fetchPolicy }}
             query={Queries.NONCONFORMITY_CARD}
-            variables={{ _id: nonconformityId }}
+            variables={{ _id: nonconformityId, organizationId }}
             skip={!!_nonconformity}
             onCompleted={data => setState({
               initialValues: getInitialValues(getNonconformity(data)),
@@ -88,7 +90,7 @@ const NonconformityEditContainer = ({
         ]}
       >
         {([
-          { loading, error },
+          { data, loading, error },
           updateNonconformity,
           deleteNonconformity,
         ]) => renderComponent({
@@ -100,6 +102,9 @@ const NonconformityEditContainer = ({
           toggle,
           nonconformity,
           initialValues,
+          type,
+          guidelines: guidelines || path(['organization', 'ncGuidelines'], data),
+          currency: currency || path(['organization', 'currency'], data),
           onSubmit: async (values, form) => {
             const currentValues = getInitialValues(nonconformity);
             const difference = diff(values, currentValues);
@@ -168,11 +173,13 @@ NonconformityEditContainer.propTypes = {
   organizationId: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  nonconformity: PropTypes.object.isRequired,
+  nonconformity: PropTypes.object,
   type: PropTypes.string.isRequired,
   onDelete: PropTypes.func,
   nonconformityId: PropTypes.string,
   fetchPolicy: PropTypes.string,
+  guidelines: PropTypes.object,
+  currency: PropTypes.string,
 };
 
 export default pure(NonconformityEditContainer);

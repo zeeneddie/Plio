@@ -1,9 +1,19 @@
 #import "../Fragment/NonconformityCard.graphql"
 
-query NonconformityCard($_id: ID!) {
+query NonconformityCard($_id: ID!, $organizationId: ID!) {
   nonconformity(_id: $_id) {
     nonconformity {
       ...NonconformityCard
+    }
+  }
+
+  organization(_id: $organizationId) {
+    _id
+    currency
+    ncGuidelines {
+      minor
+      major
+      critical
     }
   }
 }

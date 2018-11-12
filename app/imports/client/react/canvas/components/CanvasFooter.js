@@ -92,9 +92,9 @@ const CanvasFooter = ({
                   label="NCs & gain"
                   renderItem={CanvasFooterItem}
                   items={sort(bySerialNumber, nonconformitiesAndGains)}
-                  onClick={({ _id }) => setState({
+                  onClick={({ _id, type }) => setState({
                     documentId: _id,
-                    documentType: DocumentTypes.NON_CONFORMITY,
+                    documentType: type,
                   })}
                 />
               </Fragment>

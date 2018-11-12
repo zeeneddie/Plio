@@ -26,7 +26,12 @@ const CanvasSubcards = ({
     standards = [],
     nonconformities = [],
     potentialGains = [],
-    organization: { rkGuidelines, ncGuidelines, pgGuidelines },
+    organization: {
+      currency,
+      rkGuidelines,
+      ncGuidelines,
+      pgGuidelines,
+    },
   },
 }) => {
   const linkedTo = { _id: documentId, title };
@@ -75,7 +80,12 @@ const CanvasSubcards = ({
         type={ProblemTypes.NON_CONFORMITY}
         is={isNotEmpty}
         guidelines={ncGuidelines}
-        {...{ organizationId, nonconformities, onChange }}
+        {...{
+          organizationId,
+          nonconformities,
+          onChange,
+          currency,
+        }}
       />
       <EntitiesField
         name="potentialGains"
@@ -84,7 +94,11 @@ const CanvasSubcards = ({
         nonconformities={potentialGains}
         is={isNotEmpty}
         guidelines={pgGuidelines}
-        {...{ organizationId, onChange }}
+        {...{
+          organizationId,
+          onChange,
+          currency,
+        }}
       />
       <EntitiesField
         name="lessons"

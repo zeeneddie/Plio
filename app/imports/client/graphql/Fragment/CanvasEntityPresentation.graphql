@@ -33,11 +33,13 @@ fragment CanvasEntityPresentation on CanvasEntity {
     title
     sequentialId
     serialNumber
+    type
   }
   potentialGains {
     _id
     title
     sequentialId
     serialNumber
+    type
   }
 }

@@ -23,6 +23,7 @@ fragment CanvasCard on CanvasEntity {
   }
   organization {
     _id
+    currency
     rkGuidelines {
       minor
       major

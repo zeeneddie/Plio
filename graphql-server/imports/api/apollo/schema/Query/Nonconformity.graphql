@@ -3,6 +3,11 @@ type NonconformitiesQueryPayload {
   nonconformities: [Nonconformity]
 }
 
+type NonconformityQueryPayload {
+  nonconformity: Nonconformity
+}
+
 type Query {
-  nonconformities(organizationId: ID! type: String!): NonconformitiesQueryPayload
+  nonconformities(organizationId: ID! type: String!): NonconformitiesQueryPayload!
+  nonconformity(_id: ID!): NonconformityQueryPayload!
 }
