@@ -5,7 +5,6 @@ import { Query, Mutation } from 'react-apollo';
 import { noop, getUserOptions } from 'plio-util';
 
 import { GoalColors, GoalPriorities } from '../../../../share/constants';
-import { moveGoalWithinCacheAfterCreating } from '../../../apollo/utils';
 import { validateGoal, createFormError } from '../../../validation';
 import { Composer, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
@@ -28,6 +27,10 @@ const GoalAddContainer = ({
       />,
       <Mutation
         mutation={Mutations.CREATE_GOAL}
+        refetchQueries={() => [
+          Queries.DASHBOARD_GOALS.name,
+          Queries.GOAL_LIST.name,
+        ]}
         children={noop}
       />,
       /* eslint-disable react/no-children-prop */
@@ -82,8 +85,6 @@ const GoalAddContainer = ({
               ownerId,
             },
           },
-          update: (proxy, { data: { createGoal: { goal } } }) =>
-            moveGoalWithinCacheAfterCreating(organizationId, goal, proxy),
         }).then(({ data: { createGoal: { goal } } }) => {
           onLink(goal._id);
           if (toggle) toggle();

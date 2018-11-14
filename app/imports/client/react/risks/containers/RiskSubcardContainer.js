@@ -13,7 +13,12 @@ const RiskSubcardContainer = ({
   toggle,
   ...props
 }) => (
-  <Mutation mutation={Mutations.DELETE_RISK}>
+  <Mutation
+    mutation={Mutations.DELETE_RISK}
+    refetchQueries={() => [
+      { query: Queries.RISK_LIST, variables: { organizationId } },
+    ]}
+  >
     {deleteRisk => (
       <RiskEditContainer
         {...{
@@ -34,10 +39,6 @@ const RiskSubcardContainer = ({
             variables: {
               input: { _id: risk._id },
             },
-            refetchQueries: [{
-              query: Queries.RISK_LIST,
-              variables: { organizationId },
-            }],
           }).then(() => onUnlink(risk._id)).then(toggle),
         })}
       />

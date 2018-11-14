@@ -8,7 +8,7 @@ import { pluck } from 'ramda';
 import { validateNonConformity, createFormError } from '../../../validation';
 import { Composer, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { ProblemMagnitudes } from '../../../../share/constants';
+import { ProblemMagnitudes, ProblemTypes } from '../../../../share/constants';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 
 const NonconformityAddContainer = ({
@@ -30,6 +30,11 @@ const NonconformityAddContainer = ({
       <Mutation
         mutation={Mutations.CREATE_NONCONFORMITY}
         children={noop}
+        refetchQueries={() => [
+          type === ProblemTypes.NON_CONFORMITY
+            ? { query: Queries.NONCONFORMITY_LIST, variables: { organizationId } }
+            : { query: Queries.POTENTIAL_GAIN_LIST, variables: { organizationId } },
+        ]}
       />,
       /* eslint-disable react/no-children-prop */
     ]}

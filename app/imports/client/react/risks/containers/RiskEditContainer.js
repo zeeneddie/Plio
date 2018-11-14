@@ -106,6 +106,10 @@ const RiskEditContainer = ({
           <Mutation
             mutation={Mutations.DELETE_RISK}
             children={noop}
+            refetchQueries={() => [
+              { query: Queries.RISK_LIST, variables: { organizationId } },
+              { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+            ]}
           />,
           <Mutation
             mutation={Mutations.COMPLETE_RISK_ANALYSIS}

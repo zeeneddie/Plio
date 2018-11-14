@@ -15,7 +15,14 @@ const NonconformitySubcardContainer = ({
   type,
   ...props
 }) => (
-  <Mutation mutation={Mutations.DELETE_NONCONFORMITY}>
+  <Mutation
+    mutation={Mutations.DELETE_NONCONFORMITY}
+    refetchQueries={() => [
+      type === ProblemTypes.NON_CONFORMITY
+        ? { query: Queries.NONCONFORMITY_LIST, variables: { organizationId } }
+        : { query: Queries.POTENTIAL_GAIN_LIST, variables: { organizationId } },
+    ]}
+  >
     {deleteNonconformity => (
       <NonconformityEditContainer
         {...{
@@ -43,10 +50,6 @@ const NonconformitySubcardContainer = ({
                   _id: nonconformity._id,
                 },
               },
-              refetchQueries: [{
-                query: Queries.NONCONFORMITY_LIST,
-                variables: { organizationId, type },
-              }],
             }).then(() => onUnlink(nonconformity._id)),
           });
         }}

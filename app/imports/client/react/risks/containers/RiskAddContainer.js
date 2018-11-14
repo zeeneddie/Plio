@@ -10,7 +10,6 @@ import { ApolloFetchPolicies } from '../../../../api/constants';
 import { ProblemMagnitudes } from '../../../../share/constants';
 import { validateRisk, createFormError } from '../../../validation';
 import { Composer, renderComponent } from '../../helpers';
-import { swal } from '../../../util';
 
 const RiskAddContainer = ({
   organizationId,
@@ -34,8 +33,13 @@ const RiskAddContainer = ({
         fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}
         children={noop}
       />,
-      <Mutation mutation={Mutations.CREATE_RISK} children={noop} />,
-      <Mutation mutation={Mutations.DELETE_RISK} children={noop} />,
+      <Mutation
+        mutation={Mutations.CREATE_RISK}
+        children={noop}
+        refetchQueries={() => [
+          { query: Queries.RISK_LIST, variables: { organizationId } },
+        ]}
+      />,
       /* eslint-enable react/no-children-prop */
     ]}
   >
@@ -47,7 +51,6 @@ const RiskAddContainer = ({
         },
       },
       createRisk,
-      deleteRisk,
     ]) => renderComponent({
       ...props,
       isOpen,
@@ -96,25 +99,6 @@ const RiskAddContainer = ({
         }).then(({ data: { createRisk: { risk } } }) => onLink(risk._id))
           .then(toggle || noop);
       },
-      // TODO move it into RiskEditContainer when risk will be refactored
-      onDelete: (event, { entity: { _id, title } }) => swal.withExtraAction({
-        title: 'Choose an action',
-        text: `Do you wish to unlink the risk "${title}" ` +
-          'from the current document, or delete it completely?',
-        confirmButtonText: 'Delete',
-        successText: `The risk "${title}" was deleted successfully.`,
-        extraButton: 'Unlink',
-        extraHandler: () => onUnlink(_id),
-        confirmHandler: () => deleteRisk({
-          variables: {
-            input: { _id },
-          },
-          refetchQueries: [{
-            query: Queries.RISK_LIST,
-            variables: { organizationId },
-          }],
-        }).then(() => onUnlink(_id)),
-      }),
     })}
   </Composer>
 );

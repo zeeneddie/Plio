@@ -85,6 +85,12 @@ const NonconformityEditContainer = ({
           <Mutation
             mutation={Mutations.DELETE_NONCONFORMITY}
             children={noop}
+            refetchQueries={() => [
+              type === ProblemTypes.NON_CONFORMITY
+                ? { query: Queries.NONCONFORMITY_LIST, variables: { organizationId } }
+                : { query: Queries.POTENTIAL_GAIN_LIST, variables: { organizationId } },
+              { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+            ]}
           />,
           /* eslint-enable react/no-children-prop */
         ]}

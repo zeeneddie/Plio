@@ -103,6 +103,10 @@ const StandardEditContainer = ({
           />,
           <Mutation
             mutation={Mutations.DELETE_STANDARD}
+            refetchQueries={() => [
+              { query: Queries.STANDARD_LIST, variables: { organizationId } },
+              { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+            ]}
             children={noop}
           />,
           /* eslint-enable react/no-children-prop */

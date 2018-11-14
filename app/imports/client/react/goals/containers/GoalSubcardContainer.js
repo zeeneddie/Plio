@@ -14,7 +14,14 @@ const GoalSubcardContainer = ({
   canEditGoals,
   ...props
 }) => (
-  <Mutation mutation={Mutations.DELETE_GOAL}>
+  <Mutation
+    mutation={Mutations.DELETE_GOAL}
+    refetchQueries={() => [
+      Queries.DASHBOARD_GOALS.name,
+      Queries.COMPLETED_DELETED_GOALS.name,
+      Queries.GOAL_LIST.name,
+    ]}
+  >
     {deleteGoal => (
       <GoalEditContainer
         {...{
@@ -37,10 +44,6 @@ const GoalSubcardContainer = ({
             variables: {
               input: { _id: goal._id },
             },
-            refetchQueries: [{
-              query: Queries.GOAL_LIST,
-              variables: { organizationId },
-            }],
           }).then(() => onUnlink(goal._id)),
         })}
       />

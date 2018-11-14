@@ -57,6 +57,9 @@ const StandardAddContainer = ({
       />,
       <Mutation
         mutation={Mutations.CREATE_STANDARD}
+        refetchQueries={() => [
+          { query: Queries.STANDARD_LIST, variables: { organizationId } },
+        ]}
         children={noop}
       />,
       /* eslint-disable react/no-children-prop */
