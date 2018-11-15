@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
+import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import {
   getUserOptions,
   lenses,
@@ -9,7 +10,6 @@ import {
   getValues,
   getIds,
 } from 'plio-util';
-import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
 
@@ -20,7 +20,6 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCustomerRelationship } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -42,6 +41,7 @@ const getInitialValues = compose(
   over(lenses.nonconformities, getIds),
   over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -127,6 +127,7 @@ const CustomerRelationshipEditModal = ({
                   standards: standardsIds,
                   nonconformities: nonconformityIds,
                   potentialGains: potentialGainIds,
+                  files = [],
                 } = values;
 
                 return updateCustomerRelationship({
@@ -142,6 +143,7 @@ const CustomerRelationshipEditModal = ({
                       nonconformityIds,
                       potentialGainIds,
                       notify: getValues(notify),
+                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
@@ -173,18 +175,8 @@ const CustomerRelationshipEditModal = ({
                             onChange={handleSubmit}
                             refetchQuery={Queries.CUSTOMER_RELATIONSHIP_CARD}
                             documentType={CanvasTypes.CUSTOMER_RELATIONSHIP}
-                            user={data && data.user}
-                          />
-                          {/*
-                            TODO Move CanvasFilesSubcard into CanvasSubcards
-                            when it will be refactored
-                           */}
-                          <CanvasFilesSubcard
-                            {...{ organizationId }}
-                            documentId={customerRelationship._id}
-                            onUpdate={updateCustomerRelationship}
                             slingshotDirective={AWSDirectives.CUSTOMER_RELATIONSHIP_FILES}
-                            documentType={CanvasTypes.CUSTOMER_RELATIONSHIP}
+                            user={data && data.user}
                           />
                         </Fragment>
                       )}

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
+import { compose, pick, over, pathOr, repeat, path, defaultTo } from 'ramda';
 import {
   getUserOptions,
   lenses,
@@ -9,7 +10,6 @@ import {
   mapUsersToOptions,
   getIds,
 } from 'plio-util';
-import { compose, pick, over, pathOr, repeat, path } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
 
@@ -28,7 +28,6 @@ import {
 import { WithState, Composer } from '../../helpers';
 import activelyManage from '../../forms/decorators/activelyManage';
 import KeyPartnerForm from './KeyPartnerForm';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import CanvasSubcards from './CanvasSubcards';
 
@@ -43,6 +42,7 @@ const getInitialValues = compose(
   over(lenses.nonconformities, getIds),
   over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -134,6 +134,7 @@ const KeyPartnerEditModal = ({
                     standards: standardsIds,
                     nonconformities: nonconformityIds,
                     potentialGains: potentialGainIds,
+                    files,
                   } = values;
 
                   return updateKeyPartner({
@@ -151,6 +152,7 @@ const KeyPartnerEditModal = ({
                         nonconformityIds,
                         potentialGainIds,
                         notify: getValues(notify),
+                        fileIds: files,
                         originatorId: originator.value,
                       },
                     },
@@ -180,18 +182,8 @@ const KeyPartnerEditModal = ({
                               onChange={handleSubmit}
                               refetchQuery={Queries.KEY_PARTNER_CARD}
                               documentType={CanvasTypes.KEY_PARTNER}
-                              user={data && data.user}
-                            />
-                            {/*
-                              TODO Move CanvasFilesSubcard into CanvasSubcards
-                                   when it will be refactored
-                            */}
-                            <CanvasFilesSubcard
-                              {...{ organizationId }}
-                              documentId={keyPartner._id}
-                              onUpdate={updateKeyPartner}
                               slingshotDirective={AWSDirectives.KEY_PARTNER_FILES}
-                              documentType={CanvasTypes.KEY_PARTNER}
+                              user={data && data.user}
                             />
                           </Fragment>
                         )}

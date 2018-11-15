@@ -10,6 +10,7 @@ import NonconformitiesSubcard from '../../noncomformities/components/Nonconformi
 import CanvasLessonsSubcard from './CanvasLessonsSubcard';
 import ActivelyManageSubcard from './ActivleyManage/ActivelyManageSubcard';
 import RisksSubcard from '../../risks/components/RisksSubcard';
+import FilesSubcardContainer from './FilesSubcardContainer';
 
 const CanvasSubcards = ({
   organizationId,
@@ -17,6 +18,7 @@ const CanvasSubcards = ({
   onChange,
   documentType,
   user: { roles = [] } = {},
+  slingshotDirective,
   section: {
     title,
     _id: documentId,
@@ -112,6 +114,17 @@ const CanvasSubcards = ({
           documentType,
         }}
       />
+      <EntitiesField
+        name="files"
+        render={props => <FilesSubcardContainer {...props} />}
+        {...{
+          documentId,
+          organizationId,
+          slingshotDirective,
+          documentType,
+          onChange,
+        }}
+      />
       <NotifySubcard {...{ documentId, organizationId, onChange }} />
     </Fragment>
   );
@@ -121,6 +134,7 @@ CanvasSubcards.propTypes = {
   section: PropTypes.object.isRequired,
   organizationId: PropTypes.string.isRequired,
   refetchQuery: PropTypes.object.isRequired,
+  slingshotDirective: PropTypes.string.isRequired,
   documentType: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   user: PropTypes.object,

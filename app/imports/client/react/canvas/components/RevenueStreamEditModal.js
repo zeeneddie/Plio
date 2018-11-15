@@ -9,7 +9,7 @@ import {
   getValues,
   getIds,
 } from 'plio-util';
-import { compose, pick, over, pathOr, repeat } from 'ramda';
+import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure } from 'recompose';
 import diff from 'deep-diff';
 
@@ -20,7 +20,6 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateRevenueStream } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import RevenueStreamForm from './RevenueStreamForm';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -42,6 +41,7 @@ const getInitialValues = compose(
   over(lenses.nonconformities, getIds),
   over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -131,6 +131,7 @@ const RevenueStreamEditModal = ({
                   standards: standardsIds,
                   nonconformities: nonconformityIds,
                   potentialGains: potentialGainIds,
+                  files = [],
                 } = values;
 
                 return updateRevenueStream({
@@ -148,6 +149,7 @@ const RevenueStreamEditModal = ({
                       nonconformityIds,
                       potentialGainIds,
                       notify: getValues(notify),
+                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
@@ -177,18 +179,8 @@ const RevenueStreamEditModal = ({
                             onChange={handleSubmit}
                             refetchQuery={Queries.REVENUE_STREAM_CARD}
                             documentType={CanvasTypes.REVENUE_STREAM}
-                            user={data && data.user}
-                          />
-                          {/*
-                            TODO Move CanvasFilesSubcard into CanvasSubcards
-                            when it will be refactored
-                           */}
-                          <CanvasFilesSubcard
-                            {...{ organizationId }}
-                            documentId={revenueStream._id}
-                            onUpdate={updateRevenueStream}
                             slingshotDirective={AWSDirectives.REVENUE_STREAM_FILES}
-                            documentType={CanvasTypes.REVENUE_STREAM}
+                            user={data && data.user}
                           />
                         </Fragment>
                       )}

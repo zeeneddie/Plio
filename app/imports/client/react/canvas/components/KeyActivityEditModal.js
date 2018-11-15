@@ -10,7 +10,7 @@ import {
   getValues,
   getIds,
 } from 'plio-util';
-import { compose, pick, over, pathOr, repeat } from 'ramda';
+import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure } from 'recompose';
 
 import { swal } from '../../../util';
@@ -20,7 +20,6 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateKeyActivity } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -42,6 +41,7 @@ const getInitialValues = compose(
   over(lenses.nonconformities, getIds),
   over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -127,6 +127,7 @@ const KeyActivityEditModal = ({
                   standards: standardsIds,
                   nonconformities: nonconformityIds,
                   potentialGains: potentialGainIds,
+                  files = [],
                 } = values;
 
                 return updateKeyActivity({
@@ -142,6 +143,7 @@ const KeyActivityEditModal = ({
                       nonconformityIds,
                       potentialGainIds,
                       notify: getValues(notify),
+                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
@@ -171,18 +173,8 @@ const KeyActivityEditModal = ({
                             onChange={handleSubmit}
                             refetchQuery={Queries.KEY_ACTIVITY_CARD}
                             documentType={CanvasTypes.KEY_ACTIVITY}
-                            user={data && data.user}
-                          />
-                          {/*
-                            TODO Move CanvasFilesSubcard into CanvasSubcards
-                            when it will be refactored
-                           */}
-                          <CanvasFilesSubcard
-                            {...{ organizationId }}
-                            documentId={keyActivity._id}
-                            onUpdate={updateKeyActivity}
                             slingshotDirective={AWSDirectives.KEY_ACTIVITY_FILES}
-                            documentType={CanvasTypes.KEY_ACTIVITY}
+                            user={data && data.user}
                           />
                         </Fragment>
                       )}

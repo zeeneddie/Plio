@@ -23,7 +23,6 @@ import { validateValueProposition } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
 import ValueComponentsSubcard from './ValueComponentsSubcard';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -46,6 +45,7 @@ const getInitialValues = compose(
   over(lenses.nonconformities, getIds),
   over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -146,6 +146,7 @@ const ValuePropositionEditModal = ({
                   standards: standardsIds,
                   nonconformities: nonconformityIds,
                   potentialGains: potentialGainIds,
+                  files = [],
                 } = values;
 
                 if (difference[0].path[0] === 'matchedTo') {
@@ -177,6 +178,7 @@ const ValuePropositionEditModal = ({
                       nonconformityIds,
                       potentialGainIds,
                       notify: getValues(notify),
+                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
@@ -220,18 +222,8 @@ const ValuePropositionEditModal = ({
                             onChange={handleSubmit}
                             refetchQuery={Queries.VALUE_PROPOSITION_CARD}
                             documentType={CanvasTypes.VALUE_PROPOSITION}
-                            user={data && data.user}
-                          />
-                          {/*
-                             TODO Move CanvasFilesSubcard into CanvasSubcards
-                             when it will be refactored
-                          */}
-                          <CanvasFilesSubcard
-                            {...{ organizationId }}
-                            documentId={valueProposition._id}
-                            onUpdate={updateValueProposition}
                             slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
-                            documentType={CanvasTypes.VALUE_PROPOSITION}
+                            user={data && data.user}
                           />
                         </Fragment>
                       )}

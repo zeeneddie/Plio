@@ -43,6 +43,7 @@ const getInitialValues = compose(
   over(lenses.completedBy, getUserOptions),
   over(lenses.notify, compose(mapUsersToOptions, defaultTo([]))),
   over(lenses.risks, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'title',
     'description',
@@ -168,7 +169,7 @@ const GoalEditContainer = ({
                 completedAt,
                 completedBy,
                 isCompleted,
-                fileIds,
+                files,
                 notify,
                 risks: riskIds,
               } = values;
@@ -215,7 +216,7 @@ const GoalEditContainer = ({
                     completionComment,
                     completedAt,
                     completedBy: getValue(completedBy),
-                    fileIds,
+                    fileIds: files,
                     riskIds,
                   },
                 },

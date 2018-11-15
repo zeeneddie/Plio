@@ -1,11 +1,11 @@
 import { Meteor } from 'meteor/meteor';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { complement, eqProps, pluck, append, reject, equals } from 'ramda';
+import { complement, eqProps } from 'ramda';
+import { getIds } from 'plio-util';
 
 import { UploaderMetaIdNames } from '../../../../share/constants';
 import { composeWithTracker, swal } from '../../../util';
 import { Files } from '../../../../share/collections';
+
 import { FilesSubcard } from '../../components';
 
 const enhance = composeWithTracker(
@@ -13,6 +13,7 @@ const enhance = composeWithTracker(
     documentId,
     documentType,
     organizationId,
+    input,
   }, onData) => {
     const subscription = Meteor.subscribe(
       'filesByDocument',
@@ -22,9 +23,8 @@ const enhance = composeWithTracker(
 
     if (subscription.ready()) {
       const files = Files.find({ organizationId }).fetch();
-
+      input.onChange(getIds(files));
       onData(null, {
-        fileIds: pluck('_id', files),
         uploaderMetaContext: {
           organizationId,
           [UploaderMetaIdNames[documentType]]: documentId,
@@ -38,37 +38,4 @@ const enhance = composeWithTracker(
   },
 );
 
-const CanvasFilesSubcard = ({
-  documentId,
-  fileIds,
-  onUpdate,
-  ...props
-}) => (
-  <FilesSubcard
-    {...{ fileIds, ...props }}
-    onAfterInsert={fileId => onUpdate({
-      variables: {
-        input: {
-          _id: documentId,
-          fileIds: append(fileId, fileIds),
-        },
-      },
-    })}
-    onAfterRemove={({ _id: fileId }) => onUpdate({
-      variables: {
-        input: {
-          _id: documentId,
-          fileIds: reject(equals(fileId), fileIds),
-        },
-      },
-    })}
-  />
-);
-
-CanvasFilesSubcard.propTypes = {
-  documentId: PropTypes.string.isRequired,
-  onUpdate: PropTypes.func.isRequired,
-  fileIds: PropTypes.arrayOf(PropTypes.string),
-};
-
-export default enhance(CanvasFilesSubcard);
+export default enhance(FilesSubcard);

@@ -23,7 +23,6 @@ import { validateCustomerSegment } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CustomerSegmentForm from './CustomerSegmentForm';
 import CustomerInsightsSubcard from './CustomerInsightsSubcard';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -46,6 +45,7 @@ const getInitialValues = compose(
   over(lenses.nonconformities, getIds),
   over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -148,6 +148,7 @@ const CustomerSegmentEditModal = ({
                   standards: standardsIds,
                   nonconformities: nonconformityIds,
                   potentialGains: potentialGainIds,
+                  files = [],
                 } = values;
 
                 if (difference[0].path[0] === 'matchedTo') {
@@ -180,6 +181,7 @@ const CustomerSegmentEditModal = ({
                       nonconformityIds,
                       potentialGainIds,
                       notify: getValues(notify),
+                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
@@ -223,18 +225,8 @@ const CustomerSegmentEditModal = ({
                             onChange={handleSubmit}
                             refetchQuery={Queries.CUSTOMER_SEGMENT_CARD}
                             documentType={CanvasTypes.CUSTOMER_SEGMENT}
-                            user={data && data.user}
-                          />
-                          {/*
-                            TODO Move CanvasFilesSubcard into CanvasSubcards
-                            when it will be refactored
-                           */}
-                          <CanvasFilesSubcard
-                            {...{ organizationId }}
-                            documentId={customerSegment._id}
-                            onUpdate={updateCustomerSegment}
                             slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
-                            documentType={CanvasTypes.CUSTOMER_SEGMENT}
+                            user={data && data.user}
                           />
                         </Fragment>
                       )}

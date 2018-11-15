@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { pure } from 'recompose';
-import { FormSpy } from 'react-final-form';
 import { sort } from 'ramda';
 import { bySerialNumber } from 'plio-util';
 
@@ -11,7 +10,7 @@ import GoalMilestonesSubcardContainer from '../containers/GoalMilestonesSubcardC
 import GoalLessonsSubcardContainer from '../containers/GoalLessonsSubcardContainer';
 import GoalActionsSubcardContainer from '../containers/GoalActionsSubcardContainer';
 import GoalEditForm from './GoalEditForm';
-import CanvasFilesSubcard from '../../canvas/components/CanvasFilesSubcard';
+import FilesSubcardContainer from '../../canvas/components/FilesSubcardContainer';
 import RisksSubcard from '../../risks/components/RisksSubcard';
 
 export const GoalEdit = ({
@@ -51,20 +50,15 @@ export const GoalEdit = ({
         />
       )}
       <GoalLessonsSubcardContainer {...{ goalId }} />
-      <FormSpy subscription={{}}>
-        {({ form }) => (
-          <CanvasFilesSubcard
-            {...{ organizationId }}
-            documentId={goalId}
-            onUpdate={({ variables: { input: { fileIds } } }) => {
-              form.change('fileIds', fileIds);
-              form.submit();
-            }}
-            slingshotDirective={AWSDirectives.GOAL_FILES}
-            documentType={DocumentTypes.GOAL}
-          />
-        )}
-      </FormSpy>
+      <EntitiesField
+        {...{ organizationId }}
+        name="files"
+        render={props => <FilesSubcardContainer {...props} />}
+        documentId={goalId}
+        onChange={save}
+        slingshotDirective={AWSDirectives.GOAL_FILES}
+        documentType={DocumentTypes.GOAL}
+      />
       <NotifySubcard
         {...{ organizationId }}
         documentId={goalId}

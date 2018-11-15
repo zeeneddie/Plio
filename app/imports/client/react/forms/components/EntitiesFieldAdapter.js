@@ -11,6 +11,7 @@ const EntitiesFieldAdapter = ({
   ...rest
 }) => !!is(input.value) && renderComponent({
   ...rest,
+  input,
   value: input.value || [],
   onLink: (entityId) => {
     const entityIds = append(entityId, input.value);
