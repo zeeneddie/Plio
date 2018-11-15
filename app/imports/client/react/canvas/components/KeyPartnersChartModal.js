@@ -18,6 +18,7 @@ import {
   CardBlock,
   ChartModal,
 } from '../../components';
+import CanvasModalGuidance from './CanvasModalGuidance';
 
 const palette = Object.values(Colors);
 
@@ -47,11 +48,11 @@ const KeyPartnersChartModal = ({ isOpen, toggle, organizationId }) => (
     {({ loading, error, data }) => (
       <ChartModal
         {...{ isOpen, toggle, error }}
-        guidance="Key partners"
         noForm
       >
         <EntityModalHeader label="Key partners" />
         <EntityModalBody>
+          <CanvasModalGuidance documentType={CanvasTypes.KEY_PARTNER} />
           <RenderSwitch
             {...{ loading, error }}
             errorWhenMissing={noop}

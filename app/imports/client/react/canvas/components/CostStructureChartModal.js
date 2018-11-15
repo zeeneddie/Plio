@@ -15,6 +15,7 @@ import {
   ChartModal,
 } from '../../components';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
+import CanvasModalGuidance from './CanvasModalGuidance';
 
 const getChartData = ({
   costLines: { costLines },
@@ -37,11 +38,11 @@ const CostStructureChartModal = ({ isOpen, toggle, organizationId }) => (
     {({ error, loading, data }) => (
       <ChartModal
         {...{ isOpen, toggle, error }}
-        guidance="Cost Structure"
         noForm
       >
         <EntityModalHeader label="Cost Structure" />
         <EntityModalBody>
+          <CanvasModalGuidance documentType={CanvasTypes.COST_LINE} />
           <RenderSwitch
             {...{ loading, error }}
             errorWhenMissing={noop}
