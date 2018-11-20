@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { StandardsHelp } from '../../../../../api/help-messages';
 import { EntityManagerItem } from '../../../components';
 import StandardAddContainer from '../../../standards/containers/StandardAddContainer';
 import NewStandardCard from '../../../standards/components/NewStandardCard';
@@ -11,6 +12,7 @@ const StandardActivelyManageItem = ({ organizationId, onLink }) => (
     {...{ organizationId, onLink }}
     itemId="standard"
     label="Standard"
+    guidance={StandardsHelp.standard}
     component={StandardAddContainer}
     render={ActivelyManageItem}
   >

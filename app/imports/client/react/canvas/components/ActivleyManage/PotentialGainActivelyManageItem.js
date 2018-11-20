@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { PotentialGainsHelp } from '../../../../../api/help-messages';
 import { ProblemTypes } from '../../../../../share/constants';
 import { EntityManagerItem } from '../../../components';
 import NonconformityAddContainer from
@@ -13,6 +14,7 @@ const PotentialGainActivelyManageItem = ({ organizationId, onLink, guidelines })
     {...{ organizationId, onLink }}
     itemId="potentialGain"
     label="Potential gain"
+    guidance={PotentialGainsHelp.potentialGain}
     type={ProblemTypes.POTENTIAL_GAIN}
     component={NonconformityAddContainer}
     render={ActivelyManageItem}

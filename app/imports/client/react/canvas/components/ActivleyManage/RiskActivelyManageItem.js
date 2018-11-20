@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { RisksHelp } from '../../../../../api/help-messages';
 import { EntityManagerItem } from '../../../components';
 import { NewRiskCard, RiskAddContainer } from '../../../risks';
 import ActivelyManageItem from './ActivelyManageItem';
@@ -16,6 +17,7 @@ const RiskActivelyManageItem = ({
     {...{ organizationId, onLink, onUnlink }}
     itemId="risk"
     label="Risk"
+    guidance={RisksHelp.risk}
     component={RiskAddContainer}
     render={ActivelyManageItem}
   >

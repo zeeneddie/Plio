@@ -13,13 +13,14 @@ const Icon = ({
   className,
   name,
   color,
+  onClick,
 }) => {
   const marginCx = margin && MarginMap[margin];
   const nameCx = name.split(' ').map(a => `fa-${a}`);
   const colorCx = color ? `text-${color}` : '';
   return (
     <FaSize {...{ size, prefix: sizePrefix }}>
-      <i className={cx('fa', ...nameCx, marginCx, className, colorCx)} />
+      <i className={cx('fa', ...nameCx, marginCx, className, colorCx)} {...{ onClick }} />
     </FaSize>
   );
 };
@@ -31,6 +32,7 @@ Icon.propTypes = {
   sizePrefix: FaSize.propTypes.prefix,
   className: PropTypes.string,
   color: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 export default Icon;

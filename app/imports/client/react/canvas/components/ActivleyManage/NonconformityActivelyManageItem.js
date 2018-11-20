@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { NonConformitiesHelp } from '../../../../../api/help-messages';
 import { ProblemTypes } from '../../../../../share/constants';
 import { EntityManagerItem } from '../../../components';
 import NonconformityAddContainer from
@@ -13,6 +14,7 @@ const NonconformityActivelyManageItem = ({ organizationId, onLink, guidelines })
     {...{ organizationId, onLink }}
     itemId="nonconformity"
     label="Nonconformity"
+    guidance={NonConformitiesHelp.nonConformity}
     type={ProblemTypes.NON_CONFORMITY}
     component={NonconformityAddContainer}
     render={ActivelyManageItem}

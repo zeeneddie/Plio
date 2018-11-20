@@ -2,10 +2,12 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { ListGroupItem, Form } from 'reactstrap';
 
+import { WithToggle } from '../../../helpers';
 import {
-  Icon,
   EntityForm,
   EntityCard,
+  GuidancePanel,
+  Icon,
 } from '../../../components';
 
 const ActivelyManageItem = ({
@@ -15,12 +17,32 @@ const ActivelyManageItem = ({
   children,
   initialValues,
   onSubmit,
+  guidance,
 }) => (
   <Fragment>
-    <ListGroupItem tag="button" color="link" onClick={toggle}>
-      Add a <strong>{label}</strong>
-      <Icon name="question-circle" />
-    </ListGroupItem>
+    <WithToggle>
+      {guidanceState => (
+        <Fragment>
+          <ListGroupItem tag="button" color="link" onClick={toggle}>
+            Add a <strong>{label}</strong>
+            {!!guidance && (
+              <Icon
+                name="question-circle"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  guidanceState.toggle();
+                }}
+              />
+            )}
+          </ListGroupItem>
+          {!!guidance && (
+            <GuidancePanel isOpen={guidanceState.isOpen} toggle={guidanceState.toggle}>
+              {guidance}
+            </GuidancePanel>
+          )}
+        </Fragment>
+      )}
+    </WithToggle>
     <EntityForm {...{ initialValues, onSubmit }}>
       {({ handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
@@ -39,6 +61,7 @@ ActivelyManageItem.propTypes = {
   label: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  guidance: PropTypes.string,
   initialValues: PropTypes.object,
 };
 
