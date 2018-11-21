@@ -6,7 +6,6 @@ import {
   pick,
   compose,
   over,
-  pluck,
   unless,
   isNil,
   pathOr,
@@ -19,6 +18,7 @@ import {
   lenses,
   noop,
   mapEntitiesToOptions,
+  getValues,
 } from 'plio-util';
 import diff from 'deep-diff';
 
@@ -30,11 +30,13 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 
 const getSourceInitialValue = unless(isNil, pick(['type', 'fileId', 'url']));
 const getStandard = pathOr({}, repeat('standard', 2));
+
 const getInitialValues = compose(
+  over(lenses.projects, mapEntitiesToOptions),
+  over(lenses.departments, mapEntitiesToOptions),
   over(lenses.owner, getUserOptions),
   over(lenses.section, getEntityOptions),
   over(lenses.type, getEntityOptions),
-  over(lenses.departments, mapEntitiesToOptions),
   over(lenses.source1, getSourceInitialValue),
   over(lenses.source2, getSourceInitialValue),
   pick([
@@ -48,6 +50,7 @@ const getInitialValues = compose(
     'description',
     'issueNumber',
     'departments',
+    'projects',
   ]),
 );
 
@@ -137,9 +140,10 @@ const StandardEditContainer = ({
               description,
               issueNumber,
               uniqueNumber,
-              departments,
               source1,
               source2,
+              departments,
+              projects,
               section: { value: sectionId } = {},
               type: { value: typeId } = {},
               owner: { value: owner } = {},
@@ -149,7 +153,8 @@ const StandardEditContainer = ({
               variables: {
                 input: {
                   _id: standard._id,
-                  departmentsIds: pluck('value', departments),
+                  departmentsIds: getValues(departments),
+                  projectIds: getValues(projects),
                   source1,
                   source2,
                   title,

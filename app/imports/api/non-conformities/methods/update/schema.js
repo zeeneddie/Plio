@@ -67,6 +67,7 @@ export const ModifierSchema = new SimpleSchema([
   modifierSchemaDefinition,
   schemas.improvementPlan,
   schemas.departmentsIds,
+  schemas.projectIds,
   schemas.notify,
   schemas.standardsIds,
   schemas.fileIds,

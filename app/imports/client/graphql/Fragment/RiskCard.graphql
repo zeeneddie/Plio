@@ -50,4 +50,8 @@ fragment RiskCard on Risk {
     _id
     title
   }
+  projects {
+    _id
+    title
+  }
 }

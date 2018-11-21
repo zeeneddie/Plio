@@ -44,6 +44,7 @@ input UpdateRiskInput {
   statusComment: String
   standardsIds: [ID]
   departmentsIds: [ID]
+  projectIds: [ID]
   originatorId: ID
   ownerId: ID
   typeId: ID

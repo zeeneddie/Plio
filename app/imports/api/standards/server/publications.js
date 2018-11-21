@@ -27,6 +27,7 @@ import {
   toDocIdAndType,
 } from '../../helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
+import { getProjectsCursorByIds } from '../../projects/utils';
 import { getActionsWithLimitedFields } from '../../actions/utils';
 import {
   getProblemsByStandardIds,
@@ -147,6 +148,7 @@ Meteor.publishComposite('standardCard', function publishStandardCard({
   );
 
   let children = [
+    getProjectsCursorByIds,
     getDepartmentsCursorByIds,
     getStandardFiles,
     compose(LessonsLearned.find.bind(LessonsLearned), toDocId),

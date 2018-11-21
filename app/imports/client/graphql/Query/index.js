@@ -56,6 +56,10 @@ import POTENTIAL_GAIN_LIST from './PotentialGainList';
 import STANDARD_CARD from './StandardCard.graphql';
 import NONCONFORMITY_CARD from './NonconformityCard.graphql';
 import RISK_CARD from './RiskCard.graphql';
+import PROJECT_LIST from './ProjectList.graphql';
+import PROJECT_COUNT from './ProjectCount.graphql';
+import DEPARTMENT_COUNT from './DepartmentCount.graphql';
+import CATEGORIZE_LIST from './CategorizeList.graphql';
 
 DASHBOARD_GOALS.name = 'DashboardGoals';
 COMPLETED_DELETED_GOALS.name = 'CompletedDeletedGoals';
@@ -120,4 +124,8 @@ export default {
   STANDARD_CARD,
   NONCONFORMITY_CARD,
   RISK_CARD,
+  PROJECT_LIST,
+  PROJECT_COUNT,
+  DEPARTMENT_COUNT,
+  CATEGORIZE_LIST,
 };

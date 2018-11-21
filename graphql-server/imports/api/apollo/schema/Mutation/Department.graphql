@@ -4,9 +4,20 @@ type DepartmentPayload {
 
 input CreateDepartmentInput {
   organizationId: ID!
-  name: String
+  name: String!
+}
+
+input UpdateDepartmentInput {
+  _id: ID!
+  name: String!
+}
+
+input DeleteDepartmentInput {
+  _id: ID!
 }
 
 type Mutation {
   createDepartment(input: CreateDepartmentInput!): DepartmentPayload
+  updateDepartment(input: UpdateDepartmentInput!): Department
+  deleteDepartment(input: DeleteDepartmentInput!): Department
 }

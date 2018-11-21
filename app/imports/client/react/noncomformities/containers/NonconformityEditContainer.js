@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { pure } from 'recompose';
-import { pick, compose, over, pluck, unless, isNil, pathOr, repeat, path } from 'ramda';
+import { pick, compose, over, unless, isNil, pathOr, repeat, path } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
 import {
   getUserOptions,
   lenses,
   noop,
   mapEntitiesToOptions,
+  getValues,
 } from 'plio-util';
 import diff from 'deep-diff';
 
@@ -19,9 +20,10 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 
 const getNonconformity = pathOr({}, repeat('nonconformity', 2));
 const getInitialValues = compose(
+  over(lenses.departments, mapEntitiesToOptions),
+  over(lenses.projects, mapEntitiesToOptions),
   over(lenses.owner, getUserOptions),
   over(lenses.originator, getUserOptions),
-  over(lenses.departments, mapEntitiesToOptions),
   over(lenses.standards, unless(
     isNil,
     mapEntitiesToOptions,
@@ -35,6 +37,7 @@ const getInitialValues = compose(
     'standards',
     'statusComment',
     'departments',
+    'projects',
     'status',
     'sequentialId',
     'cost',
@@ -123,8 +126,9 @@ const NonconformityEditContainer = ({
               standards,
               description,
               statusComment,
-              departments,
               cost,
+              departments,
+              projects,
               ref: { url, text },
               owner: { value: ownerId } = {},
               originator: { value: originatorId } = {},
@@ -142,8 +146,9 @@ const NonconformityEditContainer = ({
                   statusComment,
                   cost,
                   ref: { url, text },
-                  standardsIds: pluck('value', standards || []),
-                  departmentsIds: pluck('value', departments),
+                  standardsIds: getValues(standards || []),
+                  departmentsIds: getValues(departments),
+                  projectIds: getValues(projects),
                 },
               },
             }).then(noop).catch((err) => {

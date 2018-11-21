@@ -6,6 +6,7 @@ import {
   branch,
   checkOrgMembership,
   checkDepartmentsAccess,
+  checkProjectsAccess,
   standardUpdateAfterware,
   checkStandardSectionAccess,
   checkStandardTypeAccess,
@@ -35,5 +36,6 @@ export default applyMiddleware(
   checkStandardSectionAccess(),
   checkStandardTypeAccess(),
   checkDepartmentsAccess(),
+  checkProjectsAccess(),
   standardUpdateAfterware(),
 )(resolver);

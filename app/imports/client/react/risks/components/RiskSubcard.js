@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'reactstrap';
 
+import categorize from '../../forms/decorators/categorize';
 import { validateRisk } from '../../../validation';
 import { EntityForm, EntityCard } from '../../components';
 import RiskEditForm from './RiskEditForm';
@@ -33,6 +34,7 @@ const RiskSubcard = ({
         </Fragment>
       )}
       validate={validateRisk}
+      decorators={[categorize]}
       component={EntityCard}
     >
       {({ handleSubmit }) => (

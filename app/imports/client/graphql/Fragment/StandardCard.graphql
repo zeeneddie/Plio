@@ -24,6 +24,10 @@ fragment StandardCard on Standard {
     _id
     title
   }
+  projects {
+    _id
+    title
+  }
   source1 {
     type
     fileId

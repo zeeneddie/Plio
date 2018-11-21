@@ -2,7 +2,6 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { pick } from 'ramda';
 
-import { Departments } from '../../../../../../share/collections/departments';
 import { StandardTypes } from '../../../../../../share/collections/standards-types';
 import { RiskTypes } from '../../../../../../share/collections/risk-types';
 import { StandardsBookSections } from '../../../../../../share/collections/standards-book-sections';
@@ -28,6 +27,10 @@ import StandardTypesSubcardContainer from
   '../../../../../../client/react/organization-settings/containers/StandardTypesSubcardContainer';
 import CanvasScreenSubcard from
   '../../../../../../client/react/organization-settings/components/CanvasScreenSubcard';
+import ProjectsSubcard from
+  '../../../../../../client/react/organization-settings/components/ProjectsSubcard';
+import DepartmentsSubcard from
+  '../../../../../../client/react/organization-settings/components/DepartmentsSubcard';
 
 Template.OrgSettings.viewmodel({
   mixin: 'organization',
@@ -52,10 +55,6 @@ Template.OrgSettings.viewmodel({
   },
   homeScreenSubcard() {
     return HomeScreenSubcard;
-  },
-  departments() {
-    const query = { organizationId: this.organizationId() };
-    return Departments.find(query);
   },
   standardsTypes() {
     const query = { organizationId: this.organizationId() };
@@ -119,4 +118,6 @@ Template.OrgSettings.viewmodel({
   StandardSectionsSubcardContainer: () => StandardSectionsSubcardContainer,
   StandardTypesSubcardContainer: () => StandardTypesSubcardContainer,
   CanvasScreenSubcard: () => CanvasScreenSubcard,
+  ProjectsSubcard: () => ProjectsSubcard,
+  DepartmentsSubcard: () => DepartmentsSubcard,
 });

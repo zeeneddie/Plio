@@ -4,6 +4,7 @@ import Organization from './Organization';
 import Risk from './Risk';
 import Lesson from './Lesson';
 import Department from './Department';
+import Project from './Project';
 import Action from './Action';
 import KeyPartner from './KeyPartner';
 import KeyActivity from './KeyActivity';
@@ -52,4 +53,5 @@ export default {
   ...Standard,
   ...StandardSection,
   ...Nonconformity,
+  ...Project,
 };

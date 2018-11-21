@@ -60,8 +60,10 @@ export default Object.assign({}, ProblemsService, {
     statusComment,
     standardsIds,
     departmentsIds,
+    projectIds,
     cost,
     ref,
+    options,
   }, { userId } = {}) {
     const query = { _id };
     const modifier = {
@@ -73,11 +75,13 @@ export default Object.assign({}, ProblemsService, {
         magnitude,
         statusComment,
         departmentsIds,
+        projectIds,
         standardsIds,
         cost,
         ref,
         updatedBy: userId,
       },
+      ...options,
     };
 
     return this.collection.update(query, modifier);

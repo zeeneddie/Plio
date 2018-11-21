@@ -11,6 +11,7 @@ import Milestone from './Milestone.graphql';
 import RiskType from './RiskType.graphql';
 import Standard from './Standard.graphql';
 import Department from './Department.graphql';
+import Project from './Project.graphql';
 import KeyPartner from './KeyPartner.graphql';
 import KeyActivity from './KeyActivity.graphql';
 import KeyResource from './KeyResource.graphql';
@@ -44,6 +45,7 @@ export default [
   RiskType,
   Standard,
   Department,
+  Project,
   KeyPartner,
   KeyActivity,
   KeyResource,

@@ -1,0 +1,8 @@
+query ProjectList($organizationId: ID!) {
+  projects(input: { organizationId: $organizationId }) {
+    projects {
+      _id
+      title
+    }
+  }
+}

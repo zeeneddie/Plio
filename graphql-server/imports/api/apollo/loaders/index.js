@@ -11,6 +11,7 @@ import Goal from './Goal';
 import RiskType from './RiskType';
 import Standard from './Standard';
 import Department from './Department';
+import Project from './Project';
 import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
 import Benefit from './Benefit';
@@ -44,6 +45,7 @@ const loaders = {
   StandardType,
   StandardSection,
   Nonconformity,
+  Project,
 };
 
 export const createLoaders = (ctx) => {

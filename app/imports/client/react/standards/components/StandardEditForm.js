@@ -7,9 +7,9 @@ import {
   FormField,
   InputField,
   TextareaField,
-  DepartmentsCreatableField,
   EditSourceField,
   UserSelectInput,
+  CategorizeField,
 } from '../../components';
 import { StandardsHelp } from '../../../../api/help-messages';
 import { StringLimits, UniqueNumberRange, IssueNumberRange } from '../../../../share/constants';
@@ -91,10 +91,10 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
       <StandardStatusField name="status" onChange={save} />
     </FormField>
     <FormField>
-      Department/sector(s)
-      <DepartmentsCreatableField
-        name="departments"
-        placeholder="Department/sector(s)"
+      Categorize
+      <CategorizeField
+        name="categorize"
+        placeholder="Add category"
         onChange={save}
         {...{ organizationId }}
       />

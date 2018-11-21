@@ -111,6 +111,18 @@ export const departmentsIds = new SimpleSchema({
   },
 });
 
+const projectIdsSchema = new SimpleSchema({ projectIds: idSchemaDefOpt });
+export const projectIds = new SimpleSchema({
+  $addToSet: {
+    optional: true,
+    type: projectIdsSchema,
+  },
+  $pull: {
+    optional: true,
+    type: projectIdsSchema,
+  },
+});
+
 const notifySchema = new SimpleSchema({ notify: idSchemaDefOpt });
 export const notify = new SimpleSchema({
   $addToSet: {

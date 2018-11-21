@@ -4397,7 +4397,7 @@ please-upgrade-node@^3.0.2, please-upgrade-node@^3.1.1:
 
 "plio-util@https://github.com/Pliohub/plio-util.git#devel":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#234b25b24bab21f4102cf401b123ad57bb0a99d7"
+  resolved "https://github.com/Pliohub/plio-util.git#d58ec8418657957a00dd22c9d5c3b50e272e4e67"
 
 pluralize@^7.0.0:
   version "7.0.0"

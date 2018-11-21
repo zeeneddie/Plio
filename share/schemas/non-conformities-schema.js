@@ -108,6 +108,14 @@ const NonConformitiesSchema = new SimpleSchema([
       type: String,
       allowedValues: Object.values(WorkflowTypes),
     },
+    projectIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      defaultValue: [],
+      optional: true,
+      index: 1,
+      // maxCount: ?
+    },
   },
 ]);
 

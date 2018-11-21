@@ -8,6 +8,7 @@ export * from './organization';
 export * from './risk';
 export * from './lesson';
 export * from './department';
+export * from './project';
 export * from './analysis';
 export * from './user';
 export * from './keyPartner';

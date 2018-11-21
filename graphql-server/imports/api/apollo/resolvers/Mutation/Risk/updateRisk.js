@@ -11,6 +11,7 @@ import {
   checkRiskTypeAccess,
   composeMiddleware,
   ensureIsAnalysisOwner,
+  checkProjectsAccess,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, context) =>
@@ -22,6 +23,7 @@ export default applyMiddleware(
   checkRiskAccess(),
   checkStandardsAccess(),
   checkDepartmentsAccess(),
+  checkProjectsAccess(),
   branch(
     (root, args) => args.ownerId,
     checkOrgMembership(({ organizationId }, { ownerId }) => ({

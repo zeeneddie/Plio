@@ -93,6 +93,13 @@ const StandardsSchema = new SimpleSchema([
       optional: true,
       // maxCount: ?
     },
+    projectIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      defaultValue: [],
+      optional: true,
+      // maxCount: ?
+    },
     source1: {
       type: SourceSchema,
       optional: true,

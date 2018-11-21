@@ -6,7 +6,7 @@ import {
 } from 'plio-util';
 import { view } from 'ramda';
 
-import { resolveStandardsByIds } from '../util';
+import { resolveStandardsByIds, resolveProjectsByIds } from '../util';
 
 const {
   createdBy,
@@ -27,6 +27,7 @@ export default {
     originator: loadUserById(view(originatorId)),
     organization: loadOrganizationById(view(organizationId)),
     departments: loadDepartmentsById(view(departmentsIds)),
+    projects: resolveProjectsByIds,
     standards: resolveStandardsByIds,
   },
 };

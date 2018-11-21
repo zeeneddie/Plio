@@ -55,7 +55,7 @@ export default Object.assign({}, ProblemsService, {
     return _id;
   },
 
-  update(args, context) {
+  update(args) {
     const {
       _id,
       title,
@@ -63,18 +63,19 @@ export default Object.assign({}, ProblemsService, {
       statusComment,
       standardsIds,
       departmentsIds,
+      projectIds,
       originatorId,
       ownerId,
       typeId,
+      options,
       analysis: {
         executor,
         targetDate,
         completedBy,
         completedAt,
         completionComments,
-      },
+      } = {},
     } = args;
-    const { collections } = context;
     const query = { _id };
     const modifier = {
       $set: {
@@ -83,6 +84,7 @@ export default Object.assign({}, ProblemsService, {
         statusComment,
         standardsIds,
         departmentsIds,
+        projectIds,
         originatorId,
         ownerId,
         typeId,
@@ -92,9 +94,10 @@ export default Object.assign({}, ProblemsService, {
         'analysis.completedAt': completedAt,
         'analysis.completionComments': completionComments,
       },
+      ...options,
     };
 
-    return collections.Risks.update(query, modifier);
+    return Risks.update(query, modifier);
   },
 
   'scores.insert': function ({ _id, ...args }) {

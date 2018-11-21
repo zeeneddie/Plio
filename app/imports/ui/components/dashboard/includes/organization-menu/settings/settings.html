@@ -15,9 +15,10 @@
       <div>{{> React component=CanvasScreenSubcard organizationId=organizationId}}</div>
       <div class="card-divider"></div>
       <div>{{> React component=keyGoalsSettings organization=organization}}</div>
-      {{> OrgSettings_Departments
-        departments=departments
-        organizationId=organizationId}}
+      <div class="card-divider"></div>
+      <div>{{> React component=DepartmentsSubcard organizationId=organizationId}}</div>
+      <div class="card-divider"></div>
+      <div>{{> React component=ProjectsSubcard organizationId=organizationId}}</div>
 
       <div class="card-divider"></div>
       <div>

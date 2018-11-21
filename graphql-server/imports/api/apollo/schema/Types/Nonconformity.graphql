@@ -27,6 +27,7 @@ type Nonconformity implements BaseEntity, PlioEntity {
   isDeleted: Boolean!
   viewedBy: User
   departments: [Department]
+  projects: [Project]
   notify: [User]
   improvementPlan: ImprovementPlan
   analysis: Analysis

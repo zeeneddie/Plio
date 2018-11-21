@@ -348,6 +348,11 @@ export const Styles = {
       },
     },
   },
+  border: {
+    color: {
+      grey: '#ddd',
+    },
+  },
   color: {
     blue: '#0078d7',
     muted: '#818a91',
@@ -357,6 +362,12 @@ export const Styles = {
     lightGrey: '#eee',
     darkGrey: '#373a3c',
     brandPrimary: '#0275d8',
+    black: '#000',
+  },
+  background: {
+    color: {
+      lightGrey: '#f5f5f5',
+    },
   },
 };
 /* eslint-enable max-len */
@@ -392,4 +403,14 @@ export const CanvasBubbleChartSize = {
 export const CriticalityLabels = {
   LOW: 'Low',
   HIGH: 'High',
+};
+
+export const CategorizeTypes = {
+  DEPARTMENT: 'department',
+  PROJECT: 'project',
+};
+
+export const GroupSelectAbbreviations = {
+  [CategorizeTypes.DEPARTMENT]: 'DEP',
+  [CategorizeTypes.PROJECT]: 'PT',
 };

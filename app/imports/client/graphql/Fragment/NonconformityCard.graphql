@@ -21,6 +21,10 @@ fragment NonconformityCard on Nonconformity {
     _id
     title
   }
+  projects {
+    _id
+    title
+  }
   owner {
     _id
     profile {

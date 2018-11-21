@@ -12,10 +12,10 @@ import {
   Magnitudes,
   SelectField,
   UserSelectInput,
-  DepartmentsCreatableField,
   Status,
   Col,
   StandardSelectInput,
+  CategorizeField,
 } from '../../components';
 import { NonConformitiesHelp } from '../../../../api/help-messages';
 import { getStatusColor } from '../helpers';
@@ -81,10 +81,10 @@ export const NonconformityEditForm = ({
     </FormField>
     <hr />
     <FormField>
-      Department/sector(s)
-      <DepartmentsCreatableField
-        name="departments"
-        placeholder="Department/sector(s)"
+      Categorize
+      <CategorizeField
+        name="categorize"
+        placeholder="Add category"
         onChange={save}
         {...{ organizationId }}
       />

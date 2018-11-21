@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
+import categorize from '../../forms/decorators/categorize';
 import { validateNonConformity } from '../../../validation';
 import {
   CardBlock,
@@ -34,6 +35,7 @@ const NonconformitySubcard = ({
         {nonconformity.title}
       </Fragment>
     )}
+    decorators={[categorize]}
     validate={validateNonConformity}
     component={EntityCard}
   >

@@ -8,6 +8,7 @@ import {
   checkStandardsAccess,
   checkDepartmentsAccess,
   nonconformityUpdateAfterware,
+  checkProjectsAccess,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, context) =>
@@ -33,5 +34,6 @@ export default applyMiddleware(
   ),
   checkStandardsAccess(),
   checkDepartmentsAccess(),
+  checkProjectsAccess(),
   nonconformityUpdateAfterware(),
 )(resolver);

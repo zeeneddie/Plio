@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { validateStandard } from '../../../validation';
+import categorize from '../../forms/decorators/categorize';
 import {
   CardBlock,
   EntityForm,
@@ -26,6 +27,7 @@ const StandardSubcard = ({
       onSubmit,
       initialValues,
     }}
+    decorators={[categorize]}
     label={standard.title}
     validate={validateStandard}
     component={EntityCard}

@@ -11,8 +11,9 @@ import {
   TextareaField,
   CardBlock,
   AnalysisForm,
+  CategorizeField,
 } from '../../components';
-import { StandardSelectInput, DepartmentsCreatableField } from '../../forms/components';
+import { StandardSelectInput } from '../../forms/components';
 
 const RiskEditForm = ({
   sequentialId,
@@ -59,12 +60,12 @@ const RiskEditForm = ({
         />
       </FormField>
       <FormField>
-        Department/sector(s)
-        <DepartmentsCreatableField
-          {...{ organizationId }}
-          name="departments"
-          placeholder="Department/sector(s)"
+        Categorize
+        <CategorizeField
+          name="categorize"
+          placeholder="Add category"
           onChange={save}
+          {...{ organizationId }}
         />
       </FormField>
     </RiskForm>

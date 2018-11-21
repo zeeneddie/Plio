@@ -32,6 +32,7 @@ export const ModifierSchema = new SimpleSchema([
   schemas.departmentsIds,
   schemas.notify,
   schemas.standardsIds,
+  schemas.projectIds,
   schemas.fileIds,
 ]);
 

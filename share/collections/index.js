@@ -2,6 +2,7 @@ export * from './actions';
 export * from './audit-logs';
 export * from './departments';
 export * from './discussions';
+export * from './projects';
 export * from './files';
 export * from './help-docs';
 export * from './help-sections';

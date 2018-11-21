@@ -88,6 +88,7 @@ export const CollectionNames = {
   AUDIT_LOGS: 'AuditLogs',
   CHANGELOG: 'Changelog',
   DEPARTMENTS: 'Departments',
+  PROJECTS: 'Projects',
   DISCUSSIONS: 'Discussions',
   FILES: 'Files',
   HELP_DOCS: 'HelpDocs',

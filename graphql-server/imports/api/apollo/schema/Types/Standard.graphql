@@ -25,6 +25,7 @@ type Standard implements BaseEntity, PlioEntity {
   notify: [User]
   status: String!
   departments: [Department]
+  projects: [Project]
   files: [File]
   type: StandardType
   section: StandardSection
