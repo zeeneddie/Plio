@@ -1,7 +1,9 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
+import { _ } from 'meteor/underscore';
 import invoke from 'lodash.invoke';
 
 import {
@@ -11,12 +13,12 @@ import {
   updatePhoneNumber,
   addPhoneNumber,
   removePhoneNumber,
-} from '/imports/api/users/methods.js';
-import { removeUser } from '/imports/api/organizations/methods.js';
-import { assignRole, revokeRole } from '/imports/api/users/methods.js';
-import { UserUpdateProfileSchema } from '/imports/share/schemas/user-schema.js';
-import { UserRoles } from '/imports/share/constants.js';
-import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+  assignRole,
+  revokeRole,
+} from '/imports/api/users/methods';
+import { UserRoles } from '/imports/share/constants';
+import UserDeleteModal from
+  '../../../../../client/react/user-directory/components/UserDeleteModal';
 
 Template.UserDirectory_Card_Edit.viewmodel({
   mixin: ['organization', 'modal'],
@@ -30,6 +32,7 @@ Template.UserDirectory_Card_Edit.viewmodel({
   country: '',
   phoneNumbers: [],
   skype: '',
+  isDeleteModalOpen: false,
   autorun() {
     const user = this.user();
     if (user) {
@@ -54,9 +57,6 @@ Template.UserDirectory_Card_Edit.viewmodel({
     return Meteor.users.findOne({
       _id: userId,
     });
-  },
-  organizationId() {
-    return this.organization() && this.organization()._id;
   },
   updateProfile(prop, val) {
     this.modal().callMethod(updateProfile, {
@@ -150,6 +150,8 @@ Template.UserDirectory_Card_Edit.viewmodel({
       const orgName = this.organization() && this.organization().name;
       return `${userName}'s superpowers for ${orgName}:`;
     }
+
+    return undefined;
   },
   orgOwnerLabel() {
     const userId = this.userId();
@@ -160,9 +162,12 @@ Template.UserDirectory_Card_Edit.viewmodel({
     if (userId && organization) {
       const orgName = organization.name;
       if (userId === organization.ownerId()) {
-        return `${firstNameOrEmail} is the organization owner for organization ${orgName} and has the full set of superpowers`;
+        return `${firstNameOrEmail} is the organization owner ` +
+        `for organization ${orgName} and has the full set of superpowers`;
       }
     }
+
+    return undefined;
   },
   isRolesEditable() {
     return Roles.userIsInRole(
@@ -204,42 +209,14 @@ Template.UserDirectory_Card_Edit.viewmodel({
       this.organizationId(),
     ) || this.isCurrentUser();
   },
-  removeUserFn() {
-    return this.removeUser.bind(this);
+  toggleDeleteModal() {
+    this.isDeleteModalOpen(!this.isDeleteModalOpen());
   },
-  removeUser() {
-    const user = this.user();
-    const fullNameOrEmail = user && user.fullNameOrEmail() || 'This user';
-    swal({
-      title: 'Are you sure?',
-      text: `${fullNameOrEmail} will be removed from the organization`,
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Delete',
-      closeOnConfirm: true,
-    }, () => {
-      this.modal().close();
-      this.modal().callMethod(removeUser, {
-        userId: this.userId(),
-        organizationId: this.organizationId(),
-      }, (err, res) => {
-        if (!err) {
-          FlowRouter.go('userDirectoryPage', {
-            orgSerialNumber: this.organization().serialNumber,
-          });
-
-          // have to wait some time before opening new sweet alert
-          Meteor.setTimeout(() => {
-            swal({
-              title: 'Removed!',
-              text: `${fullNameOrEmail} has been removed from this organization`,
-              type: 'success',
-              timer: ALERT_AUTOHIDE_TIME,
-              showConfirmButton: false,
-            });
-          }, 500);
-        }
-      });
-    });
+  onDelete() {
+    this.isDeleteModalOpen(true);
   },
+  closeModal() {
+    this.modal().close();
+  },
+  UserDeleteModal: () => UserDeleteModal,
 });

@@ -6,10 +6,15 @@ import { ModalHeader } from '../Modal';
 import EntityModalLeftHeaderButton from './EntityModalLeftHeaderButton';
 import EntityModalRightHeaderButton from './EntityModalRightHeaderButton';
 
-const EntityModalHeader = ({ label, children, ...props }) => (
+const EntityModalHeader = ({
+  label,
+  rightButtonLabel,
+  children,
+  ...props
+}) => (
   <ModalHeader
     renderLeftButton={<EntityModalLeftHeaderButton />}
-    renderRightButton={<EntityModalRightHeaderButton />}
+    renderRightButton={<EntityModalRightHeaderButton label={rightButtonLabel} />}
     {...props}
   >
     {children || label && (<CardTitle>{label}</CardTitle>)}
@@ -19,6 +24,7 @@ const EntityModalHeader = ({ label, children, ...props }) => (
 EntityModalHeader.propTypes = {
   label: PropTypes.string,
   children: PropTypes.node,
+  rightButtonLabel: PropTypes.string,
 };
 
 export default EntityModalHeader;

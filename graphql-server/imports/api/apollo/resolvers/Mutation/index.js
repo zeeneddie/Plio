@@ -25,6 +25,7 @@ import Guidance from './Guidance';
 import Standard from './Standard';
 import StandardSection from './StandardSection';
 import Nonconformity from './Nonconformity';
+import User from './User';
 
 export default {
   ...Goal,
@@ -54,4 +55,5 @@ export default {
   ...Standard,
   ...StandardSection,
   ...Nonconformity,
+  ...User,
 };

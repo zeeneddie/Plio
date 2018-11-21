@@ -1,0 +1,163 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserService.reassignOwnership matches snapshot 1`] = `
+Array [
+  Array [
+    Object {
+      "_id": "86a5c5d2-6d05-4788-9984-0efae5384784",
+      "completedBy": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "ownerId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      "toBeCompletedBy": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      "toBeVerifiedBy": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      "verifiedBy": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "e4f94b98-c56a-4bd2-a9fd-5fd11603e7e8",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "owner": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "3104de39-071c-47b8-86b4-d62ccc4a4fa6",
+      "analysis": Object {
+        "completedBy": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+        "executor": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      },
+      "improvementPlan": Object {
+        "owner": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      },
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "originatorId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      "ownerId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      "updateOfStandards": Object {
+        "completedBy": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+        "executor": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      },
+    },
+  ],
+  Array [
+    Object {
+      "_id": "13a7e8b6-7270-4c99-81e9-9d752e0c295c",
+      "analysis": Object {
+        "completedBy": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+        "executor": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      },
+      "improvementPlan": Object {
+        "owner": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      },
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "originatorId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      "ownerId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      "updateOfStandards": Object {
+        "completedBy": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+        "executor": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      },
+    },
+  ],
+  Array [
+    Object {
+      "_id": "71ad3d9e-e211-472b-a16d-861737c57ecd",
+      "improvementPlan": Object {
+        "owner": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      },
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "owner": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "0a87e996-34b4-46ba-909a-70ab67b1f811",
+      "assigneeId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "0a9fcc89-e14b-47af-85c3-8465ca607c29",
+      "completedBy": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "ownerId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "5adb2861-f732-4eae-81a7-5875d0231173",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "originatorId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "0c4e6054-5fd8-48a8-817c-f6611278f755",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "originatorId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "c1c93379-b46e-439f-baad-f0e408619f23",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "originatorId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "9553f193-a46a-4b46-9c0f-5287289644a6",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "originatorId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "0dea0f27-ce0c-4b4f-8ddb-5ff6adb57e12",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "originatorId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "ffad1d21-d940-48b1-8915-35ea558b9a3f",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "originatorId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "94a3416e-70e7-490f-a858-a057eeb310b6",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "originatorId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "e58df07e-0a8e-4899-8d55-5e66c65631f7",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "originatorId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "ea54ae47-3456-456e-8dbb-7f86d3b184b2",
+      "organizationId": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "originatorId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+    },
+  ],
+  Array [
+    Object {
+      "_id": "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+      "review": Object {
+        "risks": Object {
+          "reviewerId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+        },
+        "standards": Object {
+          "reviewerId": "a27218b8-6a4d-47bb-95b6-5a55334fac1c",
+        },
+      },
+    },
+  ],
+]
+`;
