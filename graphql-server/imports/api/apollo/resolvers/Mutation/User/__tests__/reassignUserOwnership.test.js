@@ -4,6 +4,7 @@ import faker from 'faker';
 import createContext from '../../../../../../share/utils/tests/createContext';
 import reassignUserOwnership from '../reassignUserOwnership';
 import Errors from '../../../../../../share/errors';
+import { UserMembership } from '../../../../../../share/constants';
 
 describe('reassignUserOwnership', () => {
   let context;
@@ -21,6 +22,8 @@ describe('reassignUserOwnership', () => {
   });
   afterAll(__closeDB);
   beforeEach(async () => {
+    context.services.UserService.reassignOwnership.mockClear();
+
     await __clearDB();
   });
 
@@ -54,6 +57,22 @@ describe('reassignUserOwnership', () => {
 
     await expect(promise).rejects.toEqual(new Error(Errors.CANNOT_REASSIGN_OWNERSHIP_TO_YOURSELF));
     expect(context.services.UserService.reassignOwnership).not.toHaveBeenCalled();
+  });
+
+  it('reassigns ownership to organization owner if no ownerId provided', async () => {
+    await context.collections.Organizations.addMembers(
+      { _id: organizationId },
+      [context.userId, { userId, role: UserMembership.ORG_OWNER }],
+    );
+
+    const _args = { input: { organizationId, userId: context.userId } };
+    await reassignUserOwnership({}, _args, context);
+
+    expect(context.services.UserService.reassignOwnership).toHaveBeenCalledWith({
+      organizationId,
+      userId: context.userId,
+      ownerId: userId,
+    }, expect.any(Object));
   });
 
   it('works', async () => {

@@ -17,7 +17,6 @@ import {
 } from '../../components';
 import { client } from '../../../apollo';
 import { swal } from '../../../util';
-import { validate, required } from '../../../validation';
 import { removeUser } from '../../../../api/organizations/methods';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 
@@ -32,53 +31,44 @@ const UserDeleteModal = ({
   <ApolloProvider {...{ client }}>
     <FlowRouterContext getParam="orgSerialNumber">
       {({ orgSerialNumber, router }) => (
-        <Mutation
-          mutation={Mutations.REASSIGN_USER_OWNERSHIP}
-          refetchQueries={() => [
-            { query: Queries.ORGANIZATION_USERS, variables: { organizationId } },
-          ]}
-        >
+        <Mutation mutation={Mutations.REASSIGN_USER_OWNERSHIP}>
           {reassignOwnership => (
             <EntityModalNext {...{ isOpen, toggle }}>
               <EntityModalForm
                 keepDirtyOnReinitialize
-                initialValues={{ user: null }}
-                onSubmit={(values) => {
-                  const errors = validate({ user: required('User') })(values);
-
-                  if (errors) return errors;
-
-                  const { user: { value } } = values;
-
-                  // BUG: when clicking on "Delete" button in modal and then on "Cancel" in alert
-                  // right modal button will permanently show saving state and disable the button.
-                  // The user then must close the modal and reopen it to proceed
-                  // swal doesn't call callback on cancel for some reason
-
-                  return swal.promise({
-                    text: `${userName} will be removed from the organization`,
-                    confirmButtonText: 'remove',
-                    successTitle: 'Removed!',
-                    successText: `${userName} has been removed from this organization`,
-                  }, () => reassignOwnership({
-                    variables: {
-                      input: {
-                        organizationId,
-                        userId,
-                        ownerId: value,
-                      },
+                initialValues={{ user: undefined }}
+                // BUG: when clicking on "Delete" button in modal and then on "Cancel" in alert
+                // right modal button will permanently show saving state and disable the button.
+                // The user then must close the modal and reopen it to proceed
+                // swal doesn't call callback on cancel for some reason
+                onSubmit={({ user: { value } = {} }) => swal.promise({
+                  text: `${userName} will be removed from the organization`,
+                  confirmButtonText: 'remove',
+                  successTitle: 'Removed!',
+                  successText: `${userName} has been removed from this organization`,
+                }, () => reassignOwnership({
+                  variables: {
+                    input: {
+                      organizationId,
+                      userId,
+                      ownerId: value,
                     },
-                  })
-                  .then(() => new Promise((resolve, rej) => {
-                    removeUser.call({ organizationId, userId }, (err, res) => {
-                      if (err) rej(err);
-                      resolve(res);
-                    });
-                  }))
-                  .then(toggle)
-                  .then(() => router.go('userDirectoryPage', { orgSerialNumber }))
-                  .then(onSuccess));
-                }}
+                  },
+                })
+                .then(() => new Promise((resolve, rej) => {
+                  removeUser.call({ organizationId, userId }, (err, res) => {
+                    if (err) rej(err);
+                    resolve(res);
+                  });
+                }))
+                // manually refetch query
+                .then(() => client.query({
+                  query: Queries.ORGANIZATION_USERS,
+                  variables: { organizationId },
+                }))
+                .then(toggle)
+                .then(() => router.go('userDirectoryPage', { orgSerialNumber }))
+                .then(onSuccess))}
               >
                 {({ handleSubmit }) => (
                   <Fragment>
