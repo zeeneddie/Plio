@@ -1,12 +1,14 @@
 import { Features } from '../../../share/collections';
 import { CollectionNames } from '../../../share/constants';
 import { getFeatureDesc, getFeatureName } from '../../../helpers/description';
-import CustomerElementAuditConfig from '../customer-elements/customer-element-audit-config';
+import { getCanvasUrl } from '../../../helpers/url';
 
-export default {
-  ...CustomerElementAuditConfig,
+export default ({ organization: { serialNumber } }) => ({
   collection: Features,
   collectionName: CollectionNames.FEATURES,
-  docName: getFeatureName,
-  docDescription: getFeatureDesc,
-};
+  description: getFeatureDesc(),
+  getDocConfig: feature => ({
+    title: getFeatureName(feature),
+    url: getCanvasUrl(serialNumber),
+  }),
+});

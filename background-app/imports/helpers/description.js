@@ -3,6 +3,7 @@ import { getTitle, generateSequentialId } from 'plio-util';
 import {
   ActionTypes,
   ProblemTypes,
+  Abbreviations,
 } from '../share/constants';
 
 // actions
@@ -60,6 +61,7 @@ export const getMilestoneDesc = () => 'milestone';
 export const getMilestoneName = getTitle;
 
 // canvas
+export const getCanvasDocName = getTitle;
 export const getKeyPartnerDesc = () => 'Key Partner';
 export const getKeyActivityDesc = () => 'Key Activity';
 export const getKeyResourceDesc = () => 'Key Resource';
@@ -78,3 +80,7 @@ export const getWantDesc = () => 'Want';
 
 export const getCustomerElementName = abbr => ({ title, serialNumber }) =>
   `${generateSequentialId(abbr, { serialNumber })} "${title}"`;
+export const getBenefitName = getCustomerElementName(Abbreviations.BENEFIT);
+export const getFeatureName = getCustomerElementName(Abbreviations.FEATURE);
+export const getNeedName = getCustomerElementName(Abbreviations.NEED);
+export const getWantName = getCustomerElementName(Abbreviations.WANT);

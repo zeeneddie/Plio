@@ -1,12 +1,14 @@
 import { Wants } from '../../../share/collections';
 import { CollectionNames } from '../../../share/constants';
 import { getWantDesc, getWantName } from '../../../helpers/description';
-import CustomerElementAuditConfig from '../customer-elements/customer-element-audit-config';
+import { getCanvasUrl } from '../../../helpers/url';
 
-export default {
-  ...CustomerElementAuditConfig,
+export default ({ organization: { serialNumber } }) => ({
   collection: Wants,
   collectionName: CollectionNames.WANTS,
-  docName: getWantName,
-  docDescription: getWantDesc,
-};
+  description: getWantDesc(),
+  getDocConfig: want => ({
+    title: getWantName(want),
+    url: getCanvasUrl(serialNumber),
+  }),
+});

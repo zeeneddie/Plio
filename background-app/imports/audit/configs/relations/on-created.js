@@ -1,7 +1,20 @@
 import { isCustomerElement, getCustomerElementData, getCustomerElementReceivers } from './helpers';
+import { getCollectionNameByDocType } from '../../../share/helpers';
 
 export default {
-  logs: [],
+  logs: [
+    {
+      shouldCreateLog: ({ newDoc }) => isCustomerElement(newDoc.rel1),
+      message:
+        '{{{rel1Desc}}} {{{rel1Name}}} was linked to ' +
+        '{{{rel2Desc}}} {{{rel2Name}}}',
+      data: ({ newDoc }) => getCustomerElementData(newDoc),
+      logData: ({ newDoc: { rel1: { documentId, documentType } } }) => ({
+        documentId,
+        collection: getCollectionNameByDocType(documentType),
+      }),
+    },
+  ],
   notifications: [
     {
       shouldSendNotification: ({ newDoc }) => isCustomerElement(newDoc.rel1),

@@ -1,12 +1,14 @@
 import { Benefits } from '../../../share/collections';
 import { CollectionNames } from '../../../share/constants';
 import { getBenefitDesc, getBenefitName } from '../../../helpers/description';
-import CustomerElementAuditConfig from '../customer-elements/customer-element-audit-config';
+import { getCanvasUrl } from '../../../helpers/url';
 
-export default {
-  ...CustomerElementAuditConfig,
+export default ({ organization: { serialNumber } }) => ({
   collection: Benefits,
   collectionName: CollectionNames.BENEFITS,
-  docName: getBenefitName,
-  docDescription: getBenefitDesc,
-};
+  description: getBenefitDesc(),
+  getDocConfig: benefit => ({
+    title: getBenefitName(benefit),
+    url: getCanvasUrl(serialNumber),
+  }),
+});

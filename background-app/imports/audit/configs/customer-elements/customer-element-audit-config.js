@@ -1,9 +1,9 @@
 import { getId, getOrganizationId } from 'plio-util';
 
-import { getCanvasUrl } from '../../../helpers/url';
 import onCreated from './on-created';
 import onRemoved from './on-removed';
 import * as UpdateHandlers from './fields';
+import CanvasAuditConfig from '../canvas/canvas-audit-config';
 
 export default {
   onCreated,
@@ -11,5 +11,5 @@ export default {
   updateHandlers: Object.values(UpdateHandlers),
   docId: getId,
   docOrgId: getOrganizationId,
-  docUrl: getCanvasUrl,
+  docUrl: CanvasAuditConfig.docUrl.bind(CanvasAuditConfig),
 };

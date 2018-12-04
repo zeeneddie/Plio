@@ -1,8 +1,8 @@
 import moment from 'moment-timezone';
 import pluralize from 'pluralize';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { DefaultDateFormat } from '/imports/share/constants.js';
+import { Organizations } from '../share/collections';
+import { DefaultDateFormat } from '../share/constants';
 
 export const getPrettyTzDate = (date, timezone = 'UTC', format = DefaultDateFormat) => (
   moment(date).tz(timezone).format(format)
