@@ -21,7 +21,7 @@ Template.ESSources.viewmodel({
       fileUrl: url,
       htmlFileName: `${fileObj.name}.html`,
       source: `source${this.id ? this.id() : ''}`,
-      standardId: this.standardId() || this.parent()._id(),
+      standardId: (this.standardId && this.standardId()) || this.parent()._id(),
     }, cb);
   },
   onRemoveSourceFile(err) {
