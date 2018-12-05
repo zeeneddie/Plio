@@ -8,7 +8,7 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { ApolloFetchPolicies, GraphQLTypenames } from '../../../../api/constants';
 import CanvasSectionItems from './CanvasSectionItems';
 import CanvasSectionItem from './CanvasSectionItem';
-import CanvasSquareIcon from './CanvasSquareIcon';
+import CanvasDraggableSquareIcon from './CanvasDraggableSquareIcon';
 import CanvasLinkedItem from './CanvasLinkedItem';
 import { WithState } from '../../helpers';
 
@@ -72,7 +72,7 @@ const CanvasItemList = ({
                       data-id={_id}
                       onClick={() => setState({ _id })}
                     >
-                      <CanvasSquareIcon color={color} />
+                      <CanvasDraggableSquareIcon color={color} />
                       <span>
                         {title}
                         {matchedTo && (

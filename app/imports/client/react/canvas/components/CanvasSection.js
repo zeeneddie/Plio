@@ -20,6 +20,10 @@ const CanvasSection = styled.div`
   ${StyledMixins.media.tabletPortrait`
     max-height: 400px;
   `}
+  
+  ${StyledMixins.media.print`
+    max-height: inherit;
+  `}
 
   ${is('empty')`
     &:hover {

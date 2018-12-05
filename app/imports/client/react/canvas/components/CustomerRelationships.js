@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
 import { pure } from 'recompose';
 
 import CustomerRelationshipAddModal from './CustomerRelationshipAddModal';
 import CustomerRelationshipEditModal from './CustomerRelationshipEditModal';
 import CanvasBlock from './CanvasBlock';
+import CustomerRelationshipsHelp from './CustomerRelationshipsHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { CanvasSections, CanvasTypes } from '../../../../share/constants';
@@ -21,12 +22,7 @@ const CustomerRelationships = ({ organizationId }) => (
         {...{ organizationId }}
         label="Customer relationships"
         sectionName={CanvasSections[CanvasTypes.CUSTOMER_RELATIONSHIP]}
-        help={(
-          <Fragment>
-            <p>What type of relationship do you want with customers?</p>
-            <p>Which fits best with each segment?</p>
-          </Fragment>
-        )}
+        help={<CustomerRelationshipsHelp />}
         items={customerRelationships}
         renderModal={({ isOpen, toggle }) => (
           <CustomerRelationshipAddModal {...{ isOpen, toggle, organizationId }} />

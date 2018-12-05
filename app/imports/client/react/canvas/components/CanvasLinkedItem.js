@@ -19,8 +19,8 @@ CanvasLinkedItem.propTypes = {
 const StyledCanvasLinkedItem = styled(CanvasLinkedItem)`
   overflow: hidden;
   color: ${Styles.color.muted};
-  margin-top: 2px;
   line-height: 1.4;
+  padding: 2px 7px 5px 7px;
 
   i {
     line-height: inherit;

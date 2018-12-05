@@ -49,6 +49,9 @@ export const renderTransitionalLayout = renderComponent(async () =>
 export const renderCanvasLayout = renderComponent(async () =>
   import('../../../client/react/canvas/components/CanvasLayout'));
 
+export const renderCanvasReportLayout = renderComponent(async () =>
+  import('../../../client/react/canvas/components/CanvasReportLayout'));
+
 /* BLAZE */
 
 export const renderNcs = renderBlazeComponent(async () => {

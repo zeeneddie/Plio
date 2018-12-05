@@ -26,7 +26,9 @@ import COST_LINES from './CostLines.graphql';
 import REVENUE_STREAMS from './RevenueStreams.graphql';
 import CHANNELS from './Channels.graphql';
 import CANVAS_LAYOUT from './CanvasLayout.graphql';
+import CANVAS_REPORT_LAYOUT from './CanvasReportLayout.graphql';
 import CANVAS_PAGE from './CanvasPage.graphql';
+import CANVAS_REPORT_PAGE from './CanvasReportPage.graphql';
 import CURRENT_USER_FULL_NAME from './CurrentUserFullName.graphql';
 import VALUE_PROPOSITION_LIST from './ValuePropositionList.graphql';
 import CUSTOMER_SEGMENT_LIST from './CustomerSegmentList.graphql';
@@ -85,6 +87,7 @@ export default {
   ACTION_CARD,
   MILESTONE_NOTIFY_CARD,
   CANVAS_LAYOUT,
+  CANVAS_REPORT_LAYOUT,
   CANVAS_PAGE,
   KEY_PARTNERS,
   KEY_ACTIVITIES,
@@ -128,4 +131,5 @@ export default {
   PROJECT_COUNT,
   DEPARTMENT_COUNT,
   CATEGORIZE_LIST,
+  CANVAS_REPORT_PAGE,
 };

@@ -11,8 +11,8 @@ const Canvas = styled.div`
     min-height: ${CanvasStyles.itemMinHeight * 3}px;
     flex: 1;
   `}
-
-  ${StyledMixins.media.desktop`
+  
+  ${StyledMixins.media.printAndDesktop`
     display: flex;
     flex-direction: column;
   `}

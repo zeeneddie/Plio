@@ -11,6 +11,17 @@ import {
   always,
   filter,
   whereEq,
+  map,
+  pick,
+  reduce,
+  mergeWith,
+  uniq,
+  concat,
+  addIndex,
+  sum,
+  subtract,
+  reject,
+  isNil,
 } from 'ramda';
 
 import {
@@ -18,6 +29,8 @@ import {
   CustomerElementStatuses,
   Criticality,
   CriticalityLevels,
+  Colors,
+  MAX_TOTAL_PERCENT,
 } from '../../../share/constants';
 
 export const getCustomerElementInitialValues = () => ({
@@ -74,3 +87,33 @@ export const getCriticalityLevelLabel = (value) => {
 };
 
 export const getCriticalityValueLabel = value => `${getCriticalityLevelLabel(value)} - ${value}%`;
+
+const pickLinkedDocs = map(pick([
+  'goals',
+  'standards',
+  'risks',
+  'nonconformities',
+  'potentialGains',
+]));
+const mergeAllWithConcat = reduce(mergeWith(compose(uniq, concat)), {});
+export const buildLinkedDocsData = compose(mergeAllWithConcat, pickLinkedDocs);
+
+const palette = Object.values(Colors);
+const getColorByIndex = index => palette[index % palette.length];
+export const generateColors = addIndex(map)((item, index) => getColorByIndex(index));
+
+export const getOtherPercent = compose(
+  subtract(MAX_TOTAL_PERCENT),
+  sum,
+  reject(isNil),
+);
+
+export const getKeyPartnerChartData = addIndex(map)(({
+  levelOfSpend,
+  criticality,
+  title,
+}, index) => ({
+  data: [{ x: levelOfSpend, y: criticality }],
+  backgroundColor: getColorByIndex(index),
+  label: title,
+}));

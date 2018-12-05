@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
 import { pure } from 'recompose';
 
@@ -7,6 +7,7 @@ import KeyPartnerAddModal from './KeyPartnerAddModal';
 import KeyPartnerEditModal from './KeyPartnerEditModal';
 import KeyPartnersChartModal from './KeyPartnersChartModal';
 import CanvasBlock from './CanvasBlock';
+import KeyPartnersHelp from './KeyPartnersHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { CanvasSections, CanvasTypes } from '../../../../share/constants';
@@ -22,12 +23,7 @@ const KeyPartners = ({ organizationId }) => (
         {...{ organizationId }}
         label="Key partners"
         sectionName={CanvasSections[CanvasTypes.KEY_PARTNER]}
-        help={(
-          <Fragment>
-            <p>Who are our key partners/suppliers?</p>
-            <p>Which key resources do they provide?</p>
-          </Fragment>
-        )}
+        help={<KeyPartnersHelp />}
         items={keyPartners}
         renderModal={({ isOpen, toggle }) => (
           <KeyPartnerAddModal {...{ isOpen, toggle, organizationId }} />

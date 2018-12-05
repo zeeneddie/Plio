@@ -20,6 +20,7 @@ import {
   renderHelpDocs,
   renderTransitionalLayout,
   renderCanvasLayout,
+  renderCanvasReportLayout,
   renderNcs,
   renderWorkInbox,
   renderUserDirectory,
@@ -356,4 +357,10 @@ FlowRouter.route('/:orgSerialNumber/canvas', {
   name: 'canvas',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action: renderCanvasLayout(),
+});
+
+FlowRouter.route('/:orgSerialNumber/canvas/report', {
+  name: 'canvasReport',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action: renderCanvasReportLayout(),
 });

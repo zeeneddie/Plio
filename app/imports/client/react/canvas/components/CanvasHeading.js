@@ -1,9 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
+import styled from 'styled-components';
 
+import { Icon } from '../../components';
 import CanvasSectionHeading from './CanvasSectionHeading';
 import CanvasSectionHelp from './CanvasSectionHelp';
 import CanvasAddButton from './CanvasAddButton';
+
+const StyledIcon = styled(Icon)`
+  font-size: 24px;
+`;
 
 const CanvasHeading = ({
   label,
@@ -12,12 +18,17 @@ const CanvasHeading = ({
   toggle,
   isEmpty,
   help,
+  icon,
 }) => (
   <Fragment>
     <CanvasSectionHeading>
       <h4>{label}</h4>
-      {renderModal({ isOpen, toggle })}
-      <CanvasAddButton onClick={isEmpty ? undefined : toggle} />
+      {!!renderModal && renderModal({ isOpen, toggle })}
+      {toggle ? (
+        <CanvasAddButton {...{ icon }} onClick={isEmpty ? undefined : toggle} />
+      ) : (
+        !!icon && <StyledIcon name={icon} />
+      )}
     </CanvasSectionHeading>
     {isEmpty && help && (
       <CanvasSectionHelp>
@@ -29,11 +40,12 @@ const CanvasHeading = ({
 
 CanvasHeading.propTypes = {
   label: PropTypes.string.isRequired,
-  renderModal: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  toggle: PropTypes.func.isRequired,
   isEmpty: PropTypes.bool.isRequired,
+  renderModal: PropTypes.func,
+  isOpen: PropTypes.bool,
+  toggle: PropTypes.func,
   help: PropTypes.node,
+  icon: PropTypes.string,
 };
 
 export default CanvasHeading;

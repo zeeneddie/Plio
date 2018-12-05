@@ -2,19 +2,11 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { ButtonGroup } from 'reactstrap';
 import { bySerialNumber, byTitle } from 'plio-util';
-import {
-  concat,
-  mergeWith,
-  reduce,
-  sort,
-  compose,
-  uniq,
-  map,
-  pick,
-} from 'ramda';
+import { concat, sort } from 'ramda';
 
 import { DocumentTypes } from '../../../../share/constants';
 import { WithToggle, WithState } from '../../helpers';
+import { buildLinkedDocsData } from '../helpers';
 import CanvasSectionFooter from './CanvasSectionFooter';
 import CanvasSectionFooterLabels from './CanvasSectionFooterLabels';
 import CanvasFooterItems from './CanvasFooterItems';
@@ -22,16 +14,6 @@ import CanvasFooterItem from './CanvasFooterItem';
 import CanvasStandardFooterItem from './CanvasStandardFooterItem';
 import CanvasChartButton from './CanvasChartButton';
 import CanvasLinkedModal from './CanvasLinkedModal';
-
-const pickLinkedDocs = map(pick([
-  'goals',
-  'standards',
-  'risks',
-  'nonconformities',
-  'potentialGains',
-]));
-const mergeAllWithConcat = reduce(mergeWith(compose(uniq, concat)), {});
-const concatLinkedDocs = compose(mergeAllWithConcat, pickLinkedDocs);
 
 const CanvasFooter = ({
   items,
@@ -46,7 +28,7 @@ const CanvasFooter = ({
     risks = [],
     nonconformities = [],
     potentialGains = [],
-  } = concatLinkedDocs(items);
+  } = buildLinkedDocsData(items);
   const nonconformitiesAndGains = concat(nonconformities, potentialGains);
 
   return (

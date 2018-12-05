@@ -367,6 +367,7 @@ export const Styles = {
   background: {
     color: {
       lightGrey: '#f5f5f5',
+      white: '#fff',
     },
   },
 };
@@ -383,6 +384,7 @@ export const GraphQLTypenames = {
 
 export const RouteNames = {
   CANVAS: 'canvas',
+  CANVAS_REPORT: 'canvasReport',
   DASHBOARD: 'dashboardPage',
   CUSTOMERS: 'customers',
   HELLO: 'hello',

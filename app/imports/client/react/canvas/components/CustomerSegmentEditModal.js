@@ -213,8 +213,8 @@ const CustomerSegmentEditModal = ({
                           />
                           <CustomerInsightsSubcard
                             {...{ organizationId }}
-                            benefits={customerSegment.benefits || []}
-                            features={customerSegment.features || []}
+                            needs={customerSegment.needs || []}
+                            wants={customerSegment.wants || []}
                             documentId={customerSegment._id}
                             matchedTo={customerSegment.matchedTo}
                             documentType={CanvasTypes.CUSTOMER_SEGMENT}

@@ -31,7 +31,7 @@ const CanvasSectionItem = styled.li`
 `;
 
 CanvasSectionItem.propTypes = {
-  'data-id': PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  'data-id': PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default CanvasSectionItem;

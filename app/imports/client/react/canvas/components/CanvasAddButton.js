@@ -8,14 +8,15 @@ import { Icon } from '../../components';
 
 import { canvasIconStyles } from '../styled';
 
-const CanvasAddButton = ({ className, ...props }) => (
+const CanvasAddButton = ({ className, icon = 'plus', ...props }) => (
   <Button className={cx('btn-link', className)} color="add" {...props}>
-    <Icon name="plus" />
+    <Icon name={icon} />
   </Button>
 );
 
 CanvasAddButton.propTypes = {
   className: PropTypes.string,
+  icon: PropTypes.string,
 };
 
 const StyledCanvasAddButton = styled(CanvasAddButton)`

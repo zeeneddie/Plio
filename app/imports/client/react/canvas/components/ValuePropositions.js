@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
 import { pure } from 'recompose';
 
 import ValuePropositionAddModal from './ValuePropositionAddModal';
 import ValuePropositionEditModal from './ValuePropositionEditModal';
 import CanvasBlock from './CanvasBlock';
+import ValuePropositionsHelp from './ValuePropositionsHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { CanvasSections, CanvasTypes } from '../../../../share/constants';
@@ -21,14 +22,7 @@ const ValuePropositions = ({ organizationId }) => (
         {...{ organizationId }}
         label="Value propositions"
         sectionName={CanvasSections[CanvasTypes.VALUE_PROPOSITION]}
-        help={(
-          <Fragment>
-            {/* eslint-disable react/no-unescaped-entities */}
-            <p>Which of our customer's problems are we helping to solve?</p>
-            <p>What does a winning value proposition look like, vs today's?</p>
-            {/* eslint-disable react/no-unescaped-entities */}
-          </Fragment>
-        )}
+        help={<ValuePropositionsHelp />}
         items={valuePropositions}
         renderModal={({ isOpen, toggle }) => (
           <ValuePropositionAddModal {...{ isOpen, toggle, organizationId }} />
