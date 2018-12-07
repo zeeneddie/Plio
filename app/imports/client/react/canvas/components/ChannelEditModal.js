@@ -10,7 +10,7 @@ import {
   getIds,
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
-import { pure } from 'recompose';
+import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -29,17 +29,11 @@ import {
   RenderSwitch,
 } from '../../components';
 import CanvasSubcards from './CanvasSubcards';
-import activelyManage from '../../forms/decorators/activelyManage';
 
 const getChannel = pathOr({}, repeat('channel', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
-  over(lenses.risks, getIds),
-  over(lenses.goals, getIds),
-  over(lenses.standards, getIds),
-  over(lenses.nonconformities, getIds),
-  over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
   over(lenses.files, defaultTo([])),
   pick([
@@ -48,14 +42,18 @@ const getInitialValues = compose(
     'color',
     'notes',
     'notify',
-    'risks',
-    'goals',
-    'standards',
-    'nonconformities',
-    'potentialGains',
     'lessons',
   ]),
   getChannel,
+);
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.CHANNEL_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
 );
 
 const ChannelEditModal = ({
@@ -63,6 +61,7 @@ const ChannelEditModal = ({
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -108,7 +107,6 @@ const ChannelEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
-              decorators={[activelyManage]}
               validate={validateChannel}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -122,11 +120,6 @@ const ChannelEditModal = ({
                   color,
                   notes = '',
                   notify = [],
-                  risks: riskIds,
-                  goals: goalIds,
-                  standards: standardsIds,
-                  nonconformities: nonconformityIds,
-                  potentialGains: potentialGainIds,
                   files = [],
                 } = values;
 
@@ -137,11 +130,6 @@ const ChannelEditModal = ({
                       title,
                       notes,
                       color,
-                      riskIds,
-                      goalIds,
-                      standardsIds,
-                      nonconformityIds,
-                      potentialGainIds,
                       notify: getValues(notify),
                       fileIds: files,
                       originatorId: originator.value,
@@ -168,10 +156,9 @@ const ChannelEditModal = ({
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
                           <CanvasSubcards
-                            {...{ organizationId }}
+                            {...{ organizationId, refetchQueries }}
                             section={channel}
                             onChange={handleSubmit}
-                            refetchQuery={Queries.CHANNEL_CARD}
                             documentType={CanvasTypes.CHANNEL}
                             slingshotDirective={AWSDirectives.CHANNEL_FILES}
                             user={data && data.user}
@@ -195,6 +182,7 @@ ChannelEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(ChannelEditModal);
+export default enhance(ChannelEditModal);

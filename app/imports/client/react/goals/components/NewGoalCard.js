@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { pure } from 'recompose';
 
 import {
   CardBlock,
@@ -32,4 +33,4 @@ NewGoalCard.propTypes = {
   goalIds: PropTypes.array,
 };
 
-export default NewGoalCard;
+export default pure(NewGoalCard);

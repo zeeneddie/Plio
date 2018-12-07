@@ -10,7 +10,7 @@ import {
   getValues,
   getIds,
 } from 'plio-util';
-import { pure } from 'recompose';
+import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -29,17 +29,11 @@ import {
   RenderSwitch,
 } from '../../components';
 import CanvasSubcards from './CanvasSubcards';
-import activelyManage from '../../forms/decorators/activelyManage';
 
 const getCustomerRelationship = pathOr({}, repeat('customerRelationship', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
-  over(lenses.risks, getIds),
-  over(lenses.goals, getIds),
-  over(lenses.standards, getIds),
-  over(lenses.nonconformities, getIds),
-  over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
   over(lenses.files, defaultTo([])),
   pick([
@@ -48,14 +42,18 @@ const getInitialValues = compose(
     'color',
     'notes',
     'notify',
-    'risks',
-    'goals',
-    'standards',
-    'nonconformities',
-    'potentialGains',
     'lessons',
   ]),
   getCustomerRelationship,
+);
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.CUSTOMER_RELATIONSHIP_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
 );
 
 const CustomerRelationshipEditModal = ({
@@ -63,6 +61,7 @@ const CustomerRelationshipEditModal = ({
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -108,7 +107,6 @@ const CustomerRelationshipEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
-              decorators={[activelyManage]}
               validate={validateCustomerRelationship}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -122,11 +120,6 @@ const CustomerRelationshipEditModal = ({
                   color,
                   notes = '',
                   notify = [],
-                  risks: riskIds,
-                  goals: goalIds,
-                  standards: standardsIds,
-                  nonconformities: nonconformityIds,
-                  potentialGains: potentialGainIds,
                   files = [],
                 } = values;
 
@@ -137,11 +130,6 @@ const CustomerRelationshipEditModal = ({
                       title,
                       notes,
                       color,
-                      riskIds,
-                      goalIds,
-                      standardsIds,
-                      nonconformityIds,
-                      potentialGainIds,
                       notify: getValues(notify),
                       fileIds: files,
                       originatorId: originator.value,
@@ -170,10 +158,9 @@ const CustomerRelationshipEditModal = ({
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
                           <CanvasSubcards
-                            {...{ organizationId }}
+                            {...{ organizationId, refetchQueries }}
                             section={customerRelationship}
                             onChange={handleSubmit}
-                            refetchQuery={Queries.CUSTOMER_RELATIONSHIP_CARD}
                             documentType={CanvasTypes.CUSTOMER_RELATIONSHIP}
                             slingshotDirective={AWSDirectives.CUSTOMER_RELATIONSHIP_FILES}
                             user={data && data.user}
@@ -197,6 +184,7 @@ CustomerRelationshipEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(CustomerRelationshipEditModal);
+export default enhance(CustomerRelationshipEditModal);

@@ -52,36 +52,6 @@ const CanvasSchema = new SimpleSchema([
         return undefined;
       },
     },
-    goalIds: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true,
-      defaultValue: [],
-    },
-    standardsIds: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true,
-      defaultValue: [],
-    },
-    riskIds: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true,
-      defaultValue: [],
-    },
-    nonconformityIds: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true,
-      defaultValue: [],
-    },
-    potentialGainIds: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true,
-      defaultValue: [],
-    },
   },
 ]);
 

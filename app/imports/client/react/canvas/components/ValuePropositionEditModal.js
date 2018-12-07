@@ -12,7 +12,7 @@ import {
   getIds,
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
-import { pure } from 'recompose';
+import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -32,18 +32,12 @@ import {
   RenderSwitch,
 } from '../../components';
 import CanvasSubcards from './CanvasSubcards';
-import activelyManage from '../../forms/decorators/activelyManage';
 
 const getValueProposition = pathOr({}, repeat('valueProposition', 2));
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
-  over(lenses.risks, getIds),
-  over(lenses.goals, getIds),
-  over(lenses.standards, getIds),
-  over(lenses.nonconformities, getIds),
-  over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
   over(lenses.files, defaultTo([])),
   pick([
@@ -53,14 +47,18 @@ const getInitialValues = compose(
     'matchedTo',
     'notes',
     'notify',
-    'risks',
-    'goals',
-    'standards',
-    'nonconformities',
-    'potentialGains',
     'lessons',
   ]),
   getValueProposition,
+);
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.VALUE_PROPOSITION_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
 );
 
 const ValuePropositionEditModal = ({
@@ -68,6 +66,7 @@ const ValuePropositionEditModal = ({
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -126,7 +125,6 @@ const ValuePropositionEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
-              decorators={[activelyManage]}
               validate={validateValueProposition}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -141,11 +139,6 @@ const ValuePropositionEditModal = ({
                   matchedTo,
                   notes = '',
                   notify = [],
-                  risks: riskIds,
-                  goals: goalIds,
-                  standards: standardsIds,
-                  nonconformities: nonconformityIds,
-                  potentialGains: potentialGainIds,
                   files = [],
                 } = values;
 
@@ -172,11 +165,6 @@ const ValuePropositionEditModal = ({
                       title,
                       notes,
                       color,
-                      riskIds,
-                      goalIds,
-                      standardsIds,
-                      nonconformityIds,
-                      potentialGainIds,
                       notify: getValues(notify),
                       fileIds: files,
                       originatorId: originator.value,
@@ -217,10 +205,9 @@ const ValuePropositionEditModal = ({
                             documentType={CanvasTypes.VALUE_PROPOSITION}
                           />
                           <CanvasSubcards
-                            {...{ organizationId }}
+                            {...{ organizationId, refetchQueries }}
                             section={valueProposition}
                             onChange={handleSubmit}
-                            refetchQuery={Queries.VALUE_PROPOSITION_CARD}
                             documentType={CanvasTypes.VALUE_PROPOSITION}
                             slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
                             user={data && data.user}
@@ -244,6 +231,7 @@ ValuePropositionEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(ValuePropositionEditModal);
+export default enhance(ValuePropositionEditModal);

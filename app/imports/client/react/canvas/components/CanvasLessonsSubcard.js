@@ -5,7 +5,7 @@ import { LessonsSubcard, LessonAddContainer } from '../../lessons';
 
 const CanvasLessonsSubcard = ({
   linkedTo,
-  refetchQuery,
+  refetchQueries,
   documentType,
   organizationId,
   lessons,
@@ -15,7 +15,7 @@ const CanvasLessonsSubcard = ({
   <LessonAddContainer
     {...{
       linkedTo,
-      refetchQuery,
+      refetchQueries,
       documentType,
       organizationId,
       lessons,
@@ -35,7 +35,7 @@ CanvasLessonsSubcard.propTypes = {
     title: PropTypes.string.isRequired,
   }).isRequired,
   organizationId: PropTypes.string.isRequired,
-  refetchQuery: PropTypes.object.isRequired,
+  refetchQueries: PropTypes.func.isRequired,
   documentType: PropTypes.string.isRequired,
   onLink: PropTypes.func.isRequired,
   onUnlink: PropTypes.func.isRequired,

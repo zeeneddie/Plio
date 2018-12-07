@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { pure } from 'recompose';
 
 import {
   CardBlock,
@@ -43,4 +44,4 @@ NewRiskCard.propTypes = {
   linkedTo: PropTypes.object,
 };
 
-export default NewRiskCard;
+export default pure(NewRiskCard);
