@@ -19,6 +19,7 @@ const RiskForm = ({
   guidelines,
   sequentialId,
   save,
+  isEditMode,
 }) => (
   <CardBlock>
     <FormField>
@@ -60,7 +61,7 @@ const RiskForm = ({
     </FormField>
     <Magnitudes label="Initial categorization" {...{ guidelines }}>
       <Magnitudes.Select
-        disabled
+        disabled={isEditMode}
         name="magnitude"
         onChange={save}
         component={SelectField}
@@ -85,6 +86,7 @@ RiskForm.propTypes = {
   sequentialId: PropTypes.string,
   children: PropTypes.node,
   save: PropTypes.func,
+  isEditMode: PropTypes.bool,
 };
 
 export default RiskForm;

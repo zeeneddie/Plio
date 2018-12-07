@@ -24,6 +24,7 @@ const RiskEditForm = ({
 }) => (
   <Fragment>
     <RiskForm
+      isEdit
       {...{
         organizationId,
         guidelines,
