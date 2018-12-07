@@ -11,6 +11,7 @@ import {
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure } from 'recompose';
+import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -28,7 +29,6 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import CanvasSubcards from './CanvasSubcards';
 import activelyManage from '../../forms/decorators/activelyManage';
 
 const getChannel = pathOr({}, repeat('channel', 2));
@@ -57,6 +57,12 @@ const getInitialValues = compose(
   ]),
   getChannel,
 );
+
+const DelayedCanvasSubcards = delayed({
+  loader: () => import('./CanvasSubcards'),
+  idle: true,
+  delay: 200,
+});
 
 const ChannelEditModal = ({
   isOpen,
@@ -167,7 +173,7 @@ const ChannelEditModal = ({
                       {channel => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasSubcards
+                          <DelayedCanvasSubcards
                             {...{ organizationId }}
                             section={channel}
                             onChange={handleSubmit}

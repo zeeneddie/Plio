@@ -11,6 +11,7 @@ import {
   getIds,
 } from 'plio-util';
 import { pure } from 'recompose';
+import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -28,7 +29,6 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import CanvasSubcards from './CanvasSubcards';
 import activelyManage from '../../forms/decorators/activelyManage';
 
 const getCustomerRelationship = pathOr({}, repeat('customerRelationship', 2));
@@ -57,6 +57,12 @@ const getInitialValues = compose(
   ]),
   getCustomerRelationship,
 );
+
+const DelayedCanvasSubcards = delayed({
+  loader: () => import('./CanvasSubcards'),
+  idle: true,
+  delay: 200,
+});
 
 const CustomerRelationshipEditModal = ({
   isOpen,
@@ -169,7 +175,7 @@ const CustomerRelationshipEditModal = ({
                       {customerRelationship => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasSubcards
+                          <DelayedCanvasSubcards
                             {...{ organizationId }}
                             section={customerRelationship}
                             onChange={handleSubmit}

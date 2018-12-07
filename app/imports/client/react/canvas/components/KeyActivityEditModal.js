@@ -12,6 +12,7 @@ import {
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure } from 'recompose';
+import { delayed } from 'libreact/lib/delayed';
 
 import { swal } from '../../../util';
 import { AWSDirectives, CanvasTypes } from '../../../../share/constants';
@@ -28,7 +29,6 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import CanvasSubcards from './CanvasSubcards';
 import activelyManage from '../../forms/decorators/activelyManage';
 
 const getKeyActivity = pathOr({}, repeat('keyActivity', 2));
@@ -57,6 +57,12 @@ const getInitialValues = compose(
   ]),
   getKeyActivity,
 );
+
+const DelayedCanvasSubcards = delayed({
+  loader: () => import('./CanvasSubcards'),
+  idle: true,
+  delay: 200,
+});
 
 const KeyActivityEditModal = ({
   isOpen,
@@ -167,7 +173,7 @@ const KeyActivityEditModal = ({
                       {keyActivity => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasSubcards
+                          <DelayedCanvasSubcards
                             {...{ organizationId }}
                             section={keyActivity}
                             onChange={handleSubmit}

@@ -13,16 +13,16 @@ import {
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure } from 'recompose';
+import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
-import { AWSDirectives, CanvasTypes } from '../../../../share/constants';
+import { CanvasTypes } from '../../../../share/constants';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateValueProposition } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
-import ValueComponentsSubcard from './ValueComponentsSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -31,7 +31,6 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import CanvasSubcards from './CanvasSubcards';
 import activelyManage from '../../forms/decorators/activelyManage';
 
 const getValueProposition = pathOr({}, repeat('valueProposition', 2));
@@ -62,6 +61,12 @@ const getInitialValues = compose(
   ]),
   getValueProposition,
 );
+
+const DelayedValuePropositionSubcards = delayed({
+  loader: () => import('./ValuePropositionSubcards'),
+  idle: true,
+  delay: 200,
+});
 
 const ValuePropositionEditModal = ({
   isOpen,
@@ -208,21 +213,9 @@ const ValuePropositionEditModal = ({
                             matchedTo={valueProposition.matchedTo}
                             save={handleSubmit}
                           />
-                          <ValueComponentsSubcard
-                            {...{ organizationId }}
-                            benefits={valueProposition.benefits || []}
-                            features={valueProposition.features || []}
-                            documentId={valueProposition._id}
-                            matchedTo={valueProposition.matchedTo}
-                            documentType={CanvasTypes.VALUE_PROPOSITION}
-                          />
-                          <CanvasSubcards
-                            {...{ organizationId }}
-                            section={valueProposition}
+                          <DelayedValuePropositionSubcards
+                            {...{ organizationId, valueProposition }}
                             onChange={handleSubmit}
-                            refetchQuery={Queries.VALUE_PROPOSITION_CARD}
-                            documentType={CanvasTypes.VALUE_PROPOSITION}
-                            slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
                             user={data && data.user}
                           />
                         </Fragment>

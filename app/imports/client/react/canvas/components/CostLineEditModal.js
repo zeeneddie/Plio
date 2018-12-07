@@ -11,6 +11,7 @@ import {
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure } from 'recompose';
+import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -28,7 +29,6 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import CanvasSubcards from './CanvasSubcards';
 import activelyManage from '../../forms/decorators/activelyManage';
 
 const getCostLine = pathOr({}, repeat('costLine', 2));
@@ -58,6 +58,12 @@ const getInitialValues = compose(
   ]),
   getCostLine,
 );
+
+const DelayedCanvasSubcards = delayed({
+  loader: () => import('./CanvasSubcards'),
+  idle: true,
+  delay: 200,
+});
 
 const CostLineEditModal = ({
   isOpen,
@@ -170,7 +176,7 @@ const CostLineEditModal = ({
                       {costLine => (
                         <Fragment>
                           <CostLineForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasSubcards
+                          <DelayedCanvasSubcards
                             {...{ organizationId }}
                             section={costLine}
                             onChange={handleSubmit}

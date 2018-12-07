@@ -13,16 +13,16 @@ import {
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure } from 'recompose';
+import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
-import { AWSDirectives, CanvasTypes } from '../../../../share/constants';
+import { CanvasTypes } from '../../../../share/constants';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCustomerSegment } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CustomerSegmentForm from './CustomerSegmentForm';
-import CustomerInsightsSubcard from './CustomerInsightsSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -31,7 +31,6 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import CanvasSubcards from './CanvasSubcards';
 import activelyManage from '../../forms/decorators/activelyManage';
 
 const getCustomerSegment = pathOr({}, repeat('customerSegment', 2));
@@ -63,6 +62,12 @@ const getInitialValues = compose(
   ]),
   getCustomerSegment,
 );
+
+const DelayedCustomerSegmentSubcards = delayed({
+  loader: () => import('./CustomerSegmentSubcards'),
+  idle: true,
+  delay: 200,
+});
 
 const CustomerSegmentEditModal = ({
   isOpen,
@@ -211,21 +216,10 @@ const CustomerSegmentEditModal = ({
                             matchedTo={customerSegment.matchedTo}
                             save={handleSubmit}
                           />
-                          <CustomerInsightsSubcard
+                          <DelayedCustomerSegmentSubcards
                             {...{ organizationId }}
-                            needs={customerSegment.needs || []}
-                            wants={customerSegment.wants || []}
-                            documentId={customerSegment._id}
-                            matchedTo={customerSegment.matchedTo}
-                            documentType={CanvasTypes.CUSTOMER_SEGMENT}
-                          />
-                          <CanvasSubcards
-                            {...{ organizationId }}
-                            section={customerSegment}
+                            customerSegment={customerSegment}
                             onChange={handleSubmit}
-                            refetchQuery={Queries.CUSTOMER_SEGMENT_CARD}
-                            documentType={CanvasTypes.CUSTOMER_SEGMENT}
-                            slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
                             user={data && data.user}
                           />
                         </Fragment>

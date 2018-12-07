@@ -11,6 +11,7 @@ import {
   getIds,
 } from 'plio-util';
 import { pure } from 'recompose';
+import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -29,7 +30,6 @@ import { WithState, Composer } from '../../helpers';
 import activelyManage from '../../forms/decorators/activelyManage';
 import KeyPartnerForm from './KeyPartnerForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
-import CanvasSubcards from './CanvasSubcards';
 
 const keyPartnerPath = repeat('keyPartner', 2);
 const getKeyPartner = path(keyPartnerPath);
@@ -60,6 +60,12 @@ const getInitialValues = compose(
   ]),
   pathOr({}, keyPartnerPath),
 );
+
+const DelayedCanvasSubcards = delayed({
+  loader: () => import('./CanvasSubcards'),
+  idle: true,
+  delay: 200,
+});
 
 const KeyPartnerEditModal = ({
   isOpen,
@@ -176,7 +182,7 @@ const KeyPartnerEditModal = ({
                         {() => (
                           <Fragment>
                             <KeyPartnerForm {...{ organizationId }} save={handleSubmit} />
-                            <CanvasSubcards
+                            <DelayedCanvasSubcards
                               {...{ organizationId }}
                               section={keyPartner}
                               onChange={handleSubmit}
