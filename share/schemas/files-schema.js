@@ -12,14 +12,6 @@ export const RequiredSchema = new SimpleSchema([
     },
     extension: {
       type: String,
-      optional: true,
-      autoValue() {
-        if (this.isInsert) {
-          const name = this.field('name').value;
-          return name.split('.').pop().toLowerCase();
-        }
-        return undefined;
-      },
     },
   },
 ]);

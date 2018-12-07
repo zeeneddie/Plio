@@ -1,14 +1,13 @@
 import { Meteor } from 'meteor/meteor';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import { toastr } from 'meteor/chrismbeckett:toastr';
-import { _ } from 'meteor/underscore';
 
 import {
   insert as insertFile,
   updateUrl,
   updateProgress,
   terminateUploading,
-} from '../../../api/files/methods.js';
+} from '/imports/api/files/methods.js';
 
 export default {
   uploadData(fileId) { // find the file with fileId is being uploaded
@@ -18,7 +17,7 @@ export default {
     const uploadData = this.uploadData(fileId);
     const uploader = uploadData && uploadData.uploader;
     if (uploader) {
-      if (uploader.xhr) uploader.xhr.abort();
+      uploader.xhr && uploader.xhr.abort();
       this.removeUploadData(fileId);
     }
     terminateUploading.call({
@@ -46,21 +45,20 @@ export default {
       slingshotDirective, metaContext, addFile, afterUpload,
     } = this.templateInstance.data;
 
-    if (beforeUpload) beforeUpload();
+    beforeUpload && beforeUpload();
 
     _.each(files, (file) => {
-      const { name } = file;
+      const name = file.name;
 
       if (file.size > maxSize) {
-        toastr.error(
-          `${file.name} size exceeds the allowed maximum of ${maxSize / 1024 / 1024} MB`,
-        );
+        toastr.error(`${file.name} size exceeds the allowed maximum of ${maxSize / 1024 / 1024} MB`);
 
         return;
       }
 
       insertFile.call({
         name,
+        extension: name.split('.').pop().toLowerCase(),
         organizationId: this.organizationId(),
       }, (err, fileId) => {
         if (err) {
@@ -68,22 +66,22 @@ export default {
           throw err;
         }
 
-        if (addFile) addFile({ fileId });
+        addFile && addFile({ fileId });
 
         const uploader = new Slingshot.Upload(slingshotDirective, metaContext);
 
         const progressInterval = Meteor.setInterval(() => {
           const progress = uploader.progress();
 
-          if (!progress && progress !== 0 || progress === 1) {
+          if (!progress && progress != 0 || progress === 1) {
             Meteor.clearInterval(progressInterval);
           } else {
-            updateProgress.call({ _id: fileId, progress }, (updatingErr) => {
-              if (updatingErr) {
+            updateProgress.call({ _id: fileId, progress }, (err, res) => {
+              if (err) {
                 Meteor.clearInterval(progressInterval);
                 this.terminateUploading(fileId);
 
-                throw updatingErr;
+                throw err;
               }
             });
           }
@@ -91,21 +89,23 @@ export default {
 
         this.uploads().push({ fileId, uploader });
 
-        uploader.send(file, (sendingErr, url) => {
+        uploader.send(file, (err, url) => {
           if (err) {
-            console.log(sendingErr);
-            toastr.error(sendingErr.reason);
+            console.log(err);
+            toastr.error(err.reason);
 
             this.terminateUploading(fileId);
             return;
           }
 
-          const encodedUrl = url && encodeURI(url);
+          if (url) {
+            url = encodeURI(url);
+          }
 
-          if (afterUpload) afterUpload({ fileId, url: encodedUrl });
+          afterUpload && afterUpload({ fileId, url });
 
-          updateUrl.call({ _id: fileId, url: encodedUrl });
-          updateProgress.call({ _id: fileId, progress: 1 }, () => {
+          updateUrl.call({ _id: fileId, url });
+          updateProgress.call({ _id: fileId, progress: 1 }, (err, res) => {
             this.removeUploadData(fileId);
           });
         });

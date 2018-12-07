@@ -118,6 +118,7 @@ const StandardAddContainer = ({
             fileId = await new Promise((resolve, reject) => {
               insertFile.call({
                 name: file.name,
+                extension: file.name.split('.').pop().toLowerCase(),
                 organizationId,
               }, (error, result) => {
                 if (error) reject(error);

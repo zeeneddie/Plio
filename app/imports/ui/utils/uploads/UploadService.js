@@ -62,6 +62,7 @@ export default class UploadService {
 
     insertFile.call({
       name,
+      extension: name.split('.').pop().toLowerCase(),
       organizationId: this.fileData.organizationId,
     }, this._afterInsert.bind(this, file));
   }
