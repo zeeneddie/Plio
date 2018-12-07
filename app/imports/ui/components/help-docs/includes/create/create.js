@@ -41,7 +41,6 @@ Template.HelpDocs_Create.viewmodel({
     if ((sourceType === SourceTypes.ATTACHMENT) && sourceFile) {
       this.modal().callMethod(insertFile, {
         name: sourceFile.name,
-        extension: sourceFile.name.split('.').pop().toLowerCase(),
         organizationId,
       }, (err, fileId) => {
         if (!err && fileId) {
