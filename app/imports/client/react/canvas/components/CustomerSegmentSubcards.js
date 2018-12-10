@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-import { Query as Queries } from '../../../graphql';
 import { AWSDirectives, CanvasTypes } from '../../../../share/constants';
 import CustomerInsightsSubcard from './CustomerInsightsSubcard';
 import CanvasSubcards from './CanvasSubcards';
@@ -11,6 +10,7 @@ const CustomerSegmentSubcards = ({
   customerSegment,
   onChange,
   user,
+  refetchQueries,
 }) => (
   <Fragment>
     <CustomerInsightsSubcard
@@ -22,9 +22,13 @@ const CustomerSegmentSubcards = ({
       documentType={CanvasTypes.CUSTOMER_SEGMENT}
     />
     <CanvasSubcards
-      {...{ organizationId, onChange, user }}
+      {...{
+        organizationId,
+        onChange,
+        user,
+        refetchQueries,
+      }}
       section={customerSegment}
-      refetchQuery={Queries.CUSTOMER_SEGMENT_CARD}
       documentType={CanvasTypes.CUSTOMER_SEGMENT}
       slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
     />
@@ -35,6 +39,7 @@ CustomerSegmentSubcards.propTypes = {
   customerSegment: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
+  refetchQueries: PropTypes.func.isRequired,
   user: PropTypes.object,
 };
 

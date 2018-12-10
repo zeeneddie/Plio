@@ -10,7 +10,7 @@ import {
   getIds,
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
-import { pure } from 'recompose';
+import { pure, withHandlers } from 'recompose';
 import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
@@ -29,17 +29,11 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import activelyManage from '../../forms/decorators/activelyManage';
 
 const getCostLine = pathOr({}, repeat('costLine', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
-  over(lenses.risks, getIds),
-  over(lenses.goals, getIds),
-  over(lenses.standards, getIds),
-  over(lenses.nonconformities, getIds),
-  over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
   over(lenses.files, defaultTo([])),
   pick([
@@ -49,11 +43,6 @@ const getInitialValues = compose(
     'percentOfTotalCost',
     'notes',
     'notify',
-    'risks',
-    'goals',
-    'standards',
-    'nonconformities',
-    'potentialGains',
     'lessons',
   ]),
   getCostLine,
@@ -65,11 +54,21 @@ const DelayedCanvasSubcards = delayed({
   delay: 200,
 });
 
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.COST_LINE_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
+);
+
 const CostLineEditModal = ({
   isOpen,
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -115,7 +114,6 @@ const CostLineEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
-              decorators={[activelyManage]}
               validate={validateCostLine}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -130,11 +128,6 @@ const CostLineEditModal = ({
                   percentOfTotalCost,
                   notes = '', // final form sends undefined value instead of an empty string
                   notify = [],
-                  risks: riskIds,
-                  goals: goalIds,
-                  standards: standardsIds,
-                  nonconformities: nonconformityIds,
-                  potentialGains: potentialGainIds,
                   files = [],
                 } = values;
 
@@ -146,11 +139,6 @@ const CostLineEditModal = ({
                       notes,
                       color,
                       percentOfTotalCost,
-                      riskIds,
-                      goalIds,
-                      standardsIds,
-                      nonconformityIds,
-                      potentialGainIds,
                       notify: getValues(notify),
                       fileIds: files,
                       originatorId: originator.value,
@@ -177,10 +165,9 @@ const CostLineEditModal = ({
                         <Fragment>
                           <CostLineForm {...{ organizationId }} save={handleSubmit} />
                           <DelayedCanvasSubcards
-                            {...{ organizationId }}
+                            {...{ organizationId, refetchQueries }}
                             section={costLine}
                             onChange={handleSubmit}
-                            refetchQuery={Queries.COST_LINE_CARD}
                             documentType={CanvasTypes.COST_LINE}
                             slingshotDirective={AWSDirectives.COST_LINE_FILES}
                             user={data && data.user}
@@ -204,6 +191,7 @@ CostLineEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(CostLineEditModal);
+export default enhance(CostLineEditModal);

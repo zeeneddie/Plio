@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { pure } from 'recompose';
 
 import {
   CardBlock,
@@ -37,4 +38,4 @@ NewNonconformityCard.propTypes = {
   guidelines: PropTypes.object,
 };
 
-export default NewNonconformityCard;
+export default pure(NewNonconformityCard);

@@ -4,6 +4,7 @@ import {
   CustomerElementStatuses,
   CustomerElementTypes,
   ProblemTypes,
+  DocumentTypes,
 } from '../../../../share/constants';
 
 export const createRelationResolver = config => async (root, args, context) => {
@@ -35,6 +36,16 @@ export const createRelationResolver = config => async (root, args, context) => {
   });
 
   return loader.loadMany(ids);
+};
+
+export const createEntityByIdsResolver = config => async (root, args, context) => {
+  const { ids = [], loader, ...rest } = await config(root, args, context);
+  invariant(loader, 'Your config function must return "loader"');
+
+  return loader.load({
+    _id: { $in: ids },
+    ...rest,
+  });
 };
 
 export const resolveMatchedBenefits = createRelationResolver(
@@ -81,21 +92,55 @@ export const resolveCustomerElementStatus = async (root, args, context) => {
   return isMatched ? CustomerElementStatuses.MATCHED : CustomerElementStatuses.UNMATCHED;
 };
 
-export const createEntityByIdsResolver = config => async (root, args, context) => {
-  const { ids = [], loader, ...rest } = await config(root, args, context);
-  invariant(loader, 'Your config function must return "loader"');
+export const resolveLinkedGoals = createRelationResolver(
+  (root, args, { loaders: { Goal: { byId } } }) => ({
+    documentType: DocumentTypes.GOAL,
+    loader: byId,
+  }),
+);
 
-  return loader.load({
-    _id: { $in: ids },
-    ...rest,
-  });
-};
+export const resolveLinkedStandards = createRelationResolver(
+  (root, { isDeleted = false }, { loaders: { Standard: { byQuery } } }) => ({
+    documentType: DocumentTypes.STANDARD,
+    loader: {
+      loadMany: ids => byQuery.load({
+        isDeleted,
+        _id: { $in: ids },
+      }),
+    },
+  }),
+);
 
-export const resolveGoalsByIds = createEntityByIdsResolver(
-  ({ goalIds }, { isDeleted = false }, { loaders: { Goal: { byQuery } } }) => ({
-    loader: byQuery,
-    ids: goalIds,
-    isDeleted,
+export const resolveLinkedRisks = createRelationResolver(
+  (root, args, { loaders: { Risk: { byId } } }) => ({
+    documentType: ProblemTypes.RISK,
+    loader: byId,
+  }),
+);
+
+export const resolveLinkedNonconformities = createRelationResolver(
+  (root, { isDeleted = false }, { loaders: { Nonconformity: { byQuery } } }) => ({
+    documentType: ProblemTypes.NON_CONFORMITY,
+    loader: {
+      loadMany: ids => byQuery.load({
+        isDeleted,
+        type: ProblemTypes.NON_CONFORMITY,
+        _id: { $in: ids },
+      }),
+    },
+  }),
+);
+
+export const resolveLinkedPotentialGains = createRelationResolver(
+  (root, { isDeleted = false }, { loaders: { Nonconformity: { byQuery } } }) => ({
+    documentType: ProblemTypes.POTENTIAL_GAIN,
+    loader: {
+      loadMany: ids => byQuery.load({
+        isDeleted,
+        type: ProblemTypes.POTENTIAL_GAIN,
+        _id: { $in: ids },
+      }),
+    },
   }),
 );
 

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { pure } from 'recompose';
 
 import {
   CardBlock,
@@ -35,4 +36,4 @@ NewStandardCard.propTypes = {
   standardIds: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default NewStandardCard;
+export default pure(NewStandardCard);

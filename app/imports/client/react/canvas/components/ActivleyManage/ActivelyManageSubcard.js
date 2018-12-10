@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { isEmpty } from 'ramda';
+import { isEmpty, any } from 'ramda';
 import { CardTitle, Col, CardText, ListGroup, FormText } from 'reactstrap';
 
 import { Styles } from '../../../../../api/constants';
+import { DocumentTypes } from '../../../../../share/constants';
 import {
   Subcard,
   SubcardHeader,
@@ -13,8 +14,8 @@ import {
   CardBlock,
   EntityManager,
   EntitiesField,
-  FieldCondition,
   Magnitudes,
+  RelationsAdapter,
 } from '../../../components';
 import GoalActivelyManageItem from './GoalActivelyManageItem';
 import StandardActivelyManageItem from './StandardActivelyManageItem';
@@ -60,95 +61,136 @@ const StyledCardBlock = styled(CardBlock)`
 const ActivelyManageSubcard = ({
   linkedTo,
   documentType,
-  onChange,
   organizationId,
-  refetchQuery,
+  refetchQueries,
   rkGuidelines,
   ncGuidelines,
   pgGuidelines,
-}) => (
-  <FieldCondition when="shouldRenderActivelyManage" is>
-    <StyledCardBlock>
-      <Subcard>
-        <SubcardHeader>
-          <CardTitle>
-            Actively Manage
-          </CardTitle>
-          <SubcardSubtitle>
-            <FormText color="muted" tag="span">
-              Only by actively managing your canvas will you be able to translate
-              your business design into better business performance.
-            </FormText>
-          </SubcardSubtitle>
-        </SubcardHeader>
-        <SubcardBody>
-          <CardBlock>
-            <StyledCol xs={12} sm={12}>
-              <CardText>
-                To actively manage this section of your canvas,
-                you need to do at least one of the following:
-              </CardText>
-              <ListGroup>
-                <EntityManager>
-                  <EntitiesField
-                    name="goals"
-                    render={GoalActivelyManageItem}
-                    is={isEmpty}
-                    {...{ organizationId, onChange }}
-                  />
-                  <EntitiesField
-                    name="standards"
-                    render={StandardActivelyManageItem}
-                    is={isEmpty}
-                    {...{ organizationId, onChange }}
-                  />
-                  <EntitiesField
-                    name="risks"
-                    render={RiskActivelyManageItem}
-                    is={isEmpty}
-                    guidelines={rkGuidelines}
-                    {...{ organizationId, onChange, linkedTo }}
-                  />
-                  <EntitiesField
-                    name="nonconformities"
-                    render={NonconformityActivelyManageItem}
-                    is={isEmpty}
-                    guidelines={ncGuidelines}
-                    {...{ organizationId, onChange }}
-                  />
-                  <EntitiesField
-                    name="potentialGains"
-                    render={PotentialGainActivelyManageItem}
-                    is={isEmpty}
-                    guidelines={pgGuidelines}
-                    {...{ organizationId, onChange }}
-                  />
-                  <EntitiesField
-                    name="lessons"
-                    render={LessonActivelyManageItem}
-                    is={isEmpty}
+  goals,
+  standards,
+  risks,
+  nonconformities,
+  potentialGains,
+  lessons,
+}) => any(
+  isEmpty,
+  [goals, standards, risks, nonconformities, potentialGains, lessons],
+) && (
+  <StyledCardBlock>
+    <Subcard>
+      <SubcardHeader>
+        <CardTitle>
+          Actively Manage
+        </CardTitle>
+        <SubcardSubtitle>
+          <FormText color="muted" tag="span">
+            Only by actively managing your canvas will you be able to translate
+            your business design into better business performance.
+          </FormText>
+        </SubcardSubtitle>
+      </SubcardHeader>
+      <SubcardBody>
+        <CardBlock>
+          <StyledCol xs={12} sm={12}>
+            <CardText>
+              To actively manage this section of your canvas,
+              you need to do at least one of the following:
+            </CardText>
+            <ListGroup>
+              <EntityManager>
+                {!goals.length && (
+                  <RelationsAdapter
                     {...{
                       organizationId,
+                      goals,
+                      documentId: linkedTo._id,
                       documentType,
-                      refetchQuery,
+                      refetchQueries,
+                    }}
+                    relatedDocumentType={DocumentTypes.GOAL}
+                    render={GoalActivelyManageItem}
+                  />
+                )}
+                {!standards.length && (
+                  <RelationsAdapter
+                    {...{
+                      organizationId,
+                      standards,
+                      documentId: linkedTo._id,
+                      documentType,
+                      refetchQueries,
+                    }}
+                    relatedDocumentType={DocumentTypes.STANDARD}
+                    render={StandardActivelyManageItem}
+                  />
+                )}
+                {!risks.length && (
+                  <RelationsAdapter
+                    {...{
+                      organizationId,
+                      risks,
+                      documentId: linkedTo._id,
+                      documentType,
+                      refetchQueries,
                       linkedTo,
                     }}
+                    relatedDocumentType={DocumentTypes.RISK}
+                    render={RiskActivelyManageItem}
+                    guidelines={rkGuidelines}
                   />
-                </EntityManager>
-              </ListGroup>
-            </StyledCol>
-          </CardBlock>
-        </SubcardBody>
-      </Subcard>
-    </StyledCardBlock>
-  </FieldCondition>
+                )}
+                {!nonconformities.length && (
+                  <RelationsAdapter
+                    {...{
+                      organizationId,
+                      nonconformities,
+                      documentId: linkedTo._id,
+                      documentType,
+                      refetchQueries,
+                    }}
+                    relatedDocumentType={DocumentTypes.NON_CONFORMITY}
+                    render={NonconformityActivelyManageItem}
+                    guidelines={ncGuidelines}
+                  />
+                )}
+                {!potentialGains.length && (
+                  <RelationsAdapter
+                    {...{
+                      organizationId,
+                      potentialGains,
+                      documentId: linkedTo._id,
+                      documentType,
+                      refetchQueries,
+                    }}
+                    relatedDocumentType={DocumentTypes.POTENTIAL_GAIN}
+                    render={PotentialGainActivelyManageItem}
+                    guidelines={pgGuidelines}
+                  />
+                )}
+                <EntitiesField
+                  name="lessons"
+                  render={LessonActivelyManageItem}
+                  is={isEmpty}
+                  {...{
+                    organizationId,
+                    documentType,
+                    refetchQueries,
+                    linkedTo,
+                  }}
+                />
+              </EntityManager>
+            </ListGroup>
+          </StyledCol>
+        </CardBlock>
+      </SubcardBody>
+    </Subcard>
+  </StyledCardBlock>
 );
 
 ActivelyManageSubcard.propTypes = {
   organizationId: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
   documentType: PropTypes.string.isRequired,
-  refetchQuery: PropTypes.object.isRequired,
+  refetchQueries: PropTypes.func.isRequired,
   linkedTo: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,

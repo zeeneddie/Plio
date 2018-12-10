@@ -11,7 +11,7 @@ import {
   getIds,
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
-import { pure } from 'recompose';
+import { pure, withHandlers } from 'recompose';
 import { delayed } from 'libreact/lib/delayed';
 
 import { swal } from '../../../util';
@@ -29,17 +29,11 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import activelyManage from '../../forms/decorators/activelyManage';
 
 const getKeyActivity = pathOr({}, repeat('keyActivity', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
-  over(lenses.risks, getIds),
-  over(lenses.goals, getIds),
-  over(lenses.standards, getIds),
-  over(lenses.nonconformities, getIds),
-  over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
   over(lenses.files, defaultTo([])),
   pick([
@@ -48,11 +42,6 @@ const getInitialValues = compose(
     'color',
     'notes',
     'notify',
-    'risks',
-    'goals',
-    'standards',
-    'nonconformities',
-    'potentialGains',
     'lessons',
   ]),
   getKeyActivity,
@@ -64,11 +53,21 @@ const DelayedCanvasSubcards = delayed({
   delay: 200,
 });
 
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.KEY_ACTIVITY_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
+);
+
 const KeyActivityEditModal = ({
   isOpen,
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -114,7 +113,6 @@ const KeyActivityEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
-              decorators={[activelyManage]}
               validate={validateKeyActivity}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -128,11 +126,6 @@ const KeyActivityEditModal = ({
                   color,
                   notes = '',
                   notify = [],
-                  risks: riskIds,
-                  goals: goalIds,
-                  standards: standardsIds,
-                  nonconformities: nonconformityIds,
-                  potentialGains: potentialGainIds,
                   files = [],
                 } = values;
 
@@ -143,11 +136,6 @@ const KeyActivityEditModal = ({
                       title,
                       notes,
                       color,
-                      riskIds,
-                      goalIds,
-                      standardsIds,
-                      nonconformityIds,
-                      potentialGainIds,
                       notify: getValues(notify),
                       fileIds: files,
                       originatorId: originator.value,
@@ -174,10 +162,9 @@ const KeyActivityEditModal = ({
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
                           <DelayedCanvasSubcards
-                            {...{ organizationId }}
+                            {...{ organizationId, refetchQueries }}
                             section={keyActivity}
                             onChange={handleSubmit}
-                            refetchQuery={Queries.KEY_ACTIVITY_CARD}
                             documentType={CanvasTypes.KEY_ACTIVITY}
                             slingshotDirective={AWSDirectives.KEY_ACTIVITY_FILES}
                             user={data && data.user}
@@ -201,6 +188,7 @@ KeyActivityEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(KeyActivityEditModal);
+export default enhance(KeyActivityEditModal);

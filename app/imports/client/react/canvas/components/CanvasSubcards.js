@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { isNotEmpty } from 'plio-util';
+import { pure } from 'recompose';
 
-import { ProblemTypes, UserRoles } from '../../../../share/constants';
-import { NotifySubcard, EntitiesField } from '../../components';
+import { UserRoles, DocumentTypes } from '../../../../share/constants';
+import { NotifySubcard, EntitiesField, RelationsAdapter } from '../../components';
 import { GoalsSubcard } from '../../goals';
 import StandardsSubcard from '../../standards/components/StandardsSubcard';
 import NonconformitiesSubcard from '../../noncomformities/components/NonconformitiesSubcard';
@@ -14,7 +15,7 @@ import FilesSubcardContainer from './FilesSubcardContainer';
 
 const CanvasSubcards = ({
   organizationId,
-  refetchQuery,
+  refetchQueries,
   onChange,
   documentType,
   user: { roles = [] } = {},
@@ -46,62 +47,90 @@ const CanvasSubcards = ({
           pgGuidelines,
           organizationId,
           linkedTo,
-          refetchQuery,
-          onChange,
+          refetchQueries,
           documentType,
-        }}
-      />
-      <EntitiesField
-        name="goals"
-        render={GoalsSubcard}
-        is={isNotEmpty}
-        canEditGoals={roles.includes(UserRoles.CREATE_DELETE_GOALS)}
-        {...{ organizationId, goals, onChange }}
-      />
-      <EntitiesField
-        name="standards"
-        render={StandardsSubcard}
-        is={isNotEmpty}
-        {...{ organizationId, standards, onChange }}
-      />
-      <EntitiesField
-        name="risks"
-        render={RisksSubcard}
-        is={isNotEmpty}
-        guidelines={rkGuidelines}
-        {...{
-          organizationId,
+          goals,
+          standards,
           risks,
-          linkedTo,
-          onChange,
-        }}
-      />
-      <EntitiesField
-        name="nonconformities"
-        render={NonconformitiesSubcard}
-        type={ProblemTypes.NON_CONFORMITY}
-        is={isNotEmpty}
-        guidelines={ncGuidelines}
-        {...{
-          organizationId,
           nonconformities,
-          onChange,
-          currency,
+          potentialGains,
+          lessons,
         }}
       />
-      <EntitiesField
-        name="potentialGains"
-        render={NonconformitiesSubcard}
-        type={ProblemTypes.POTENTIAL_GAIN}
-        nonconformities={potentialGains}
-        is={isNotEmpty}
-        guidelines={pgGuidelines}
-        {...{
-          organizationId,
-          onChange,
-          currency,
-        }}
-      />
+      {!!goals.length && (
+        <RelationsAdapter
+          {...{
+            organizationId,
+            goals,
+            documentId,
+            documentType,
+            refetchQueries,
+          }}
+          relatedDocumentType={DocumentTypes.GOAL}
+          render={GoalsSubcard}
+          canEditGoals={roles.includes(UserRoles.CREATE_DELETE_GOALS)}
+        />
+      )}
+      {!!standards.length && (
+        <RelationsAdapter
+          {...{
+            organizationId,
+            standards,
+            documentId: linkedTo._id,
+            documentType,
+            refetchQueries,
+          }}
+          relatedDocumentType={DocumentTypes.STANDARD}
+          render={StandardsSubcard}
+        />
+      )}
+      {!!risks.length && (
+        <RelationsAdapter
+          {...{
+            organizationId,
+            risks,
+            documentId: linkedTo._id,
+            documentType,
+            refetchQueries,
+            linkedTo,
+          }}
+          relatedDocumentType={DocumentTypes.RISK}
+          render={RisksSubcard}
+          guidelines={rkGuidelines}
+        />
+      )}
+      {!!nonconformities.length && (
+        <RelationsAdapter
+          {...{
+            organizationId,
+            nonconformities,
+            documentId: linkedTo._id,
+            documentType,
+            refetchQueries,
+            currency,
+          }}
+          relatedDocumentType={DocumentTypes.NON_CONFORMITY}
+          type={DocumentTypes.NON_CONFORMITY}
+          render={NonconformitiesSubcard}
+          guidelines={ncGuidelines}
+        />
+      )}
+      {!!potentialGains.length && (
+        <RelationsAdapter
+          {...{
+            organizationId,
+            documentId: linkedTo._id,
+            documentType,
+            refetchQueries,
+            currency,
+          }}
+          relatedDocumentType={DocumentTypes.POTENTIAL_GAIN}
+          type={DocumentTypes.POTENTIAL_GAIN}
+          render={NonconformitiesSubcard}
+          guidelines={pgGuidelines}
+          nonconformities={potentialGains}
+        />
+      )}
       <EntitiesField
         name="lessons"
         render={CanvasLessonsSubcard}
@@ -110,7 +139,7 @@ const CanvasSubcards = ({
           organizationId,
           lessons,
           linkedTo,
-          refetchQuery,
+          refetchQueries,
           documentType,
         }}
       />
@@ -133,11 +162,11 @@ const CanvasSubcards = ({
 CanvasSubcards.propTypes = {
   section: PropTypes.object.isRequired,
   organizationId: PropTypes.string.isRequired,
-  refetchQuery: PropTypes.object.isRequired,
+  refetchQueries: PropTypes.func.isRequired,
   slingshotDirective: PropTypes.string.isRequired,
   documentType: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   user: PropTypes.object,
 };
 
-export default CanvasSubcards;
+export default pure(CanvasSubcards);

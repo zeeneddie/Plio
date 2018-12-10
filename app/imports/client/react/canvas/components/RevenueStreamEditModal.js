@@ -10,7 +10,7 @@ import {
   getIds,
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
-import { pure } from 'recompose';
+import { pure, withHandlers } from 'recompose';
 import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
@@ -29,17 +29,11 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import activelyManage from '../../forms/decorators/activelyManage';
 
 const getRevenueStream = pathOr({}, repeat('revenueStream', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
-  over(lenses.risks, getIds),
-  over(lenses.goals, getIds),
-  over(lenses.standards, getIds),
-  over(lenses.nonconformities, getIds),
-  over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
   over(lenses.files, defaultTo([])),
   pick([
@@ -50,11 +44,6 @@ const getInitialValues = compose(
     'percentOfProfit',
     'notes',
     'notify',
-    'risks',
-    'goals',
-    'standards',
-    'nonconformities',
-    'potentialGains',
     'lessons',
   ]),
   getRevenueStream,
@@ -66,11 +55,21 @@ const DelayedCanvasSubcards = delayed({
   delay: 200,
 });
 
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.REVENUE_STREAM_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
+);
+
 const RevenueStreamEditModal = ({
   isOpen,
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -116,7 +115,6 @@ const RevenueStreamEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
-              decorators={[activelyManage]}
               validate={validateRevenueStream}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -132,11 +130,6 @@ const RevenueStreamEditModal = ({
                   percentOfProfit,
                   notes = '', // final form sends undefined value instead of an empty string
                   notify = [],
-                  risks: riskIds,
-                  goals: goalIds,
-                  standards: standardsIds,
-                  nonconformities: nonconformityIds,
-                  potentialGains: potentialGainIds,
                   files = [],
                 } = values;
 
@@ -149,11 +142,6 @@ const RevenueStreamEditModal = ({
                       color,
                       percentOfRevenue,
                       percentOfProfit,
-                      riskIds,
-                      goalIds,
-                      standardsIds,
-                      nonconformityIds,
-                      potentialGainIds,
                       notify: getValues(notify),
                       fileIds: files,
                       originatorId: originator.value,
@@ -180,10 +168,9 @@ const RevenueStreamEditModal = ({
                         <Fragment>
                           <RevenueStreamForm {...{ organizationId }} save={handleSubmit} />
                           <DelayedCanvasSubcards
-                            {...{ organizationId }}
+                            {...{ organizationId, refetchQueries }}
                             section={revenueStream}
                             onChange={handleSubmit}
-                            refetchQuery={Queries.REVENUE_STREAM_CARD}
                             documentType={CanvasTypes.REVENUE_STREAM}
                             slingshotDirective={AWSDirectives.REVENUE_STREAM_FILES}
                             user={data && data.user}
@@ -207,6 +194,7 @@ RevenueStreamEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(RevenueStreamEditModal);
+export default enhance(RevenueStreamEditModal);

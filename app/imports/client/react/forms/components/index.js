@@ -49,3 +49,4 @@ export { default as GroupSelect } from './GroupSelect';
 export { default as CategorizeField } from './CategorizeField';
 export { default as CategorizeFieldBlazeWrap } from './CategorizeFieldBlazeWrap';
 export { default as EntityArrayForm } from './EntityArrayForm';
+export { default as RelationsAdapter } from './RelationsAdapter';

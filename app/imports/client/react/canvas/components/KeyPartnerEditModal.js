@@ -10,7 +10,7 @@ import {
   mapUsersToOptions,
   getIds,
 } from 'plio-util';
-import { pure } from 'recompose';
+import { pure, withHandlers } from 'recompose';
 import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
@@ -27,7 +27,6 @@ import {
   RenderSwitch,
 } from '../../components';
 import { WithState, Composer } from '../../helpers';
-import activelyManage from '../../forms/decorators/activelyManage';
 import KeyPartnerForm from './KeyPartnerForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
 
@@ -36,11 +35,6 @@ const getKeyPartner = path(keyPartnerPath);
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
-  over(lenses.risks, getIds),
-  over(lenses.goals, getIds),
-  over(lenses.standards, getIds),
-  over(lenses.nonconformities, getIds),
-  over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
   over(lenses.files, defaultTo([])),
   pick([
@@ -51,11 +45,6 @@ const getInitialValues = compose(
     'levelOfSpend',
     'notes',
     'notify',
-    'risks',
-    'goals',
-    'standards',
-    'nonconformities',
-    'potentialGains',
     'lessons',
   ]),
   pathOr({}, keyPartnerPath),
@@ -67,11 +56,24 @@ const DelayedCanvasSubcards = delayed({
   delay: 200,
 });
 
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      {
+        query: Queries.KEY_PARTNER_CARD,
+        variables: { _id, organizationId },
+      },
+    ],
+  }),
+  pure,
+);
+
 const KeyPartnerEditModal = ({
   isOpen,
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -119,7 +121,6 @@ const KeyPartnerEditModal = ({
             >
               <EntityModalForm
                 {...{ initialValues }}
-                decorators={[activelyManage]}
                 validate={validateKeyPartner}
                 onSubmit={(values, form) => {
                   const currentValues = getInitialValues(data);
@@ -135,11 +136,6 @@ const KeyPartnerEditModal = ({
                     levelOfSpend,
                     notes = '', // final form sends undefined value instead of an empty string
                     notify = [],
-                    risks: riskIds,
-                    goals: goalIds,
-                    standards: standardsIds,
-                    nonconformities: nonconformityIds,
-                    potentialGains: potentialGainIds,
                     files,
                   } = values;
 
@@ -152,11 +148,6 @@ const KeyPartnerEditModal = ({
                         color,
                         criticality,
                         levelOfSpend,
-                        riskIds,
-                        goalIds,
-                        standardsIds,
-                        nonconformityIds,
-                        potentialGainIds,
                         notify: getValues(notify),
                         fileIds: files,
                         originatorId: originator.value,
@@ -183,10 +174,9 @@ const KeyPartnerEditModal = ({
                           <Fragment>
                             <KeyPartnerForm {...{ organizationId }} save={handleSubmit} />
                             <DelayedCanvasSubcards
-                              {...{ organizationId }}
+                              {...{ organizationId, refetchQueries }}
                               section={keyPartner}
                               onChange={handleSubmit}
-                              refetchQuery={Queries.KEY_PARTNER_CARD}
                               documentType={CanvasTypes.KEY_PARTNER}
                               slingshotDirective={AWSDirectives.KEY_PARTNER_FILES}
                               user={data && data.user}
@@ -211,6 +201,7 @@ KeyPartnerEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(KeyPartnerEditModal);
+export default enhance(KeyPartnerEditModal);

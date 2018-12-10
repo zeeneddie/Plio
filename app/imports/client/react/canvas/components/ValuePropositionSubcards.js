@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-import { Query as Queries } from '../../../graphql';
 import { AWSDirectives, CanvasTypes } from '../../../../share/constants';
 import ValueComponentsSubcard from './ValueComponentsSubcard';
 import CanvasSubcards from './CanvasSubcards';
@@ -11,6 +10,7 @@ const ValuePropositionSubcards = ({
   valueProposition,
   onChange,
   user,
+  refetchQueries,
 }) => (
   <Fragment>
     <ValueComponentsSubcard
@@ -22,9 +22,13 @@ const ValuePropositionSubcards = ({
       documentType={CanvasTypes.VALUE_PROPOSITION}
     />
     <CanvasSubcards
-      {...{ organizationId, onChange, user }}
+      {...{
+        organizationId,
+        onChange,
+        user,
+        refetchQueries,
+      }}
       section={valueProposition}
-      refetchQuery={Queries.VALUE_PROPOSITION_CARD}
       documentType={CanvasTypes.VALUE_PROPOSITION}
       slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
     />
@@ -35,6 +39,7 @@ ValuePropositionSubcards.propTypes = {
   valueProposition: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
+  refetchQueries: PropTypes.func.isRequired,
   user: PropTypes.object,
 };
 

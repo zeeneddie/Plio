@@ -6,12 +6,12 @@ import {
   lenses,
 } from 'plio-util';
 import {
-  resolveGoalsByIds,
-  resolveStandardsByIds,
-  resolveRisksByIds,
+  resolveLinkedGoals,
+  resolveLinkedStandards,
+  resolveLinkedRisks,
   resolveLessonsById,
-  resolveNonconformitiesByIds,
-  resolvePotentialGainsByIds,
+  resolveLinkedNonconformities,
+  resolveLinkedPotentialGains,
 } from './util';
 
 const {
@@ -28,10 +28,10 @@ export const CanvasResolvers = {
   originator: loadUserById(view(originatorId)),
   organization: loadOrganizationById(view(organizationId)),
   notify: loadUsersById(view(notify)),
-  goals: resolveGoalsByIds,
-  standards: resolveStandardsByIds,
-  risks: resolveRisksByIds,
+  goals: resolveLinkedGoals,
+  standards: resolveLinkedStandards,
+  risks: resolveLinkedRisks,
   lessons: resolveLessonsById,
-  nonconformities: resolveNonconformitiesByIds,
-  potentialGains: resolvePotentialGainsByIds,
+  nonconformities: resolveLinkedNonconformities,
+  potentialGains: resolveLinkedPotentialGains,
 };

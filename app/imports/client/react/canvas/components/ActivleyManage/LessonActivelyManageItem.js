@@ -9,7 +9,7 @@ const LessonActivelyManageItem = ({
   organizationId,
   linkedTo,
   documentType,
-  refetchQuery,
+  refetchQueries,
   onLink,
   onUnlink,
 }) => (
@@ -17,7 +17,7 @@ const LessonActivelyManageItem = ({
     {...{
       organizationId,
       documentType,
-      refetchQuery,
+      refetchQueries,
       onLink,
       onUnlink,
     }}
@@ -34,7 +34,7 @@ const LessonActivelyManageItem = ({
 LessonActivelyManageItem.propTypes = {
   organizationId: PropTypes.string.isRequired,
   documentType: PropTypes.string.isRequired,
-  refetchQuery: PropTypes.object.isRequired,
+  refetchQueries: PropTypes.func.isRequired,
   onLink: PropTypes.func.isRequired,
   onUnlink: PropTypes.func.isRequired,
   linkedTo: PropTypes.shape({

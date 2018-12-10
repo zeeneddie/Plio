@@ -10,7 +10,7 @@ import {
   getValues,
   getIds,
 } from 'plio-util';
-import { pure } from 'recompose';
+import { pure, withHandlers } from 'recompose';
 import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
@@ -29,17 +29,11 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import activelyManage from '../../forms/decorators/activelyManage';
 
 const getKeyResource = pathOr({}, repeat('keyResource', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
-  over(lenses.risks, getIds),
-  over(lenses.goals, getIds),
-  over(lenses.standards, getIds),
-  over(lenses.nonconformities, getIds),
-  over(lenses.potentialGains, getIds),
   over(lenses.lessons, getIds),
   over(lenses.files, defaultTo([])),
   pick([
@@ -48,11 +42,6 @@ const getInitialValues = compose(
     'color',
     'notes',
     'notify',
-    'risks',
-    'goals',
-    'standards',
-    'nonconformities',
-    'potentialGains',
     'lessons',
   ]),
   getKeyResource,
@@ -64,11 +53,21 @@ const DelayedCanvasSubcards = delayed({
   delay: 200,
 });
 
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.KEY_RESOURCE_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
+);
+
 const KeyResourceEditModal = ({
   isOpen,
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -114,7 +113,6 @@ const KeyResourceEditModal = ({
           >
             <EntityModalForm
               {...{ initialValues }}
-              decorators={[activelyManage]}
               validate={validateKeyResource}
               onSubmit={(values, form) => {
                 const currentValues = getInitialValues(data);
@@ -128,11 +126,6 @@ const KeyResourceEditModal = ({
                   color,
                   notes = '', // final form sends undefined value instead of an empty string
                   notify = [],
-                  risks: riskIds,
-                  goals: goalIds,
-                  standards: standardsIds,
-                  nonconformities: nonconformityIds,
-                  potentialGains: potentialGainIds,
                   files = [],
                 } = values;
 
@@ -143,11 +136,6 @@ const KeyResourceEditModal = ({
                       title,
                       notes,
                       color,
-                      riskIds,
-                      goalIds,
-                      standardsIds,
-                      nonconformityIds,
-                      potentialGainIds,
                       notify: getValues(notify),
                       fileIds: files,
                       originatorId: originator.value,
@@ -174,10 +162,9 @@ const KeyResourceEditModal = ({
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
                           <DelayedCanvasSubcards
-                            {...{ organizationId }}
+                            {...{ organizationId, refetchQueries }}
                             section={keyResource}
                             onChange={handleSubmit}
-                            refetchQuery={Queries.KEY_RESOURCE_CARD}
                             documentType={CanvasTypes.KEY_RESOURCE}
                             slingshotDirective={AWSDirectives.KEY_RESOURCE_FILES}
                             user={data && data.user}
@@ -201,6 +188,7 @@ KeyResourceEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(KeyResourceEditModal);
+export default enhance(KeyResourceEditModal);
