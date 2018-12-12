@@ -25,6 +25,7 @@ import {
   Needs,
   Wants,
   Relations,
+  CanvasSettings,
 } from '../collections';
 import AuditManager from '../utils/audit-manager';
 
@@ -54,6 +55,7 @@ const collections = {
   [CollectionNames.NEEDS]: Needs,
   [CollectionNames.WANTS]: Wants,
   [CollectionNames.RELATIONS]: Relations,
+  [CollectionNames.CANVAS_SETTINGS]: CanvasSettings,
 };
 
 Object.keys(collections).forEach(name => AuditManager.registerCollection(collections[name], name));
