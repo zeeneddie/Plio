@@ -1,11 +1,11 @@
-#import "../Fragment/CustomerSegmentCard.graphql"
+#import "../Fragment/CanvasCard.graphql"
 #import "../Fragment/CustomerSegmentRelations.graphql"
 
 query CustomerSegmentCard($_id: ID!, $organizationId: ID!) {
   customerSegment(_id: $_id) {
     customerSegment {
+      ...CanvasCard
       ...CustomerSegmentRelations
-      ...CustomerSegmentCard
     }
   }
   user: me {
