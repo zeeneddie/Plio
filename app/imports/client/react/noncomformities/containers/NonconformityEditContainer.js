@@ -72,7 +72,7 @@ const NonconformityEditContainer = ({
             {...{ fetchPolicy }}
             query={Queries.NONCONFORMITY_CARD}
             variables={{ _id: nonconformityId, organizationId }}
-            skip={!!_nonconformity}
+            skip={!isOpen || !!_nonconformity}
             onCompleted={data => setState({
               initialValues: getInitialValues(getNonconformity(data)),
               nonconformity: getNonconformity(data),

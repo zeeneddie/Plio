@@ -91,7 +91,7 @@ const GoalEditContainer = ({
             {...{ fetchPolicy }}
             query={Queries.GOAL_CARD}
             variables={{ _id: goalId, organizationId }}
-            skip={!!_goal}
+            skip={!isOpen || !!_goal}
             onCompleted={data => setState({
               initialValues: getInitialValues(getGoal(data)),
               goal: getGoal(data),

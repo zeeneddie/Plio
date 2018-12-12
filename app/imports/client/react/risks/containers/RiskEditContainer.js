@@ -94,7 +94,7 @@ const RiskEditContainer = ({
             {...{ fetchPolicy }}
             query={Queries.RISK_CARD}
             variables={{ _id: riskId, organizationId }}
-            skip={!!_risk}
+            skip={!isOpen || !!_risk}
             onCompleted={data => setState({
               initialValues: getInitialValues(getRisk(data)),
               risk: getRisk(data),
