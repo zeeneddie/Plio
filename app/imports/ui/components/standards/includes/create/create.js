@@ -73,7 +73,6 @@ Template.CreateStandard.viewmodel({
     if ((sourceType === 'attachment') && sourceFile) {
       this.modal().callMethod(insertFile, {
         name: sourceFile.name,
-        extension: sourceFile.name.split('.').pop().toLowerCase(),
         organizationId: this.organizationId(),
       }, (err, fileId) => {
         if (!err && fileId) {
