@@ -16,6 +16,10 @@ const StyledDropdownMenu = styled(DropdownMenu)`
   transform: none !important;
   top: auto !important;
   left: auto !important;
+  min-width: 0;
+  button:focus {
+    outline: none;
+  }
 `;
 
 const CanvasLabel = ({

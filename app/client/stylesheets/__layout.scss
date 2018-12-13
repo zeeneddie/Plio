@@ -18,6 +18,17 @@ body {
 	@include flex-direction(column);
 }
 
+@media print {
+  #app,
+  html,
+  body {
+    overflow: visible;
+  }
+  #app {
+    display: block;
+  }
+}
+
 a {
   cursor: pointer;
 

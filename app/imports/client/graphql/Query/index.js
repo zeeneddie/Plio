@@ -10,7 +10,6 @@ import DEPARTMENT_LIST from './DepartmentList.graphql';
 import COUNTS from './Counts.graphql';
 import GOAL_MILESTONES_CARD from './GoalMilestonesCard.graphql';
 import GOAL_LESSONS_CARD from './GoalLessonsCard.graphql';
-import GOAL_RISKS_CARD from './GoalRisksCard.graphql';
 import GOAL_ACTIONS_CARD from './GoalActionsCard.graphql';
 import ACTION_LIST from './ActionList.graphql';
 import GOAL_LIST from './GoalList.graphql';
@@ -27,7 +26,9 @@ import COST_LINES from './CostLines.graphql';
 import REVENUE_STREAMS from './RevenueStreams.graphql';
 import CHANNELS from './Channels.graphql';
 import CANVAS_LAYOUT from './CanvasLayout.graphql';
+import CANVAS_REPORT_LAYOUT from './CanvasReportLayout.graphql';
 import CANVAS_PAGE from './CanvasPage.graphql';
+import CANVAS_REPORT_PAGE from './CanvasReportPage.graphql';
 import CURRENT_USER_FULL_NAME from './CurrentUserFullName.graphql';
 import VALUE_PROPOSITION_LIST from './ValuePropositionList.graphql';
 import CUSTOMER_SEGMENT_LIST from './CustomerSegmentList.graphql';
@@ -49,6 +50,18 @@ import REVENUE_STREAMS_CHART from './RevenueStreamsChart.graphql';
 import REVENUE_STREAMS_PROFIT_CHART from './RevenueStreamsProfitChart.graphql';
 import KEY_PARTNERS_CHART from './KeyPartnersChart.graphql';
 import GUIDANCE from './Guidance.graphql';
+import CANVAS_SCREEN_SETTINGS from './CanvasScreenSettings.graphql';
+import STANDARD_TYPE_LIST from './StandardTypeList.graphql';
+import STANDARD_SECTION_LIST from './StandardSectionList.graphql';
+import NONCONFORMITY_LIST from './NonconformityList';
+import POTENTIAL_GAIN_LIST from './PotentialGainList';
+import STANDARD_CARD from './StandardCard.graphql';
+import NONCONFORMITY_CARD from './NonconformityCard.graphql';
+import RISK_CARD from './RiskCard.graphql';
+import PROJECT_LIST from './ProjectList.graphql';
+import PROJECT_COUNT from './ProjectCount.graphql';
+import DEPARTMENT_COUNT from './DepartmentCount.graphql';
+import CATEGORIZE_LIST from './CategorizeList.graphql';
 
 DASHBOARD_GOALS.name = 'DashboardGoals';
 COMPLETED_DELETED_GOALS.name = 'CompletedDeletedGoals';
@@ -67,7 +80,6 @@ export default {
   COUNTS,
   GOAL_MILESTONES_CARD,
   GOAL_LESSONS_CARD,
-  GOAL_RISKS_CARD,
   GOAL_ACTIONS_CARD,
   ACTION_LIST,
   GOAL_LIST,
@@ -75,6 +87,7 @@ export default {
   ACTION_CARD,
   MILESTONE_NOTIFY_CARD,
   CANVAS_LAYOUT,
+  CANVAS_REPORT_LAYOUT,
   CANVAS_PAGE,
   KEY_PARTNERS,
   KEY_ACTIVITIES,
@@ -98,6 +111,7 @@ export default {
   CUSTOMER_SEGMENT_CARD,
   VALUE_PROPOSITION_CARD,
   CANVAS_SETTINGS,
+  CANVAS_SCREEN_SETTINGS,
   ORGANIZATIONS_MENU,
   ORGANIZATIONS,
   COST_LINES_CHART,
@@ -106,4 +120,16 @@ export default {
   REVENUE_STREAMS_PROFIT_CHART,
   KEY_PARTNERS_CHART,
   GUIDANCE,
+  STANDARD_TYPE_LIST,
+  STANDARD_SECTION_LIST,
+  NONCONFORMITY_LIST,
+  POTENTIAL_GAIN_LIST,
+  STANDARD_CARD,
+  NONCONFORMITY_CARD,
+  RISK_CARD,
+  PROJECT_LIST,
+  PROJECT_COUNT,
+  DEPARTMENT_COUNT,
+  CATEGORIZE_LIST,
+  CANVAS_REPORT_PAGE,
 };

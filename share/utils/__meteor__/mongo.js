@@ -20,13 +20,14 @@ export const __closeDB = jest.fn(async () => {
 
 export const __clearDB = jest.fn(async () => {
   const collections = await db.collections();
-  return Promise.all(collections.map(collection => collection.remove()));
+  return Promise.all(collections.map(collection => collection.drop()));
 });
 
 const Collection = jest.fn(function (name) {
   if (!db) return null;
 
   this.collection = db.collection(name);
+  this.rawCollection = () => this.collection;
 
   this.insert = jest.fn(async function insert(doc, ...args) {
     const writeDoc = { _id: faker.random.uuid(), ...doc };
@@ -50,10 +51,12 @@ const Collection = jest.fn(function (name) {
 
   this.find = jest.fn(function find(...args) {
     const cursor = this.collection.find(...args);
-    return Object.assign({}, cursor, {
+    return {
+      ...cursor,
+      ...cursor.__proto__, // eslint-disable-line no-proto
       fetch: jest.fn(async () => cursor.toArray()),
-      count: jest.fn(async () => cursor.count()),
-    });
+      map: jest.fn(async (...mapArgs) => cursor.map(...mapArgs).toArray()),
+    };
   });
 
   this.before = {

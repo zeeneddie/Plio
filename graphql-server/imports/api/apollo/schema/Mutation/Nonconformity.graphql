@@ -1,0 +1,44 @@
+type NonconformityPayload {
+  nonconformity: Nonconformity
+}
+
+input CreateNonconformityInput {
+  organizationId: ID!
+  description: String
+  title: String!
+  ownerId: ID!
+  originatorId: ID!
+  magnitude: String!
+  type: String!
+  standardsIds: [ID]
+}
+
+input RefInput {
+  text: String
+  url: String
+}
+
+input UpdateNonconformityInput {
+  _id: ID!
+  title: String
+  description: String
+  ownerId: ID
+  originatorId: ID
+  magnitude: String
+  statusComment: String
+  standardsIds: [ID]
+  departmentsIds: [ID]
+  projectIds: [ID]
+  cost: Int,
+  ref: RefInput,
+}
+
+input DeleteNonconformityInput {
+  _id: ID!
+}
+
+type Mutation {
+  createNonconformity(input: CreateNonconformityInput!): NonconformityPayload
+  updateNonconformity(input: UpdateNonconformityInput!): Nonconformity
+  deleteNonconformity(input: DeleteNonconformityInput!): Nonconformity
+}

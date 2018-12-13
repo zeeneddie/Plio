@@ -1,7 +1,8 @@
-import { Organizations } from '/imports/share/collections/organizations';
-import { getTimezones } from './helpers';
-import DailyRecapSender from '/imports/recaps/daily/DailyRecapSender';
+import { SyncedCron } from 'meteor/percolate:synced-cron';
 
+import { Organizations } from '../../share/collections';
+import { getTimezones } from './helpers';
+import { sendDailyRecap } from '../../recaps/daily/sendDailyRecap';
 
 // send recaps at 05:00
 const RECAP_SENDING_TIME = '05:00';
@@ -20,8 +21,6 @@ SyncedCron.add({
       timezone: { $in: timezones },
     }, {
       fields: { _id: 1 },
-    }).forEach((org) => {
-      new DailyRecapSender(org._id).send();
-    });
+    }).forEach((({ _id }) => sendDailyRecap(_id)));
   },
 });

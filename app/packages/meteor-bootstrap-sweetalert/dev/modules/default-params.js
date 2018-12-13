@@ -11,6 +11,7 @@ var defaultParams = {
   confirmButtonClass: 'btn-primary',
   cancelButtonText: 'Cancel',
   cancelButtonClass: 'btn-default',
+  extraButtonClass: 'btn-default',
   containerClass: '',
   titleClass: '',
   textClass: '',

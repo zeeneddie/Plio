@@ -15,4 +15,18 @@ export default {
       },
     );
   },
+
+  async update(args, context) {
+    const { organizationId, notify } = args;
+    const { userId, collections: { CanvasSettings } } = context;
+    const query = { organizationId };
+    const modifier = {
+      $set: {
+        notify,
+        updatedBy: userId,
+      },
+    };
+
+    return CanvasSettings.update(query, modifier);
+  },
 };

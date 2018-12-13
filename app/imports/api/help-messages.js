@@ -4,6 +4,7 @@ import { UserRoles } from '../share/constants';
 
 const StandardsHelp = {
   standard: 'A standard is a document that sets standards for how you do things (policies, processes, etc) in your organization.  To add a standard into Plio, just fill in the card details, and link to a source file which may be a Word document, a URL link to a web document or a video.',
+  uniqueNumber: 'Please enter a unique number between 1 and 10000 for this standards document',
 };
 
 const NonConformitiesHelp = {
@@ -38,7 +39,8 @@ const OrganizationSettingsHelp = {
   organizationOwner: 'The organization owner in Plio is the user who controls the administration of the Plio workspace, and is the designated person for account billing.  You can request to change the organization owner and if this request is accepted by the new owner, he or she will take over administration and billing responsibilities.',
   timeZone: 'Use this setting to set the time that Plio sends out certain notification messages.',
   defaultCurrency: 'Use this setting to set the currency that Plio uses in your organization workspace.  This will also be used as the default currency for your Plio billing.',
-  departments: 'Create a list of departments or business sectors for your organization.',
+  departments: 'Create a list of departments or teams for your organization.',
+  projects: 'Create a list of projects for your organization.',
   standardTypes: 'Create a list of standards types for your organization.',
   standardSections: 'Create the section structure for your standards documents.',
   workflowSteps: 'Indicate whether you want Plio to use simple (3-step) or full (6-step) workflows for your nonconformity and risk-handling processes. If you wish, you can set simpler workflows for your less critical nonconformities and risks. Plio always uses a 3-step workflow process for managing potential gains.',

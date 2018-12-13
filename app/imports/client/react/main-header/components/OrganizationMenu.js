@@ -25,6 +25,7 @@ import HeaderMenuItem from './HeaderMenuItem';
 const RouteLabels = {
   [RouteNames.CANVAS]: 'Business design view',
   [RouteNames.DASHBOARD]: 'Business operations view',
+  [RouteNames.CANVAS_REPORT]: 'View report',
 };
 
 const DropdownMenuStyled = styled(DropdownMenu)`
@@ -36,6 +37,12 @@ const PreloaderStyled = styled(Preloader)`
   width: 20px;
   margin: auto;
   padding: 10px 0;
+`;
+
+const EmbeddedHeaderMenuItem = styled(HeaderMenuItem)`
+  &.dropdown-item {
+    padding-left: 30px;
+  }
 `;
 
 const OrganizationMenu = ({ organization: currentOrg, isDashboard }) => (
@@ -96,6 +103,15 @@ const OrganizationMenu = ({ organization: currentOrg, isDashboard }) => (
                         >
                           {RouteLabels[RouteNames.CANVAS]}
                         </HeaderMenuItem>
+                        {routeName === RouteNames.CANVAS && (
+                          <EmbeddedHeaderMenuItem
+                            tag="a"
+                            target="_blank"
+                            href={router.path(RouteNames.CANVAS_REPORT, { orgSerialNumber })}
+                          >
+                            {RouteLabels[RouteNames.CANVAS_REPORT]}
+                          </EmbeddedHeaderMenuItem>
+                        )}
                         <HeaderMenuItem
                           tag="a"
                           href={router.path(RouteNames.DASHBOARD, { orgSerialNumber })}

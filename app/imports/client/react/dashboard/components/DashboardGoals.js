@@ -10,9 +10,10 @@ import {
 import { WithToggle } from '../../helpers';
 import {
   GoalsChartContainer,
-  GoalAddModalContainer,
+  GoalAddContainer,
   GoalEditModalContainer,
   CompletedDeletedGoalsContainer,
+  GoalAddModal,
 } from '../../goals';
 import { MilestoneModalContainer } from '../../milestones';
 import { ActionModalContainer } from '../../actions';
@@ -40,9 +41,9 @@ const DashboardGoals = ({
     {addModalToggleState => (
       <Fragment>
         {canEditGoals && (
-          <GoalAddModalContainer
+          <GoalAddContainer
             {...{ ...addModalToggleState, organizationId }}
-            owner={user}
+            component={GoalAddModal}
           />
         )}
         {!!goals.length && (
@@ -50,7 +51,7 @@ const DashboardGoals = ({
             <GoalEditModalContainer
               isOpen={isEditModalOpen}
               toggle={toggleEditModal}
-              {...{ organizationId, canEditGoals }}
+              {...{ organizationId }}
             />
             <MilestoneModalContainer
               isOpen={isMilestoneModalOpen}

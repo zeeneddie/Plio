@@ -1,12 +1,11 @@
 import { compose } from 'ramda';
 
 import { KeyActivities } from '../../../share/collections';
-import { CollectionNames } from '../../../share/constants';
+import { CollectionNames, CanvasTypes } from '../../../share/constants';
 import { getKeyActivityDesc } from '../../../helpers/description';
 import {
   getDocUrlByOrganizationId,
   getDocUnsubscribePath,
-  getCanvasUrl,
 } from '../../../helpers/url';
 import CanvasAuditConfig from '../canvas/canvas-audit-config';
 
@@ -15,6 +14,8 @@ export default {
   collection: KeyActivities,
   collectionName: CollectionNames.KEY_ACTIVITIES,
   docDescription: getKeyActivityDesc,
-  docUrl: getCanvasUrl,
-  docUnsubscribeUrl: compose(getDocUnsubscribePath, getDocUrlByOrganizationId('keyActivities')),
+  docUnsubscribeUrl: compose(
+    getDocUnsubscribePath,
+    getDocUrlByOrganizationId(CanvasTypes.KEY_ACTIVITY),
+  ),
 };

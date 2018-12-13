@@ -1,7 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Card } from 'reactstrap';
 
-import { EntitySubcard } from '../../components';
+import categorize from '../../forms/decorators/categorize';
+import { validateRisk } from '../../../validation';
+import { EntityForm, EntityCard } from '../../components';
 import RiskEditForm from './RiskEditForm';
 
 const RiskSubcard = ({
@@ -9,38 +12,49 @@ const RiskSubcard = ({
   isOpen,
   toggle,
   onDelete,
-  error,
-  loading,
-  ...props
+  onSubmit,
+  organizationId,
+  initialValues,
+  ...rest
 }) => (
-  <EntitySubcard
-    entity={risk}
-    header={() => (
-      <Fragment>
-        <strong>{risk.sequentialId}</strong>
-        {' '}
-        {risk.title}
-      </Fragment>
-    )}
-    {...{
-      isOpen,
-      toggle,
-      loading,
-      error,
-      onDelete,
-    }}
-  >
-    <RiskEditForm {...{ ...risk, ...props }} />
-  </EntitySubcard>
+  <Card>
+    <EntityForm
+      {...{
+        isOpen,
+        toggle,
+        onDelete,
+        onSubmit,
+        initialValues,
+      }}
+      label={(
+        <Fragment>
+          <strong>{risk.sequentialId}</strong>
+          {' '}
+          {risk.title}
+        </Fragment>
+      )}
+      validate={validateRisk}
+      decorators={[categorize]}
+      component={EntityCard}
+    >
+      {({ handleSubmit }) => (
+        <RiskEditForm
+          {...{ organizationId, ...rest }}
+          save={handleSubmit}
+        />
+      )}
+    </EntityForm>
+  </Card>
 );
 
 RiskSubcard.propTypes = {
   risk: PropTypes.object.isRequired,
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  error: PropTypes.string,
-  loading: PropTypes.bool,
+  initialValues: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  organizationId: PropTypes.string.isRequired,
+  onDelete: PropTypes.func,
 };
 
 export default RiskSubcard;

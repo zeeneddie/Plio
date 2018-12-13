@@ -1,9 +1,13 @@
 #import "../Fragment/KeyResourceCard.graphql"
 
-query KeyResourceCard($_id: ID!) {
+query KeyResourceCard($_id: ID!, $organizationId: ID!) {
   keyResource(_id: $_id) {
     keyResource {
       ...KeyResourceCard
     }
+  }
+  user: me {
+    _id
+    roles(organizationId: $organizationId)
   }
 }

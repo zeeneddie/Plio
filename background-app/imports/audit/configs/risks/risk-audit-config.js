@@ -1,9 +1,8 @@
 import { _ } from 'meteor/underscore';
 
 import { Risks } from '/imports/share/collections/risks';
-import { CollectionNames } from '/imports/share/constants';
 import ProblemAuditConfig from '../problems/problem-audit-config';
-import RiskWorkflow from '/imports/workflow/RiskWorkflow';
+import RiskWorkflow from '../../../workflow/RiskWorkflow';
 
 import improvementPlanDesiredOutcome from './fields/improvementPlan.desiredOutcome';
 import improvementPlanFileIds from './fields/improvementPlan.fileIds';
@@ -20,13 +19,11 @@ import riskEvaluationPrevLossExp from './fields/riskEvaluation.prevLossExp';
 import riskEvaluationPriority from './fields/riskEvaluation.priority';
 import scores from './fields/scores';
 import typeId from './fields/typeId';
-import { getRiskDesc } from '/imports/helpers/description';
-import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
+import { getRiskDesc } from '../../../helpers/description';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '../../../helpers/url';
+import { ProblemTypes, CollectionNames, DocumentTypesPlural } from '../../../share/constants';
 
-
-const generateRiskDocUrl = getDocUrlByOrganizationId('risks');
-
-export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
+const RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
 
   collection: Risks,
 
@@ -57,7 +54,9 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
     return getRiskDesc();
   },
 
-  docUrl: generateRiskDocUrl,
+  docUrl: getDocUrlByOrganizationId(DocumentTypesPlural.RISKS),
 
-  docUnsubscribeUrl: _.compose(getDocUnsubscribePath, generateRiskDocUrl),
+  docUnsubscribeUrl: _.compose(getDocUnsubscribePath, getDocUrlByOrganizationId(ProblemTypes.RISK)),
 });
+
+export default RiskAuditConfig;

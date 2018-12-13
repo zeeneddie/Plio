@@ -3,9 +3,9 @@ import {
   checkLoggedIn,
   flattenInput,
   checkCustomerRelationshipAccess,
-  checkFilesAccess,
   customerRelationshipUpdateAfterware,
 } from '../../../../../share/middleware';
+import { CanvasUpdateMiddlewares } from '../../../../../share/middleware/constants';
 
 export const resolver = async (root, args, context) =>
   context.services.CustomerRelationshipService.update(args, context);
@@ -14,6 +14,6 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkCustomerRelationshipAccess(),
-  checkFilesAccess(),
+  ...CanvasUpdateMiddlewares,
   customerRelationshipUpdateAfterware(),
 )(resolver);

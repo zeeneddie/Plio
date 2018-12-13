@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
 import { pure } from 'recompose';
 
@@ -7,6 +7,7 @@ import RevenueStreamAddModal from './RevenueStreamAddModal';
 import RevenueStreamEditModal from './RevenueStreamEditModal';
 import RevenueStreamsChartModal from './RevenueStreamsChartModal';
 import CanvasBlock from './CanvasBlock';
+import RevenueStreamsHelp from './RevenueStreamsHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { CanvasSections, CanvasTypes } from '../../../../share/constants';
@@ -22,12 +23,7 @@ const RevenueStreams = ({ organizationId }) => (
         {...{ organizationId }}
         label="Revenue streams"
         sectionName={CanvasSections[CanvasTypes.REVENUE_STREAM]}
-        help={(
-          <Fragment>
-            <p>From which channels and segments?</p>
-            <p>How much does each contribute to overall revenue?</p>
-          </Fragment>
-        )}
+        help={<RevenueStreamsHelp />}
         items={revenueStreams}
         renderModal={({ isOpen, toggle }) => (
           <RevenueStreamAddModal {...{ isOpen, toggle, organizationId }} />

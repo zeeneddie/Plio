@@ -10,9 +10,9 @@ import { Mutation as Mutations, Query as Queries } from '../../../graphql';
 import Matcher from './Matcher';
 import { Col } from '../../components';
 
-const getRefetchQueries = _id => [{
+const getRefetchQueries = variables => [{
   query: Queries.CUSTOMER_SEGMENT_CARD,
-  variables: { _id },
+  variables,
 }];
 
 const getSuggestedItems = ifElse(
@@ -32,18 +32,19 @@ const CustomerInsightsMatcher = ({
   wants,
   documentId,
   matchedTo,
+  organizationId,
 }) => (
   <Composer
     components={[
       /* eslint-disable react/no-children-prop */
       <Mutation
         mutation={Mutations.CREATE_RELATION}
-        refetchQueries={getRefetchQueries(documentId)}
+        refetchQueries={getRefetchQueries({ _id: documentId, organizationId })}
         children={noop}
       />,
       <Mutation
         mutation={Mutations.DELETE_RELATION}
-        refetchQueries={getRefetchQueries(documentId)}
+        refetchQueries={getRefetchQueries({ _id: documentId, organizationId })}
         children={noop}
       />,
       /* eslint-enable react/no-children-prop */
@@ -95,6 +96,7 @@ CustomerInsightsMatcher.propTypes = {
   needs: PropTypes.arrayOf(PropTypes.object).isRequired,
   wants: PropTypes.arrayOf(PropTypes.object).isRequired,
   documentId: PropTypes.string.isRequired,
+  organizationId: PropTypes.string.isRequired,
   matchedTo: PropTypes.shape({
     benefits: PropTypes.arrayOf(PropTypes.object),
     features: PropTypes.arrayOf(PropTypes.object),

@@ -1,0 +1,5 @@
+mutation deleteStandard($input: DeleteStandardInput!) {
+  deleteStandard(input: $input) {
+    _id
+  }
+}

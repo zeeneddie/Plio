@@ -5,15 +5,16 @@ import { BaseEntitySchema, ViewedBySchema, OrganizationIdSchema } from './schema
 const RequiredSchema = new SimpleSchema({
   nonConformityId: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    regEx: SimpleSchema.RegEx.Id,
+    index: 1,
   },
   description: {
     type: String,
-    min: 1
+    min: 1,
   },
   date: {
-    type: Date
-  }
+    type: Date,
+  },
 });
 
 const OccurrencesSchema = new SimpleSchema([
@@ -24,13 +25,13 @@ const OccurrencesSchema = new SimpleSchema([
   {
     serialNumber: {
       type: Number,
-      min: 0
+      min: 0,
     },
     sequentialId: {
       type: String,
-      min: 5
-    }
-  }
+      min: 5,
+    },
+  },
 ]);
 
 export { OccurrencesSchema, RequiredSchema };

@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import React, { Component, createContext } from 'react';
+import React, { PureComponent, createContext } from 'react';
 import { handleGQError } from '../../../../api/handleGQError';
 
 const { Provider, Consumer } = createContext({});
 
 export const ModalConsumer = Consumer;
 
-export class ModalProvider extends Component {
+export class ModalProvider extends PureComponent {
   state = {
     loading: false,
     error: null,

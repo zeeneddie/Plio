@@ -3,10 +3,10 @@ import {
   checkLoggedIn,
   flattenInput,
   checkValuePropositionAccess,
-  checkFilesAccess,
   valuePropositionUpdateAfterware,
   checkValuePropositionMatchedToAccess,
 } from '../../../../../share/middleware';
+import { CanvasUpdateMiddlewares } from '../../../../../share/middleware/constants';
 
 export const resolver = async (root, args, context) =>
   context.services.ValuePropositionService.update(args, context);
@@ -16,6 +16,6 @@ export default applyMiddleware(
   flattenInput(),
   checkValuePropositionAccess(),
   checkValuePropositionMatchedToAccess(),
-  checkFilesAccess(),
+  ...CanvasUpdateMiddlewares,
   valuePropositionUpdateAfterware(),
 )(resolver);

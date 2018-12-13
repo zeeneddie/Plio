@@ -9,9 +9,10 @@ import {
   convertDocumentOptions,
   getValues,
   mapUsersToOptions,
+  getIds,
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
-import { pure } from 'recompose';
+import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -22,7 +23,6 @@ import { validateValueProposition } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
 import ValueComponentsSubcard from './ValueComponentsSubcard';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -30,14 +30,16 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
 
 const getValueProposition = pathOr({}, repeat('valueProposition', 2));
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -45,8 +47,18 @@ const getInitialValues = compose(
     'matchedTo',
     'notes',
     'notify',
+    'lessons',
   ]),
   getValueProposition,
+);
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.VALUE_PROPOSITION_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
 );
 
 const ValuePropositionEditModal = ({
@@ -54,6 +66,7 @@ const ValuePropositionEditModal = ({
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -126,6 +139,7 @@ const ValuePropositionEditModal = ({
                   matchedTo,
                   notes = '',
                   notify = [],
+                  files = [],
                 } = values;
 
                 if (difference[0].path[0] === 'matchedTo') {
@@ -152,6 +166,7 @@ const ValuePropositionEditModal = ({
                       notes,
                       color,
                       notify: getValues(notify),
+                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
@@ -167,41 +182,35 @@ const ValuePropositionEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.VALUE_PROPOSITION} />
                     <RenderSwitch
-                      require={data.valueProposition && data.valueProposition.valueProposition}
+                      require={isOpen &&
+                        data.valueProposition &&
+                        data.valueProposition.valueProposition}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<ValuePropositionForm {...{ organizationId }} />}
                     >
-                      {({
-                        _id: documentId,
-                        benefits = [],
-                        features = [],
-                        matchedTo,
-                      }) => (
+                      {valueProposition => (
                         <Fragment>
                           <ValuePropositionForm
-                            {...{ organizationId, matchedTo }}
+                            {...{ organizationId }}
+                            matchedTo={valueProposition.matchedTo}
                             save={handleSubmit}
                           />
                           <ValueComponentsSubcard
-                            {...{
-                              organizationId,
-                              benefits,
-                              features,
-                              documentId,
-                              matchedTo,
-                            }}
+                            {...{ organizationId }}
+                            benefits={valueProposition.benefits || []}
+                            features={valueProposition.features || []}
+                            documentId={valueProposition._id}
+                            matchedTo={valueProposition.matchedTo}
                             documentType={CanvasTypes.VALUE_PROPOSITION}
                           />
-                          <CanvasFilesSubcard
-                            {...{ organizationId, documentId }}
-                            onUpdate={updateValueProposition}
-                            slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
-                            documentType={CanvasTypes.VALUE_PROPOSITION}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
+                          <CanvasSubcards
+                            {...{ organizationId, refetchQueries }}
+                            section={valueProposition}
                             onChange={handleSubmit}
+                            documentType={CanvasTypes.VALUE_PROPOSITION}
+                            slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
+                            user={data && data.user}
                           />
                         </Fragment>
                       )}
@@ -222,6 +231,7 @@ ValuePropositionEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(ValuePropositionEditModal);
+export default enhance(ValuePropositionEditModal);

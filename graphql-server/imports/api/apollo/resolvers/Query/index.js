@@ -5,6 +5,7 @@ import RiskType from './RiskType';
 import Risk from './Risk';
 import Standard from './Standard';
 import Department from './Department';
+import Project from './Project';
 import Action from './Action';
 import Milestone from './Milestone';
 import ValueProposition from './ValueProposition';
@@ -22,6 +23,9 @@ import Feature from './Feature';
 import Need from './Need';
 import Want from './Want';
 import Guidance from './Guidance';
+import StandardType from './StandardType';
+import StandardSection from './StandardSection';
+import Nonconformity from './Nonconformity';
 
 export default {
   ...User,
@@ -48,4 +52,8 @@ export default {
   ...Need,
   ...Want,
   ...Guidance,
+  ...StandardType,
+  ...StandardSection,
+  ...Nonconformity,
+  ...Project,
 };

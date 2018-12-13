@@ -146,6 +146,10 @@ export const getCollectionNameByDocType = docType => ({
   [DocumentTypes.STANDARD]: CollectionNames.STANDARDS,
   [DocumentTypes.NON_CONFORMITY]: CollectionNames.NCS,
   [DocumentTypes.RISK]: CollectionNames.RISKS,
+  [DocumentTypes.BENEFIT]: CollectionNames.BENEFITS,
+  [DocumentTypes.FEATURE]: CollectionNames.FEATURES,
+  [DocumentTypes.NEED]: CollectionNames.NEEDS,
+  [DocumentTypes.WANT]: CollectionNames.WANTS,
 })[docType];
 
 export const getFormattedDate = (date, stringFormat) => {
@@ -279,7 +283,7 @@ export const getUserFullNameOrEmail = (userOrId) => {
     user = getUser(userOrId);
   }
 
-  return (user && user.fullNameOrEmail()) || '';
+  return (user && user.fullNameOrEmail && user.fullNameOrEmail()) || '';
 };
 
 export const htmlToPlainText = (html) => {
@@ -331,3 +335,8 @@ export const removeRolesFromAllUsers = roles =>
   });
 
 export const getWorkspaceDefaultsUpdater = mapKeys(concat(`${WORKSPACE_DEFAULTS}.`));
+
+export const getNestingLevel = (title) => {
+  const number = title.match(/^[\d.]*\d/);
+  return (number && number[0].split('.').length) || 1;
+};

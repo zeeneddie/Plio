@@ -1,0 +1,9 @@
+#import "../Fragment/StandardCard.graphql"
+
+query StandardCard($_id: ID!) {
+  standard(_id: $_id) {
+    standard {
+      ...StandardCard
+    }
+  }
+}

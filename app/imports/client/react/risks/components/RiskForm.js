@@ -14,23 +14,19 @@ import { UserSelectInput } from '../../forms/components';
 import { StringLimits } from '../../../../share/constants';
 
 const RiskForm = ({
-  onChangeTitle,
-  onChangeDescription,
-  onChangeOriginator,
-  onChangeOwner,
-  onChangeMagnitude,
-  onChangeType,
   children,
   organizationId,
   guidelines,
   sequentialId,
+  save,
+  isEditMode,
 }) => (
   <CardBlock>
     <FormField>
       Risk name
       <InputField
         name="title"
-        onBlur={onChangeTitle}
+        onBlur={save}
         placeholder="Risk name"
         addon={sequentialId}
         maxLength={StringLimits.title.max}
@@ -40,7 +36,7 @@ const RiskForm = ({
       Description
       <TextareaField
         name="description"
-        onBlur={onChangeDescription}
+        onBlur={save}
         placeholder="Description"
       />
     </FormField>
@@ -50,7 +46,7 @@ const RiskForm = ({
       <UserSelectInput
         name="originator"
         placeholder="originator"
-        onChange={onChangeOriginator}
+        onChange={save}
         {...{ organizationId }}
       />
     </FormField>
@@ -59,15 +55,15 @@ const RiskForm = ({
       <UserSelectInput
         name="owner"
         placeholder="Owner"
-        onChange={onChangeOwner}
+        onChange={save}
         {...{ organizationId }}
       />
     </FormField>
     <Magnitudes label="Initial categorization" {...{ guidelines }}>
       <Magnitudes.Select
-        disabled
+        disabled={isEditMode}
         name="magnitude"
-        onChange={onChangeMagnitude}
+        onChange={save}
         component={SelectField}
       />
     </Magnitudes>
@@ -75,7 +71,7 @@ const RiskForm = ({
       Risk type
       <RiskTypeSelectContainer
         name="type"
-        onChange={onChangeType}
+        onChange={save}
         component={SelectField}
         {...{ organizationId }}
       />
@@ -84,17 +80,13 @@ const RiskForm = ({
 );
 
 RiskForm.propTypes = {
-  onChangeTitle: PropTypes.func,
-  onChangeDescription: PropTypes.func,
-  onChangeOriginator: PropTypes.func,
-  onChangeOwner: PropTypes.func,
-  onChangeMagnitude: PropTypes.func,
-  onChangeType: PropTypes.func,
   organizationId: PropTypes.string.isRequired,
   // eslint-disable-next-line react/no-typos
   guidelines: Magnitudes.propTypes.guidelines,
   sequentialId: PropTypes.string,
   children: PropTypes.node,
+  save: PropTypes.func,
+  isEditMode: PropTypes.bool,
 };
 
 export default RiskForm;

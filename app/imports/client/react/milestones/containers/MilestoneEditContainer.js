@@ -55,6 +55,7 @@ const MilestoneEditContainer = ({
   isOpen,
   toggle,
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
+  organizationId,
   ...props
 }) => (
   <WithState
@@ -87,7 +88,7 @@ const MilestoneEditContainer = ({
             mutation={Mutations.DELETE_MILESTONE}
             refetchQueries={() => [{
               query: Queries.GOAL_CARD,
-              variables: { _id: milestone.linkedTo._id },
+              variables: { _id: milestone.linkedTo._id, organizationId },
             }]}
             children={noop}
           />,
@@ -95,7 +96,7 @@ const MilestoneEditContainer = ({
         ]}
       >
         {([
-          { data, loading, error },
+          { loading, error },
           updateMilestone,
           deleteMilestone,
         ]) => renderComponent({
@@ -106,8 +107,9 @@ const MilestoneEditContainer = ({
           toggle,
           initialValues,
           milestone,
+          organizationId,
           onSubmit: async (values, form) => {
-            const currentValues = getInitialValues(data);
+            const currentValues = getInitialValues(milestone);
             const difference = diff(values, currentValues);
 
             if (!difference) return undefined;
@@ -165,6 +167,7 @@ MilestoneEditContainer.propTypes = {
   milestoneId: PropTypes.string,
   milestone: PropTypes.object,
   fetchPolicy: PropTypes.string,
+  organizationId: PropTypes.string.isRequired,
 };
 
 export default pure(MilestoneEditContainer);

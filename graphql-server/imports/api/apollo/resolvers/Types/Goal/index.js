@@ -7,6 +7,7 @@ import {
 } from 'plio-util';
 import { view, map, flatten } from 'ramda';
 
+import { resolveRisksByIds, resolveLessonsById } from '../util';
 import { getGoalStatus } from '../../../../../share/helpers';
 
 const {
@@ -35,12 +36,7 @@ export default {
       const { timezone } = await byId.load(view(organizationId, goal));
       return getGoalStatus(timezone, goal);
     },
-    lessons: async (root, args, context) => {
-      const { _id: documentId } = root;
-      const { loaders: { Lesson: { byQuery } } } = context;
-
-      return byQuery.load({ documentId });
-    },
+    lessons: resolveLessonsById,
     actions: async (root, args, context) => {
       const { _id: documentId } = root;
       const { isDeleted = false } = args;
@@ -57,15 +53,6 @@ export default {
         isDeleted: false,
       }), milestoneIds)).then(flatten);
     },
-    risks: async (root, args, context) => {
-      const { riskIds } = root;
-      const { isDeleted = false } = args;
-      const { loaders: { Risk: { byQuery } } } = context;
-
-      return byQuery.loadMany(map(riskId => ({
-        _id: riskId,
-        isDeleted,
-      }), riskIds)).then(flatten);
-    },
+    risks: resolveRisksByIds,
   },
 };

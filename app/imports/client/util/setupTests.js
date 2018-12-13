@@ -16,6 +16,9 @@ Meteor.settings = mergeDeepRight(Meteor.settings, {
       url: '',
     },
   },
+  mainApp: {
+    url: '',
+  },
 });
 
 configure({ adapter: new Adapter() });

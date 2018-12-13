@@ -6,7 +6,5 @@ export default (config = () => ({})) => async (next, root, args, context) => {
 
   await next(root, args, context);
 
-  const risk = await Risks.findOne({ _id });
-
-  return { risk };
+  return Risks.findOne({ _id });
 };

@@ -8,6 +8,11 @@ export default async function updateCustomerSegment(args, context) {
     notes,
     fileIds,
     notify,
+    goalIds,
+    standardsIds,
+    riskIds,
+    nonconformityIds,
+    potentialGainIds,
   } = args;
   const { userId, collections: { CustomerSegments } } = context;
   const query = { _id };
@@ -20,6 +25,11 @@ export default async function updateCustomerSegment(args, context) {
       notes,
       fileIds,
       notify,
+      goalIds,
+      standardsIds,
+      riskIds,
+      nonconformityIds,
+      potentialGainIds,
       updatedBy: userId,
     },
   };

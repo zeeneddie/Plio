@@ -1,102 +1,99 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form } from 'react-final-form';
-import { getId, getUserOptions, mapEntitiesToOptions, lenses, spreadProp, noop } from 'plio-util';
-import { compose, pick, over, defaultTo } from 'ramda';
+import { CardTitle, Col } from 'reactstrap';
+import { getIds } from 'plio-util';
 
-import EntityManagerSubcard from '../../components/EntityManagerSubcard';
-import RiskSubcardContainer from '../containers/RiskSubcardContainer';
+import {
+  Subcard,
+  SubcardHeader,
+  SubcardBody,
+  Pull,
+  CardBlock,
+  EntityManager,
+  EntityManagerItem,
+  EntityManagerAddButton,
+  EntityManagerForms,
+  EntityManagerCards,
+  EntityManagerCard,
+} from '../../components';
+import RiskAddFormWrapper from './RiskAddFormWrapper';
 import NewRiskCard from './NewRiskCard';
-
-const getInitialValues = compose(
-  spreadProp('analysis'),
-  pick([
-    'title',
-    'description',
-    'statusComment',
-    'magnitude',
-    'owner',
-    'originator',
-    'type',
-    'standards',
-    'departments',
-    'analysis',
-  ]),
-  over(lenses.owner, getUserOptions),
-  over(lenses.originator, getUserOptions),
-  over(lenses.type, getId),
-  over(lenses.standards, mapEntitiesToOptions),
-  over(lenses.departments, mapEntitiesToOptions),
-  over(lenses.analysis, compose(
-    pick([
-      'targetDate',
-      'executor',
-      'completedBy',
-      'completionComments',
-      'completedAt',
-    ]),
-    over(lenses.executor, compose(getUserOptions, defaultTo({}))),
-    over(lenses.completedBy, compose(getUserOptions, defaultTo({}))),
-  )),
-);
+import RiskSubcard from './RiskSubcard';
+import RiskSubcardContainer from '../containers/RiskSubcardContainer';
 
 const RisksSubcard = ({
-  risks,
-  onDelete,
-  linkedTo,
   organizationId,
+  risks,
+  linkedTo,
   guidelines,
-  user,
-  ...props
+  onLink,
+  onUnlink,
 }) => (
-  <EntityManagerSubcard
-    {...props}
-    title="Risks"
-    newEntityTitle="New risk"
-    newEntityButtonTitle="Add a new risk"
-    entities={risks}
-    render={({ entity, isOpen, toggle }) => (
-      <Form
-        key={entity._id}
-        onSubmit={noop}
-        initialValues={getInitialValues(entity)}
-        subscription={{}}
-        render={({ form: { reset } }) => (
-          <RiskSubcardContainer
-            risk={entity}
-            {...{
-              isOpen,
-              toggle,
-              onDelete,
-              organizationId,
-              user,
-              reset,
-              guidelines,
-            }}
-          />
-        )}
-      />
-    )}
-    renderNewEntity={() => (
-      <NewRiskCard
-        {...{
-          linkedTo,
-          organizationId,
-          guidelines,
-          risks,
-        }}
-      />
-    )}
-  />
+  <Subcard>
+    <SubcardHeader>
+      <Pull left>
+        <CardTitle>
+          Risks
+        </CardTitle>
+      </Pull>
+      <Pull right>
+        <CardTitle>
+          {risks.length || ''}
+        </CardTitle>
+      </Pull>
+    </SubcardHeader>
+    <SubcardBody>
+      <CardBlock>
+        <Col sm={12}>
+          <EntityManager>
+            {risks.map(risk => (
+              <EntityManagerItem
+                {...{
+                  organizationId,
+                  risk,
+                  guidelines,
+                  linkedTo,
+                  onUnlink,
+                }}
+                key={risk._id}
+                itemId={risk._id}
+                component={RiskSubcardContainer}
+                render={RiskSubcard}
+              />
+            ))}
+            <EntityManagerForms>
+              <EntityManagerCards
+                {...{
+                  organizationId,
+                  onLink,
+                  onUnlink,
+                }}
+                keepDirtyOnReinitialize
+                label="New risk"
+                component={RiskAddFormWrapper}
+                render={EntityManagerCard}
+              >
+                <NewRiskCard
+                  {...{ organizationId, linkedTo, guidelines }}
+                  riskIds={getIds(risks)}
+                />
+              </EntityManagerCards>
+              <EntityManagerAddButton>Add a new risk</EntityManagerAddButton>
+            </EntityManagerForms>
+          </EntityManager>
+        </Col>
+      </CardBlock>
+    </SubcardBody>
+  </Subcard>
 );
 
 RisksSubcard.propTypes = {
-  risks: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onDelete: PropTypes.func.isRequired,
-  linkedTo: PropTypes.object,
   organizationId: PropTypes.string.isRequired,
+  risks: PropTypes.array.isRequired,
+  linkedTo: PropTypes.object,
   guidelines: PropTypes.object,
-  user: PropTypes.object,
+  onLink: PropTypes.func.isRequired,
+  onUnlink: PropTypes.func.isRequired,
 };
 
 export default RisksSubcard;

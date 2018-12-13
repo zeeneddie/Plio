@@ -1,25 +1,28 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { pure } from 'recompose';
-import { FormSpy } from 'react-final-form';
+import { sort } from 'ramda';
+import { bySerialNumber } from 'plio-util';
 
 import { AWSDirectives, DocumentTypes } from '../../../../share/constants';
-import { CardBlock, NotifySubcard } from '../../components';
+import { CardBlock, NotifySubcard, EntitiesField } from '../../components';
 import GoalMilestonesSubcardContainer from '../containers/GoalMilestonesSubcardContainer';
-import GoalRisksSubcardContainer from '../containers/GoalRisksSubcardContainer';
 import GoalLessonsSubcardContainer from '../containers/GoalLessonsSubcardContainer';
 import GoalActionsSubcardContainer from '../containers/GoalActionsSubcardContainer';
 import GoalEditForm from './GoalEditForm';
-import GoalCompleteForm from './GoalCompleteForm';
-import CanvasFilesSubcard from '../../canvas/components/CanvasFilesSubcard';
+import FilesSubcardContainer from '../../canvas/components/FilesSubcardContainer';
+import RisksSubcard from '../../risks/components/RisksSubcard';
 
 export const GoalEdit = ({
   status,
   organizationId,
   sequentialId,
+  title,
   save,
   _id: goalId,
   canEditGoals,
+  risks,
+  organization: { rkGuidelines } = {},
 }) => (
   <Fragment>
     <CardBlock>
@@ -31,31 +34,37 @@ export const GoalEdit = ({
           save,
         }}
       />
-      <GoalCompleteForm {...{ organizationId, save }} />
     </CardBlock>
-    <GoalActionsSubcardContainer {...{ organizationId, goalId }} />
-    <GoalMilestonesSubcardContainer {...{ goalId }} />
-    {canEditGoals && <GoalRisksSubcardContainer {...{ organizationId, goalId }} />}
-    <GoalLessonsSubcardContainer {...{ goalId }} />
-    <FormSpy subscription={{}}>
-      {({ form }) => (
-        <CanvasFilesSubcard
+    <Fragment>
+      <GoalActionsSubcardContainer {...{ organizationId, goalId }} />
+      <GoalMilestonesSubcardContainer {...{ goalId }} />
+      {canEditGoals && (
+        <EntitiesField
           {...{ organizationId }}
-          documentId={goalId}
-          onUpdate={({ variables: { input: { fileIds } } }) => {
-            form.change('fileIds', fileIds);
-            form.submit();
-          }}
-          slingshotDirective={AWSDirectives.GOAL_FILES}
-          documentType={DocumentTypes.GOAL}
+          name="risks"
+          render={RisksSubcard}
+          onChange={save}
+          guidelines={rkGuidelines}
+          linkedTo={{ title, sequentialId }}
+          risks={sort(bySerialNumber, risks)}
         />
       )}
-    </FormSpy>
-    <NotifySubcard
-      {...{ organizationId }}
-      documentId={goalId}
-      onChange={save}
-    />
+      <GoalLessonsSubcardContainer {...{ goalId }} />
+      <EntitiesField
+        {...{ organizationId }}
+        name="files"
+        render={props => <FilesSubcardContainer {...props} />}
+        documentId={goalId}
+        onChange={save}
+        slingshotDirective={AWSDirectives.GOAL_FILES}
+        documentType={DocumentTypes.GOAL}
+      />
+      <NotifySubcard
+        {...{ organizationId }}
+        documentId={goalId}
+        onChange={save}
+      />
+    </Fragment>
   </Fragment>
 );
 
@@ -63,9 +72,14 @@ GoalEdit.propTypes = {
   _id: PropTypes.string.isRequired,
   status: PropTypes.number.isRequired,
   organizationId: PropTypes.string,
-  sequentialId: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  sequentialId: PropTypes.string.isRequired,
   save: PropTypes.func.isRequired,
   canEditGoals: PropTypes.bool,
+  risks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  organization: PropTypes.shape({
+    rkGuidelines: PropTypes.object,
+  }).isRequired,
 };
 
 export default pure(GoalEdit);

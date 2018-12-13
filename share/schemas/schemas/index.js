@@ -97,6 +97,7 @@ export const ProgressSchema = new SimpleSchema({
 export const idSchemaDoc = {
   type: String,
   regEx: SimpleSchema.RegEx.Id,
+  index: 1,
 };
 
 export const OrganizationIdSchema = new SimpleSchema({
@@ -156,6 +157,7 @@ export const CreatedAtSchema = new SimpleSchema({
 
       return this.unset();
     },
+    index: 1,
   },
 });
 
@@ -266,6 +268,7 @@ export const standardsIdsSchema = new SimpleSchema({
     type: [String],
     regEx: SimpleSchema.RegEx.Id,
     optional: true,
+    index: 1,
     // maxCount: ?
   },
 });
@@ -311,6 +314,7 @@ export const ViewedBySchema = new SimpleSchema({
     type: [String],
     regEx: SimpleSchema.RegEx.Id,
     optional: true,
+    index: 1,
     // maxCount: ?
     autoValue() {
       if (this.isInsert) {
@@ -327,6 +331,7 @@ export const DeletedSchema = new SimpleSchema({
     type: Boolean,
     optional: true,
     defaultValue: false,
+    index: 1,
   },
   deletedBy: {
     type: String,
@@ -372,10 +377,12 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
       type: String,
       min: StringLimits.title.min,
       max: StringLimits.title.max,
+      index: 1,
     },
     magnitude: {
       type: String,
       allowedValues: Object.values(ProblemMagnitudes),
+      index: 1,
     },
     description: {
       type: String,
@@ -464,6 +471,7 @@ export const BaseProblemsOptionalSchema = ((() => {
         regEx: SimpleSchema.RegEx.Id,
         defaultValue: [],
         optional: true,
+        index: 1,
         // maxCount: ?
       },
       improvementPlan: {
@@ -475,7 +483,6 @@ export const BaseProblemsOptionalSchema = ((() => {
     },
   ]);
 })());
-
 
 export const TimezoneSchema = new SimpleSchema({
   timezone: {

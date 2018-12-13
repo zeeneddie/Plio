@@ -1,0 +1,12 @@
+<template name="Categorize">
+  {{#FormField label=label helpText=helpText}}
+    <div>
+      {{> React
+        component=CategorizeField
+        organizationId=organizationId
+        placeholder=placeholder
+        value=selected
+        onChange=onChangeCb}}
+    </div>
+  {{/FormField}}
+</template>

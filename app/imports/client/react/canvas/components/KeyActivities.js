@@ -6,6 +6,7 @@ import { pure } from 'recompose';
 import KeyActivityAddModal from './KeyActivityAddModal';
 import KeyActivityEditModal from './KeyActivityEditModal';
 import CanvasBlock from './CanvasBlock';
+import KeyActivitiesHelp from './KeyActivitiesHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { CanvasSections, CanvasTypes } from '../../../../share/constants';
@@ -21,9 +22,7 @@ const KeyActivities = ({ organizationId }) => (
         {...{ organizationId }}
         label="Key activities"
         sectionName={CanvasSections[CanvasTypes.KEY_ACTIVITY]}
-        help={(
-          <p>What are the key activities we need to create our value propositions?</p>
-        )}
+        help={<KeyActivitiesHelp />}
         items={keyActivities}
         renderModal={({ isOpen, toggle }) => (
           <KeyActivityAddModal {...{ isOpen, toggle, organizationId }} />

@@ -3,7 +3,6 @@ import React from 'react';
 import { getEntityOptions, mapEntitiesToOptions } from 'plio-util';
 import { pure } from 'recompose';
 
-import { swal } from '../../../util';
 import { Query } from '../../../graphql';
 import CanvasForm from './CanvasForm';
 import { FormField, ApolloSelectInputField, PercentInputField } from '../../components';
@@ -27,15 +26,16 @@ const CustomerSegmentForm = ({
           // network only is needed because after matching an item
           // the data would become inconsistent
           fetchPolicy: ApolloFetchPolicies.NETWORK_ONLY,
-        }).then(({ data: { valuePropositions: { valuePropositions } } }) => {
+        })}
+        transformOptions={({ data: { valuePropositions: { valuePropositions } } }) => {
           const options = [OptionNone];
 
           if (matchedTo) options.push(getEntityOptions(matchedTo));
 
           options.push(...mapEntitiesToOptions(valuePropositions));
 
-          return { options };
-        }).catch(swal.error)}
+          return options;
+        }}
       />
     </FormField>
     <FormField>

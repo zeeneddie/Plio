@@ -9,9 +9,10 @@ const CanvasRow = styled.div`
     flex-wrap: wrap;
   `}
 
-  ${StyledMixins.media.desktop`
+  ${StyledMixins.media.printAndDesktop`
     display: flex;
     flex: 1;
+    flex-wrap: nowrap;
 
     ${is('oneThird')`
       min-height: 33.33333%;

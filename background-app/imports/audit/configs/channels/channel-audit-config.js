@@ -1,12 +1,11 @@
 import { compose } from 'ramda';
 
 import { Channels } from '../../../share/collections';
-import { CollectionNames } from '../../../share/constants';
+import { CollectionNames, CanvasTypes } from '../../../share/constants';
 import { getChannelDesc } from '../../../helpers/description';
 import {
   getDocUrlByOrganizationId,
   getDocUnsubscribePath,
-  getCanvasUrl,
 } from '../../../helpers/url';
 import CanvasAuditConfig from '../canvas/canvas-audit-config';
 
@@ -15,6 +14,5 @@ export default {
   collection: Channels,
   collectionName: CollectionNames.CHANNELS,
   docDescription: getChannelDesc,
-  docUrl: getCanvasUrl,
-  docUnsubscribeUrl: compose(getDocUnsubscribePath, getDocUrlByOrganizationId('channels')),
+  docUnsubscribeUrl: compose(getDocUnsubscribePath, getDocUrlByOrganizationId(CanvasTypes.CHANNEL)),
 };

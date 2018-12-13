@@ -1,9 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
-import { compose, pick, over, pathOr, repeat } from 'ramda';
-import { pure } from 'recompose';
+import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
+import {
+  getUserOptions,
+  lenses,
+  noop,
+  mapUsersToOptions,
+  getValues,
+  getIds,
+} from 'plio-util';
+import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -13,7 +20,6 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCustomerRelationship } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -21,21 +27,33 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
 
 const getCustomerRelationship = pathOr({}, repeat('customerRelationship', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
     'color',
     'notes',
     'notify',
+    'lessons',
   ]),
   getCustomerRelationship,
+);
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.CUSTOMER_RELATIONSHIP_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
 );
 
 const CustomerRelationshipEditModal = ({
@@ -43,6 +61,7 @@ const CustomerRelationshipEditModal = ({
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -51,7 +70,7 @@ const CustomerRelationshipEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.CUSTOMER_RELATIONSHIP_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -101,6 +120,7 @@ const CustomerRelationshipEditModal = ({
                   color,
                   notes = '',
                   notify = [],
+                  files = [],
                 } = values;
 
                 return updateCustomerRelationship({
@@ -111,6 +131,7 @@ const CustomerRelationshipEditModal = ({
                       notes,
                       color,
                       notify: getValues(notify),
+                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
@@ -126,24 +147,23 @@ const CustomerRelationshipEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.CUSTOMER_RELATIONSHIP} />
                     <RenderSwitch
-                      require={data.customerRelationship &&
+                      require={isOpen &&
+                        data.customerRelationship &&
                         data.customerRelationship.customerRelationship}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CanvasForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId }) => (
+                      {customerRelationship => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasFilesSubcard
-                            {...{ documentId, organizationId }}
-                            onUpdate={updateCustomerRelationship}
-                            slingshotDirective={AWSDirectives.CUSTOMER_RELATIONSHIP_FILES}
-                            documentType={CanvasTypes.CUSTOMER_RELATIONSHIP}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
+                          <CanvasSubcards
+                            {...{ organizationId, refetchQueries }}
+                            section={customerRelationship}
                             onChange={handleSubmit}
+                            documentType={CanvasTypes.CUSTOMER_RELATIONSHIP}
+                            slingshotDirective={AWSDirectives.CUSTOMER_RELATIONSHIP_FILES}
+                            user={data && data.user}
                           />
                         </Fragment>
                       )}
@@ -164,6 +184,7 @@ CustomerRelationshipEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(CustomerRelationshipEditModal);
+export default enhance(CustomerRelationshipEditModal);

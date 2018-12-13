@@ -9,9 +9,10 @@ import {
   convertDocumentOptions,
   getValues,
   mapUsersToOptions,
+  getIds,
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
-import { pure } from 'recompose';
+import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -22,7 +23,6 @@ import { validateCustomerSegment } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CustomerSegmentForm from './CustomerSegmentForm';
 import CustomerInsightsSubcard from './CustomerInsightsSubcard';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -30,14 +30,16 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
 
 const getCustomerSegment = pathOr({}, repeat('customerSegment', 2));
 const getInitialValues = compose(
   over(lenses.matchedTo, compose(defaultTo(OptionNone), getEntityOptions)),
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -46,8 +48,18 @@ const getInitialValues = compose(
     'matchedTo',
     'notes',
     'notify',
+    'lessons',
   ]),
   getCustomerSegment,
+);
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.CUSTOMER_SEGMENT_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
 );
 
 const CustomerSegmentEditModal = ({
@@ -55,6 +67,7 @@ const CustomerSegmentEditModal = ({
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -63,7 +76,7 @@ const CustomerSegmentEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.CUSTOMER_SEGMENT_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -128,6 +141,7 @@ const CustomerSegmentEditModal = ({
                   percentOfMarketSize,
                   notes = '',
                   notify = [],
+                  files = [],
                 } = values;
 
                 if (difference[0].path[0] === 'matchedTo') {
@@ -155,6 +169,7 @@ const CustomerSegmentEditModal = ({
                       color,
                       percentOfMarketSize,
                       notify: getValues(notify),
+                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
@@ -170,41 +185,35 @@ const CustomerSegmentEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.CUSTOMER_SEGMENT} />
                     <RenderSwitch
-                      require={data.customerSegment && data.customerSegment.customerSegment}
+                      require={isOpen &&
+                        data.customerSegment &&
+                        data.customerSegment.customerSegment}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CustomerSegmentForm {...{ organizationId }} />}
                     >
-                      {({
-                        _id: documentId,
-                        needs = [],
-                        wants = [],
-                        matchedTo,
-                      }) => (
+                      {customerSegment => (
                         <Fragment>
                           <CustomerSegmentForm
-                            {...{ organizationId, matchedTo }}
+                            {...{ organizationId }}
+                            matchedTo={customerSegment.matchedTo}
                             save={handleSubmit}
                           />
                           <CustomerInsightsSubcard
-                            {...{
-                              organizationId,
-                              needs,
-                              wants,
-                              documentId,
-                              matchedTo,
-                            }}
+                            {...{ organizationId }}
+                            needs={customerSegment.needs || []}
+                            wants={customerSegment.wants || []}
+                            documentId={customerSegment._id}
+                            matchedTo={customerSegment.matchedTo}
                             documentType={CanvasTypes.CUSTOMER_SEGMENT}
                           />
-                          <CanvasFilesSubcard
-                            {...{ organizationId, documentId }}
-                            onUpdate={updateCustomerSegment}
-                            slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
-                            documentType={CanvasTypes.CUSTOMER_SEGMENT}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
+                          <CanvasSubcards
+                            {...{ organizationId, refetchQueries }}
+                            section={customerSegment}
                             onChange={handleSubmit}
+                            documentType={CanvasTypes.CUSTOMER_SEGMENT}
+                            slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
+                            user={data && data.user}
                           />
                         </Fragment>
                       )}
@@ -225,6 +234,7 @@ CustomerSegmentEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(CustomerSegmentEditModal);
+export default enhance(CustomerSegmentEditModal);

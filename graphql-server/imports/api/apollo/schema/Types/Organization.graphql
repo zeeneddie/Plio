@@ -66,6 +66,6 @@ type Guidelines {
 type HomeScreenTitles {
   standards: String
   risks: String
-  nonConformities: String
+  nonconformities: String
   workInbox: String
 }

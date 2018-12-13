@@ -1,9 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
-import { compose, pick, over, pathOr, repeat } from 'ramda';
-import { pure } from 'recompose';
+import {
+  getUserOptions,
+  lenses,
+  noop,
+  mapUsersToOptions,
+  getValues,
+  getIds,
+} from 'plio-util';
+import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
+import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -13,7 +20,6 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateChannel } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -21,21 +27,33 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
 
 const getChannel = pathOr({}, repeat('channel', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
     'color',
     'notes',
     'notify',
+    'lessons',
   ]),
   getChannel,
+);
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.CHANNEL_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
 );
 
 const ChannelEditModal = ({
@@ -43,6 +61,7 @@ const ChannelEditModal = ({
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -51,7 +70,7 @@ const ChannelEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.CHANNEL_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -101,6 +120,7 @@ const ChannelEditModal = ({
                   color,
                   notes = '',
                   notify = [],
+                  files = [],
                 } = values;
 
                 return updateChannel({
@@ -111,6 +131,7 @@ const ChannelEditModal = ({
                       notes,
                       color,
                       notify: getValues(notify),
+                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
@@ -126,23 +147,21 @@ const ChannelEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.CHANNEL} />
                     <RenderSwitch
-                      require={data.channel && data.channel.channel}
+                      require={isOpen && data.channel && data.channel.channel}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CanvasForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId }) => (
+                      {channel => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasFilesSubcard
-                            {...{ documentId, organizationId }}
-                            onUpdate={updateChannel}
-                            slingshotDirective={AWSDirectives.CHANNEL_FILES}
-                            documentType={CanvasTypes.CHANNEL}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
+                          <CanvasSubcards
+                            {...{ organizationId, refetchQueries }}
+                            section={channel}
                             onChange={handleSubmit}
+                            documentType={CanvasTypes.CHANNEL}
+                            slingshotDirective={AWSDirectives.CHANNEL_FILES}
+                            user={data && data.user}
                           />
                         </Fragment>
                       )}
@@ -163,6 +182,7 @@ ChannelEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(ChannelEditModal);
+export default enhance(ChannelEditModal);

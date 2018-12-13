@@ -11,6 +11,7 @@ import workflowDefaults from './fields/workflowDefaults';
 import reminders from './fields/reminders';
 import guidelines from './fields/guidelines';
 import workspaceDefaults from './fields/workspaceDefaults';
+import review from './fields/review';
 
 export default {
 
@@ -35,6 +36,7 @@ export default {
     ...reminders,
     ...guidelines,
     ...workspaceDefaults,
+    ...review,
   ],
 
   onRemoved: { },

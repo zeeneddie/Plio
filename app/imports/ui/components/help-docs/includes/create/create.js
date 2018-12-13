@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { _ } from 'meteor/underscore';
 import invoke from 'lodash.invoke';
+import { toastr } from 'meteor/chrismbeckett:toastr';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { SourceTypes } from '/imports/share/constants';
@@ -40,7 +41,6 @@ Template.HelpDocs_Create.viewmodel({
     if ((sourceType === SourceTypes.ATTACHMENT) && sourceFile) {
       this.modal().callMethod(insertFile, {
         name: sourceFile.name,
-        extension: sourceFile.name.split('.').pop().toLowerCase(),
         organizationId,
       }, (err, fileId) => {
         if (!err && fileId) {

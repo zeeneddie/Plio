@@ -4,6 +4,7 @@ type CanvasSectionSettings {
 
 type CanvasSettings implements BaseEntity {
   _id: ID!
+  organization: Organization!
   keyPartners: CanvasSectionSettings
   keyActivities: CanvasSectionSettings
   keyResources: CanvasSectionSettings
@@ -17,4 +18,6 @@ type CanvasSettings implements BaseEntity {
   createdBy: User!
   updatedAt: DateTime!
   updatedBy: User!
+  # default list of users to notify about canvas item changes
+  notify: [User]!
 }

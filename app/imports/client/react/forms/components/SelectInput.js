@@ -171,8 +171,8 @@ const TextCreatorWrapper = styled.span`
 `;
 
 const MultiValue = compose(
-  withProps(({ value }) => ({
-    label: value.label,
+  withProps(({ children }) => ({
+    label: children,
   })),
   withHandlers({
     onRemove: ({ value, onRemove, onRemoveMultiValue }) => (event) => {

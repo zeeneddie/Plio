@@ -1,13 +1,12 @@
 import { compose } from 'ramda';
 
 import { KeyPartners } from '../../../share/collections';
-import { CollectionNames } from '../../../share/constants';
+import { CollectionNames, CanvasTypes } from '../../../share/constants';
 import { getKeyPartnerDesc } from '../../../helpers/description';
 import * as UpdateHandlers from './fields';
 import {
   getDocUrlByOrganizationId,
   getDocUnsubscribePath,
-  getCanvasUrl,
 } from '../../../helpers/url';
 import CanvasAuditConfig from '../canvas/canvas-audit-config';
 
@@ -20,6 +19,8 @@ export default {
   collection: KeyPartners,
   collectionName: CollectionNames.KEY_PARTNERS,
   docDescription: getKeyPartnerDesc,
-  docUrl: getCanvasUrl,
-  docUnsubscribeUrl: compose(getDocUnsubscribePath, getDocUrlByOrganizationId('keyPartners')),
+  docUnsubscribeUrl: compose(
+    getDocUnsubscribePath,
+    getDocUrlByOrganizationId(CanvasTypes.KEY_PARTNER),
+  ),
 };

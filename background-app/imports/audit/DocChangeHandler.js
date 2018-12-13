@@ -164,6 +164,7 @@ export default class DocChangeHandler {
       docDesc: this._docDesc,
       docName: this._docName,
       userName: this._userName,
+      orgName: this._organization.name,
     };
   }
 
@@ -270,11 +271,12 @@ export default class DocChangeHandler {
   _buildNotifications(handler, args, notificationConfig, diff) {
     const getData = notificationConfig.data || handler.data;
     const getReceivers = notificationConfig.receivers || handler.receivers;
+    const getEmailTplData = notificationConfig.emailTemplateData || handler.emailTemplateData;
     const { kind } = diff || {};
 
     const {
       text, title, emailTemplateName,
-      emailText, emailSubject, emailTemplateData: getEmailTplData,
+      emailText, emailSubject,
       pushText, pushTitle, pushData: getPushData,
       sendBoth = false,
     } = notificationConfig;

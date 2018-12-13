@@ -49,6 +49,7 @@ Risks.publicFields = {
   typeId: 1,
   scores: 1,
   departmentsIds: 1,
+  projectIds: 1,
   status: 1,
   viewedBy: 1,
   createdAt: 1,

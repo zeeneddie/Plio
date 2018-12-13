@@ -11,6 +11,7 @@ import Milestone from './Milestone.graphql';
 import RiskType from './RiskType.graphql';
 import Standard from './Standard.graphql';
 import Department from './Department.graphql';
+import Project from './Project.graphql';
 import KeyPartner from './KeyPartner.graphql';
 import KeyActivity from './KeyActivity.graphql';
 import KeyResource from './KeyResource.graphql';
@@ -26,6 +27,9 @@ import Feature from './Feature.graphql';
 import Need from './Need.graphql';
 import Want from './Want.graphql';
 import Guidance from './Guidance.graphql';
+import StandardType from './StandardType.graphql';
+import StandardSection from './StandardSection.graphql';
+import Nonconformity from './Nonconformity.graphql';
 
 export default [
   User,
@@ -41,6 +45,7 @@ export default [
   RiskType,
   Standard,
   Department,
+  Project,
   KeyPartner,
   KeyActivity,
   KeyResource,
@@ -56,4 +61,7 @@ export default [
   Need,
   Want,
   Guidance,
+  StandardType,
+  StandardSection,
+  Nonconformity,
 ];

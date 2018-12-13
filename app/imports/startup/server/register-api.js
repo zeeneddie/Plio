@@ -4,8 +4,6 @@ import '../../api/audit-logs';
 
 import '../../api/organizations';
 
-import '../../api/departments';
-
 import '../../api/discussions';
 
 import '../../api/messages';

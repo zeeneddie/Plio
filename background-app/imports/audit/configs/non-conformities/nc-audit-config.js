@@ -18,7 +18,7 @@ import ref from './fields/ref';
 import refText from './fields/ref.text';
 import refUrl from './fields/ref.url';
 
-const generateNCDocUrl = getDocUrlByOrganizationId('non-conformities');
+const generateNCDocUrl = getDocUrlByOrganizationId(ProblemTypes.NON_CONFORMITY);
 
 export default Object.assign({}, ProblemAuditConfig, {
 

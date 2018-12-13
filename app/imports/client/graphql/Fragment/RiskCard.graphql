@@ -16,6 +16,7 @@ fragment RiskCard on Risk {
       }
     }
     status
+    isCompleted
     completedBy {
       _id
       profile {
@@ -46,6 +47,10 @@ fragment RiskCard on Risk {
     title
   }
   departments {
+    _id
+    title
+  }
+  projects {
     _id
     title
   }

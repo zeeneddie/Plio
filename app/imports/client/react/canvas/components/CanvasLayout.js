@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { ApolloProvider, Query } from 'react-apollo';
+import { delayed } from 'libreact/lib/delayed';
 
 import { client } from '../../../apollo';
 import { Query as Queries } from '../../../graphql';
@@ -13,6 +14,12 @@ import {
 import Errors from '../../../../share/errors';
 import MainHeader from '../../main-header/components/MainHeader';
 import CanvasPage from './CanvasPage';
+
+const DelayedMainHeader = delayed({
+  loader: () => Promise.resolve(MainHeader),
+  idle: true,
+  delay: 200,
+});
 
 const CanvasLayout = () => (
   <ApolloProvider {...{ client }}>
@@ -41,7 +48,7 @@ const CanvasLayout = () => (
             >
               {organization => (
                 <Fragment>
-                  <MainHeader {...{ organization }} />
+                  <DelayedMainHeader {...{ organization }} />
                   <CanvasPage {...{ organization }} />
                 </Fragment>
               )}

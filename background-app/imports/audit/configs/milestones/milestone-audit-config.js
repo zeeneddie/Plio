@@ -3,9 +3,9 @@ import { getId, getOrganizationId, getNotify } from 'plio-util';
 import { Milestones } from '../../../share/collections';
 import { CollectionNames } from '../../../share/constants';
 import { getMilestoneName, getMilestoneDesc } from '../../../helpers/description';
+import { getMilestoneUrl } from '../../../helpers/url';
 import onCreated from './on-created';
 import onRemoved from './on-removed';
-import GoalAuditConfig from '../goals/goal-audit-config';
 import * as UpdateHandlers from './fields';
 
 export default {
@@ -19,5 +19,5 @@ export default {
   docName: getMilestoneName,
   docOrgId: getOrganizationId,
   docNotifyList: getNotify,
-  docUrl: GoalAuditConfig.docUrl.bind(GoalAuditConfig),
+  docUrl: getMilestoneUrl,
 };

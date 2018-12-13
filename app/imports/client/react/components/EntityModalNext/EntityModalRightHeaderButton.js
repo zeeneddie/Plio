@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { FormSpy } from 'react-final-form';
 
 import { SaveButton, Button } from '../Buttons';
 import { Consumer } from './EntityModal';
 
-const EntityModalRightHeaderButton = props => (
+const EntityModalRightHeaderButton = ({ label, ...props }) => (
   <Consumer>
     {({
       loading,
@@ -12,7 +13,7 @@ const EntityModalRightHeaderButton = props => (
       toggle,
       noForm,
     }) => noForm ? (
-      <Button color="secondary" onClick={toggle}>Close</Button>
+      <Button color="secondary" onClick={toggle}>{label || 'Close'}</Button>
     ) : (
       <FormSpy subscription={{ submitting: true, active: true, dirty: true }}>
         {({
@@ -24,7 +25,7 @@ const EntityModalRightHeaderButton = props => (
           <SaveButton
             isSaving={loading || submitting}
             color={isEditMode ? 'secondary' : 'primary'}
-            onClick={submit}
+            onClick={event => !isEditMode && submit(event)}
             onMouseDown={() => {
               // display saving state when clicking on "Close" button
               // while being focused on the input
@@ -38,12 +39,16 @@ const EntityModalRightHeaderButton = props => (
             }}
             {...props}
           >
-            {isEditMode ? 'Close' : 'Save'}
+            {label || (isEditMode ? 'Close' : 'Save')}
           </SaveButton>
         )}
       </FormSpy>
     )}
   </Consumer>
 );
+
+EntityModalRightHeaderButton.propTypes = {
+  label: PropTypes.string,
+};
 
 export default EntityModalRightHeaderButton;

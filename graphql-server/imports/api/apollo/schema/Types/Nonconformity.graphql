@@ -1,0 +1,39 @@
+type HelpDeskRef {
+  text: String
+  url: String
+}
+
+type Nonconformity implements BaseEntity, PlioEntity {
+  _id: ID!
+  organization: Organization!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime
+  updatedBy: User
+  deletedAt: DateTime
+  deletedBy: User
+  title: String!
+  description: String
+  owner: User!
+  originator: User!
+  magnitude: String!
+  type: String!
+  standards: [Standard]
+  status: Int!
+  serialNumber: Int!
+  sequentialId: String!
+  workflowType: String!
+  fileIds: [String]
+  isDeleted: Boolean!
+  viewedBy: User
+  departments: [Department]
+  projects: [Project]
+  notify: [User]
+  improvementPlan: ImprovementPlan
+  analysis: Analysis
+  updateOfStandards: Analysis
+  statusComment: String
+  cost: Int
+  ref: HelpDeskRef
+  # rootCauseAnalysis:
+}

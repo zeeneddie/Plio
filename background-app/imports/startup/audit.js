@@ -25,6 +25,13 @@ import CustomerSegmentAuditConfig from
   '../audit/configs/customer-segments/customer-segment-audit-config';
 import CostLineAuditConfig from '../audit/configs/cost-lines/cost-line-audit-config';
 import RevenueStreamAuditConfig from '../audit/configs/revenue-streams/revenue-stream-audit-config';
+import BenefitAuditConfig from '../audit/configs/benefits/benefit-audit-config';
+import FeatureAuditConfig from '../audit/configs/features/feature-audit-config';
+import NeedAuditConfig from '../audit/configs/needs/need-audit-config';
+import WantAuditConfig from '../audit/configs/wants/want-audit-config';
+import RelationAuditConfig from '../audit/configs/relations/relation-audit-config';
+import CanvasSettingsAuditConfig from
+  '../audit/configs/canvas-settings/canvas-settings-audit-config';
 
 const auditConfigs = [
   ActionAuditConfig,
@@ -47,6 +54,12 @@ const auditConfigs = [
   CustomerSegmentAuditConfig,
   CostLineAuditConfig,
   RevenueStreamAuditConfig,
+  BenefitAuditConfig,
+  FeatureAuditConfig,
+  NeedAuditConfig,
+  WantAuditConfig,
+  RelationAuditConfig,
+  CanvasSettingsAuditConfig,
 ];
 
 auditConfigs.forEach((config) => {

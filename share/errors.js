@@ -22,6 +22,7 @@ export default {
   COMPLETION_TARGET_DATE_AFTER_END_DATE: '"Completion - target date" cannot be after end date',
   ORG_CANNOT_CHANGE_SETTINGS: 'User is not authorized for editing organization settings',
   DEP_CREATE_NOT_AUTHORIZED: 'User is not authorized for creating departments',
+  PROJECT_CREATE_NOT_AUTHORIZED: 'User is not authorized for creating projects',
   ANALYSIS_CANT_COMPLETE: 'Can\'t complete analysis',
   ANALYSIS_CANT_UNDO_COMPLETION: 'Can\'t undo analysis completion',
   ANALYSIS_SHOULD_BE_COMPLETED: 'Analysis should be completed',
@@ -31,4 +32,5 @@ export default {
   ACT_CANNOT_SET_COMPLETION_DATE_FOR_COMPLETED: 'Cannot set completion date for completed action',
   ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED: 'Cannot set executor for completed action',
   ST_CANNOT_CHANGE_DEFAULT: 'Cannot change or delete the default standard type',
+  CANNOT_REASSIGN_OWNERSHIP_TO_YOURSELF: 'Cannot reassign ownership to yourself',
 };

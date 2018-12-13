@@ -1,24 +1,98 @@
+import PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
-import { withHandlers, withProps } from 'recompose';
-import { view, ifElse, compose } from 'ramda';
-import { lenses, viewEq, getUserOptions } from 'plio-util';
-import { graphql } from 'react-apollo';
+import { sort } from 'ramda';
+import { bySerialNumber, getIds, noop } from 'plio-util';
+import { Query, Mutation } from 'react-apollo';
+import { Form } from 'react-final-form';
+import diff from 'deep-diff';
 
-import { namedCompose, withStore, withApollo } from '../../helpers';
-import { ProblemMagnitudes } from '../../../../share/constants';
-import {
-  getRiskTypes,
-  getCurrentUser,
-  getOrganizationId,
-  getRiskGuidelines,
-} from '../../../store/selectors';
+import { namedCompose, withStore, withApollo, Composer } from '../../helpers';
+import { getOrganizationId, getRiskGuidelines } from '../../../store/selectors';
 import { getRisksLinkedToStandard } from '../../../store/selectors/risks';
-import { Mutation } from '../../../graphql';
-import { swal } from '../../../util';
+import { Mutation as Mutations, Query as Queries } from '../../../graphql';
 import RisksSubcard from '../../risks/components/RisksSubcard';
-import { getUserWithFullName } from '../../../../api/users/helpers';
+import EntitiesField from '../../forms/components/EntitiesField';
+import { swal } from '../../../util';
 
-const getCurrentUserWithFullName = compose(getUserWithFullName, getCurrentUser);
+const StandardRisksSubcardContainer = ({
+  organizationId,
+  guidelines,
+  risks,
+  linkedTo,
+}) => (
+  <Composer
+    components={[
+      /* eslint-disable react/no-children-prop */
+      <Mutation mutation={Mutations.LINK_STANDARD_TO_RISK} children={noop} />,
+      <Mutation mutation={Mutations.UNLINK_STANDARD_FROM_RISK} children={noop} />,
+      <Query
+        query={Queries.CURRENT_USER_FULL_NAME}
+        children={noop}
+      />,
+      <Query
+        query={Queries.RISK_TYPE_LIST}
+        variables={{ organizationId }}
+        children={noop}
+      />,
+      /* eslint-enable react/no-children-prop */
+    ]}
+  >
+    {([linkStandardToRisk, unlinkStandardFromRisk]) => (
+      <Form
+        subscription={{}}
+        initialValues={{ risks: getIds(risks) }}
+        onSubmit={({ risks: riskIds }) => {
+          // TEMP: solution until we refactor standard edit modal
+          const difference = diff(getIds(risks), riskIds);
+
+          if (!difference) return undefined;
+
+          if (difference[0].item.kind === 'N') {
+            return linkStandardToRisk({
+              variables: {
+                input: {
+                  _id: difference[0].item.rhs,
+                  standardId: linkedTo._id,
+                },
+              },
+            }).catch(swal.error);
+          }
+
+          if (difference[0].item.kind === 'D') {
+            return unlinkStandardFromRisk({
+              variables: {
+                input: {
+                  _id: difference[0].item.lhs,
+                  standardId: linkedTo._id,
+                },
+              },
+            }).catch(swal.error);
+          }
+
+          return undefined;
+        }}
+      >
+        {({ handleSubmit }) => (
+          <EntitiesField
+            {...{ organizationId, guidelines, linkedTo }}
+            name="risks"
+            render={RisksSubcard}
+            onChange={handleSubmit}
+            risks={sort(bySerialNumber, risks)}
+          />
+        )}
+      </Form>
+    )}
+  </Composer>
+);
+
+StandardRisksSubcardContainer.propTypes = {
+  organizationId: PropTypes.string.isRequired,
+  guidelines: PropTypes.object.isRequired,
+  risks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  linkedTo: PropTypes.object.isRequired,
+};
 
 export default namedCompose('StandardRisksSubcardContainer')(
   withStore,
@@ -27,96 +101,6 @@ export default namedCompose('StandardRisksSubcardContainer')(
     organizationId: getOrganizationId(state),
     risks: getRisksLinkedToStandard(state, { standardId }),
     linkedTo: state.collections.standardsByIds[standardId],
-    riskTypes: getRiskTypes(state),
     guidelines: getRiskGuidelines(state),
-    user: getCurrentUserWithFullName(state),
   })),
-  graphql(Mutation.LINK_STANDARD_TO_RISK, {
-    props: ({
-      mutate,
-      ownProps: {
-        linkedTo,
-      },
-    }) => ({
-      linkStandardToRisk: async ({ risk: { value: riskId } = {} }) => {
-        if (!riskId) throw new Error('Risk is required');
-
-        return mutate({
-          variables: {
-            input: {
-              _id: riskId,
-              standardId: linkedTo._id,
-            },
-          },
-        });
-      },
-    }),
-  }),
-  graphql(Mutation.CREATE_RISK, {
-    props: ({
-      mutate,
-      ownProps: {
-        organizationId,
-        linkedTo,
-      },
-    }) => ({
-      createRisk: async ({
-        title,
-        description,
-        magnitude,
-        originator: { value: originatorId },
-        owner: { value: ownerId },
-        type: typeId,
-      }) => {
-        if (!title) throw new Error('Title is required');
-
-        return mutate({
-          variables: {
-            input: {
-              title,
-              description,
-              originatorId,
-              ownerId,
-              magnitude,
-              typeId,
-              organizationId,
-              standardsIds: [linkedTo._id],
-            },
-          },
-        });
-      },
-    }),
-  }),
-  withHandlers({
-    onSave: ({ linkStandardToRisk, createRisk }) => ifElse(
-      viewEq(0, lenses.active),
-      createRisk,
-      linkStandardToRisk,
-    ),
-  }),
-  graphql(Mutation.DELETE_RISK, {
-    props: ({ mutate }) => ({
-      onDelete: (e, {
-        entity: { _id, title },
-      }) => swal.promise({
-        text: `The risk "${title}" will be deleted`,
-        confirmButtonText: 'Delete',
-        successTitle: 'Deleted!',
-        successText: `The risk "${title}" was deleted successfully.`,
-      }, () => mutate({
-        variables: {
-          input: { _id },
-        },
-      })),
-    }),
-  }),
-  withProps(({ user, riskTypes }) => ({
-    initialValues: {
-      active: 0,
-      owner: getUserOptions(user),
-      originator: getUserOptions(user),
-      type: view(lenses.head._id, riskTypes),
-      magnitude: ProblemMagnitudes.MAJOR,
-    },
-  })),
-)(RisksSubcard);
+)(StandardRisksSubcardContainer);

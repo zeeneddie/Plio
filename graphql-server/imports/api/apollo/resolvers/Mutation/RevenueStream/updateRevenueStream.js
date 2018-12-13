@@ -5,9 +5,9 @@ import {
   checkRevenueStreamAccess,
   checkPercentOfRevenue,
   checkPercentOfProfit,
-  checkFilesAccess,
   revenueStreamUpdateAfterware,
 } from '../../../../../share/middleware';
+import { CanvasUpdateMiddlewares } from '../../../../../share/middleware/constants';
 
 export const resolver = async (root, args, context) =>
   context.services.RevenueStreamService.update(args, context);
@@ -18,6 +18,6 @@ export default applyMiddleware(
   checkRevenueStreamAccess(),
   checkPercentOfRevenue(),
   checkPercentOfProfit(),
-  checkFilesAccess(),
+  ...CanvasUpdateMiddlewares,
   revenueStreamUpdateAfterware(),
 )(resolver);

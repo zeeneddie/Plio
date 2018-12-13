@@ -1,0 +1,5 @@
+query ProjectCount($organizationId: ID!) {
+  projects(input: { organizationId: $organizationId }) {
+    totalCount
+  }
+}

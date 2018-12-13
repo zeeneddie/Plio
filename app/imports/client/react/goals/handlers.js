@@ -1,12 +1,7 @@
 import { curry } from 'ramda';
 
 import { swal } from '../../util';
-import {
-  moveGoalWithinCacheAfterDeleting,
-  moveGoalWithinCacheAfterRestoring,
-  moveGoalWithinCacheAfterRemoving,
-} from '../../apollo/utils';
-import { Mutation } from '../../graphql';
+import { Query, Mutation } from '../../graphql';
 
 export const onDelete = ({ mutate, ownProps: { organizationId, goal } }, callback) => swal.promise({
   text: `The goal "${goal.title}" will be deleted`,
@@ -19,22 +14,28 @@ export const onDelete = ({ mutate, ownProps: { organizationId, goal } }, callbac
       _id: goal._id,
     },
   },
-  update: (proxy, { data: { deleteGoal: removedGoal } }) => {
-    if (!removedGoal.isCompleted) {
-      moveGoalWithinCacheAfterDeleting(organizationId, removedGoal, proxy);
-    }
-  },
+  refetchQueries: [
+    Query.DASHBOARD_GOALS.name,
+    Query.COMPLETED_DELETED_GOALS.name,
+    Query.GOAL_LIST.name,
+    {
+      query: Query.CANVAS_PAGE,
+      variables: { organizationId },
+    },
+  ],
 }).then(callback));
 
-export const onComplete = ({ mutate, ownProps: { organizationId, goal } }) => mutate({
+export const onComplete = ({ mutate, ownProps: { goal } }) => mutate({
   variables: {
     input: {
       _id: goal._id,
     },
   },
-  update: (proxy, { data: { completeGoal: completedGoal } }) => {
-    moveGoalWithinCacheAfterDeleting(organizationId, completedGoal, proxy);
-  },
+  refetchQueries: [
+    Query.DASHBOARD_GOALS.name,
+    Query.COMPLETED_DELETED_GOALS.name,
+    Query.GOAL_LIST.name,
+  ],
 });
 
 export const createRestoreHandler = curry((
@@ -47,12 +48,18 @@ export const createRestoreHandler = curry((
   successText: `The key goal "${title}" was restored successfully.`,
 }, () => mutate({
   variables: { input: { _id } },
-  update: (store, { data: { [mutationName]: goal } }) => {
-    moveGoalWithinCacheAfterRestoring(organizationId, goal, store);
-  },
+  refetchQueries: [
+    Query.DASHBOARD_GOALS.name,
+    Query.COMPLETED_DELETED_GOALS.name,
+    Query.GOAL_LIST.name,
+    {
+      query: Query.CANVAS_PAGE,
+      variables: { organizationId },
+    },
+  ],
 })));
 
-export const onRemove = ({ organizationId, [Mutation.REMOVE_GOAL.name]: mutate }) =>
+export const onRemove = ({ [Mutation.REMOVE_GOAL.name]: mutate }) =>
   ({ _id, title }) => swal.promise({
     text: `The goal "${title}" will be deleted permanently`,
     confirmButtonText: 'Delete',
@@ -60,7 +67,8 @@ export const onRemove = ({ organizationId, [Mutation.REMOVE_GOAL.name]: mutate }
     successText: `The key goal "${title}" was removed successfully.`,
   }, () => mutate({
     variables: { input: { _id } },
-    update: (store) => {
-      moveGoalWithinCacheAfterRemoving(organizationId, _id, store);
-    },
+    refetchQueries: [
+      Query.DASHBOARD_GOALS.name,
+      Query.COMPLETED_DELETED_GOALS.name,
+    ],
   }));

@@ -1,0 +1,5 @@
+query DepartmentCount($organizationId: ID!) {
+  departments(input: { organizationId: $organizationId }) {
+    totalCount
+  }
+}

@@ -1,9 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
-import { compose, pick, over, pathOr, repeat } from 'ramda';
-import { pure } from 'recompose';
+import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
+import {
+  getUserOptions,
+  lenses,
+  noop,
+  mapUsersToOptions,
+  getValues,
+  getIds,
+} from 'plio-util';
+import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -13,7 +20,6 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateKeyResource } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -21,21 +27,33 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
 
 const getKeyResource = pathOr({}, repeat('keyResource', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
     'color',
     'notes',
     'notify',
+    'lessons',
   ]),
   getKeyResource,
+);
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.KEY_RESOURCE_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
 );
 
 const KeyResourceEditModal = ({
@@ -43,6 +61,7 @@ const KeyResourceEditModal = ({
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -51,7 +70,7 @@ const KeyResourceEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.KEY_RESOURCE_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -101,6 +120,7 @@ const KeyResourceEditModal = ({
                   color,
                   notes = '', // final form sends undefined value instead of an empty string
                   notify = [],
+                  files = [],
                 } = values;
 
                 return updateKeyResource({
@@ -111,6 +131,7 @@ const KeyResourceEditModal = ({
                       notes,
                       color,
                       notify: getValues(notify),
+                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
@@ -126,23 +147,21 @@ const KeyResourceEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.KEY_RESOURCE} />
                     <RenderSwitch
-                      require={data.keyResource && data.keyResource.keyResource}
+                      require={isOpen && data.keyResource && data.keyResource.keyResource}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CanvasForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId }) => (
+                      {keyResource => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasFilesSubcard
-                            {...{ documentId, organizationId }}
-                            onUpdate={updateKeyResource}
-                            slingshotDirective={AWSDirectives.KEY_RESOURCE_FILES}
-                            documentType={CanvasTypes.KEY_RESOURCE}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
+                          <CanvasSubcards
+                            {...{ organizationId, refetchQueries }}
+                            section={keyResource}
                             onChange={handleSubmit}
+                            documentType={CanvasTypes.KEY_RESOURCE}
+                            slingshotDirective={AWSDirectives.KEY_RESOURCE_FILES}
+                            user={data && data.user}
                           />
                         </Fragment>
                       )}
@@ -163,6 +182,7 @@ KeyResourceEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(KeyResourceEditModal);
+export default enhance(KeyResourceEditModal);

@@ -273,6 +273,12 @@ export const TransitionTimeouts = {
 
 export const TransitionBaseActiveClass = 'in';
 
+export const ProblemStatusTypes = {
+  AMBER: 'amber',
+  RED: 'red',
+  GREEN: 'green',
+};
+
 export const StatusColors = {
   DEFAULT: 'default',
   AMBER: 'warning',
@@ -342,6 +348,11 @@ export const Styles = {
       },
     },
   },
+  border: {
+    color: {
+      grey: '#ddd',
+    },
+  },
   color: {
     blue: '#0078d7',
     muted: '#818a91',
@@ -350,6 +361,14 @@ export const Styles = {
     white: '#fff',
     lightGrey: '#eee',
     darkGrey: '#373a3c',
+    brandPrimary: '#0275d8',
+    black: '#000',
+  },
+  background: {
+    color: {
+      lightGrey: '#f5f5f5',
+      white: '#fff',
+    },
   },
 };
 /* eslint-enable max-len */
@@ -365,6 +384,7 @@ export const GraphQLTypenames = {
 
 export const RouteNames = {
   CANVAS: 'canvas',
+  CANVAS_REPORT: 'canvasReport',
   DASHBOARD: 'dashboardPage',
   CUSTOMERS: 'customers',
   HELLO: 'hello',
@@ -385,4 +405,14 @@ export const CanvasBubbleChartSize = {
 export const CriticalityLabels = {
   LOW: 'Low',
   HIGH: 'High',
+};
+
+export const CategorizeTypes = {
+  DEPARTMENT: 'department',
+  PROJECT: 'project',
+};
+
+export const GroupSelectAbbreviations = {
+  [CategorizeTypes.DEPARTMENT]: 'DEP',
+  [CategorizeTypes.PROJECT]: 'PT',
 };

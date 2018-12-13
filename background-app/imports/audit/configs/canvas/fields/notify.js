@@ -1,4 +1,4 @@
-import { getReceivers } from '../helpers';
+import { getReceivers, emailTemplateData } from '../helpers';
 import notify from '../../common/fields/notify';
 
 export default {
@@ -9,6 +9,7 @@ export default {
     notify.notifications.personal,
   ],
   data: notify.data,
+  emailTemplateData,
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
   },

@@ -1,4 +1,6 @@
-import { mergeDeepRight, mapObjIndexed } from 'ramda';
+/* eslint-disable no-proto */
+
+import { mergeDeepRight, mapObjIndexed, is } from 'ramda';
 import faker from 'faker';
 import { Mongo } from 'meteor/mongo';
 import sift from 'sift';
@@ -30,6 +32,26 @@ export default (ctx) => {
     Want: collections.Wants,
     Relation: collections.Relations,
   };
+
+  Object.assign(collections.Organizations.__proto__, {
+    addMembers(query, users) {
+      const modifier = {
+        $set: {
+          users: users.map((user) => {
+            if (is(Object, user)) {
+              return { isRemoved: false, ...user };
+            }
+
+            return { userId: user, isRemoved: false };
+          }),
+        },
+      };
+      const options = { upsert: true, multi: true };
+
+      return this.update(query, modifier, options);
+    },
+  });
+
   const context = mergeDeepRight({
     userId: faker.random.uuid(),
     collections,

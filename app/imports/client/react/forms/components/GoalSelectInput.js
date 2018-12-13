@@ -3,24 +3,28 @@ import PropTypes from 'prop-types';
 import { mapEntitiesToOptions } from 'plio-util';
 
 import { Query } from '../../../graphql';
-import { swal } from '../../../util';
 
 import ApolloSelectInputField from './ApolloSelectInputField';
 
-const GoalSelectInput = ({ organizationId, ...props }) => (
+const mapGoalsToOptions = ({ data: { goals: { goals } } }) => mapEntitiesToOptions(goals);
+
+const GoalSelectInput = ({
+  organizationId,
+  transformOptions = mapGoalsToOptions,
+  ...props
+}) => (
   <ApolloSelectInputField
-    {...props}
+    {...{ transformOptions, ...props }}
     loadOptions={query => query({
       query: Query.GOAL_LIST,
       variables: { organizationId },
-    }).then(({ data: { goals: { goals } } }) => ({
-      options: mapEntitiesToOptions(goals),
-    })).catch(swal.error)}
+    })}
   />
 );
 
 GoalSelectInput.propTypes = {
   organizationId: PropTypes.string.isRequired,
+  transformOptions: PropTypes.func,
 };
 
 export default GoalSelectInput;

@@ -3,9 +3,9 @@ import {
   checkLoggedIn,
   flattenInput,
   checkKeyActivityAccess,
-  checkFilesAccess,
   keyActivityUpdateAfterware,
 } from '../../../../../share/middleware';
+import { CanvasUpdateMiddlewares } from '../../../../../share/middleware/constants';
 
 export const resolver = async (root, args, context) =>
   context.services.KeyActivityService.update(args, context);
@@ -14,6 +14,6 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkKeyActivityAccess(),
-  checkFilesAccess(),
+  ...CanvasUpdateMiddlewares,
   keyActivityUpdateAfterware(),
 )(resolver);

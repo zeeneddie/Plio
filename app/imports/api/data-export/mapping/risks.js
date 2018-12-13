@@ -44,7 +44,7 @@ export const mapping = {
       },
     },
     departments: {
-      label: 'Department/sector(s)',
+      label: 'Departments/teams',
       isDefault: true,
       reference: {
         from: CollectionNames.DEPARTMENTS,

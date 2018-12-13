@@ -8,7 +8,6 @@ import {
   StandardTypes,
   StandardsBookSections,
   RiskTypes,
-  Departments,
 } from '../../../share/collections';
 import { getUserOrganizations } from '../utils';
 import { isPlioUser, isOrgMember } from '../../checkers';
@@ -174,7 +173,6 @@ Meteor.publish('organizationDeps', function (organizationId) {
   });
   const standardsTypes = StandardTypes.find(query, { fields: StandardTypes.publicFields });
   const riskTypes = RiskTypes.find(query);
-  const departments = Departments.find(query, { fields: Departments.publicFields });
   const users = Meteor.users.find({ _id: { $in: userIds } }, {
     fields: Meteor.users.publicFields,
   });
@@ -183,7 +181,6 @@ Meteor.publish('organizationDeps', function (organizationId) {
     standardsBookSections,
     standardsTypes,
     riskTypes,
-    departments,
     users,
   ];
 });

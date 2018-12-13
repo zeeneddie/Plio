@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Field } from 'react-final-form';
+import { Field, FormSpy } from 'react-final-form';
 import { FormGroup, Button } from 'reactstrap';
-import { onlyUpdateForKeys } from 'recompose';
+import { pure } from 'recompose';
 
-import { AnalysisStatuses, ANALYSIS_STATUSES } from '../../../../share/constants';
+import { AnalysisStatuses } from '../../../../share/constants';
 import { getAnalysisStatusClass } from '../../../../api/problems/helpers';
 import FormField from './FormField';
 import DatePickerField from './DatePickerField';
@@ -15,41 +15,36 @@ import TextareaField from './TextareaField';
 import StyledFlexFormGroup from '../../components/styled/StyledFlexFormGroup';
 import FieldCondition from './FieldCondition';
 
-const enhance = onlyUpdateForKeys(['organizationId', 'status', 'userId']);
-
 const AnalysisForm = ({
   organizationId,
-  status,
   userId,
-  onChangeTargetDate,
-  onChangeCompletedAt,
-  onChangeExecutor,
-  onChangeCompletedBy,
-  onChangeCompletionComments,
-  onComplete,
-  onUndoCompletion,
+  save,
+  prefix,
 }) => {
-  const isCompleted = status === ANALYSIS_STATUSES.COMPLETED;
   const comments = (
-    <TextareaField
-      name="completionComments"
-      placeholder="Enter any completion comments"
-      onBlur={e => isCompleted && onChangeCompletionComments(e)}
-    />
+    <Field name={`${prefix}.isCompleted`} subscription={{ value: true }}>
+      {({ input: { value: isCompleted } }) => (
+        <TextareaField
+          name={`${prefix}.completionComments`}
+          placeholder="Enter any completion comments"
+          onBlur={e => isCompleted && save(e)}
+        />
+      )}
+    </Field>
   );
   const executor = (
     <UserSelectInput
-      name="executor"
+      name={`${prefix}.executor`}
       placeholder="Who will do it?"
-      onChange={onChangeExecutor}
+      onChange={save}
       {...{ organizationId }}
     />
   );
   const completedBy = (
     <UserSelectInput
-      name="completedBy"
+      name={`${prefix}.completedBy`}
       placeholder="Completed by"
-      onChange={onChangeCompletedBy}
+      onChange={save}
       {...{ organizationId }}
     />
   );
@@ -58,92 +53,111 @@ const AnalysisForm = ({
     <Fragment>
       <FormField>
         Target date
-        <DatePickerField
-          name="targetDate"
-          onChange={onChangeTargetDate}
-          placeholderText="Target date"
-          disabled={isCompleted}
-        />
+        <Field name={`${prefix}.isCompleted`} subscription={{ value: true }}>
+          {({ input: { value: isCompleted } }) => (
+            <DatePickerField
+              name={`${prefix}.targetDate`}
+              onChange={save}
+              placeholderText="Target date"
+              disabled={!!isCompleted}
+            />
+          )}
+        </Field>
       </FormField>
-      {isCompleted ? (
+      <FieldCondition
+        when={`${prefix}.isCompleted`}
+        is={Boolean}
+        otherwise={(
+          <FormField>
+            Who will do it?
+            <FieldCondition
+              when={`${prefix}.executor`}
+              is={({ value }) => value && value === userId}
+              otherwise={executor}
+            >
+              <ToggleComplete input={executor}>
+                <FormGroup className="margin-top">
+                  {comments}
+                </FormGroup>
+                <FormSpy subscription={{}}>
+                  {({ form }) => (
+                    <Button
+                      color="success"
+                      onClick={() => {
+                        form.change(`${prefix}.isCompleted`, true);
+                        form.submit();
+                      }}
+                    >
+                      Complete
+                    </Button>
+                  )}
+                </FormSpy>
+              </ToggleComplete>
+            </FieldCondition>
+          </FormField>
+        )}
+      >
         <FormField>
           Completed date
           <DatePickerField
-            name="completedAt"
-            onChange={onChangeCompletedAt}
+            name={`${prefix}.completedAt`}
+            onChange={save}
             placeholderText="Completed date"
           />
         </FormField>
-      ) : (
-        <FormField>
-          Who will do it?
-          <FieldCondition
-            when="executor"
-            is={({ value }) => value && value === userId}
-            otherwise={executor}
-          >
-            <ToggleComplete input={executor}>
-              <FormGroup className="margin-top">
-                {comments}
-              </FormGroup>
-              <Field name="completionComments" subscription={{ value: true }}>
-                {({ input }) => (
-                  <Button
-                    color="success"
-                    onClick={() => onComplete({ completionComments: input.value })}
-                  >
-                    Complete
-                  </Button>
-                )}
-              </Field>
-            </ToggleComplete>
-          </FieldCondition>
-        </FormField>
-      )}
+      </FieldCondition>
       <FormField>
         Status
-        <Status color={getAnalysisStatusClass(status)}>
-          {AnalysisStatuses[status]}
-        </Status>
+        <Field name={`${prefix}.status`} subscription={{ value: true }}>
+          {({ input: { value: status } }) => (
+            <Status color={getAnalysisStatusClass(status)}>
+              {AnalysisStatuses[status]}
+            </Status>
+          )}
+        </Field>
       </FormField>
-      {isCompleted && (
-        <Fragment>
-          <FormField>
-            Completed by
-            <FieldCondition
-              when="completedBy"
-              is={({ value }) => value && value === userId}
-              otherwise={completedBy}
-            >
-              <StyledFlexFormGroup>
-                {completedBy}
-                <Button color="link" onClick={onUndoCompletion}>
-                  Undo
-                </Button>
-              </StyledFlexFormGroup>
-            </FieldCondition>
-          </FormField>
-          <FormField>
-            Comments
-            {comments}
-          </FormField>
-        </Fragment>
-      )}
+      <FieldCondition when={`${prefix}.isCompleted`} is={Boolean}>
+        <FormField>
+          Completed by
+          <FieldCondition
+            when={`${prefix}.completedBy`}
+            is={({ value }) => value && value === userId}
+            otherwise={completedBy}
+          >
+            <StyledFlexFormGroup>
+              {completedBy}
+              <FormSpy subscription={{}}>
+                {({ form }) => (
+                  <Button
+                    color="link"
+                    onClick={() => {
+                      form.change(`${prefix}.isCompleted`, false);
+                      form.submit();
+                    }}
+                  >
+                    Undo
+                  </Button>
+                )}
+              </FormSpy>
+            </StyledFlexFormGroup>
+          </FieldCondition>
+        </FormField>
+        <FormField>
+          Comments
+          {comments}
+        </FormField>
+      </FieldCondition>
     </Fragment>
   );
 };
 
 AnalysisForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
-  status: PropTypes.number,
   userId: PropTypes.string,
-  onChangeTargetDate: PropTypes.func,
-  onChangeCompletedAt: PropTypes.func,
-  onChangeExecutor: PropTypes.func,
-  onChangeCompletedBy: PropTypes.func,
-  onChangeCompletionComments: PropTypes.func,
   onUndoCompletion: PropTypes.func,
   onComplete: PropTypes.func,
+  save: PropTypes.func,
+  prefix: PropTypes.string.isRequired,
 };
 
-export default enhance(AnalysisForm);
+export default pure(AnalysisForm);

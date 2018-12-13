@@ -43,7 +43,11 @@ class EntityManagerSubcard extends Component {
     } = this.props;
 
     return (
-      <EntityManagerForm {...{ initialValues }} onSubmit={onSave}>
+      <EntityManagerForm
+        {...{ initialValues }}
+        onSubmit={onSave}
+        keepDirtyOnReinitialize
+      >
         {props => (
           <EntityManagerCard label={newEntityTitle}>
             {renderNewEntity(props)}

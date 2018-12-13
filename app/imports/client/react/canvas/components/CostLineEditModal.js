@@ -1,9 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
-import { compose, pick, over, pathOr, repeat } from 'ramda';
-import { pure } from 'recompose';
+import {
+  getUserOptions,
+  lenses,
+  noop,
+  mapUsersToOptions,
+  getValues,
+  getIds,
+} from 'plio-util';
+import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
+import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -13,7 +20,6 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCostLine } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CostLineForm from './CostLineForm';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -21,13 +27,15 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
 
 const getCostLine = pathOr({}, repeat('costLine', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -35,8 +43,18 @@ const getInitialValues = compose(
     'percentOfTotalCost',
     'notes',
     'notify',
+    'lessons',
   ]),
   getCostLine,
+);
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.COST_LINE_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
 );
 
 const CostLineEditModal = ({
@@ -44,6 +62,7 @@ const CostLineEditModal = ({
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -52,7 +71,7 @@ const CostLineEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.COST_LINE_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -103,6 +122,7 @@ const CostLineEditModal = ({
                   percentOfTotalCost,
                   notes = '', // final form sends undefined value instead of an empty string
                   notify = [],
+                  files = [],
                 } = values;
 
                 return updateCostLine({
@@ -114,6 +134,7 @@ const CostLineEditModal = ({
                       color,
                       percentOfTotalCost,
                       notify: getValues(notify),
+                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
@@ -129,23 +150,22 @@ const CostLineEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.COST_LINE} />
                     <RenderSwitch
-                      require={data.costLine && data.costLine.costLine}
+                      require={isOpen && data.costLine && data.costLine.costLine}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CostLineForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId }) => (
+                      {costLine => (
                         <Fragment>
                           <CostLineForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasFilesSubcard
-                            {...{ documentId, organizationId }}
-                            onUpdate={updateCostLine}
-                            slingshotDirective={AWSDirectives.COST_LINE_FILES}
-                            documentType={CanvasTypes.COST_LINE}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
+                          <CanvasSubcards
+                            {...{ organizationId, refetchQueries }}
+                            section={costLine}
                             onChange={handleSubmit}
+                            refetchQuery={Queries.COST_LINE_CARD}
+                            documentType={CanvasTypes.COST_LINE}
+                            slingshotDirective={AWSDirectives.COST_LINE_FILES}
+                            user={data && data.user}
                           />
                         </Fragment>
                       )}
@@ -166,6 +186,7 @@ CostLineEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(CostLineEditModal);
+export default enhance(CostLineEditModal);

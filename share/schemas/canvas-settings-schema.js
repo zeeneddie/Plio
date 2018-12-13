@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { invert, map } from 'ramda';
 
-import { BaseEntitySchema, OrganizationIdSchema } from './schemas';
+import { BaseEntitySchema, idSchemaDoc } from './schemas';
 import { CanvasSections } from '../constants';
 
 const CanvasSectionSettingsSchema = new SimpleSchema({
@@ -18,8 +18,18 @@ const applySectionSchema = () => ({
 
 const CanvasSettingsSchema = new SimpleSchema([
   BaseEntitySchema,
-  OrganizationIdSchema,
   map(applySectionSchema, invert(CanvasSections)),
+  {
+    organizationId: {
+      ...idSchemaDoc,
+      index: 1,
+      unique: true,
+    },
+    notify: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+    },
+  },
 ]);
 
 export default CanvasSettingsSchema;

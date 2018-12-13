@@ -4,13 +4,11 @@ import styled from 'styled-components';
 import { prop } from 'ramda';
 
 import { Icon } from '../../components';
-import { HoverSensor } from '../../helpers';
 
-const DragHandle = styled.span`
-  min-height: 30px;
+const Wrapper = styled.div`
+  min-height: 24px;
   width: 32px;
   position: relative;
-  cursor: row-resize;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -31,18 +29,15 @@ const StyledIcon = styled(Icon)`
   transition: color .4s ease;
 `;
 
-const CanvasSquareIcon = props => (
-  <HoverSensor>
-    {({ isHovered, bind }) => (
-      <DragHandle {...bind} className="drag-handle">
-        <StyledIcon {...props} size="2" name={isHovered ? 'sort' : 'square'} />
-      </DragHandle>
-    )}
-  </HoverSensor>
+const CanvasSquareIcon = ({ className, ...props }) => (
+  <Wrapper {...{ className }}>
+    <StyledIcon size="2" name="square" {...props} />
+  </Wrapper>
 );
 
 CanvasSquareIcon.propTypes = {
   color: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default CanvasSquareIcon;

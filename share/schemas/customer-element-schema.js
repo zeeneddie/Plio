@@ -13,6 +13,7 @@ const LinkedToSchema = new SimpleSchema({
   documentId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
+    index: 1,
   },
   documentType: {
     type: String,

@@ -1,9 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop, getValues, mapUsersToOptions } from 'plio-util';
-import { compose, pick, over, pathOr, repeat } from 'ramda';
-import { pure } from 'recompose';
+import { compose, pick, over, pathOr, repeat, path, defaultTo } from 'ramda';
+import {
+  getUserOptions,
+  lenses,
+  noop,
+  getValues,
+  mapUsersToOptions,
+  getIds,
+} from 'plio-util';
+import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -17,17 +24,19 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
 import { WithState, Composer } from '../../helpers';
 import KeyPartnerForm from './KeyPartnerForm';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
+import CanvasSubcards from './CanvasSubcards';
 
-const getKeyPartner = pathOr({}, repeat('keyPartner', 2));
+const keyPartnerPath = repeat('keyPartner', 2);
+const getKeyPartner = path(keyPartnerPath);
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -36,8 +45,21 @@ const getInitialValues = compose(
     'levelOfSpend',
     'notes',
     'notify',
+    'lessons',
   ]),
-  getKeyPartner,
+  pathOr({}, keyPartnerPath),
+);
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      {
+        query: Queries.KEY_PARTNER_CARD,
+        variables: { _id, organizationId },
+      },
+    ],
+  }),
+  pure,
 );
 
 const KeyPartnerEditModal = ({
@@ -45,6 +67,7 @@ const KeyPartnerEditModal = ({
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -53,7 +76,7 @@ const KeyPartnerEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.KEY_PARTNER_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -64,101 +87,105 @@ const KeyPartnerEditModal = ({
           /* eslint-disable react/no-children-prop */
         ]}
       >
-        {([{ data, ...query }, updateKeyPartner, deleteKeyPartner]) => (
-          <EntityModalNext
-            {...{ isOpen, toggle }}
-            isEditMode
-            loading={query.loading}
-            error={query.error}
-            onDelete={() => {
-              const { title } = getKeyPartner(data);
-              swal.promise(
-                {
-                  text: `The key partner "${title}" will be deleted`,
-                  confirmButtonText: 'Delete',
-                  successTitle: 'Deleted!',
-                  successText: `The key partner "${title}" was deleted successfully.`,
-                },
-                () => deleteKeyPartner({
-                  variables: { input: { _id } },
-                  refetchQueries: [
-                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
-                  ],
-                }).then(toggle),
-              );
-            }}
-          >
-            <EntityModalForm
-              {...{ initialValues }}
-              validate={validateKeyPartner}
-              onSubmit={(values, form) => {
-                const currentValues = getInitialValues(data);
-                const isDirty = diff(values, currentValues);
-
-                if (!isDirty) return undefined;
-
-                const {
-                  title,
-                  originator,
-                  color,
-                  criticality,
-                  levelOfSpend,
-                  notes = '', // final form sends undefined value instead of an empty string
-                  notify = [],
-                } = values;
-
-                return updateKeyPartner({
-                  variables: {
-                    input: {
-                      _id,
-                      title,
-                      notes,
-                      color,
-                      criticality,
-                      levelOfSpend,
-                      notify: getValues(notify),
-                      originatorId: originator.value,
-                    },
+        {([{ data, ...query }, updateKeyPartner, deleteKeyPartner]) => {
+          const keyPartner = getKeyPartner(data);
+          return (
+            <EntityModalNext
+              {...{ isOpen, toggle }}
+              isEditMode
+              loading={query.loading}
+              error={query.error}
+              onDelete={() => {
+                const { title } = keyPartner || {};
+                swal.promise(
+                  {
+                    text: `The key partner "${title}" will be deleted`,
+                    confirmButtonText: 'Delete',
+                    successTitle: 'Deleted!',
+                    successText: `The key partner "${title}" was deleted successfully.`,
                   },
-                }).then(noop).catch((err) => {
-                  form.reset(currentValues);
-                  throw err;
-                });
+                  () => deleteKeyPartner({
+                    variables: { input: { _id } },
+                    refetchQueries: [
+                      { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                    ],
+                  }).then(toggle),
+                );
               }}
             >
-              {({ handleSubmit }) => (
-                <Fragment>
-                  <EntityModalHeader label="Key partner" />
-                  <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.KEY_PARTNER} />
-                    <RenderSwitch
-                      require={data.keyPartner && data.keyPartner.keyPartner}
-                      errorWhenMissing={noop}
-                      loading={query.loading}
-                      renderLoading={<KeyPartnerForm {...{ organizationId }} />}
-                    >
-                      {({ _id: documentId }) => (
-                        <Fragment>
-                          <KeyPartnerForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasFilesSubcard
-                            {...{ organizationId, documentId }}
-                            onUpdate={updateKeyPartner}
-                            slingshotDirective={AWSDirectives.KEY_PARTNER_FILES}
-                            documentType={CanvasTypes.KEY_PARTNER}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
-                            onChange={handleSubmit}
-                          />
-                        </Fragment>
-                      )}
-                    </RenderSwitch>
-                  </EntityModalBody>
-                </Fragment>
-              )}
-            </EntityModalForm>
-          </EntityModalNext>
-        )}
+              <EntityModalForm
+                {...{ initialValues }}
+                validate={validateKeyPartner}
+                onSubmit={(values, form) => {
+                  const currentValues = getInitialValues(data);
+                  const isDirty = diff(values, currentValues);
+
+                  if (!isDirty) return undefined;
+
+                  const {
+                    title,
+                    originator,
+                    color,
+                    criticality,
+                    levelOfSpend,
+                    notes = '', // final form sends undefined value instead of an empty string
+                    notify = [],
+                    files,
+                  } = values;
+
+                  return updateKeyPartner({
+                    variables: {
+                      input: {
+                        _id,
+                        title,
+                        notes,
+                        color,
+                        criticality,
+                        levelOfSpend,
+                        notify: getValues(notify),
+                        fileIds: files,
+                        originatorId: originator.value,
+                      },
+                    },
+                  }).then(noop).catch((err) => {
+                    form.reset(currentValues);
+                    throw err;
+                  });
+                }}
+              >
+                {({ handleSubmit }) => (
+                  <Fragment>
+                    <EntityModalHeader label="Key partner" />
+                    <EntityModalBody>
+                      <CanvasModalGuidance documentType={CanvasTypes.KEY_PARTNER} />
+                      <RenderSwitch
+                        require={isOpen && keyPartner}
+                        errorWhenMissing={noop}
+                        loading={query.loading}
+                        renderLoading={<KeyPartnerForm {...{ organizationId }} />}
+                      >
+                        {() => (
+                          <Fragment>
+                            <KeyPartnerForm {...{ organizationId }} save={handleSubmit} />
+                            <CanvasSubcards
+                              {...{ organizationId, refetchQueries }}
+                              section={keyPartner}
+                              onChange={handleSubmit}
+                              refetchQuery={Queries.KEY_PARTNER_CARD}
+                              documentType={CanvasTypes.KEY_PARTNER}
+                              slingshotDirective={AWSDirectives.KEY_PARTNER_FILES}
+                              user={data && data.user}
+                            />
+                          </Fragment>
+                        )}
+                      </RenderSwitch>
+                    </EntityModalBody>
+                  </Fragment>
+                )}
+              </EntityModalForm>
+            </EntityModalNext>
+          );
+        }}
       </Composer>
     )}
   </WithState>
@@ -169,6 +196,7 @@ KeyPartnerEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(KeyPartnerEditModal);
+export default enhance(KeyPartnerEditModal);

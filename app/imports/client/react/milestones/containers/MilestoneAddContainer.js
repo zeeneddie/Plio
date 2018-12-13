@@ -27,7 +27,7 @@ const MilestoneAddContainer = ({
         mutation={Mutations.CREATE_MILESTONE}
         refetchQueries={() => [{
           query: Queries.GOAL_CARD,
-          variables: { _id: goalId },
+          variables: { _id: goalId, organizationId },
         }]}
         children={noop}
       />,

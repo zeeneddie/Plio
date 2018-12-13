@@ -8,11 +8,11 @@ import {
   Goals,
 } from '../../../share/collections';
 import { ProblemTypes, DocumentTypes } from '../../../share/constants';
-import { getCollectionByDocType } from '../../../share/helpers';
-import { getUserId } from '../../utils/helpers';
-import NCAuditConfig from '../non-conformities/nc-audit-config';
-import RiskAuditConfig from '../risks/risk-audit-config';
-import GoalAuditConfig from '../goals/goal-audit-config';
+import { getUserId, getLinkedDocAuditConfig } from '../../utils/helpers';
+
+export { getLinkedDocName, getLinkedDocDescription } from '../../utils/helpers';
+
+export { getLinkedDocAuditConfig };
 
 export const getReceivers = ({ linkedTo, notify }, user) => {
   const getLinkedDocsIds = (linkedDocs, docType) => _.pluck(
@@ -61,30 +61,4 @@ export const getReceivers = ({ linkedTo, notify }, user) => {
   const receivers = Array.from(usersIds);
 
   return without(getUserId(user), receivers);
-};
-
-export const getLinkedDocAuditConfig = documentType => ({
-  [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
-  [ProblemTypes.POTENTIAL_GAIN]: NCAuditConfig,
-  [ProblemTypes.RISK]: RiskAuditConfig,
-  [DocumentTypes.GOAL]: GoalAuditConfig,
-}[documentType]);
-
-const getLinkedDoc = (documentId, documentType) => {
-  const collection = getCollectionByDocType(documentType);
-  return collection.findOne({ _id: documentId });
-};
-
-export const getLinkedDocDescription = (documentId, documentType) => {
-  const doc = getLinkedDoc(documentId, documentType);
-  const docAuditConfig = getLinkedDocAuditConfig(documentType);
-
-  return docAuditConfig.docDescription(doc);
-};
-
-export const getLinkedDocName = (documentId, documentType) => {
-  const doc = getLinkedDoc(documentId, documentType);
-  const docAuditConfig = getLinkedDocAuditConfig(documentType);
-
-  return docAuditConfig.docName(doc);
 };

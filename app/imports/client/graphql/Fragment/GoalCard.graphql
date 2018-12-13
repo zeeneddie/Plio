@@ -17,6 +17,7 @@ fragment GoalCard on Goal {
   endDate
   color
   sequentialId
+  serialNumber
   description
   priority
   status

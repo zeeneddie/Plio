@@ -1,3 +1,5 @@
+
+
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { StandardsSchema } from '/imports/share/schemas/standards-schema';
@@ -54,6 +56,7 @@ export const ModifierSchema = new SimpleSchema([
   modifierSchemaDefinition,
   schemas.improvementPlan,
   schemas.departmentsIds,
+  schemas.projectIds,
   schemas.notify,
 ]);
 

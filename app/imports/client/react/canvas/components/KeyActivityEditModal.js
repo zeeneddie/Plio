@@ -2,9 +2,16 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import diff from 'deep-diff';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop, mapUsersToOptions, getValues } from 'plio-util';
-import { compose, pick, over, pathOr, repeat } from 'ramda';
-import { pure } from 'recompose';
+import {
+  getUserOptions,
+  lenses,
+  noop,
+  mapUsersToOptions,
+  getValues,
+  getIds,
+} from 'plio-util';
+import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
+import { pure, withHandlers } from 'recompose';
 
 import { swal } from '../../../util';
 import { AWSDirectives, CanvasTypes } from '../../../../share/constants';
@@ -13,7 +20,6 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateKeyActivity } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
-import CanvasFilesSubcard from './CanvasFilesSubcard';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {
   EntityModalNext,
@@ -21,21 +27,33 @@ import {
   EntityModalBody,
   EntityModalForm,
   RenderSwitch,
-  NotifySubcard,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
 
 const getKeyActivity = pathOr({}, repeat('keyActivity', 2));
 const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.lessons, getIds),
+  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
     'color',
     'notes',
     'notify',
+    'lessons',
   ]),
   getKeyActivity,
+);
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      { query: Queries.KEY_ACTIVITY_CARD, variables: { _id, organizationId } },
+    ],
+  }),
+  pure,
 );
 
 const KeyActivityEditModal = ({
@@ -43,6 +61,7 @@ const KeyActivityEditModal = ({
   toggle,
   organizationId,
   _id,
+  refetchQueries,
 }) => (
   <WithState initialState={{ initialValues: {} }}>
     {({ state: { initialValues }, setState }) => (
@@ -51,7 +70,7 @@ const KeyActivityEditModal = ({
           /* eslint-disable react/no-children-prop */
           <Query
             query={Queries.KEY_ACTIVITY_CARD}
-            variables={{ _id }}
+            variables={{ _id, organizationId }}
             skip={!isOpen}
             onCompleted={data => setState({ initialValues: getInitialValues(data) })}
             fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
@@ -101,6 +120,7 @@ const KeyActivityEditModal = ({
                   color,
                   notes = '',
                   notify = [],
+                  files = [],
                 } = values;
 
                 return updateKeyActivity({
@@ -111,6 +131,7 @@ const KeyActivityEditModal = ({
                       notes,
                       color,
                       notify: getValues(notify),
+                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
@@ -126,23 +147,21 @@ const KeyActivityEditModal = ({
                   <EntityModalBody>
                     <CanvasModalGuidance documentType={CanvasTypes.KEY_ACTIVITY} />
                     <RenderSwitch
-                      require={data.keyActivity && data.keyActivity.keyActivity}
+                      require={isOpen && data.keyActivity && data.keyActivity.keyActivity}
                       errorWhenMissing={noop}
                       loading={query.loading}
                       renderLoading={<CanvasForm {...{ organizationId }} />}
                     >
-                      {({ _id: documentId }) => (
+                      {keyActivity => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasFilesSubcard
-                            {...{ documentId, organizationId }}
-                            onUpdate={updateKeyActivity}
-                            slingshotDirective={AWSDirectives.KEY_ACTIVITY_FILES}
-                            documentType={CanvasTypes.KEY_ACTIVITY}
-                          />
-                          <NotifySubcard
-                            {...{ documentId, organizationId }}
+                          <CanvasSubcards
+                            {...{ organizationId, refetchQueries }}
+                            section={keyActivity}
                             onChange={handleSubmit}
+                            documentType={CanvasTypes.KEY_ACTIVITY}
+                            slingshotDirective={AWSDirectives.KEY_ACTIVITY_FILES}
+                            user={data && data.user}
                           />
                         </Fragment>
                       )}
@@ -163,6 +182,7 @@ KeyActivityEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   _id: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(KeyActivityEditModal);
+export default enhance(KeyActivityEditModal);

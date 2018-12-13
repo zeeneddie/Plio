@@ -7,6 +7,7 @@ import CostLineAddModal from './CostLineAddModal';
 import CostLineEditModal from './CostLineEditModal';
 import CostStructureChartModal from './CostStructureChartModal';
 import CanvasBlock from './CanvasBlock';
+import CostStructureHelp from './CostStructureHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { CanvasSections, CanvasTypes } from '../../../../share/constants';
@@ -22,13 +23,7 @@ const CostStructure = ({ organizationId }) => (
         {...{ organizationId }}
         label="Cost structure"
         sectionName={CanvasSections[CanvasTypes.COST_LINE]}
-        help={(
-          <p>
-            What are the main elements of operational expense
-            {' '}
-            (including variable costs, inventory, WIP and capital assets)?
-          </p>
-        )}
+        help={<CostStructureHelp />}
         items={costLines}
         renderModal={({ isOpen, toggle }) => (
           <CostLineAddModal {...{ isOpen, toggle, organizationId }} />

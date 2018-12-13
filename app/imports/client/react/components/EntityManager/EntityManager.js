@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component, createContext } from 'react';
+import React, { PureComponent, createContext } from 'react';
 
 import { renderComponent } from '../../helpers';
 
@@ -7,7 +7,7 @@ const { Provider, Consumer } = createContext({});
 
 export { Consumer };
 
-export default class EntityManager extends Component {
+export default class EntityManager extends PureComponent {
   static propTypes = {
     active: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }

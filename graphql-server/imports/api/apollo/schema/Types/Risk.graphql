@@ -22,6 +22,7 @@ type Risk implements BaseEntity, PlioEntity {
   workflowType: String
   statusComment: String
   departments: [Department]
+  projects: [Project]
   # isViewed: Boolean
   files: [File]
   type: RiskType

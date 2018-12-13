@@ -44,7 +44,7 @@ export default Object.assign({}, ProblemsService, {
 
     if (goalId) {
       Object.assign(args, { goalId });
-    } else {
+    } else if (standardsIds) {
       Object.assign(args, { standardsIds });
     }
 
@@ -53,6 +53,51 @@ export default Object.assign({}, ProblemsService, {
     if (goalId) await GoalService.linkRisk({ _id: goalId, riskId: _id });
 
     return _id;
+  },
+
+  update(args) {
+    const {
+      _id,
+      title,
+      description,
+      statusComment,
+      standardsIds,
+      departmentsIds,
+      projectIds,
+      originatorId,
+      ownerId,
+      typeId,
+      options,
+      analysis: {
+        executor,
+        targetDate,
+        completedBy,
+        completedAt,
+        completionComments,
+      } = {},
+    } = args;
+    const query = { _id };
+    const modifier = {
+      $set: {
+        title,
+        description,
+        statusComment,
+        standardsIds,
+        departmentsIds,
+        projectIds,
+        originatorId,
+        ownerId,
+        typeId,
+        'analysis.executor': executor,
+        'analysis.targetDate': targetDate,
+        'analysis.completedBy': completedBy,
+        'analysis.completedAt': completedAt,
+        'analysis.completionComments': completionComments,
+      },
+      ...options,
+    };
+
+    return Risks.update(query, modifier);
   },
 
   'scores.insert': function ({ _id, ...args }) {

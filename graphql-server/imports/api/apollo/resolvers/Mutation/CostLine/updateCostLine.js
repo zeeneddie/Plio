@@ -4,9 +4,9 @@ import {
   flattenInput,
   checkCostLineAccess,
   checkPercentOfTotalCost,
-  checkFilesAccess,
   costLineUpdateAfterware,
 } from '../../../../../share/middleware';
+import { CanvasUpdateMiddlewares } from '../../../../../share/middleware/constants';
 
 export const resolver = async (root, args, context) =>
   context.services.CostLineService.update(args, context);
@@ -16,6 +16,6 @@ export default applyMiddleware(
   flattenInput(),
   checkCostLineAccess(),
   checkPercentOfTotalCost(),
-  checkFilesAccess(),
+  ...CanvasUpdateMiddlewares,
   costLineUpdateAfterware(),
 )(resolver);
