@@ -11,7 +11,6 @@ import {
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure, withHandlers } from 'recompose';
-import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -22,6 +21,7 @@ import { validateCostLine } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CostLineForm from './CostLineForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
+import DelayedCanvasSubcards from './DelayedCanvasSubcards';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -47,12 +47,6 @@ const getInitialValues = compose(
   ]),
   getCostLine,
 );
-
-const DelayedCanvasSubcards = delayed({
-  loader: () => import('./CanvasSubcards'),
-  idle: true,
-  delay: 200,
-});
 
 const enhance = compose(
   withHandlers({

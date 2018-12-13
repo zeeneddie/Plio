@@ -11,7 +11,6 @@ import {
   getIds,
 } from 'plio-util';
 import { pure, withHandlers } from 'recompose';
-import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -29,6 +28,7 @@ import {
 import { WithState, Composer } from '../../helpers';
 import KeyPartnerForm from './KeyPartnerForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
+import DelayedCanvasSubcards from './DelayedCanvasSubcards';
 
 const keyPartnerPath = repeat('keyPartner', 2);
 const getKeyPartner = path(keyPartnerPath);
@@ -49,12 +49,6 @@ const getInitialValues = compose(
   ]),
   pathOr({}, keyPartnerPath),
 );
-
-const DelayedCanvasSubcards = delayed({
-  loader: () => import('./CanvasSubcards'),
-  idle: true,
-  delay: 200,
-});
 
 const enhance = compose(
   withHandlers({

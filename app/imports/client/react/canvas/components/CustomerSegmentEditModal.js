@@ -52,12 +52,6 @@ const getInitialValues = compose(
   getCustomerSegment,
 );
 
-const DelayedCustomerSegmentSubcards = delayed({
-  loader: () => import('./CustomerSegmentSubcards'),
-  idle: true,
-  delay: 200,
-});
-
 const enhance = compose(
   withHandlers({
     refetchQueries: ({ _id, organizationId }) => () => [
@@ -73,155 +67,162 @@ const CustomerSegmentEditModal = ({
   organizationId,
   _id,
   refetchQueries,
-}) => (
-  <WithState initialState={{ initialValues: {} }}>
-    {({ state: { initialValues }, setState }) => (
-      <Composer
-        components={[
-          /* eslint-disable react/no-children-prop */
-          <Query
-            query={Queries.CUSTOMER_SEGMENT_CARD}
-            variables={{ _id, organizationId }}
-            skip={!isOpen}
-            onCompleted={data => setState({ initialValues: getInitialValues(data) })}
-            fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
-            children={noop}
-          />,
-          <Mutation mutation={Mutations.UPDATE_CUSTOMER_SEGMENT} children={noop} />,
-          <Mutation mutation={Mutations.DELETE_CUSTOMER_SEGMENT} children={noop} />,
-          <Mutation
-            mutation={Mutations.MATCH_CUSTOMER_SEGMENT}
-            refetchQueries={() => [{
-              query: Queries.VALUE_PROPOSITIONS,
-              variables: { organizationId },
-            }]}
-            children={noop}
-          />,
-          /* eslint-disable react/no-children-prop */
-        ]}
-      >
-        {([
-          { data, ...query },
-          updateCustomerSegment,
-          deleteCustomerSegment,
-          matchCustomerSegment,
-        ]) => (
-          <EntityModalNext
-            {...{ isOpen, toggle }}
-            isEditMode
-            loading={query.loading}
-            error={query.error}
-            onDelete={() => {
-              const { title } = getCustomerSegment(data);
-              swal.promise(
-                {
-                  text: `The customer segment "${title}" will be deleted`,
-                  confirmButtonText: 'Delete',
-                  successTitle: 'Deleted!',
-                  successText: `The customer segment "${title}" was deleted successfully.`,
-                },
-                () => deleteCustomerSegment({
-                  variables: { input: { _id } },
-                  refetchQueries: [
-                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
-                  ],
-                }).then(toggle),
-              );
-            }}
-          >
-            <EntityModalForm
-              {...{ initialValues }}
-              validate={validateCustomerSegment}
-              onSubmit={(values, form) => {
-                const currentValues = getInitialValues(data);
-                const difference = diff(values, currentValues);
+}) => {
+  const DelayedCustomerSegmentSubcards = delayed({
+    loader: () => import('./CustomerSegmentSubcards'),
+    idle: true,
+    delay: 250,
+  });
+  return (
+    <WithState initialState={{ initialValues: {} }}>
+      {({ state: { initialValues }, setState }) => (
+        <Composer
+          components={[
+            /* eslint-disable react/no-children-prop */
+            <Query
+              query={Queries.CUSTOMER_SEGMENT_CARD}
+              variables={{ _id, organizationId }}
+              skip={!isOpen}
+              onCompleted={data => setState({ initialValues: getInitialValues(data) })}
+              fetchPolicy={ApolloFetchPolicies.CACHE_AND_NETWORK}
+              children={noop}
+            />,
+            <Mutation mutation={Mutations.UPDATE_CUSTOMER_SEGMENT} children={noop} />,
+            <Mutation mutation={Mutations.DELETE_CUSTOMER_SEGMENT} children={noop} />,
+            <Mutation
+              mutation={Mutations.MATCH_CUSTOMER_SEGMENT}
+              refetchQueries={() => [{
+                query: Queries.VALUE_PROPOSITIONS,
+                variables: { organizationId },
+              }]}
+              children={noop}
+            />,
+            /* eslint-disable react/no-children-prop */
+          ]}
+        >
+          {([
+            { data, ...query },
+            updateCustomerSegment,
+            deleteCustomerSegment,
+            matchCustomerSegment,
+          ]) => (
+            <EntityModalNext
+              {...{ isOpen, toggle }}
+              isEditMode
+              loading={query.loading}
+              error={query.error}
+              onDelete={() => {
+                const { title } = getCustomerSegment(data);
+                swal.promise(
+                  {
+                    text: `The customer segment "${title}" will be deleted`,
+                    confirmButtonText: 'Delete',
+                    successTitle: 'Deleted!',
+                    successText: `The customer segment "${title}" was deleted successfully.`,
+                  },
+                  () => deleteCustomerSegment({
+                    variables: { input: { _id } },
+                    refetchQueries: [
+                      { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                    ],
+                  }).then(toggle),
+                );
+              }}
+            >
+              <EntityModalForm
+                {...{ initialValues }}
+                validate={validateCustomerSegment}
+                onSubmit={(values, form) => {
+                  const currentValues = getInitialValues(data);
+                  const difference = diff(values, currentValues);
 
-                if (!difference) return undefined;
+                  if (!difference) return undefined;
 
-                const {
-                  title,
-                  originator = {},
-                  color = {},
-                  matchedTo,
-                  percentOfMarketSize,
-                  notes = '',
-                  notify = [],
-                  files = [],
-                } = values;
+                  const {
+                    title,
+                    originator = {},
+                    color = {},
+                    matchedTo,
+                    percentOfMarketSize,
+                    notes = '',
+                    notify = [],
+                    files = [],
+                  } = values;
 
-                if (difference[0].path[0] === 'matchedTo') {
-                  return matchCustomerSegment({
+                  if (difference[0].path[0] === 'matchedTo') {
+                    return matchCustomerSegment({
+                      variables: {
+                        input: {
+                          _id,
+                          matchedTo: convertDocumentOptions({
+                            documentType: CanvasTypes.VALUE_PROPOSITION,
+                          }, matchedTo),
+                        },
+                      },
+                    }).then(noop).catch((err) => {
+                      form.reset(currentValues);
+                      throw err;
+                    });
+                  }
+
+                  return updateCustomerSegment({
                     variables: {
                       input: {
                         _id,
-                        matchedTo: convertDocumentOptions({
-                          documentType: CanvasTypes.VALUE_PROPOSITION,
-                        }, matchedTo),
+                        title,
+                        notes,
+                        color,
+                        percentOfMarketSize,
+                        notify: getValues(notify),
+                        fileIds: files,
+                        originatorId: originator.value,
                       },
                     },
                   }).then(noop).catch((err) => {
                     form.reset(currentValues);
                     throw err;
                   });
-                }
-
-                return updateCustomerSegment({
-                  variables: {
-                    input: {
-                      _id,
-                      title,
-                      notes,
-                      color,
-                      percentOfMarketSize,
-                      notify: getValues(notify),
-                      fileIds: files,
-                      originatorId: originator.value,
-                    },
-                  },
-                }).then(noop).catch((err) => {
-                  form.reset(currentValues);
-                  throw err;
-                });
-              }}
-            >
-              {({ handleSubmit }) => (
-                <Fragment>
-                  <EntityModalHeader label="Customer segment" />
-                  <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.CUSTOMER_SEGMENT} />
-                    <RenderSwitch
-                      require={isOpen &&
+                }}
+              >
+                {({ handleSubmit }) => (
+                  <Fragment>
+                    <EntityModalHeader label="Customer segment" />
+                    <EntityModalBody>
+                      <CanvasModalGuidance documentType={CanvasTypes.CUSTOMER_SEGMENT} />
+                      <RenderSwitch
+                        require={isOpen &&
                         data.customerSegment &&
                         data.customerSegment.customerSegment}
-                      errorWhenMissing={noop}
-                      loading={query.loading}
-                      renderLoading={<CustomerSegmentForm {...{ organizationId }} />}
-                    >
-                      {customerSegment => (
-                        <Fragment>
-                          <CustomerSegmentForm
-                            {...{ organizationId }}
-                            matchedTo={customerSegment.matchedTo}
-                            save={handleSubmit}
-                          />
-                          <DelayedCustomerSegmentSubcards
-                            {...{ organizationId, customerSegment, refetchQueries }}
-                            onChange={handleSubmit}
-                            user={data && data.user}
-                          />
-                        </Fragment>
-                      )}
-                    </RenderSwitch>
-                  </EntityModalBody>
-                </Fragment>
-              )}
-            </EntityModalForm>
-          </EntityModalNext>
-        )}
-      </Composer>
-    )}
-  </WithState>
-);
+                        errorWhenMissing={noop}
+                        loading={query.loading}
+                        renderLoading={<CustomerSegmentForm {...{ organizationId }} />}
+                      >
+                        {customerSegment => (
+                          <Fragment>
+                            <CustomerSegmentForm
+                              {...{ organizationId }}
+                              matchedTo={customerSegment.matchedTo}
+                              save={handleSubmit}
+                            />
+                            <DelayedCustomerSegmentSubcards
+                              {...{ organizationId, customerSegment, refetchQueries }}
+                              onChange={handleSubmit}
+                              user={data && data.user}
+                            />
+                          </Fragment>
+                        )}
+                      </RenderSwitch>
+                    </EntityModalBody>
+                  </Fragment>
+                )}
+              </EntityModalForm>
+            </EntityModalNext>
+          )}
+        </Composer>
+      )}
+    </WithState>
+  );
+};
 
 CustomerSegmentEditModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
