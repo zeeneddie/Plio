@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { pure } from 'recompose';
+import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
   CardBlock,
@@ -13,7 +14,7 @@ import RiskForm from './RiskForm';
 
 const NewRiskCard = ({
   organizationId,
-  riskIds,
+  riskIds = [],
   guidelines,
   linkedTo = {},
 }) => (
@@ -30,7 +31,9 @@ const NewRiskCard = ({
         <RiskSelectInput
           name="risk"
           placeholder="Existing risk"
-          {...{ organizationId, riskIds }}
+          transformOptions={({ data: { risks: { risks } } }) =>
+            mapRejectedEntitiesByIdsToOptions(riskIds, risks)}
+          {...{ organizationId }}
         />
       </FormField>
     </CardBlock>

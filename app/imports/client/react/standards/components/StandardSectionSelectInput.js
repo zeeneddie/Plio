@@ -24,9 +24,9 @@ const StandardSectionSelectInput = ({ organizationId, ...props }) => (
         loadOptions={query => query({
           query: Queries.STANDARD_SECTION_LIST,
           variables: { organizationId },
-        }).then(({ data: { standardSections: { standardSections = [] } = {} } }) => ({
-          options: getOptions(standardSections),
-        })).catch(swal.error)}
+        })}
+        transformOptions={({ data: { standardSections: { standardSections = [] } = {} } }) =>
+          getOptions(standardSections)}
         onNewOptionClick={({ value: title }, callback) => swal.promise({
           title: 'Are you sure?',
           text: `New section "${title}" will be added.`,

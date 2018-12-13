@@ -1,30 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
+import { mapEntitiesToOptions } from 'plio-util';
 
-import { swal } from '../../../util';
 import { ApolloSelectInputField } from '../../components';
 import { Query } from '../../../graphql';
 
+const mapNonconformitiesToOptions = ({ data: { nonconformities: { nonconformities } } }) =>
+  mapEntitiesToOptions(nonconformities);
+
 const NonconformitySelectInput = ({
   organizationId,
-  nonconformityIds = [],
+  transformOptions = mapNonconformitiesToOptions,
   ...props
 }) => (
   <ApolloSelectInputField
-    {...props}
+    {...{ transformOptions, ...props }}
     loadOptions={query => query({
       query: Query.NONCONFORMITY_LIST,
       variables: { organizationId },
-    }).then(({ data: { nonconformities: { nonconformities } } }) => ({
-      options: mapRejectedEntitiesByIdsToOptions(nonconformityIds, nonconformities),
-    })).catch(swal.error)}
+    })}
   />
 );
 
 NonconformitySelectInput.propTypes = {
   organizationId: PropTypes.string.isRequired,
-  nonconformityIds: PropTypes.array,
+  transformOptions: PropTypes.func,
 };
 
 export default NonconformitySelectInput;

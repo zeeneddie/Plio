@@ -1,27 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
+import { mapEntitiesToOptions } from 'plio-util';
 
 import { Query } from '../../../graphql';
-import { swal } from '../../../util';
-
 import ApolloSelectInputField from './ApolloSelectInputField';
 
-const StandardSelectInput = ({ organizationId, standardIds = [], ...props }) => (
+const mapStandardsToOptions = ({ data: { standards: { standards } } }) =>
+  mapEntitiesToOptions(standards);
+
+const StandardSelectInput = ({
+  organizationId,
+  transformOptions = mapStandardsToOptions,
+  ...props
+}) => (
   <ApolloSelectInputField
-    {...props}
+    {...{ transformOptions, ...props }}
     loadOptions={query => query({
       query: Query.STANDARD_LIST,
       variables: { organizationId },
-    }).then(({ data: { standards: { standards } } }) => ({
-      options: mapRejectedEntitiesByIdsToOptions(standardIds, standards),
-    })).catch(swal.error)}
+    })}
   />
 );
 
 StandardSelectInput.propTypes = {
   organizationId: PropTypes.string.isRequired,
-  standardIds: PropTypes.arrayOf(PropTypes.string),
+  transformOptions: PropTypes.func,
 };
 
 export default StandardSelectInput;

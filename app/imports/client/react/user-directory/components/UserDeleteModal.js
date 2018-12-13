@@ -86,7 +86,7 @@ const UserDeleteModal = ({
                                 placeholder={
                                   `Select user to take on ${userName} owner responsibilities`
                                 }
-                                transform={reject(whereEq({ value: userId }))}
+                                transformOptions={reject(whereEq({ value: userId }))}
                               />
                             )}
                           </FormGroup>
