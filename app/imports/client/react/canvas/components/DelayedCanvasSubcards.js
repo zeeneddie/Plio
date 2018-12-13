@@ -1,4 +1,4 @@
-import { delayed } from 'libreact/lib/delayed';
+import { delayed } from '../../helpers';
 
 const DelayedCanvasSubcards = props => delayed({
   loader: () => import('./CanvasSubcards'),

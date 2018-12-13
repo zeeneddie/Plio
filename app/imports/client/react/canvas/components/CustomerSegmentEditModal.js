@@ -13,7 +13,6 @@ import {
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure, withHandlers } from 'recompose';
-import { delayed } from 'libreact/lib/delayed';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -21,7 +20,7 @@ import { CanvasTypes } from '../../../../share/constants';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCustomerSegment } from '../../../validation';
-import { WithState, Composer } from '../../helpers';
+import { WithState, Composer, delayed } from '../../helpers';
 import CustomerSegmentForm from './CustomerSegmentForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import {

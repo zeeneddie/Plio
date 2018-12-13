@@ -30,3 +30,4 @@ export { default as renderComponent } from './renderComponent';
 export { default as Composer } from './Composer';
 export { default as withUpdateLastAccessedDate } from './withUpdateLastAccessedDate';
 export { default as HoverSensor } from './HoverSensor';
+export { default as delayed } from './delayed';

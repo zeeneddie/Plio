@@ -43,7 +43,6 @@
     "handlebars": "^4.0.5",
     "i": "^0.3.6",
     "invariant": "^2.2.1",
-    "libreact": "^2.6.0",
     "lodash.curry": "^4.1.1",
     "lodash.get": "^4.4.2",
     "lodash.invoke": "^4.5.1",
