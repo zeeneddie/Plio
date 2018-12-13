@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { withHandlers, setPropTypes, defaultProps, componentFromProp } from 'recompose';
 
+import { ApolloFetchPolicies } from '../../../api/constants';
 import { namedCompose, omitProps } from '../helpers';
 import { Select } from '../components';
 import { Query } from '../../graphql';
@@ -13,6 +14,7 @@ export default namedCompose('RiskTypeSelectContainer')(
     loadOptions: ({ organizationId }) => () => client.query({
       query: Query.RISK_TYPE_LIST,
       variables: { organizationId },
+      fetchPolicy: ApolloFetchPolicies.NETWORK_ONLY,
     }).then(({
       data: {
         riskTypes: {
