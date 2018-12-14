@@ -23,6 +23,7 @@ import { validateValueProposition } from '../../../validation';
 import { WithState, Composer, delayed } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
+import ValuePropositionSubcards from './ValuePropositionSubcards';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -67,7 +68,7 @@ const ValuePropositionEditModal = ({
   refetchQueries,
 }) => {
   const DelayedValuePropositionSubcards = delayed({
-    loader: () => import('./ValuePropositionSubcards'),
+    loader: () => Promise.resolve(ValuePropositionSubcards),
     idle: true,
     delay: 250,
   });

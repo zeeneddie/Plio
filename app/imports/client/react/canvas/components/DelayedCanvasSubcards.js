@@ -1,7 +1,8 @@
 import { delayed } from '../../helpers';
+import CanvasSubcards from './CanvasSubcards';
 
 const DelayedCanvasSubcards = props => delayed({
-  loader: () => import('./CanvasSubcards'),
+  loader: () => CanvasSubcards,
   idle: true,
   delay: 250,
 })(props);

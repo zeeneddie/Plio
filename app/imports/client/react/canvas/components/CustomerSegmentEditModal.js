@@ -23,6 +23,7 @@ import { validateCustomerSegment } from '../../../validation';
 import { WithState, Composer, delayed } from '../../helpers';
 import CustomerSegmentForm from './CustomerSegmentForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
+import CustomerSegmentSubcards from './CustomerSegmentSubcards';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -68,7 +69,7 @@ const CustomerSegmentEditModal = ({
   refetchQueries,
 }) => {
   const DelayedCustomerSegmentSubcards = delayed({
-    loader: () => import('./CustomerSegmentSubcards'),
+    loader: () => Promise.resolve(CustomerSegmentSubcards),
     idle: true,
     delay: 250,
   });
