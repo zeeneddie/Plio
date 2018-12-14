@@ -15,10 +15,10 @@ import {
   EntityManagerCards,
   EntityManagerCard,
 } from '../../components';
-import ActionSubcardContainer from '../containers/ActionSubcardContainer';
+import ActionEditContainer from '../containers/ActionEditContainer';
 import ActionsSubcardHeader from './ActionsSubcardHeader';
 import NewActionForm from './NewActionForm';
-// import ActionAddFormWrapper from './ActionAddFormWrapper';
+import ActionAddFormWrapper from './ActionAddFormWrapper';
 import ActionSubcard from './ActionSubcard';
 
 const ActionsSubcard = ({
@@ -51,7 +51,7 @@ const ActionsSubcard = ({
                   }}
                   key={action._id}
                   itemId={action._id}
-                  component={ActionSubcardContainer}
+                  component={ActionEditContainer}
                   render={ActionSubcard}
                 />
               ))}
@@ -64,7 +64,7 @@ const ActionsSubcard = ({
                   }}
                   keepDirtyOnReinitialize
                   label={newEntityTitle}
-
+                  component={ActionAddFormWrapper}
                   render={EntityManagerCard}
                 >
                   <NewActionForm
