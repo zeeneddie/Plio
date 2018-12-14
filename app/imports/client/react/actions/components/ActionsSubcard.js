@@ -1,34 +1,89 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { omit } from 'ramda';
+import { Col } from 'reactstrap';
 
-import { EntityManagerSubcard } from '../../components';
+import {
+  Subcard,
+  SubcardHeader,
+  SubcardBody,
+  CardBlock,
+  EntityManager,
+  EntityManagerItem,
+  EntityManagerAddButton,
+  EntityManagerForms,
+  EntityManagerCards,
+  EntityManagerCard,
+} from '../../components';
+import ActionSubcardContainer from '../containers/ActionSubcardContainer';
 import ActionsSubcardHeader from './ActionsSubcardHeader';
 import NewActionForm from './NewActionForm';
+// import ActionAddFormWrapper from './ActionAddFormWrapper';
+import ActionSubcard from './ActionSubcard';
 
 const ActionsSubcard = ({
+  organizationId,
   actions,
-  onSave,
   initialValues,
-  render,
   newEntityTitle,
   newEntityButtonTitle,
+  onLink,
+  onUnlink,
+  linkedTo,
   ...props
 }) => (
-  <EntityManagerSubcard
-    {...{
-      onSave,
-      initialValues,
-      render,
-      newEntityTitle,
-      newEntityButtonTitle,
-    }}
-    entities={actions}
-    renderNewEntity={() => (
-      <NewActionForm {...{ ...omit(['userId', 'canCompleteAnyAction'], props), actions }} />
-    )}
-    header={(<ActionsSubcardHeader {...{ actions }} />)}
-  />
+  <Fragment>
+    <Subcard>
+      <SubcardHeader>
+        <ActionsSubcardHeader {...{ actions }} />
+      </SubcardHeader>
+      <SubcardBody>
+        <CardBlock>
+          <Col sm={12}>
+            <EntityManager>
+              {actions.map(action => (
+                <EntityManagerItem
+                  {...{
+                    organizationId,
+                    action,
+                    linkedTo,
+                    onUnlink,
+                  }}
+                  key={action._id}
+                  itemId={action._id}
+                  component={ActionSubcardContainer}
+                  render={ActionSubcard}
+                />
+              ))}
+              <EntityManagerForms>
+                <EntityManagerCards
+                  {...{
+                    organizationId,
+                    onLink,
+                    onUnlink,
+                  }}
+                  keepDirtyOnReinitialize
+                  label={newEntityTitle}
+
+                  render={EntityManagerCard}
+                >
+                  <NewActionForm
+                    {...{
+                      actions,
+                      organizationId,
+                      linkedTo,
+                      ...omit(['userId', 'canCompleteAnyAction'], props),
+                    }}
+                  />
+                </EntityManagerCards>
+                <EntityManagerAddButton>{newEntityButtonTitle}</EntityManagerAddButton>
+              </EntityManagerForms>
+            </EntityManager>
+          </Col>
+        </CardBlock>
+      </SubcardBody>
+    </Subcard>
+  </Fragment>
 );
 
 ActionsSubcard.defaultProps = {
@@ -37,12 +92,14 @@ ActionsSubcard.defaultProps = {
 };
 
 ActionsSubcard.propTypes = {
+  organizationId: PropTypes.string.isRequired,
   actions: PropTypes.arrayOf(PropTypes.object),
-  onSave: PropTypes.func,
   initialValues: PropTypes.object,
-  render: PropTypes.func.isRequired,
   newEntityTitle: PropTypes.string,
   newEntityButtonTitle: PropTypes.string,
+  linkedTo: PropTypes.object,
+  onLink: PropTypes.func.isRequired,
+  onUnlink: PropTypes.func.isRequired,
 };
 
 export default ActionsSubcard;

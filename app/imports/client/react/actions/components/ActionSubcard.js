@@ -1,60 +1,71 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
+import { Card } from 'reactstrap';
 
+import { validateAction } from '../../../validation';
 import { getDisplayDate, getClassByStatus } from '../../../../api/actions/helpers';
-import { EntitySubcard, Pull, Icon } from '../../components';
+import { Pull, Icon, EntityCard, EntityForm } from '../../components';
+import ActionEditForm from './ActionEditForm';
 
 const ActionSubcard = ({
   action,
   isOpen,
   toggle,
   onDelete,
-  loading,
-  error,
-  render,
-  ...props
+  onSubmit,
+  organizationId,
+  initialValues,
+  ...rest
 }) => (
-  <EntitySubcard
-    entity={action}
-    header={() => (
-      <Fragment>
-        <Pull left>
-          <span>
-            <strong>{action.sequentialId}</strong>
-            {' '}
-            {action.title}
-          </span>
-        </Pull>
-        <Pull right>
-          <span>
-            <span className="hidden-xs-down">
-              {getDisplayDate(action)}
+  <Card>
+    <EntityForm
+      {...{
+        isOpen,
+        toggle,
+        onDelete,
+        onSubmit,
+        initialValues,
+      }}
+      label={(
+        <Fragment>
+          <Pull left>
+            <span>
+              <strong>{action.sequentialId}</strong>
+              {' '}
+              {action.title}
             </span>
-            <Icon name="circle" color={getClassByStatus(action.status)} margin="left" />
-          </span>
-        </Pull>
-      </Fragment>
-    )}
-    {...{
-      isOpen,
-      toggle,
-      loading,
-      error,
-      onDelete,
-    }}
-  >
-    {render(props)}
-  </EntitySubcard>
+          </Pull>
+          <Pull right>
+            <span>
+              <span className="hidden-xs-down">
+                {getDisplayDate(action)}
+              </span>
+              <Icon name="circle" color={getClassByStatus(action.status)} margin="left" />
+            </span>
+          </Pull>
+        </Fragment>
+      )}
+      validate={validateAction}
+      component={EntityCard}
+    >
+      {({ handleSubmit }) => (
+        <ActionEditForm
+          {...{ organizationId, ...rest }}
+          save={handleSubmit}
+        />
+      )}
+    </EntityForm>
+  </Card>
 );
 
 ActionSubcard.propTypes = {
-  action: PropTypes.object,
-  isOpen: PropTypes.bool,
-  toggle: PropTypes.func,
+  initialValues: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  organizationId: PropTypes.string.isRequired,
+  action: PropTypes.object.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
-  loading: PropTypes.bool,
-  error: PropTypes.string,
-  render: PropTypes.func,
 };
 
 export default ActionSubcard;

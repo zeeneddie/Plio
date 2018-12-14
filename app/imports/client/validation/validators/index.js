@@ -14,3 +14,4 @@ export { default as validateRisk } from './validateRisk';
 export { default as validateLesson } from './validateLesson';
 export { default as validateStandard } from './validateStandard';
 export { default as validateNonConformity } from './validateNonConformity';
+export { default as validateAction } from './validateAction';
