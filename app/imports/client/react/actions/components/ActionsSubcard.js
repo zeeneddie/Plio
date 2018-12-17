@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { omit } from 'ramda';
 import { Col } from 'reactstrap';
 
 import {
@@ -30,6 +29,8 @@ const ActionsSubcard = ({
   onLink,
   onUnlink,
   linkedTo,
+  documentType,
+  type,
   ...props
 }) => (
   <Fragment>
@@ -58,9 +59,14 @@ const ActionsSubcard = ({
               <EntityManagerForms>
                 <EntityManagerCards
                   {...{
+                    type,
                     organizationId,
                     onLink,
                     onUnlink,
+                  }}
+                  linkedTo={{
+                    documentId: linkedTo._id,
+                    documentType,
                   }}
                   keepDirtyOnReinitialize
                   label={newEntityTitle}
@@ -72,7 +78,7 @@ const ActionsSubcard = ({
                       actions,
                       organizationId,
                       linkedTo,
-                      ...omit(['userId', 'canCompleteAnyAction'], props),
+                      ...props,
                     }}
                   />
                 </EntityManagerCards>
@@ -98,8 +104,10 @@ ActionsSubcard.propTypes = {
   newEntityTitle: PropTypes.string,
   newEntityButtonTitle: PropTypes.string,
   linkedTo: PropTypes.object,
+  documentType: PropTypes.string,
   onLink: PropTypes.func.isRequired,
   onUnlink: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default ActionsSubcard;

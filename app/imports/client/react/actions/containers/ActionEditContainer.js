@@ -54,7 +54,7 @@ const ActionEditContainer = ({
             children={noop}
           />,
           <Mutation
-            mutation={Mutations.UPDATE_ACTION}
+            mutation={Mutations.UPDATE_RISK}
             children={noop}
             onCompleted={({ updateGoal }) => setState({ action: updateGoal })}
           />,

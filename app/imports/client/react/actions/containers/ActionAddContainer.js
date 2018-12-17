@@ -14,6 +14,9 @@ const ActionAddContainer = ({
   organizationId,
   isOpen,
   toggle,
+  type,
+  linkedTo,
+  documentType,
   onLink = noop,
   ...props
 }) => (
@@ -43,10 +46,10 @@ const ActionAddContainer = ({
           active,
           title = '',
           description = '',
-          toBeCompletedBy,
           planInPlace,
           completionTargetDate,
           owner: { value: ownerId } = {},
+          toBeCompletedBy: { value: toBeCompletedBy } = {},
           existingAction,
         } = values;
 
@@ -63,11 +66,13 @@ const ActionAddContainer = ({
             input: {
               title,
               description,
-              toBeCompletedBy,
               planInPlace,
               completionTargetDate,
               organizationId,
               ownerId,
+              type,
+              linkedTo,
+              toBeCompletedBy,
             },
           },
         }).then(({ data: { createAction: { action } } }) => {
@@ -81,6 +86,9 @@ const ActionAddContainer = ({
 
 ActionAddContainer.propTypes = {
   organizationId: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  documentType: PropTypes.string,
+  linkedTo: PropTypes.object,
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
   onLink: PropTypes.func,
