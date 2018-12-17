@@ -15,6 +15,7 @@ import { Query, Mutation } from 'react-apollo';
 import { noop, getValue } from 'plio-util';
 import diff from 'deep-diff';
 
+import { swal } from '../../../util';
 import { getGeneralActionValuesByAction } from '../helpers';
 import { Composer, WithState, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
@@ -29,6 +30,7 @@ const ActionEditContainer = ({
   isOpen,
   toggle,
   onDelete,
+  refetchQueries,
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
   ...props
 }) => (
@@ -59,6 +61,7 @@ const ActionEditContainer = ({
             onCompleted={({ updateGoal }) => setState({ action: updateGoal })}
           />,
           <Mutation
+            {...{ refetchQueries }}
             mutation={Mutations.DELETE_ACTION}
             children={noop}
           />,
@@ -184,8 +187,17 @@ const ActionEditContainer = ({
           },
           onDelete: () => {
             if (onDelete) return onDelete();
-            console.log(onDelete);
-            return deleteAction();
+
+            return swal.promise({
+              text: `The action "${action.title}" will be deleted`,
+              confirmButtonText: 'Delete',
+              successTitle: 'Deleted!',
+              successText: `The action "${action.title}" was deleted successfully.`,
+            }, () => deleteAction({
+              variables: {
+                input: { _id: action._id },
+              },
+            })).then(toggle || noop);
           },
         })}
       </Composer>
@@ -202,6 +214,7 @@ ActionEditContainer.propTypes = {
   action: PropTypes.object,
   fetchPolicy: PropTypes.string,
   canEditGoals: PropTypes.bool,
+  refetchQueries: PropTypes.func,
 };
 
 export default pure(ActionEditContainer);

@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { pure } from 'recompose';
-import { sort } from 'ramda';
+import { pure, withHandlers } from 'recompose';
+import { sort, compose } from 'ramda';
 import { bySerialNumber } from 'plio-util';
 
+import { Query as Queries } from '../../../graphql';
 import { AWSDirectives, DocumentTypes, ActionTypes } from '../../../../share/constants';
 import { CardBlock, NotifySubcard, EntitiesField } from '../../components';
 import GoalMilestonesSubcardContainer from '../containers/GoalMilestonesSubcardContainer';
@@ -12,6 +13,18 @@ import GoalEditForm from './GoalEditForm';
 import FilesSubcardContainer from '../../canvas/components/FilesSubcardContainer';
 import RisksSubcard from '../../risks/components/RisksSubcard';
 import ActionsSubcard from '../../actions/components/ActionsSubcard';
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ _id, organizationId }) => () => [
+      {
+        query: Queries.GOAL_CARD,
+        variables: { _id, organizationId },
+      },
+    ],
+  }),
+  pure,
+);
 
 export const GoalEdit = ({
   status,
@@ -23,6 +36,7 @@ export const GoalEdit = ({
   canEditGoals,
   risks,
   actions,
+  refetchQueries,
   organization: { rkGuidelines } = {},
 }) => (
   <Fragment>
@@ -38,7 +52,7 @@ export const GoalEdit = ({
     </CardBlock>
     <Fragment>
       <EntitiesField
-        {...{ organizationId }}
+        {...{ organizationId, refetchQueries }}
         name="actions"
         render={ActionsSubcard}
         onChange={save}
@@ -88,6 +102,7 @@ GoalEdit.propTypes = {
   sequentialId: PropTypes.string.isRequired,
   save: PropTypes.func.isRequired,
   canEditGoals: PropTypes.bool,
+  refetchQueries: PropTypes.func,
   risks: PropTypes.arrayOf(PropTypes.object).isRequired,
   actions: PropTypes.arrayOf(PropTypes.object).isRequired,
   organization: PropTypes.shape({
@@ -95,4 +110,4 @@ GoalEdit.propTypes = {
   }).isRequired,
 };
 
-export default pure(GoalEdit);
+export default enhance(GoalEdit);

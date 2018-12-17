@@ -23,7 +23,6 @@ import ActionSubcard from './ActionSubcard';
 const ActionsSubcard = ({
   organizationId,
   actions,
-  initialValues,
   newEntityTitle,
   newEntityButtonTitle,
   onLink,
@@ -31,6 +30,7 @@ const ActionsSubcard = ({
   linkedTo,
   documentType,
   type,
+  refetchQueries,
   ...props
 }) => (
   <Fragment>
@@ -49,6 +49,7 @@ const ActionsSubcard = ({
                     action,
                     linkedTo,
                     onUnlink,
+                    refetchQueries,
                   }}
                   key={action._id}
                   itemId={action._id}
@@ -100,7 +101,6 @@ ActionsSubcard.defaultProps = {
 ActionsSubcard.propTypes = {
   organizationId: PropTypes.string.isRequired,
   actions: PropTypes.arrayOf(PropTypes.object),
-  initialValues: PropTypes.object,
   newEntityTitle: PropTypes.string,
   newEntityButtonTitle: PropTypes.string,
   linkedTo: PropTypes.object,
@@ -108,6 +108,7 @@ ActionsSubcard.propTypes = {
   onLink: PropTypes.func.isRequired,
   onUnlink: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
+  refetchQueries: PropTypes.func,
 };
 
 export default ActionsSubcard;
