@@ -2,9 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { pure } from 'recompose';
 import {
-  pick,
-  compose,
-  over,
   unless,
   isNil,
   pathOr,
@@ -15,46 +12,15 @@ import {
   merge,
 } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, lenses, noop, getValue } from 'plio-util';
-import moment from 'moment';
+import { noop, getValue } from 'plio-util';
 import diff from 'deep-diff';
 
+import { getGeneralActionValuesByAction } from '../helpers';
 import { Composer, WithState, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 
 const getAction = pathOr({}, repeat('action', 2));
-const getInitialValues = compose(
-  over(lenses.startDate, moment),
-  over(lenses.endDate, moment),
-  over(lenses.completedAt, unless(isNil, moment)),
-  over(lenses.owner, getUserOptions),
-  over(lenses.completedBy, getUserOptions),
-
-  over(lenses.toBeCompletedBy, getUserOptions),
-  over(lenses.completionTargetDate, moment),
-  over(lenses.verifiedAt, unless(isNil, moment)),
-  over(lenses.verifiedBy, getUserOptions),
-  over(lenses.toBeVerifiedBy, getUserOptions),
-  over(lenses.verificationTargetDate, moment),
-  pick([
-    'title',
-    'description',
-    'toBeCompletedBy',
-    'planInPlace',
-    'completionTargetDate',
-    'owner',
-    'completedAt',
-    'completedBy',
-    'completionComments',
-    'verifiedAt',
-    'verifiedBy',
-    'verificationComments',
-    'toBeVerifiedBy',
-    'verificationTargetDate',
-    'isCompleted',
-  ]),
-);
 
 const ActionEditContainer = ({
   action: _action = null,
@@ -69,7 +35,7 @@ const ActionEditContainer = ({
   <WithState
     initialState={{
       action: _action,
-      initialValues: unless(isNil, getInitialValues, _action),
+      initialValues: unless(isNil, getGeneralActionValuesByAction, _action),
     }}
   >
     {({ state: { initialValues, action }, setState }) => (
@@ -82,7 +48,7 @@ const ActionEditContainer = ({
             variables={{ _id: actionId }}
             skip={!isOpen || !!_action}
             onCompleted={data => setState({
-              initialValues: getInitialValues(getAction(data)),
+              initialValues: getGeneralActionValuesByAction(getAction(data)),
               action: getAction(data),
             })}
             children={noop}
@@ -101,7 +67,10 @@ const ActionEditContainer = ({
             children={noop}
             onCompleted={({ completeAction }) => {
               const newAction = merge(action, completeAction);
-              setState({ action: newAction, initialValues: getInitialValues(newAction) });
+              setState({
+                action: newAction,
+                initialValues: getGeneralActionValuesByAction(newAction),
+              });
             }}
           />,
           <Mutation
@@ -110,7 +79,10 @@ const ActionEditContainer = ({
             onCompleted={
               ({ undoActionCompletion }) => {
                 const newAction = merge(action, undoActionCompletion);
-                setState({ goal: newAction, initialValues: getInitialValues(newAction) });
+                setState({
+                  goal: newAction,
+                  initialValues: getGeneralActionValuesByAction(newAction),
+                });
               }
             }
           />,
@@ -120,7 +92,7 @@ const ActionEditContainer = ({
         {([
           { loading, error },
           updateAction,
-          // deleteAction,
+          deleteAction,
           completeAction,
           undoActionCompletion,
         ]) => renderComponent({
@@ -133,7 +105,7 @@ const ActionEditContainer = ({
           action,
           loading,
           onSubmit: async (values, form) => {
-            const currentValues = getInitialValues(action);
+            const currentValues = getGeneralActionValuesByAction(action);
             const difference = diff(values, currentValues);
 
             if (!difference) return undefined;
@@ -213,7 +185,7 @@ const ActionEditContainer = ({
           onDelete: () => {
             if (onDelete) return onDelete();
             console.log(onDelete);
-            return null;
+            return deleteAction();
           },
         })}
       </Composer>

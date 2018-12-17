@@ -8,10 +8,10 @@ import { AWSDirectives, DocumentTypes } from '../../../../share/constants';
 import { CardBlock, NotifySubcard, EntitiesField } from '../../components';
 import GoalMilestonesSubcardContainer from '../containers/GoalMilestonesSubcardContainer';
 import GoalLessonsSubcardContainer from '../containers/GoalLessonsSubcardContainer';
-import GoalActionsSubcardContainer from '../containers/GoalActionsSubcardContainer';
 import GoalEditForm from './GoalEditForm';
 import FilesSubcardContainer from '../../canvas/components/FilesSubcardContainer';
 import RisksSubcard from '../../risks/components/RisksSubcard';
+import ActionsSubcard from '../../actions/components/ActionsSubcard';
 
 export const GoalEdit = ({
   status,
@@ -22,51 +22,64 @@ export const GoalEdit = ({
   _id: goalId,
   canEditGoals,
   risks,
+  actions,
   organization: { rkGuidelines } = {},
-}) => (
-  <Fragment>
-    <CardBlock>
-      <GoalEditForm
-        {...{
-          status,
-          organizationId,
-          sequentialId,
-          save,
-        }}
-      />
-    </CardBlock>
+}) => {
+  console.log('actions', actions);
+  return (
     <Fragment>
-      <GoalActionsSubcardContainer {...{ organizationId, goalId }} />
-      <GoalMilestonesSubcardContainer {...{ goalId }} />
-      {canEditGoals && (
+      <CardBlock>
+        <GoalEditForm
+          {...{
+            status,
+            organizationId,
+            sequentialId,
+            save,
+          }}
+        />
+      </CardBlock>
+      <Fragment>
         <EntitiesField
           {...{ organizationId }}
-          name="risks"
-          render={RisksSubcard}
+          name="actions"
+          render={ActionsSubcard}
           onChange={save}
-          guidelines={rkGuidelines}
+          newEntityTitle="New general action"
+          newEntityButtonTitle="Add general action"
           linkedTo={{ title, sequentialId }}
-          risks={sort(bySerialNumber, risks)}
+          actions={sort(bySerialNumber, actions)}
         />
-      )}
-      <GoalLessonsSubcardContainer {...{ goalId }} />
-      <EntitiesField
-        {...{ organizationId }}
-        name="files"
-        render={props => <FilesSubcardContainer {...props} />}
-        documentId={goalId}
-        onChange={save}
-        slingshotDirective={AWSDirectives.GOAL_FILES}
-        documentType={DocumentTypes.GOAL}
-      />
-      <NotifySubcard
-        {...{ organizationId }}
-        documentId={goalId}
-        onChange={save}
-      />
+        <GoalMilestonesSubcardContainer {...{ goalId }} />
+        {canEditGoals && (
+          <EntitiesField
+            {...{ organizationId }}
+            name="risks"
+            render={RisksSubcard}
+            onChange={save}
+            guidelines={rkGuidelines}
+            linkedTo={{ title, sequentialId }}
+            risks={sort(bySerialNumber, risks)}
+          />
+        )}
+        <GoalLessonsSubcardContainer {...{ goalId }} />
+        <EntitiesField
+          {...{ organizationId }}
+          name="files"
+          render={props => <FilesSubcardContainer {...props} />}
+          documentId={goalId}
+          onChange={save}
+          slingshotDirective={AWSDirectives.GOAL_FILES}
+          documentType={DocumentTypes.GOAL}
+        />
+        <NotifySubcard
+          {...{ organizationId }}
+          documentId={goalId}
+          onChange={save}
+        />
+      </Fragment>
     </Fragment>
-  </Fragment>
-);
+  );
+};
 
 GoalEdit.propTypes = {
   _id: PropTypes.string.isRequired,
@@ -77,6 +90,7 @@ GoalEdit.propTypes = {
   save: PropTypes.func.isRequired,
   canEditGoals: PropTypes.bool,
   risks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  actions: PropTypes.arrayOf(PropTypes.object).isRequired,
   organization: PropTypes.shape({
     rkGuidelines: PropTypes.object,
   }).isRequired,
