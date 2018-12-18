@@ -1,0 +1,7 @@
+#import "../../Fragment/LessonCard.graphql"
+
+mutation updateLesson($input: UpdateLessonInput!) {
+  updateLesson(input: $input) {
+    ...LessonCard
+  }
+}

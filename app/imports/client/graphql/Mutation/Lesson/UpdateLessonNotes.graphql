@@ -1,8 +1,0 @@
-mutation updateLessonNotes($input: UpdateLessonNotesInput!) {
-  updateLessonNotes(input: $input) {
-    lesson {
-      _id
-      notes
-    }
-  }
-}

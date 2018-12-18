@@ -1,20 +1,22 @@
 import { applyMiddleware } from 'plio-util';
-
 import {
   checkLoggedIn,
   flattenInput,
+  checkOrgMembership,
   checkLessonAccess,
   lessonUpdateAfterware,
-  sanitizeNotes,
 } from '../../../../../share/middleware';
 
-export const resolver = async (root, args, { services: { LessonService } }) =>
-  LessonService.update(args);
+export const resolver = async (root, args, context) =>
+  context.services.LessonService.update(args, context);
 
 export default applyMiddleware(
-  flattenInput(),
   checkLoggedIn(),
+  flattenInput(),
   checkLessonAccess(),
-  sanitizeNotes(),
+  checkOrgMembership(({ organizationId }, { ownerId }) => ({
+    organizationId,
+    userId: ownerId,
+  })),
   lessonUpdateAfterware(),
 )(resolver);

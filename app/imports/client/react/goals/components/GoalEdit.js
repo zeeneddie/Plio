@@ -7,11 +7,11 @@ import { bySerialNumber, byCompletionTargetDate } from 'plio-util';
 import { AWSDirectives, DocumentTypes } from '../../../../share/constants';
 import { CardBlock, NotifySubcard, EntitiesField, RelationsAdapter } from '../../components';
 import MilestonesSubcard from '../../milestones/components/MilestonesSubcard';
-import GoalLessonsSubcardContainer from '../containers/GoalLessonsSubcardContainer';
 import GoalActionsSubcardContainer from '../containers/GoalActionsSubcardContainer';
 import GoalEditForm from './GoalEditForm';
 import FilesSubcardContainer from '../../canvas/components/FilesSubcardContainer';
 import RisksSubcard from '../../risks/components/RisksSubcard';
+import LessonsSubcard from '../../lessons/components/LessonsSubcard';
 
 export const GoalEdit = ({
   status,
@@ -23,6 +23,7 @@ export const GoalEdit = ({
   canEditGoals,
   risks,
   milestones,
+  lessons,
   organization: { rkGuidelines } = {},
   refetchQueries,
 }) => {
@@ -40,43 +41,52 @@ export const GoalEdit = ({
           }}
         />
       </CardBlock>
-      <Fragment>
-        <GoalActionsSubcardContainer {...{ organizationId, goalId }} />
+      <GoalActionsSubcardContainer {...{ organizationId, goalId }} />
+      <RelationsAdapter
+        {...{ refetchQueries, goalId, organizationId }}
+        documentId={goalId}
+        documentType={DocumentTypes.GOAL}
+        relatedDocumentType={DocumentTypes.MILESTONE}
+        component={MilestonesSubcard}
+        milestones={sort(byCompletionTargetDate, milestones)}
+      />
+      {canEditGoals && (
         <RelationsAdapter
-          {...{ refetchQueries, goalId, organizationId }}
+          {...{ organizationId, refetchQueries, linkedTo }}
           documentId={goalId}
           documentType={DocumentTypes.GOAL}
-          relatedDocumentType={DocumentTypes.MILESTONE}
-          component={MilestonesSubcard}
-          milestones={sort(byCompletionTargetDate, milestones)}
+          relatedDocumentType={DocumentTypes.RISK}
+          render={RisksSubcard}
+          guidelines={rkGuidelines}
+          risks={sort(bySerialNumber, risks)}
         />
-        {canEditGoals && (
-          <RelationsAdapter
-            {...{ organizationId, refetchQueries, linkedTo }}
-            documentId={goalId}
-            documentType={DocumentTypes.GOAL}
-            relatedDocumentType={DocumentTypes.RISK}
-            render={RisksSubcard}
-            guidelines={rkGuidelines}
-            risks={sort(bySerialNumber, risks)}
-          />
-        )}
-        <GoalLessonsSubcardContainer {...{ goalId }} />
-        <EntitiesField
-          {...{ organizationId }}
-          name="files"
-          render={props => <FilesSubcardContainer {...props} />}
-          documentId={goalId}
-          onChange={save}
-          slingshotDirective={AWSDirectives.GOAL_FILES}
-          documentType={DocumentTypes.GOAL}
-        />
-        <NotifySubcard
-          {...{ organizationId }}
-          documentId={goalId}
-          onChange={save}
-        />
-      </Fragment>
+      )}
+      <EntitiesField
+        name="lessons"
+        render={LessonsSubcard}
+        documentType={DocumentTypes.GOAL}
+        lessons={sort(bySerialNumber, lessons)}
+        linkedTo={{
+          _id: goalId,
+          sequentialId,
+          title,
+        }}
+        {...{ organizationId, refetchQueries }}
+      />
+      <EntitiesField
+        {...{ organizationId }}
+        name="files"
+        render={props => <FilesSubcardContainer {...props} />}
+        documentId={goalId}
+        onChange={save}
+        slingshotDirective={AWSDirectives.GOAL_FILES}
+        documentType={DocumentTypes.GOAL}
+      />
+      <NotifySubcard
+        {...{ organizationId }}
+        documentId={goalId}
+        onChange={save}
+      />
     </Fragment>
   );
 };
@@ -90,6 +100,7 @@ GoalEdit.propTypes = {
   save: PropTypes.func.isRequired,
   canEditGoals: PropTypes.bool,
   risks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  lessons: PropTypes.arrayOf(PropTypes.object).isRequired,
   organization: PropTypes.shape({
     rkGuidelines: PropTypes.object,
   }).isRequired,

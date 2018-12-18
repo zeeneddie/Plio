@@ -1,8 +1,0 @@
-mutation updateLessonDate($input: UpdateLessonDateInput!) {
-  updateLessonDate(input: $input) {
-    lesson {
-      _id
-      date
-    }
-  }
-}

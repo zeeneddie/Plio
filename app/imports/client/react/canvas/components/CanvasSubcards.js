@@ -8,10 +8,10 @@ import { NotifySubcard, EntitiesField, RelationsAdapter } from '../../components
 import { GoalsSubcard } from '../../goals';
 import StandardsSubcard from '../../standards/components/StandardsSubcard';
 import NonconformitiesSubcard from '../../noncomformities/components/NonconformitiesSubcard';
-import CanvasLessonsSubcard from './CanvasLessonsSubcard';
 import ActivelyManageSubcard from './ActivleyManage/ActivelyManageSubcard';
 import RisksSubcard from '../../risks/components/RisksSubcard';
 import FilesSubcardContainer from './FilesSubcardContainer';
+import LessonsSubcard from '../../lessons/components/LessonsSubcard';
 
 const CanvasSubcards = ({
   organizationId,
@@ -133,7 +133,7 @@ const CanvasSubcards = ({
       )}
       <EntitiesField
         name="lessons"
-        render={CanvasLessonsSubcard}
+        render={LessonsSubcard}
         is={isNotEmpty}
         {...{
           organizationId,
