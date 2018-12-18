@@ -5,7 +5,7 @@ import { Query } from 'react-apollo';
 import { isEmpty, pathOr, compose, prop, pick, mapObjIndexed, curry } from 'ramda';
 import { sortByIds } from 'plio-util';
 
-import { delayed } from '../../helpers';
+import delayed from '../../helpers/delayed';
 import { Styles } from '../../../../api/constants';
 import { RenderSwitch, PreloaderPage, ErrorPage } from '../../components';
 import { Query as Queries } from '../../../graphql';

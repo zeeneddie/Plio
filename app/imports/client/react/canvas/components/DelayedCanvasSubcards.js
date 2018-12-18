@@ -1,4 +1,4 @@
-import { delayed } from '../../helpers';
+import delayed from '../../helpers/delayed';
 import CanvasSubcards from './CanvasSubcards';
 
 const DelayedCanvasSubcards = props => delayed({

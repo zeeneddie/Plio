@@ -15,12 +15,13 @@ import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
 import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
+import delayed from '../../helpers/delayed';
 import { swal } from '../../../util';
 import { CanvasTypes } from '../../../../share/constants';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateValueProposition } from '../../../validation';
-import { WithState, Composer, delayed } from '../../helpers';
+import { WithState, Composer } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
 import ValuePropositionSubcards from './ValuePropositionSubcards';
