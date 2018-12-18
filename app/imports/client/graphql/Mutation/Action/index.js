@@ -20,6 +20,7 @@ import DELETE_ACTION from './DeleteAction.graphql';
 import CREATE_ACTION from './CreateAction.graphql';
 import LINK_DOC_TO_ACTION from './LinkDocToAction.graphql';
 import UNLINK_DOC_FROM_ACTION from './UnlinkDocFromAction.graphql';
+import UPDATE_ACTION from './UpdateAction.graphql';
 
 UPDATE_ACTION_TITLE.name = 'updateActionTitle';
 UPDATE_ACTION_DESCRIPTION.name = 'updateActionDescription';
@@ -67,4 +68,5 @@ export default {
   CREATE_ACTION,
   LINK_DOC_TO_ACTION,
   UNLINK_DOC_FROM_ACTION,
+  UPDATE_ACTION,
 };

@@ -20,6 +20,7 @@ import deleteAction from './deleteAction';
 import createAction from './createAction';
 import linkDocToAction from './linkDocToAction';
 import unlinkDocFromAction from './unlinkDocFromAction';
+import updateAction from './updateAction';
 
 export default {
   updateActionTitle,
@@ -44,4 +45,5 @@ export default {
   createAction,
   linkDocToAction,
   unlinkDocFromAction,
+  updateAction,
 };

@@ -123,6 +123,24 @@ input UnlinkDocFromActionInput {
   documentId: ID!
 }
 
+input UpdateActionInput {
+  _id: ID!
+  title: String
+  description: String
+  ownerId: ID
+  planInPlace: String,
+  completionTargetDate: DateTime
+  toBeCompletedBy: ID
+  completionComments: String
+  completedAt: DateTime
+  completedBy: ID
+  verifiedAt: DateTime
+  verifiedBy: ID
+  verificationComments: String
+  verificationTargetDate: DateTime
+  toBeVerifiedBy: ID
+}
+
 type Mutation {
   createAction(input: CreateActionInput!): ActionPayload
   deleteAction(input: DeleteActionInput!): ActionPayload
@@ -146,4 +164,5 @@ type Mutation {
   updateActionToBeVerifiedBy(input: UpdateActionToBeVerifiedByInput!): ActionPayload
   linkDocToAction(input: LinkDocToActionInput!): ActionPayload
   unlinkDocFromAction(input: UnlinkDocFromActionInput!): ActionPayload
+  updateAction(input: UpdateActionInput!): Action
 }
