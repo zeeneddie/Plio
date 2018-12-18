@@ -20,19 +20,15 @@ const ActionCompletionForm = ({
   isCompleted,
   isVerified,
   canCompleteAnyAction,
-  onChangeCompletionTargetDate,
-  onChangeToBeCompletedBy,
   onComplete,
   onUndoCompletion,
-  onChangeCompletionComments,
-  onChangeCompletedAt,
-  onChangeCompletedBy,
+  save,
 }) => {
   const toBeCompletedBy = (
     <UserSelectInput
       name="toBeCompletedBy"
       placeholder="To be completed by"
-      onChange={onChangeToBeCompletedBy}
+      onChange={save}
       {...{ organizationId }}
     />
   );
@@ -40,7 +36,7 @@ const ActionCompletionForm = ({
     <UserSelectInput
       name="completedBy"
       placeholder="Completed by"
-      onChange={onChangeCompletedBy}
+      onChange={save}
       disabled={isVerified}
       {...{ organizationId }}
     />
@@ -50,7 +46,7 @@ const ActionCompletionForm = ({
       name="completionComments"
       placeholder="Enter any completion comments"
       component={TextareaAdapter}
-      onBlur={e => isCompleted && onChangeCompletionComments(e)}
+      onBlur={e => isCompleted && save(e)}
       disabled={isVerified}
     />
   );
@@ -62,7 +58,7 @@ const ActionCompletionForm = ({
         <Field
           name="completionTargetDate"
           placeholderText="Completion - target date"
-          onChange={onChangeCompletionTargetDate}
+          onChange={save}
           render={DatePickerAdapter}
           disabled={isCompleted}
         />
@@ -73,7 +69,7 @@ const ActionCompletionForm = ({
             Completed on
             <Field
               name="completedAt"
-              onChange={onChangeCompletedAt}
+              onChange={save}
               placeholderText="Completed on"
               render={DatePickerAdapter}
               disabled={isVerified}
@@ -156,6 +152,7 @@ ActionCompletionForm.propTypes = {
   onChangeCompletionComments: PropTypes.func,
   onChangeCompletedAt: PropTypes.func,
   onChangeCompletedBy: PropTypes.func,
+  save: PropTypes.func,
 };
 
 export default ActionCompletionForm;

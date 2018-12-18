@@ -14,10 +14,11 @@ const ActionEditForm = ({
   loadLinkedDocs,
   onLink,
   onUnlink,
+  save,
   ...props
 }) => (
   <Fragment>
-    <ActionForm {...props}>
+    <ActionForm {...{ save, ...props }}>
       <FormField>
         Linked to
         <Field
@@ -54,6 +55,7 @@ ActionEditForm.propTypes = {
   loadLinkedDocs: PropTypes.func,
   onLink: PropTypes.func,
   onUnlink: PropTypes.func,
+  save: PropTypes.func,
 };
 
 export default ActionEditForm;

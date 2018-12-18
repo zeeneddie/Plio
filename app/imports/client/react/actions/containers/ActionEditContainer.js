@@ -58,7 +58,7 @@ const ActionEditContainer = ({
           <Mutation
             mutation={Mutations.UPDATE_ACTION}
             children={noop}
-            onCompleted={({ updateGoal }) => setState({ action: updateGoal })}
+            onCompleted={({ updateAction }) => setState({ action: updateAction })}
           />,
           <Mutation
             {...{ refetchQueries }}
@@ -118,10 +118,10 @@ const ActionEditContainer = ({
               description = '',
               owner: { value: ownerId } = {},
               isCompleted,
-              completionComment = '',
+              completionComments = '',
+              verificationComments = '',
               completedAt,
               completedBy,
-              verificationComments,
               toBeCompletedBy,
               planInPlace,
               completionTargetDate,
@@ -139,7 +139,7 @@ const ActionEditContainer = ({
                   variables: {
                     input: {
                       _id: action._id,
-                      completionComment,
+                      completionComments,
                     },
                   },
                 }).then(noop).catch((err) => {
@@ -166,7 +166,7 @@ const ActionEditContainer = ({
                   description,
                   ownerId,
                   planInPlace,
-                  completionComment,
+                  completionComments,
                   verificationComments,
                   completedAt,
                   verifiedAt,

@@ -17,10 +17,7 @@ const ActionForm = ({
   children,
   sequentialId,
   organizationId,
-  onChangeTitle,
-  onChangeDescription,
-  onChangeOwner,
-  // onChangePlanInPlace,
+  save,
   ...props
 }) => (
   <Fragment>
@@ -29,7 +26,7 @@ const ActionForm = ({
         Title
         <InputField
           name="title"
-          onBlur={onChangeTitle}
+          onBlur={save}
           placeholder="Title"
           addon={sequentialId}
           maxLength={StringLimits.longTitle.max}
@@ -39,7 +36,7 @@ const ActionForm = ({
         Description
         <Field
           name="description"
-          onBlur={onChangeDescription}
+          onBlur={save}
           placeholder="Description"
           component={TextareaAdapter}
         />
@@ -50,7 +47,7 @@ const ActionForm = ({
         <UserSelectInput
           name="owner"
           placeholder="Owner"
-          onChange={onChangeOwner}
+          onChange={save}
           {...{ organizationId }}
         />
       </FormField>
@@ -58,7 +55,7 @@ const ActionForm = ({
         Plan in place?
         <Field
           name="planInPlace"
-          onChange={onChangePlanInPlace}
+          onChange={save}
           render={ActionPlan}
         />
       </FormField> */}
@@ -73,12 +70,9 @@ ActionForm.propTypes = {
   children: PropTypes.node,
   sequentialId: PropTypes.string,
   organizationId: PropTypes.string,
-  onChangeTitle: PropTypes.func,
-  onChangeDescription: PropTypes.func,
-  onChangeOwner: PropTypes.func,
-  // onChangePlanInPlace: PropTypes.func,
   onChangeCompletionTargetDate: PropTypes.func,
   onChangeToBeCompletedBy: PropTypes.func,
+  save: PropTypes.func,
 };
 
 export default ActionForm;
