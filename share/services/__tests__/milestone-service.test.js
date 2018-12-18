@@ -1,101 +1,74 @@
-import { __setupDB, __closeDB, Mongo } from 'meteor/mongo';
+import { __setupDB, __closeDB, __clearDB } from 'meteor/mongo';
+import faker from 'faker';
+
+import createContext from '../../utils/tests/createContext';
+import MilestoneService from '../milestone-service';
 
 describe('Milestone service', () => {
-  beforeAll(__setupDB);
-  afterAll(__closeDB);
+  let context;
 
-  beforeEach(() => {
-    jest.doMock('../../collections', () => ({
-      Goals: new Mongo.Collection('goals'),
-      Milestones: new Mongo.Collection('milestones'),
-    }));
+  beforeAll(async () => {
+    await __setupDB();
+
+    context = createContext({});
   });
+  afterAll(__closeDB);
+  beforeEach(__clearDB);
 
   test('insert', async () => {
-    const MilestoneService = require('../milestone-service').default;
-    const { Goals } = require('../../collections');
-    const organizationId = 1;
-    const goalId = 2;
+    const organizationId = faker.random.uuid();
     const args = {
       organizationId,
-      title: 'hello',
-      description: 'world',
+      title: faker.random.word(),
+      description: faker.random.words(),
       completionTargetDate: new Date(),
-      linkedTo: goalId,
     };
 
-    await Goals.insert({ _id: goalId });
+    const _id = await MilestoneService.insert(args, context);
+    const milestone = await context.collections.Milestones.findOne({ _id });
 
-    const _id = await MilestoneService.insert(args);
-    const milestone = await MilestoneService.collection.findOne({ _id });
-    const { milestoneIds } = await Goals.findOne({ _id: goalId });
-
-    expect(milestone).toMatchObject(args);
-    expect(milestoneIds).toContain(milestone._id);
-  });
-
-  test('delete', async () => {
-    const MilestoneService = require('../milestone-service').default;
-    const args = {
-      organizationId: 2,
-      title: 'hello',
-      description: 'world',
-      completionTargetDate: new Date(),
-      linkedTo: 3,
-    };
-    const context = { userId: 4 };
-    const _id = await MilestoneService.insert(args);
-
-    await MilestoneService.delete({ _id }, context);
-
-    const milestone = await MilestoneService.collection.findOne({ _id });
-
-    expect(milestone).toMatchObject({
-      isDeleted: true,
-      deletedBy: context.userId,
-      deletedAt: expect.any(Date),
+    expect(milestone).toEqual({
+      ...args,
+      _id,
+      notify: [context.userId],
+      createdBy: context.userId,
     });
   });
 
   test('remove', async () => {
-    const MilestoneService = require('../milestone-service').default;
-    const _id = await MilestoneService.collection.insert({});
+    const _id = await context.collections.Milestones.insert({});
 
-    await MilestoneService.remove({ _id });
+    await MilestoneService.remove({ _id }, context);
 
-    const milestone = await MilestoneService.collection.findOne({ _id });
+    const milestone = await context.collections.Milestones.findOne({ _id });
 
     expect(milestone).toBe(null);
   });
 
   test('restore', async () => {
-    const MilestoneService = require('../milestone-service').default;
-    const _id = await MilestoneService.collection.insert({
+    const _id = await context.collections.Milestones.insert({
       isCompleted: true,
-      isDeleted: true,
-      deletedBy: 1,
-      deletedAt: new Date(),
+      completedBy: new Date(),
+      completionComment: faker.random.words(),
     });
 
-    await MilestoneService.restore({ _id });
+    await MilestoneService.restore({ _id }, context);
 
-    const milestone = await MilestoneService.collection.findOne({ _id });
+    const milestone = await context.collections.Milestones.findOne({ _id });
 
     expect(milestone).toEqual({
       _id,
-      isDeleted: false,
       isCompleted: false,
+      updatedBy: context.userId,
     });
   });
 
   test('complete', async () => {
-    const MilestoneService = require('../milestone-service').default;
-    const context = { userId: 1 };
-    const _id = await MilestoneService.insert({});
+    const _id = await context.collections.Milestones.insert({});
 
     await MilestoneService.complete({ _id }, context);
 
-    const milestone = await MilestoneService.collection.findOne({ _id });
+    const milestone = await context.collections.Milestones.findOne({ _id });
 
     expect(milestone).toMatchObject({
       isCompleted: true,

@@ -7,8 +7,8 @@ import {
   goalUpdateAfterware,
 } from '../../../../../share/middleware';
 
-export const resolver = async (root, args, { services: { GoalService }, ...context }) =>
-  GoalService.undoCompletion(args, context);
+export const resolver = async (root, args, context) =>
+  context.services.GoalService.undoCompletion(args, context);
 
 export default applyMiddleware(
   flattenInput(),

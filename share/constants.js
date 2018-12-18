@@ -321,6 +321,7 @@ export const Abbreviations = {
   FEATURE: 'FE',
   NEED: 'NE',
   WANT: 'WA',
+  RISK: 'RK',
 };
 
 export const ProblemTypes = {

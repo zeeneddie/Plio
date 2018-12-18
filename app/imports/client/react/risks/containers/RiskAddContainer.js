@@ -16,7 +16,6 @@ const RiskAddContainer = ({
   isOpen,
   toggle,
   onLink,
-  onUnlink,
   ...props
 }) => (
   <Composer
@@ -106,7 +105,6 @@ const RiskAddContainer = ({
 RiskAddContainer.propTypes = {
   organizationId: PropTypes.string.isRequired,
   onLink: PropTypes.func.isRequired,
-  onUnlink: PropTypes.func.isRequired,
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
 };

@@ -1,13 +1,9 @@
 import { getIds } from 'plio-util';
 
-import { Goals } from '../collections';
 import { generateSerialNumber } from '../helpers';
 import { Abbreviations } from '../constants';
-import MilestoneService from './milestone-service';
 
 export default {
-  collection: Goals,
-
   async insert({
     organizationId,
     title,
@@ -17,11 +13,11 @@ export default {
     endDate,
     color,
     priority,
-  }) {
-    const serialNumber = generateSerialNumber(this.collection, { organizationId });
+  }, { userId, collections: { Goals } }) {
+    const serialNumber = generateSerialNumber(Goals, { organizationId });
     const sequentialId = `${Abbreviations.GOAL}${serialNumber}`;
 
-    return this.collection.insert({
+    return Goals.insert({
       organizationId,
       title,
       description,
@@ -32,6 +28,7 @@ export default {
       serialNumber,
       sequentialId,
       priority,
+      createdBy: userId,
     });
   },
 
@@ -49,12 +46,10 @@ export default {
       completionComment,
       completedAt,
       completedBy,
-      riskIds,
-      milestoneIds,
       notify,
       fileIds,
     } = args;
-    const { collections } = context;
+    const { userId, collections } = context;
     const query = { _id };
     const modifier = {
       $set: {
@@ -69,31 +64,35 @@ export default {
         completionComment,
         completedAt,
         completedBy,
-        riskIds,
-        milestoneIds,
         notify,
         fileIds,
+        updatedBy: userId,
       },
     };
 
     return collections.Goals.update(query, modifier);
   },
 
-  async complete({ _id, completionComment }, { userId }) {
-    return this.set({
-      _id,
-      completionComment,
-      isCompleted: true,
-      completedBy: userId,
-      completedAt: new Date(),
-    });
+  async complete({ _id, completionComment }, { userId, collections: { Goals } }) {
+    const query = { _id };
+    const modifier = {
+      $set: {
+        completionComment,
+        isCompleted: true,
+        completedBy: userId,
+        completedAt: new Date(),
+        updatedBy: userId,
+      },
+    };
+    return Goals.update(query, modifier);
   },
 
-  async undoCompletion({ _id }) {
+  async undoCompletion({ _id }, { userId, collections: { Goals } }) {
     const query = { _id };
     const modifier = {
       $set: {
         isCompleted: false,
+        updatedBy: userId,
       },
       $unset: {
         completedBy: '',
@@ -102,84 +101,10 @@ export default {
       },
     };
 
-    return this.collection.update(query, modifier);
+    return Goals.update(query, modifier);
   },
 
-  async linkMilestone({ _id, milestoneId }) {
-    const query = { _id };
-    const modifier = {
-      $addToSet: {
-        milestoneIds: milestoneId,
-      },
-    };
-
-    return this.collection.update(query, modifier);
-  },
-
-  async linkRisk({ _id, riskId }) {
-    const query = { _id };
-    const modifier = {
-      $addToSet: {
-        riskIds: riskId,
-      },
-    };
-
-    return this.collection.update(query, modifier);
-  },
-
-  async linkFile({ _id, fileId }) {
-    const query = { _id };
-    const modifier = {
-      $addToSet: {
-        fileIds: fileId,
-      },
-    };
-
-    return this.collection.update(query, modifier);
-  },
-
-  async unlinkFile({ _id, fileId }) {
-    const query = { _id };
-    const modifier = {
-      $pull: {
-        fileIds: fileId,
-      },
-    };
-
-    return this.collection.update(query, modifier);
-  },
-
-  async addToNotify({ _id, userId }) {
-    const query = { _id };
-    const modifier = {
-      $addToSet: {
-        notify: userId,
-      },
-    };
-
-    return this.collection.update(query, modifier);
-  },
-
-  async removeFromNotify({ _id, userId }) {
-    const query = { _id };
-    const modifier = {
-      $pull: {
-        notify: userId,
-      },
-    };
-
-    return this.collection.update(query, modifier);
-  },
-
-  async deleteMilestones({ milestoneIds = [] }, { userId }) {
-    return Promise.all(milestoneIds.map(milestoneId =>
-      MilestoneService.delete({ _id: milestoneId }, { userId })));
-  },
-
-  async removeMilestones({ milestoneIds = [] }, { collections: { Milestones } }) {
-    return Milestones.remove({ _id: { $in: milestoneIds } });
-  },
-
+  // TODO: replace with cron job
   async unlinkActions(
     { _id: documentId },
     {
@@ -203,25 +128,24 @@ export default {
     return Files.remove({ _id: { $in: fileIds } });
   },
 
-  async delete({ _id }, { userId }) {
-    const goal = await this.collection.findOne({ _id });
-    const res = await this.set({
-      _id,
-      isDeleted: true,
-      deletedBy: userId,
-      deletedAt: new Date(),
-    });
-
-    await this.deleteMilestones(goal, { userId });
-
-    return res;
+  async delete({ _id }, { userId, collections: { Goals } }) {
+    const query = { _id };
+    const modifier = {
+      $set: {
+        isDeleted: true,
+        deletedBy: userId,
+        deletedAt: new Date(),
+        updatedBy: userId,
+      },
+    };
+    return Goals.update(query, modifier);
   },
 
   async remove({ _id }, { goal, ...context }) {
-    const res = await this.collection.remove({ _id });
+    const { collections: { Goals } } = context;
+    const res = await Goals.remove({ _id });
 
     await Promise.all([
-      this.removeMilestones(goal, context),
       this.removeLessons(goal, context),
       this.unlinkActions(goal, context),
       this.removeFiles(goal, context),
@@ -230,12 +154,13 @@ export default {
     return res;
   },
 
-  async restore({ _id }) {
+  async restore({ _id }, { userId, collections: { Goals } }) {
     const query = { _id };
     const modifier = {
       $set: {
         isDeleted: false,
         isCompleted: false,
+        updatedBy: userId,
       },
       $unset: {
         deletedBy: '',
@@ -245,16 +170,6 @@ export default {
         completionComment: '',
       },
     };
-    const { milestoneIds = [] } = await this.collection.findOne(query);
-    const res = await this.collection.update(query, modifier);
-
-    await Promise.all(milestoneIds.map(milestoneId =>
-      MilestoneService.restore({ _id: milestoneId })));
-
-    return res;
-  },
-
-  async set({ _id, ...args }) {
-    return this.collection.update({ _id }, { $set: args });
+    return Goals.update(query, modifier);
   },
 };

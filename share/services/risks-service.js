@@ -2,15 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 
 import { Risks } from '../collections';
-import { ProblemTypes } from '../constants';
+import { ProblemTypes, Abbreviations } from '../constants';
 import BaseEntityService from './base-entity-service';
 import ProblemsService from './problems-service';
-import GoalService from './goal-service';
-
-if (Meteor.isServer) {
-  // import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
-}
-
 
 export default Object.assign({}, ProblemsService, {
   collection: Risks,
@@ -19,7 +13,7 @@ export default Object.assign({}, ProblemsService, {
 
   _getDocType: () => ProblemTypes.RISK,
 
-  _getAbbr: () => 'RK',
+  _getAbbr: () => Abbreviations.RISK,
 
   async insert({
     organizationId,
@@ -48,11 +42,7 @@ export default Object.assign({}, ProblemsService, {
       Object.assign(args, { standardsIds });
     }
 
-    const _id = await ProblemsService.insert.call(this, args);
-
-    if (goalId) await GoalService.linkRisk({ _id: goalId, riskId: _id });
-
-    return _id;
+    return ProblemsService.insert.call(this, args);
   },
 
   update(args) {

@@ -16,6 +16,14 @@ export default applyMiddleware(
   async (next, root, args, context) => {
     await next(root, args, context);
 
-    return null;
+    const { rel1, rel2 } = args;
+    return {
+      rel1: {
+        documentType: rel1.documentType,
+      },
+      rel2: {
+        documentType: rel2.documentType,
+      },
+    };
   },
 )(resolver);

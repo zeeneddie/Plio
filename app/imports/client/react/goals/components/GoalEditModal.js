@@ -26,6 +26,7 @@ export const GoalEditModal = ({
   onSubmit,
   goal,
   canEditGoals,
+  ...props
 }) => (
   <EntityModalNext
     {...{
@@ -53,7 +54,12 @@ export const GoalEditModal = ({
               require={goal}
             >
               <GoalEdit
-                {...{ ...goal, organizationId, canEditGoals }}
+                {...{
+                  ...props,
+                  ...goal,
+                  organizationId,
+                  canEditGoals,
+                }}
                 save={handleSubmit}
               />
             </RenderSwitch>

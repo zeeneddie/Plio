@@ -4,14 +4,12 @@ import { pickNonInt } from 'plio-util';
 import {
   BaseEntitySchema,
   OrganizationIdSchema,
-  DeletedSchema,
 } from './schemas';
 import { StringLimits, MilestoneStatuses } from '../constants';
 
 export const MilestoneSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
-  DeletedSchema,
   {
     title: {
       type: String,

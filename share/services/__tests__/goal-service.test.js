@@ -1,237 +1,115 @@
-import { __setupDB, __closeDB, Mongo } from 'meteor/mongo';
+import { __setupDB, __closeDB, __clearDB } from 'meteor/mongo';
+import faker from 'faker';
 
 import { GoalColors, GoalPriorities, Abbreviations } from '../../constants';
-import MilestoneService from '../milestone-service';
+import createContext from '../../utils/tests/createContext';
+import GoalService from '../goal-service';
+import { generateSerialNumber } from '../../helpers';
 
-jest.mock('../milestone-service', () => ({
-  delete: jest.fn(),
-  restore: jest.fn(),
+jest.mock('../../helpers', () => ({
+  generateSerialNumber: jest.fn(),
 }));
 
 describe('Goal service', () => {
-  beforeAll(__setupDB);
-  afterAll(__closeDB);
+  let context;
 
-  beforeEach(() => {
-    jest.doMock('../../collections', () => ({
-      Goals: new Mongo.Collection('goals'),
-      WorkItems: new Mongo.Collection('workItems'),
-      Milestones: new Mongo.Collection('milestones'),
-    }));
+  beforeAll(async () => {
+    await __setupDB();
+
+    context = createContext({});
   });
+  afterAll(__closeDB);
+  beforeEach(__clearDB);
 
   test('insert', async () => {
-    const GoalService = require('../goal-service').default;
     const args = {
-      organizationId: 1,
-      title: 'hello',
-      ownerId: 2,
+      organizationId: faker.random.uuid(),
+      title: faker.random.word(),
+      description: faker.random.words(),
+      ownerId: faker.random.uuid(),
       startDate: new Date(),
       endDate: new Date(),
       color: GoalColors.PINK,
       priority: GoalPriorities.MAJOR,
     };
-    const _id = await GoalService.insert(args);
-    const goal = await GoalService.collection.findOne({ _id });
+    const _id = await GoalService.insert(args, context);
+    const goal = await context.collections.Goals.findOne({ _id });
 
-    expect(goal).toMatchObject(args);
+    expect(goal).toMatchObject({
+      ...args,
+      createdBy: context.userId,
+    });
+    expect(generateSerialNumber).toHaveBeenCalled();
     expect(goal.sequentialId.startsWith(Abbreviations.GOAL)).toBe(true);
   });
 
   test('complete', async () => {
-    const GoalService = require('../goal-service').default;
-    const _id = await GoalService.collection.insert({});
-    const userId = 1;
-    const completionComment = 'hello world';
+    const _id = await context.collections.Goals.insert({});
+    const args = {
+      _id,
+      completionComment: faker.random.words(),
+    };
 
-    await GoalService.complete({ _id, completionComment }, { userId });
+    await GoalService.complete(args, context);
 
-    const goal = await GoalService.collection.findOne({ _id });
+    const goal = await context.collections.Goals.findOne({ _id });
 
-    expect(goal).toMatchObject({
+    expect(goal).toEqual({
+      ...args,
       isCompleted: true,
-      completedBy: userId,
+      completedBy: context.userId,
       completedAt: expect.any(Date),
-      completionComment,
+      updatedBy: context.userId,
     });
   });
 
   test('undoCompletion', async () => {
-    const GoalService = require('../goal-service').default;
-    const _id = await GoalService.collection.insert({
+    const _id = await context.collections.Goals.insert({
       isCompleted: true,
-      completedBy: 1,
+      completedBy: context.userId,
       completedAt: new Date(),
-      completionComment: 'hello world',
+      completionComment: faker.random.words(),
     });
 
-    await GoalService.undoCompletion({ _id });
+    await GoalService.undoCompletion({ _id }, context);
 
-    const goal = await GoalService.collection.findOne({ _id });
+    const goal = await context.collections.Goals.findOne({ _id });
 
     expect(goal).toEqual({
       _id,
       isCompleted: false,
-    });
-  });
-
-  test('linkMilestone', async () => {
-    const GoalService = require('../goal-service').default;
-    const _id = await GoalService.collection.insert({});
-    const milestoneId = 1;
-
-    await GoalService.linkMilestone({ _id, milestoneId });
-
-    const goal = await GoalService.collection.findOne({ _id });
-
-    expect(goal).toEqual({
-      _id,
-      milestoneIds: [milestoneId],
-    });
-  });
-
-  test('linkFile', async () => {
-    const GoalService = require('../goal-service').default;
-    const _id = await GoalService.collection.insert({});
-    const fileId = 1;
-
-    await GoalService.linkFile({ _id, fileId });
-
-    const goal = await GoalService.collection.findOne({ _id });
-
-    expect(goal).toEqual({
-      _id,
-      fileIds: [fileId],
-    });
-  });
-
-  test('unlinkFile', async () => {
-    const GoalService = require('../goal-service').default;
-    const fileId = 1;
-    const _id = await GoalService.collection.insert({ fileIds: [fileId] });
-
-    await GoalService.unlinkFile({ _id, fileId });
-
-    const goal = await GoalService.collection.findOne({ _id });
-
-    expect(goal).toEqual({
-      _id,
-      fileIds: [],
-    });
-  });
-
-  test('linkRisk', async () => {
-    const GoalService = require('../goal-service').default;
-    const _id = await GoalService.collection.insert({});
-    const riskId = 1;
-
-    await GoalService.linkRisk({ _id, riskId });
-
-    const goal = await GoalService.collection.findOne({ _id });
-
-    expect(goal).toEqual({
-      _id,
-      riskIds: [riskId],
-    });
-  });
-
-  test('addToNotify', async () => {
-    const GoalService = require('../goal-service').default;
-    const _id = await GoalService.collection.insert({});
-    const userId = 1;
-
-    await GoalService.addToNotify({ _id, userId });
-
-    const goal = await GoalService.collection.findOne({ _id });
-
-    expect(goal).toEqual({
-      _id,
-      notify: [userId],
-    });
-  });
-
-  test('removeFromNotify', async () => {
-    const GoalService = require('../goal-service').default;
-    const userId = 1;
-    const _id = await GoalService.collection.insert({ notify: [userId] });
-
-    await GoalService.removeFromNotify({ _id, userId });
-
-    const goal = await GoalService.collection.findOne({ _id });
-
-    expect(goal).toEqual({
-      _id,
-      notify: [],
+      updatedBy: context.userId,
     });
   });
 
   test('restore', async () => {
-    const GoalService = require('../goal-service').default;
-    const _id = await GoalService.collection.insert({ milestoneIds: [2, 3] });
+    const _id = await context.collections.Goals.insert({
+      isDeleted: true,
+      deletedAt: new Date(),
+      deletedBy: context.userId,
+      isCompleted: true,
+      completedAt: new Date(),
+      completedBy: context.userId,
+    });
 
-    await GoalService.delete({ _id }, { userId: 1 });
-    await GoalService.restore({ _id });
+    await GoalService.restore({ _id }, context);
 
-    const goal = await GoalService.collection.findOne({ _id });
+    const goal = await context.collections.Goals.findOne({ _id });
 
-    expect(MilestoneService.delete).toHaveBeenCalledTimes(2);
-    expect(MilestoneService.restore).toHaveBeenCalledTimes(2);
-
-    expect(goal).toMatchObject({
+    expect(goal).toEqual({
+      _id,
+      updatedBy: context.userId,
       isDeleted: false,
       isCompleted: false,
     });
   });
 
   test('remove', async () => {
-    const GoalService = require('../goal-service').default;
-    const ActionService = require('../action-service').default;
-    const LessonsLearned = new Mongo.Collection('lessons');
-    const Milestones = new Mongo.Collection('milestones');
-    const Risks = new Mongo.Collection('risks');
-    const Files = new Mongo.Collection('files');
-    const Actions = new Mongo.Collection('actions');
-    const _id = 1;
-    const milestoneIds = [2];
-    const riskIds = [3];
-    const fileIds = [4];
-    const goal = {
-      _id,
-      milestoneIds,
-      riskIds,
-      fileIds,
-    };
+    const _id = await context.collections.Goals.insert({});
+    const goal = await context.collections.Goals.findOne({ _id });
 
-    ActionService.collection = Actions;
+    await GoalService.remove({ _id }, { ...context, goal });
 
-    const context = {
-      goal,
-      services: { ActionService },
-      collections: {
-        LessonsLearned,
-        Milestones,
-        Files,
-        Actions,
-      },
-    };
-
-    await Promise.all([
-      Milestones.insert({ _id: goal.milestoneIds[0] }),
-      Risks.insert({ _id: goal.riskIds[0] }),
-      Files.insert({ _id: goal.fileIds[0] }),
-      LessonsLearned.insert({ linkedTo: [{ documentId: _id }] }),
-      LessonsLearned.insert({ linkedTo: [{ documentId: _id }] }),
-      Actions.insert({ linkedTo: [{ documentId: _id }] }),
-      Actions.insert({ linkedTo: [{ documentId: _id }] }),
-    ]);
-
-    await GoalService.remove({ _id: goal._id }, context);
-
-    await expect(Milestones.find().count()).resolves.toBe(0);
-    await expect(Files.find().count()).resolves.toBe(0);
-    await expect(LessonsLearned.find().count()).resolves.toBe(0);
-    await expect(Risks.find().count()).resolves.toBe(riskIds.length);
-    await expect(Actions.find().count()).resolves.toBe(2);
-    await expect(Actions.find({ 'linkedTo.documentId': _id }).count()).resolves.toBe(0);
+    await expect(context.collections.Goals.findOne({ _id })).resolves.toBe(null);
   });
 });

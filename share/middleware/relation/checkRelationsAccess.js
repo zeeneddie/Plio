@@ -8,8 +8,5 @@ export default () => async (next, root, args, context) => applyMiddleware(
     query: { _id: documentId },
     collection: getCollectionByDocType(documentType),
   })),
-  checkDocAccess((_, { rel2: { documentId, documentType } }) => ({
-    query: { _id: documentId },
-    collection: getCollectionByDocType(documentType),
-  })),
+  // Can't check second document because it's already removed at this point
 )(next)(root, args, context);
