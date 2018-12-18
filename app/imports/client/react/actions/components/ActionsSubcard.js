@@ -31,6 +31,7 @@ const ActionsSubcard = ({
   documentType,
   type,
   refetchQueries,
+  canCompleteAnyAction,
   ...props
 }) => (
   <Fragment>
@@ -50,6 +51,7 @@ const ActionsSubcard = ({
                     linkedTo,
                     onUnlink,
                     refetchQueries,
+                    canCompleteAnyAction,
                   }}
                   key={action._id}
                   itemId={action._id}
@@ -109,6 +111,7 @@ ActionsSubcard.propTypes = {
   onUnlink: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   refetchQueries: PropTypes.func,
+  canCompleteAnyAction: PropTypes.bool,
 };
 
 export default ActionsSubcard;

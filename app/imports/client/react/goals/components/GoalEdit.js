@@ -4,6 +4,7 @@ import { pure, withHandlers } from 'recompose';
 import { sort, compose } from 'ramda';
 import { bySerialNumber } from 'plio-util';
 
+import { UserRoles } from '../../../../share/constants';
 import { Query as Queries } from '../../../graphql';
 import { AWSDirectives, DocumentTypes, ActionTypes } from '../../../../share/constants';
 import { CardBlock, NotifySubcard, EntitiesField } from '../../components';
@@ -37,6 +38,7 @@ export const GoalEdit = ({
   risks,
   actions,
   refetchQueries,
+  user: { roles } = {},
   organization: { rkGuidelines } = {},
 }) => (
   <Fragment>
@@ -62,6 +64,7 @@ export const GoalEdit = ({
         documentType={DocumentTypes.GOAL}
         linkedTo={{ _id: goalId, title, sequentialId }}
         actions={sort(bySerialNumber, actions)}
+        canCompleteAnyAction={roles && roles.includes(UserRoles.COMPLETE_ANY_ACTION)}
       />
       <GoalMilestonesSubcardContainer {...{ goalId }} />
       {canEditGoals && (
@@ -103,6 +106,7 @@ GoalEdit.propTypes = {
   save: PropTypes.func.isRequired,
   canEditGoals: PropTypes.bool,
   refetchQueries: PropTypes.func,
+  user: PropTypes.object,
   risks: PropTypes.arrayOf(PropTypes.object).isRequired,
   actions: PropTypes.arrayOf(PropTypes.object).isRequired,
   organization: PropTypes.shape({

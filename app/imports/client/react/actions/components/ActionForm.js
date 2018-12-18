@@ -61,7 +61,7 @@ const ActionForm = ({
       </FormField> */}
     </CardBlock>
     <CardBlock>
-      <ActionCompletionForm {...{ ...props, organizationId }} />
+      <ActionCompletionForm {...{ ...props, save, organizationId }} />
     </CardBlock>
   </Fragment>
 );
