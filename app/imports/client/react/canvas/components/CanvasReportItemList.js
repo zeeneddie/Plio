@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { identity } from 'ramda';
 
 import { Styles } from '../../../../api/constants';
 import CanvasSectionItem from './CanvasSectionItem';
@@ -49,13 +50,14 @@ const CanvasReportItemList = ({
   items,
   isSimple,
   renderItem,
+  sort = identity,
   ...rest
 }) => {
   const Tag = isSimple ? 'ol' : 'ul';
   return (
     <List {...rest}>
       <Tag>
-        {items.map(item => (
+        {sort(items).map(item => (
           <CanvasSectionItem key={item._id}>
             {!isSimple && item.color && <StyledCanvasSquareIcon color={item.color} />}
             <span>
@@ -78,6 +80,7 @@ CanvasReportItemList.propTypes = {
   renderItem: PropTypes.func,
   className: PropTypes.string,
   isSimple: PropTypes.bool,
+  sort: PropTypes.func,
 };
 
 export default CanvasReportItemList;
