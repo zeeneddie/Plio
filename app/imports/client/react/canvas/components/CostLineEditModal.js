@@ -21,6 +21,7 @@ import { validateCostLine } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CostLineForm from './CostLineForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
+import DelayedCanvasSubcards from './DelayedCanvasSubcards';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -28,7 +29,6 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import CanvasSubcards from './CanvasSubcards';
 
 const getCostLine = pathOr({}, repeat('costLine', 2));
 const getInitialValues = compose(
@@ -158,11 +158,10 @@ const CostLineEditModal = ({
                       {costLine => (
                         <Fragment>
                           <CostLineForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasSubcards
+                          <DelayedCanvasSubcards
                             {...{ organizationId, refetchQueries }}
                             section={costLine}
                             onChange={handleSubmit}
-                            refetchQuery={Queries.COST_LINE_CARD}
                             documentType={CanvasTypes.COST_LINE}
                             slingshotDirective={AWSDirectives.COST_LINE_FILES}
                             user={data && data.user}

@@ -28,7 +28,7 @@ import {
 import { WithState, Composer } from '../../helpers';
 import KeyPartnerForm from './KeyPartnerForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
-import CanvasSubcards from './CanvasSubcards';
+import DelayedCanvasSubcards from './DelayedCanvasSubcards';
 
 const keyPartnerPath = repeat('keyPartner', 2);
 const getKeyPartner = path(keyPartnerPath);
@@ -167,11 +167,10 @@ const KeyPartnerEditModal = ({
                         {() => (
                           <Fragment>
                             <KeyPartnerForm {...{ organizationId }} save={handleSubmit} />
-                            <CanvasSubcards
+                            <DelayedCanvasSubcards
                               {...{ organizationId, refetchQueries }}
                               section={keyPartner}
                               onChange={handleSubmit}
-                              refetchQuery={Queries.KEY_PARTNER_CARD}
                               documentType={CanvasTypes.KEY_PARTNER}
                               slingshotDirective={AWSDirectives.KEY_PARTNER_FILES}
                               user={data && data.user}

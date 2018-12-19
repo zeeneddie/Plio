@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { delayed } from 'libreact/lib/delayed';
 
+import delayed from '../../helpers/delayed';
 import { WithToggle } from '../../helpers';
 import CanvasSection from './CanvasSection';
 import CanvasItemList from './CanvasItemList';

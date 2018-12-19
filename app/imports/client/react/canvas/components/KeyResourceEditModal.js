@@ -21,6 +21,7 @@ import { validateKeyResource } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
+import DelayedCanvasSubcards from './DelayedCanvasSubcards';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -28,7 +29,6 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import CanvasSubcards from './CanvasSubcards';
 
 const getKeyResource = pathOr({}, repeat('keyResource', 2));
 const getInitialValues = compose(
@@ -155,7 +155,7 @@ const KeyResourceEditModal = ({
                       {keyResource => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasSubcards
+                          <DelayedCanvasSubcards
                             {...{ organizationId, refetchQueries }}
                             section={keyResource}
                             onChange={handleSubmit}

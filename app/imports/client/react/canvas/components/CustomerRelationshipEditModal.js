@@ -21,6 +21,7 @@ import { validateCustomerRelationship } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
+import DelayedCanvasSubcards from './DelayedCanvasSubcards';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -28,7 +29,6 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
-import CanvasSubcards from './CanvasSubcards';
 
 const getCustomerRelationship = pathOr({}, repeat('customerRelationship', 2));
 const getInitialValues = compose(
@@ -157,7 +157,7 @@ const CustomerRelationshipEditModal = ({
                       {customerRelationship => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                          <CanvasSubcards
+                          <DelayedCanvasSubcards
                             {...{ organizationId, refetchQueries }}
                             section={customerRelationship}
                             onChange={handleSubmit}
