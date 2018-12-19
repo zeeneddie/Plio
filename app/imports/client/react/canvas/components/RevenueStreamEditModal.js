@@ -21,7 +21,6 @@ import { validateRevenueStream } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import RevenueStreamForm from './RevenueStreamForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
-import DelayedCanvasSubcards from './DelayedCanvasSubcards';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -29,6 +28,7 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
 
 const getRevenueStream = pathOr({}, repeat('revenueStream', 2));
 const getInitialValues = compose(
@@ -161,7 +161,7 @@ const RevenueStreamEditModal = ({
                       {revenueStream => (
                         <Fragment>
                           <RevenueStreamForm {...{ organizationId }} save={handleSubmit} />
-                          <DelayedCanvasSubcards
+                          <CanvasSubcards
                             {...{ organizationId, refetchQueries }}
                             section={revenueStream}
                             onChange={handleSubmit}

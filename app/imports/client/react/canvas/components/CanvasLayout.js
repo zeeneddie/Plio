@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { ApolloProvider, Query } from 'react-apollo';
+import { delayed } from 'libreact/lib/delayed';
 
-import delayed from '../../helpers/delayed';
 import { client } from '../../../apollo';
 import { Query as Queries } from '../../../graphql';
 import {

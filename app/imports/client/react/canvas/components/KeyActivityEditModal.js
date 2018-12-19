@@ -21,7 +21,6 @@ import { validateKeyActivity } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
 import CanvasModalGuidance from './CanvasModalGuidance';
-import DelayedCanvasSubcards from './DelayedCanvasSubcards';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -29,6 +28,7 @@ import {
   EntityModalForm,
   RenderSwitch,
 } from '../../components';
+import CanvasSubcards from './CanvasSubcards';
 
 const getKeyActivity = pathOr({}, repeat('keyActivity', 2));
 const getInitialValues = compose(
@@ -155,7 +155,7 @@ const KeyActivityEditModal = ({
                       {keyActivity => (
                         <Fragment>
                           <CanvasForm {...{ organizationId }} save={handleSubmit} />
-                          <DelayedCanvasSubcards
+                          <CanvasSubcards
                             {...{ organizationId, refetchQueries }}
                             section={keyActivity}
                             onChange={handleSubmit}
