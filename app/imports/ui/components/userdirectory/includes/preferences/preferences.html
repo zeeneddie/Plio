@@ -1,5 +1,15 @@
 <template name="UserPreferences">
   <div class="card-block">
+    {{#FormField label="Default color for new canvas items"}}
+      <div>
+        {{> React
+            component=ColorPicker
+            onChange=(callback 'onChangeColor')
+            value=defaultCanvasColor
+        }}
+      </div>
+    {{/FormField}}
+
     {{#FormField label="Email notifications"}}
       <button type="button" class="btn btn-checkbox btn-secondary"
           id="email-notifications-checkbox" data-toggle="button" autocomplete="off"

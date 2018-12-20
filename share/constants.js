@@ -880,22 +880,22 @@ export const GoalStatuses = {
 };
 
 export const Colors = {
-  PINK: '#F06292',
+  YELLOW: '#FCCF31',
+  GREY: '#757575',
+  BLUE_GREY: '#607D8B',
   PLUM: '#9C27B0',
   PURPLE: '#673AB7',
   INDIGO: '#3F51B5',
   BLUE: '#2196F3',
-  LIGHT_BLUE: '#4FC3F7',
   CYAN: '#00BCD4',
-  TEAL: '#009688',
-  MUTED_PINK: '#F8BBD0',
+  MUTED_YELLOW: '#FFEF81',
+  LIGHT_GREY: '#BDBDBD',
+  LIGHT_BLUE_GREY: '#B0BEC5',
   MUTED_PLUM: '#CE93D8',
   MUTED_PURPLE: '#B39DDB',
   MUTED_INDIGO: '#9FA8DA',
   MUTED_BLUE: '#90CAF9',
-  MUTED_LIGHT_BLUE: '#B3E5FC',
   MUTED_CYAN: '#80DEEA',
-  MUTED_TEAL: '#80CBC4',
 };
 
 export const GoalColors = { ...Colors };
@@ -974,6 +974,8 @@ export const CriticalityLevels = {
 };
 
 export const CanvasColors = { ...Colors };
+
+export const DEFAULT_CANVAS_COLOR = CanvasColors.YELLOW;
 
 export const MAX_TOTAL_PERCENT = 100;
 

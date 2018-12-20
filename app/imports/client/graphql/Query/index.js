@@ -60,6 +60,7 @@ import PROJECT_COUNT from './ProjectCount.graphql';
 import DEPARTMENT_COUNT from './DepartmentCount.graphql';
 import CATEGORIZE_LIST from './CategorizeList.graphql';
 import LESSON_CARD from './LessonCard.graphql';
+import CANVAS_CURRENT_USER_INFO from './CanvasCurrentUserInfo.graphql';
 
 DASHBOARD_GOALS.name = 'DashboardGoals';
 COMPLETED_DELETED_GOALS.name = 'CompletedDeletedGoals';
@@ -128,4 +129,5 @@ export default {
   CATEGORIZE_LIST,
   CANVAS_REPORT_PAGE,
   LESSON_CARD,
+  CANVAS_CURRENT_USER_INFO,
 };

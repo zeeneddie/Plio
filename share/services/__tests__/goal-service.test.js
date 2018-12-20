@@ -29,7 +29,7 @@ describe('Goal service', () => {
       ownerId: faker.random.uuid(),
       startDate: new Date(),
       endDate: new Date(),
-      color: GoalColors.PINK,
+      color: GoalColors.YELLOW,
       priority: GoalPriorities.MAJOR,
     };
     const _id = await GoalService.insert(args, context);
