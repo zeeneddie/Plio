@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { isEmpty, any } from 'ramda';
 import { CardTitle, Col, CardText, ListGroup, FormText } from 'reactstrap';
+import { pure } from 'recompose';
 
 import { Styles } from '../../../../../api/constants';
 import { DocumentTypes } from '../../../../../share/constants';
@@ -55,7 +56,9 @@ const StyledCol = styled(Col)`
   }
 `;
 const StyledCardBlock = styled(CardBlock)`
-  padding: 0;
+  &.card-block {
+    padding: 0;
+  }
 `;
 
 const ActivelyManageSubcard = ({
@@ -202,4 +205,4 @@ ActivelyManageSubcard.propTypes = {
   /* eslint-disable react/no-typos */
 };
 
-export default ActivelyManageSubcard;
+export default pure(ActivelyManageSubcard);

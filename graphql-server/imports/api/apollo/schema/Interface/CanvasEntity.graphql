@@ -6,6 +6,7 @@ interface CanvasEntity {
   notes: String
   notify: [User]
   organization: Organization!
+  fileIds: [String]
   goals: [Goal]
   standards: [Standard]
   risks: [Risk]

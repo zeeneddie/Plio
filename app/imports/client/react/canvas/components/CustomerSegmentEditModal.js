@@ -199,14 +199,6 @@ const CustomerSegmentEditModal = ({
                             matchedTo={customerSegment.matchedTo}
                             save={handleSubmit}
                           />
-                          <CustomerInsightsSubcard
-                            {...{ organizationId }}
-                            needs={customerSegment.needs || []}
-                            wants={customerSegment.wants || []}
-                            documentId={customerSegment._id}
-                            matchedTo={customerSegment.matchedTo}
-                            documentType={CanvasTypes.CUSTOMER_SEGMENT}
-                          />
                           <CanvasSubcards
                             {...{ organizationId, refetchQueries }}
                             section={customerSegment}
@@ -214,7 +206,16 @@ const CustomerSegmentEditModal = ({
                             documentType={CanvasTypes.CUSTOMER_SEGMENT}
                             slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
                             user={data && data.user}
-                          />
+                          >
+                            <CustomerInsightsSubcard
+                              {...{ organizationId }}
+                              needs={customerSegment.needs || []}
+                              wants={customerSegment.wants || []}
+                              documentId={customerSegment._id}
+                              matchedTo={customerSegment.matchedTo}
+                              documentType={CanvasTypes.CUSTOMER_SEGMENT}
+                            />
+                          </CanvasSubcards>
                         </Fragment>
                       )}
                     </RenderSwitch>

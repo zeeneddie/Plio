@@ -196,14 +196,6 @@ const ValuePropositionEditModal = ({
                             matchedTo={valueProposition.matchedTo}
                             save={handleSubmit}
                           />
-                          <ValueComponentsSubcard
-                            {...{ organizationId }}
-                            benefits={valueProposition.benefits || []}
-                            features={valueProposition.features || []}
-                            documentId={valueProposition._id}
-                            matchedTo={valueProposition.matchedTo}
-                            documentType={CanvasTypes.VALUE_PROPOSITION}
-                          />
                           <CanvasSubcards
                             {...{ organizationId, refetchQueries }}
                             section={valueProposition}
@@ -211,7 +203,16 @@ const ValuePropositionEditModal = ({
                             documentType={CanvasTypes.VALUE_PROPOSITION}
                             slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
                             user={data && data.user}
-                          />
+                          >
+                            <ValueComponentsSubcard
+                              {...{ organizationId }}
+                              benefits={valueProposition.benefits || []}
+                              features={valueProposition.features || []}
+                              documentId={valueProposition._id}
+                              matchedTo={valueProposition.matchedTo}
+                              documentType={CanvasTypes.VALUE_PROPOSITION}
+                            />
+                          </CanvasSubcards>
                         </Fragment>
                       )}
                     </RenderSwitch>
