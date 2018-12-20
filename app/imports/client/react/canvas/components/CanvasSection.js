@@ -26,6 +26,10 @@ const CanvasSection = styled.div`
   `}
 
   ${is('empty')`
+    ul {
+      display: none;
+    }
+    
     &:hover {
       cursor: pointer;
       background: #f5f5f5;
