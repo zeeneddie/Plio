@@ -7,6 +7,7 @@ import CanvasSquareIcon from './CanvasSquareIcon';
 
 const DragHandle = styled.span`
   cursor: row-resize;
+  flex: 0 0 32px;
 `;
 
 const CanvasDraggableSquareIcon = props => (
