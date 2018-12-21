@@ -42,7 +42,7 @@ const CanvasReportItems = ({
   customerRelationships,
   itemsCount,
 }) => !!itemsCount && (
-  <CanvasReportSection>
+  <CanvasReportSection className="canvas-items">
     <CanvasReportSectionHeading>Canvas items ({itemsCount})</CanvasReportSectionHeading>
     <ListWrapper>
       <CanvasReportHeader isEmpty={isGroupEmpty([valuePropositions, customerSegments])} tag="h3">

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { StyledMixins } from 'plio-util';
 
 import { Styles } from '../../../../api/constants';
-import { Button, Pull, Icon } from '../../components';
+import { Icon } from '../../components';
 import Canvas from './Canvas';
 import CanvasRow from './CanvasRow';
 import CanvasCol from './CanvasCol';
@@ -22,6 +22,7 @@ import ChannelsHelp from './ChannelsHelp';
 import CustomerSegmentsHelp from './CustomerSegmentsHelp';
 import CostStructureHelp from './CostStructureHelp';
 import RevenueStreamsHelp from './RevenueStreamsHelp';
+import CanvasReportPrintModal from './CanvasReportPrintModal';
 
 const StyledReportItemList = styled(CanvasReportItemList)`
   padding: 0 0.75rem;
@@ -30,12 +31,6 @@ const StyledReportItemList = styled(CanvasReportItemList)`
     display: inline-flex;
     margin-right: 10px;
   }
-`;
-
-const StyledButton = styled(Button)`
-  ${StyledMixins.media.print`
-    display: none;
-  `}
 `;
 
 const StyledCanvas = styled(Canvas)`
@@ -61,18 +56,13 @@ const CanvasReportBusinessModel = ({
   customerSegments,
   costLines,
   revenueStreams,
+  printState,
+  updatePrintState,
 }) => (
-  <CanvasReportSection>
+  <CanvasReportSection className="business-model-canvas">
     <CanvasReportSectionHeading>
       Business model canvas
-      <Pull right>
-        <StyledButton
-          component="button"
-          onClick={() => window.print()}
-        >
-          Print
-        </StyledButton>
-      </Pull>
+      <CanvasReportPrintModal {...{ printState, updatePrintState }} />
     </CanvasReportSectionHeading>
     <StyledCanvas>
       <CanvasRow twoThirds>
@@ -192,6 +182,8 @@ CanvasReportBusinessModel.propTypes = {
   customerSegments: PropTypes.array.isRequired,
   costLines: PropTypes.array.isRequired,
   revenueStreams: PropTypes.array.isRequired,
+  printState: PropTypes.object.isRequired,
+  updatePrintState: PropTypes.func.isRequired,
 };
 
 export default CanvasReportBusinessModel;
