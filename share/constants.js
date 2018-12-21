@@ -940,7 +940,7 @@ export const AWSDirectives = {
   REVENUE_STREAM_FILES: 'revenueStreamFiles',
 };
 
-export const CRITICALITY_DEFAULT = 30;
+export const CRITICALITY_DEFAULT = 50;
 
 export const Criticality = {
   VERY_LOW: 1,
