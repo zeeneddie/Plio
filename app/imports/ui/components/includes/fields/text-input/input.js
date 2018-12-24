@@ -5,5 +5,6 @@ Template.TextInput.viewmodel({
   className: '',
   enable: true,
   placeholder: '',
+  autoComplete: 'off',
   onFocusOut() {},
 });
