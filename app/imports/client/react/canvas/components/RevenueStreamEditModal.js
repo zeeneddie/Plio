@@ -20,7 +20,7 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateRevenueStream } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import RevenueStreamForm from './RevenueStreamForm';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -151,7 +151,7 @@ const RevenueStreamEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Revenue stream" />
                   <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.REVENUE_STREAM} />
+                    <ModalGuidancePanel documentType={CanvasTypes.REVENUE_STREAM} />
                     <RenderSwitch
                       require={isOpen && data.revenueStream && data.revenueStream.revenueStream}
                       errorWhenMissing={noop}

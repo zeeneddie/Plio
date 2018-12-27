@@ -19,7 +19,7 @@ import {
   CardBlock,
   ChartModal,
 } from '../../components';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import CriticalityChart from './CriticalityChart';
 
 const getChartData = ({
@@ -44,7 +44,7 @@ const KeyPartnersChartModal = ({ isOpen, toggle, organizationId }) => (
       >
         <EntityModalHeader label="Key partners" />
         <EntityModalBody>
-          <CanvasModalGuidance documentType={CanvasTypes.KEY_PARTNER} />
+          <ModalGuidancePanel documentType={CanvasTypes.KEY_PARTNER} />
           <RenderSwitch
             {...{ loading, error }}
             errorWhenMissing={noop}

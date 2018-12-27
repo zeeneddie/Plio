@@ -1,6 +1,4 @@
-import sanitizeHtml from 'sanitize-html';
-import { over } from 'ramda';
-import { applyMiddleware, lenses } from 'plio-util';
+import { applyMiddleware } from 'plio-util';
 import {
   checkLoggedIn,
   flattenInput,
@@ -8,22 +6,19 @@ import {
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, context) =>
-  context.services.GuidanceService.update(args, context);
+  context.services.GuidanceService.remove(args, context);
 
 export default applyMiddleware(
   checkLoggedIn(),
   ensureUserIsPlioAdmin(),
   flattenInput(),
-  async (next, root, args, context) => next(
-    root,
-    over(lenses.html, sanitizeHtml, args),
-    context,
-  ),
   async (next, root, args, context) => {
-    await next(root, args, context);
     const { _id } = args;
     const { collections: { Guidances } } = context;
+    const guidance = Guidances.findOne({ _id });
 
-    return Guidances.findOne({ _id });
+    await next(root, args, context);
+
+    return guidance;
   },
 )(resolver);

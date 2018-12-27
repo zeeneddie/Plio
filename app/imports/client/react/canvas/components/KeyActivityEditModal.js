@@ -20,7 +20,7 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateKeyActivity } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -145,7 +145,7 @@ const KeyActivityEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key activity" />
                   <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.KEY_ACTIVITY} />
+                    <ModalGuidancePanel documentType={CanvasTypes.KEY_ACTIVITY} />
                     <RenderSwitch
                       require={isOpen && data.keyActivity && data.keyActivity.keyActivity}
                       errorWhenMissing={noop}

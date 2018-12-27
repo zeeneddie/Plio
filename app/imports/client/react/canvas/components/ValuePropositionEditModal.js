@@ -23,7 +23,7 @@ import { validateValueProposition } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
 import ValueComponentsSubcard from './ValueComponentsSubcard';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -180,7 +180,7 @@ const ValuePropositionEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Value proposition" />
                   <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.VALUE_PROPOSITION} />
+                    <ModalGuidancePanel documentType={CanvasTypes.VALUE_PROPOSITION} />
                     <RenderSwitch
                       require={isOpen &&
                         data.valueProposition &&

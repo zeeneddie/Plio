@@ -23,7 +23,7 @@ import { validateCustomerSegment } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CustomerSegmentForm from './CustomerSegmentForm';
 import CustomerInsightsSubcard from './CustomerInsightsSubcard';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -183,7 +183,7 @@ const CustomerSegmentEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Customer segment" />
                   <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.CUSTOMER_SEGMENT} />
+                    <ModalGuidancePanel documentType={CanvasTypes.CUSTOMER_SEGMENT} />
                     <RenderSwitch
                       require={isOpen &&
                         data.customerSegment &&

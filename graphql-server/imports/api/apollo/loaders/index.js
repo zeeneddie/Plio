@@ -22,6 +22,7 @@ import Relation from './Relation';
 import StandardType from './StandardType';
 import StandardSection from './StandardSection';
 import Nonconformity from './Nonconformity';
+import Guidance from './Guidance';
 
 const loaders = {
   User,
@@ -46,6 +47,7 @@ const loaders = {
   StandardSection,
   Nonconformity,
   Project,
+  Guidance,
 };
 
 export const createLoaders = (ctx) => {

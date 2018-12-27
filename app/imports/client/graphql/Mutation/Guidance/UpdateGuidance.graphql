@@ -1,6 +1,7 @@
 mutation updateGuidance($input: UpdateGuidanceInput!) {
   updateGuidance(input: $input) {
     _id
+    title
     html
   }
 }

@@ -8,7 +8,7 @@ import {
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, context) =>
-  context.services.GuidanceService.update(args, context);
+  context.services.GuidanceService.insert(args, context);
 
 export default applyMiddleware(
   checkLoggedIn(),
@@ -20,10 +20,8 @@ export default applyMiddleware(
     context,
   ),
   async (next, root, args, context) => {
-    await next(root, args, context);
-    const { _id } = args;
+    const _id = await next(root, args, context);
     const { collections: { Guidances } } = context;
-
     return Guidances.findOne({ _id });
   },
 )(resolver);
