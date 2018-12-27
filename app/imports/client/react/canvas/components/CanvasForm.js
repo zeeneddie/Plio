@@ -21,6 +21,7 @@ const CanvasForm = ({ organizationId, children, save }) => (
         placeholder="Title"
         maxLength={StringLimits.title.max}
         onBlur={save}
+        autoFocus
       />
     </FormField>
     <FormField>

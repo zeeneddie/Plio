@@ -29,6 +29,7 @@ export const GoalForm = ({
         onBlur={save}
         addon={sequentialId}
         maxLength={StringLimits.title.max}
+        autoFocus
       />
     </FormField>
     <FormField>
