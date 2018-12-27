@@ -4,6 +4,7 @@ const filter = true;
 export const PATH_MAP = {
   signOut: {},
   dashboardPage: { orgSerialNumber },
+  canvas: { orgSerialNumber },
   standards: { orgSerialNumber, filter },
   standard: { orgSerialNumber, filter },
   standardDiscussion: { orgSerialNumber, filter },

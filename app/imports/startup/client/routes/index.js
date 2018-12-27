@@ -67,6 +67,14 @@ function checkEmailVerified(context, redirect) {
   }
 }
 
+const addBackRouteQueryParam = ({ queryParams = {}, oldRoute = {} }) => {
+  const oldRouteName = oldRoute.name;
+
+  if (oldRouteName && !queryParams.backRoute) {
+    FlowRouter.setQueryParams({ backRoute: oldRouteName });
+  }
+};
+
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
   name: 'signIn',
@@ -206,13 +214,13 @@ FlowRouter.route('/customers/:urlItemId', {
 
 FlowRouter.route('/help-center', {
   name: 'helpDocs',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, addBackRouteQueryParam],
   action: renderHelpDocs(),
 });
 
 FlowRouter.route('/help-center/:helpId', {
   name: 'helpDoc',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, addBackRouteQueryParam],
   action: renderHelpDocs(),
 });
 
@@ -266,13 +274,13 @@ FlowRouter.route('/:orgSerialNumber', {
 
 FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, addBackRouteQueryParam],
   action: renderUserDirectory,
 });
 
 FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, addBackRouteQueryParam],
   action: renderUserDirectory,
 });
 
