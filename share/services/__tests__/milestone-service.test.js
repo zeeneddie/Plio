@@ -3,6 +3,9 @@ import faker from 'faker';
 
 import createContext from '../../utils/tests/createContext';
 import MilestoneService from '../milestone-service';
+import { removeRelations } from '../util/cleanup';
+
+jest.mock('../util/cleanup');
 
 describe('Milestone service', () => {
   let context;
@@ -37,12 +40,12 @@ describe('Milestone service', () => {
 
   test('remove', async () => {
     const _id = await context.collections.Milestones.insert({});
-
-    await MilestoneService.remove({ _id }, context);
-
     const milestone = await context.collections.Milestones.findOne({ _id });
 
-    expect(milestone).toBe(null);
+    await MilestoneService.remove({ _id }, { ...context, milestone });
+
+    expect(removeRelations).toHaveBeenCalledWith(milestone, context);
+    await expect(context.collections.Milestones.findOne({ _id })).resolves.toBe(null);
   });
 
   test('restore', async () => {

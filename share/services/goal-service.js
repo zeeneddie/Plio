@@ -1,7 +1,12 @@
-import { getIds } from 'plio-util';
-
 import { generateSerialNumber } from '../helpers';
 import { Abbreviations } from '../constants';
+import {
+  removeRelations,
+  removeFiles,
+  removeLessons,
+  unlinkActions,
+  removeMilestones,
+} from './util/cleanup';
 
 export default {
   async insert({
@@ -104,30 +109,6 @@ export default {
     return Goals.update(query, modifier);
   },
 
-  // TODO: replace with cron job
-  async unlinkActions(
-    { _id: documentId },
-    {
-      collections: { Actions },
-      services: { ActionService },
-    },
-  ) {
-    const query = { 'linkedTo.documentId': documentId };
-    const options = { fields: { _id: 1 } };
-    const actions = await Actions.find(query, options).fetch();
-    const ids = getIds(actions);
-
-    return Promise.all(ids.map(_id => ActionService.unlinkDocument({ _id, documentId })));
-  },
-
-  async removeLessons({ _id }, { collections: { LessonsLearned } }) {
-    return LessonsLearned.remove({ 'linkedTo.documentId': _id });
-  },
-
-  async removeFiles({ fileIds = [] }, { collections: { Files } }) {
-    return Files.remove({ _id: { $in: fileIds } });
-  },
-
   async delete({ _id }, { userId, collections: { Goals } }) {
     const query = { _id };
     const modifier = {
@@ -146,10 +127,12 @@ export default {
     const res = await Goals.remove({ _id });
 
     await Promise.all([
-      this.removeLessons(goal, context),
-      this.unlinkActions(goal, context),
-      this.removeFiles(goal, context),
+      removeFiles(goal, context),
+      removeLessons(goal, context),
+      unlinkActions(goal, context),
+      removeMilestones(goal, context),
     ]);
+    await removeRelations(goal, context);
 
     return res;
   },

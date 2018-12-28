@@ -1,3 +1,5 @@
+import { removeRelations } from './util/cleanup';
+
 export default {
   async insert({
     organizationId,
@@ -40,8 +42,13 @@ export default {
     return collections.Milestones.update(query, modifier);
   },
 
-  async remove({ _id }, { collections: { Milestones } }) {
-    return Milestones.remove({ _id });
+  async remove({ _id }, { milestone, ...context }) {
+    const { collections: { Milestones } } = context;
+    const res = await Milestones.remove({ _id });
+
+    await removeRelations(milestone, context);
+
+    return res;
   },
 
   async restore({ _id }, { userId, collections: { Milestones } }) {

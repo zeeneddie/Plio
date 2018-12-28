@@ -5,10 +5,19 @@ import { GoalColors, GoalPriorities, Abbreviations } from '../../constants';
 import createContext from '../../utils/tests/createContext';
 import GoalService from '../goal-service';
 import { generateSerialNumber } from '../../helpers';
+import {
+  removeFiles,
+  removeLessons,
+  removeRelations,
+  unlinkActions,
+  removeMilestones,
+} from '../util/cleanup';
 
 jest.mock('../../helpers', () => ({
   generateSerialNumber: jest.fn(),
 }));
+
+jest.mock('../util/cleanup');
 
 describe('Goal service', () => {
   let context;
@@ -111,5 +120,10 @@ describe('Goal service', () => {
     await GoalService.remove({ _id }, { ...context, goal });
 
     await expect(context.collections.Goals.findOne({ _id })).resolves.toBe(null);
+    expect(removeFiles).toHaveBeenCalledWith(goal, context);
+    expect(removeLessons).toHaveBeenCalledWith(goal, context);
+    expect(removeRelations).toHaveBeenCalledWith(goal, context);
+    expect(unlinkActions).toHaveBeenCalledWith(goal, context);
+    expect(removeMilestones).toHaveBeenCalledWith(goal, context);
   });
 });

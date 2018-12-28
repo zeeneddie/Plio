@@ -1,4 +1,5 @@
 import { generateSerialNumber } from '../../../share/helpers';
+import { removeRelations } from '../util/cleanup';
 
 export default {
   async insert(args, context) {
@@ -48,10 +49,9 @@ export default {
 
   async delete(args, context) {
     const { _id } = args;
-    const { services: { RelationService } } = context;
     const collection = await this.collection(context);
 
-    await RelationService.deleteByDocumentId({ documentId: _id }, context);
+    await removeRelations({ _id }, context);
 
     return collection.remove({ _id });
   },

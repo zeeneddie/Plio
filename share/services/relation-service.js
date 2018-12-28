@@ -17,11 +17,4 @@ export default {
       },
     ],
   }),
-
-  deleteByDocumentId: async ({ documentId }, { collections: { Relations } }) => Relations.remove({
-    $or: [
-      { 'rel1.documentId': documentId },
-      { 'rel2.documentId': documentId },
-    ],
-  }),
 };
