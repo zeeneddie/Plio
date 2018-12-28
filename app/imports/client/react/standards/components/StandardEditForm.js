@@ -30,6 +30,7 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
         placeholder="Title"
         onBlur={save}
         maxLength={StringLimits.title.max}
+        autoFocus
       />
     </FormField>
     <FormField>

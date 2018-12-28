@@ -9,10 +9,16 @@ const GuidanceSchema = new SimpleSchema([
     documentType: {
       type: String,
       allowedValues: Object.values(CanvasTypes),
+      index: 1,
     },
     html: {
       type: String,
       min: 1,
+    },
+    title: {
+      type: String,
+      min: 1,
+      optional: true,
     },
   },
 ]);

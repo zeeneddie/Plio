@@ -19,7 +19,7 @@ export const GoalEditFrom = ({
   save,
 }) => (
   <Fragment>
-    <GoalForm {...{ organizationId, sequentialId, save }} />
+    <GoalForm {...{ organizationId, sequentialId, save }} isEditMode />
     <FormField>
       Status
       <Status color={getStatusColor(status)}>

@@ -23,9 +23,9 @@ import { WithToggle } from '../../helpers';
 import HeaderMenuItem from './HeaderMenuItem';
 
 const RouteLabels = {
-  [RouteNames.CANVAS]: 'Business design view',
-  [RouteNames.DASHBOARD]: 'Business operations view',
-  [RouteNames.CANVAS_REPORT]: 'View report',
+  [RouteNames.CANVAS]: 'Canvas view',
+  [RouteNames.DASHBOARD]: 'Operations view',
+  [RouteNames.CANVAS_REPORT]: 'Print report',
 };
 
 const DropdownMenuStyled = styled(DropdownMenu)`
@@ -139,7 +139,7 @@ const OrganizationMenu = ({ organization: currentOrg, isDashboard }) => (
                               });
                             }}
                           >
-                            Org Settings
+                            Organization settings
                           </HeaderMenuItem>
                         )}
 

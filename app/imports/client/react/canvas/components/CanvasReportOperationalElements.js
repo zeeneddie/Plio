@@ -18,7 +18,7 @@ const hasOperationalElements = compose(
 );
 
 const CanvasReportOperationalElements = props => hasOperationalElements(props) && (
-  <CanvasReportSection>
+  <CanvasReportSection className="operational-elements">
     <CanvasReportSectionHeading>
       Operational elements
       <Pull right>

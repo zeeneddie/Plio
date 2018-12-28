@@ -4,7 +4,6 @@ import { graphql } from 'react-apollo';
 import { sort, ifElse, composeP } from 'ramda';
 import { bySerialNumber, viewEq, lenses } from 'plio-util';
 
-import { ApolloFetchPolicies } from '../../../../api/constants';
 import { Query, Mutation } from '../../../graphql';
 import { namedCompose } from '../../helpers';
 import ActionAddModal from '../components/ActionAddModal';
@@ -22,11 +21,11 @@ export default namedCompose('ActionAddModalContainer')(
   }),
   pure,
   graphql(Query.DASHBOARD_GOAL, {
-    options: ({ goalId }) => ({
+    options: ({ goalId, isOpen }) => ({
       variables: {
         _id: goalId,
       },
-      fetchPolicy: ApolloFetchPolicies.CACHE_ONLY,
+      skip: !isOpen,
     }),
     props: ({
       ownProps: { user },

@@ -32,6 +32,7 @@ const TextInput = enhance(({
   ...other
 }) => (
   <Input
+    autoComplete="off"
     value={internalValue}
     onChange={(e) => {
       if (typeof setInternalValue === 'function') {

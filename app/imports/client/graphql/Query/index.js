@@ -8,14 +8,11 @@ import RISK_LIST from './RiskList.graphql';
 import STANDARD_LIST from './StandardList.graphql';
 import DEPARTMENT_LIST from './DepartmentList.graphql';
 import COUNTS from './Counts.graphql';
-import GOAL_MILESTONES_CARD from './GoalMilestonesCard.graphql';
-import GOAL_LESSONS_CARD from './GoalLessonsCard.graphql';
 import GOAL_ACTIONS_CARD from './GoalActionsCard.graphql';
 import ACTION_LIST from './ActionList.graphql';
 import GOAL_LIST from './GoalList.graphql';
 import MILESTONE_CARD from './MilestoneCard.graphql';
 import ACTION_CARD from './ActionCard.graphql';
-import MILESTONE_NOTIFY_CARD from './MilestoneNotifyCard.graphql';
 import KEY_PARTNERS from './KeyPartners.graphql';
 import KEY_ACTIVITIES from './KeyActivities.graphql';
 import KEY_RESOURCES from './KeyResources.graphql';
@@ -62,6 +59,8 @@ import PROJECT_LIST from './ProjectList.graphql';
 import PROJECT_COUNT from './ProjectCount.graphql';
 import DEPARTMENT_COUNT from './DepartmentCount.graphql';
 import CATEGORIZE_LIST from './CategorizeList.graphql';
+import LESSON_CARD from './LessonCard.graphql';
+import CANVAS_CURRENT_USER_INFO from './CanvasCurrentUserInfo.graphql';
 
 DASHBOARD_GOALS.name = 'DashboardGoals';
 COMPLETED_DELETED_GOALS.name = 'CompletedDeletedGoals';
@@ -78,14 +77,11 @@ export default {
   STANDARD_LIST,
   DEPARTMENT_LIST,
   COUNTS,
-  GOAL_MILESTONES_CARD,
-  GOAL_LESSONS_CARD,
   GOAL_ACTIONS_CARD,
   ACTION_LIST,
   GOAL_LIST,
   MILESTONE_CARD,
   ACTION_CARD,
-  MILESTONE_NOTIFY_CARD,
   CANVAS_LAYOUT,
   CANVAS_REPORT_LAYOUT,
   CANVAS_PAGE,
@@ -132,4 +128,6 @@ export default {
   DEPARTMENT_COUNT,
   CATEGORIZE_LIST,
   CANVAS_REPORT_PAGE,
+  LESSON_CARD,
+  CANVAS_CURRENT_USER_INFO,
 };

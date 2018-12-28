@@ -1,23 +1,25 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { isNotEmpty } from 'plio-util';
 import { pure } from 'recompose';
+import { unnest } from 'ramda';
 
 import { UserRoles, DocumentTypes } from '../../../../share/constants';
-import { NotifySubcard, EntitiesField, RelationsAdapter } from '../../components';
+import { NotifySubcard, EntitiesField, MoreLess, RelationsAdapter } from '../../components';
 import { GoalsSubcard } from '../../goals';
 import StandardsSubcard from '../../standards/components/StandardsSubcard';
 import NonconformitiesSubcard from '../../noncomformities/components/NonconformitiesSubcard';
-import CanvasLessonsSubcard from './CanvasLessonsSubcard';
 import ActivelyManageSubcard from './ActivleyManage/ActivelyManageSubcard';
 import RisksSubcard from '../../risks/components/RisksSubcard';
 import FilesSubcardContainer from './FilesSubcardContainer';
+import LessonsSubcard from '../../lessons/components/LessonsSubcard';
 
 const CanvasSubcards = ({
   organizationId,
   refetchQueries,
   onChange,
   documentType,
+  children,
   user: { roles = [] } = {},
   slingshotDirective,
   section: {
@@ -29,6 +31,7 @@ const CanvasSubcards = ({
     standards = [],
     nonconformities = [],
     potentialGains = [],
+    fileIds = [],
     organization: {
       currency,
       rkGuidelines,
@@ -39,7 +42,18 @@ const CanvasSubcards = ({
 }) => {
   const linkedTo = { _id: documentId, title };
   return (
-    <Fragment>
+    <MoreLess
+      badge={unnest([
+        goals,
+        standards,
+        risks,
+        nonconformities,
+        potentialGains,
+        lessons,
+        fileIds,
+      ]).length}
+    >
+      {children}
       <ActivelyManageSubcard
         {...{
           rkGuidelines,
@@ -133,7 +147,7 @@ const CanvasSubcards = ({
       )}
       <EntitiesField
         name="lessons"
-        render={CanvasLessonsSubcard}
+        render={LessonsSubcard}
         is={isNotEmpty}
         {...{
           organizationId,
@@ -155,7 +169,7 @@ const CanvasSubcards = ({
         }}
       />
       <NotifySubcard {...{ documentId, organizationId, onChange }} />
-    </Fragment>
+    </MoreLess>
   );
 };
 
@@ -166,6 +180,7 @@ CanvasSubcards.propTypes = {
   slingshotDirective: PropTypes.string.isRequired,
   documentType: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  children: PropTypes.node,
   user: PropTypes.object,
 };
 

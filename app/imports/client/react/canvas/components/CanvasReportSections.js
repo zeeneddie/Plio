@@ -4,8 +4,6 @@ import { compose, values, length } from 'ramda';
 import { concatAll } from 'plio-util';
 
 import CanvasReportItems from './CanvasReportItems';
-import CanvasReportGroupedItemsVertical from './CanvasReportGroupedItemsVertical';
-import CanvasReportGroupedItemsHorizontal from './CanvasReportGroupedItemsHorizontal';
 import CanvasReportCustomerInsights from './CanvasReportCustomerInsights';
 import CanvasReportValueComponents from './CanvasReportValueComponents';
 import CanvasReportOperationalElements from './CanvasReportOperationalElements';
@@ -24,8 +22,6 @@ const CanvasReportSections = ({ sections }) => {
   return (
     <Fragment>
       <CanvasReportItems {...{ itemsCount, ...sections }} />
-      <CanvasReportGroupedItemsVertical {...{ itemsCount, ...sections }} />
-      <CanvasReportGroupedItemsHorizontal {...{ itemsCount, ...sections }} />
       <CanvasReportCustomerSegmentRevenueStreamCharts
         customerSegments={sections.customerSegments}
         revenueStreams={sections.revenueStreams}

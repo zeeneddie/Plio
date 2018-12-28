@@ -6,10 +6,8 @@ import {
   ensureCanChangeGoals,
 } from '../../../../../share/middleware';
 
-export const resolver = async (goal, args, context) => {
-  const { services: { GoalService } } = context;
-  return GoalService.remove(args, { ...context, goal });
-};
+export const resolver = async (goal, args, context) =>
+  context.services.GoalService.remove(args, { ...context, goal });
 
 export default applyMiddleware(
   flattenInput(),

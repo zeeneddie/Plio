@@ -2,16 +2,16 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { pure } from 'recompose';
 import { sort } from 'ramda';
-import { bySerialNumber } from 'plio-util';
+import { bySerialNumber, byCompletionTargetDate } from 'plio-util';
 
 import { AWSDirectives, DocumentTypes } from '../../../../share/constants';
-import { CardBlock, NotifySubcard, EntitiesField } from '../../components';
-import GoalMilestonesSubcardContainer from '../containers/GoalMilestonesSubcardContainer';
-import GoalLessonsSubcardContainer from '../containers/GoalLessonsSubcardContainer';
+import { CardBlock, NotifySubcard, EntitiesField, RelationsAdapter } from '../../components';
+import MilestonesSubcard from '../../milestones/components/MilestonesSubcard';
 import GoalActionsSubcardContainer from '../containers/GoalActionsSubcardContainer';
 import GoalEditForm from './GoalEditForm';
 import FilesSubcardContainer from '../../canvas/components/FilesSubcardContainer';
 import RisksSubcard from '../../risks/components/RisksSubcard';
+import LessonsSubcard from '../../lessons/components/LessonsSubcard';
 
 export const GoalEdit = ({
   status,
@@ -22,34 +22,57 @@ export const GoalEdit = ({
   _id: goalId,
   canEditGoals,
   risks,
+  milestones,
+  lessons,
   organization: { rkGuidelines } = {},
-}) => (
-  <Fragment>
-    <CardBlock>
-      <GoalEditForm
-        {...{
-          status,
-          organizationId,
-          sequentialId,
-          save,
-        }}
-      />
-    </CardBlock>
+  refetchQueries,
+}) => {
+  const linkedTo = { _id: goalId, title, sequentialId };
+
+  return (
     <Fragment>
+      <CardBlock>
+        <GoalEditForm
+          {...{
+            status,
+            organizationId,
+            sequentialId,
+            save,
+          }}
+        />
+      </CardBlock>
       <GoalActionsSubcardContainer {...{ organizationId, goalId }} />
-      <GoalMilestonesSubcardContainer {...{ goalId }} />
+      <RelationsAdapter
+        {...{ refetchQueries, goalId, organizationId }}
+        documentId={goalId}
+        documentType={DocumentTypes.GOAL}
+        relatedDocumentType={DocumentTypes.MILESTONE}
+        component={MilestonesSubcard}
+        milestones={sort(byCompletionTargetDate, milestones)}
+      />
       {canEditGoals && (
-        <EntitiesField
-          {...{ organizationId }}
-          name="risks"
+        <RelationsAdapter
+          {...{ organizationId, refetchQueries, linkedTo }}
+          documentId={goalId}
+          documentType={DocumentTypes.GOAL}
+          relatedDocumentType={DocumentTypes.RISK}
           render={RisksSubcard}
-          onChange={save}
           guidelines={rkGuidelines}
-          linkedTo={{ title, sequentialId }}
           risks={sort(bySerialNumber, risks)}
         />
       )}
-      <GoalLessonsSubcardContainer {...{ goalId }} />
+      <EntitiesField
+        name="lessons"
+        render={LessonsSubcard}
+        documentType={DocumentTypes.GOAL}
+        lessons={sort(bySerialNumber, lessons)}
+        linkedTo={{
+          _id: goalId,
+          sequentialId,
+          title,
+        }}
+        {...{ organizationId, refetchQueries }}
+      />
       <EntitiesField
         {...{ organizationId }}
         name="files"
@@ -65,8 +88,8 @@ export const GoalEdit = ({
         onChange={save}
       />
     </Fragment>
-  </Fragment>
-);
+  );
+};
 
 GoalEdit.propTypes = {
   _id: PropTypes.string.isRequired,
@@ -77,9 +100,12 @@ GoalEdit.propTypes = {
   save: PropTypes.func.isRequired,
   canEditGoals: PropTypes.bool,
   risks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  lessons: PropTypes.arrayOf(PropTypes.object).isRequired,
   organization: PropTypes.shape({
     rkGuidelines: PropTypes.object,
   }).isRequired,
+  milestones: PropTypes.arrayOf(PropTypes.object).isRequired,
+  refetchQueries: PropTypes.func,
 };
 
 export default pure(GoalEdit);

@@ -23,7 +23,7 @@ import { validateValueProposition } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
 import ValueComponentsSubcard from './ValueComponentsSubcard';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -180,7 +180,7 @@ const ValuePropositionEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Value proposition" />
                   <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.VALUE_PROPOSITION} />
+                    <ModalGuidancePanel documentType={CanvasTypes.VALUE_PROPOSITION} />
                     <RenderSwitch
                       require={isOpen &&
                         data.valueProposition &&
@@ -196,14 +196,6 @@ const ValuePropositionEditModal = ({
                             matchedTo={valueProposition.matchedTo}
                             save={handleSubmit}
                           />
-                          <ValueComponentsSubcard
-                            {...{ organizationId }}
-                            benefits={valueProposition.benefits || []}
-                            features={valueProposition.features || []}
-                            documentId={valueProposition._id}
-                            matchedTo={valueProposition.matchedTo}
-                            documentType={CanvasTypes.VALUE_PROPOSITION}
-                          />
                           <CanvasSubcards
                             {...{ organizationId, refetchQueries }}
                             section={valueProposition}
@@ -211,7 +203,16 @@ const ValuePropositionEditModal = ({
                             documentType={CanvasTypes.VALUE_PROPOSITION}
                             slingshotDirective={AWSDirectives.VALUE_PROPOSITION_FILES}
                             user={data && data.user}
-                          />
+                          >
+                            <ValueComponentsSubcard
+                              {...{ organizationId }}
+                              benefits={valueProposition.benefits || []}
+                              features={valueProposition.features || []}
+                              documentId={valueProposition._id}
+                              matchedTo={valueProposition.matchedTo}
+                              documentType={CanvasTypes.VALUE_PROPOSITION}
+                            />
+                          </CanvasSubcards>
                         </Fragment>
                       )}
                     </RenderSwitch>

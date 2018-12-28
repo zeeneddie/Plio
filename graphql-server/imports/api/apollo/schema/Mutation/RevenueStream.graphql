@@ -7,8 +7,8 @@ input CreateRevenueStreamInput {
   title: String!
   originatorId: ID!
   color: String!
-  percentOfRevenue: Int!
-  percentOfProfit: Int!
+  percentOfRevenue: Int
+  percentOfProfit: Int
   notes: String
 }
 

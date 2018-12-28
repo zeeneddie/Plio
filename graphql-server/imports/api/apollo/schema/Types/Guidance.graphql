@@ -6,4 +6,6 @@ type Guidance implements BaseEntity {
   _id: ID!
   documentType: String!
   html: String
+  title: String
+  subguidances: [Guidance]
 }

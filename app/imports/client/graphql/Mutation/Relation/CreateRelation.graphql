@@ -1,3 +1,10 @@
 mutation createRelation($input: RelationInput!) {
-  createRelation(input: $input)
+  createRelation(input: $input) {
+    rel1 {
+      documentType
+    }
+    rel2 {
+      documentType
+    }
+  }
 }

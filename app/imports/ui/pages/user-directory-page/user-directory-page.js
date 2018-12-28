@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { _ } from 'meteor/underscore';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { UserSubs } from '/imports/startup/client/subsmanagers.js';
+import { Organizations } from '../../../share/collections/organizations.js';
 
 Template.UserDirectory_Page.viewmodel({
   share: 'search',
@@ -21,6 +21,8 @@ Template.UserDirectory_Page.viewmodel({
         FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
           orgSerialNumber: this.organizationSerialNumber(),
           userId: this.organizationUsers().fetch()[0]._id,
+        }, {
+          backRoute: FlowRouter.getQueryParam('backRoute'),
         }));
       }
     }
@@ -31,6 +33,8 @@ Template.UserDirectory_Page.viewmodel({
   activeUser() {
     return FlowRouter.getParam('userId') || null;
   },
+
+  // eslint-disable-next-line consistent-return
   organizationUsers() {
     const userIds = this.getCurrentOrganizationUsers();
     const findQuery = {};
@@ -53,7 +57,9 @@ Template.UserDirectory_Page.viewmodel({
       { ...searchUsers },
     ];
 
-    const cursor = Meteor.users.find(findQuery, { sort: { 'profile.firstName': 1, 'emails.0.address': 1 } });
+    const cursor = Meteor.users.find(findQuery, {
+      sort: { 'profile.firstName': 1, 'emails.0.address': 1 },
+    });
 
     const result = _.pluck(cursor.fetch(), '_id');
 

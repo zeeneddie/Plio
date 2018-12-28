@@ -21,6 +21,7 @@ const FormInput = enhance(({
   containerClassName,
   inputGroup,
   addon,
+  autoComplete = 'off',
   ...other
 }) => {
   let textInput;
@@ -43,6 +44,7 @@ const FormInput = enhance(({
           value,
           onChange,
           onBlur,
+          autoComplete,
           ...other,
         }}
       />

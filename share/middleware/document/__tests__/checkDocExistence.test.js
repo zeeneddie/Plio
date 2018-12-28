@@ -18,7 +18,7 @@ describe('checkDocExistence', () => {
   afterAll(__closeDB);
 
   beforeEach(async () => {
-    Organizations.remove({});
+    await Organizations.remove({});
   });
 
   it('throws if no collection provided', async () => {

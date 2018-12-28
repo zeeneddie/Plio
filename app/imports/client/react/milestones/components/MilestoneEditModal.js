@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { pure } from 'recompose';
 import { noop } from 'plio-util';
 
 import {
@@ -75,4 +74,4 @@ MilestoneEditModal.propTypes = {
   milestone: PropTypes.object,
 };
 
-export default pure(MilestoneEditModal);
+export default MilestoneEditModal;

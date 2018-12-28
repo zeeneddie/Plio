@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import { omit } from 'ramda';
+import { pure } from 'recompose';
 
 import { Mutation as Mutations } from '../../../graphql';
 import { renderComponent } from '../../helpers';
@@ -69,4 +70,4 @@ RelationsAdapterContainer.propTypes = {
   refetchQueries: PropTypes.func,
 };
 
-export default RelationsAdapterContainer;
+export default pure(RelationsAdapterContainer);

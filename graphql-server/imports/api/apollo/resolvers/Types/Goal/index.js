@@ -5,9 +5,13 @@ import {
   loadFilesById,
   lenses,
 } from 'plio-util';
-import { view, map, flatten } from 'ramda';
+import { view } from 'ramda';
 
-import { resolveRisksByIds, resolveLessonsById } from '../util';
+import {
+  resolveLessonsById,
+  resolveLinkedMilestones,
+  resolveLinkedRisks,
+} from '../util';
 import { getGoalStatus } from '../../../../../share/helpers';
 
 const {
@@ -37,6 +41,7 @@ export default {
       return getGoalStatus(timezone, goal);
     },
     lessons: resolveLessonsById,
+    milestones: resolveLinkedMilestones,
     actions: async (root, args, context) => {
       const { _id: documentId } = root;
       const { isDeleted = false } = args;
@@ -44,15 +49,6 @@ export default {
 
       return byQuery.load({ 'linkedTo.documentId': documentId, isDeleted });
     },
-    milestones: async (root, args, context) => {
-      const { milestoneIds } = root;
-      const { loaders: { Milestone: { byQuery } } } = context;
-
-      return byQuery.loadMany(map(milestoneId => ({
-        _id: milestoneId,
-        isDeleted: false,
-      }), milestoneIds)).then(flatten);
-    },
-    risks: resolveRisksByIds,
+    risks: resolveLinkedRisks,
   },
 };

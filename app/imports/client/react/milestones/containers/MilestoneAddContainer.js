@@ -4,7 +4,6 @@ import { Query, Mutation } from 'react-apollo';
 import { noop, getEntityOptions } from 'plio-util';
 
 import { validateMilestone } from '../../../validation';
-import { ApolloFetchPolicies } from '../../../../api/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { renderComponent, Composer } from '../../helpers';
 
@@ -12,6 +11,8 @@ const MilestoneAddContainer = ({
   goalId,
   organizationId,
   toggle,
+  isOpen,
+  onLink = noop,
   ...props
 }) => (
   <Composer
@@ -20,15 +21,11 @@ const MilestoneAddContainer = ({
       <Query
         query={Queries.DASHBOARD_GOAL}
         variables={{ _id: goalId }}
-        fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}
+        skip={!isOpen}
         children={noop}
       />,
       <Mutation
         mutation={Mutations.CREATE_MILESTONE}
-        refetchQueries={() => [{
-          query: Queries.GOAL_CARD,
-          variables: { _id: goalId, organizationId },
-        }]}
         children={noop}
       />,
       /* eslint-disable react/no-children-prop */
@@ -38,6 +35,7 @@ const MilestoneAddContainer = ({
       ...props,
       organizationId,
       toggle,
+      isOpen,
       initialValues: {
         title: '',
         description: '',
@@ -65,7 +63,9 @@ const MilestoneAddContainer = ({
               linkedTo: goal._id,
             },
           },
-        }).then(toggle || noop);
+        })
+          .then(({ data: { createMilestone: { milestone } } }) => onLink(milestone._id))
+          .then(toggle || noop);
       },
     })}
   </Composer>
@@ -75,6 +75,8 @@ MilestoneAddContainer.propTypes = {
   goalId: PropTypes.string.isRequired,
   organizationId: PropTypes.string.isRequired,
   toggle: PropTypes.func,
+  isOpen: PropTypes.bool,
+  onLink: PropTypes.func,
 };
 
 export default MilestoneAddContainer;

@@ -22,6 +22,7 @@ import {
   subtract,
   reject,
   isNil,
+  pathOr,
 } from 'ramda';
 
 import {
@@ -31,6 +32,7 @@ import {
   CriticalityLevels,
   Colors,
   MAX_TOTAL_PERCENT,
+  DEFAULT_CANVAS_COLOR,
 } from '../../../share/constants';
 
 export const getCustomerElementInitialValues = () => ({
@@ -117,3 +119,8 @@ export const getKeyPartnerChartData = addIndex(map)(({
   backgroundColor: getColorByIndex(index),
   label: title,
 }));
+
+export const getUserDefaultCanvasColor = pathOr(
+  DEFAULT_CANVAS_COLOR,
+  ['preferences', 'defaultCanvasColor'],
+);

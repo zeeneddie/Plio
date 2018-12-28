@@ -30,6 +30,7 @@ const RiskForm = ({
         placeholder="Risk name"
         addon={sequentialId}
         maxLength={StringLimits.title.max}
+        autoFocus
       />
     </FormField>
     <FormField>

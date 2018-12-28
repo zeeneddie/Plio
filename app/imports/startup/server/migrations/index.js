@@ -1,33 +1,4 @@
 /* eslint-disable no-console */
-
-// import { Migrations } from 'meteor/percolate:migrations';
-//
-// import { NonConformities } from '/imports/share/collections/non-conformities';
-// import { Risks } from '/imports/share/collections/risks';
-// import { WorkItems } from '/imports/share/collections/work-items';
-// import { Standards } from '/imports/share/collections/standards';
-// import { Actions } from '/imports/share/collections/actions';
-//
-// const workItems = WorkItems.find({});
-// workItems.forEach((workItem) => {
-//   const linkedDocInfo = workItem.linkedDoc || {};
-//   let linkedDoc;
-//   if (linkedDocInfo.type === 'non-conformity') {
-//     linkedDoc = NonConformities.findOne({ _id: linkedDocInfo._id });
-//   } else if (linkedDocInfo.type === 'risk') {
-//     linkedDoc = Risks.findOne({ _id: linkedDocInfo._id });
-//   } else if (linkedDocInfo.type === 'standard') {
-//     linkedDoc = Standards.findOne({ _id: linkedDocInfo._id });
-//   } else if (linkedDocInfo.type === 'action') {
-//     linkedDoc = Actions.findOne({ _id: linkedDocInfo._id });
-//   }
-//
-//   if (!linkedDoc) {
-//     WorkItems.remove({ _id: workItem._id });
-//     console.log(`Work item ${workItem._id} has been removed`);
-//   }
-// });
-
 import { Meteor } from 'meteor/meteor';
 import { Migrations } from 'meteor/percolate:migrations';
 
@@ -53,6 +24,7 @@ import './13-workspace-defaults';
 import './14-add-crud-goals-role';
 import './15-enable-simplified-completion-of-actions';
 import './16-create-canvas-settings';
+import './17-move-goals-relations';
 
 Migrations.add({
   version: 1,

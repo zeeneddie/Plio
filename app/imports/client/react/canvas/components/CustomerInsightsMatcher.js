@@ -33,64 +33,68 @@ const CustomerInsightsMatcher = ({
   documentId,
   matchedTo,
   organizationId,
-}) => (
-  <Composer
-    components={[
-      /* eslint-disable react/no-children-prop */
-      <Mutation
-        mutation={Mutations.CREATE_RELATION}
-        refetchQueries={getRefetchQueries({ _id: documentId, organizationId })}
-        children={noop}
-      />,
-      <Mutation
-        mutation={Mutations.DELETE_RELATION}
-        refetchQueries={getRefetchQueries({ _id: documentId, organizationId })}
-        children={noop}
-      />,
-      /* eslint-enable react/no-children-prop */
-    ]}
-  >
-    {([createRelation, deleteRelation]) => (
-      <Fragment>
-        <Row>
-          <Col xs="6">
-            <legend>Needs & wants</legend>
-          </Col>
-          <Col xs="6">
-            <legend>Features & benefits</legend>
-          </Col>
-        </Row>
-        {needs.concat(wants).sort(bySequentialId).map(({
-          _id,
-          sequentialId,
-          title,
-          benefits,
-          features,
-          documentType,
-        }) => (
-          <Matcher
-            {...{
-              _id,
-              sequentialId,
-              title,
-              documentType,
-            }}
-            key={_id}
-            matchedItems={benefits.concat(features).sort(bySequentialId)}
-            suggestedItems={getSuggestedItems(matchedTo)}
-            onMatch={createRelation}
-            onUnmatch={deleteRelation}
-            hasMatchedDocument={!!matchedTo}
-            /* eslint-disable max-len */
-            noSuggestedItemsText="No Features or Benefits found. Please add some to the Value proposition"
-            noMatchedDocumentText="No Value proposition found. Please add one, with some Features and Benefits"
-            /* eslint-enable max-len */
-          />
-        ))}
-      </Fragment>
-    )}
-  </Composer>
-);
+}) => {
+  const customerInsights = needs.concat(wants);
+  return (
+    <Composer
+      components={[
+        /* eslint-disable react/no-children-prop */
+        <Mutation
+          mutation={Mutations.CREATE_RELATION}
+          refetchQueries={getRefetchQueries({ _id: documentId, organizationId })}
+          children={noop}
+        />,
+        <Mutation
+          mutation={Mutations.DELETE_RELATION}
+          refetchQueries={getRefetchQueries({ _id: documentId, organizationId })}
+          children={noop}
+        />,
+        /* eslint-enable react/no-children-prop */
+      ]}
+    >
+      {([createRelation, deleteRelation]) => (
+        <Fragment>
+          <Row>
+            <Col xs="6">
+              <legend>Needs & wants</legend>
+            </Col>
+            <Col xs="6">
+              <legend>Features & benefits</legend>
+            </Col>
+          </Row>
+          {!customerInsights.length && <div className="text-muted">None</div>}
+          {customerInsights.sort(bySequentialId).map(({
+            _id,
+            sequentialId,
+            title,
+            benefits,
+            features,
+            documentType,
+          }) => (
+            <Matcher
+              {...{
+                _id,
+                sequentialId,
+                title,
+                documentType,
+              }}
+              key={_id}
+              matchedItems={benefits.concat(features).sort(bySequentialId)}
+              suggestedItems={getSuggestedItems(matchedTo)}
+              onMatch={createRelation}
+              onUnmatch={deleteRelation}
+              hasMatchedDocument={!!matchedTo}
+              /* eslint-disable max-len */
+              noSuggestedItemsText="No Features or Benefits found. Please add some to the Value proposition"
+              noMatchedDocumentText="No Value proposition found. Please add one, with some Features and Benefits"
+              /* eslint-enable max-len */
+            />
+          ))}
+        </Fragment>
+      )}
+    </Composer>
+  );
+};
 
 CustomerInsightsMatcher.propTypes = {
   needs: PropTypes.arrayOf(PropTypes.object).isRequired,

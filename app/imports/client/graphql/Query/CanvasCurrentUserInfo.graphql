@@ -1,0 +1,11 @@
+query CanvasCurrentUserInfo {
+  user: me {
+    _id
+    profile {
+      fullName
+    }
+    preferences {
+      defaultCanvasColor
+    }
+  }
+}

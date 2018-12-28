@@ -40,6 +40,20 @@ import {
   Goals,
   Milestones,
   CanvasSettings,
+  KeyPartners,
+  KeyActivities,
+  KeyResources,
+  ValuePropositions,
+  CustomerRelationships,
+  Channels,
+  CustomerSegments,
+  CostLines,
+  RevenueStreams,
+  Benefits,
+  Features,
+  Needs,
+  Wants,
+  Projects,
 } from '../../../share/collections';
 
 const OrganizationService = {
@@ -388,6 +402,20 @@ const OrganizationService = {
       WorkItems,
       Goals,
       Milestones,
+      KeyPartners,
+      KeyActivities,
+      KeyResources,
+      ValuePropositions,
+      CustomerRelationships,
+      Channels,
+      CustomerSegments,
+      CostLines,
+      RevenueStreams,
+      Benefits,
+      Features,
+      Needs,
+      Wants,
+      Projects,
     ];
 
     _(collections).each(coll => coll.direct.remove({ organizationId }));
