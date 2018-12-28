@@ -12,6 +12,7 @@ const getEmails = compose(uniq, reject(isNil), pluck('value'));
 
 Template.UserDirectory_InviteUsers.viewmodel({
   mixin: ['modal', 'organization'],
+  initialValues: undefined,
   UsersInviteForm: () => UsersInviteForm,
   save() {
     const event = new Event('submit', { cancelable: true });
