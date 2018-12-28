@@ -37,6 +37,7 @@ const CanvasForm = ({ organizationId, children, save }) => (
       Color
       <ColorPickerField
         name="color"
+        id="canvas"
         onChange={save}
       />
     </FormField>

@@ -18,6 +18,7 @@ import { StringLimits } from '../../../../share/constants';
 export const GoalForm = ({
   organizationId,
   sequentialId,
+  isEditMode,
   save = noop,
 }) => (
   <Fragment>
@@ -77,6 +78,7 @@ export const GoalForm = ({
       Color
       <ColorPickerField
         name="color"
+        id={isEditMode ? 'goal' : 'newGoal'}
         onChange={save}
       />
     </FormField>
@@ -86,6 +88,7 @@ export const GoalForm = ({
 GoalForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
   sequentialId: PropTypes.string,
+  isEditMode: PropTypes.bool,
   save: PropTypes.func,
 };
 
