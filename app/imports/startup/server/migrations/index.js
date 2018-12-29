@@ -25,6 +25,7 @@ import './14-add-crud-goals-role';
 import './15-enable-simplified-completion-of-actions';
 import './16-create-canvas-settings';
 import './17-move-goals-relations';
+import './18-add-notify-to-canvas-settings';
 
 Migrations.add({
   version: 1,
