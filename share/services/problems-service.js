@@ -47,7 +47,11 @@ export default {
     return _id;
   },
 
-  update({
+  update(...args) {
+    return this._update(...args);
+  },
+
+  _update({
     _id, query = {}, options = {}, ...args
   }) {
     if (!Object.keys(query).length) {
