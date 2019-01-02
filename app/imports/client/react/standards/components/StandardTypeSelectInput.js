@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { compose, sort, map } from 'ramda';
 import { byTitle } from 'plio-util';
 
-import { swal } from '../../../util';
 import { ApolloSelectInputField } from '../../components';
 import { Query } from '../../../graphql';
 
@@ -21,15 +20,8 @@ const StandardTypeSelectInput = ({ organizationId, ...props }) => (
     loadOptions={query => query({
       query: Query.STANDARD_TYPE_LIST,
       variables: { organizationId },
-    }).then(({
-      data: {
-        standardTypes: {
-          standardTypes,
-        },
-      },
-    }) => ({
-      options: getOptions(standardTypes),
-    })).catch(swal.error)}
+    })}
+    transformOptions={({ data: { standardTypes: { standardTypes } } }) => getOptions(standardTypes)}
   />
 );
 

@@ -1,0 +1,11 @@
+mutation updateUserPreferences($input: UpdateUserPreferencesInput!) {
+  updateUserPreferences(input: $input) {
+    _id
+    preferences {
+      areNotificationsEnabled
+      areEmailNotificationsEnabled
+      notificationSound
+      defaultCanvasColor
+    }
+  }
+}

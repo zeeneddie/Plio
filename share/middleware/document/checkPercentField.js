@@ -6,11 +6,12 @@ import { MAX_TOTAL_PERCENT } from '../../constants';
 const calculateTotalPercent = (key, items) => compose(sum, map(prop(key)))(items);
 
 export default (config = () => ({})) => async (next, root, args, context) => {
+  const organizationId = args.organizationId || root.organizationId;
   const {
     key,
     collection,
     entityName,
-    query = { organizationId: args.organizationId },
+    query = { organizationId },
   } = await config(root, args, context);
 
   invariant(

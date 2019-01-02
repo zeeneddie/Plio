@@ -7,7 +7,6 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { validateLesson } from '../../../validation';
 import { Composer, renderComponent } from '../../helpers';
-import { swal } from '../../../util';
 
 const LessonAddContainer = ({
   organizationId,
@@ -33,15 +32,10 @@ const LessonAddContainer = ({
         mutation={Mutations.CREATE_LESSON}
         children={noop}
       />,
-      <Mutation
-        {...{ refetchQueries }}
-        mutation={Mutations.REMOVE_LESSON}
-        children={noop}
-      />,
       /* eslint-enable react/no-children-prop */
     ]}
   >
-    {([{ data: { user } }, createLesson, deleteLesson]) => renderComponent({
+    {([{ data: { user } }, createLesson]) => renderComponent({
       ...props,
       isOpen,
       toggle,
@@ -80,17 +74,6 @@ const LessonAddContainer = ({
         }).then(({ data: { createLesson: { lesson } } }) => onLink(lesson._id))
           .then(toggle || noop);
       },
-      // TODO move it into LessonEditContainer when lesson will be refactored
-      onDelete: (event, { entity: { _id, title } }) => swal.promise({
-        text: `The lesson learned "${title}" will be permanently deleted`,
-        confirmButtonText: 'Delete',
-        successTitle: 'Deleted!',
-        successText: `The lesson learned "${title}" was deleted successfully.`,
-      }, () => deleteLesson({
-        variables: {
-          input: { _id },
-        },
-      })).then(() => onUnlink(_id)),
     })}
   </Composer>
 );

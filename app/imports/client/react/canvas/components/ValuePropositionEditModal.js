@@ -23,8 +23,8 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateValueProposition } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import ValuePropositionForm from './ValuePropositionForm';
-import CanvasModalGuidance from './CanvasModalGuidance';
 import ValuePropositionSubcards from './ValuePropositionSubcards';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -186,7 +186,7 @@ const ValuePropositionEditModal = ({
                   <Fragment>
                     <EntityModalHeader label="Value proposition" />
                     <EntityModalBody>
-                      <CanvasModalGuidance documentType={CanvasTypes.VALUE_PROPOSITION} />
+                      <ModalGuidancePanel documentType={CanvasTypes.VALUE_PROPOSITION} />
                       <RenderSwitch
                         require={isOpen &&
                         data.valueProposition &&

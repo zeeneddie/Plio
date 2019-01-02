@@ -25,6 +25,7 @@ fragment ValuePropositionRelations on ValueProposition {
   }
   matchedTo {
     _id
+    title
     needs {
       ...CustomerElementPresentation
     }

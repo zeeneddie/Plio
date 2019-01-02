@@ -14,7 +14,7 @@ const CanvasSection = styled.div`
     display: flex;
     flex: 1;
     flex-direction: column;
-    min-height: ${CanvasStyles.itemMinHeight}
+    min-height: ${CanvasStyles.itemMinHeight}px;
   `}
 
   ${StyledMixins.media.tabletPortrait`
@@ -26,6 +26,10 @@ const CanvasSection = styled.div`
   `}
 
   ${is('empty')`
+    ul {
+      display: none;
+    }
+    
     &:hover {
       cursor: pointer;
       background: #f5f5f5;

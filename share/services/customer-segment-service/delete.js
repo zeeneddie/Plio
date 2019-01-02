@@ -1,15 +1,17 @@
 import unmatch from './unmatch';
-import deleteRelations from './deleteRelations';
+import { cleanupCanvas } from '../util/cleanup';
 
 export default async function deleteCustomerSegment(args, context) {
   const { _id } = args;
-  const { collections: { CustomerSegments, Needs, Wants } } = context;
+  const { customerSegment, collections: { CustomerSegments, Needs, Wants } } = context;
 
-  const res = await CustomerSegments.remove({ _id });
-  await unmatch(args, context);
-  await deleteRelations(args, context);
-  await Needs.remove({ 'linkedTo.documentId': _id });
-  await Wants.remove({ 'linkedTo.documentId': _id });
+  const [res] = await Promise.all([
+    CustomerSegments.remove({ _id }),
+    unmatch(args, context),
+    Needs.remove({ 'linkedTo.documentId': _id }),
+    Wants.remove({ 'linkedTo.documentId': _id }),
+    cleanupCanvas(customerSegment, context),
+  ]);
 
   return res;
 }

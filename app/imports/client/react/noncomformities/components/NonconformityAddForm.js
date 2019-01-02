@@ -21,6 +21,7 @@ export const NonconformityAddForm = ({ organizationId, guidelines }) => (
         name="title"
         placeholder="Title"
         maxLength={StringLimits.title.max}
+        autoFocus
       />
     </FormField>
     <FormField>

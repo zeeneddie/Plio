@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { pure } from 'recompose';
+import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
   CardBlock,
@@ -12,7 +13,7 @@ import StandardAddForm from './StandardAddForm';
 
 const NewStandardCard = ({
   organizationId,
-  standardIds,
+  standardIds = [],
 }) => (
   <NewExistingSwitchField name="active">
     <CardBlock>
@@ -24,7 +25,9 @@ const NewStandardCard = ({
         <StandardSelectInput
           name="standard"
           placeholder="Existing standard"
-          {...{ organizationId, standardIds }}
+          transformOptions={({ data: { standards: { standards } } }) =>
+            mapRejectedEntitiesByIdsToOptions(standardIds, standards)}
+          {...{ organizationId }}
         />
       </FormField>
     </CardBlock>

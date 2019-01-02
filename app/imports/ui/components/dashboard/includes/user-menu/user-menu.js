@@ -2,6 +2,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { range } from 'ramda';
 
 import { isMobileRes } from '../../../../../api/checkers';
 import { flattenObjects } from '../../../../../api/helpers';
@@ -9,6 +10,7 @@ import { MyPreferencesHelp } from '../../../../../api/help-messages';
 import { userLogout } from '../../../../../client/store/actions/globalActions';
 import { UserPresenceStatuses, SUPPORT_FORUM_URL } from '../../../../../api/constants';
 import { client } from '../../../../../client/apollo';
+import { AvatarPlaceholders } from '../../../../../share/constants';
 
 const STATUSES = [
   {
@@ -127,8 +129,7 @@ Template.UserMenu.viewmodel({
     await import('../../../userdirectory/includes/invite');
 
     const { organizationId, organizationName } = this.data();
-
-    this.modal().open({
+    const params = {
       template: 'UserDirectory_InviteUsers',
       _title: 'Invite users',
       submitCaption: 'Invite',
@@ -137,7 +138,23 @@ Template.UserMenu.viewmodel({
       variation: 'save',
       organizationId,
       organizationName,
-    });
+    };
+    const isCanvasPage = FlowRouter.current().path.includes('/canvas');
+
+    if (isCanvasPage) {
+      Object.assign(params, {
+        initialValues: {
+          welcome: 'Hi there.\nWe\'ll be using Plio to create and share a business model canvas. ' +
+          'Please accept this invitation to join Plio as a user. See you there soon.',
+          options: range(0, 4).map(i => ({
+            value: undefined,
+            src: AvatarPlaceholders[i],
+          })),
+        },
+      });
+    }
+
+    this.modal().open(params);
   },
   goToMyProfile(href) {
     const mobileWidth = isMobileRes();

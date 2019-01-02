@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Query } from 'react-apollo';
 import { isEmpty, pathOr, compose, prop, pick, mapObjIndexed, curry } from 'ramda';
-import { sortByIds } from 'plio-util';
+import { sortByIds, StyledMixins } from 'plio-util';
 
 import delayed from '../../helpers/delayed';
+import { WithState } from '../../helpers';
+import { CanvasReportSections } from '../constants';
 import { Styles } from '../../../../api/constants';
 import { RenderSwitch, PreloaderPage, ErrorPage } from '../../components';
 import { Query as Queries } from '../../../graphql';
@@ -17,9 +19,31 @@ const DelayedCanvasReportSections = delayed({
   delay: 200,
 });
 
+const getDisplayValue = reportSection => props => props[reportSection] ? 'block' : 'none';
 const ReportWrapper = styled.div`
   overflow: auto;
   color: ${Styles.color.black};
+  
+  ${StyledMixins.media.print`
+    .business-model-canvas {
+      display: ${getDisplayValue(CanvasReportSections.BUSINESS_MODEL_CANVAS)}
+    }
+    .canvas-items {
+      display: ${getDisplayValue(CanvasReportSections.CANVAS_ITEMS)}
+    }
+    .canvas-charts {
+      display: ${getDisplayValue(CanvasReportSections.CANVAS_CHARTS)}
+    }
+    .value-components {
+      display: ${getDisplayValue(CanvasReportSections.VALUE_COMPONENTS)}
+    }
+    .customer-insights {
+      display: ${getDisplayValue(CanvasReportSections.CUSTOMER_INSIGHTS)}
+    }
+    .operational-elements {
+      display: ${getDisplayValue(CanvasReportSections.OPERATIONAL_ELEMENTS)}
+    }
+  `}
 `;
 
 const getSectionOrder = curry((sectionKey, settings) => pathOr(
@@ -61,10 +85,29 @@ const CanvasReportPage = ({ organization: { _id: organizationId } }) => (
           const orderedSections = getOrderedSections(canvasSettings, sectionsItems);
 
           return (
-            <ReportWrapper>
-              <CanvasReportBusinessModel {...orderedSections} />
-              <DelayedCanvasReportSections sections={orderedSections} />
-            </ReportWrapper>
+            <WithState
+              initialState={{
+                [CanvasReportSections.BUSINESS_MODEL_CANVAS]: true,
+                [CanvasReportSections.CANVAS_ITEMS]: true,
+                [CanvasReportSections.CANVAS_CHARTS]: true,
+                [CanvasReportSections.CUSTOMER_INSIGHTS]: true,
+                [CanvasReportSections.VALUE_COMPONENTS]: true,
+                [CanvasReportSections.OPERATIONAL_ELEMENTS]: true,
+              }}
+            >
+              {({ state, setState }) => (
+                <ReportWrapper {...state}>
+                  <CanvasReportBusinessModel
+                    updatePrintState={setState}
+                    printState={state}
+                    {...{
+                      ...orderedSections,
+                    }}
+                  />
+                  <DelayedCanvasReportSections sections={orderedSections} />
+                </ReportWrapper>
+              )}
+            </WithState>
           );
         }}
       </RenderSwitch>

@@ -20,7 +20,7 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateKeyResource } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import DelayedCanvasSubcards from './DelayedCanvasSubcards';
 import {
   EntityModalNext,
@@ -145,7 +145,7 @@ const KeyResourceEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key resource" />
                   <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.KEY_RESOURCE} />
+                    <ModalGuidancePanel documentType={CanvasTypes.KEY_RESOURCE} />
                     <RenderSwitch
                       require={isOpen && data.keyResource && data.keyResource.keyResource}
                       errorWhenMissing={noop}

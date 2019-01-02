@@ -18,7 +18,7 @@ import {
   ChartModal,
 } from '../../components';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 
 const chartTabs = {
   PERCENT_OF_REVENUE: 0,
@@ -62,7 +62,7 @@ const RevenueStreamsChartModal = ({ isOpen, toggle, organizationId }) => (
       >
         <EntityModalHeader label="Revenue streams" />
         <EntityModalBody>
-          <CanvasModalGuidance documentType={CanvasTypes.REVENUE_STREAM} />
+          <ModalGuidancePanel documentType={CanvasTypes.REVENUE_STREAM} />
           <StyledSwitchView
             active={state.activeTab}
             onChange={idx => setState({ activeTab: idx, error: null })}

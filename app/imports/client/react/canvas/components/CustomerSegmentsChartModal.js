@@ -15,7 +15,7 @@ import {
   ChartModal,
 } from '../../components';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 
 const getChartData = ({
   customerSegments: { customerSegments },
@@ -42,7 +42,7 @@ const CustomerSegmentsChartModal = ({ isOpen, toggle, organizationId }) => (
       >
         <EntityModalHeader label="Customer segments" />
         <EntityModalBody>
-          <CanvasModalGuidance documentType={CanvasTypes.CUSTOMER_SEGMENT} />
+          <ModalGuidancePanel documentType={CanvasTypes.CUSTOMER_SEGMENT} />
           <RenderSwitch
             {...{ loading, error }}
             errorWhenMissing={noop}

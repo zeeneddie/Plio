@@ -92,7 +92,7 @@ const StandardEditContainer = ({
             {...{ fetchPolicy }}
             query={Queries.STANDARD_CARD}
             variables={{ _id: standardId }}
-            skip={!!_standard}
+            skip={!isOpen || !!_standard}
             onCompleted={data => setState({
               initialValues: getInitialValues(getStandard(data)),
               standard: getStandard(data),

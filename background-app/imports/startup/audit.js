@@ -30,6 +30,8 @@ import FeatureAuditConfig from '../audit/configs/features/feature-audit-config';
 import NeedAuditConfig from '../audit/configs/needs/need-audit-config';
 import WantAuditConfig from '../audit/configs/wants/want-audit-config';
 import RelationAuditConfig from '../audit/configs/relations/relation-audit-config';
+import CanvasSettingsAuditConfig from
+  '../audit/configs/canvas-settings/canvas-settings-audit-config';
 
 const auditConfigs = [
   ActionAuditConfig,
@@ -57,6 +59,7 @@ const auditConfigs = [
   NeedAuditConfig,
   WantAuditConfig,
   RelationAuditConfig,
+  CanvasSettingsAuditConfig,
 ];
 
 auditConfigs.forEach((config) => {

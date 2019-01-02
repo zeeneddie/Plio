@@ -20,7 +20,7 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCostLine } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CostLineForm from './CostLineForm';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import DelayedCanvasSubcards from './DelayedCanvasSubcards';
 import {
   EntityModalNext,
@@ -148,7 +148,7 @@ const CostLineEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Cost line" />
                   <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.COST_LINE} />
+                    <ModalGuidancePanel documentType={CanvasTypes.COST_LINE} />
                     <RenderSwitch
                       require={isOpen && data.costLine && data.costLine.costLine}
                       errorWhenMissing={noop}

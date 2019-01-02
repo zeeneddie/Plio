@@ -4,6 +4,9 @@ import faker from 'faker';
 import createContext from '../../../utils/tests/createContext';
 import { generateSerialNumber } from '../../../helpers';
 import CustomerElementService from '../CustomerElementService';
+import { removeRelations } from '../../util/cleanup';
+
+jest.mock('../../util/cleanup');
 
 jest.mock('../../../helpers', () => ({
   generateSerialNumber: jest.fn(() => 1),
@@ -17,7 +20,6 @@ describe('Customer element service', () => {
 
     context = createContext({});
     CustomerElementService.collection = jest.fn(() => context.collections.Benefits);
-    context.services.RelationService.deleteByDocumentId = jest.fn(() => true);
   });
   afterAll(__closeDB);
 
@@ -78,7 +80,6 @@ describe('Customer element service', () => {
     const benefit = await context.collections.Benefits.findOne({ _id });
 
     expect(benefit).toBe(null);
-    expect(context.services.RelationService.deleteByDocumentId)
-      .toBeCalledWith({ documentId: _id }, context);
+    expect(removeRelations).toHaveBeenCalledWith({ _id }, context);
   });
 });

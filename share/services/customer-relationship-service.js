@@ -1,3 +1,5 @@
+import { cleanupCanvas } from './util/cleanup';
+
 export default {
   insert: async ({
     organizationId,
@@ -47,7 +49,12 @@ export default {
 
     return CustomerRelationships.update(query, modifier);
   },
-  async delete({ _id }, { collections: { CustomerRelationships } }) {
-    return CustomerRelationships.remove({ _id });
+  async delete({ _id }, context) {
+    const { customerRelationship, collections: { CustomerRelationships } } = context;
+    const [res] = await Promise.all([
+      CustomerRelationships.remove({ _id }),
+      cleanupCanvas(customerRelationship, context),
+    ]);
+    return res;
   },
 };

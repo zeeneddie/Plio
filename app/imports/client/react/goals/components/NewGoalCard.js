@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { pure } from 'recompose';
+import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
   CardBlock,
@@ -10,7 +11,7 @@ import {
 } from '../../components';
 import GoalForm from './GoalForm';
 
-const NewGoalCard = ({ organizationId, goalIds }) => (
+const NewGoalCard = ({ organizationId, goalIds = [] }) => (
   <NewExistingSwitchField name="active">
     <CardBlock>
       <GoalForm {...{ organizationId }} />
@@ -21,7 +22,9 @@ const NewGoalCard = ({ organizationId, goalIds }) => (
         <GoalSelectInput
           name="goal"
           placeholder="Existing goal"
-          {...{ organizationId, goalIds }}
+          transformOptions={({ data: { goals: { goals } } }) =>
+            mapRejectedEntitiesByIdsToOptions(goalIds, goals)}
+          {...{ organizationId }}
         />
       </FormField>
     </CardBlock>

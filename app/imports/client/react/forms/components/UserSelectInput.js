@@ -3,29 +3,28 @@ import React from 'react';
 import { mapUsersToOptions } from 'plio-util';
 import { pluck, compose, identity } from 'ramda';
 
-import { swal } from '../../../util';
 import { Query as Queries } from '../../../graphql';
 import ApolloSelectInputField from './ApolloSelectInputField';
 
-const UserSelectInput = ({ organizationId, transform, ...props }) => (
+const UserSelectInput = ({ organizationId, transformOptions, ...props }) => (
   <ApolloSelectInputField
     {...props}
     loadOptions={query => query({
       query: Queries.ORGANIZATION_USERS,
       variables: { organizationId },
-    }).then(({ data: { organization: { users } } }) => ({
-      options: compose(transform, mapUsersToOptions, pluck('user'))(users),
-    })).catch(swal.error)}
+    })}
+    transformOptions={({ data: { organization: { users } } }) =>
+      compose(transformOptions, mapUsersToOptions, pluck('user'))(users)}
   />
 );
 
 UserSelectInput.defaultProps = {
-  transform: identity,
+  transformOptions: identity,
 };
 
 UserSelectInput.propTypes = {
   organizationId: PropTypes.string.isRequired,
-  transform: PropTypes.func,
+  transformOptions: PropTypes.func,
 };
 
 export default UserSelectInput;

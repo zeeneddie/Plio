@@ -4,7 +4,12 @@ import { Label, Input, FormGroup, Button } from 'reactstrap';
 
 import Icon from '../../components/Icons/Icon';
 
-const Checkbox = ({ checked = false, onChange, ...props }) => (
+const Checkbox = ({
+  checked = false,
+  onChange,
+  label,
+  ...props
+}) => (
   <FormGroup check>
     <Label check>
       <Button
@@ -21,6 +26,7 @@ const Checkbox = ({ checked = false, onChange, ...props }) => (
         type="checkbox"
         {...{ ...props, checked }}
       />
+      {label}
     </Label>
   </FormGroup>
 );
@@ -28,6 +34,7 @@ const Checkbox = ({ checked = false, onChange, ...props }) => (
 Checkbox.propTypes = {
   checked: PropTypes.bool,
   onChange: PropTypes.func,
+  label: PropTypes.string,
 };
 
 export default Checkbox;

@@ -7,5 +7,10 @@ query Guidance($documentType: String!) {
   guidance(documentType: $documentType) {
     _id
     html
+    subguidances {
+      _id
+      title
+      html
+    }
   }
 }

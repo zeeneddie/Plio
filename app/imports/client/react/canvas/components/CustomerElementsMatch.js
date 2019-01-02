@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import styled from 'styled-components';
 import { TabContent, TabPane, Button } from 'reactstrap';
 
+import { Styles } from '../../../../api/constants';
 import { WithState } from '../../helpers';
 import { Pull, Icon } from '../../components';
 
@@ -9,6 +11,12 @@ const Tabs = {
   PIE: 'pie',
   MATCHER: 'matcher',
 };
+
+const HelpText = styled.p`
+  margin: 0 -2.25rem 1.45rem -2.25rem;
+  padding: 0 2.25rem 1.45rem 2.25rem;
+  border-bottom: 1px solid ${Styles.border.color.grey};
+`;
 
 const CustomerElementsMatch = ({ renderPie, renderMatcher, ...props }) => (
   <WithState initialState={{ activeTab: Tabs.PIE }}>
@@ -21,6 +29,7 @@ const CustomerElementsMatch = ({ renderPie, renderMatcher, ...props }) => (
           })}
         </TabPane>
         <TabPane tabId={Tabs.MATCHER}>
+          <HelpText>Click on the arrow symbol to match to one or more elements</HelpText>
           {renderMatcher(props)}
           <Pull right>
             <Button onClick={() => setState({ activeTab: Tabs.PIE })}>

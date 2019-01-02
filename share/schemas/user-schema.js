@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { PhoneTypes, StringLimits } from '../constants';
+import { PhoneTypes, StringLimits, CanvasColors } from '../constants';
 import { TimezoneSchema, homeScreenTypeSchemaObj } from './schemas';
 
 const PhoneNumberSchema = new SimpleSchema({
@@ -83,6 +83,12 @@ const UserPreferencesSchema = new SimpleSchema({
     type: String,
     defaultValue: '/sounds/graceful',
     optional: true,
+  },
+  defaultCanvasColor: {
+    type: String,
+    defaultValue: CanvasColors.YELLOW,
+    optional: true,
+    allowedValues: Object.values(CanvasColors),
   },
 });
 

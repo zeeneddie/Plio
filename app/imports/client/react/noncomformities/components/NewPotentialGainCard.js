@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { pure } from 'recompose';
+import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
   CardBlock,
@@ -12,7 +13,7 @@ import NonconformityAddForm from './NonconformityAddForm';
 
 const NewPotentialGainCard = ({
   organizationId,
-  potentialGainIds,
+  potentialGainIds = [],
   guidelines,
 }) => (
   <NewExistingSwitchField name="active">
@@ -25,7 +26,9 @@ const NewPotentialGainCard = ({
         <PotentialGainSelectInput
           name="nonconformity"
           placeholder="Existing potential gain"
-          {...{ organizationId, potentialGainIds }}
+          transformOptions={({ data: { potentialGains: { nonconformities } } }) =>
+            mapRejectedEntitiesByIdsToOptions(potentialGainIds, nonconformities)}
+          {...{ organizationId }}
         />
       </FormField>
     </CardBlock>

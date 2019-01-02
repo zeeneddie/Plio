@@ -15,6 +15,6 @@ export default new CheckedMethod({
   check: checker => checker(Risks)(always(T)),
 
   run({ ...args }) {
-    return RisksService.update({ ...args });
+    return RisksService._update({ ...args });
   },
 });

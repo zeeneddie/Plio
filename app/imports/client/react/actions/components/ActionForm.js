@@ -33,6 +33,7 @@ const ActionForm = ({
           placeholder="Title"
           addon={sequentialId}
           maxLength={StringLimits.longTitle.max}
+          autoFocus
         />
       </FormField>
       <FormField>

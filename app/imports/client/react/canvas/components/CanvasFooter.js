@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { ButtonGroup } from 'reactstrap';
 import { bySerialNumber, byTitle } from 'plio-util';
-import { concat, sort } from 'ramda';
+import { concat, sort, unnest } from 'ramda';
 
 import { DocumentTypes } from '../../../../share/constants';
 import { WithToggle, WithState } from '../../helpers';
@@ -30,8 +30,14 @@ const CanvasFooter = ({
     potentialGains = [],
   } = buildLinkedDocsData(items);
   const nonconformitiesAndGains = concat(nonconformities, potentialGains);
+  const hasLinkedDocs = !!unnest([
+    nonconformitiesAndGains,
+    risks,
+    standards,
+    goals,
+  ]).length;
 
-  return (
+  return (!!renderChartModal || hasLinkedDocs) && (
     <CanvasSectionFooter>
       <CanvasSectionFooterLabels>
         <ButtonGroup>

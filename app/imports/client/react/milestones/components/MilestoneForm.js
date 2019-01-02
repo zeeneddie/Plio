@@ -33,6 +33,7 @@ const MilestoneForm = ({ save }) => (
         name="title"
         placeholder="Title"
         onBlur={save}
+        autoFocus
       />
     </FormField>
     <FormField>

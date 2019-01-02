@@ -11,7 +11,7 @@ import CanvasReportSectionHeading from './CanvasReportSectionHeading';
 const getLabels = pluck('title');
 
 const CanvasReportCustomerSegmentRevenueStreamCharts = ({ customerSegments, revenueStreams }) => (
-  <CanvasReportSection>
+  <CanvasReportSection className="canvas-charts">
     <CanvasReportSectionHeading>Canvas charts</CanvasReportSectionHeading>
     <hr />
     <Container fluid>

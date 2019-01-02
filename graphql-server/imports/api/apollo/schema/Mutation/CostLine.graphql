@@ -7,7 +7,7 @@ input CreateCostLineInput {
   title: String!
   originatorId: ID!
   color: String!
-  percentOfTotalCost: Int!
+  percentOfTotalCost: Int
   notes: String
 }
 

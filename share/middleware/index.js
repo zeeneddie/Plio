@@ -26,7 +26,6 @@ export * from './feature';
 export * from './need';
 export * from './want';
 export * from './files';
-export * from './relation';
 export * from './standard';
 export * from './nonconformity';
 export * from './standardSection';

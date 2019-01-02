@@ -23,6 +23,7 @@ const CustomerSegmentSchema = new SimpleSchema([
       type: Number,
       min: 0,
       max: 100,
+      optional: true,
     },
   },
 ]);

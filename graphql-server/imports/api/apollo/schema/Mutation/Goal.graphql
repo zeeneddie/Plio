@@ -2,10 +2,6 @@ type GoalPayload {
   goal: Goal
 }
 
-type LinkRiskToGoalPayload {
-  risk: Risk
-}
-
 input CreateGoalInput {
   organizationId: ID!
   title: String!
@@ -38,21 +34,6 @@ input RestoreGoalInput {
   _id: ID!
 }
 
-input LinkRiskToGoalInput {
-  _id: ID!
-  riskId: ID!
-}
-
-input AddGoalNotifyUserInput {
-  _id: ID!
-  userId: ID!
-}
-
-input RemoveGoalNotifyUserInput {
-  _id: ID!
-  userId: ID!
-}
-
 input UpdateGoalInput {
   _id: ID!
   title: String
@@ -66,8 +47,6 @@ input UpdateGoalInput {
   completionComment: String
   completedAt: DateTime
   completedBy: ID
-  riskIds: [ID]
-  milestoneIds: [ID]
   notify: [ID]
   fileIds: [ID]
 }
@@ -80,7 +59,4 @@ type Mutation {
   completeGoal(input: CompleteGoalInput!): Goal
   undoGoalCompletion(input: UndoGoalCompletionInput!): Goal
   restoreGoal(input: RestoreGoalInput!): Goal
-  linkRiskToGoal(input: LinkRiskToGoalInput!): LinkRiskToGoalPayload
-  addGoalNotifyUser(input: AddGoalNotifyUserInput!): UserPayload
-  removeGoalNotifyUser(input: RemoveGoalNotifyUserInput!): Goal
 }
