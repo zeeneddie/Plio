@@ -18,6 +18,11 @@ body {
 	@include flex-direction(column);
 }
 
+.no-responsiveness {
+  overflow: auto;
+  min-width: 850px;
+}
+
 @media print {
   #app,
   html,
@@ -26,6 +31,14 @@ body {
   }
   #app {
     display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  html,
+  body,
+  #app {
+    overflow: auto;
   }
 }
 

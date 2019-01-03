@@ -45,15 +45,32 @@ const EmbeddedHeaderMenuItem = styled(HeaderMenuItem)`
   }
 `;
 
+const StyledNav = styled(Nav)`
+  flex: 1;
+  .dropdown .dropdown-toggle {
+    padding-right: 0;
+  }
+`;
+
+const OrganizationName = styled.span`
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: calc(100% - 140px);
+  float: left;
+  margin-right: 5px;
+`;
+
 const OrganizationMenu = ({ organization: currentOrg, isDashboard }) => (
   <FlowRouterContext getParam="orgSerialNumber" getRouteName>
     {({ orgSerialNumber, routeName, router }) => (
-      <Nav navbar className="nav pull-xs-left">
+      <StyledNav navbar className="nav pull-xs-left">
         <WithToggle>
           {({ isOpen, toggle }) => (
             <Dropdown {...{ isOpen, toggle }}>
               <DropdownToggle nav caret>
-                {currentOrg.name}
+                <OrganizationName>{currentOrg.name}</OrganizationName>
                 <span className="secondary-label"> {RouteLabels[routeName]}</span>
               </DropdownToggle>
 
@@ -194,7 +211,7 @@ const OrganizationMenu = ({ organization: currentOrg, isDashboard }) => (
             </Dropdown>
           )}
         </WithToggle>
-      </Nav>
+      </StyledNav>
     )}
   </FlowRouterContext>
 );

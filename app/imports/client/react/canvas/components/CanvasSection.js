@@ -9,6 +9,7 @@ const CanvasSection = styled.div`
   border: 2px solid ${CanvasStyles.borderColor};
   transition: background-color 0.4s ease, border-color 0.4s ease;
   margin: -1px;
+  background: #fff;
 
   ${StyledMixins.media.notMobile`
     display: flex;
