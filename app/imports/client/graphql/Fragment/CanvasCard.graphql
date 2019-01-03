@@ -9,6 +9,7 @@ fragment CanvasCard on CanvasEntity {
   title
   color
   notes
+  fileIds
   originator {
     _id
     profile {

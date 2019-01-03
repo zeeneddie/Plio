@@ -39,7 +39,6 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
-  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -49,6 +48,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
+    'fileIds',
   ]),
   getCustomerSegment,
 );
@@ -141,7 +141,7 @@ const CustomerSegmentEditModal = ({
                   percentOfMarketSize,
                   notes = '',
                   notify = [],
-                  files = [],
+                  fileIds = [],
                 } = values;
 
                 if (difference[0].path[0] === 'matchedTo') {
@@ -168,8 +168,8 @@ const CustomerSegmentEditModal = ({
                       notes,
                       color,
                       percentOfMarketSize,
+                      fileIds,
                       notify: getValues(notify),
-                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },

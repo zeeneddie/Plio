@@ -10,7 +10,7 @@ import {
   getValues,
   getIds,
 } from 'plio-util';
-import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
+import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure, withHandlers } from 'recompose';
 
 import { swal } from '../../../util';
@@ -35,7 +35,6 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
-  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -43,6 +42,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
+    'fileIds',
   ]),
   getKeyActivity,
 );
@@ -120,7 +120,7 @@ const KeyActivityEditModal = ({
                   color,
                   notes = '',
                   notify = [],
-                  files = [],
+                  fileIds = [],
                 } = values;
 
                 return updateKeyActivity({
@@ -130,8 +130,8 @@ const KeyActivityEditModal = ({
                       title,
                       notes,
                       color,
+                      fileIds,
                       notify: getValues(notify),
-                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },

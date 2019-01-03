@@ -9,7 +9,7 @@ import {
   getValues,
   getIds,
 } from 'plio-util';
-import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
+import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
@@ -35,7 +35,6 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
-  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -44,6 +43,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
+    'fileIds',
   ]),
   getCostLine,
 );
@@ -122,7 +122,7 @@ const CostLineEditModal = ({
                   percentOfTotalCost,
                   notes = '', // final form sends undefined value instead of an empty string
                   notify = [],
-                  files = [],
+                  fileIds = [],
                 } = values;
 
                 return updateCostLine({
@@ -133,8 +133,8 @@ const CostLineEditModal = ({
                       notes,
                       color,
                       percentOfTotalCost,
+                      fileIds,
                       notify: getValues(notify),
-                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },

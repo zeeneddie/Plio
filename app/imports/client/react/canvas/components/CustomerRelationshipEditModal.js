@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
+import { compose, pick, over, pathOr, repeat } from 'ramda';
 import {
   getUserOptions,
   lenses,
@@ -35,7 +35,6 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
-  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -43,6 +42,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
+    'fileIds',
   ]),
   getCustomerRelationship,
 );
@@ -120,7 +120,7 @@ const CustomerRelationshipEditModal = ({
                   color,
                   notes = '',
                   notify = [],
-                  files = [],
+                  fileIds = [],
                 } = values;
 
                 return updateCustomerRelationship({
@@ -130,8 +130,8 @@ const CustomerRelationshipEditModal = ({
                       title,
                       notes,
                       color,
+                      fileIds,
                       notify: getValues(notify),
-                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },

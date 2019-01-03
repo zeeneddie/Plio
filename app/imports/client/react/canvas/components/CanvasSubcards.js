@@ -158,7 +158,7 @@ const CanvasSubcards = ({
         }}
       />
       <EntitiesField
-        name="files"
+        name="fileIds"
         render={props => <FilesSubcardContainer {...props} />}
         {...{
           documentId,

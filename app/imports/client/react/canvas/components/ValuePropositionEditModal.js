@@ -39,7 +39,6 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
-  over(lenses.files, defaultTo([])),
   pick([
     'originator',
     'title',
@@ -48,6 +47,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
+    'fileIds',
   ]),
   getValueProposition,
 );
@@ -139,7 +139,7 @@ const ValuePropositionEditModal = ({
                   matchedTo,
                   notes = '',
                   notify = [],
-                  files = [],
+                  fileIds = [],
                 } = values;
 
                 if (difference[0].path[0] === 'matchedTo') {
@@ -165,8 +165,8 @@ const ValuePropositionEditModal = ({
                       title,
                       notes,
                       color,
+                      fileIds,
                       notify: getValues(notify),
-                      fileIds: files,
                       originatorId: originator.value,
                     },
                   },
