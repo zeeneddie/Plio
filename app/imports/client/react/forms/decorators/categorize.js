@@ -34,6 +34,6 @@ export default createDecorator(
       departments: getDepartments,
       projects: getProjects,
     },
-    isEqual: equals,
+    isEqual: (value, oldValue) => value ? equals(value, oldValue) : true,
   },
 );

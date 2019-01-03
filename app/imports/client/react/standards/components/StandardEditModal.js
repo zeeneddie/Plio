@@ -13,6 +13,7 @@ import {
 } from '../../components';
 import StandardAddForm from './StandardAddForm';
 import StandardEditForm from './StandardEditForm';
+import categorize from '../../forms/decorators/categorize';
 import { StandardsHelp } from '../../../../api/help-messages';
 import { validateStandard } from '../../../validation';
 
@@ -40,6 +41,7 @@ export const StandardEditModal = ({
   >
     <EntityModalForm
       {...{ initialValues, onSubmit }}
+      decorators={[categorize]}
       validate={validateStandard}
     >
       {({ handleSubmit }) => (

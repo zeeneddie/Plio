@@ -16,7 +16,9 @@ Template.Fields_Standards_Edit.viewmodel({
     return invoke(this.child('Select_Multi'), 'value');
   },
   standards() {
-    const standards = this._getStandardsByQuery({ ...this.searchObject('value', [{ name: 'title' }, { name: 'status' }]) }).fetch();
+    const standards = this._getStandardsByQuery({
+      ...this.searchObject('value', [{ name: 'title' }, { name: 'status' }]),
+    }).fetch();
     return sortArrayByTitlePrefix(standards);
   },
   onUpdateCb() {
@@ -29,7 +31,10 @@ Template.Fields_Standards_Edit.viewmodel({
     this.callUpdate(selectedItemId, selected, '$addToSet');
   },
   callUpdate(selectedItemId, selected, option) {
-    if (selected.length === this.selected().count() && selected.every(({ _id: itemId }) => this.selected().fetch().find(({ _id }) => _id === itemId))) return;
+    if (selected.length === this.selected().count() &&
+        selected.every(({ _id: itemId }) =>
+          this.selected().fetch().find(({ _id }) => _id === itemId))
+    ) return;
 
     const standardsIds = selected.map(({ _id }) => _id);
 
@@ -56,7 +61,8 @@ Template.Fields_Standards_Edit.viewmodel({
     this.callUpdate(selectedItemId, selected, '$pull');
   },
   areIdsIncludesItemId(selectedItemId) {
-    return this.standardsIds().includes(selectedItemId);
+    const standardsIds = this.standardsIds() || [];
+    return standardsIds.includes(selectedItemId);
   },
   getData() {
     const { standardsIds } = this.data();
