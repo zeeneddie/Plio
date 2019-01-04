@@ -9,7 +9,7 @@ type KeyActivity implements BaseEntity, CanvasEntity {
   originator: User!
   color: String!
   notes: String
-  fileIds: [String]
+  files: [File]
   notify: [User]
   goals: [Goal]
   standards: [Standard]
