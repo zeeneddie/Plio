@@ -7,13 +7,6 @@ query RiskCard($_id: ID!, $organizationId: ID!) {
     }
   }
 
-  riskTypes(organizationId: $organizationId) {
-    riskTypes {
-      _id
-      title
-    }
-  }
-
   user: me {
     _id
   }

@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import Blaze from 'meteor/gadicc:blaze-react-component';
 import PropTypes from 'prop-types';
 import { Navbar } from 'reactstrap';
+import { StyledMixins } from 'plio-util';
 
 import { Styles } from '../../../../api/constants';
 import OrganizationMenu from './OrganizationMenu';
 
 const NavbarStyled = styled(Navbar)`
+  display: flex;
   .navbar-nav {
     margin: 0;
     padding: 0;
@@ -18,7 +20,6 @@ const NavbarStyled = styled(Navbar)`
     .dropdown-toggle {
       height: 50px;
       line-height: 50px;
-      padding: 0 15px;
       font-size: 16px;
       &:after {
         font-size: 18px;
@@ -36,16 +37,32 @@ const NavbarStyled = styled(Navbar)`
   }
 `;
 
+const UserMenuWrapper = styled.div`
+  flex: 1;
+  ${StyledMixins.media.mobile`
+    .nav-link > span {
+      display: block;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 119px;
+      float: left;
+    }
+  `}
+`;
+
 const MainHeader = ({ organization, isDashboard }) => (
   <NavbarStyled dark>
     <OrganizationMenu {...{ organization, isDashboard }} />
-    <Blaze
-      template="UserMenu"
-      // Blaze component renders <span> tag and messes up styling
-      className="nav navbar-nav pull-xs-right"
-      organizationId={organization._id}
-      organizationName={organization.name}
-    />
+    <UserMenuWrapper>
+      <Blaze
+        template="UserMenu"
+        // Blaze component renders <span> tag and messes up styling
+        className="nav navbar-nav pull-xs-right"
+        organizationId={organization._id}
+        organizationName={organization.name}
+      />
+    </UserMenuWrapper>
   </NavbarStyled>
 );
 
