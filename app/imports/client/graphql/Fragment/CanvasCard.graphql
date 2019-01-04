@@ -9,7 +9,6 @@ fragment CanvasCard on CanvasEntity {
   title
   color
   notes
-  fileIds
   originator {
     _id
     profile {
@@ -40,6 +39,9 @@ fragment CanvasCard on CanvasEntity {
       major
       critical
     }
+  }
+  files {
+    _id
   }
   goals {
     ...GoalCard

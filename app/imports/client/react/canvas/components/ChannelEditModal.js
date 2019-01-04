@@ -35,6 +35,7 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
+  over(lenses.files, getIds),
   pick([
     'originator',
     'title',
@@ -42,7 +43,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
-    'fileIds',
+    'files',
   ]),
   getChannel,
 );
@@ -120,7 +121,7 @@ const ChannelEditModal = ({
                   color,
                   notes = '',
                   notify = [],
-                  fileIds = [],
+                  files = [],
                 } = values;
 
                 return updateChannel({
@@ -130,7 +131,7 @@ const ChannelEditModal = ({
                       title,
                       notes,
                       color,
-                      fileIds,
+                      fileIds: files,
                       notify: getValues(notify),
                       originatorId: originator.value,
                     },

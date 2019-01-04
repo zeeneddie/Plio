@@ -35,6 +35,7 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
+  over(lenses.files, getIds),
   pick([
     'originator',
     'title',
@@ -44,7 +45,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
-    'fileIds',
+    'files',
   ]),
   getRevenueStream,
 );
@@ -124,7 +125,7 @@ const RevenueStreamEditModal = ({
                   percentOfProfit,
                   notes = '', // final form sends undefined value instead of an empty string
                   notify = [],
-                  fileIds = [],
+                  files = [],
                 } = values;
 
                 return updateRevenueStream({
@@ -136,7 +137,7 @@ const RevenueStreamEditModal = ({
                       color,
                       percentOfRevenue,
                       percentOfProfit,
-                      fileIds,
+                      fileIds: files,
                       notify: getValues(notify),
                       originatorId: originator.value,
                     },

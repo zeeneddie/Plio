@@ -12,6 +12,7 @@ import {
   resolveLessonsById,
   resolveLinkedNonconformities,
   resolveLinkedPotentialGains,
+  resolveLinkedFiles,
 } from './util';
 
 const {
@@ -34,4 +35,5 @@ export const CanvasResolvers = {
   lessons: resolveLessonsById,
   nonconformities: resolveLinkedNonconformities,
   potentialGains: resolveLinkedPotentialGains,
+  files: resolveLinkedFiles,
 };
