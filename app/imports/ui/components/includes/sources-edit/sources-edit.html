@@ -36,11 +36,11 @@
         </div>
       {{/if}}
     </div>
-    {{#ClearableField field="sourceUrl"}}
+    {{#ClearableField clearFn="clear" field="sourceUrl"}}
       <input type="text" class="form-control" placeholder="URL link"
           {{b "if: sourceType === 'url', value: sourceUrl, focusout: update"}} />
     {{/ClearableField}}
-    {{#ClearableField field="sourceUrl"}}
+    {{#ClearableField clearFn="clear" field="sourceUrl"}}
       <input type="text" class="form-control" placeholder="Youtube or Vimeo url link"
           {{b "if: sourceType === 'video', value: sourceUrl, focusout: update"}} />
     {{/ClearableField}}

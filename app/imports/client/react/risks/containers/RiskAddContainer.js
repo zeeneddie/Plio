@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Query, Mutation } from 'react-apollo';
-import { noop, getUserOptions, lenses } from 'plio-util';
-import { view } from 'ramda';
+import { noop, getUserOptions, getEntityOptions } from 'plio-util';
 import { pure } from 'recompose';
 
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
@@ -29,7 +28,7 @@ const RiskAddContainer = ({
       <Query
         query={Queries.RISK_TYPE_LIST}
         variables={{ organizationId }}
-        fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}
+        skip={!isOpen}
         children={noop}
       />,
       <Mutation
@@ -61,7 +60,7 @@ const RiskAddContainer = ({
         magnitude: ProblemMagnitudes.MAJOR,
         originator: getUserOptions(user),
         owner: getUserOptions(user),
-        type: view(lenses.head._id, riskTypes),
+        type: getEntityOptions(riskTypes[0]),
       },
       onSubmit: (values) => {
         const {
@@ -71,7 +70,7 @@ const RiskAddContainer = ({
           originator: { value: originatorId },
           owner: { value: ownerId },
           magnitude,
-          type: typeId,
+          type: { value: typeId } = {},
           risk: existingRisk = {},
         } = values;
 

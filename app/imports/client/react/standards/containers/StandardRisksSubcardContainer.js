@@ -30,11 +30,6 @@ const StandardRisksSubcardContainer = ({
         query={Queries.CURRENT_USER_FULL_NAME}
         children={noop}
       />,
-      <Query
-        query={Queries.RISK_TYPE_LIST}
-        variables={{ organizationId }}
-        children={noop}
-      />,
       /* eslint-enable react/no-children-prop */
     ]}
   >
