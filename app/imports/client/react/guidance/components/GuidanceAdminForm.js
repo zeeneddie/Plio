@@ -20,6 +20,9 @@ import GuidanceEditContainer from '../containers/GuidanceEditContainer';
 const StyledQuillField = styled(QuillField)`
   .quill:not(.ql-expanded) {
     margin: -17px -17px 0 -17px;
+    .rich-text-controls {
+      border-top: none;
+    }
   }
 `;
 
