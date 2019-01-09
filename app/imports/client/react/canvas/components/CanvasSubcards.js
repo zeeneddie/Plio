@@ -31,7 +31,7 @@ const CanvasSubcards = ({
     standards = [],
     nonconformities = [],
     potentialGains = [],
-    fileIds = [],
+    files = [],
     organization: {
       currency,
       rkGuidelines,
@@ -50,7 +50,7 @@ const CanvasSubcards = ({
         nonconformities,
         potentialGains,
         lessons,
-        fileIds,
+        files,
       ]).length}
     >
       {children}

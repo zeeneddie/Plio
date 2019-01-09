@@ -13,7 +13,7 @@ import DataAggregator from './DataAggregator';
 import { isOrgMember } from '../checkers';
 import Method from '../method';
 import { ORG_MUST_BE_MEMBER } from '../organizations/errors';
-import { IdSchema } from '/imports/share/schemas/schemas';
+import { IdSchema } from '../../share/schemas/schemas';
 
 
 function createFileInfo(orgName, docType) {
@@ -49,8 +49,7 @@ function saveData(file, fields, mapping, data) {
   }));
 
   writer.pipe(stream);
-  data.fetch().forEach(entity => writer.write(entity));
-  writer.end();
+  data.fetch().forEach(entity => writer.write(entity)).then(() => writer.end());
 
   return streamFuture.wait();
 }
@@ -79,6 +78,7 @@ export const generateLink = new Method({
       },
       fields: {
         type: [String],
+        // eslint-disable-next-line import/namespace
         allowedValues: Object.keys(Mapping[docType].mapping.fields),
       },
       filters: {
@@ -96,6 +96,7 @@ export const generateLink = new Method({
   run({
     org, docType, fields, filters,
   }) {
+    // eslint-disable-next-line import/namespace
     const { mapping } = Mapping[docType];
     const file = createFileInfo(org.name, docType);
 

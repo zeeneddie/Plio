@@ -213,3 +213,10 @@ export const resolveProjectsByIds = createEntityByIdsResolver(
     ids: projectIds,
   }),
 );
+
+export const resolveLinkedFiles = createEntityByIdsResolver(
+  ({ fileIds }, args, { loaders: { File: { byQuery } } }) => ({
+    loader: byQuery,
+    ids: fileIds,
+  }),
+);
