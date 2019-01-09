@@ -40,6 +40,10 @@ const StyledCanvas = styled(Canvas)`
   `}
 `;
 
+const StyledCanvasSection = styled(CanvasSection)`
+  min-height: auto;
+`;
+
 const Copyright = styled.div`
   margin-top: 10px;
   text-align: right;
@@ -67,7 +71,7 @@ const CanvasReportBusinessModel = ({
     <StyledCanvas>
       <CanvasRow twoThirds>
         <CanvasCol md>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Key partners"
               icon="link"
@@ -75,10 +79,10 @@ const CanvasReportBusinessModel = ({
               isEmpty={!keyPartners.length}
             />
             <StyledReportItemList items={keyPartners} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
         <CanvasCol md>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Key activities"
               icon="cog"
@@ -86,8 +90,8 @@ const CanvasReportBusinessModel = ({
               isEmpty={!keyActivities.length}
             />
             <StyledReportItemList items={keyActivities} />
-          </CanvasSection>
-          <CanvasSection>
+          </StyledCanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Key resources"
               icon="th"
@@ -95,10 +99,10 @@ const CanvasReportBusinessModel = ({
               isEmpty={!keyResources.length}
             />
             <StyledReportItemList items={keyResources} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
         <CanvasCol md>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Value propositions"
               icon="gift"
@@ -106,10 +110,10 @@ const CanvasReportBusinessModel = ({
               isEmpty={!valuePropositions.length}
             />
             <StyledReportItemList items={valuePropositions} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
         <CanvasCol md>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Customer relationships"
               icon="heart"
@@ -117,8 +121,8 @@ const CanvasReportBusinessModel = ({
               isEmpty={!customerRelationships.length}
             />
             <StyledReportItemList items={customerRelationships} />
-          </CanvasSection>
-          <CanvasSection>
+          </StyledCanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Channels"
               icon="truck"
@@ -126,10 +130,10 @@ const CanvasReportBusinessModel = ({
               isEmpty={!channels.length}
             />
             <StyledReportItemList items={channels} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
         <CanvasCol md>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Customer segments"
               icon="smile-o"
@@ -137,12 +141,12 @@ const CanvasReportBusinessModel = ({
               isEmpty={!customerSegments.length}
             />
             <StyledReportItemList items={customerSegments} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
       </CanvasRow>
       <CanvasRow oneThird>
         <CanvasCol sm>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Cost structure"
               icon="tags"
@@ -150,10 +154,10 @@ const CanvasReportBusinessModel = ({
               isEmpty={!costLines.length}
             />
             <StyledReportItemList items={costLines} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
         <CanvasCol sm>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Revenue streams"
               icon="usd"
@@ -161,7 +165,7 @@ const CanvasReportBusinessModel = ({
               isEmpty={!revenueStreams.length}
             />
             <StyledReportItemList items={revenueStreams} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
       </CanvasRow>
     </StyledCanvas>
