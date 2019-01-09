@@ -70,10 +70,12 @@ export default {
   async complete({ _id }, { userId, collections: { Milestones } }) {
     const query = { _id };
     const modifier = {
-      isCompleted: true,
-      completedBy: userId,
-      completedAt: new Date(),
-      updatedBy: userId,
+      $set: {
+        isCompleted: true,
+        completedBy: userId,
+        completedAt: new Date(),
+        updatedBy: userId,
+      },
     };
     return Milestones.update(query, modifier);
   },
