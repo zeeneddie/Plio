@@ -257,7 +257,7 @@ const GoalEditContainer = ({
               };
 
               if (notify) {
-                Object.assign(args, { notify: getValues(notify) });
+                Object.assign(args.variables.input, { notify: getValues(notify) });
               }
 
               return updateGoal(args).then(noop).catch((err) => {

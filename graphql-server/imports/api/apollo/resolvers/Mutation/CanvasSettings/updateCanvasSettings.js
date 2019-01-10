@@ -5,6 +5,8 @@ import {
   checkOrgMembership,
   canvasSettingsUpdateAfterware,
   ensureUserIsInRole,
+  checkMultipleOrgMembership,
+  branch,
 } from '../../../../../share/middleware';
 import { UserRoles } from '../../../../../share/constants';
 
@@ -19,6 +21,11 @@ export default applyMiddleware(
     organizationId,
     role: UserRoles.CHANGE_ORG_SETTINGS,
   })),
-  // TODO: check notify users access
+  branch(
+    (root, args) => args.notify,
+    checkMultipleOrgMembership((root, { notify }) => ({
+      userIds: notify,
+    })),
+  ),
   canvasSettingsUpdateAfterware(),
 )(resolver);

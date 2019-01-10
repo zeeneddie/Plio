@@ -25,6 +25,7 @@ input UpdateMilestoneInput {
   completionTargetDate: DateTime
   completedAt: DateTime
   completionComments: String
+  notify: [ID]
 }
 
 type Mutation {

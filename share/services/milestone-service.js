@@ -25,6 +25,7 @@ export default {
       completionTargetDate,
       completedAt,
       completionComments,
+      notify,
     } = args;
     const { userId, collections } = context;
     const query = { _id };
@@ -35,6 +36,7 @@ export default {
         completionTargetDate,
         completedAt,
         completionComments,
+        notify,
         updatedBy: userId,
       },
     };

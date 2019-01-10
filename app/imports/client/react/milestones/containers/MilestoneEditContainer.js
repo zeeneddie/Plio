@@ -134,7 +134,7 @@ const MilestoneEditContainer = ({
             };
 
             if (notify) {
-              Object.assign(args, { notify: getValues(notify) });
+              Object.assign(args.variables.input, { notify: getValues(notify) });
             }
 
             return updateMilestone(args).then(noop).catch((err) => {
