@@ -1,4 +1,5 @@
 import invariant from 'invariant';
+import { reject, isNil, composeP, head, when, tap } from 'ramda';
 
 import {
   CustomerElementStatuses,
@@ -8,9 +9,12 @@ import {
 } from '../../../../share/constants';
 
 export const createRelationResolver = config => async (root, args, context) => {
-  const { documentType, loader } = await config(root, args, context);
+  const { documentType, loader, load } = await config(root, args, context);
 
-  invariant(documentType && loader, 'Your config function must return "documentType" and "loader"');
+  invariant(
+    documentType && (loader || load),
+    'Your config function must return "documentType" and "loader" or "load"',
+  );
 
   const { _id } = root;
   const { loaders: { Relation } } = context;
@@ -35,7 +39,9 @@ export const createRelationResolver = config => async (root, args, context) => {
     return rel.rel2.documentId;
   });
 
-  return loader.loadMany(ids);
+  if (loader) return loader.loadMany(ids).then(reject(isNil));
+
+  return load(ids).then(reject(isNil));
 };
 
 export const createEntityByIdsResolver = config => async (root, args, context) => {
@@ -99,21 +105,41 @@ export const resolveLinkedGoals = createRelationResolver(
   }),
 );
 
+export const resolveLinkedGoal = composeP(
+  head,
+  when(
+    goals => goals.length > 1,
+    tap(() => {
+      console.warn('You probably wanted to resolve a single document, but found multiple');
+      console.trace();
+    }),
+  ),
+  resolveLinkedGoals,
+);
+
 export const resolveLinkedStandards = createRelationResolver(
   (root, { isDeleted = false }, { loaders: { Standard: { byQuery } } }) => ({
     documentType: DocumentTypes.STANDARD,
-    loader: {
-      loadMany: ids => byQuery.load({
-        isDeleted,
-        _id: { $in: ids },
-      }),
-    },
+    load: ids => byQuery.load({
+      isDeleted,
+      _id: { $in: ids },
+    }),
   }),
 );
 
 export const resolveLinkedRisks = createRelationResolver(
-  (root, args, { loaders: { Risk: { byId } } }) => ({
+  (root, { isDeleted = false }, { loaders: { Risk: { byQuery } } }) => ({
     documentType: ProblemTypes.RISK,
+    load: ids => byQuery.load({
+      isDeleted,
+      _id: { $in: ids },
+    }),
+  }),
+);
+
+export const resolveLinkedMilestones = createRelationResolver(
+  (root, args, { loaders: { Milestone: { byId } } }) => ({
+    documentType: DocumentTypes.MILESTONE,
     loader: byId,
   }),
 );
@@ -121,26 +147,22 @@ export const resolveLinkedRisks = createRelationResolver(
 export const resolveLinkedNonconformities = createRelationResolver(
   (root, { isDeleted = false }, { loaders: { Nonconformity: { byQuery } } }) => ({
     documentType: ProblemTypes.NON_CONFORMITY,
-    loader: {
-      loadMany: ids => byQuery.load({
-        isDeleted,
-        type: ProblemTypes.NON_CONFORMITY,
-        _id: { $in: ids },
-      }),
-    },
+    load: ids => byQuery.load({
+      isDeleted,
+      type: ProblemTypes.NON_CONFORMITY,
+      _id: { $in: ids },
+    }),
   }),
 );
 
 export const resolveLinkedPotentialGains = createRelationResolver(
   (root, { isDeleted = false }, { loaders: { Nonconformity: { byQuery } } }) => ({
     documentType: ProblemTypes.POTENTIAL_GAIN,
-    loader: {
-      loadMany: ids => byQuery.load({
-        isDeleted,
-        type: ProblemTypes.POTENTIAL_GAIN,
-        _id: { $in: ids },
-      }),
-    },
+    load: ids => byQuery.load({
+      isDeleted,
+      type: ProblemTypes.POTENTIAL_GAIN,
+      _id: { $in: ids },
+    }),
   }),
 );
 
@@ -189,5 +211,12 @@ export const resolveProjectsByIds = createEntityByIdsResolver(
   ({ projectIds }, args, { loaders: { Project: { byQuery } } }) => ({
     loader: byQuery,
     ids: projectIds,
+  }),
+);
+
+export const resolveLinkedFiles = createEntityByIdsResolver(
+  ({ fileIds }, args, { loaders: { File: { byQuery } } }) => ({
+    loader: byQuery,
+    ids: fileIds,
   }),
 );

@@ -5,7 +5,7 @@ import { getUserOptions } from 'plio-util';
 import { Form } from 'reactstrap';
 import { pure } from 'recompose';
 
-import { CanvasColors, CRITICALITY_DEFAULT } from '../../../../share/constants';
+import { CRITICALITY_DEFAULT } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import {
   EntityModalNext,
@@ -16,9 +16,10 @@ import {
 import KeyPartnerForm from './KeyPartnerForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { validateKeyPartner } from '../../../validation';
+import { getUserDefaultCanvasColor } from '../helpers';
 
 const KeyPartnerAddModal = ({ isOpen, toggle, organizationId }) => (
-  <Query query={Queries.CURRENT_USER_FULL_NAME} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
+  <Query query={Queries.CANVAS_CURRENT_USER_INFO} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
     {({ data: { user } }) => (
       <Mutation mutation={Mutations.CREATE_KEY_PARTNER}>
         {createKeyPartner => (
@@ -28,7 +29,7 @@ const KeyPartnerAddModal = ({ isOpen, toggle, organizationId }) => (
               initialValues={{
                 originator: getUserOptions(user),
                 title: '',
-                color: CanvasColors.INDIGO,
+                color: getUserDefaultCanvasColor(user),
                 criticality: CRITICALITY_DEFAULT,
                 levelOfSpend: CRITICALITY_DEFAULT,
                 notes: '',

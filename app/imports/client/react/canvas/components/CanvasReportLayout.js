@@ -1,5 +1,6 @@
 import React, { createContext } from 'react';
 import { ApolloProvider, Query } from 'react-apollo';
+import { lifecycle } from 'recompose';
 
 import { client } from '../../../apollo';
 import { Query as Queries } from '../../../graphql';
@@ -14,6 +15,15 @@ import Errors from '../../../../share/errors';
 import CanvasReportPage from './CanvasReportPage';
 
 const { Provider, Consumer } = createContext({});
+
+const enhance = lifecycle({
+  componentWillMount() {
+    document.documentElement.classList.add('no-responsiveness');
+  },
+  componentWillUnmount() {
+    document.documentElement.classList.remove('no-responsiveness');
+  },
+});
 
 const CanvasReportLayout = () => (
   <ApolloProvider {...{ client }}>
@@ -55,4 +65,4 @@ const CanvasReportLayout = () => (
 
 export { Consumer };
 
-export default CanvasReportLayout;
+export default enhance(CanvasReportLayout);

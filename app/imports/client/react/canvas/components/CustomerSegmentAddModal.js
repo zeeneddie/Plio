@@ -5,7 +5,7 @@ import { getUserOptions, convertDocumentOptions } from 'plio-util';
 import { Form } from 'reactstrap';
 import { pure } from 'recompose';
 
-import { CanvasColors, CanvasTypes } from '../../../../share/constants';
+import { CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import CustomerSegmentForm from './CustomerSegmentForm';
 import { ApolloFetchPolicies, OptionNone } from '../../../../api/constants';
@@ -16,13 +16,14 @@ import {
   EntityModalBody,
   EntityModalForm,
 } from '../../components';
+import { getUserDefaultCanvasColor } from '../helpers';
 
 const CustomerSegmentAddModal = ({
   isOpen,
   toggle,
   organizationId,
 }) => (
-  <Query query={Queries.CURRENT_USER_FULL_NAME} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
+  <Query query={Queries.CANVAS_CURRENT_USER_INFO} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
     {({ data: { user } }) => (
       <Mutation mutation={Mutations.CREATE_CUSTOMER_SEGMENT}>
         {createCustomerSegment => (
@@ -32,7 +33,7 @@ const CustomerSegmentAddModal = ({
               initialValues={{
                 originator: getUserOptions(user),
                 title: '',
-                color: CanvasColors.INDIGO,
+                color: getUserDefaultCanvasColor(user),
                 matchedTo: OptionNone,
                 percentOfMarketSize: null,
                 notes: '',

@@ -68,16 +68,4 @@ describe('Customer element service', () => {
 
     expect(relation).toBe(null);
   });
-
-  test('deleteByDocumentId', async () => {
-    const _id = await RelationService.insert(insertArgs, context);
-    const { rel1: { documentId } } = await context.collections.Relations.findOne({ _id });
-    const args = { documentId };
-
-    await RelationService.deleteByDocumentId(args, context);
-
-    const relation = await context.collections.Relations.findOne({ _id });
-
-    expect(relation).toBe(null);
-  });
 });

@@ -1,8 +1,21 @@
-input UpdateGuidanceInput {
+input CreateGuidanceInput {
   documentType: String!
+  title: String
   html: String!
 }
 
+input UpdateGuidanceInput {
+  _id: String!
+  title: String
+  html: String!
+}
+
+input RemoveGuidanceInput {
+  _id: ID!
+}
+
 type Mutation {
+  createGuidance(input: CreateGuidanceInput!): Guidance
   updateGuidance(input: UpdateGuidanceInput!): Guidance
+  removeGuidance(input: RemoveGuidanceInput!): Guidance
 }

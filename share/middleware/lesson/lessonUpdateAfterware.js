@@ -4,7 +4,5 @@ export default () => async (next, root, args, context) => {
 
   await next(root, args, context);
 
-  const lesson = await LessonsLearned.findOne({ _id });
-
-  return { lesson };
+  return LessonsLearned.findOne({ _id });
 };

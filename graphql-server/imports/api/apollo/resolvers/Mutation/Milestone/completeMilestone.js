@@ -7,8 +7,8 @@ import {
   milestoneUpdateAfterware,
 } from '../../../../../share/middleware';
 
-export const resolver = async (root, args, { services: { MilestoneService }, ...context }) =>
-  MilestoneService.complete(args, context);
+export const resolver = async (root, args, context) =>
+  context.services.MilestoneService.complete(args, context);
 
 export default applyMiddleware(
   checkLoggedIn(),

@@ -39,6 +39,7 @@ export const NonconformityEditForm = ({
             onBlur={save}
             addon={sequentialId}
             maxLength={StringLimits.title.max}
+            autoFocus
           />
         )}
       </Field>

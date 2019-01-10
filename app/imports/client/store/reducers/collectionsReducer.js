@@ -32,6 +32,7 @@ import {
   UPDATE_RISK,
   REMOVE_RISK,
   SET_REVIEWS,
+  SET_PROJECTS,
 } from '../actions/types';
 import { CollectionNames } from '../../../share/constants';
 import { STORE_COLLECTION_NAMES } from '../lib/constants';
@@ -84,6 +85,7 @@ export default function reducer(state = initialState, action) {
     case SET_HELP_SECTIONS:
     case SET_USERS:
     case SET_REVIEWS:
+    case SET_PROJECTS:
       return set(Object.keys(action.payload)[0]);
     case ADD_STANDARD:
       return add(getSCName(CollectionNames.STANDARDS));

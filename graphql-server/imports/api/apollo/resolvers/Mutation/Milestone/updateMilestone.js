@@ -9,7 +9,9 @@ import {
   ensureIsCompleted,
   composeMiddleware,
   checkGoalAccess,
+  checkMultipleOrgMembership,
 } from '../../../../../share/middleware';
+import { resolveLinkedGoal } from '../../Types/util';
 
 export const resolver = async (root, args, context) =>
   context.services.MilestoneService.update(args, context);
@@ -19,16 +21,25 @@ export default applyMiddleware(
   flattenInput(),
   checkMilestoneAccess(),
   branch(
+    (root, args) => args.completedAt || args.completionComments,
+    ensureIsCompleted(),
+  ),
+  branch(
     (root, args) => args.completionTargetDate,
     composeMiddleware(
-      checkGoalAccess(({ _id }) => ({ query: { milestoneIds: _id } })),
+      checkGoalAccess(async (root, args, context) => {
+        const { _id } = await resolveLinkedGoal(root, args, context);
+        return { query: { _id } };
+      }),
       checkMilestoneCompletionTargetDate(),
     ),
   ),
   branch(
-    (root, args) => args.completedAt || args.completionComments,
-    ensureIsCompleted(),
+    (root, args) => args.notify,
+    checkMultipleOrgMembership(({ organizationId }, { notify }) => ({
+      userIds: notify,
+      organizationId,
+    })),
   ),
-  // TODO: check notify users access
   milestoneUpdateAfterware(),
 )(resolver);

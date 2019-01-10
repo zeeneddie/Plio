@@ -46,4 +46,5 @@ type UserPreferences {
   areNotificationsEnabled: Boolean
   notificationSound: String
   areEmailNotificationsEnabled: Boolean
+  defaultCanvasColor: String
 }

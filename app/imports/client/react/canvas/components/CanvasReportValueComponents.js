@@ -8,7 +8,7 @@ import CanvasReportColumnList from './CanvasReportColumnList';
 import CanvasReportValuePropositionColumnItem from './CanvasReportValuePropositionColumnItem';
 
 const CanvasReportValueComponents = ({ valuePropositions }) => !!valuePropositions.length && (
-  <CanvasReportSection>
+  <CanvasReportSection className="value-components">
     <CanvasReportSectionHeading>
       Value components
       <Pull right>

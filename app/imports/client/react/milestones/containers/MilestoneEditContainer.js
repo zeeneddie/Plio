@@ -56,6 +56,7 @@ const MilestoneEditContainer = ({
   toggle,
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
   organizationId,
+  onUnlink,
   ...props
 }) => (
   <WithState
@@ -72,7 +73,7 @@ const MilestoneEditContainer = ({
             {...{ fetchPolicy }}
             query={Queries.MILESTONE_CARD}
             variables={{ _id: milestoneId }}
-            skip={!!_milestone}
+            skip={!isOpen || !!_milestone}
             onCompleted={data => setState({
               initialValues: getInitialValues(getMilestone(data)),
               milestone: getMilestone(data),
@@ -86,10 +87,6 @@ const MilestoneEditContainer = ({
           />,
           <Mutation
             mutation={Mutations.DELETE_MILESTONE}
-            refetchQueries={() => [{
-              query: Queries.GOAL_CARD,
-              variables: { _id: milestone.linkedTo._id, organizationId },
-            }]}
             children={noop}
           />,
           /* eslint-enable react/no-children-prop */
@@ -137,7 +134,7 @@ const MilestoneEditContainer = ({
             };
 
             if (notify) {
-              Object.assign(args, { notify: getValues(notify) });
+              Object.assign(args.variables.input, { notify: getValues(notify) });
             }
 
             return updateMilestone(args).then(noop).catch((err) => {
@@ -154,12 +151,16 @@ const MilestoneEditContainer = ({
             variables: {
               input: { _id: milestone._id },
             },
-          })).then(toggle),
+          }).then(() => onUnlink(milestone._id))).then(toggle),
         })}
       </Composer>
     )}
   </WithState>
 );
+
+MilestoneEditContainer.defaultProps = {
+  onUnlink: noop,
+};
 
 MilestoneEditContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
@@ -168,6 +169,7 @@ MilestoneEditContainer.propTypes = {
   milestone: PropTypes.object,
   fetchPolicy: PropTypes.string,
   organizationId: PropTypes.string.isRequired,
+  onUnlink: PropTypes.func,
 };
 
 export default pure(MilestoneEditContainer);

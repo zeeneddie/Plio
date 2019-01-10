@@ -5,6 +5,7 @@ import { StyledMixins } from 'plio-util';
 import EntityModalNext from '../EntityModalNext/EntityModal';
 
 const StyledEntityModalNext = styled(({ bodyHeight, ...rest }) => <EntityModalNext {...rest} />)`
+  max-width: 100%;
   display: inline-block;
   width: auto !important;
   height: calc(100vh - 60px);
@@ -15,6 +16,7 @@ const StyledEntityModalNext = styled(({ bodyHeight, ...rest }) => <EntityModalNe
     ${({ bodyHeight = 'calc(100vh - 115px)' }) => `
       height: ${bodyHeight};
       width: ${bodyHeight};
+      max-width: 100%;
     `}
   }
   ${StyledMixins.media.mobile`

@@ -27,6 +27,7 @@ export const GoalEditModal = ({
   goal,
   canEditGoals,
   user,
+  ...props
 }) => (
   <EntityModalNext
     {...{
@@ -55,6 +56,7 @@ export const GoalEditModal = ({
             >
               <GoalEdit
                 {...{
+                  ...props,
                   ...goal,
                   user,
                   organizationId,

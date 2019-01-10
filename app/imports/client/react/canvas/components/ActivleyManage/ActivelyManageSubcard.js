@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { isEmpty, any } from 'ramda';
 import { CardTitle, Col, CardText, ListGroup, FormText } from 'reactstrap';
+import { pure } from 'recompose';
 
 import { Styles } from '../../../../../api/constants';
 import { DocumentTypes } from '../../../../../share/constants';
@@ -54,8 +55,10 @@ const StyledCol = styled(Col)`
     }
   }
 `;
-const StyledCardBlock = styled(CardBlock)`
-  padding: 0;
+const StyledSubcard = styled(Subcard)`
+  &.card-block {
+    padding: 0;
+  }
 `;
 
 const ActivelyManageSubcard = ({
@@ -76,115 +79,113 @@ const ActivelyManageSubcard = ({
   isEmpty,
   [goals, standards, risks, nonconformities, potentialGains, lessons],
 ) && (
-  <StyledCardBlock>
-    <Subcard>
-      <SubcardHeader>
-        <CardTitle>
-          Actively Manage
-        </CardTitle>
-        <SubcardSubtitle>
-          <FormText color="muted" tag="span">
-            Only by actively managing your canvas will you be able to translate
-            your business design into better business performance.
-          </FormText>
-        </SubcardSubtitle>
-      </SubcardHeader>
-      <SubcardBody>
-        <CardBlock>
-          <StyledCol xs={12} sm={12}>
-            <CardText>
-              To actively manage this section of your canvas,
-              you need to do at least one of the following:
-            </CardText>
-            <ListGroup>
-              <EntityManager>
-                {!goals.length && (
-                  <RelationsAdapter
-                    {...{
-                      organizationId,
-                      goals,
-                      documentId: linkedTo._id,
-                      documentType,
-                      refetchQueries,
-                    }}
-                    relatedDocumentType={DocumentTypes.GOAL}
-                    render={GoalActivelyManageItem}
-                  />
-                )}
-                {!standards.length && (
-                  <RelationsAdapter
-                    {...{
-                      organizationId,
-                      standards,
-                      documentId: linkedTo._id,
-                      documentType,
-                      refetchQueries,
-                    }}
-                    relatedDocumentType={DocumentTypes.STANDARD}
-                    render={StandardActivelyManageItem}
-                  />
-                )}
-                {!risks.length && (
-                  <RelationsAdapter
-                    {...{
-                      organizationId,
-                      risks,
-                      documentId: linkedTo._id,
-                      documentType,
-                      refetchQueries,
-                      linkedTo,
-                    }}
-                    relatedDocumentType={DocumentTypes.RISK}
-                    render={RiskActivelyManageItem}
-                    guidelines={rkGuidelines}
-                  />
-                )}
-                {!nonconformities.length && (
-                  <RelationsAdapter
-                    {...{
-                      organizationId,
-                      nonconformities,
-                      documentId: linkedTo._id,
-                      documentType,
-                      refetchQueries,
-                    }}
-                    relatedDocumentType={DocumentTypes.NON_CONFORMITY}
-                    render={NonconformityActivelyManageItem}
-                    guidelines={ncGuidelines}
-                  />
-                )}
-                {!potentialGains.length && (
-                  <RelationsAdapter
-                    {...{
-                      organizationId,
-                      potentialGains,
-                      documentId: linkedTo._id,
-                      documentType,
-                      refetchQueries,
-                    }}
-                    relatedDocumentType={DocumentTypes.POTENTIAL_GAIN}
-                    render={PotentialGainActivelyManageItem}
-                    guidelines={pgGuidelines}
-                  />
-                )}
-                <EntitiesField
-                  name="lessons"
-                  render={LessonActivelyManageItem}
-                  is={isEmpty}
+  <StyledSubcard>
+    <SubcardHeader>
+      <CardTitle>
+        Actively Manage
+      </CardTitle>
+      <SubcardSubtitle>
+        <FormText color="muted" tag="span">
+          Only by actively managing your canvas will you be able to translate
+          your business design into better business performance.
+        </FormText>
+      </SubcardSubtitle>
+    </SubcardHeader>
+    <SubcardBody>
+      <CardBlock>
+        <StyledCol xs={12} sm={12}>
+          <CardText>
+            To actively manage this section of your canvas,
+            you need to do at least one of the following:
+          </CardText>
+          <ListGroup>
+            <EntityManager>
+              {!goals.length && (
+                <RelationsAdapter
                   {...{
                     organizationId,
+                    goals,
+                    documentId: linkedTo._id,
+                    documentType,
+                    refetchQueries,
+                  }}
+                  relatedDocumentType={DocumentTypes.GOAL}
+                  render={GoalActivelyManageItem}
+                />
+              )}
+              {!standards.length && (
+                <RelationsAdapter
+                  {...{
+                    organizationId,
+                    standards,
+                    documentId: linkedTo._id,
+                    documentType,
+                    refetchQueries,
+                  }}
+                  relatedDocumentType={DocumentTypes.STANDARD}
+                  render={StandardActivelyManageItem}
+                />
+              )}
+              {!risks.length && (
+                <RelationsAdapter
+                  {...{
+                    organizationId,
+                    risks,
+                    documentId: linkedTo._id,
                     documentType,
                     refetchQueries,
                     linkedTo,
                   }}
+                  relatedDocumentType={DocumentTypes.RISK}
+                  render={RiskActivelyManageItem}
+                  guidelines={rkGuidelines}
                 />
-              </EntityManager>
-            </ListGroup>
-          </StyledCol>
-        </CardBlock>
-      </SubcardBody>
-    </Subcard>
-  </StyledCardBlock>
+              )}
+              {!nonconformities.length && (
+                <RelationsAdapter
+                  {...{
+                    organizationId,
+                    nonconformities,
+                    documentId: linkedTo._id,
+                    documentType,
+                    refetchQueries,
+                  }}
+                  relatedDocumentType={DocumentTypes.NON_CONFORMITY}
+                  render={NonconformityActivelyManageItem}
+                  guidelines={ncGuidelines}
+                />
+              )}
+              {!potentialGains.length && (
+                <RelationsAdapter
+                  {...{
+                    organizationId,
+                    potentialGains,
+                    documentId: linkedTo._id,
+                    documentType,
+                    refetchQueries,
+                  }}
+                  relatedDocumentType={DocumentTypes.POTENTIAL_GAIN}
+                  render={PotentialGainActivelyManageItem}
+                  guidelines={pgGuidelines}
+                />
+              )}
+              <EntitiesField
+                name="lessons"
+                render={LessonActivelyManageItem}
+                is={isEmpty}
+                {...{
+                  organizationId,
+                  documentType,
+                  refetchQueries,
+                  linkedTo,
+                }}
+              />
+            </EntityManager>
+          </ListGroup>
+        </StyledCol>
+      </CardBlock>
+    </SubcardBody>
+  </StyledSubcard>
 );
 
 ActivelyManageSubcard.propTypes = {
@@ -202,4 +203,4 @@ ActivelyManageSubcard.propTypes = {
   /* eslint-disable react/no-typos */
 };
 
-export default ActivelyManageSubcard;
+export default pure(ActivelyManageSubcard);

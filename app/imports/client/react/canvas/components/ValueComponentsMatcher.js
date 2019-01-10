@@ -33,64 +33,73 @@ const ValueComponentsMatcher = ({
   documentId,
   matchedTo,
   organizationId,
-}) => (
-  <Composer
-    components={[
-      /* eslint-disable react/no-children-prop */
-      <Mutation
-        mutation={Mutations.CREATE_RELATION}
-        refetchQueries={getRefetchQueries({ _id: documentId, organizationId })}
-        children={noop}
-      />,
-      <Mutation
-        mutation={Mutations.DELETE_RELATION}
-        refetchQueries={getRefetchQueries({ _id: documentId, organizationId })}
-        children={noop}
-      />,
-      /* eslint-enable react/no-children-prop */
-    ]}
-  >
-    {([createRelation, deleteRelation]) => (
-      <Fragment>
-        <Row>
-          <Col xs="6">
-            <legend>Features & benefits</legend>
-          </Col>
-          <Col xs="6">
-            <legend>Needs & wants</legend>
-          </Col>
-        </Row>
-        {benefits.concat(features).sort(bySequentialId).map(({
-          _id,
-          sequentialId,
-          title,
-          needs,
-          wants,
-          documentType,
-        }) => (
-          <Matcher
-            {...{
-              _id,
-              sequentialId,
-              title,
-              documentType,
-            }}
-            key={_id}
-            matchedItems={needs.concat(wants).sort(bySequentialId)}
-            suggestedItems={getSuggestedItems(matchedTo)}
-            onMatch={createRelation}
-            onUnmatch={deleteRelation}
-            hasMatchedDocument={!!matchedTo}
-            /* eslint-disable max-len */
-            noSuggestedItemsText="No Needs or Wants found. Please add some to the Customer segment"
-            noMatchedDocumentText="No Customer segment found. Please add one, with some Needs and Wants"
-            /* eslint-enable max-len */
-          />
-        ))}
-      </Fragment>
-    )}
-  </Composer>
-);
+}) => {
+  const valueComponents = benefits.concat(features);
+  return (
+    <Composer
+      components={[
+        /* eslint-disable react/no-children-prop */
+        <Mutation
+          mutation={Mutations.CREATE_RELATION}
+          refetchQueries={getRefetchQueries({ _id: documentId, organizationId })}
+          children={noop}
+        />,
+        <Mutation
+          mutation={Mutations.DELETE_RELATION}
+          refetchQueries={getRefetchQueries({ _id: documentId, organizationId })}
+          children={noop}
+        />,
+        /* eslint-enable react/no-children-prop */
+      ]}
+    >
+      {([createRelation, deleteRelation]) => (
+        <Fragment>
+          <Row>
+            <Col xs="6">
+              <legend>Features & benefits</legend>
+            </Col>
+            <Col xs="6">
+              <legend>Needs & wants</legend>
+            </Col>
+          </Row>
+          {!valueComponents.length && (
+            <Row>
+              <Col xs="6" className="text-muted">None</Col>
+              <Col xs="6" className="text-muted">None</Col>
+            </Row>
+          )}
+          {valueComponents.sort(bySequentialId).map(({
+            _id,
+            sequentialId,
+            title,
+            needs,
+            wants,
+            documentType,
+          }) => (
+            <Matcher
+              {...{
+                _id,
+                sequentialId,
+                title,
+                documentType,
+              }}
+              key={_id}
+              matchedItems={needs.concat(wants).sort(bySequentialId)}
+              suggestedItems={getSuggestedItems(matchedTo)}
+              onMatch={createRelation}
+              onUnmatch={deleteRelation}
+              hasMatchedDocument={!!matchedTo}
+              /* eslint-disable max-len */
+              noSuggestedItemsText="No Needs or Wants found. Please add some to the Customer segment"
+              noMatchedDocumentText="No Customer segment found. Please add one, with some Needs and Wants"
+              /* eslint-enable max-len */
+            />
+          ))}
+        </Fragment>
+      )}
+    </Composer>
+  );
+};
 
 ValueComponentsMatcher.propTypes = {
   benefits: PropTypes.arrayOf(PropTypes.object).isRequired,

@@ -11,7 +11,7 @@ import CanvasReportSectionHeading from './CanvasReportSectionHeading';
 import CanvasReportCriticalityChart from './CanvasReportCriticalityChart';
 
 const CanvasReportKeyPartnerCostStructureCharts = ({ keyPartners, costLines }) => (
-  <CanvasReportSection>
+  <CanvasReportSection className="canvas-charts">
     <CanvasReportSectionHeading>Canvas charts</CanvasReportSectionHeading>
     <hr />
     <Container fluid>

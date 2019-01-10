@@ -1,0 +1,7 @@
+mutation createGuidance($input: CreateGuidanceInput!) {
+  createGuidance(input: $input) {
+    _id
+    title
+    html
+  }
+}

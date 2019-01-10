@@ -20,10 +20,10 @@ export default applyMiddleware(
     context,
   ),
   async (next, root, args, context) => {
-    const { documentType } = args;
-    const { collections: { Guidances } } = context;
     await next(root, args, context);
+    const { _id } = args;
+    const { collections: { Guidances } } = context;
 
-    return Guidances.findOne({ documentType });
+    return Guidances.findOne({ _id });
   },
 )(resolver);

@@ -13,6 +13,7 @@ import {
 } from '../../components';
 import { NonConformitiesHelp } from '../../../../api/help-messages';
 import { validateNonConformity } from '../../../validation';
+import categorize from '../../forms/decorators/categorize';
 import NonconformityAddForm from './NonconformityAddForm';
 import NonconformityEditForm from './NonconformityEditForm';
 import { ProblemTypes } from '../../../../share/constants';
@@ -45,6 +46,7 @@ export const NonconformityEditModal = ({
   >
     <EntityModalForm
       {...{ initialValues, onSubmit }}
+      decorators={[categorize]}
       validate={validateNonConformity}
     >
       {({ handleSubmit }) => (

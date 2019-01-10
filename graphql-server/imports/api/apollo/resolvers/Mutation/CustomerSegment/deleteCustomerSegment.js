@@ -6,8 +6,8 @@ import {
   deleteAfterware,
 } from '../../../../../share/middleware';
 
-export const resolver = async (root, args, context) =>
-  context.services.CustomerSegmentService.delete(args, context);
+export const resolver = async (customerSegment, args, context) =>
+  context.services.CustomerSegmentService.delete(args, { ...context, customerSegment });
 
 export default applyMiddleware(
   checkLoggedIn(),

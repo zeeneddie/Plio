@@ -9,7 +9,7 @@ import {
   getValues,
   getIds,
 } from 'plio-util';
-import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
+import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
@@ -20,7 +20,7 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCostLine } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CostLineForm from './CostLineForm';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -35,7 +35,7 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
-  over(lenses.files, defaultTo([])),
+  over(lenses.files, getIds),
   pick([
     'originator',
     'title',
@@ -44,6 +44,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
+    'files',
   ]),
   getCostLine,
 );
@@ -133,8 +134,8 @@ const CostLineEditModal = ({
                       notes,
                       color,
                       percentOfTotalCost,
-                      notify: getValues(notify),
                       fileIds: files,
+                      notify: getValues(notify),
                       originatorId: originator.value,
                     },
                   },
@@ -148,7 +149,7 @@ const CostLineEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Cost line" />
                   <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.COST_LINE} />
+                    <ModalGuidancePanel documentType={CanvasTypes.COST_LINE} />
                     <RenderSwitch
                       require={isOpen && data.costLine && data.costLine.costLine}
                       errorWhenMissing={noop}

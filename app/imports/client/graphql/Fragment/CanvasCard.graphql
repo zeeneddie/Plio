@@ -40,6 +40,9 @@ fragment CanvasCard on CanvasEntity {
       critical
     }
   }
+  files {
+    _id
+  }
   goals {
     ...GoalCard
   }

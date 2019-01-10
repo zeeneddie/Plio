@@ -3,3 +3,12 @@ export const CanvasStyles = {
   borderColor: '#aaa',
   sectionPadding: '1rem',
 };
+
+export const CanvasReportSections = {
+  BUSINESS_MODEL_CANVAS: 'businessModelCanvas',
+  CANVAS_ITEMS: 'canvasItems',
+  CANVAS_CHARTS: 'canvasCharts',
+  CUSTOMER_INSIGHTS: 'customerInsights',
+  VALUE_COMPONENTS: 'valueComponents',
+  OPERATIONAL_ELEMENTS: 'operationalElements',
+};

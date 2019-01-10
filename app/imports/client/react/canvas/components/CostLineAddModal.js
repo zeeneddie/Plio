@@ -5,7 +5,6 @@ import { getUserOptions } from 'plio-util';
 import { Form } from 'reactstrap';
 import { pure } from 'recompose';
 
-import { CanvasColors } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import CostLineForm from './CostLineForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -16,13 +15,14 @@ import {
   EntityModalBody,
   EntityModalForm,
 } from '../../components';
+import { getUserDefaultCanvasColor } from '../helpers';
 
 const CostLineAddModal = ({
   isOpen,
   toggle,
   organizationId,
 }) => (
-  <Query query={Queries.CURRENT_USER_FULL_NAME} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
+  <Query query={Queries.CANVAS_CURRENT_USER_INFO} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
     {({ data: { user } }) => (
       <Mutation mutation={Mutations.CREATE_COST_LINE}>
         {createCostLine => (
@@ -32,7 +32,7 @@ const CostLineAddModal = ({
               initialValues={{
                 originator: getUserOptions(user),
                 title: '',
-                color: CanvasColors.INDIGO,
+                color: getUserDefaultCanvasColor(user),
                 notes: '',
                 percentOfTotalCost: null,
               }}

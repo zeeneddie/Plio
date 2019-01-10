@@ -30,6 +30,7 @@ FlowRouter.triggers.enter([
           break;
         case 'work-inbox':
         case 'hello':
+        case 'users':
           switch (route) {
             case 'standards':
             case 'risks':

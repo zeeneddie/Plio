@@ -1,0 +1,9 @@
+#import "../Fragment/LessonCard.graphql"
+
+query LessonCard($_id: ID!) {
+  lesson(_id: $_id) {
+    lesson {
+      ...LessonCard
+    }
+  }
+}

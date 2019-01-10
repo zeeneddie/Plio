@@ -8,12 +8,12 @@ type CustomerSegment implements BaseEntity, CanvasEntity {
   title: String!
   originator: User!
   color: String!
-  percentOfMarketSize: Int!
+  percentOfMarketSize: Int
   notes: String
   matchedTo: ValueProposition
   needs: [Need]
   wants: [Want]
-  fileIds: [String]
+  files: [File]
   notify: [User]
   goals: [Goal]
   standards: [Standard]

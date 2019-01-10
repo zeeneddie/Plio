@@ -1,3 +1,5 @@
+import { HomeScreenTypes } from '../share/constants';
+
 export const APP_VERSION = '0.3.40';
 
 export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
@@ -9,18 +11,28 @@ export const DocumentTitles = {
   RISK: 'Risk',
 };
 
+export const NonconformityFilterIndexes = {
+  MAGNITUDE: 1,
+  STATUS: 2,
+  DEPARTMENT: 3,
+  PROJECT: 4,
+  DELETED: 5,
+};
+
 export const NonConformityFilters = {
-  1: { title: '', name: 'magnitude', prepend: 'by' },
-  2: { title: '', name: 'status', prepend: 'by' },
-  3: { title: '', name: 'department', prepend: 'by' },
-  4: { title: '', name: 'deleted' },
+  [NonconformityFilterIndexes.MAGNITUDE]: { title: '', name: 'magnitude', prepend: 'by' },
+  [NonconformityFilterIndexes.STATUS]: { title: '', name: 'status', prepend: 'by' },
+  [NonconformityFilterIndexes.DEPARTMENT]: { title: '', name: 'department', prepend: 'by' },
+  [NonconformityFilterIndexes.PROJECT]: { title: '', name: 'project', prepend: 'by' },
+  [NonconformityFilterIndexes.DELETED]: { title: '', name: 'deleted' },
 };
 
 export const RiskFilterIndexes = {
   TYPE: 1,
   STATUS: 2,
   DEPARTMENT: 3,
-  DELETED: 4,
+  PROJECT: 4,
+  DELETED: 5,
 };
 
 export const RiskFilters = {
@@ -37,6 +49,11 @@ export const RiskFilters = {
   [RiskFilterIndexes.DEPARTMENT]: {
     title: 'Risks',
     name: 'department',
+    prepend: 'by',
+  },
+  [RiskFilterIndexes.PROJECT]: {
+    title: 'Risks',
+    name: 'project',
     prepend: 'by',
   },
   [RiskFilterIndexes.DELETED]: {
@@ -260,6 +277,7 @@ export const KeyMap = {
 };
 
 export const DEPARTMENT_UNCATEGORIZED = 'DEPARTMENTS.UNCATEGORIZED';
+export const PROJECT_UNCATEGORIZED = 'PROJECTS.UNCATEGORIZED';
 
 export const UserPresenceStatuses = {
   ONLINE: 'online',
@@ -388,6 +406,11 @@ export const RouteNames = {
   DASHBOARD: 'dashboardPage',
   CUSTOMERS: 'customers',
   HELLO: 'hello',
+};
+
+export const HomeRouteNames = {
+  [HomeScreenTypes.OPERATIONS]: RouteNames.DASHBOARD,
+  [HomeScreenTypes.CANVAS]: RouteNames.CANVAS,
 };
 
 export const OptionNone = { label: 'None', value: null };

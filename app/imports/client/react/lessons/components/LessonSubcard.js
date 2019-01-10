@@ -1,37 +1,50 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Card } from 'reactstrap';
 
-import { EntitySubcard } from '../../components';
+import { validateLesson } from '../../../validation';
+import { EntityForm, EntityCard } from '../../components';
 import LessonForm from './LessonForm';
 
 const LessonSubcard = ({
   lesson,
+  onSubmit,
+  organizationId,
+  initialValues,
   isOpen,
   toggle,
   onDelete,
-  error,
-  loading,
-  ...props
+  ...rest
 }) => (
-  <EntitySubcard
-    entity={lesson}
-    header={() => (
-      <Fragment>
-        <strong>{lesson.sequentialId}</strong>
-        {' '}
-        {lesson.title}
-      </Fragment>
-    )}
-    {...{
-      isOpen,
-      toggle,
-      loading,
-      error,
-      onDelete,
-    }}
-  >
-    <LessonForm {...props} />
-  </EntitySubcard>
+  <Fragment>
+    <Card>
+      <EntityForm
+        {...{
+          isOpen,
+          toggle,
+          onDelete,
+          onSubmit,
+          initialValues,
+        }}
+        label={(
+          <Fragment>
+            <strong>{lesson.sequentialId}</strong>
+            {' '}
+            {lesson.title}
+          </Fragment>
+        )}
+        validate={validateLesson}
+        component={EntityCard}
+      >
+        {({ handleSubmit }) => (
+          <LessonForm
+            {...{ organizationId, ...rest }}
+            save={handleSubmit}
+          />
+        )}
+      </EntityForm>
+    </Card>
+  </Fragment>
 );
 
 LessonSubcard.propTypes = {
@@ -39,8 +52,9 @@ LessonSubcard.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  error: PropTypes.string,
-  loading: PropTypes.bool,
+  initialValues: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  organizationId: PropTypes.string.isRequired,
 };
 
 export default LessonSubcard;

@@ -41,13 +41,13 @@ const HomeScreenSubcard = enhance(({ loading, organization = {} }) => (
           <CardBlock>
             <HomeScreenForm {...{ organization }} />
 
-            <legend>Implementation view defaults</legend>
+            <legend>Operations view - defaults</legend>
             <ImplementationViewDefaultsForm
               organizationId={organization._id}
               workspaceDefaults={organization[WORKSPACE_DEFAULTS]}
             />
 
-            <legend>Implementation view titles</legend>
+            <legend>Operations view - titles</legend>
             <ImplementationViewTitlesForm
               organizationId={organization._id}
               homeScreenTitles={organization[HOME_SCREEN_TITLES]}

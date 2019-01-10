@@ -8,10 +8,10 @@ type RevenueStream implements BaseEntity, CanvasEntity {
   title: String!
   originator: User!
   color: String!
-  percentOfRevenue: Int!
-  percentOfProfit: Int!
+  percentOfRevenue: Int
+  percentOfProfit: Int
   notes: String
-  fileIds: [String]
+  files: [File]
   notify: [User]
   goals: [Goal]
   standards: [Standard]

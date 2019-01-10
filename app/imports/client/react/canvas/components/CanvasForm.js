@@ -21,6 +21,7 @@ const CanvasForm = ({ organizationId, children, save }) => (
         placeholder="Title"
         maxLength={StringLimits.title.max}
         onBlur={save}
+        autoFocus
       />
     </FormField>
     <FormField>
@@ -36,6 +37,7 @@ const CanvasForm = ({ organizationId, children, save }) => (
       Color
       <ColorPickerField
         name="color"
+        id="canvas"
         onChange={save}
       />
     </FormField>

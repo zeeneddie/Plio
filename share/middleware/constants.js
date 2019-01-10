@@ -1,10 +1,12 @@
 import {
+  branch,
   checkFilesAccess,
   checkGoalsAccess,
   checkRisksAccess,
   checkStandardsAccess,
   checkNonconformitiesAccess,
   checkPotentialGainsAccess,
+  checkMultipleOrgMembership,
 } from './';
 
 export const CanvasUpdateMiddlewares = [
@@ -14,4 +16,11 @@ export const CanvasUpdateMiddlewares = [
   checkStandardsAccess(),
   checkNonconformitiesAccess(),
   checkPotentialGainsAccess(),
+  branch(
+    (root, args) => args.notify,
+    checkMultipleOrgMembership(({ organizationId }, { notify }) => ({
+      userIds: notify,
+      organizationId,
+    })),
+  ),
 ];

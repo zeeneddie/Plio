@@ -8,6 +8,7 @@ import { _ } from 'meteor/underscore';
 
 import PreloaderPage from '/imports/client/react/components/PreloaderPage';
 import { Messages } from '/imports/share/collections/messages';
+import { Files } from '/imports/share/collections/files';
 
 import {
   setMessages,
@@ -15,11 +16,12 @@ import {
   setLastMessageId,
   setResetCompleted,
   markMessagesAsRead,
-} from '/imports/client/store/actions/discussionActions';
-import { getState } from '/imports/client/store';
-import notifications from '/imports/startup/client/mixins/notifications';
-import { pickFromDiscussion, pickC, invoker, notEquals } from '/imports/api/helpers';
-import LastDiscussionMessage from '/imports/client/collections/lastDiscussionMessage';
+} from '../../../../store/actions/discussionActions';
+import { getState } from '../../../../../client/store';
+import notifications from '../../../../../startup/client/mixins/notifications';
+import { pickFromDiscussion, pickC, invoker, notEquals } from '../../../../../api/helpers';
+import LastDiscussionMessage from '../../../../../client/collections/lastDiscussionMessage';
+import { setFiles } from '../../../../store/actions/collectionsActions';
 import { MESSAGES_PER_PAGE_LIMIT } from '../../constants';
 import MessagesListWrapper from '../../components/MessagesListWrapper';
 import { composeWithTracker } from '../../../../util';
@@ -27,7 +29,7 @@ import { composeWithTracker } from '../../../../util';
 const initObservers = () => {
   const handle = LastDiscussionMessage.find().observe({
     changed({ createdBy }) {
-      const userId = getState().global.userId;
+      const { userId } = getState().global;
       if (!Object.is(createdBy, userId)) {
         // play new-message sound if the sender is not a current user
         notifications.playNewMessageSound();
@@ -80,6 +82,7 @@ const loadMessagesData = ({
     const query = { discussionId };
     const options = { sort: { createdAt: 1 }, fields: { viewedBy: 0 } };
     const messages = Messages.find(query, options).fetch();
+    const files = Files.find().fetch();
     const lastMessageId = Tracker.nonreactive(() =>
       get(LastDiscussionMessage.findOne(), 'lastMessageId'));
 
@@ -87,6 +90,7 @@ const loadMessagesData = ({
       setLoading(false),
       setLastMessageId(lastMessageId),
       setMessages(messages),
+      setFiles(files),
     ];
 
     if (resetCompleted) {

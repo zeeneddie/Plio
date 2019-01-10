@@ -9,8 +9,7 @@ import {
   TextareaField,
   SelectField,
 } from '../../components';
-import { RiskTypeSelectContainer } from '../../containers';
-import { UserSelectInput } from '../../forms/components';
+import { UserSelectInput, RiskTypeSelectInput } from '../../forms/components';
 import { StringLimits } from '../../../../share/constants';
 
 const RiskForm = ({
@@ -30,6 +29,7 @@ const RiskForm = ({
         placeholder="Risk name"
         addon={sequentialId}
         maxLength={StringLimits.title.max}
+        autoFocus
       />
     </FormField>
     <FormField>
@@ -69,10 +69,10 @@ const RiskForm = ({
     </Magnitudes>
     <FormField>
       Risk type
-      <RiskTypeSelectContainer
+      <RiskTypeSelectInput
         name="type"
+        placeholder="Risk type"
         onChange={save}
-        component={SelectField}
         {...{ organizationId }}
       />
     </FormField>

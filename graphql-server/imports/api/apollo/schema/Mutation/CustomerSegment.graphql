@@ -12,7 +12,7 @@ input CreateCustomerSegmentInput {
   title: String!
   originatorId: ID!
   color: String!
-  percentOfMarketSize: Int!
+  percentOfMarketSize: Int
   notes: String
   matchedTo: CustomerSegmentMatchedToInput
 }

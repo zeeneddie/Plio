@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { pure } from 'recompose';
+import { Field } from 'react-final-form';
 import styled from 'styled-components';
 
 import {
@@ -21,6 +22,10 @@ const NumberField = styled(InputField)`
   max-width: 75px;
 `;
 
+const SourceFieldWrapper = styled.div`
+  display: ${({ hidden }) => hidden ? 'none' : 'block'};
+`;
+
 export const StandardEditForm = ({ organizationId, standardId, save }) => (
   <Fragment>
     <FormField>
@@ -30,6 +35,7 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
         placeholder="Title"
         onBlur={save}
         maxLength={StringLimits.title.max}
+        autoFocus
       />
     </FormField>
     <FormField>
@@ -106,12 +112,18 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
       onChange={save}
       {...{ organizationId, standardId }}
     />
-    <EditSourceField
-      name="source2"
-      label="Source file 2"
-      onChange={save}
-      {...{ organizationId, standardId }}
-    />
+    <Field name="shouldRenderSource2" subscription={{ value: true }}>
+      {({ input }) => (
+        <SourceFieldWrapper hidden={!input.value}>
+          <EditSourceField
+            name="source2"
+            label="Source file 2"
+            onChange={save}
+            {...{ organizationId, standardId }}
+          />
+        </SourceFieldWrapper>
+      )}
+    </Field>
   </Fragment>
 );
 

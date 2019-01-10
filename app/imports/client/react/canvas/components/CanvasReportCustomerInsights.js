@@ -8,7 +8,7 @@ import CanvasReportColumnList from './CanvasReportColumnList';
 import CanvasReportCustomerSegmentColumnItem from './CanvasReportCustomerSegmentColumnItem';
 
 const CanvasReportCustomerInsights = ({ customerSegments }) => !!customerSegments.length && (
-  <CanvasReportSection>
+  <CanvasReportSection className="customer-insights">
     <CanvasReportSectionHeading>
       Customer insights
       <Pull right>

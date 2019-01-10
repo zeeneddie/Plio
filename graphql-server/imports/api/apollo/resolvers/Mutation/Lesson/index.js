@@ -1,15 +1,9 @@
 import createLesson from './createLesson';
 import removeLesson from './removeLesson';
-import updateLessonTitle from './updateLessonTitle';
-import updateLessonDate from './updateLessonDate';
-import updateLessonOwner from './updateLessonOwner';
-import updateLessonNotes from './updateLessonNotes';
+import updateLesson from './updateLesson';
 
 export default {
   createLesson,
   removeLesson,
-  updateLessonTitle,
-  updateLessonDate,
-  updateLessonOwner,
-  updateLessonNotes,
+  updateLesson,
 };
