@@ -116,6 +116,7 @@ const Matcher = ({
         </Wrapper>
       </Col>
       <Col xs="6">
+        {!hasMatchedItems && <div className="text-muted">None</div>}
         {matchedItems.map(matchedItem => (
           <EntityLabel
             key={matchedItem._id}

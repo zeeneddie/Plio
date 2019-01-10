@@ -4,6 +4,7 @@
 query CustomerSegmentCard($_id: ID!, $organizationId: ID!) {
   customerSegment(_id: $_id) {
     customerSegment {
+      percentOfMarketSize
       ...CanvasCard
       ...CustomerSegmentRelations
     }
