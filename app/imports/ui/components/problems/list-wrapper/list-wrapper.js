@@ -2,8 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { ProblemsStatuses } from '/imports/share/constants';
 import { lengthItems, inspire } from '/imports/api/helpers';
-import { Departments } from '/imports/share/collections/departments';
-import { NonConformities } from '../../../../share/collections';
+import { NonConformities, Projects, Departments } from '../../../../share/collections';
 import { sortByType } from '../../../../api/non-conformities/util';
 
 Template.Problems_ListWrapper.viewmodel({
@@ -13,8 +12,12 @@ Template.Problems_ListWrapper.viewmodel({
   listArgs() {
     return {
       ...inspire([
-        'statuses', 'departments', 'deleted',
-        '_getSearchQuery', '_getSearchOptions',
+        'statuses',
+        'departments',
+        'projects',
+        'deleted',
+        '_getSearchQuery',
+        '_getSearchOptions',
       ], this),
     };
   },
@@ -102,6 +105,58 @@ Template.Problems_ListWrapper.viewmodel({
     })());
 
     return departments
+      .map(mapper)
+      .concat(uncategorized)
+      .filter(lengthItems);
+  },
+  projects() {
+    const organizationId = this.organizationId();
+    const mainQuery = this._getMainQuery();
+    const collection = this.collection();
+    const searchOptions = this._getSearchOptions();
+
+    const mapper = (project) => {
+      const query = {
+        ...mainQuery,
+        projectIds: project._id,
+      };
+      let items = collection.find(query, searchOptions).fetch();
+
+      if (collection === NonConformities) {
+        items = sortByType(items);
+      }
+
+      return { ...project, items };
+    };
+
+    const projects = ((() => {
+      const query = { organizationId };
+      const options = { sort: { title: 1 } };
+
+      return Projects.find(query, options).fetch();
+    })());
+
+    const uncategorized = ((() => {
+      const filterFn = nc => !projects.find(project =>
+        nc.projectIds.includes(project._id));
+      let items = collection
+        .find(mainQuery, searchOptions)
+        .fetch()
+        .filter(filterFn);
+
+      if (collection === NonConformities) {
+        items = sortByType(items);
+      }
+
+      return {
+        organizationId,
+        items,
+        _id: 'NonConformities.projects.uncategorized',
+        title: 'Uncategorized',
+      };
+    })());
+
+    return projects
       .map(mapper)
       .concat(uncategorized)
       .filter(lengthItems);

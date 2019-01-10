@@ -2,12 +2,15 @@ import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
 import { getJoinUserToOrganizationDate } from '../../../api/organizations/utils';
-import { Risks } from '../../../share/collections/risks';
-import { Standards } from '../../../share/collections/standards';
-import { RiskTypes } from '../../../share/collections/risk-types';
+import {
+  Risks,
+  Standards,
+  RiskTypes,
+  Departments,
+  Projects,
+  NonConformities,
+} from '../../../share/collections';
 import { isOrgMember } from '../../checkers';
-import { Departments } from '../../../share/collections/departments';
-import { NonConformities } from '../../../share/collections/non-conformities';
 import Counter from '../../counter/server';
 import {
   makeOptionsFields,
@@ -86,12 +89,17 @@ Meteor.publish('risksDeps', function (organizationId) {
     { organizationId },
     makeOptionsFields(Departments.publicFields),
   );
+  const projects = Projects.find(
+    { organizationId },
+    makeOptionsFields(Projects.publicFields),
+  );
   const actions = getActionsWithLimitedFields(actionsQuery);
   const NCs = getProblemsWithLimitedFields({ organizationId }, NonConformities);
   const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
 
   return [
     departments,
+    projects,
     actions,
     NCs,
     standards,

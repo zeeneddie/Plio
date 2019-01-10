@@ -17,4 +17,5 @@ export const STORE_COLLECTION_NAMES = {
   [CollectionNames.MESSAGES]: 'messages',
   [CollectionNames.USERS]: 'users',
   [CollectionNames.REVIEWS]: 'reviews',
+  [CollectionNames.PROJECTS]: 'projects',
 };
