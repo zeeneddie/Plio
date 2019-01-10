@@ -50,7 +50,7 @@ const ActionCompletionForm = ({
               placeholderText="Completion - target date"
               onChange={save}
               render={DatePickerAdapter}
-              disabled={isCompleted}
+              disabled={isCompleted || false}
             />
           </FormField>
           {isCompleted ? (
