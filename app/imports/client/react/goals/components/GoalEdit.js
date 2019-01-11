@@ -47,7 +47,6 @@ export const GoalEdit = ({
         {...{ organizationId, refetchQueries, linkedTo }}
         name="actions"
         render={ActionsSubcard}
-        onChange={save}
         newEntityTitle="New general action"
         newEntityButtonTitle="Add general action"
         type={ActionTypes.GENERAL_ACTION}

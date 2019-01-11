@@ -32,10 +32,14 @@ const ActionAddContainer = ({
         mutation={Mutations.CREATE_ACTION}
         children={noop}
       />,
+      <Mutation
+        mutation={Mutations.LINK_DOC_TO_ACTION}
+        children={noop}
+      />,
       /* eslint-disable react/no-children-prop */
     ]}
   >
-    {([{ data: { user } }, createAction]) => renderComponent({
+    {([{ data: { user } }, createAction, linkDocToAction]) => renderComponent({
       ...props,
       organizationId,
       isOpen,
@@ -50,12 +54,19 @@ const ActionAddContainer = ({
           completionTargetDate,
           owner: { value: ownerId } = {},
           toBeCompletedBy: { value: toBeCompletedBy } = {},
-          existingAction,
+          action: existingAction = {},
         } = values;
 
         if (active === 1) {
           if (!existingAction.value) return createFormError('Action required');
-          return onLink(existingAction.value).then(toggle || noop);
+          return linkDocToAction({
+            variables: {
+              input: {
+                _id: existingAction.value,
+                ...linkedTo,
+              },
+            },
+          }).then(toggle || noop);
         }
 
         const errors = validateAction(values);
