@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Field } from 'react-final-form';
+import { renameKeys } from 'plio-util';
 
 import { getClassByStatus, getStatusName } from '../../../../api/actions/helpers';
 import { WorkflowTypes } from '../../../../share/constants';
 import ActionForm from './ActionForm';
 import ActionVerificationForm from './ActionVerificationForm';
-import { FormField, Status, CardBlock, SelectInputAdapter } from '../../components';
+import { FormField, Status, CardBlock, LinkedEntityInput } from '../../components';
 
 const ActionEditForm = ({
   status,
@@ -15,22 +15,14 @@ const ActionEditForm = ({
   onLink,
   onUnlink,
   save,
+  linkedTo,
   ...props
 }) => (
   <Fragment>
     <ActionForm {...{ save, ...props }}>
       <FormField>
         Linked to
-        <Field
-          multi
-          loadOptionsOnOpen
-          name="linkedTo"
-          placeholder="Linked to"
-          component={SelectInputAdapter}
-          loadOptions={loadLinkedDocs}
-          onChange={onLink}
-          onRemoveMultiValue={onUnlink}
-        />
+        <LinkedEntityInput disabled {...renameKeys({ title: 'value' }, linkedTo)} />
       </FormField>
       <FormField>
         Status
@@ -56,6 +48,7 @@ ActionEditForm.propTypes = {
   onLink: PropTypes.func,
   onUnlink: PropTypes.func,
   save: PropTypes.func,
+  linkedTo: PropTypes.object,
 };
 
 export default ActionEditForm;

@@ -133,7 +133,6 @@ const ActionEditContainer = ({
 
             const isCompletedDiff = find(where({ path: contains('isCompleted') }), difference);
 
-            // TODO add "verification functionality"
             if (isCompletedDiff) {
               if (isCompleted) {
                 return completeAction({

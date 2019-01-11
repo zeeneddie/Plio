@@ -30,6 +30,7 @@ const ActionAddContainer = ({
         children={noop}
       />,
       <Mutation
+        {...{ refetchQueries }}
         mutation={Mutations.CREATE_ACTION}
         children={noop}
       />,
