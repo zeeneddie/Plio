@@ -17,6 +17,7 @@ const ActionAddContainer = ({
   type,
   linkedTo,
   documentType,
+  refetchQueries,
   onLink = noop,
   ...props
 }) => (
@@ -33,6 +34,7 @@ const ActionAddContainer = ({
         children={noop}
       />,
       <Mutation
+        {...{ refetchQueries }}
         mutation={Mutations.LINK_DOC_TO_ACTION}
         children={noop}
       />,
@@ -103,6 +105,7 @@ ActionAddContainer.propTypes = {
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
   onLink: PropTypes.func,
+  refetchQueries: PropTypes.func,
 };
 
 export default pure(ActionAddContainer);

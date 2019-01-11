@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Col } from 'reactstrap';
+import { getIds } from 'plio-util';
 
 import {
   Subcard,
@@ -66,6 +67,7 @@ const ActionsSubcard = ({
                     organizationId,
                     onLink,
                     onUnlink,
+                    refetchQueries,
                   }}
                   linkedTo={{
                     documentId: linkedTo._id,
@@ -78,11 +80,11 @@ const ActionsSubcard = ({
                 >
                   <NewActionForm
                     {...{
-                      actions,
                       organizationId,
                       linkedTo,
                       ...props,
                     }}
+                    actionIds={getIds(actions)}
                   />
                 </EntityManagerCards>
                 <EntityManagerAddButton>{newEntityButtonTitle}</EntityManagerAddButton>

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { renameKeys } from 'plio-util';
+import { renameKeys, mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
   CardBlock,
@@ -11,7 +11,12 @@ import {
 } from '../../components';
 import ActionForm from './ActionForm';
 
-const NewActionForm = ({ organizationId, linkedTo, ...props }) => (
+const NewActionForm = ({
+  organizationId,
+  linkedTo,
+  actionIds,
+  ...props
+}) => (
   <NewExistingSwitchField name="active">
     <ActionForm {...{ ...props, organizationId }}>
       <FormField>
@@ -25,6 +30,8 @@ const NewActionForm = ({ organizationId, linkedTo, ...props }) => (
         <ActionSelectInput
           name="action"
           placeholder="Existing action"
+          transformOptions={({ data: { actions: { actions } } }) =>
+            mapRejectedEntitiesByIdsToOptions(actionIds, actions)}
           {...{ organizationId }}
         />
       </FormField>
@@ -35,6 +42,7 @@ const NewActionForm = ({ organizationId, linkedTo, ...props }) => (
 NewActionForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
   linkedTo: PropTypes.object,
+  actionIds: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default NewActionForm;
