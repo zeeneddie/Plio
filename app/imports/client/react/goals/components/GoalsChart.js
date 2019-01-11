@@ -5,7 +5,7 @@ import { pick } from 'ramda';
 import {
   TimelineChart,
   TimelineHorizontalLine,
-} from '../../components';
+} from '../../components/timeline';
 import { Timeline } from '../../../../api/constants';
 import ActionsMilestonesListContainer from '../containers/ActionsMilestonesListContainer';
 
