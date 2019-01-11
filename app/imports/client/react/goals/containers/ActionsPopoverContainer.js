@@ -1,11 +1,9 @@
 import connectUI from 'redux-ui';
-import { propEq, mergeDeepLeft } from 'ramda';
+import { propEq } from 'ramda';
 import { graphql } from 'react-apollo';
 import { compose, withHandlers, onlyUpdateForKeys, branch, withProps } from 'recompose';
-import { Mutation, Fragment } from '../../../graphql';
+import { Mutation, Query } from '../../../graphql';
 import { swal } from '../../../util';
-import { deleteActionFromGoalFragment } from '../../../apollo';
-import { updateActionFragment } from '../../../apollo/utils';
 import ChartActions from '../components/ChartActions';
 
 const {
@@ -57,7 +55,9 @@ const enhance = compose(
               documentId: goalId,
             },
           },
-          update: deleteActionFromGoalFragment(goalId, _id),
+          refetchQueries: [
+            Query.DASHBOARD_GOALS.name,
+          ],
         }));
       },
     }),
@@ -72,24 +72,9 @@ const enhance = compose(
             variables: {
               input: { _id },
             },
-            update: (proxy, { data: { [COMPLETE_ACTION.name]: { action } } }) => {
-              updateActionFragment(
-                mergeDeepLeft(action),
-                {
-                  id: _id,
-                  fragment: Fragment.ACTION_CARD,
-                },
-                proxy,
-              );
-              updateActionFragment(
-                mergeDeepLeft(action),
-                {
-                  id: _id,
-                  fragment: Fragment.DASHBOARD_ACTION,
-                },
-                proxy,
-              );
-            },
+            refetchQueries: [
+              Query.DASHBOARD_GOALS.name,
+            ],
           });
         },
       }),

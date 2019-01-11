@@ -150,8 +150,8 @@ type Mutation {
   updateActionPlanInPlace(input: UpdateActionPlanInPlaceInput!): ActionPayload
   updateActionCompletionTargetDate(input: UpdateActionCompletionTargetDateInput!): ActionPayload
   updateActionToBeCompletedBy(input: UpdateActionToBeCompletedByInput!): ActionPayload
-  completeAction(input: CompleteActionInput!): ActionPayload
-  undoActionCompletion(input: UndoActionCompletionInput!): ActionPayload
+  completeAction(input: CompleteActionInput!): Action
+  undoActionCompletion(input: UndoActionCompletionInput!): Action
   verifyAction(input: VerifyActionInput!): ActionPayload
   undoActionVerification(input: UndoActionVerificationInput!): ActionPayload
   updateActionCompletedAt(input: UpdateActionCompletedAtInput!): ActionPayload
@@ -162,7 +162,7 @@ type Mutation {
   updateActionVerificationComments(input: UpdateActionVerificationCommentsInput!): ActionPayload
   updateActionVerificationTargetDate(input: UpdateActionVerificationTargetDateInput!): ActionPayload
   updateActionToBeVerifiedBy(input: UpdateActionToBeVerifiedByInput!): ActionPayload
-  linkDocToAction(input: LinkDocToActionInput!): ActionPayload
+  linkDocToAction(input: LinkDocToActionInput!): Action
   unlinkDocFromAction(input: UnlinkDocFromActionInput!): ActionPayload
   updateAction(input: UpdateActionInput!): Action
 }

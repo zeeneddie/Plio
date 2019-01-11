@@ -66,6 +66,7 @@ const ActionEditContainer = ({
             children={noop}
           />,
           <Mutation
+            {...{ refetchQueries }}
             mutation={Mutations.COMPLETE_ACTION}
             children={noop}
             onCompleted={({ completeAction }) => {
@@ -77,6 +78,7 @@ const ActionEditContainer = ({
             }}
           />,
           <Mutation
+            {...{ refetchQueries }}
             mutation={Mutations.UNDO_ACTION_COMPLETION}
             children={noop}
             onCompleted={
