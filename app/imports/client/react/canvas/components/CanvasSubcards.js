@@ -6,7 +6,7 @@ import { unnest } from 'ramda';
 
 import { UserRoles, DocumentTypes } from '../../../../share/constants';
 import { NotifySubcard, EntitiesField, MoreLess, RelationsAdapter } from '../../components';
-import { GoalsSubcard } from '../../goals';
+import GoalsSubcard from '../../goals/components/GoalsSubcard';
 import StandardsSubcard from '../../standards/components/StandardsSubcard';
 import NonconformitiesSubcard from '../../noncomformities/components/NonconformitiesSubcard';
 import ActivelyManageSubcard from './ActivleyManage/ActivelyManageSubcard';
