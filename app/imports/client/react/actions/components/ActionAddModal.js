@@ -1,37 +1,50 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
+import { Form } from 'reactstrap';
 
-import { EntityModal } from '../../components';
+import {
+  EntityModalNext,
+  EntityModalHeader,
+  EntityModalBody,
+  EntityModalForm,
+} from '../../components';
 import NewActionForm from './NewActionForm';
 
 const ActionAddModal = ({
   isOpen,
   toggle,
-  loading,
+  onSubmit,
   initialValues,
-  onSave,
+  organizationId,
   ...props
 }) => (
-  <EntityModal
-    {...{
-      isOpen,
-      toggle,
-      loading,
-      initialValues,
-      onSave,
-    }}
-    title="Action"
-  >
-    <NewActionForm {...props} />
-  </EntityModal>
+  <EntityModalNext {...{ isOpen, toggle }}>
+    <EntityModalForm
+      {...{ initialValues, onSubmit }}
+      keepDirtyOnReinitialize
+    >
+      {({ handleSubmit }) => (
+        <Fragment>
+          <EntityModalHeader label="Action" />
+          <EntityModalBody>
+            <Form onSubmit={handleSubmit}>
+              {/* hidden input is needed for return key to work */}
+              <input hidden type="submit" />
+              <NewActionForm {...{ organizationId, ...props }} />
+            </Form>
+          </EntityModalBody>
+        </Fragment>
+      )}
+    </EntityModalForm>
+  </EntityModalNext>
 );
 
 ActionAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
+  organizationId: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func,
   initialValues: PropTypes.object,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default ActionAddModal;

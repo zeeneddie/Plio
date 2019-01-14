@@ -14,7 +14,7 @@ import ActionForm from './ActionForm';
 const NewActionForm = ({
   organizationId,
   linkedTo,
-  actionIds,
+  actionIds = [],
   ...props
 }) => (
   <NewExistingSwitchField name="active">

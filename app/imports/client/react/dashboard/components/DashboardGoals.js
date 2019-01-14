@@ -7,6 +7,7 @@ import {
   IconLoading,
   PlusButton,
 } from '../../components';
+import { ActionTypes, DocumentTypes } from '../../../../share/constants';
 import { WithToggle } from '../../helpers';
 import {
   GoalsChartContainer,
@@ -61,6 +62,8 @@ const DashboardGoals = ({
             <ActionModalContainer
               isOpen={isActionModalOpen}
               toggle={toggleActionModal}
+              type={ActionTypes.GENERAL_ACTION}
+              documentType={DocumentTypes.GOAL}
               {...{ organizationId, user }}
             />
           </Fragment>
