@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import createReadFields from '/imports/client/react/helpers';
+import createReadFields from '/imports/client/react/helpers/createReadFields';
 import FileProvider from '/imports/client/react/containers/providers/FileProvider';
 
 // TODO: needs testing

@@ -14,7 +14,7 @@ import GoalEditModalContainer from '../../goals/containers/GoalEditModalContaine
 import CompletedDeletedGoalsContainer from '../../goals/containers/CompletedDeletedGoalsContainer';
 import GoalAddModal from '../../goals/components/GoalAddModal';
 import { MilestoneModalContainer } from '../../milestones';
-import { ActionModalContainer } from '../../actions';
+import ActionModalContainer from '../../actions/containers/ActionModalContainer';
 
 const DashboardGoals = ({
   totalCount,
