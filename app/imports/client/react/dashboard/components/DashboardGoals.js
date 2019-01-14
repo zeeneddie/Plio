@@ -13,7 +13,7 @@ import GoalAddContainer from '../../goals/containers/GoalAddContainer';
 import GoalEditModalContainer from '../../goals/containers/GoalEditModalContainer';
 import CompletedDeletedGoalsContainer from '../../goals/containers/CompletedDeletedGoalsContainer';
 import GoalAddModal from '../../goals/components/GoalAddModal';
-import { MilestoneModalContainer } from '../../milestones';
+import MilestoneModalContainer from '../../milestones/containers/MilestoneModalContainer';
 import ActionModalContainer from '../../actions/containers/ActionModalContainer';
 
 const DashboardGoals = ({
