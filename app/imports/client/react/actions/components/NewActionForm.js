@@ -19,10 +19,12 @@ const NewActionForm = ({
 }) => (
   <NewExistingSwitchField name="active">
     <ActionForm {...{ ...props, organizationId }}>
-      <FormField>
-        Linked to
-        <LinkedEntityInput disabled {...renameKeys({ title: 'value' }, linkedTo)} />
-      </FormField>
+      {linkedTo && (
+        <FormField>
+          Linked to
+          <LinkedEntityInput disabled {...renameKeys({ title: 'value' }, linkedTo)} />
+        </FormField>
+      )}
     </ActionForm>
     <CardBlock>
       <FormField>

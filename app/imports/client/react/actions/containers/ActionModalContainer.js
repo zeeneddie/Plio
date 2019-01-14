@@ -72,7 +72,8 @@ export default enhance(({
         type,
       }}
       linkedTo={{
-        _id: goalId,
+        documentId: goalId,
+        documentType,
       }}
       render={ActionEditModal}
     />
