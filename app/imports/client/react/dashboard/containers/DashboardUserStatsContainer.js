@@ -4,7 +4,7 @@ import React from 'react';
 import { pure, withHandlers, setPropTypes, mapProps } from 'recompose';
 import { getActiveOrgUserIds } from 'plio-util';
 
-import { DashboardUserStats } from '../components';
+import DashboardUserStats from '../components/DashboardUserStats';
 
 import { composeWithTracker } from '../../../util';
 import { namedCompose } from '../../helpers';
