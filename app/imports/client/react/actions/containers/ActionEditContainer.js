@@ -31,6 +31,7 @@ const ActionEditContainer = ({
   toggle,
   onDelete,
   refetchQueries,
+  linkedToField,
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
   ...props
 }) => (
@@ -109,6 +110,7 @@ const ActionEditContainer = ({
           initialValues,
           action,
           loading,
+          linkedTo: linkedToField,
           onSubmit: async (values, form) => {
             const currentValues = getGeneralActionValuesByAction(action);
             const difference = diff(values, currentValues);
@@ -211,6 +213,7 @@ ActionEditContainer.propTypes = {
   organizationId: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
+  linkedToField: PropTypes.object,
   onDelete: PropTypes.func,
   actionId: PropTypes.string,
   action: PropTypes.object,

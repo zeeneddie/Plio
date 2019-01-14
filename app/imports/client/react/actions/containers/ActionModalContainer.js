@@ -1,43 +1,23 @@
 import React from 'react';
-import connectUI from 'redux-ui';
-import { connect } from 'react-redux';
-import { withHandlers } from 'recompose';
+import PropTypes from 'prop-types';
 
-import { Query as Queries } from '../../../graphql';
-import { namedCompose } from '../../helpers';
 import ActionAddContainer from './ActionAddContainer';
 import ActionEditContainer from './ActionEditContainer';
 import ActionAddModal from '../components/ActionAddModal';
 import ActionEditModal from '../components/ActionEditModal';
 
-const enhance = namedCompose('ActionModalContainer')(
-  connect(),
-  connectUI(),
-  withHandlers({
-    refetchQueries: ({ ui: { activeGoal } }) => () => activeGoal ? [
-      {
-        query: Queries.DASHBOARD_GOAL,
-        variables: { _id: activeGoal },
-      },
-    ] : [],
-  }),
-);
-
-export default enhance(({
-  ui: {
-    activeGoal: goalId,
-    activeAction: actionId,
-  },
+const ActionModalContainer = ({
   isOpen,
   toggle,
   organizationId,
   user,
   refetchQueries,
   type,
-  documentType,
+  linkedTo,
+  actionId,
+  actionIds,
+  linkedToField,
 }) => {
-  if (!goalId) return null;
-
   if (!actionId) {
     return (
       <ActionAddContainer
@@ -46,13 +26,11 @@ export default enhance(({
           toggle,
           organizationId,
           user,
-          goalId,
           refetchQueries,
           type,
-        }}
-        linkedTo={{
-          documentId: goalId,
-          documentType,
+          linkedTo,
+          actionIds,
+          linkedToField,
         }}
         render={ActionAddModal}
       />
@@ -67,15 +45,26 @@ export default enhance(({
         organizationId,
         user,
         actionId,
-        goalId,
         refetchQueries,
         type,
-      }}
-      linkedTo={{
-        documentId: goalId,
-        documentType,
+        linkedToField,
       }}
       render={ActionEditModal}
     />
   );
-});
+};
+
+ActionModalContainer.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
+  organizationId: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
+  type: PropTypes.string.isRequired,
+  actionIds: PropTypes.array,
+  refetchQueries: PropTypes.func,
+  linkedTo: PropTypes.object,
+  linkedToField: PropTypes.object,
+  actionId: PropTypes.string,
+};
+
+export default ActionModalContainer;

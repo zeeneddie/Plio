@@ -18,6 +18,7 @@ const ActionAddContainer = ({
   linkedTo,
   documentType,
   refetchQueries,
+  linkedToField,
   onLink = noop,
   ...props
 }) => (
@@ -47,6 +48,7 @@ const ActionAddContainer = ({
       organizationId,
       isOpen,
       toggle,
+      linkedTo: linkedToField,
       initialValues: getActionFormInitialState(user),
       onSubmit: (values) => {
         const {
@@ -103,6 +105,7 @@ ActionAddContainer.propTypes = {
   type: PropTypes.string.isRequired,
   documentType: PropTypes.string,
   linkedTo: PropTypes.object,
+  linkedToField: PropTypes.object,
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
   onLink: PropTypes.func,

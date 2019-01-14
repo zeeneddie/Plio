@@ -19,6 +19,7 @@ const ActionEditModal = ({
   onSubmit,
   error,
   organizationId,
+  linkedTo,
   action = {},
 }) => (
   <EntityModalNext
@@ -40,7 +41,7 @@ const ActionEditModal = ({
           <EntityModalHeader label="Action" />
           <EntityModalBody>
             <ActionEditForm
-              {...{ ...action, organizationId }}
+              {...{ ...action, linkedTo, organizationId }}
               save={handleSubmit}
             />
           </EntityModalBody>
@@ -60,6 +61,7 @@ ActionEditModal.propTypes = {
   initialValues: PropTypes.object,
   onDelete: PropTypes.func,
   action: PropTypes.object,
+  linkedTo: PropTypes.object,
 };
 
 export default ActionEditModal;
