@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import { noop } from 'plio-util';
+import React, { Fragment } from 'react';
 
-import { EntityModal } from '../../components';
-import GeneralActionEditFormContainer from '../containers/GeneralActionEditFormContainer';
-
-// TODO: make this component universal for all types of actions
+import { validateAction } from '../../../validation';
+import {
+  EntityModalNext,
+  EntityModalHeader,
+  EntityModalBody,
+  EntityModalForm,
+} from '../../components';
+import ActionEditForm from './ActionEditForm';
 
 const ActionEditModal = ({
   isOpen,
@@ -13,38 +16,50 @@ const ActionEditModal = ({
   loading,
   initialValues,
   onDelete,
+  onSubmit,
+  error,
+  organizationId,
   action = {},
-  ...props
 }) => (
-  <EntityModal
+  <EntityModalNext
     {...{
       isOpen,
       toggle,
       loading,
-      initialValues,
+      error,
       onDelete,
     }}
     isEditMode
-    title="Action"
-    onSave={noop}
   >
-    {({ handleMutation }) => (
-      <GeneralActionEditFormContainer
-        {...{ ...props, ...action }}
-        mutateWithState={handleMutation}
-      />
-    )}
-  </EntityModal>
+    <EntityModalForm
+      {...{ initialValues, onSubmit }}
+      validate={validateAction}
+    >
+      {({ handleSubmit }) => (
+        <Fragment>
+          <EntityModalHeader label="Action" />
+          <EntityModalBody>
+            <ActionEditForm
+              {...{ ...action, organizationId }}
+              save={handleSubmit}
+            />
+          </EntityModalBody>
+        </Fragment>
+      )}
+    </EntityModalForm>
+  </EntityModalNext>
 );
 
 ActionEditModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  organizationId: PropTypes.string.isRequired,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   loading: PropTypes.bool,
   initialValues: PropTypes.object,
   onDelete: PropTypes.func,
   action: PropTypes.object,
-  organizationId: PropTypes.string.isRequired,
 };
 
 export default ActionEditModal;

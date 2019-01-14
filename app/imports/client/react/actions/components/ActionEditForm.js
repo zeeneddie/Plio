@@ -20,10 +20,12 @@ const ActionEditForm = ({
 }) => (
   <Fragment>
     <ActionForm {...{ save, ...props }}>
-      <FormField>
-        Linked to
-        <LinkedEntityInput disabled {...renameKeys({ title: 'value' }, linkedTo)} />
-      </FormField>
+      {linkedTo && (
+        <FormField>
+          Linked to
+          <LinkedEntityInput disabled {...renameKeys({ title: 'value' }, linkedTo)} />
+        </FormField>
+      )}
       <FormField>
         Status
         <Status color={getClassByStatus(status)}>
