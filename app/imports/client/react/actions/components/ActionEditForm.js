@@ -10,10 +10,6 @@ import { FormField, Status, CardBlock, LinkedEntityInput } from '../../component
 
 const ActionEditForm = ({
   status,
-  children,
-  loadLinkedDocs,
-  onLink,
-  onUnlink,
   save,
   linkedTo,
   ...props
@@ -45,10 +41,6 @@ ActionEditForm.propTypes = {
   status: PropTypes.number,
   isCompleted: PropTypes.bool,
   workflowType: PropTypes.oneOf(Object.values(WorkflowTypes)),
-  children: PropTypes.node,
-  loadLinkedDocs: PropTypes.func,
-  onLink: PropTypes.func,
-  onUnlink: PropTypes.func,
   save: PropTypes.func,
   linkedTo: PropTypes.object,
 };
