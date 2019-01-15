@@ -20,6 +20,7 @@ const ActionEditModal = ({
   error,
   organizationId,
   linkedTo,
+  canCompleteAnyAction,
   action = {},
 }) => (
   <EntityModalNext
@@ -41,7 +42,12 @@ const ActionEditModal = ({
           <EntityModalHeader label="Action" />
           <EntityModalBody>
             <ActionEditForm
-              {...{ ...action, linkedTo, organizationId }}
+              {...{
+                ...action,
+                linkedTo,
+                organizationId,
+                canCompleteAnyAction,
+              }}
               save={handleSubmit}
             />
           </EntityModalBody>
@@ -62,6 +68,7 @@ ActionEditModal.propTypes = {
   onDelete: PropTypes.func,
   action: PropTypes.object,
   linkedTo: PropTypes.object,
+  canCompleteAnyAction: PropTypes.bool,
 };
 
 export default ActionEditModal;

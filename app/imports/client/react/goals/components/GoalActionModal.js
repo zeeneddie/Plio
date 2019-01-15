@@ -5,7 +5,7 @@ import { withHandlers } from 'recompose';
 import { find, propEq } from 'ramda';
 import { getIds } from 'plio-util';
 
-import { ActionTypes, DocumentTypes } from '../../../../share/constants';
+import { ActionTypes, DocumentTypes, UserRoles } from '../../../../share/constants';
 import { Query as Queries } from '../../../graphql';
 import { namedCompose } from '../../helpers';
 import ActionModalContainer from '../../actions/containers/ActionModalContainer';
@@ -28,10 +28,10 @@ export default enhance(({
     activeGoal: goalId,
     activeAction: actionId,
   },
+  user: { roles } = {},
   isOpen,
   toggle,
   organizationId,
-  user,
   refetchQueries,
   goals,
 }) => {
@@ -43,10 +43,10 @@ export default enhance(({
         isOpen,
         toggle,
         organizationId,
-        user,
         refetchQueries,
         actionId,
       }}
+      canCompleteAnyAction={roles && roles.includes(UserRoles.COMPLETE_ANY_ACTION)}
       actionIds={getIds(goal.actions)}
       type={ActionTypes.GENERAL_ACTION}
       linkedTo={{

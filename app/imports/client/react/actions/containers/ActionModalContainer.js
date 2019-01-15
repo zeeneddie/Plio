@@ -10,13 +10,13 @@ const ActionModalContainer = ({
   isOpen,
   toggle,
   organizationId,
-  user,
   refetchQueries,
   type,
   linkedTo,
   actionId,
   actionIds,
   linkedToField,
+  canCompleteAnyAction,
 }) => {
   if (!actionId) {
     return (
@@ -25,7 +25,6 @@ const ActionModalContainer = ({
           isOpen,
           toggle,
           organizationId,
-          user,
           refetchQueries,
           type,
           linkedTo,
@@ -43,11 +42,11 @@ const ActionModalContainer = ({
         isOpen,
         toggle,
         organizationId,
-        user,
         actionId,
         refetchQueries,
         type,
         linkedToField,
+        canCompleteAnyAction,
       }}
       render={ActionEditModal}
     />
@@ -58,13 +57,13 @@ ActionModalContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
-  user: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
   actionIds: PropTypes.array,
   refetchQueries: PropTypes.func,
   linkedTo: PropTypes.object,
   linkedToField: PropTypes.object,
   actionId: PropTypes.string,
+  canCompleteAnyAction: PropTypes.bool,
 };
 
 export default ActionModalContainer;
