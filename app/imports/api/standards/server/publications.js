@@ -36,7 +36,7 @@ import {
 import { getPublishCompositeOrganizationUsers } from '../../../server/helpers/pub-helpers';
 import { publishWithMiddleware } from '../../helpers/server';
 import { checkOrgMembership } from '../../middleware';
-import { checkLoggedIn } from '../../../share/middleware';
+import checkLoggedIn from '../../../share/middleware/Auth/checkLoggedIn';
 
 const getStandardFiles = ({
   improvementPlan: {

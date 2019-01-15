@@ -5,8 +5,8 @@ import { Files } from '../../../share/collections';
 import Errors from '../../../share/errors';
 import { isOrgMember } from '../../../share/checkers';
 import { publishCompositeWithMiddleware } from '../../helpers/server';
-import { checkLoggedIn } from '../../../share/middleware';
 import { getCollectionByDocType } from '../../../share/helpers';
+import checkLoggedIn from '../../../share/middleware/Auth/checkLoggedIn';
 
 Meteor.publish('fileById', function (fileId) {
   check(fileId, String);
