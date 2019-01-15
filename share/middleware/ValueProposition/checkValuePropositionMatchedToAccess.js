@@ -1,5 +1,5 @@
 import branch from '../helpers/branch';
-import checkDocAccess from '../document/checkDocAccess';
+import checkDocAccess from '../Document/checkDocAccess';
 
 export default () => branch(
   (root, args) => args.matchedTo,

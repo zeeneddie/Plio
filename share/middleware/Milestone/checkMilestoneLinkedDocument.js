@@ -1,4 +1,4 @@
-import checkGoalAccess from '../goal/checkGoalAccess';
+import checkGoalAccess from '../Goal/checkGoalAccess';
 import Errors from '../../errors';
 
 export default () => checkGoalAccess((root, { linkedTo }) => ({

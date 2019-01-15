@@ -1,4 +1,4 @@
-import { checkDocsAccess } from '../document';
+import checkDocsAccess from '../Document/checkDocsAccess';
 
 export default (config = () => ({})) =>
   checkDocsAccess(async (root, args, context) => ({

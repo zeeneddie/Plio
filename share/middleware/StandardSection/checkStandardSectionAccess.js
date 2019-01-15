@@ -1,5 +1,5 @@
-import { checkDocAccess } from '../document';
-import { branch } from '../helpers';
+import checkDocAccess from '../Document/checkDocAccess';
+import branch from '../helpers/branch';
 
 export default () => branch(
   (root, args) => args.sectionId,

@@ -1,5 +1,5 @@
-import { checkDocsAccess } from '../document';
-import { branch } from '../helpers';
+import checkDocsAccess from '../Document/checkDocsAccess';
+import branch from '../helpers/branch';
 
 export default () => branch(
   (root, args) => args.nonconformityIds,

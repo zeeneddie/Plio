@@ -1,4 +1,4 @@
-import { checkPercentField } from '../document';
+import checkPercentField from '../Document/checkPercentField';
 
 export default (config = () => ({})) =>
   checkPercentField(async (root, args, context) => ({
