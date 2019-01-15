@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Card } from 'reactstrap';
 
+import isVerification from '../../forms/decorators/isVerification';
 import { validateAction } from '../../../validation';
 import { getDisplayDate, getClassByStatus } from '../../../../api/actions/helpers';
 import { Pull, Icon, EntityCard, EntityForm } from '../../components';
@@ -26,6 +27,7 @@ const ActionSubcard = ({
         onSubmit,
         initialValues,
       }}
+      decorators={[isVerification]}
       label={(
         <Fragment>
           <Pull left>

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 
+import isVerification from '../../forms/decorators/isVerification';
 import { validateAction } from '../../../validation';
 import {
   EntityModalNext,
@@ -36,6 +37,7 @@ const ActionEditModal = ({
   >
     <EntityModalForm
       {...{ initialValues, onSubmit }}
+      decorators={[isVerification]}
       validate={validateAction}
     >
       {({ handleSubmit }) => (
