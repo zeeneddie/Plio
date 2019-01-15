@@ -35,7 +35,7 @@ const ActionEditForm = ({
     </ActionForm>
     {props.isCompleted && props.workflowType === WorkflowTypes.SIX_STEP && (
       <CardBlock>
-        <ActionVerificationForm {...props} />
+        <ActionVerificationForm {...{ save, ...props }} />
       </CardBlock>
     )}
   </Fragment>

@@ -17,6 +17,7 @@ const ActionModalContainer = ({
   actionIds,
   linkedToField,
   canCompleteAnyAction,
+  userId,
 }) => {
   if (!actionId) {
     return (
@@ -47,6 +48,7 @@ const ActionModalContainer = ({
         type,
         linkedToField,
         canCompleteAnyAction,
+        userId,
       }}
       render={ActionEditModal}
     />
@@ -64,6 +66,7 @@ ActionModalContainer.propTypes = {
   linkedToField: PropTypes.object,
   actionId: PropTypes.string,
   canCompleteAnyAction: PropTypes.bool,
+  userId: PropTypes.string,
 };
 
 export default ActionModalContainer;

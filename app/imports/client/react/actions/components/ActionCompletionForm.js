@@ -21,6 +21,7 @@ const ActionCompletionForm = ({
   canCompleteAnyAction,
   save,
 }) => {
+  console.log(userId);
   const toBeCompletedBy = (
     <UserSelectInput
       name="toBeCompletedBy"

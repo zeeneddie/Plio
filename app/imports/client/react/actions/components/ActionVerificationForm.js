@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Field } from 'react-final-form';
+import { Field, FormSpy } from 'react-final-form';
 import { FormGroup, Button } from 'reactstrap';
 
 import {
@@ -16,24 +16,19 @@ import {
 import { UserSelectInput } from '../../forms/components';
 
 const ActionVerificationForm = ({
+  save,
   organizationId,
   userId,
   isVerified,
   isVerifiedAsEffective,
   canCompleteAnyAction,
-  onChangeVerificationTargetDate,
-  onChangeToBeVerifiedBy,
   onVerify,
-  onUndoVerification,
-  onChangeVerificationComments,
-  onChangeVerifiedAt,
-  onChangeVerifiedBy,
 }) => {
   const toBeVerifiedBy = (
     <UserSelectInput
       name="toBeVerifiedBy"
       placeholder="To be verified by"
-      onChange={onChangeToBeVerifiedBy}
+      onChange={save}
       {...{ organizationId }}
     />
   );
@@ -41,7 +36,7 @@ const ActionVerificationForm = ({
     <UserSelectInput
       name="verifiedBy"
       placeholder="Verified by"
-      onChange={onChangeVerifiedBy}
+      onChange={save}
       {...{ organizationId }}
     />
   );
@@ -50,7 +45,7 @@ const ActionVerificationForm = ({
       name="verificationComments"
       placeholder="Enter any verification comments"
       component={TextareaAdapter}
-      onBlur={e => isVerified && onChangeVerificationComments(e)}
+      onBlur={e => isVerified && save(e)}
     />
   );
 
@@ -61,7 +56,7 @@ const ActionVerificationForm = ({
         <Field
           name="verificationTargetDate"
           placeholderText="Verification - target date"
-          onChange={onChangeVerificationTargetDate}
+          onChange={save}
           render={DatePickerAdapter}
           disabled={isVerified}
         />
@@ -72,7 +67,7 @@ const ActionVerificationForm = ({
             {isVerifiedAsEffective ? 'Verified as effective on' : 'Assessed as ineffective on'}
             <Field
               name="verifiedAt"
-              onChange={onChangeVerifiedAt}
+              onChange={save}
               placeholderText="Verified on"
               render={DatePickerAdapter}
             />
@@ -95,9 +90,20 @@ const ActionVerificationForm = ({
                     >
                       <StyledFlexFormGroup>
                         {verifiedBy}
-                        <Button color="link" onClick={onUndoVerification}>
-                          Undo
-                        </Button>
+                        <FormSpy subscription={{ submitting: true }}>
+                          {({ submitting, form }) => (
+                            <Button
+                              color="link"
+                              disabled={submitting}
+                              onClick={() => {
+                                form.change('isVerified', false);
+                                save();
+                              }}
+                            >
+                              Undo
+                            </Button>
+                          )}
+                        </FormSpy>
                       </StyledFlexFormGroup>
                       <span>
                         Verified {passed}, {left} left to undo
@@ -165,13 +171,8 @@ ActionVerificationForm.propTypes = {
   isVerified: PropTypes.bool,
   isVerifiedAsEffective: PropTypes.bool,
   canCompleteAnyAction: PropTypes.bool,
-  onChangeVerificationTargetDate: PropTypes.func,
-  onChangeToBeVerifiedBy: PropTypes.func,
   onVerify: PropTypes.func,
-  onUndoVerification: PropTypes.func,
-  onChangeVerificationComments: PropTypes.func,
-  onChangeVerifiedAt: PropTypes.func,
-  onChangeVerifiedBy: PropTypes.func,
+  save: PropTypes.func,
 };
 
 export default ActionVerificationForm;

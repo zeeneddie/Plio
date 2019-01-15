@@ -28,7 +28,7 @@ export default enhance(({
     activeGoal: goalId,
     activeAction: actionId,
   },
-  user: { roles } = {},
+  user: { roles, _id: userId } = {},
   isOpen,
   toggle,
   organizationId,
@@ -45,6 +45,7 @@ export default enhance(({
         organizationId,
         refetchQueries,
         actionId,
+        userId,
       }}
       canCompleteAnyAction={roles && roles.includes(UserRoles.COMPLETE_ANY_ACTION)}
       actionIds={getIds(goal.actions)}

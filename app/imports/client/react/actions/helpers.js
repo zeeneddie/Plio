@@ -27,6 +27,8 @@ export const getGeneralActionValuesByAction = compose(
     'verificationTargetDate',
     'linkedTo',
     'isCompleted',
+    'isVerified',
+    'isVerifiedAsEffective',
   ]),
   renameKeys({ goals: 'linkedTo' }),
   over(lenses.goals, mapEntitiesToOptions),

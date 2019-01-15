@@ -26,7 +26,7 @@ export const GoalEdit = ({
   milestones,
   lessons,
   refetchQueries,
-  user: { roles } = {},
+  user: { roles, _id: userId } = {},
   organization: { rkGuidelines } = {},
 }) => {
   const linkedTo = { _id: goalId, title, sequentialId };
@@ -44,7 +44,12 @@ export const GoalEdit = ({
         />
       </CardBlock>
       <EntitiesField
-        {...{ organizationId, refetchQueries, linkedTo }}
+        {...{
+          organizationId,
+          refetchQueries,
+          linkedTo,
+          userId,
+        }}
         name="actions"
         render={ActionsSubcard}
         newEntityTitle="New general action"

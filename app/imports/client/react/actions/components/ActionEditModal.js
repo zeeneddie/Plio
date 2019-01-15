@@ -21,6 +21,7 @@ const ActionEditModal = ({
   organizationId,
   linkedTo,
   canCompleteAnyAction,
+  userId,
   action = {},
 }) => (
   <EntityModalNext
@@ -44,6 +45,7 @@ const ActionEditModal = ({
             <ActionEditForm
               {...{
                 ...action,
+                userId,
                 linkedTo,
                 organizationId,
                 canCompleteAnyAction,
@@ -69,6 +71,7 @@ ActionEditModal.propTypes = {
   action: PropTypes.object,
   linkedTo: PropTypes.object,
   canCompleteAnyAction: PropTypes.bool,
+  userId: PropTypes.string,
 };
 
 export default ActionEditModal;
