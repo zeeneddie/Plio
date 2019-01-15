@@ -20,7 +20,6 @@ const ActionVerificationForm = ({
   organizationId,
   userId,
   canCompleteAnyAction,
-  onVerify,
 }) => (
   <Field name="isVerified" subscription={{ value: true }}>
     {({ input: { value: isVerified } = {} }) => {
@@ -130,37 +129,43 @@ const ActionVerificationForm = ({
                 is={({ value }) => value && (value === userId || canCompleteAnyAction)}
                 otherwise={toBeVerifiedBy}
               >
-                <Field name="verificationComments" subscription={{ value: true }}>
-                  {({ input: { value: verificationComments } }) => (
-                    <ToggleComplete input={toBeVerifiedBy} completeButtonContent="Verify">
-                      <FormGroup className="margin-top">
-                        {comments}
-                      </FormGroup>
-                      <Pull left>
-                        <Button
-                          color="success"
-                          onClick={() => onVerify({
-                            verificationComments,
-                            isVerifiedAsEffective: true,
-                          })}
-                        >
-                          Verified as effective
-                        </Button>
-                      </Pull>
-                      <Pull left>
-                        <Button
-                          color="danger"
-                          onClick={() => onVerify({
-                            verificationComments,
-                            isVerifiedAsEffective: false,
-                          })}
-                        >
-                          Assessed as ineffective
-                        </Button>
-                      </Pull>
-                    </ToggleComplete>
-                  )}
-                </Field>
+                <ToggleComplete input={toBeVerifiedBy} completeButtonContent="Verify">
+                  <FormGroup className="margin-top">
+                    {comments}
+                  </FormGroup>
+                  <FormSpy subscription={{ submitting: true }}>
+                    {({ submitting, form }) => (
+                      <Fragment>
+                        <Pull left>
+                          <Button
+                            color="success"
+                            disabled={submitting}
+                            onClick={() => {
+                              form.change('isVerified', true);
+                              form.change('isVerifiedAsEffective', true);
+                              save();
+                            }}
+                          >
+                            Verified as effective
+                          </Button>
+                        </Pull>
+                        <Pull left>
+                          <Button
+                            color="danger"
+                            disabled={submitting}
+                            onClick={() => {
+                              form.change('isVerified', true);
+                              form.change('isVerifiedAsEffective', false);
+                              save();
+                            }}
+                          >
+                            Assessed as ineffective
+                          </Button>
+                        </Pull>
+                      </Fragment>
+                    )}
+                  </FormSpy>
+                </ToggleComplete>
               </FieldCondition>
             </FormField>
           )}
@@ -174,7 +179,6 @@ ActionVerificationForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
   userId: PropTypes.string,
   canCompleteAnyAction: PropTypes.bool,
-  onVerify: PropTypes.func,
   save: PropTypes.func,
 };
 
