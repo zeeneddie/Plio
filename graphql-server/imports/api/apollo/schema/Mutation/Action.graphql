@@ -2,36 +2,6 @@ type ActionPayload {
   action: Action
 }
 
-input UpdateActionTitleInput {
-  _id: ID!
-  title: String!
-}
-
-input UpdateActionDescriptionInput {
-  _id: ID!
-  description: String!
-}
-
-input UpdateActionOwnerInput {
-  _id: ID!
-  ownerId: ID!
-}
-
-input UpdateActionPlanInPlaceInput {
-  _id: ID!
-  planInPlace: String!
-}
-
-input UpdateActionCompletionTargetDateInput {
-  _id: ID!
-  completionTargetDate: DateTime!
-}
-
-input UpdateActionToBeCompletedByInput {
-  _id: ID!
-  toBeCompletedBy: ID!
-}
-
 input CompleteActionInput {
   _id: ID!
   completionComments: String
@@ -49,46 +19,6 @@ input VerifyActionInput {
 
 input UndoActionVerificationInput {
   _id: ID!
-}
-
-input UpdateActionCompletedAtInput {
-  _id: ID!
-  completedAt: DateTime!
-}
-
-input UpdateActionCompletedByInput {
-  _id: ID!
-  completedBy: ID!
-}
-
-input UpdateActionCompletionCommentsInput {
-  _id: ID!
-  completionComments: String!
-}
-
-input UpdateActionVerifiedAtInput {
-  _id: ID!
-  verifiedAt: DateTime!
-}
-
-input UpdateActionVerifiedByInput {
-  _id: ID!
-  verifiedBy: ID!
-}
-
-input UpdateActionVerificationCommentsInput {
-  _id: ID!
-  verificationComments: String!
-}
-
-input UpdateActionVerificationTargetDateInput {
-  _id: ID!
-  verificationTargetDate: DateTime!
-}
-
-input UpdateActionToBeVerifiedByInput {
-  _id: ID!
-  toBeVerifiedBy: ID!
 }
 
 input DeleteActionInput {
@@ -144,24 +74,10 @@ input UpdateActionInput {
 type Mutation {
   createAction(input: CreateActionInput!): ActionPayload
   deleteAction(input: DeleteActionInput!): ActionPayload
-  updateActionTitle(input: UpdateActionTitleInput!): ActionPayload
-  updateActionDescription(input: UpdateActionDescriptionInput!): ActionPayload
-  updateActionOwner(input: UpdateActionOwnerInput!): ActionPayload
-  updateActionPlanInPlace(input: UpdateActionPlanInPlaceInput!): ActionPayload
-  updateActionCompletionTargetDate(input: UpdateActionCompletionTargetDateInput!): ActionPayload
-  updateActionToBeCompletedBy(input: UpdateActionToBeCompletedByInput!): ActionPayload
   completeAction(input: CompleteActionInput!): Action
   undoActionCompletion(input: UndoActionCompletionInput!): Action
   verifyAction(input: VerifyActionInput!): ActionPayload
   undoActionVerification(input: UndoActionVerificationInput!): ActionPayload
-  updateActionCompletedAt(input: UpdateActionCompletedAtInput!): ActionPayload
-  updateActionCompletedBy(input: UpdateActionCompletedByInput!): ActionPayload
-  updateActionCompletionComments(input: UpdateActionCompletionCommentsInput!): ActionPayload
-  updateActionVerifiedAt(input: UpdateActionVerifiedAtInput!): ActionPayload
-  updateActionVerifiedBy(input: UpdateActionVerifiedByInput!): ActionPayload
-  updateActionVerificationComments(input: UpdateActionVerificationCommentsInput!): ActionPayload
-  updateActionVerificationTargetDate(input: UpdateActionVerificationTargetDateInput!): ActionPayload
-  updateActionToBeVerifiedBy(input: UpdateActionToBeVerifiedByInput!): ActionPayload
   linkDocToAction(input: LinkDocToActionInput!): Action
   unlinkDocFromAction(input: UnlinkDocFromActionInput!): ActionPayload
   updateAction(input: UpdateActionInput!): Action

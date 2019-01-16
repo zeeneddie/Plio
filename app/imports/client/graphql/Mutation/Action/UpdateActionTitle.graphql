@@ -1,7 +1,0 @@
-mutation updateActionTitle($input: UpdateActionTitleInput!) {
-  updateActionTitle(input: $input) {
-    action {
-      title
-    }
-  }
-}
