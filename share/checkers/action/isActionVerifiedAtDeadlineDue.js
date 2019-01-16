@@ -1,6 +1,8 @@
 import { compose, view } from 'ramda';
-import { verifiedAt } from 'plio-util/dist/lenses';
+import { lenses } from 'plio-util';
 
 import isActionUndoDeadlineDue from './isActionUndoDeadlineDue';
+
+const { verifiedAt } = lenses;
 
 export default compose(isActionUndoDeadlineDue, view(verifiedAt));

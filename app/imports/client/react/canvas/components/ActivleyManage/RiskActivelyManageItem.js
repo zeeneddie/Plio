@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 import { RisksHelp } from '../../../../../api/help-messages';
 import { EntityManagerItem } from '../../../components';
-import { NewRiskCard, RiskAddContainer } from '../../../risks';
+import NewRiskCard from '../../../risks/components/NewRiskCard';
+import RiskAddContainer from '../../../risks/containers/RiskAddContainer';
 import ActivelyManageItem from './ActivelyManageItem';
 
 const RiskActivelyManageItem = ({

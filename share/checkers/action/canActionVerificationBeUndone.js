@@ -1,9 +1,10 @@
 import { allPass, flip, view, anyPass } from 'ramda';
-import { isVerified } from 'plio-util/dist/lenses';
-import { isVerifiedAtDate, eqVerifiedBy } from 'plio-util';
+import { isVerifiedAtDate, eqVerifiedBy, lenses } from 'plio-util';
 
 import isActionVerifiedAtDeadlineDue from './isActionVerifiedAtDeadlineDue';
 import canCompleteAnyAction from './canCompleteAnyAction';
+
+const { isVerified } = lenses;
 
 export default allPass([
   view(isVerified),
