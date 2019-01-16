@@ -6,12 +6,12 @@ import { bySerialNumber, byCompletionTargetDate } from 'plio-util';
 
 import { AWSDirectives, DocumentTypes, ActionTypes, UserRoles } from '../../../../share/constants';
 import { CardBlock, NotifySubcard, EntitiesField, RelationsAdapter } from '../../components';
-import MilestonesSubcard from '../../milestones/components/MilestonesSubcard';
 import GoalEditForm from './GoalEditForm';
 import FilesSubcardContainer from '../../canvas/components/FilesSubcardContainer';
 import RisksSubcard from '../../risks/components/RisksSubcard';
 import LessonsSubcard from '../../lessons/components/LessonsSubcard';
 import ActionsSubcard from '../../actions/components/ActionsSubcard';
+import MilestonesSubcard from '../../milestones/components/MilestonesSubcard';
 
 export const GoalEdit = ({
   status,
