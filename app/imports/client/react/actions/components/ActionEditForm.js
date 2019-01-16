@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { renameKeys } from 'plio-util';
 
 import { getClassByStatus, getStatusName } from '../../../../api/actions/helpers';
 import ActionForm from './ActionForm';
@@ -10,15 +9,18 @@ import { FormField, Status, LinkedEntityInput } from '../../components';
 const ActionEditForm = ({
   status,
   save,
-  linkedTo,
+  linkedTo: {
+    title: value,
+    sequentialId,
+  } = {},
   ...props
 }) => (
   <Fragment>
     <ActionForm {...{ save, ...props }}>
-      {linkedTo && (
+      {value && (
         <FormField>
           Linked to
-          <LinkedEntityInput disabled {...renameKeys({ title: 'value' }, linkedTo)} />
+          <LinkedEntityInput disabled {...{ sequentialId, value }} />
         </FormField>
       )}
       <FormField>

@@ -5,6 +5,7 @@ import { withHandlers } from 'recompose';
 import { find, propEq } from 'ramda';
 import { getIds } from 'plio-util';
 
+import { getGeneralActionValuesByAction } from '../../actions/helpers';
 import { ActionTypes, DocumentTypes, UserRoles } from '../../../../share/constants';
 import { Query as Queries } from '../../../graphql';
 import { namedCompose } from '../../helpers';
@@ -49,15 +50,14 @@ export default enhance(({
       }}
       canCompleteAnyAction={roles && roles.includes(UserRoles.COMPLETE_ANY_ACTION)}
       actionIds={getIds(goal.actions)}
+      getInitialValues={getGeneralActionValuesByAction}
       type={ActionTypes.GENERAL_ACTION}
       linkedTo={{
-        documentId: goalId,
-        documentType: DocumentTypes.GOAL,
-      }}
-      linkedToField={{
         _id: goal._id,
         title: goal.title,
         sequentialId: goal.sequentialId,
+        documentId: goalId,
+        documentType: DocumentTypes.GOAL,
       }}
     />
   );

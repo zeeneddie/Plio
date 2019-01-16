@@ -16,7 +16,6 @@ import { noop, getValue } from 'plio-util';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
-import { getGeneralActionValuesByAction } from '../helpers';
 import { Composer, WithState, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -31,14 +30,14 @@ const ActionEditContainer = ({
   toggle,
   onDelete,
   refetchQueries,
-  linkedToField,
+  getInitialValues,
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
   ...props
 }) => (
   <WithState
     initialState={{
       action: _action,
-      initialValues: unless(isNil, getGeneralActionValuesByAction, _action),
+      initialValues: unless(isNil, getInitialValues, _action),
     }}
   >
     {({ state: { initialValues, action }, setState }) => {
@@ -46,7 +45,7 @@ const ActionEditContainer = ({
         const newAction = merge(action, mutatedAction);
         setState({
           action: newAction,
-          initialValues: getGeneralActionValuesByAction(newAction),
+          initialValues: getInitialValues(newAction),
         });
       };
       return (
@@ -59,7 +58,7 @@ const ActionEditContainer = ({
               variables={{ _id: actionId }}
               skip={!isOpen || !!_action}
               onCompleted={data => setState({
-                initialValues: getGeneralActionValuesByAction(getAction(data)),
+                initialValues: getInitialValues(getAction(data)),
                 action: getAction(data),
               })}
               children={noop}
@@ -119,9 +118,8 @@ const ActionEditContainer = ({
             initialValues,
             action,
             loading,
-            linkedTo: linkedToField,
             onSubmit: async (values, form) => {
-              const currentValues = getGeneralActionValuesByAction(action);
+              const currentValues = getInitialValues(action);
               const difference = diff(values, currentValues);
 
               if (!difference) return undefined;
@@ -242,7 +240,7 @@ ActionEditContainer.propTypes = {
   organizationId: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  linkedToField: PropTypes.object,
+  getInitialValues: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
   actionId: PropTypes.string,
   action: PropTypes.object,

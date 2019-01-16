@@ -34,6 +34,7 @@ const ActionsSubcard = ({
   refetchQueries,
   canCompleteAnyAction,
   userId,
+  getInitialValues,
   ...props
 }) => (
   <Fragment>
@@ -55,6 +56,7 @@ const ActionsSubcard = ({
                     refetchQueries,
                     canCompleteAnyAction,
                     userId,
+                    getInitialValues,
                   }}
                   key={action._id}
                   itemId={action._id}
@@ -106,6 +108,7 @@ ActionsSubcard.defaultProps = {
 
 ActionsSubcard.propTypes = {
   organizationId: PropTypes.string.isRequired,
+  getInitialValues: PropTypes.func.isRequired,
   actions: PropTypes.arrayOf(PropTypes.object),
   newEntityTitle: PropTypes.string,
   newEntityButtonTitle: PropTypes.string,

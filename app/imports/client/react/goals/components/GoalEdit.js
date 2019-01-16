@@ -4,6 +4,7 @@ import { pure } from 'recompose';
 import { sort } from 'ramda';
 import { bySerialNumber, byCompletionTargetDate } from 'plio-util';
 
+import { getGeneralActionValuesByAction } from '../../actions/helpers';
 import { AWSDirectives, DocumentTypes, ActionTypes, UserRoles } from '../../../../share/constants';
 import { CardBlock, NotifySubcard, EntitiesField, RelationsAdapter } from '../../components';
 import MilestonesSubcard from '../../milestones/components/MilestonesSubcard';
@@ -57,6 +58,7 @@ export const GoalEdit = ({
         type={ActionTypes.GENERAL_ACTION}
         documentType={DocumentTypes.GOAL}
         actions={sort(bySerialNumber, actions)}
+        getInitialValues={getGeneralActionValuesByAction}
         canCompleteAnyAction={roles && roles.includes(UserRoles.COMPLETE_ANY_ACTION)}
       />
       <RelationsAdapter

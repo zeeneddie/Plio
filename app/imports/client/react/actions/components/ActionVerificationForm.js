@@ -14,6 +14,7 @@ import {
   StyledFlexFormGroup,
   CardBlock,
 } from '../../components';
+import { WorkflowTypes } from '../../../../share/constants';
 import { UserSelectInput } from '../../forms/components';
 
 const ActionVerificationForm = ({
@@ -22,7 +23,7 @@ const ActionVerificationForm = ({
   userId,
   canCompleteAnyAction,
 }) => (
-  <FieldCondition when="isVerification" is>
+  <FieldCondition when="workflowType" is={WorkflowTypes.SIX_STEP}>
     <Field name="isVerified" subscription={{ value: true }}>
       {({ input: { value: isVerified } = {} }) => {
         const toBeVerifiedBy = (
