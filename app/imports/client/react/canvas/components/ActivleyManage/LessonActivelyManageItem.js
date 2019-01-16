@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { EntityManagerItem } from '../../../components';
-import { LessonForm, LessonAddContainer } from '../../../lessons';
+import LessonForm from '../../../lessons/components/LessonForm';
+import LessonAddContainer from '../../../lessons/containers/LessonAddContainer';
 import ActivelyManageItem from './ActivelyManageItem';
 
 const LessonActivelyManageItem = ({
