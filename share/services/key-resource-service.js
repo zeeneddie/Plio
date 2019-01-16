@@ -1,3 +1,5 @@
+import { cleanupCanvas } from './util/cleanup';
+
 export default {
   async insert({
     organizationId,
@@ -49,7 +51,12 @@ export default {
 
     return KeyResources.update(query, modifier);
   },
-  async delete({ _id }, { collections: { KeyResources } }) {
-    return KeyResources.remove({ _id });
+  async delete({ _id }, context) {
+    const { keyResource, collections: { KeyResources } } = context;
+    const [res] = await Promise.all([
+      KeyResources.remove({ _id }),
+      cleanupCanvas(keyResource, context),
+    ]);
+    return res;
   },
 };

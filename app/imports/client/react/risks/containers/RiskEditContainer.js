@@ -22,8 +22,8 @@ import {
   lenses,
   noop,
   mapEntitiesToOptions,
-  getId,
   getValues,
+  getEntityOptions,
 } from 'plio-util';
 import diff from 'deep-diff';
 
@@ -49,12 +49,12 @@ const getInitialValues = compose(
     'departments',
     'projects',
   ]),
-  over(lenses.projects, mapEntitiesToOptions),
-  over(lenses.departments, mapEntitiesToOptions),
+  over(lenses.projects, compose(mapEntitiesToOptions, defaultTo([]))),
+  over(lenses.departments, compose(mapEntitiesToOptions, defaultTo([]))),
   over(lenses.owner, getUserOptions),
   over(lenses.originator, getUserOptions),
-  over(lenses.type, getId),
-  over(lenses.standards, mapEntitiesToOptions),
+  over(lenses.type, getEntityOptions),
+  over(lenses.standards, compose(mapEntitiesToOptions, defaultTo([]))),
   over(lenses.analysis, compose(
     pick([
       'targetDate',

@@ -9,11 +9,13 @@ const RevenueStreamSchema = new SimpleSchema([
       type: Number,
       min: 0,
       max: 100,
+      optional: true,
     },
     percentOfProfit: {
       type: Number,
       min: 0,
       max: 100,
+      optional: true,
     },
   },
 ]);

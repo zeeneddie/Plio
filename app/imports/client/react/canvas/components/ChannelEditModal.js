@@ -9,7 +9,7 @@ import {
   getValues,
   getIds,
 } from 'plio-util';
-import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
+import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
@@ -20,7 +20,7 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateChannel } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -35,7 +35,7 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
-  over(lenses.files, defaultTo([])),
+  over(lenses.files, getIds),
   pick([
     'originator',
     'title',
@@ -43,6 +43,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
+    'files',
   ]),
   getChannel,
 );
@@ -130,8 +131,8 @@ const ChannelEditModal = ({
                       title,
                       notes,
                       color,
-                      notify: getValues(notify),
                       fileIds: files,
+                      notify: getValues(notify),
                       originatorId: originator.value,
                     },
                   },
@@ -145,7 +146,7 @@ const ChannelEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Channel" />
                   <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.CHANNEL} />
+                    <ModalGuidancePanel documentType={CanvasTypes.CHANNEL} />
                     <RenderSwitch
                       require={isOpen && data.channel && data.channel.channel}
                       errorWhenMissing={noop}

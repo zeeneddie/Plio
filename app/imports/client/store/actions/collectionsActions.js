@@ -34,6 +34,7 @@ import {
   SET_USERS,
   SET_USERS_BY_ORG_IDS,
   SET_REVIEWS,
+  SET_PROJECTS,
 } from './types';
 import { createAction } from './helpers';
 
@@ -146,6 +147,13 @@ export function setReviews(reviews) {
   return {
     type: SET_REVIEWS,
     payload: { reviews },
+  };
+}
+
+export function setProjects(projects) {
+  return {
+    type: SET_PROJECTS,
+    payload: { projects },
   };
 }
 

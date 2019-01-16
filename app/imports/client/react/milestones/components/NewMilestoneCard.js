@@ -13,6 +13,7 @@ const NewMilestoneCard = props => (
   <EntityManagerForms>
     <EntityManagerCards
       {...props}
+      keepDirtyOnReinitialize
       label="New milestone"
       component={EntityManagerForm}
       render={EntityManagerCard}

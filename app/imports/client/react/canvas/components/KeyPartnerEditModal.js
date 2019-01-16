@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { compose, pick, over, pathOr, repeat, path, defaultTo } from 'ramda';
+import { compose, pick, over, pathOr, repeat, path } from 'ramda';
 import {
   getUserOptions,
   lenses,
@@ -27,7 +27,7 @@ import {
 } from '../../components';
 import { WithState, Composer } from '../../helpers';
 import KeyPartnerForm from './KeyPartnerForm';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import CanvasSubcards from './CanvasSubcards';
 
 const keyPartnerPath = repeat('keyPartner', 2);
@@ -36,7 +36,7 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
-  over(lenses.files, defaultTo([])),
+  over(lenses.files, getIds),
   pick([
     'originator',
     'title',
@@ -46,6 +46,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
+    'files',
   ]),
   pathOr({}, keyPartnerPath),
 );
@@ -130,7 +131,7 @@ const KeyPartnerEditModal = ({
                     levelOfSpend,
                     notes = '', // final form sends undefined value instead of an empty string
                     notify = [],
-                    files,
+                    files = [],
                   } = values;
 
                   return updateKeyPartner({
@@ -142,8 +143,8 @@ const KeyPartnerEditModal = ({
                         color,
                         criticality,
                         levelOfSpend,
-                        notify: getValues(notify),
                         fileIds: files,
+                        notify: getValues(notify),
                         originatorId: originator.value,
                       },
                     },
@@ -157,7 +158,7 @@ const KeyPartnerEditModal = ({
                   <Fragment>
                     <EntityModalHeader label="Key partner" />
                     <EntityModalBody>
-                      <CanvasModalGuidance documentType={CanvasTypes.KEY_PARTNER} />
+                      <ModalGuidancePanel documentType={CanvasTypes.KEY_PARTNER} />
                       <RenderSwitch
                         require={isOpen && keyPartner}
                         errorWhenMissing={noop}

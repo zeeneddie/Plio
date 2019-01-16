@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { StringLimits } from '/imports/share/constants.js';
+import { StringLimits } from '../../../../../share/constants';
 
 const defaults = {
   label: 'Title',
@@ -8,6 +8,7 @@ const defaults = {
   placeholder: 'Title',
   className: 'form-control',
   withFocusCheck: true,
+  autoFocus: true,
   maxLength: StringLimits.title.max,
 };
 
@@ -21,6 +22,7 @@ Template.TitleInput.viewmodel({
       placeholder = defaults.placeholder,
       withFocusCheck = defaults.withFocusCheck,
       maxLength = defaults.maxLength,
+      autoFocus = defaults.autoFocus,
     } = this.data();
 
     const { onFocusOut = () => {} } = this.templateInstance.data;
@@ -30,6 +32,7 @@ Template.TitleInput.viewmodel({
       className,
       placeholder,
       maxLength,
+      autoFocus,
       onFocusOut: (e) => {
         const targetValue = e.target.value;
 

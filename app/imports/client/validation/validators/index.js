@@ -13,5 +13,6 @@ export { default as validateMilestone } from './validateMilestone';
 export { default as validateRisk } from './validateRisk';
 export { default as validateLesson } from './validateLesson';
 export { default as validateStandard } from './validateStandard';
+export { default as validateEditingStandard } from './validateEditingStandard';
 export { default as validateNonConformity } from './validateNonConformity';
 export { default as validateAction } from './validateAction';

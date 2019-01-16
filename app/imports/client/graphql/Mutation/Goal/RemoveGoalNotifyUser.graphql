@@ -1,5 +1,0 @@
-mutation removeGoalNotifyUser($input: RemoveGoalNotifyUserInput!) {
-  removeGoalNotifyUser(input: $input) {
-    _id
-  }
-}

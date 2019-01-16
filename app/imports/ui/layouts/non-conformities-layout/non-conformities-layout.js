@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers.js';
+import { NonconformityFilterIndexes } from '../../../api/constants';
 
 Template.NC_Layout.viewmodel({
   mixin: ['organization', 'nonconformity'],
@@ -8,7 +9,7 @@ Template.NC_Layout.viewmodel({
   autorun: [
     function () {
       const orgSerialNumber = this.organizationSerialNumber();
-      const isDeleted = this.isActiveNCFilter(4);
+      const isDeleted = this.isActiveNCFilter(NonconformityFilterIndexes.DELETED);
       const _subHandlers = [
         DocumentLayoutSubs.subscribe('nonConformitiesLayout', orgSerialNumber, isDeleted),
       ];

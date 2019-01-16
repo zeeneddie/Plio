@@ -4,8 +4,9 @@ import {
   loadOrganizationById,
   lenses,
 } from 'plio-util';
-import { view, head } from 'ramda';
+import { view } from 'ramda';
 import { getMilestoneStatus } from '../../../../../share/helpers';
+import { resolveLinkedGoal } from '../util';
 
 const {
   createdBy,
@@ -27,7 +28,6 @@ export default {
       const { timezone } = await byId.load(view(organizationId, milestone));
       return getMilestoneStatus(timezone, milestone);
     },
-    goal: async ({ _id }, args, { loaders: { Goal: { byQuery } } }) =>
-      byQuery.load({ milestoneIds: _id }).then(head),
+    goal: resolveLinkedGoal,
   },
 };

@@ -67,11 +67,13 @@ Modal.propTypes = {
   backdrop: PropTypes.string,
   keyboard: PropTypes.bool,
   onClosed: PropTypes.func,
+  autoFocus: PropTypes.bool,
 };
 
 Modal.defaultProps = {
   backdrop: 'static',
   keyboard: false,
+  autoFocus: false,
 };
 
 export default Modal;

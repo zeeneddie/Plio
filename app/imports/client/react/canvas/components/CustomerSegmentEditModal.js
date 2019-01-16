@@ -23,7 +23,7 @@ import { validateCustomerSegment } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CustomerSegmentForm from './CustomerSegmentForm';
 import CustomerInsightsSubcard from './CustomerInsightsSubcard';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -39,7 +39,7 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
-  over(lenses.files, defaultTo([])),
+  over(lenses.files, getIds),
   pick([
     'originator',
     'title',
@@ -49,6 +49,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
+    'files',
   ]),
   getCustomerSegment,
 );
@@ -168,8 +169,8 @@ const CustomerSegmentEditModal = ({
                       notes,
                       color,
                       percentOfMarketSize,
-                      notify: getValues(notify),
                       fileIds: files,
+                      notify: getValues(notify),
                       originatorId: originator.value,
                     },
                   },
@@ -183,7 +184,7 @@ const CustomerSegmentEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Customer segment" />
                   <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.CUSTOMER_SEGMENT} />
+                    <ModalGuidancePanel documentType={CanvasTypes.CUSTOMER_SEGMENT} />
                     <RenderSwitch
                       require={isOpen &&
                         data.customerSegment &&
@@ -199,14 +200,6 @@ const CustomerSegmentEditModal = ({
                             matchedTo={customerSegment.matchedTo}
                             save={handleSubmit}
                           />
-                          <CustomerInsightsSubcard
-                            {...{ organizationId }}
-                            needs={customerSegment.needs || []}
-                            wants={customerSegment.wants || []}
-                            documentId={customerSegment._id}
-                            matchedTo={customerSegment.matchedTo}
-                            documentType={CanvasTypes.CUSTOMER_SEGMENT}
-                          />
                           <CanvasSubcards
                             {...{ organizationId, refetchQueries }}
                             section={customerSegment}
@@ -214,7 +207,16 @@ const CustomerSegmentEditModal = ({
                             documentType={CanvasTypes.CUSTOMER_SEGMENT}
                             slingshotDirective={AWSDirectives.CUSTOMER_SEGMENT_FILES}
                             user={data && data.user}
-                          />
+                          >
+                            <CustomerInsightsSubcard
+                              {...{ organizationId }}
+                              needs={customerSegment.needs || []}
+                              wants={customerSegment.wants || []}
+                              documentId={customerSegment._id}
+                              matchedTo={customerSegment.matchedTo}
+                              documentType={CanvasTypes.CUSTOMER_SEGMENT}
+                            />
+                          </CanvasSubcards>
                         </Fragment>
                       )}
                     </RenderSwitch>

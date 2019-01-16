@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
+import { compose, pick, over, pathOr, repeat } from 'ramda';
 import {
   getUserOptions,
   lenses,
@@ -20,7 +20,7 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateCustomerRelationship } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import CanvasForm from './CanvasForm';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -35,7 +35,7 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
-  over(lenses.files, defaultTo([])),
+  over(lenses.files, getIds),
   pick([
     'originator',
     'title',
@@ -43,6 +43,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
+    'files',
   ]),
   getCustomerRelationship,
 );
@@ -130,8 +131,8 @@ const CustomerRelationshipEditModal = ({
                       title,
                       notes,
                       color,
-                      notify: getValues(notify),
                       fileIds: files,
+                      notify: getValues(notify),
                       originatorId: originator.value,
                     },
                   },
@@ -145,7 +146,7 @@ const CustomerRelationshipEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Customer relationship" />
                   <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.CUSTOMER_RELATIONSHIP} />
+                    <ModalGuidancePanel documentType={CanvasTypes.CUSTOMER_RELATIONSHIP} />
                     <RenderSwitch
                       require={isOpen &&
                         data.customerRelationship &&

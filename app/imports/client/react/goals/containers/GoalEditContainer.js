@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
+import { pure, withHandlers } from 'recompose';
 import {
   pick,
   compose,
@@ -23,7 +23,6 @@ import {
   getValue,
   getValues,
   mapUsersToOptions,
-  getIds,
 } from 'plio-util';
 import moment from 'moment';
 import diff from 'deep-diff';
@@ -32,7 +31,7 @@ import { Composer, WithState, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { onDelete as onDeleteGoal } from '../handlers';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { UserRoles } from '../../../../share/constants';
+import { UserRoles, DocumentTypes } from '../../../../share/constants';
 
 const getGoal = pathOr({}, repeat('goal', 2));
 const getInitialValues = compose(
@@ -42,7 +41,6 @@ const getInitialValues = compose(
   over(lenses.owner, getUserOptions),
   over(lenses.completedBy, getUserOptions),
   over(lenses.notify, compose(mapUsersToOptions, defaultTo([]))),
-  over(lenses.risks, getIds),
   over(lenses.files, defaultTo([])),
   pick([
     'title',
@@ -58,7 +56,6 @@ const getInitialValues = compose(
     'completedBy',
     'isCompleted',
     'notify',
-    'risks',
   ]),
 );
 const getRefetchQueries = () => [
@@ -66,6 +63,43 @@ const getRefetchQueries = () => [
   Queries.COMPLETED_DELETED_GOALS.name,
   Queries.GOAL_LIST.name,
 ];
+
+const enhance = compose(
+  withHandlers({
+    refetchQueries: ({ organizationId, goalId, goal }) => ({ data }) => {
+      const queries = [
+        {
+          query: Queries.GOAL_CARD,
+          variables: {
+            _id: goal && goal._id || goalId,
+            organizationId,
+          },
+        },
+      ];
+
+      if (data) {
+        if (data.createRelation) {
+          // Display milestone on dashboard goals chart
+          // Milestones subcard is updated only when refetching this exact query
+          // I have no idea why
+          if (data.createRelation.rel2.documentType === DocumentTypes.MILESTONE) {
+            queries.push(Queries.DASHBOARD_GOALS.name);
+          }
+        }
+
+        if (data.deleteRelation) {
+          // Remove milestone from dashboard goals chart
+          if (data.deleteRelation.rel2.documentType === DocumentTypes.MILESTONE) {
+            queries.push(Queries.DASHBOARD_GOALS.name);
+          }
+        }
+      }
+
+      return queries;
+    },
+  }),
+  pure,
+);
 
 const GoalEditContainer = ({
   goal: _goal = null,
@@ -75,6 +109,7 @@ const GoalEditContainer = ({
   toggle,
   onDelete,
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
+  refetchQueries,
   ...props
 }) => (
   <WithState
@@ -150,6 +185,7 @@ const GoalEditContainer = ({
             goal,
             canEditGoals,
             loading,
+            refetchQueries,
             onSubmit: async (values, form) => {
               const currentValues = getInitialValues(goal);
               const difference = diff(values, currentValues);
@@ -171,7 +207,6 @@ const GoalEditContainer = ({
                 isCompleted,
                 files,
                 notify,
-                risks: riskIds,
               } = values;
 
               const isCompletedDiff = find(where({ path: contains('isCompleted') }), difference);
@@ -217,13 +252,12 @@ const GoalEditContainer = ({
                     completedAt,
                     completedBy: getValue(completedBy),
                     fileIds: files,
-                    riskIds,
                   },
                 },
               };
 
               if (notify) {
-                Object.assign(args, { notify: getValues(notify) });
+                Object.assign(args.variables.input, { notify: getValues(notify) });
               }
 
               return updateGoal(args).then(noop).catch((err) => {
@@ -254,6 +288,7 @@ GoalEditContainer.propTypes = {
   goal: PropTypes.object,
   fetchPolicy: PropTypes.string,
   canEditGoals: PropTypes.bool,
+  refetchQueries: PropTypes.func,
 };
 
-export default pure(GoalEditContainer);
+export default enhance(GoalEditContainer);

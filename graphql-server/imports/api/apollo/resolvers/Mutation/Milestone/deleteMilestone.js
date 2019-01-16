@@ -5,8 +5,8 @@ import {
   flattenInput,
 } from '../../../../../share/middleware';
 
-export const resolver = async (root, args, { services: { MilestoneService } }) =>
-  MilestoneService.remove(args);
+export const resolver = async (milestone, args, context) =>
+  context.services.MilestoneService.remove(args, { ...context, milestone });
 
 export default applyMiddleware(
   flattenInput(),

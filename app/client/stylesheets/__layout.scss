@@ -18,6 +18,13 @@ body {
 	@include flex-direction(column);
 }
 
+.no-responsiveness {
+  @media (max-width: 768px) {
+    overflow: auto;
+    min-width: 850px;
+  }
+}
+
 @media print {
   #app,
   html,

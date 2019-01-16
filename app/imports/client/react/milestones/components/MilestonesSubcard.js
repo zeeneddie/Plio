@@ -18,7 +18,13 @@ import NewMilestoneCard from './NewMilestoneCard';
 import MilestoneEditContainer from '../containers/MilestoneEditContainer';
 import MilestoneAddContainer from '../containers/MilestoneAddContainer';
 
-const MilestonesSubcard = ({ milestones, goalId, organizationId }) => (
+const MilestonesSubcard = ({
+  milestones,
+  goalId,
+  organizationId,
+  onLink,
+  onUnlink,
+}) => (
   <Subcard>
     <SubcardHeader>
       <Pull left>
@@ -38,7 +44,7 @@ const MilestonesSubcard = ({ milestones, goalId, organizationId }) => (
           <EntityManager>
             {milestones.map(milestone => (
               <EntityManagerItem
-                {...{ organizationId }}
+                {...{ organizationId, onUnlink }}
                 key={milestone._id}
                 itemId={milestone._id}
                 milestone={milestone}
@@ -47,7 +53,11 @@ const MilestonesSubcard = ({ milestones, goalId, organizationId }) => (
               />
             ))}
             <MilestoneAddContainer
-              {...{ goalId, organizationId }}
+              {...{
+                goalId,
+                organizationId,
+                onLink,
+              }}
               component={NewMilestoneCard}
             />
           </EntityManager>
@@ -61,6 +71,8 @@ MilestonesSubcard.propTypes = {
   milestones: PropTypes.arrayOf(PropTypes.object).isRequired,
   goalId: PropTypes.string.isRequired,
   organizationId: PropTypes.string.isRequired,
+  onLink: PropTypes.func,
+  onUnlink: PropTypes.func,
 };
 
 export default pure(MilestonesSubcard);

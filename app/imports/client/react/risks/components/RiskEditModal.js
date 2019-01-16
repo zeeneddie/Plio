@@ -13,6 +13,7 @@ import {
 } from '../../components';
 import { RisksHelp } from '../../../../api/help-messages';
 import { validateRisk } from '../../../validation';
+import categorize from '../../forms/decorators/categorize';
 import RiskForm from './RiskForm';
 import RiskEditForm from './RiskEditForm';
 
@@ -42,6 +43,7 @@ export const RiskEditModal = ({
   >
     <EntityModalForm
       {...{ initialValues, onSubmit }}
+      decorators={[categorize]}
       validate={validateRisk}
     >
       {({ handleSubmit }) => (

@@ -9,7 +9,7 @@ import {
   getValues,
   getIds,
 } from 'plio-util';
-import { compose, pick, over, pathOr, repeat, defaultTo } from 'ramda';
+import { compose, pick, over, pathOr, repeat } from 'ramda';
 import { pure, withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
@@ -20,7 +20,7 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { validateRevenueStream } from '../../../validation';
 import { WithState, Composer } from '../../helpers';
 import RevenueStreamForm from './RevenueStreamForm';
-import CanvasModalGuidance from './CanvasModalGuidance';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import {
   EntityModalNext,
   EntityModalHeader,
@@ -35,7 +35,7 @@ const getInitialValues = compose(
   over(lenses.originator, getUserOptions),
   over(lenses.notify, mapUsersToOptions),
   over(lenses.lessons, getIds),
-  over(lenses.files, defaultTo([])),
+  over(lenses.files, getIds),
   pick([
     'originator',
     'title',
@@ -45,6 +45,7 @@ const getInitialValues = compose(
     'notes',
     'notify',
     'lessons',
+    'files',
   ]),
   getRevenueStream,
 );
@@ -136,8 +137,8 @@ const RevenueStreamEditModal = ({
                       color,
                       percentOfRevenue,
                       percentOfProfit,
-                      notify: getValues(notify),
                       fileIds: files,
+                      notify: getValues(notify),
                       originatorId: originator.value,
                     },
                   },
@@ -151,7 +152,7 @@ const RevenueStreamEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Revenue stream" />
                   <EntityModalBody>
-                    <CanvasModalGuidance documentType={CanvasTypes.REVENUE_STREAM} />
+                    <ModalGuidancePanel documentType={CanvasTypes.REVENUE_STREAM} />
                     <RenderSwitch
                       require={isOpen && data.revenueStream && data.revenueStream.revenueStream}
                       errorWhenMissing={noop}

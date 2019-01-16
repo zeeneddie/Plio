@@ -9,6 +9,7 @@ import {
   lengthItems, flattenMapItems,
 } from '/imports/api/helpers';
 import { sortByType } from '../../../../api/non-conformities/util';
+import { NonconformityFilterIndexes } from '../../../../api/constants';
 
 Template.NC_List.viewmodel({
   mixin: [
@@ -60,19 +61,23 @@ Template.NC_List.viewmodel({
     const resulstsFromItems = results(flattenMapItems);
 
     switch (this.activeNCFilterId()) {
-      case 1: {
+      case NonconformityFilterIndexes.MAGNITUDE: {
         const magnitude = this.magnitude();
         return resulstsFromItems(magnitude);
       }
-      case 2: {
+      case NonconformityFilterIndexes.STATUS: {
         const statuses = this.statuses();
         return resulstsFromItems(statuses);
       }
-      case 3: {
+      case NonconformityFilterIndexes.DEPARTMENT: {
         const departments = this.departments();
         return resulstsFromItems(departments);
       }
-      case 4: {
+      case NonconformityFilterIndexes.PROJECT: {
+        const projects = this.projects();
+        return resulstsFromItems(projects);
+      }
+      case NonconformityFilterIndexes.DELETED: {
         const deleted = this.deleted();
         return results(identity, deleted);
       }
@@ -106,7 +111,7 @@ Template.NC_List.viewmodel({
     return total ? this.getCurrencySymbol(currency) + this.round(total) : '';
   },
   onSearchInputValue() {
-    return value => extractIds(this._findNCForFilter().array);
+    return () => extractIds(this._findNCForFilter().array);
   },
   onAfterSearch() {
     return (searchText, searchResult) => {
@@ -117,7 +122,8 @@ Template.NC_List.viewmodel({
   },
   _getTotalUnreadMessages(ncs) {
     const NCIds = extractIds(ncs);
-    const totalUnreadMessages = NCIds.reduce((prev, cur) => prev + this.counter.get(`nc-messages-not-viewed-count-${cur}`), 0);
+    const totalUnreadMessages = NCIds.reduce((prev, cur) =>
+      prev + this.counter.get(`nc-messages-not-viewed-count-${cur}`), 0);
 
     return totalUnreadMessages;
   },

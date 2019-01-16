@@ -9,12 +9,13 @@ const CanvasSection = styled.div`
   border: 2px solid ${CanvasStyles.borderColor};
   transition: background-color 0.4s ease, border-color 0.4s ease;
   margin: -1px;
+  background: #fff;
 
   ${StyledMixins.media.notMobile`
     display: flex;
     flex: 1;
     flex-direction: column;
-    min-height: ${CanvasStyles.itemMinHeight}
+    min-height: ${CanvasStyles.itemMinHeight}px;
   `}
 
   ${StyledMixins.media.tabletPortrait`
@@ -26,6 +27,10 @@ const CanvasSection = styled.div`
   `}
 
   ${is('empty')`
+    ul {
+      display: none;
+    }
+    
     &:hover {
       cursor: pointer;
       background: #f5f5f5;

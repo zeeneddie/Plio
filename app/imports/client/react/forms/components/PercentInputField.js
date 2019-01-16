@@ -18,6 +18,7 @@ const PercentInputField = props => (
       min={0}
       max={100}
       component={InputAdapter}
+      parse={parseInt}
     />
     <InputGroupAddon addonType="append">%</InputGroupAddon>
   </StyledInputGroup>

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { StyledMixins } from 'plio-util';
 
 import { Styles } from '../../../../api/constants';
-import { Button, Pull, Icon } from '../../components';
+import { Icon } from '../../components';
 import Canvas from './Canvas';
 import CanvasRow from './CanvasRow';
 import CanvasCol from './CanvasCol';
@@ -22,6 +22,7 @@ import ChannelsHelp from './ChannelsHelp';
 import CustomerSegmentsHelp from './CustomerSegmentsHelp';
 import CostStructureHelp from './CostStructureHelp';
 import RevenueStreamsHelp from './RevenueStreamsHelp';
+import CanvasReportPrintModal from './CanvasReportPrintModal';
 
 const StyledReportItemList = styled(CanvasReportItemList)`
   padding: 0 0.75rem;
@@ -32,17 +33,15 @@ const StyledReportItemList = styled(CanvasReportItemList)`
   }
 `;
 
-const StyledButton = styled(Button)`
-  ${StyledMixins.media.print`
-    display: none;
-  `}
-`;
-
 const StyledCanvas = styled(Canvas)`
   padding 1px;
   ${StyledMixins.media.print`
-    min-height: calc(100vh - 87px);
+    min-height: calc(100vh - 88px);
   `}
+`;
+
+const StyledCanvasSection = styled(CanvasSection)`
+  min-height: auto;
 `;
 
 const Copyright = styled.div`
@@ -61,23 +60,18 @@ const CanvasReportBusinessModel = ({
   customerSegments,
   costLines,
   revenueStreams,
+  printState,
+  updatePrintState,
 }) => (
-  <CanvasReportSection>
+  <CanvasReportSection className="business-model-canvas">
     <CanvasReportSectionHeading>
       Business model canvas
-      <Pull right>
-        <StyledButton
-          component="button"
-          onClick={() => window.print()}
-        >
-          Print
-        </StyledButton>
-      </Pull>
+      <CanvasReportPrintModal {...{ printState, updatePrintState }} />
     </CanvasReportSectionHeading>
     <StyledCanvas>
       <CanvasRow twoThirds>
         <CanvasCol md>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Key partners"
               icon="link"
@@ -85,10 +79,10 @@ const CanvasReportBusinessModel = ({
               isEmpty={!keyPartners.length}
             />
             <StyledReportItemList items={keyPartners} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
         <CanvasCol md>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Key activities"
               icon="cog"
@@ -96,8 +90,8 @@ const CanvasReportBusinessModel = ({
               isEmpty={!keyActivities.length}
             />
             <StyledReportItemList items={keyActivities} />
-          </CanvasSection>
-          <CanvasSection>
+          </StyledCanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Key resources"
               icon="th"
@@ -105,10 +99,10 @@ const CanvasReportBusinessModel = ({
               isEmpty={!keyResources.length}
             />
             <StyledReportItemList items={keyResources} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
         <CanvasCol md>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Value propositions"
               icon="gift"
@@ -116,10 +110,10 @@ const CanvasReportBusinessModel = ({
               isEmpty={!valuePropositions.length}
             />
             <StyledReportItemList items={valuePropositions} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
         <CanvasCol md>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Customer relationships"
               icon="heart"
@@ -127,8 +121,8 @@ const CanvasReportBusinessModel = ({
               isEmpty={!customerRelationships.length}
             />
             <StyledReportItemList items={customerRelationships} />
-          </CanvasSection>
-          <CanvasSection>
+          </StyledCanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Channels"
               icon="truck"
@@ -136,10 +130,10 @@ const CanvasReportBusinessModel = ({
               isEmpty={!channels.length}
             />
             <StyledReportItemList items={channels} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
         <CanvasCol md>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Customer segments"
               icon="smile-o"
@@ -147,12 +141,12 @@ const CanvasReportBusinessModel = ({
               isEmpty={!customerSegments.length}
             />
             <StyledReportItemList items={customerSegments} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
       </CanvasRow>
       <CanvasRow oneThird>
         <CanvasCol sm>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Cost structure"
               icon="tags"
@@ -160,10 +154,10 @@ const CanvasReportBusinessModel = ({
               isEmpty={!costLines.length}
             />
             <StyledReportItemList items={costLines} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
         <CanvasCol sm>
-          <CanvasSection>
+          <StyledCanvasSection>
             <CanvasHeading
               label="Revenue streams"
               icon="usd"
@@ -171,7 +165,7 @@ const CanvasReportBusinessModel = ({
               isEmpty={!revenueStreams.length}
             />
             <StyledReportItemList items={revenueStreams} />
-          </CanvasSection>
+          </StyledCanvasSection>
         </CanvasCol>
       </CanvasRow>
     </StyledCanvas>
@@ -192,6 +186,8 @@ CanvasReportBusinessModel.propTypes = {
   customerSegments: PropTypes.array.isRequired,
   costLines: PropTypes.array.isRequired,
   revenueStreams: PropTypes.array.isRequired,
+  printState: PropTypes.object.isRequired,
+  updatePrintState: PropTypes.func.isRequired,
 };
 
 export default CanvasReportBusinessModel;

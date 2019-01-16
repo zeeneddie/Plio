@@ -21,6 +21,7 @@ const StandardAddForm = ({ organizationId }) => (
         name="title"
         placeholder="Title"
         maxLength={StringLimits.title.max}
+        autoFocus
       />
     </FormField>
     <FormField>

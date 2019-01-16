@@ -11,10 +11,12 @@ import {
   RenderSwitch,
   CardBlock,
 } from '../../components';
+import categorize from '../../forms/decorators/categorize';
+import shouldRenderSource2 from '../../forms/decorators/shouldRenderSource2';
 import StandardAddForm from './StandardAddForm';
 import StandardEditForm from './StandardEditForm';
 import { StandardsHelp } from '../../../../api/help-messages';
-import { validateStandard } from '../../../validation';
+import { validateEditingStandard } from '../../../validation';
 
 export const StandardEditModal = ({
   isOpen,
@@ -40,7 +42,8 @@ export const StandardEditModal = ({
   >
     <EntityModalForm
       {...{ initialValues, onSubmit }}
-      validate={validateStandard}
+      decorators={[categorize, shouldRenderSource2]}
+      validate={validateEditingStandard}
     >
       {({ handleSubmit }) => (
         <Fragment>

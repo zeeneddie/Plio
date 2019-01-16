@@ -1,0 +1,5 @@
+mutation removeGuidance($input: RemoveGuidanceInput!) {
+  removeGuidance(input: $input) {
+    _id
+  }
+}
