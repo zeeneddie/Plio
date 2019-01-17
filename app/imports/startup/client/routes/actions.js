@@ -53,9 +53,11 @@ export const renderTransitionalLayout = renderComponent(async () =>
 export const renderCanvasLayout = renderComponent(async () => {
   const [CanvasLayout] = await Promise.all([
     import('../../../client/react/canvas/components/CanvasLayout'),
+    // fetch necessary blaze components
+    import('../../../ui/components/dashboard/includes/user-menu'),
   ]);
 
-  // don't wait for blaze components because they aren't immediately needed
+  // don't wait for other blaze components because they aren't immediately needed
   import('../../../ui/components');
 
   return CanvasLayout;
