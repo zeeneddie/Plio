@@ -10,9 +10,10 @@ import {
   where,
   contains,
   merge,
+  difference as differenceR,
 } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
-import { noop, getValue } from 'plio-util';
+import { noop, getValue, getValues } from 'plio-util';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -31,6 +32,7 @@ const ActionEditContainer = ({
   onDelete,
   refetchQueries,
   getInitialValues,
+  linkedTo,
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
   ...props
 }) => (
@@ -98,6 +100,18 @@ const ActionEditContainer = ({
               onCompleted={({ undoActionVerification }) =>
                 updateActionInState(undoActionVerification)}
             />,
+            <Mutation
+              {...{ refetchQueries }}
+              mutation={Mutations.LINK_DOC_TO_ACTION}
+              children={noop}
+              onCompleted={({ linkDocToAction }) => updateActionInState(linkDocToAction)}
+            />,
+            <Mutation
+              {...{ refetchQueries }}
+              mutation={Mutations.UNLINK_DOC_FROM_ACTION}
+              children={noop}
+              onCompleted={({ unlinkDocFromAction }) => updateActionInState(unlinkDocFromAction)}
+            />,
             /* eslint-enable react/no-children-prop */
           ]}
         >
@@ -109,6 +123,8 @@ const ActionEditContainer = ({
             undoActionCompletion,
             verifyAction,
             undoActionVerification,
+            linkDocToAction,
+            unlinkDocFromAction,
           ]) => renderComponent({
             ...props,
             error,
@@ -142,6 +158,7 @@ const ActionEditContainer = ({
                 verifiedBy,
                 toBeVerifiedBy,
                 verificationTargetDate,
+                linkedTo: linkedToValue,
               } = values;
 
               const isCompletedDiff = find(where({ path: contains('isCompleted') }), difference);
@@ -189,6 +206,37 @@ const ActionEditContainer = ({
                     input: { _id: action._id },
                   },
                 }).then(noop).catch(errorHandler);
+              }
+
+              const isLinkedToDiff = find(where({ path: contains('linkedTo') }), difference);
+
+              if (isLinkedToDiff) {
+                const docsIds = getValues(linkedToValue);
+                const currentDocsIds = getValues(currentValues.linkedTo);
+                const linkedDocId = differenceR(docsIds, currentDocsIds)[0];
+                if (linkedDocId) {
+                  return linkDocToAction({
+                    variables: {
+                      input: {
+                        _id: action._id,
+                        documentType: linkedTo.documentType,
+                        documentId: linkedDocId,
+                      },
+                    },
+                  }).then(noop).catch(errorHandler);
+                }
+
+                const unlinkedDocId = differenceR(currentDocsIds, docsIds)[0];
+                if (unlinkedDocId) {
+                  return unlinkDocFromAction({
+                    variables: {
+                      input: {
+                        _id: action._id,
+                        documentId: unlinkedDocId,
+                      },
+                    },
+                  }).then(noop).catch(errorHandler);
+                }
               }
 
               const args = {
@@ -241,6 +289,7 @@ ActionEditContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   getInitialValues: PropTypes.func.isRequired,
+  linkedTo: PropTypes.object,
   onDelete: PropTypes.func,
   actionId: PropTypes.string,
   action: PropTypes.object,

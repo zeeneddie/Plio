@@ -2,7 +2,7 @@ import React from 'react';
 import connectUI from 'redux-ui';
 import { connect } from 'react-redux';
 import { withHandlers } from 'recompose';
-import { find, propEq } from 'ramda';
+import { find, propEq, path } from 'ramda';
 import { getIds } from 'plio-util';
 
 import { getGeneralActionValuesByAction } from '../../actions/helpers';
@@ -52,6 +52,10 @@ export default enhance(({
       actionIds={getIds(goal.actions)}
       getInitialValues={getGeneralActionValuesByAction}
       type={ActionTypes.GENERAL_ACTION}
+      loadLinkedDocs={query => query({
+        query: Queries.GOAL_LIST,
+        variables: { organizationId },
+      }).then(path(['data', 'goals', 'goals']))}
       linkedTo={{
         _id: goal._id,
         title: goal.title,

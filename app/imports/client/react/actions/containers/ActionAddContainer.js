@@ -75,7 +75,8 @@ const ActionAddContainer = ({
             variables: {
               input: {
                 _id: existingAction.value,
-                ...linkedTo,
+                documentId: linkedTo.documentId,
+                documentType: linkedTo.documentType,
               },
             },
           }).then(toggle || noop);

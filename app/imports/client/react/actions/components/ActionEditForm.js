@@ -1,28 +1,31 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
+import { mapEntitiesToOptions } from 'plio-util';
 
 import { getClassByStatus, getStatusName } from '../../../../api/actions/helpers';
 import ActionForm from './ActionForm';
 import ActionVerificationForm from './ActionVerificationForm';
-import { FormField, Status, LinkedEntityInput } from '../../components';
+import { FormField, Status, ApolloSelectInputField } from '../../components';
 
 const ActionEditForm = ({
   status,
   save,
-  linkedTo: {
-    title: value,
-    sequentialId,
-  } = {},
+  loadLinkedDocs,
   ...props
 }) => (
   <Fragment>
     <ActionForm {...{ save, ...props }}>
-      {value && (
-        <FormField>
-          Linked to
-          <LinkedEntityInput disabled {...{ sequentialId, value }} />
-        </FormField>
-      )}
+      <FormField>
+        Linked to
+        <ApolloSelectInputField
+          multi
+          name="linkedTo"
+          placeholder="Linked to"
+          loadOptions={loadLinkedDocs}
+          transformOptions={mapEntitiesToOptions}
+          onChange={save}
+        />
+      </FormField>
       <FormField>
         Status
         <Status color={getClassByStatus(status)}>
@@ -35,9 +38,9 @@ const ActionEditForm = ({
 );
 
 ActionEditForm.propTypes = {
+  loadLinkedDocs: PropTypes.func.isRequired,
   status: PropTypes.number,
   save: PropTypes.func,
-  linkedTo: PropTypes.object,
 };
 
 export default ActionEditForm;

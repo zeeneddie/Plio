@@ -18,6 +18,7 @@ const ActionModalContainer = ({
   canCompleteAnyAction,
   userId,
   getInitialValues,
+  loadLinkedDocs,
 }) => {
   if (!actionId) {
     return (
@@ -49,6 +50,7 @@ const ActionModalContainer = ({
         canCompleteAnyAction,
         userId,
         getInitialValues,
+        loadLinkedDocs,
       }}
       render={ActionEditModal}
     />
@@ -60,6 +62,7 @@ ActionModalContainer.propTypes = {
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   getInitialValues: PropTypes.func.isRequired,
+  loadLinkedDocs: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   actionIds: PropTypes.array,
   refetchQueries: PropTypes.func,

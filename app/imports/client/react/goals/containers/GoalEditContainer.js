@@ -94,7 +94,10 @@ const enhance = compose(
           }
         }
 
-        if (data.linkDocToAction || data.createAction || data.deleteAction) {
+        if (data.unlinkDocFromAction ||
+            data.linkDocToAction ||
+            data.createAction ||
+            data.deleteAction) {
           queries.push(Queries.DASHBOARD_GOALS.name);
         }
       }
