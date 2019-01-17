@@ -25,8 +25,15 @@ const CostStructure = ({ organizationId }) => (
         sectionName={CanvasSections[CanvasTypes.COST_LINE]}
         help={<CostStructureHelp />}
         items={costLines}
-        renderModal={({ isOpen, toggle }) => (
-          <CostLineAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <CostLineAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
         )}
         renderEditModal={({ isOpen, toggle, _id }) => (
           <CostLineEditModal

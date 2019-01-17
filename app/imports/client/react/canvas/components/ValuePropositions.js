@@ -24,8 +24,15 @@ const ValuePropositions = ({ organizationId }) => (
         sectionName={CanvasSections[CanvasTypes.VALUE_PROPOSITION]}
         help={<ValuePropositionsHelp />}
         items={valuePropositions}
-        renderModal={({ isOpen, toggle }) => (
-          <ValuePropositionAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <ValuePropositionAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
         )}
         renderEditModal={({ isOpen, toggle, _id }) => (
           <ValuePropositionEditModal

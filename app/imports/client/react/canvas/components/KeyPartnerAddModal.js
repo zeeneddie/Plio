@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions } from 'plio-util';
+import { getUserOptions, noop } from 'plio-util';
 import { Form } from 'reactstrap';
 import { pure } from 'recompose';
 
@@ -18,7 +18,12 @@ import { ApolloFetchPolicies } from '../../../../api/constants';
 import { validateKeyPartner } from '../../../validation';
 import { getUserDefaultCanvasColor } from '../helpers';
 
-const KeyPartnerAddModal = ({ isOpen, toggle, organizationId }) => (
+const KeyPartnerAddModal = ({
+  isOpen,
+  toggle,
+  organizationId,
+  onLink = noop,
+}) => (
   <Query query={Queries.CANVAS_CURRENT_USER_INFO} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
     {({ data: { user } }) => (
       <Mutation mutation={Mutations.CREATE_KEY_PARTNER}>
@@ -49,6 +54,7 @@ const KeyPartnerAddModal = ({ isOpen, toggle, organizationId }) => (
                 } = values;
 
                 return createKeyPartner({
+                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -61,9 +67,12 @@ const KeyPartnerAddModal = ({ isOpen, toggle, organizationId }) => (
                     },
                   },
                   refetchQueries: [
-                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                    { query: Queries.KEY_PARTNERS, variables: { organizationId } },
                   ],
-                }).then(toggle);
+                }).then(({ data: { createKeyPartner: { keyPartner } } }) => {
+                  onLink(keyPartner._id);
+                  toggle();
+                });
               }}
             >
               {({ handleSubmit }) => (
@@ -90,6 +99,7 @@ KeyPartnerAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
+  onLink: PropTypes.func,
 };
 
 export default pure(KeyPartnerAddModal);

@@ -25,8 +25,15 @@ const KeyPartners = ({ organizationId }) => (
         sectionName={CanvasSections[CanvasTypes.KEY_PARTNER]}
         help={<KeyPartnersHelp />}
         items={keyPartners}
-        renderModal={({ isOpen, toggle }) => (
-          <KeyPartnerAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <KeyPartnerAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
         )}
         renderEditModal={({ isOpen, toggle, _id }) => (
           <KeyPartnerEditModal

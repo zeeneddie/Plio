@@ -25,8 +25,15 @@ const CustomerSegments = ({ organizationId }) => (
         sectionName={CanvasSections[CanvasTypes.CUSTOMER_SEGMENT]}
         help={<CustomerSegmentsHelp />}
         items={customerSegments}
-        renderModal={({ isOpen, toggle }) => (
-          <CustomerSegmentAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <CustomerSegmentAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
         )}
         renderEditModal={({ isOpen, toggle, _id }) => (
           <CustomerSegmentEditModal
