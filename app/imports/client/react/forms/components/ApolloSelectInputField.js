@@ -6,6 +6,7 @@ import { identity } from 'ramda';
 import { swal } from '../../../util';
 import { renderComponent } from '../../helpers';
 import SelectInputField from './SelectInputField';
+import { ApolloFetchPolicies } from '../../../../api/constants';
 
 const ApolloSelectInputField = ({
   loadOptions,
@@ -16,7 +17,10 @@ const ApolloSelectInputField = ({
   <ApolloConsumer>
     {client => renderComponent({
       loadOptionsOnOpen: true,
-      loadOptions: () => loadOptions(client.query)
+      loadOptions: () => loadOptions(args => client.query({
+        fetchPolicy: ApolloFetchPolicies.NETWORK_ONLY,
+        ...args,
+      }))
         .then((...args) => ({ options: transformOptions(...args) }))
         .catch(onError),
       ...props,

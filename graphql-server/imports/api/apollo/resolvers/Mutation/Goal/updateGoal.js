@@ -12,6 +12,7 @@ import {
   checkDocsAccess,
   goalUpdateAfterware,
   composeMiddleware,
+  checkMultipleOrgMembership,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, context) =>
@@ -61,6 +62,12 @@ export default applyMiddleware(
       })),
     ),
   ),
-  // TODO: check notify users access
+  branch(
+    (root, args) => args.notify,
+    checkMultipleOrgMembership(({ organizationId }, { notify }) => ({
+      userIds: notify,
+      organizationId,
+    })),
+  ),
   goalUpdateAfterware(),
 )(resolver);

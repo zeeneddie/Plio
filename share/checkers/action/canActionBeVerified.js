@@ -1,8 +1,9 @@
 import { allPass, complement, anyPass, flip, view } from 'ramda';
-import { isCompleted, isVerified } from 'plio-util/dist/lenses';
-import { eqToBeVerifiedBy } from 'plio-util';
+import { eqToBeVerifiedBy, lenses } from 'plio-util';
 
 import canCompleteAnyAction from './canCompleteAnyAction';
+
+const { isCompleted, isVerified } = lenses;
 
 // (Object, String) => Boolean
 export default allPass([

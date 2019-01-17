@@ -62,7 +62,12 @@ const CustomerInsightsMatcher = ({
               <legend>Features & benefits</legend>
             </Col>
           </Row>
-          {!customerInsights.length && <div className="text-muted">None</div>}
+          {!customerInsights.length && (
+            <Row>
+              <Col xs="6" className="text-muted">None</Col>
+              <Col xs="6" className="text-muted">None</Col>
+            </Row>
+          )}
           {customerInsights.sort(bySequentialId).map(({
             _id,
             sequentialId,

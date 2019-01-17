@@ -9,6 +9,7 @@ import {
   ensureIsCompleted,
   composeMiddleware,
   checkGoalAccess,
+  checkMultipleOrgMembership,
 } from '../../../../../share/middleware';
 import { resolveLinkedGoal } from '../../Types/util';
 
@@ -33,6 +34,12 @@ export default applyMiddleware(
       checkMilestoneCompletionTargetDate(),
     ),
   ),
-  // TODO: check notify users access
+  branch(
+    (root, args) => args.notify,
+    checkMultipleOrgMembership(({ organizationId }, { notify }) => ({
+      userIds: notify,
+      organizationId,
+    })),
+  ),
   milestoneUpdateAfterware(),
 )(resolver);

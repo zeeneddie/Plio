@@ -44,6 +44,7 @@ const CanvasBlock = ({
               toggle,
               isEmpty,
               help,
+              sectionName,
             }}
           />
           <CanvasItemList

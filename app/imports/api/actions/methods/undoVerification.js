@@ -6,7 +6,9 @@ import {
 } from '../../middleware';
 import { Actions } from '../../../share/collections';
 import { ActionService } from '../../../share/services';
-import { checkLoggedIn, ensureCanUndoActionVerification } from '../../../share/middleware';
+import checkLoggedIn from '../../../share/middleware/Auth/checkLoggedIn';
+import ensureCanUndoActionVerification
+  from '../../../share/middleware/Action/ensureCanUndoActionVerification';
 
 export default new MiddlewareMethod({
   name: 'Actions.undoVerification',

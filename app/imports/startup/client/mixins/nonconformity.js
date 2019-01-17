@@ -1,6 +1,10 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { NonConformities } from '../../../share/collections';
-import { NonConformityFilters, AnalysisTitles } from '../../../api/constants';
+import {
+  NonConformityFilters,
+  NonconformityFilterIndexes,
+  AnalysisTitles,
+} from '../../../api/constants';
 import { ProblemTypes } from '../../../share/constants';
 
 export default {
@@ -54,4 +58,5 @@ export default {
     const query = { ...filter, organizationId: this.organizationId() };
     return NonConformities.findOne(query, options);
   },
+  NonconformityFilterIndexes: () => NonconformityFilterIndexes,
 };

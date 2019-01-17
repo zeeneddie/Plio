@@ -14,7 +14,7 @@ import { sort, either, when, always, slice, compose, mergeDeepLeft } from 'ramda
 import connectUI from 'redux-ui';
 
 import { namedCompose, withHr, withApolloPreloader } from '../../helpers';
-import { DashboardGoals } from '../components';
+import DashboardGoals from '../components/DashboardGoals';
 import {
   WORKSPACE_DEFAULTS,
   WorkspaceDefaultsTypes,

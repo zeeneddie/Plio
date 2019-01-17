@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 import { GoalsHelp } from '../../../../../api/help-messages';
 import { EntityManagerItem } from '../../../components';
-import { NewGoalCard, GoalAddContainer } from '../../../goals';
+import NewGoalCard from '../../../goals/components/NewGoalCard';
+import GoalAddContainer from '../../../goals/containers/GoalAddContainer';
 import ActivelyManageItem from './ActivelyManageItem';
 
 const GoalActivelyManageItem = ({ organizationId, onLink }) => (

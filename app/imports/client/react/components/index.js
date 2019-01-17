@@ -4,7 +4,6 @@ export * from './Buttons';
 export * from './Icons';
 export * from './Utility';
 export * from './Labels';
-export * from './timeline';
 export * from './subcards';
 export * from './styled';
 export * from './Modal';

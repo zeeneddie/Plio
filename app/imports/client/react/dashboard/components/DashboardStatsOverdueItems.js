@@ -10,7 +10,7 @@ import {
   WorkspaceDefaults,
   WorkspaceDefaultsTypes,
 } from '../../../../share/constants';
-import { DashboardStatsActionContainer } from '../containers';
+import DashboardStatsActionContainer from '../containers/DashboardStatsActionContainer';
 
 const enhance = onlyUpdateForKeys([
   'count',

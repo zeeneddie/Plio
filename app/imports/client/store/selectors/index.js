@@ -14,3 +14,4 @@ export * from './standardTypes';
 export * from './users';
 export * from './window';
 export * from './workItems';
+export * from './projects';

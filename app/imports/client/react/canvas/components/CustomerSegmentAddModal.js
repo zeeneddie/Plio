@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions, convertDocumentOptions } from 'plio-util';
+import { getUserOptions, convertDocumentOptions, noop } from 'plio-util';
 import { Form } from 'reactstrap';
 import { pure } from 'recompose';
 
@@ -22,6 +22,7 @@ const CustomerSegmentAddModal = ({
   isOpen,
   toggle,
   organizationId,
+  onLink = noop,
 }) => (
   <Query query={Queries.CANVAS_CURRENT_USER_INFO} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
     {({ data: { user } }) => (
@@ -53,6 +54,7 @@ const CustomerSegmentAddModal = ({
                 } = values;
 
                 return createCustomerSegment({
+                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -67,9 +69,12 @@ const CustomerSegmentAddModal = ({
                     },
                   },
                   refetchQueries: [
-                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                    { query: Queries.CUSTOMER_SEGMENTS, variables: { organizationId } },
                   ],
-                }).then(toggle);
+                }).then(({ data: { createCustomerSegment: { customerSegment } } }) => {
+                  onLink(customerSegment._id);
+                  toggle();
+                });
               }}
             >
               {({ handleSubmit }) => (
@@ -96,6 +101,7 @@ CustomerSegmentAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
+  onLink: PropTypes.func,
 };
 
 export default pure(CustomerSegmentAddModal);

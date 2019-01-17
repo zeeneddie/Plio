@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions } from 'plio-util';
+import { getUserOptions, noop } from 'plio-util';
 import { Form } from 'reactstrap';
 import { pure } from 'recompose';
 
@@ -17,10 +17,11 @@ import {
 } from '../../components';
 import { getUserDefaultCanvasColor } from '../helpers';
 
-const KeyActivitiesAddModal = ({
+const KeyActivityAddModal = ({
   isOpen,
   toggle,
   organizationId,
+  onLink = noop,
 }) => (
   <Query query={Queries.CANVAS_CURRENT_USER_INFO} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
     {({ data: { user } }) => (
@@ -46,6 +47,7 @@ const KeyActivitiesAddModal = ({
                 } = values;
 
                 return createKeyActivity({
+                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -56,9 +58,12 @@ const KeyActivitiesAddModal = ({
                     },
                   },
                   refetchQueries: [
-                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                    { query: Queries.KEY_ACTIVITIES, variables: { organizationId } },
                   ],
-                }).then(toggle);
+                }).then(({ data: { createKeyActivity: { keyActivity } } }) => {
+                  onLink(keyActivity._id);
+                  toggle();
+                });
               }}
             >
               {({ handleSubmit }) => (
@@ -81,10 +86,11 @@ const KeyActivitiesAddModal = ({
   </Query>
 );
 
-KeyActivitiesAddModal.propTypes = {
+KeyActivityAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
+  onLink: PropTypes.func,
 };
 
-export default pure(KeyActivitiesAddModal);
+export default pure(KeyActivityAddModal);

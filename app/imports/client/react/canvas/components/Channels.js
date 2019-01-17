@@ -24,8 +24,15 @@ const Channels = ({ organizationId }) => (
         sectionName={CanvasSections[CanvasTypes.CHANNEL]}
         help={<ChannelsHelp />}
         items={channels}
-        renderModal={({ isOpen, toggle }) => (
-          <ChannelAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <ChannelAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
         )}
         renderEditModal={({ isOpen, toggle, _id }) => (
           <ChannelEditModal

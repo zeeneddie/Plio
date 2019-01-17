@@ -18,8 +18,10 @@ import RevenueStreams from './RevenueStreams';
 import { Query as Queries } from '../../../graphql';
 import { RenderSwitch, PreloaderPage, ErrorPage } from '../../components';
 
+const THIRTY_SECONDS = 30000;
+
 const CanvasPage = ({ organization: { _id: organizationId } }) => (
-  <Query query={Queries.CANVAS_PAGE} variables={{ organizationId }}>
+  <Query query={Queries.CANVAS_PAGE} variables={{ organizationId }} pollInterval={THIRTY_SECONDS}>
     {({ error, loading }) => (
       <RenderSwitch
         {...{ error, loading }}

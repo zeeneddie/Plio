@@ -1,13 +1,14 @@
 import React from 'react';
 import { ListGroup } from 'reactstrap';
 
-import { RiskFilterIndexes } from '/imports/api/constants';
+import { RiskFilterIndexes } from '../../../../../api/constants';
 import propTypes from './propTypes';
 import LHSContainer from '../../../containers/LHSContainer';
 import TypeListContainer from '../../containers/TypeListContainer';
 import DepartmentListContainer from '../../containers/DepartmentListContainer';
 import StatusListContainer from '../../containers/StatusListContainer';
 import DeletedRisksListContainer from '../../containers/DeletedRisksListContainer';
+import ProjectListContainer from '../../containers/ProjectListContainer';
 
 const RisksLHS = ({
   filter,
@@ -29,6 +30,8 @@ const RisksLHS = ({
         return (<StatusListContainer {...{ risks, onToggleCollapse }} />);
       case RiskFilterIndexes.DEPARTMENT:
         return (<DepartmentListContainer {...{ risks, onToggleCollapse }} />);
+      case RiskFilterIndexes.PROJECT:
+        return (<ProjectListContainer {...{ risks, onToggleCollapse }} />);
       case RiskFilterIndexes.DELETED:
         return (
           <ListGroup>

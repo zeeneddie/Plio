@@ -62,7 +62,12 @@ const ValueComponentsMatcher = ({
               <legend>Needs & wants</legend>
             </Col>
           </Row>
-          {!valueComponents.length && <div className="text-muted">None</div>}
+          {!valueComponents.length && (
+            <Row>
+              <Col xs="6" className="text-muted">None</Col>
+              <Col xs="6" className="text-muted">None</Col>
+            </Row>
+          )}
           {valueComponents.sort(bySequentialId).map(({
             _id,
             sequentialId,

@@ -36,7 +36,7 @@ const StyledReportItemList = styled(CanvasReportItemList)`
 const StyledCanvas = styled(Canvas)`
   padding 1px;
   ${StyledMixins.media.print`
-    min-height: calc(100vh - 87px);
+    min-height: calc(100vh - 88px);
   `}
 `;
 

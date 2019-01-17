@@ -25,8 +25,15 @@ const RevenueStreams = ({ organizationId }) => (
         sectionName={CanvasSections[CanvasTypes.REVENUE_STREAM]}
         help={<RevenueStreamsHelp />}
         items={revenueStreams}
-        renderModal={({ isOpen, toggle }) => (
-          <RevenueStreamAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <RevenueStreamAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
         )}
         renderEditModal={({ isOpen, toggle, _id }) => (
           <RevenueStreamEditModal

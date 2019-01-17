@@ -1,16 +1,30 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Meteor } from 'meteor/meteor';
 
-import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Occurrences } from '/imports/share/collections/occurrences';
-import { DocumentCardSubs } from '/imports/startup/client/subsmanagers';
 import { restore, remove } from '/imports/api/non-conformities/methods';
 import { NonConformitiesHelp, PotentialGainsHelp } from '/imports/api/help-messages';
 import { ActionTypes } from '../../../../share/constants';
+import { NonconformityFilterIndexes } from '../../../../api/constants';
 
 Template.NC_Card_Read.viewmodel({
   share: 'search',
-  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'workInbox'],
+  mixin: [
+    'organization',
+    'nonconformity',
+    'user',
+    'date',
+    'utils',
+    'modal',
+    'currency',
+    'problemsStatus',
+    'collapse',
+    'router',
+    'collapsing',
+    'workInbox',
+  ],
   isReadOnly: false,
   isReady: false,
   showCard() {
@@ -24,7 +38,7 @@ Template.NC_Card_Read.viewmodel({
   },
   NCs() {
     const organizationId = this.organizationId();
-    const query = this.isActiveNCFilter(4)
+    const query = this.isActiveNCFilter(NonconformityFilterIndexes.DELETED)
       ? { isDeleted: true }
       : { isDeleted: { $in: [null, false] } };
 
@@ -62,22 +76,22 @@ Template.NC_Card_Read.viewmodel({
     const queryParams = { filter: this.activeNCFilterId() };
     return FlowRouter.path('nonConformityDiscussion', params, queryParams);
   },
-  restore({ _id, isDeleted, title }, cb = () => {}) {
+  restore({ _id, isDeleted }, cb = () => {}) {
     if (!isDeleted) return;
 
     const callback = (err) => {
       cb(err, () => {
         FlowRouter.setQueryParams({ filter: 1 });
-        Meteor.setTimeout(() => {
+        Meteor.defer(() => {
           this.goToNC(_id);
           this.expandCollapsed(_id);
-        }, 0);
+        });
       });
     };
 
     restore.call({ _id }, callback);
   },
-  delete({ _id, title, isDeleted }, cb = () => {}) {
+  delete({ _id, isDeleted }, cb = () => {}) {
     if (!isDeleted) return;
 
     remove.call({ _id }, cb);

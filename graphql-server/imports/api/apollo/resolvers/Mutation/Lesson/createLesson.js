@@ -1,9 +1,11 @@
-import { applyMiddleware } from 'plio-util';
+import { applyMiddleware, lenses } from 'plio-util';
+import { over } from 'ramda';
+import sanitizeHtml from 'sanitize-html';
+
 import {
   checkLoggedIn,
   checkOrgMembership,
   flattenInput,
-  sanitizeNotes,
   checkDocExistence,
 } from '../../../../../share/middleware';
 import { getCollectionByDocType } from '../../../../../share/helpers';
@@ -31,6 +33,10 @@ export default applyMiddleware(
     collection: getCollectionByDocType(documentType),
   })),
   checkOrgMembership(),
-  sanitizeNotes(),
+  async (next, root, args, context) => next(
+    root,
+    over(lenses.notes, sanitizeHtml, args),
+    context,
+  ),
   afterware(),
 )(resolver);

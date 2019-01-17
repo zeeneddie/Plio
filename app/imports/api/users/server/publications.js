@@ -5,9 +5,10 @@ import { getActiveOrgUserIds } from 'plio-util';
 import { getUsersCursorByIdsAndOrgId } from '../../../server/helpers/pub-helpers';
 import { isOrgMember } from '../../checkers';
 import { publishWithMiddleware } from '../../helpers/server';
-import { checkLoggedIn, checkOrgMembership } from '../../../share/middleware';
 import { Organizations } from '../../../share/collections';
 import { UserPresenceStatuses } from '../../constants';
+import checkLoggedIn from '../../../share/middleware/Auth/checkLoggedIn';
+import checkOrgMembership from '../../../share/middleware/Auth/checkOrgMembership';
 
 Meteor.publish(null, function publishCurrentUser() {
   const query = { _id: this.userId };

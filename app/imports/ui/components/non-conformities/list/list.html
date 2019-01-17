@@ -6,7 +6,7 @@
     onSearchInputValue=onSearchInputValue
     onAfterSearch=onAfterSearch}}
 
-      {{#if isActiveNCFilter 1}}
+      {{#if isActiveNCFilter NonconformityFilterIndexes.MAGNITUDE}}
         {{#each magnitude}}
           {{> ListItem
               template="NC_SectionItem"
@@ -19,7 +19,7 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveNCFilter 2}}
+      {{#if isActiveNCFilter NonconformityFilterIndexes.STATUS}}
         {{#each statuses}}
           {{> ListItem
               template="NC_SectionItem"
@@ -31,7 +31,7 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveNCFilter 3}}
+      {{#if isActiveNCFilter NonconformityFilterIndexes.DEPARTMENT}}
         {{#each departments}}
           {{> ListItem
               template="NC_SectionItem"
@@ -44,7 +44,20 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveNCFilter 4}}
+      {{#if isActiveNCFilter NonconformityFilterIndexes.PROJECT}}
+        {{#each projects}}
+          {{> ListItem
+            template="NC_SectionItem"
+            items=this.items
+            title=this.title
+            closeAllOnCollapse=false
+            hideRTextOnExpand=true
+            unreadMessagesCount=this.unreadMessagesCount
+            rText=(calculateTotalCost this.items)}}
+        {{/each}}
+      {{/if}}
+
+      {{#if isActiveNCFilter NonconformityFilterIndexes.DELETED}}
         {{#each deleted}}
           {{> NC_Item}}
         {{/each}}

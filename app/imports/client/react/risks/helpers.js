@@ -3,7 +3,11 @@ import property from 'lodash.property';
 
 import { TYPE_UNCATEGORIZED, RISK_STATUSES } from './constants';
 import { CollectionNames } from '../../../share/constants';
-import { RiskFilterIndexes, DEPARTMENT_UNCATEGORIZED } from '../../../api/constants';
+import {
+  RiskFilterIndexes,
+  DEPARTMENT_UNCATEGORIZED,
+  PROJECT_UNCATEGORIZED,
+} from '../../../api/constants';
 import {
   compose,
   find,
@@ -43,6 +47,7 @@ export const goToRisks = goTo('risks');
 
 export const createRiskTypeItem = createTypeItem(CollectionNames.RISK_TYPES);
 export const createRiskDepartmentItem = createTypeItem(CollectionNames.DEPARTMENTS);
+export const createRiskProjectItem = createTypeItem(CollectionNames.PROJECTS);
 export const createRiskStatusItem = createTypeItem(RISK_STATUSES);
 
 export const getRisksByFilter = ({ filter, risks }) => (
@@ -64,6 +69,7 @@ const addCollapsedItem = (...fns) => (closeOthers) => {
 export const addCollapsedType = addCollapsedItem(createRiskTypeItem, propId);
 export const addCollapsedStatus = addCollapsedItem(createRiskStatusItem, property('value'));
 export const addCollapsedDepartment = addCollapsedItem(createRiskDepartmentItem, propId);
+export const addCollapsedProject = addCollapsedItem(createRiskProjectItem, propId);
 
 export const createUncategorizedType = ({ risks = [], types = [] }) => ({
   _id: TYPE_UNCATEGORIZED,
@@ -79,6 +85,16 @@ export const createUncategorizedDepartment = ({ risks = [], departments = [] }) 
   risks: risks.filter(risk => !find(
     department => _.contains(risk.departmentsIds, department._id),
     departments,
+  )),
+});
+
+export const createUncategorizedProject = ({ risks = [], projects = [] }) => ({
+  _id: PROJECT_UNCATEGORIZED,
+  title: 'Uncategorized',
+  organizationId: getC('organizationId', risks[0]),
+  risks: risks.filter(risk => !find(
+    project => _.contains(risk.projectIds, project._id),
+    projects,
   )),
 });
 
@@ -147,10 +163,26 @@ export const expandCollapsedDepartments = (risks, departments, closeOthers) => {
   return store.dispatch(chainActions(actions));
 };
 
+export const expandCollapsedProjects = (risks, projects, closeOthers) => {
+  const { collapsed } = getState('global');
+  const predicate = ({ _id }) => compose(includes(_id), property('projectIds'));
+  const getProjects = getExpandedFiltered('_id', predicate, collapsed, risks);
+  const projectsFiltered = getProjects(projects);
+  const uncategorizedProject = createUncategorizedProject({ projects, risks });
+  const resultProjects = length(uncategorizedProject.risks)
+    ? projectsFiltered.concat(uncategorizedProject)
+    : projectsFiltered;
+  const actions = mapC(addCollapsedProject(closeOthers), resultProjects);
+
+  return store.dispatch(chainActions(actions));
+};
+
 export const expandCollapsedRisks = (ids, closeOthers = false) => {
   const _ids = typeof ids === 'string' ? [ids] : ids;
   const {
-    collections: { risks, riskTypes, departments },
+    collections: {
+      risks, riskTypes, departments, projects,
+    },
     global: { filter },
   } = getState();
   const risksFound = filterC(risk => includes(risk._id, _ids), risks);
@@ -162,6 +194,8 @@ export const expandCollapsedRisks = (ids, closeOthers = false) => {
       return expandCollapsedStatuses(risksFound, problemsStatuses, closeOthers);
     case RiskFilterIndexes.DEPARTMENT:
       return expandCollapsedDepartments(risksFound, departments, closeOthers);
+    case RiskFilterIndexes.PROJECT:
+      return expandCollapsedProjects(risksFound, projects, closeOthers);
     default:
       return false;
   }
