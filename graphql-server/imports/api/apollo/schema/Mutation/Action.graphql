@@ -76,9 +76,9 @@ type Mutation {
   deleteAction(input: DeleteActionInput!): ActionPayload
   completeAction(input: CompleteActionInput!): Action
   undoActionCompletion(input: UndoActionCompletionInput!): Action
-  verifyAction(input: VerifyActionInput!): ActionPayload
-  undoActionVerification(input: UndoActionVerificationInput!): ActionPayload
+  verifyAction(input: VerifyActionInput!): Action
+  undoActionVerification(input: UndoActionVerificationInput!): Action
   linkDocToAction(input: LinkDocToActionInput!): Action
-  unlinkDocFromAction(input: UnlinkDocFromActionInput!): ActionPayload
+  unlinkDocFromAction(input: UnlinkDocFromActionInput!): Action
   updateAction(input: UpdateActionInput!): Action
 }

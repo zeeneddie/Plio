@@ -12,17 +12,15 @@
 
 mutation undoActionVerification($input: UndoActionVerificationInput!) {
   undoActionVerification(input: $input) {
-    action {
-      isVerified
-      isVerifiedAsEffective
-      verifiedAt
-      verificationComments
-      status
-      verifiedBy {
-        _id
-        profile {
-          fullName
-        }
+    isVerified
+    isVerifiedAsEffective
+    verifiedAt
+    verificationComments
+    status
+    verifiedBy {
+      _id
+      profile {
+        fullName
       }
     }
   }

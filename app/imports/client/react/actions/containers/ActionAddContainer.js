@@ -4,6 +4,7 @@ import moment from 'moment-timezone';
 import { pure } from 'recompose';
 import { Query, Mutation } from 'react-apollo';
 import { noop, getUserOptions } from 'plio-util';
+import { pick } from 'ramda';
 
 import { ActionPlanOptions } from '../../../../share/constants';
 import { validateAction, createFormError } from '../../../validation';
@@ -75,8 +76,7 @@ const ActionAddContainer = ({
             variables: {
               input: {
                 _id: existingAction.value,
-                documentId: linkedTo.documentId,
-                documentType: linkedTo.documentType,
+                ...pick(['documentId', 'documentType'], linkedTo),
               },
             },
           }).then(toggle || noop);
@@ -95,7 +95,7 @@ const ActionAddContainer = ({
               organizationId,
               ownerId,
               type,
-              linkedTo,
+              linkedTo: pick(['documentId', 'documentType'], linkedTo),
               toBeCompletedBy,
             },
           },
