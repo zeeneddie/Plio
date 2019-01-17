@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { mapEntitiesToOptions, noop } from 'plio-util';
+import { mapEntitiesToOptions, noop, byTitle } from 'plio-util';
 import { Query, Mutation } from 'react-apollo';
 import { pure } from 'recompose';
+import { sort } from 'ramda';
 
 import { Composer } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
@@ -53,7 +54,7 @@ const ProjectsSubcardForm = ({ organizationId, isOpen }) => (
       >
         {projects => (
           <EntityArrayForm
-            items={mapEntitiesToOptions(projects)}
+            items={mapEntitiesToOptions(sort(byTitle, projects))}
             placeholder="Another project"
             buttonLabel="Add project"
             onCreate={({ label }) => createProject({
