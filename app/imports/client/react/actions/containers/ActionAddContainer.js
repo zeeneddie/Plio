@@ -56,7 +56,7 @@ const ActionAddContainer = ({
         toBeCompletedBy: getUserOptions(user),
         planInPlace: ActionPlanOptions.NO,
         // TODO: Update based on linked documents like creation modal?
-        completionTargetDate: moment().add(1, 'days'),
+        completionTargetDate: moment().add(1, 'days').toDate(),
       },
       onSubmit: (values) => {
         const {
