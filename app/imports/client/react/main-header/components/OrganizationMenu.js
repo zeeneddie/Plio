@@ -21,6 +21,7 @@ import { Query as Queries } from '../../../graphql';
 import { FlowRouterContext, RenderSwitch, Preloader } from '../../components';
 import { WithToggle } from '../../helpers';
 import HeaderMenuItem from './HeaderMenuItem';
+import StrategyzerCopyright from '../../canvas/components/StrategyzerCopyright';
 
 const RouteLabels = {
   [RouteNames.CANVAS]: 'Canvas view',
@@ -60,6 +61,10 @@ const OrganizationName = styled.span`
   max-width: calc(100% - 140px);
   float: left;
   margin-right: 5px;
+`;
+
+const Copyright = styled.div`
+  margin-top: 10px;
 `;
 
 const OrganizationMenu = ({ organization: currentOrg, isDashboard }) => (
@@ -202,6 +207,11 @@ const OrganizationMenu = ({ organization: currentOrg, isDashboard }) => (
                         <DropdownItem divider />
                         <HeaderMenuItem disabled>
                           Plio version {APP_VERSION}
+                          {routeName === RouteNames.CANVAS && (
+                            <Copyright>
+                              <StrategyzerCopyright />
+                            </Copyright>
+                          )}
                         </HeaderMenuItem>
                       </Fragment>
                     </RenderSwitch>
