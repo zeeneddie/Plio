@@ -1,7 +1,7 @@
+#import "../../Fragment/ActionCard.graphql"
+
 mutation unlinkDocFromAction($input: UnlinkDocFromActionInput!) {
   unlinkDocFromAction(input: $input) {
-    action {
-      _id
-    }
+    ...ActionCard
   }
 }

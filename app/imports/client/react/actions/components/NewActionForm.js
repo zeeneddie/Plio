@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { renameKeys, mapRejectedEntitiesByIdsToOptions } from 'plio-util';
+import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
   CardBlock,
@@ -13,16 +13,19 @@ import ActionForm from './ActionForm';
 
 const NewActionForm = ({
   organizationId,
-  linkedTo,
+  linkedTo: {
+    title: value,
+    sequentialId,
+  } = {},
   actionIds = [],
   ...props
 }) => (
   <NewExistingSwitchField name="active">
     <ActionForm {...{ ...props, organizationId }}>
-      {linkedTo && (
+      {value && (
         <FormField>
           Linked to
-          <LinkedEntityInput disabled {...renameKeys({ title: 'value' }, linkedTo)} />
+          <LinkedEntityInput disabled {...{ sequentialId, value }} />
         </FormField>
       )}
     </ActionForm>

@@ -1,4 +1,3 @@
-import moment from 'moment-timezone';
 import { pick, compose, over } from 'ramda';
 import {
   getUserOptions,
@@ -6,7 +5,7 @@ import {
   mapEntitiesToOptions,
   renameKeys,
 } from 'plio-util';
-import { ActionPlanOptions, ActionIndexes } from '../../../share/constants';
+import { ActionIndexes } from '../../../share/constants';
 import { ActionStatusColors } from '../../../api/constants';
 
 export const getGeneralActionValuesByAction = compose(
@@ -27,6 +26,9 @@ export const getGeneralActionValuesByAction = compose(
     'verificationTargetDate',
     'linkedTo',
     'isCompleted',
+    'isVerified',
+    'isVerifiedAsEffective',
+    'workflowType',
   ]),
   renameKeys({ goals: 'linkedTo' }),
   over(lenses.goals, mapEntitiesToOptions),
@@ -36,15 +38,6 @@ export const getGeneralActionValuesByAction = compose(
   over(lenses.toBeCompletedBy, getUserOptions),
   over(lenses.owner, getUserOptions),
 );
-
-export const getActionFormInitialState = user => ({
-  active: 0,
-  owner: getUserOptions(user),
-  toBeCompletedBy: getUserOptions(user),
-  planInPlace: ActionPlanOptions.NO,
-  // TODO: Update based on linked documents like creation modal?
-  completionTargetDate: moment().add(1, 'days'),
-});
 
 export const getActionSymbolColor = (status, color) => {
   switch (status) {

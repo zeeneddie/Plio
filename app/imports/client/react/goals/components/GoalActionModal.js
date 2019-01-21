@@ -2,9 +2,10 @@ import React from 'react';
 import connectUI from 'redux-ui';
 import { connect } from 'react-redux';
 import { withHandlers } from 'recompose';
-import { find, propEq } from 'ramda';
+import { find, propEq, path } from 'ramda';
 import { getIds } from 'plio-util';
 
+import { getGeneralActionValuesByAction } from '../../actions/helpers';
 import { ActionTypes, DocumentTypes, UserRoles } from '../../../../share/constants';
 import { Query as Queries } from '../../../graphql';
 import { namedCompose } from '../../helpers';
@@ -28,7 +29,7 @@ export default enhance(({
     activeGoal: goalId,
     activeAction: actionId,
   },
-  user: { roles } = {},
+  user: { roles, _id: userId } = {},
   isOpen,
   toggle,
   organizationId,
@@ -45,18 +46,22 @@ export default enhance(({
         organizationId,
         refetchQueries,
         actionId,
+        userId,
       }}
       canCompleteAnyAction={roles && roles.includes(UserRoles.COMPLETE_ANY_ACTION)}
       actionIds={getIds(goal.actions)}
+      getInitialValues={getGeneralActionValuesByAction}
       type={ActionTypes.GENERAL_ACTION}
+      loadLinkedDocs={query => query({
+        query: Queries.GOAL_LIST,
+        variables: { organizationId },
+      }).then(path(['data', 'goals', 'goals']))}
       linkedTo={{
-        documentId: goalId,
-        documentType: DocumentTypes.GOAL,
-      }}
-      linkedToField={{
         _id: goal._id,
         title: goal.title,
         sequentialId: goal.sequentialId,
+        documentId: goalId,
+        documentType: DocumentTypes.GOAL,
       }}
     />
   );

@@ -19,8 +19,9 @@ const ActionEditModal = ({
   onSubmit,
   error,
   organizationId,
-  linkedTo,
   canCompleteAnyAction,
+  userId,
+  loadLinkedDocs,
   action = {},
 }) => (
   <EntityModalNext
@@ -44,7 +45,8 @@ const ActionEditModal = ({
             <ActionEditForm
               {...{
                 ...action,
-                linkedTo,
+                loadLinkedDocs,
+                userId,
                 organizationId,
                 canCompleteAnyAction,
               }}
@@ -62,13 +64,14 @@ ActionEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
+  loadLinkedDocs: PropTypes.func.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   loading: PropTypes.bool,
   initialValues: PropTypes.object,
   onDelete: PropTypes.func,
   action: PropTypes.object,
-  linkedTo: PropTypes.object,
   canCompleteAnyAction: PropTypes.bool,
+  userId: PropTypes.string,
 };
 
 export default ActionEditModal;

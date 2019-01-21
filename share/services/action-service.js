@@ -261,64 +261,6 @@ export default {
     return ret;
   },
 
-  setCompletionDate({ _id, targetDate }) {
-    const ret = this.collection.update({
-      _id,
-    }, {
-      $set: { completionTargetDate: targetDate },
-    });
-
-    WorkItemService.actionCompletionDateUpdated(_id, targetDate);
-
-    return ret;
-  },
-
-  setCompletionExecutor({ _id, userId, assignedBy }) {
-    const ret = this.collection.update({
-      _id,
-    }, {
-      $set: {
-        toBeCompletedBy: userId,
-        completionAssignedBy: assignedBy,
-      },
-    });
-
-    WorkItemService.actionCompletionUserUpdated(_id, userId);
-
-    return ret;
-  },
-
-  setVerificationDate({ _id, targetDate }) {
-    const ret = this.collection.update({
-      _id,
-    }, {
-      $set: { verificationTargetDate: targetDate },
-    });
-
-    WorkItemService.actionVerificationDateUpdated(_id, targetDate);
-
-    return ret;
-  },
-
-  setVerificationExecutor({ _id, userId, assignedBy }) {
-    const ret = this.collection.update({
-      _id,
-    }, {
-      $set: {
-        toBeVerifiedBy: userId,
-        verificationAssignedBy: assignedBy,
-      },
-    });
-
-    WorkItemService.actionVerificationUserUpdated(_id, userId);
-
-    return ret;
-  },
-
-  updateViewedBy({ _id, userId: viewedBy }) {
-    this._service.updateViewedBy({ _id, viewedBy });
-  },
-
   remove({ _id, deletedBy }) {
     const workQuery = { query: { 'linkedDoc._id': _id } };
     const onSoftDelete = () =>
