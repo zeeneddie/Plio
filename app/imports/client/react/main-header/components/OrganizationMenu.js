@@ -102,22 +102,6 @@ const OrganizationMenu = ({ organization: currentOrg, isDashboard }) => (
                       renderLoading={<PreloaderStyled />}
                     >
                       <Fragment>
-                        {organizations.map(({ _id, name, serialNumber }) => (
-                          <HeaderMenuItem
-                            key={_id}
-                            // TODO delete line below when dashboard page will be on React
-                            toggle={!isDashboard}
-                            onClick={() => {
-                              setSelectedOrgSerialNumber(serialNumber, userId);
-                              router.setParams({ orgSerialNumber: serialNumber });
-                            }}
-                            active={currentOrg._id === _id}
-                          >
-                            {name}
-                          </HeaderMenuItem>
-                        ))}
-
-                        <DropdownItem divider />
                         <HeaderMenuItem
                           tag="a"
                           href={router.path(RouteNames.CANVAS, { orgSerialNumber })}
@@ -143,6 +127,24 @@ const OrganizationMenu = ({ organization: currentOrg, isDashboard }) => (
                         </HeaderMenuItem>
 
                         <DropdownItem divider />
+
+                        {organizations.map(({ _id, name, serialNumber }) => (
+                          <HeaderMenuItem
+                            key={_id}
+                            // TODO delete line below when dashboard page will be on React
+                            toggle={!isDashboard}
+                            onClick={() => {
+                              setSelectedOrgSerialNumber(serialNumber, userId);
+                              router.setParams({ orgSerialNumber: serialNumber });
+                            }}
+                            active={currentOrg._id === _id}
+                          >
+                            {name}
+                          </HeaderMenuItem>
+                        ))}
+
+                        <DropdownItem divider />
+
                         {roles.includes(UserRoles.CHANGE_ORG_SETTINGS) && (
                           <HeaderMenuItem
                             onClick={async () => {
