@@ -45,7 +45,7 @@ const CanvasScreenSubcardForm = ({ organizationId, isOpen }) => (
                       {...{ organizationId }}
                       multi
                       name="notify"
-                      placeholder="User to notify"
+                      placeholder="Select users to notify"
                       onChange={handleSubmit}
                     />
                   </FormGroup>

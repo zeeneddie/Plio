@@ -35,7 +35,7 @@ const NotifySubcard = ({ onChange, ...props }) => (
             {...{ onChange, ...props }}
             multi
             name="notify"
-            placeholder="User to notify"
+            placeholder="Select users to notify"
           />
         </FormGroup>
       </CardBlock>
