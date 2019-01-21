@@ -373,6 +373,7 @@ export const Styles = {
   },
   color: {
     blue: '#0078d7',
+    hoverBlue: '#014c8c',
     muted: '#818a91',
     lightBlue: '#00BCF2',
     hoverLightBlue: '#59daff',
