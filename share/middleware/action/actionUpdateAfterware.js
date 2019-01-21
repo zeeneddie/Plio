@@ -4,7 +4,5 @@ export default () => async (next, root, args, context) => {
 
   await next(root, args, context);
 
-  const action = await Actions.findOne({ _id });
-
-  return { action };
+  return Actions.findOne({ _id });
 };

@@ -1,56 +1,53 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { renameKeys } from 'plio-util';
-import { Field } from 'react-final-form';
+import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
   CardBlock,
   FormField,
   LinkedEntityInput,
-  SwitchViewAdapter,
-  SelectInputAdapter,
+  NewExistingSwitchField,
+  ActionSelectInput,
 } from '../../components';
 import ActionForm from './ActionForm';
 
 const NewActionForm = ({
   organizationId,
-  linkedTo,
-  loadActions,
+  linkedTo: {
+    title: value,
+    sequentialId,
+  } = {},
+  actionIds = [],
   ...props
 }) => (
-  <Field
-    name="active"
-    buttons={[
-      <span key="new">New</span>,
-      <span key="existing">Existing</span>,
-    ]}
-    component={SwitchViewAdapter}
-  >
+  <NewExistingSwitchField name="active">
     <ActionForm {...{ ...props, organizationId }}>
-      <FormField>
-        Linked to
-        <LinkedEntityInput disabled {...renameKeys({ title: 'value' }, linkedTo)} />
-      </FormField>
+      {value && (
+        <FormField>
+          Linked to
+          <LinkedEntityInput disabled {...{ sequentialId, value }} />
+        </FormField>
+      )}
     </ActionForm>
     <CardBlock>
       <FormField>
         Existing action
-        <Field
-          loadOptionsOnOpen
+        <ActionSelectInput
           name="action"
           placeholder="Existing action"
-          component={SelectInputAdapter}
-          loadOptions={loadActions}
+          transformOptions={({ data: { actions: { actions } } }) =>
+            mapRejectedEntitiesByIdsToOptions(actionIds, actions)}
+          {...{ organizationId }}
         />
       </FormField>
     </CardBlock>
-  </Field>
+  </NewExistingSwitchField>
 );
 
 NewActionForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
   linkedTo: PropTypes.object,
-  loadActions: PropTypes.func,
+  actionIds: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default NewActionForm;

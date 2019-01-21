@@ -51,6 +51,7 @@ const ActionSubcard = ({
       {({ handleSubmit }) => (
         <ActionEditForm
           {...{ organizationId, ...rest }}
+          status={action.status}
           save={handleSubmit}
         />
       )}

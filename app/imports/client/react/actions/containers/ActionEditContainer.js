@@ -10,12 +10,13 @@ import {
   where,
   contains,
   merge,
+  difference as differenceR,
 } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
-import { noop, getValue } from 'plio-util';
+import { noop, getValue, getValues } from 'plio-util';
 import diff from 'deep-diff';
 
-import { getGeneralActionValuesByAction } from '../helpers';
+import { swal } from '../../../util';
 import { Composer, WithState, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -29,167 +30,257 @@ const ActionEditContainer = ({
   isOpen,
   toggle,
   onDelete,
+  refetchQueries,
+  getInitialValues,
+  linkedTo,
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
   ...props
 }) => (
   <WithState
     initialState={{
       action: _action,
-      initialValues: unless(isNil, getGeneralActionValuesByAction, _action),
+      initialValues: unless(isNil, getInitialValues, _action),
     }}
   >
-    {({ state: { initialValues, action }, setState }) => (
-      <Composer
-        components={[
-          /* eslint-disable react/no-children-prop */
-          <Query
-            {...{ fetchPolicy }}
-            query={Queries.ACTION_CARD}
-            variables={{ _id: actionId }}
-            skip={!isOpen || !!_action}
-            onCompleted={data => setState({
-              initialValues: getGeneralActionValuesByAction(getAction(data)),
-              action: getAction(data),
-            })}
-            children={noop}
-          />,
-          <Mutation
-            mutation={Mutations.UPDATE_RISK}
-            children={noop}
-            onCompleted={({ updateGoal }) => setState({ action: updateGoal })}
-          />,
-          <Mutation
-            mutation={Mutations.DELETE_ACTION}
-            children={noop}
-          />,
-          <Mutation
-            mutation={Mutations.COMPLETE_ACTION}
-            children={noop}
-            onCompleted={({ completeAction }) => {
-              const newAction = merge(action, completeAction);
-              setState({
-                action: newAction,
-                initialValues: getGeneralActionValuesByAction(newAction),
-              });
-            }}
-          />,
-          <Mutation
-            mutation={Mutations.UNDO_ACTION_COMPLETION}
-            children={noop}
-            onCompleted={
-              ({ undoActionCompletion }) => {
-                const newAction = merge(action, undoActionCompletion);
-                setState({
-                  goal: newAction,
-                  initialValues: getGeneralActionValuesByAction(newAction),
-                });
-              }
-            }
-          />,
-          /* eslint-enable react/no-children-prop */
-        ]}
-      >
-        {([
-          { loading, error },
-          updateAction,
-          deleteAction,
-          completeAction,
-          undoActionCompletion,
-        ]) => renderComponent({
-          ...props,
-          error,
-          organizationId,
-          isOpen,
-          toggle,
-          initialValues,
-          action,
-          loading,
-          onSubmit: async (values, form) => {
-            const currentValues = getGeneralActionValuesByAction(action);
-            const difference = diff(values, currentValues);
+    {({ state: { initialValues, action }, setState }) => {
+      const updateActionInState = (mutatedAction) => {
+        const newAction = merge(action, mutatedAction);
+        setState({
+          action: newAction,
+          initialValues: getInitialValues(newAction),
+        });
+      };
+      return (
+        <Composer
+          components={[
+            /* eslint-disable react/no-children-prop */
+            <Query
+              {...{ fetchPolicy }}
+              query={Queries.ACTION_CARD}
+              variables={{ _id: actionId }}
+              skip={!isOpen || !!_action}
+              onCompleted={data => setState({
+                initialValues: getInitialValues(getAction(data)),
+                action: getAction(data),
+              })}
+              children={noop}
+            />,
+            <Mutation
+              mutation={Mutations.UPDATE_ACTION}
+              children={noop}
+              onCompleted={({ updateAction }) => setState({ action: updateAction })}
+            />,
+            <Mutation
+              {...{ refetchQueries }}
+              mutation={Mutations.DELETE_ACTION}
+              children={noop}
+            />,
+            <Mutation
+              {...{ refetchQueries }}
+              mutation={Mutations.COMPLETE_ACTION}
+              children={noop}
+              onCompleted={({ completeAction }) => updateActionInState(completeAction)}
+            />,
+            <Mutation
+              {...{ refetchQueries }}
+              mutation={Mutations.UNDO_ACTION_COMPLETION}
+              children={noop}
+              onCompleted={({ undoActionCompletion }) => updateActionInState(undoActionCompletion)}
+            />,
+            <Mutation
+              {...{ refetchQueries }}
+              mutation={Mutations.VERIFY_ACTION}
+              children={noop}
+              onCompleted={({ verifyAction }) => updateActionInState(verifyAction)}
+            />,
+            <Mutation
+              {...{ refetchQueries }}
+              mutation={Mutations.UNDO_ACTION_VERIFICATION}
+              children={noop}
+              onCompleted={({ undoActionVerification }) =>
+                updateActionInState(undoActionVerification)}
+            />,
+            <Mutation
+              {...{ refetchQueries }}
+              mutation={Mutations.LINK_DOC_TO_ACTION}
+              children={noop}
+              onCompleted={({ linkDocToAction }) => updateActionInState(linkDocToAction)}
+            />,
+            <Mutation
+              {...{ refetchQueries }}
+              mutation={Mutations.UNLINK_DOC_FROM_ACTION}
+              children={noop}
+              onCompleted={({ unlinkDocFromAction }) => updateActionInState(unlinkDocFromAction)}
+            />,
+            /* eslint-enable react/no-children-prop */
+          ]}
+        >
+          {([
+            { loading, error },
+            updateAction,
+            deleteAction,
+            completeAction,
+            undoActionCompletion,
+            verifyAction,
+            undoActionVerification,
+            linkDocToAction,
+            unlinkDocFromAction,
+          ]) => renderComponent({
+            ...props,
+            error,
+            organizationId,
+            isOpen,
+            toggle,
+            initialValues,
+            action,
+            loading,
+            onSubmit: async (values, form) => {
+              const currentValues = getInitialValues(action);
+              const difference = diff(values, currentValues);
 
-            if (!difference) return undefined;
+              if (!difference) return undefined;
 
-            const {
-              title,
-              description = '',
-              owner: { value: ownerId } = {},
-              isCompleted,
-              completionComment = '',
-              completedAt,
-              completedBy,
-              verificationComments,
-              toBeCompletedBy,
-              planInPlace,
-              completionTargetDate,
-              verifiedAt,
-              verifiedBy,
-              toBeVerifiedBy,
-              verificationTargetDate,
-            } = values;
+              const {
+                title,
+                description = '',
+                owner: { value: ownerId } = {},
+                isCompleted,
+                isVerified,
+                isVerifiedAsEffective,
+                completionComments = '',
+                verificationComments = '',
+                completedAt,
+                completedBy,
+                toBeCompletedBy,
+                planInPlace,
+                completionTargetDate,
+                verifiedAt,
+                verifiedBy,
+                toBeVerifiedBy,
+                verificationTargetDate,
+                linkedTo: linkedToValue,
+              } = values;
 
-            const isCompletedDiff = find(where({ path: contains('isCompleted') }), difference);
+              const isCompletedDiff = find(where({ path: contains('isCompleted') }), difference);
+              const errorHandler = (err) => {
+                form.reset(currentValues);
+                throw err;
+              };
 
-            if (isCompletedDiff) {
-              if (isCompleted) {
-                return completeAction({
-                  variables: {
-                    input: {
-                      _id: action._id,
-                      completionComment,
+              if (isCompletedDiff) {
+                if (isCompleted) {
+                  return completeAction({
+                    variables: {
+                      input: {
+                        _id: action._id,
+                        completionComments,
+                      },
                     },
+                  }).then(noop).catch(errorHandler);
+                }
+
+                return undoActionCompletion({
+                  variables: {
+                    input: { _id: action._id },
                   },
-                }).then(noop).catch((err) => {
-                  form.reset(currentValues);
-                  throw err;
-                });
+                }).then(noop).catch(errorHandler);
               }
 
-              return undoActionCompletion({
+              const isVerifiedDiff = find(where({ path: contains('isVerified') }), difference);
+
+              if (isVerifiedDiff) {
+                if (isVerified) {
+                  return verifyAction({
+                    variables: {
+                      input: {
+                        _id: action._id,
+                        verificationComments,
+                        isVerifiedAsEffective,
+                      },
+                    },
+                  }).then(noop).catch(errorHandler);
+                }
+
+                return undoActionVerification({
+                  variables: {
+                    input: { _id: action._id },
+                  },
+                }).then(noop).catch(errorHandler);
+              }
+
+              const isLinkedToDiff = find(where({ path: contains('linkedTo') }), difference);
+
+              if (isLinkedToDiff) {
+                const docsIds = getValues(linkedToValue);
+                const currentDocsIds = getValues(currentValues.linkedTo);
+                const linkedDocId = differenceR(docsIds, currentDocsIds)[0];
+                if (linkedDocId) {
+                  return linkDocToAction({
+                    variables: {
+                      input: {
+                        _id: action._id,
+                        documentType: linkedTo.documentType,
+                        documentId: linkedDocId,
+                      },
+                    },
+                  }).then(noop).catch(errorHandler);
+                }
+
+                const unlinkedDocId = differenceR(currentDocsIds, docsIds)[0];
+                if (unlinkedDocId) {
+                  return unlinkDocFromAction({
+                    variables: {
+                      input: {
+                        _id: action._id,
+                        documentId: unlinkedDocId,
+                      },
+                    },
+                  }).then(noop).catch(errorHandler);
+                }
+              }
+
+              const args = {
+                variables: {
+                  input: {
+                    _id: action._id,
+                    title,
+                    description,
+                    ownerId,
+                    planInPlace,
+                    completionComments,
+                    verificationComments,
+                    completedAt,
+                    verifiedAt,
+                    completionTargetDate,
+                    verificationTargetDate,
+                    completedBy: getValue(completedBy),
+                    toBeCompletedBy: getValue(toBeCompletedBy),
+                    toBeVerifiedBy: getValue(toBeVerifiedBy),
+                    verifiedBy: getValue(verifiedBy),
+                  },
+                },
+              };
+
+              return updateAction(args).then(noop).catch(errorHandler);
+            },
+            onDelete: () => {
+              if (onDelete) return onDelete();
+
+              return swal.promise({
+                text: `The action "${action.title}" will be deleted`,
+                confirmButtonText: 'Delete',
+                successTitle: 'Deleted!',
+                successText: `The action "${action.title}" was deleted successfully.`,
+              }, () => deleteAction({
                 variables: {
                   input: { _id: action._id },
                 },
-              }).then(noop).catch((err) => {
-                form.reset(currentValues);
-                throw err;
-              });
-            }
-
-            const args = {
-              variables: {
-                input: {
-                  _id: action._id,
-                  title,
-                  description,
-                  ownerId,
-                  planInPlace,
-                  completionComment,
-                  verificationComments,
-                  completedAt,
-                  verifiedAt,
-                  completionTargetDate,
-                  verificationTargetDate,
-                  completedBy: getValue(completedBy),
-                  toBeCompletedBy: getValue(toBeCompletedBy),
-                  toBeVerifiedBy: getValue(toBeVerifiedBy),
-                  verifiedBy: getValue(verifiedBy),
-                },
-              },
-            };
-
-            return updateAction(args).then(noop).catch((err) => {
-              form.reset(currentValues);
-              throw err;
-            });
-          },
-          onDelete: () => {
-            if (onDelete) return onDelete();
-            console.log(onDelete);
-            return deleteAction();
-          },
-        })}
-      </Composer>
-    )}
+              })).then(toggle || noop);
+            },
+          })}
+        </Composer>
+      );
+    }}
   </WithState>
 );
 
@@ -197,11 +288,15 @@ ActionEditContainer.propTypes = {
   organizationId: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
+  getInitialValues: PropTypes.func.isRequired,
+  linkedTo: PropTypes.object,
   onDelete: PropTypes.func,
   actionId: PropTypes.string,
   action: PropTypes.object,
   fetchPolicy: PropTypes.string,
   canEditGoals: PropTypes.bool,
+  refetchQueries: PropTypes.func,
+  canCompleteAnyAction: PropTypes.bool,
 };
 
 export default pure(ActionEditContainer);

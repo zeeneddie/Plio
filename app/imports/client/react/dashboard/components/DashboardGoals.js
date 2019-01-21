@@ -16,7 +16,7 @@ import {
   GoalAddModal,
 } from '../../goals';
 import { MilestoneModalContainer } from '../../milestones';
-import { ActionModalContainer } from '../../actions';
+import GoalActionModal from '../../goals/components/GoalActionModal';
 
 const DashboardGoals = ({
   totalCount,
@@ -58,10 +58,10 @@ const DashboardGoals = ({
               toggle={toggleMilestoneModal}
               {...{ organizationId }}
             />
-            <ActionModalContainer
+            <GoalActionModal
               isOpen={isActionModalOpen}
               toggle={toggleActionModal}
-              {...{ organizationId, user }}
+              {...{ organizationId, user, goals }}
             />
           </Fragment>
         )}

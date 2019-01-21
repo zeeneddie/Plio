@@ -2,8 +2,6 @@
 
 mutation linkDocToAction($input: LinkDocToActionInput!) {
   linkDocToAction(input: $input) {
-    action {
-      ...ActionCard
-    }
+    ...ActionCard
   }
 }

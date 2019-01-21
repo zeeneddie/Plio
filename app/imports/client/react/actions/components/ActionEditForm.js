@@ -1,34 +1,29 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Field } from 'react-final-form';
+import { mapEntitiesToOptions } from 'plio-util';
 
 import { getClassByStatus, getStatusName } from '../../../../api/actions/helpers';
-import { WorkflowTypes } from '../../../../share/constants';
 import ActionForm from './ActionForm';
 import ActionVerificationForm from './ActionVerificationForm';
-import { FormField, Status, CardBlock, SelectInputAdapter } from '../../components';
+import { FormField, Status, ApolloSelectInputField } from '../../components';
 
 const ActionEditForm = ({
   status,
-  children,
+  save,
   loadLinkedDocs,
-  onLink,
-  onUnlink,
   ...props
 }) => (
   <Fragment>
-    <ActionForm {...props}>
+    <ActionForm {...{ save, ...props }}>
       <FormField>
         Linked to
-        <Field
+        <ApolloSelectInputField
           multi
-          loadOptionsOnOpen
           name="linkedTo"
           placeholder="Linked to"
-          component={SelectInputAdapter}
           loadOptions={loadLinkedDocs}
-          onChange={onLink}
-          onRemoveMultiValue={onUnlink}
+          transformOptions={mapEntitiesToOptions}
+          onChange={save}
         />
       </FormField>
       <FormField>
@@ -38,22 +33,14 @@ const ActionEditForm = ({
         </Status>
       </FormField>
     </ActionForm>
-    {props.isCompleted && props.workflowType === WorkflowTypes.SIX_STEP && (
-      <CardBlock>
-        <ActionVerificationForm {...props} />
-      </CardBlock>
-    )}
+    <ActionVerificationForm {...{ save, ...props }} />
   </Fragment>
 );
 
 ActionEditForm.propTypes = {
+  loadLinkedDocs: PropTypes.func.isRequired,
   status: PropTypes.number,
-  isCompleted: PropTypes.bool,
-  workflowType: PropTypes.oneOf(Object.values(WorkflowTypes)),
-  children: PropTypes.node,
-  loadLinkedDocs: PropTypes.func,
-  onLink: PropTypes.func,
-  onUnlink: PropTypes.func,
+  save: PropTypes.func,
 };
 
 export default ActionEditForm;

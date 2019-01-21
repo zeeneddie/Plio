@@ -1,7 +1,0 @@
-mutation updateActionCompletedAt($input: UpdateActionCompletedAtInput!) {
-  updateActionCompletedAt(input: $input) {
-    action {
-      completedAt
-    }
-  }
-}

@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
 import { pure } from 'recompose';
 import { Query, Mutation } from 'react-apollo';
-import { noop } from 'plio-util';
+import { noop, getUserOptions } from 'plio-util';
+import { pick } from 'ramda';
 
-import { getActionFormInitialState } from '../helpers';
+import { ActionPlanOptions } from '../../../../share/constants';
 import { validateAction, createFormError } from '../../../validation';
 import { Composer, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
@@ -17,6 +19,7 @@ const ActionAddContainer = ({
   type,
   linkedTo,
   documentType,
+  refetchQueries,
   onLink = noop,
   ...props
 }) => (
@@ -29,18 +32,32 @@ const ActionAddContainer = ({
         children={noop}
       />,
       <Mutation
+        {...{ refetchQueries }}
         mutation={Mutations.CREATE_ACTION}
+        children={noop}
+      />,
+      <Mutation
+        {...{ refetchQueries }}
+        mutation={Mutations.LINK_DOC_TO_ACTION}
         children={noop}
       />,
       /* eslint-disable react/no-children-prop */
     ]}
   >
-    {([{ data: { user } }, createAction]) => renderComponent({
+    {([{ data: { user } }, createAction, linkDocToAction]) => renderComponent({
       ...props,
       organizationId,
       isOpen,
       toggle,
-      initialValues: getActionFormInitialState(user),
+      linkedTo,
+      initialValues: {
+        active: 0,
+        owner: getUserOptions(user),
+        toBeCompletedBy: getUserOptions(user),
+        planInPlace: ActionPlanOptions.NO,
+        // TODO: Update based on linked documents like creation modal?
+        completionTargetDate: moment().add(1, 'days').toDate(),
+      },
       onSubmit: (values) => {
         const {
           active,
@@ -50,12 +67,19 @@ const ActionAddContainer = ({
           completionTargetDate,
           owner: { value: ownerId } = {},
           toBeCompletedBy: { value: toBeCompletedBy } = {},
-          existingAction,
+          action: existingAction = {},
         } = values;
 
         if (active === 1) {
           if (!existingAction.value) return createFormError('Action required');
-          return onLink(existingAction.value).then(toggle || noop);
+          return linkDocToAction({
+            variables: {
+              input: {
+                _id: existingAction.value,
+                ...pick(['documentId', 'documentType'], linkedTo),
+              },
+            },
+          }).then(toggle || noop);
         }
 
         const errors = validateAction(values);
@@ -71,7 +95,7 @@ const ActionAddContainer = ({
               organizationId,
               ownerId,
               type,
-              linkedTo,
+              linkedTo: pick(['documentId', 'documentType'], linkedTo),
               toBeCompletedBy,
             },
           },
@@ -92,6 +116,7 @@ ActionAddContainer.propTypes = {
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
   onLink: PropTypes.func,
+  refetchQueries: PropTypes.func,
 };
 
 export default pure(ActionAddContainer);

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Field } from 'react-final-form';
+import { FormSpy, Field } from 'react-final-form';
 import { FormGroup, Button } from 'reactstrap';
 
 import {
@@ -17,145 +17,155 @@ import { UserSelectInput } from '../../forms/components';
 const ActionCompletionForm = ({
   organizationId,
   userId,
-  isCompleted,
-  isVerified,
   canCompleteAnyAction,
-  onChangeCompletionTargetDate,
-  onChangeToBeCompletedBy,
-  onComplete,
-  onUndoCompletion,
-  onChangeCompletionComments,
-  onChangeCompletedAt,
-  onChangeCompletedBy,
-}) => {
-  const toBeCompletedBy = (
-    <UserSelectInput
-      name="toBeCompletedBy"
-      placeholder="To be completed by"
-      onChange={onChangeToBeCompletedBy}
-      {...{ organizationId }}
-    />
-  );
-  const completedBy = (
-    <UserSelectInput
-      name="completedBy"
-      placeholder="Completed by"
-      onChange={onChangeCompletedBy}
-      disabled={isVerified}
-      {...{ organizationId }}
-    />
-  );
-  const comments = (
-    <Field
-      name="completionComments"
-      placeholder="Enter any completion comments"
-      component={TextareaAdapter}
-      onBlur={e => isCompleted && onChangeCompletionComments(e)}
-      disabled={isVerified}
-    />
-  );
-
-  return (
-    <Fragment>
-      <FormField>
-        Completion - target date
-        <Field
-          name="completionTargetDate"
-          placeholderText="Completion - target date"
-          onChange={onChangeCompletionTargetDate}
-          render={DatePickerAdapter}
-          disabled={isCompleted}
+  save,
+}) => (
+  <Field name="isVerified" subscription={{ value: true }}>
+    {({ input: { value: isVerified } = {} }) => {
+      const toBeCompletedBy = (
+        <UserSelectInput
+          name="toBeCompletedBy"
+          placeholder="To be completed by"
+          onChange={save}
+          {...{ organizationId }}
         />
-      </FormField>
-      {isCompleted ? (
-        <Fragment>
-          <FormField>
-            Completed on
-            <Field
-              name="completedAt"
-              onChange={onChangeCompletedAt}
-              placeholderText="Completed on"
-              render={DatePickerAdapter}
-              disabled={isVerified}
-            />
-          </FormField>
-          <FormField>
-            Completed by
-            <Field
-              name="completedAt"
-              subscription={{ value: true }}
-            >
-              {({ input }) => (
-                <UndoTime date={input.value}>
-                  {({ passed, left, isOverdue }) => (
-                    <FieldCondition
-                      when="completedBy"
-                      is={({ value }) => !isOverdue && (value === userId || canCompleteAnyAction)}
-                      otherwise={completedBy}
+      );
+      const completedBy = (
+        <UserSelectInput
+          name="completedBy"
+          placeholder="Completed by"
+          onChange={save}
+          disabled={isVerified}
+          {...{ organizationId }}
+        />
+      );
+
+      return (
+        <Field name="isCompleted" subscription={{ value: true }}>
+          {({ input: { value: isCompleted } = {} }) => (
+            <Fragment>
+              <FormField>
+                Completion - target date
+                <Field
+                  name="completionTargetDate"
+                  placeholderText="Completion - target date"
+                  onChange={save}
+                  render={DatePickerAdapter}
+                  disabled={isVerified || false}
+                />
+              </FormField>
+              {isCompleted ? (
+                <Fragment>
+                  <FormField>
+                    Completed on
+                    <Field
+                      name="completedAt"
+                      onChange={save}
+                      placeholderText="Completed on"
+                      render={DatePickerAdapter}
+                      disabled={isVerified}
+                    />
+                  </FormField>
+                  <FormField>
+                    Completed by
+                    <Field
+                      name="completedAt"
+                      subscription={{ value: true }}
                     >
-                      <StyledFlexFormGroup>
-                        {completedBy}
-                        <Button color="link" onClick={onUndoCompletion}>
-                          Undo
-                        </Button>
-                      </StyledFlexFormGroup>
-                      <span>
-                        Completed {passed}, {left} left to undo
-                      </span>
-                    </FieldCondition>
-                  )}
-                </UndoTime>
-              )}
-            </Field>
-          </FormField>
-          <FormField>
-            Comments
-            {comments}
-          </FormField>
-        </Fragment>
-      ) : (
-        <FormField>
-          To be completed by
-          <FieldCondition
-            when="toBeCompletedBy"
-            is={({ value }) => value && (value === userId || canCompleteAnyAction)}
-            otherwise={toBeCompletedBy}
-          >
-            <Field name="completionComments" subscription={{ value: true }}>
-              {({ input }) => (
-                <ToggleComplete input={toBeCompletedBy}>
-                  <FormGroup className="margin-top">
-                    {comments}
-                  </FormGroup>
-                  <Button
-                    color="success"
-                    onClick={() => onComplete({ completionComments: input.value })}
+                      {({ input }) => (
+                        <UndoTime date={input.value}>
+                          {({ passed, left, isOverdue }) => (
+                            <FieldCondition
+                              when="completedBy"
+                              is={({ value }) =>
+                              !isOverdue && (value === userId || canCompleteAnyAction)}
+                              otherwise={completedBy}
+                            >
+                              <StyledFlexFormGroup>
+                                {completedBy}
+                                <FormSpy subscription={{ submitting: true }}>
+                                  {({ submitting, form }) => (
+                                    <Button
+                                      color="link"
+                                      disabled={submitting}
+                                      onClick={() => {
+                                        form.change('isCompleted', false);
+                                        save();
+                                      }}
+                                    >
+                                      Undo
+                                    </Button>
+                                  )}
+                                </FormSpy>
+                              </StyledFlexFormGroup>
+                              <span>
+                                Completed {passed}, {left} left to undo
+                              </span>
+                            </FieldCondition>
+                          )}
+                        </UndoTime>
+                      )}
+                    </Field>
+                  </FormField>
+                  <FormField>
+                    Comments
+                    <Field
+                      name="completionComments"
+                      placeholder="Enter any completion comments"
+                      component={TextareaAdapter}
+                      disabled={isVerified}
+                      onBlur={save}
+                    />
+                  </FormField>
+                </Fragment>
+              ) : (
+                <FormField>
+                  To be completed by
+                  <FieldCondition
+                    when="toBeCompletedBy"
+                    is={({ value }) => value && (value === userId || canCompleteAnyAction)}
+                    otherwise={toBeCompletedBy}
                   >
-                    Complete
-                  </Button>
-                </ToggleComplete>
+                    <ToggleComplete input={toBeCompletedBy}>
+                      <FormGroup className="margin-top">
+                        <Field
+                          name="completionComments"
+                          placeholder="Enter any completion comments"
+                          component={TextareaAdapter}
+                          disabled={isVerified}
+                        />
+                      </FormGroup>
+                      <FormSpy subscription={{ submitting: true }}>
+                        {({ submitting, form }) => (
+                          <Button
+                            color="success"
+                            disabled={submitting}
+                            onClick={() => {
+                              form.change('isCompleted', true);
+                              save();
+                            }}
+                          >
+                            Complete
+                          </Button>
+                        )}
+                      </FormSpy>
+                    </ToggleComplete>
+                  </FieldCondition>
+                </FormField>
               )}
-            </Field>
-          </FieldCondition>
-        </FormField>
-      )}
-    </Fragment>
-  );
-};
+            </Fragment>
+          )}
+        </Field>
+      );
+    }}
+  </Field>
+);
 
 ActionCompletionForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
   userId: PropTypes.string,
-  isCompleted: PropTypes.bool,
-  isVerified: PropTypes.bool,
   canCompleteAnyAction: PropTypes.bool,
-  onChangeCompletionTargetDate: PropTypes.func,
-  onChangeToBeCompletedBy: PropTypes.func,
-  onComplete: PropTypes.func,
-  onUndoCompletion: PropTypes.func,
-  onChangeCompletionComments: PropTypes.func,
-  onChangeCompletedAt: PropTypes.func,
-  onChangeCompletedBy: PropTypes.func,
+  save: PropTypes.func,
 };
 
 export default ActionCompletionForm;

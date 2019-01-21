@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Col } from 'reactstrap';
+import { getIds } from 'plio-util';
 
 import {
   Subcard,
@@ -23,14 +24,17 @@ import ActionSubcard from './ActionSubcard';
 const ActionsSubcard = ({
   organizationId,
   actions,
-  initialValues,
   newEntityTitle,
   newEntityButtonTitle,
   onLink,
   onUnlink,
   linkedTo,
-  documentType,
   type,
+  refetchQueries,
+  canCompleteAnyAction,
+  userId,
+  getInitialValues,
+  loadLinkedDocs,
   ...props
 }) => (
   <Fragment>
@@ -48,7 +52,13 @@ const ActionsSubcard = ({
                     organizationId,
                     action,
                     linkedTo,
+                    onLink,
                     onUnlink,
+                    refetchQueries,
+                    canCompleteAnyAction,
+                    userId,
+                    getInitialValues,
+                    loadLinkedDocs,
                   }}
                   key={action._id}
                   itemId={action._id}
@@ -63,10 +73,8 @@ const ActionsSubcard = ({
                     organizationId,
                     onLink,
                     onUnlink,
-                  }}
-                  linkedTo={{
-                    documentId: linkedTo._id,
-                    documentType,
+                    refetchQueries,
+                    linkedTo,
                   }}
                   keepDirtyOnReinitialize
                   label={newEntityTitle}
@@ -75,11 +83,11 @@ const ActionsSubcard = ({
                 >
                   <NewActionForm
                     {...{
-                      actions,
                       organizationId,
                       linkedTo,
                       ...props,
                     }}
+                    actionIds={getIds(actions)}
                   />
                 </EntityManagerCards>
                 <EntityManagerAddButton>{newEntityButtonTitle}</EntityManagerAddButton>
@@ -99,15 +107,18 @@ ActionsSubcard.defaultProps = {
 
 ActionsSubcard.propTypes = {
   organizationId: PropTypes.string.isRequired,
+  getInitialValues: PropTypes.func.isRequired,
+  loadLinkedDocs: PropTypes.func.isRequired,
   actions: PropTypes.arrayOf(PropTypes.object),
-  initialValues: PropTypes.object,
   newEntityTitle: PropTypes.string,
   newEntityButtonTitle: PropTypes.string,
   linkedTo: PropTypes.object,
-  documentType: PropTypes.string,
   onLink: PropTypes.func.isRequired,
   onUnlink: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
+  refetchQueries: PropTypes.func,
+  canCompleteAnyAction: PropTypes.bool,
+  userId: PropTypes.string,
 };
 
 export default ActionsSubcard;

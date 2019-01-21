@@ -1,52 +1,75 @@
 import React from 'react';
-import connectUI from 'redux-ui';
-import { connect } from 'react-redux';
-import { namedCompose } from '../../helpers';
-import ActionEditModalContainer from './ActionEditModalContainer';
-import ActionAddModalContainer from './ActionAddModalContainer';
+import PropTypes from 'prop-types';
 
-const enhance = namedCompose('ActionModalContainer')(
-  connect(),
-  connectUI(),
-);
+import ActionAddContainer from './ActionAddContainer';
+import ActionEditContainer from './ActionEditContainer';
+import ActionAddModal from '../components/ActionAddModal';
+import ActionEditModal from '../components/ActionEditModal';
 
-export default enhance(({
-  ui: {
-    activeGoal: goalId,
-    activeAction: actionId,
-  },
+const ActionModalContainer = ({
   isOpen,
   toggle,
   organizationId,
-  user,
+  refetchQueries,
+  type,
+  linkedTo,
+  actionId,
+  actionIds,
+  canCompleteAnyAction,
+  userId,
+  getInitialValues,
+  loadLinkedDocs,
 }) => {
-  if (!goalId) return null;
-
   if (!actionId) {
     return (
-      <ActionAddModalContainer
+      <ActionAddContainer
         {...{
           isOpen,
           toggle,
           organizationId,
-          user,
-          actionId,
-          goalId,
+          refetchQueries,
+          type,
+          linkedTo,
+          actionIds,
         }}
+        render={ActionAddModal}
       />
     );
   }
 
   return (
-    <ActionEditModalContainer
+    <ActionEditContainer
       {...{
         isOpen,
         toggle,
         organizationId,
-        user,
         actionId,
-        goalId,
+        refetchQueries,
+        type,
+        linkedTo,
+        canCompleteAnyAction,
+        userId,
+        getInitialValues,
+        loadLinkedDocs,
       }}
+      render={ActionEditModal}
     />
   );
-});
+};
+
+ActionModalContainer.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
+  organizationId: PropTypes.string.isRequired,
+  getInitialValues: PropTypes.func.isRequired,
+  loadLinkedDocs: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
+  actionIds: PropTypes.array,
+  refetchQueries: PropTypes.func,
+  linkedTo: PropTypes.object,
+  actionId: PropTypes.string,
+  canCompleteAnyAction: PropTypes.bool,
+  userId: PropTypes.string,
+};
+
+export default ActionModalContainer;

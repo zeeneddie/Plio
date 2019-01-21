@@ -93,6 +93,13 @@ const enhance = compose(
             queries.push(Queries.DASHBOARD_GOALS.name);
           }
         }
+
+        if (data.unlinkDocFromAction ||
+            data.linkDocToAction ||
+            data.createAction ||
+            data.deleteAction) {
+          queries.push(Queries.DASHBOARD_GOALS.name);
+        }
       }
 
       return queries;
@@ -172,8 +179,9 @@ const GoalEditContainer = ({
           completeGoal,
           undoGoalCompletion,
         ]) => {
-          const canEditGoals = data && data.user && data.user.roles &&
-            data.user.roles.includes(UserRoles.CREATE_DELETE_GOALS);
+          const user = data && data.user;
+          const canEditGoals = user && user.roles &&
+            user.roles.includes(UserRoles.CREATE_DELETE_GOALS);
 
           return renderComponent({
             ...props,
@@ -185,6 +193,7 @@ const GoalEditContainer = ({
             goal,
             canEditGoals,
             loading,
+            user,
             refetchQueries,
             onSubmit: async (values, form) => {
               const currentValues = getInitialValues(goal);

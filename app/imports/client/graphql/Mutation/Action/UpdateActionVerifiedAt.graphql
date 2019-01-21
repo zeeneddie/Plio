@@ -1,7 +1,0 @@
-mutation updateActionVerifiedAt($input: UpdateActionVerifiedAtInput!) {
-  updateActionVerifiedAt(input: $input) {
-    action {
-      verifiedAt
-    }
-  }
-}

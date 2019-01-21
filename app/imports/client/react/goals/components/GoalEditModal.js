@@ -26,6 +26,7 @@ export const GoalEditModal = ({
   onSubmit,
   goal,
   canEditGoals,
+  user,
   ...props
 }) => (
   <EntityModalNext
@@ -57,6 +58,7 @@ export const GoalEditModal = ({
                 {...{
                   ...props,
                   ...goal,
+                  user,
                   organizationId,
                   canEditGoals,
                 }}
@@ -82,6 +84,7 @@ GoalEditModal.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   goal: PropTypes.object,
   canEditGoals: PropTypes.bool,
+  user: PropTypes.object,
 };
 
 export default pure(GoalEditModal);

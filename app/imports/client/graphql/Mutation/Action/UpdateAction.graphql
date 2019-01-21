@@ -1,0 +1,7 @@
+#import "../../Fragment/ActionCard.graphql"
+
+mutation updateAction($input: UpdateActionInput!) {
+  updateAction(input: $input) {
+    ...ActionCard
+  }
+}

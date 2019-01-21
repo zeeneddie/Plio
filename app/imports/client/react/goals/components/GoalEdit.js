@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { pure } from 'recompose';
-import { sort } from 'ramda';
+import { sort, path } from 'ramda';
 import { bySerialNumber, byCompletionTargetDate } from 'plio-util';
 
-import { AWSDirectives, DocumentTypes, ActionTypes } from '../../../../share/constants';
+import { Query as Queries } from '../../../graphql';
+import { getGeneralActionValuesByAction } from '../../actions/helpers';
+import { AWSDirectives, DocumentTypes, ActionTypes, UserRoles } from '../../../../share/constants';
 import { CardBlock, NotifySubcard, EntitiesField, RelationsAdapter } from '../../components';
 import GoalEditForm from './GoalEditForm';
 import FilesSubcardContainer from '../../canvas/components/FilesSubcardContainer';
@@ -22,11 +24,12 @@ export const GoalEdit = ({
   _id: goalId,
   canEditGoals,
   risks,
+  actions,
   milestones,
   lessons,
-  actions,
-  organization: { rkGuidelines } = {},
   refetchQueries,
+  user: { roles, _id: userId } = {},
+  organization: { rkGuidelines } = {},
 }) => {
   const linkedTo = { _id: goalId, title, sequentialId };
 
@@ -43,16 +46,29 @@ export const GoalEdit = ({
         />
       </CardBlock>
       <EntitiesField
-        {...{ organizationId }}
+        {...{
+          organizationId,
+          refetchQueries,
+          linkedTo,
+          userId,
+        }}
         name="actions"
         render={ActionsSubcard}
-        onChange={save}
         newEntityTitle="New general action"
         newEntityButtonTitle="Add general action"
         type={ActionTypes.GENERAL_ACTION}
-        documentType={DocumentTypes.GOAL}
-        linkedTo={{ _id: goalId, title, sequentialId }}
         actions={sort(bySerialNumber, actions)}
+        getInitialValues={getGeneralActionValuesByAction}
+        canCompleteAnyAction={roles && roles.includes(UserRoles.COMPLETE_ANY_ACTION)}
+        linkedTo={{
+          ...linkedTo,
+          documentType: DocumentTypes.GOAL,
+          documentId: linkedTo._id,
+        }}
+        loadLinkedDocs={query => query({
+          query: Queries.GOAL_LIST,
+          variables: { organizationId },
+        }).then(path(['data', 'goals', 'goals']))}
       />
       <RelationsAdapter
         {...{ refetchQueries, goalId, organizationId }}
@@ -78,12 +94,7 @@ export const GoalEdit = ({
         render={LessonsSubcard}
         documentType={DocumentTypes.GOAL}
         lessons={sort(bySerialNumber, lessons)}
-        linkedTo={{
-          _id: goalId,
-          sequentialId,
-          title,
-        }}
-        {...{ organizationId, refetchQueries }}
+        {...{ organizationId, refetchQueries, linkedTo }}
       />
       <EntitiesField
         {...{ organizationId }}
@@ -119,6 +130,7 @@ GoalEdit.propTypes = {
   }).isRequired,
   milestones: PropTypes.arrayOf(PropTypes.object).isRequired,
   refetchQueries: PropTypes.func,
+  user: PropTypes.object,
 };
 
 export default pure(GoalEdit);
