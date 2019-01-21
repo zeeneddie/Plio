@@ -27,9 +27,12 @@ import CanvasReportPrintModal from './CanvasReportPrintModal';
 const StyledReportItemList = styled(CanvasReportItemList)`
   padding: 0 0.75rem;
   margin: 0;
-  ul li {
-    display: inline-flex;
-    margin-right: 10px;
+  ul {
+    padding: 0;
+    li {
+      display: inline-flex;
+      margin-right: 10px;
+    }
   }
 `;
 

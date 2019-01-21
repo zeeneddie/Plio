@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { identity } from 'ramda';
 
-import { Styles } from '../../../../api/constants';
 import CanvasSectionItem from './CanvasSectionItem';
 import CanvasSquareIcon from './CanvasSquareIcon';
 import CanvasLinkedItem from './CanvasLinkedItem';
 
 const List = styled.div`
-  ul, ol {
-    padding: 0;
+  ul {
+    padding: 0 0 0 8px;
     margin-bottom: 1rem;
     li {
       cursor: auto;
@@ -23,17 +22,6 @@ const List = styled.div`
         padding: 0 !important;
         overflow: hidden;
         display: block;
-      }
-    }
-  }
-  ol {
-    padding-left: 8px;
-    li {
-      display: list-item;
-      font-family: ${Styles.font.family.segoe.semibold};
-      span {
-        display: inline;
-        font-family: ${Styles.font.family.segoe.regular};
       }
     }
   }
@@ -52,28 +40,25 @@ const CanvasReportItemList = ({
   renderItem,
   sort = identity,
   ...rest
-}) => {
-  const Tag = isSimple ? 'ol' : 'ul';
-  return (
-    <List {...rest}>
-      <Tag>
-        {sort(items).map(item => (
-          <CanvasSectionItem key={item._id}>
-            {!isSimple && item.color && <StyledCanvasSquareIcon color={item.color} />}
-            <span>
-              {renderItem ? renderItem(item) : item.title}
-              {!isSimple && item.matchedTo && (
-                <CanvasLinkedItem>
-                  {item.matchedTo.title}
-                </CanvasLinkedItem>
-              )}
-            </span>
-          </CanvasSectionItem>
-        ))}
-      </Tag>
-    </List>
-  );
-};
+}) => (
+  <List {...rest}>
+    <ul>
+      {sort(items).map(item => (
+        <CanvasSectionItem key={item._id}>
+          {!isSimple && item.color && <StyledCanvasSquareIcon color={item.color} />}
+          <span>
+            {renderItem ? renderItem(item) : item.title}
+            {!isSimple && item.matchedTo && (
+              <CanvasLinkedItem>
+                {item.matchedTo.title}
+              </CanvasLinkedItem>
+            )}
+          </span>
+        </CanvasSectionItem>
+      ))}
+    </ul>
+  </List>
+);
 
 CanvasReportItemList.propTypes = {
   items: PropTypes.array.isRequired,

@@ -13,12 +13,19 @@ const ListWrapper = styled.div`
   h4 {
     margin: 0;
   }
-  ol {
-    list-style: none;
+  ul {
+    list-style: disc inside;
     break-inside: avoid;
+    overflow: hidden;
     li {
-      display: inline-flex;
-      margin-right: 12px;
+      display: list-item;
+      overflow: visible;
+      float: left;
+      margin-right: 25px;
+      span {
+        display: inline;
+        margin: -10px;
+      }
     }
   }
 `;
