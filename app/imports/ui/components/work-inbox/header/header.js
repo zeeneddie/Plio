@@ -9,7 +9,7 @@ Template.WorkInbox_Header.viewmodel({
       idToExpand: this.workItemId(),
       filters: WorkInboxFilters,
       isActiveFilter: this.isActiveWorkInboxFilter.bind(this),
-      transformCurrentFilterLabel: (text, filter) => text.replace(filter.prepend, ''),
+      transformHeader: () => 'Work - ',
       getOptionsMenu() {
         return {
           component: HeaderMenu,
