@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
 import { pure } from 'recompose';
 import { Query, Mutation } from 'react-apollo';
-import { noop } from 'plio-util';
+import { noop, getUserOptions } from 'plio-util';
+import { pick } from 'ramda';
 
-import { getActionFormInitialState } from '../helpers';
+import { ActionPlanOptions } from '../../../../share/constants';
 import { validateAction, createFormError } from '../../../validation';
 import { Composer, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
@@ -18,7 +20,6 @@ const ActionAddContainer = ({
   linkedTo,
   documentType,
   refetchQueries,
-  linkedToField,
   onLink = noop,
   ...props
 }) => (
@@ -48,8 +49,15 @@ const ActionAddContainer = ({
       organizationId,
       isOpen,
       toggle,
-      linkedTo: linkedToField,
-      initialValues: getActionFormInitialState(user),
+      linkedTo,
+      initialValues: {
+        active: 0,
+        owner: getUserOptions(user),
+        toBeCompletedBy: getUserOptions(user),
+        planInPlace: ActionPlanOptions.NO,
+        // TODO: Update based on linked documents like creation modal?
+        completionTargetDate: moment().add(1, 'days').toDate(),
+      },
       onSubmit: (values) => {
         const {
           active,
@@ -68,7 +76,7 @@ const ActionAddContainer = ({
             variables: {
               input: {
                 _id: existingAction.value,
-                ...linkedTo,
+                ...pick(['documentId', 'documentType'], linkedTo),
               },
             },
           }).then(toggle || noop);
@@ -87,7 +95,7 @@ const ActionAddContainer = ({
               organizationId,
               ownerId,
               type,
-              linkedTo,
+              linkedTo: pick(['documentId', 'documentType'], linkedTo),
               toBeCompletedBy,
             },
           },
@@ -105,7 +113,6 @@ ActionAddContainer.propTypes = {
   type: PropTypes.string.isRequired,
   documentType: PropTypes.string,
   linkedTo: PropTypes.object,
-  linkedToField: PropTypes.object,
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
   onLink: PropTypes.func,

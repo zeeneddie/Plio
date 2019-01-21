@@ -15,9 +15,10 @@ const ActionModalContainer = ({
   linkedTo,
   actionId,
   actionIds,
-  linkedToField,
   canCompleteAnyAction,
   userId,
+  getInitialValues,
+  loadLinkedDocs,
 }) => {
   if (!actionId) {
     return (
@@ -30,7 +31,6 @@ const ActionModalContainer = ({
           type,
           linkedTo,
           actionIds,
-          linkedToField,
         }}
         render={ActionAddModal}
       />
@@ -46,9 +46,11 @@ const ActionModalContainer = ({
         actionId,
         refetchQueries,
         type,
-        linkedToField,
+        linkedTo,
         canCompleteAnyAction,
         userId,
+        getInitialValues,
+        loadLinkedDocs,
       }}
       render={ActionEditModal}
     />
@@ -59,11 +61,12 @@ ActionModalContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
+  getInitialValues: PropTypes.func.isRequired,
+  loadLinkedDocs: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   actionIds: PropTypes.array,
   refetchQueries: PropTypes.func,
   linkedTo: PropTypes.object,
-  linkedToField: PropTypes.object,
   actionId: PropTypes.string,
   canCompleteAnyAction: PropTypes.bool,
   userId: PropTypes.string,

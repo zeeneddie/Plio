@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 
-import isVerification from '../../forms/decorators/isVerification';
 import { validateAction } from '../../../validation';
 import {
   EntityModalNext,
@@ -20,9 +19,9 @@ const ActionEditModal = ({
   onSubmit,
   error,
   organizationId,
-  linkedTo,
   canCompleteAnyAction,
   userId,
+  loadLinkedDocs,
   action = {},
 }) => (
   <EntityModalNext
@@ -37,7 +36,6 @@ const ActionEditModal = ({
   >
     <EntityModalForm
       {...{ initialValues, onSubmit }}
-      decorators={[isVerification]}
       validate={validateAction}
     >
       {({ handleSubmit }) => (
@@ -47,8 +45,8 @@ const ActionEditModal = ({
             <ActionEditForm
               {...{
                 ...action,
+                loadLinkedDocs,
                 userId,
-                linkedTo,
                 organizationId,
                 canCompleteAnyAction,
               }}
@@ -66,12 +64,12 @@ ActionEditModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
+  loadLinkedDocs: PropTypes.func.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   loading: PropTypes.bool,
   initialValues: PropTypes.object,
   onDelete: PropTypes.func,
   action: PropTypes.object,
-  linkedTo: PropTypes.object,
   canCompleteAnyAction: PropTypes.bool,
   userId: PropTypes.string,
 };

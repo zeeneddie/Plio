@@ -93,6 +93,13 @@ const enhance = compose(
             queries.push(Queries.DASHBOARD_GOALS.name);
           }
         }
+
+        if (data.unlinkDocFromAction ||
+            data.linkDocToAction ||
+            data.createAction ||
+            data.deleteAction) {
+          queries.push(Queries.DASHBOARD_GOALS.name);
+        }
       }
 
       return queries;

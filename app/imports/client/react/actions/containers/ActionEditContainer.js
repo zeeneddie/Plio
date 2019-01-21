@@ -10,13 +10,13 @@ import {
   where,
   contains,
   merge,
+  difference as differenceR,
 } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
-import { noop, getValue } from 'plio-util';
+import { noop, getValue, getValues } from 'plio-util';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
-import { getGeneralActionValuesByAction } from '../helpers';
 import { Composer, WithState, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -31,14 +31,15 @@ const ActionEditContainer = ({
   toggle,
   onDelete,
   refetchQueries,
-  linkedToField,
+  getInitialValues,
+  linkedTo,
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
   ...props
 }) => (
   <WithState
     initialState={{
       action: _action,
-      initialValues: unless(isNil, getGeneralActionValuesByAction, _action),
+      initialValues: unless(isNil, getInitialValues, _action),
     }}
   >
     {({ state: { initialValues, action }, setState }) => {
@@ -46,7 +47,7 @@ const ActionEditContainer = ({
         const newAction = merge(action, mutatedAction);
         setState({
           action: newAction,
-          initialValues: getGeneralActionValuesByAction(newAction),
+          initialValues: getInitialValues(newAction),
         });
       };
       return (
@@ -59,7 +60,7 @@ const ActionEditContainer = ({
               variables={{ _id: actionId }}
               skip={!isOpen || !!_action}
               onCompleted={data => setState({
-                initialValues: getGeneralActionValuesByAction(getAction(data)),
+                initialValues: getInitialValues(getAction(data)),
                 action: getAction(data),
               })}
               children={noop}
@@ -99,6 +100,18 @@ const ActionEditContainer = ({
               onCompleted={({ undoActionVerification }) =>
                 updateActionInState(undoActionVerification)}
             />,
+            <Mutation
+              {...{ refetchQueries }}
+              mutation={Mutations.LINK_DOC_TO_ACTION}
+              children={noop}
+              onCompleted={({ linkDocToAction }) => updateActionInState(linkDocToAction)}
+            />,
+            <Mutation
+              {...{ refetchQueries }}
+              mutation={Mutations.UNLINK_DOC_FROM_ACTION}
+              children={noop}
+              onCompleted={({ unlinkDocFromAction }) => updateActionInState(unlinkDocFromAction)}
+            />,
             /* eslint-enable react/no-children-prop */
           ]}
         >
@@ -110,6 +123,8 @@ const ActionEditContainer = ({
             undoActionCompletion,
             verifyAction,
             undoActionVerification,
+            linkDocToAction,
+            unlinkDocFromAction,
           ]) => renderComponent({
             ...props,
             error,
@@ -119,9 +134,8 @@ const ActionEditContainer = ({
             initialValues,
             action,
             loading,
-            linkedTo: linkedToField,
             onSubmit: async (values, form) => {
-              const currentValues = getGeneralActionValuesByAction(action);
+              const currentValues = getInitialValues(action);
               const difference = diff(values, currentValues);
 
               if (!difference) return undefined;
@@ -144,6 +158,7 @@ const ActionEditContainer = ({
                 verifiedBy,
                 toBeVerifiedBy,
                 verificationTargetDate,
+                linkedTo: linkedToValue,
               } = values;
 
               const isCompletedDiff = find(where({ path: contains('isCompleted') }), difference);
@@ -191,6 +206,37 @@ const ActionEditContainer = ({
                     input: { _id: action._id },
                   },
                 }).then(noop).catch(errorHandler);
+              }
+
+              const isLinkedToDiff = find(where({ path: contains('linkedTo') }), difference);
+
+              if (isLinkedToDiff) {
+                const docsIds = getValues(linkedToValue);
+                const currentDocsIds = getValues(currentValues.linkedTo);
+                const linkedDocId = differenceR(docsIds, currentDocsIds)[0];
+                if (linkedDocId) {
+                  return linkDocToAction({
+                    variables: {
+                      input: {
+                        _id: action._id,
+                        documentType: linkedTo.documentType,
+                        documentId: linkedDocId,
+                      },
+                    },
+                  }).then(noop).catch(errorHandler);
+                }
+
+                const unlinkedDocId = differenceR(currentDocsIds, docsIds)[0];
+                if (unlinkedDocId) {
+                  return unlinkDocFromAction({
+                    variables: {
+                      input: {
+                        _id: action._id,
+                        documentId: unlinkedDocId,
+                      },
+                    },
+                  }).then(noop).catch(errorHandler);
+                }
               }
 
               const args = {
@@ -242,7 +288,8 @@ ActionEditContainer.propTypes = {
   organizationId: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  linkedToField: PropTypes.object,
+  getInitialValues: PropTypes.func.isRequired,
+  linkedTo: PropTypes.object,
   onDelete: PropTypes.func,
   actionId: PropTypes.string,
   action: PropTypes.object,

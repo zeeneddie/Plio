@@ -29,11 +29,12 @@ const ActionsSubcard = ({
   onLink,
   onUnlink,
   linkedTo,
-  documentType,
   type,
   refetchQueries,
   canCompleteAnyAction,
   userId,
+  getInitialValues,
+  loadLinkedDocs,
   ...props
 }) => (
   <Fragment>
@@ -51,10 +52,13 @@ const ActionsSubcard = ({
                     organizationId,
                     action,
                     linkedTo,
+                    onLink,
                     onUnlink,
                     refetchQueries,
                     canCompleteAnyAction,
                     userId,
+                    getInitialValues,
+                    loadLinkedDocs,
                   }}
                   key={action._id}
                   itemId={action._id}
@@ -70,10 +74,7 @@ const ActionsSubcard = ({
                     onLink,
                     onUnlink,
                     refetchQueries,
-                  }}
-                  linkedTo={{
-                    documentId: linkedTo._id,
-                    documentType,
+                    linkedTo,
                   }}
                   keepDirtyOnReinitialize
                   label={newEntityTitle}
@@ -106,11 +107,12 @@ ActionsSubcard.defaultProps = {
 
 ActionsSubcard.propTypes = {
   organizationId: PropTypes.string.isRequired,
+  getInitialValues: PropTypes.func.isRequired,
+  loadLinkedDocs: PropTypes.func.isRequired,
   actions: PropTypes.arrayOf(PropTypes.object),
   newEntityTitle: PropTypes.string,
   newEntityButtonTitle: PropTypes.string,
   linkedTo: PropTypes.object,
-  documentType: PropTypes.string,
   onLink: PropTypes.func.isRequired,
   onUnlink: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
