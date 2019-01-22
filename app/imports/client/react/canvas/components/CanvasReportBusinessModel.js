@@ -32,6 +32,12 @@ const StyledReportItemList = styled(CanvasReportItemList)`
     li {
       display: inline-flex;
       margin-right: 10px;
+      & > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 170px;
+      }
     }
   }
 `;
