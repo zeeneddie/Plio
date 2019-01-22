@@ -4,11 +4,12 @@ import { insert, update, remove } from '../../../../api/standards-types/methods'
 import { swal } from '../../../util';
 import { namedCompose } from '../../helpers';
 import StandardTypesSubcard from '../components/StandardTypesSubcard';
+import sortByTitlePrefix from '../../../../api/helpers/sortByTitlePrefix';
 
 export default namedCompose('StandardTypesSubcardContainer')(
   withProps(({ standardTypes = [] }) => ({
     initialValues: {
-      standardTypes,
+      standardTypes: sortByTitlePrefix(standardTypes),
     },
   })),
   withHandlers({

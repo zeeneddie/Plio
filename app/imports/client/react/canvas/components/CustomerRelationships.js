@@ -24,8 +24,15 @@ const CustomerRelationships = ({ organizationId }) => (
         sectionName={CanvasSections[CanvasTypes.CUSTOMER_RELATIONSHIP]}
         help={<CustomerRelationshipsHelp />}
         items={customerRelationships}
-        renderModal={({ isOpen, toggle }) => (
-          <CustomerRelationshipAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <CustomerRelationshipAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
         )}
         renderEditModal={({ isOpen, toggle, _id }) => (
           <CustomerRelationshipEditModal

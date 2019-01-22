@@ -29,7 +29,11 @@ const CustomerElementsMatch = ({ renderPie, renderMatcher, ...props }) => (
           })}
         </TabPane>
         <TabPane tabId={Tabs.MATCHER}>
-          <HelpText>Click on the arrow symbol to match to one or more elements</HelpText>
+          <HelpText>
+            Click on the arrow symbol to match to one or more elements.
+            If there are no elements listed then click on the Back button
+            and start adding some Features and/or Benefits.
+          </HelpText>
           {renderMatcher(props)}
           <Pull right>
             <Button onClick={() => setState({ activeTab: Tabs.PIE })}>

@@ -7,6 +7,7 @@ import { Pull } from './Utility';
 import Subcard from './Subcard';
 import SubcardBody from './SubcardBody';
 import SubcardHeader from './SubcardHeader';
+import { Styles } from '../../../api/constants';
 
 const SubcardWrapper = styled.div`
   & > .card-block-collapse-toggle {
@@ -32,13 +33,21 @@ const SubcardWrapper = styled.div`
   }
 `;
 
+const StyledHeading = styled.span`
+  font-family: ${Styles.font.family.segoe.semibold};
+  font-size: 15px;
+  color: ${Styles.color.darkGrey};
+`;
+
 const MoreLess = ({ children, badge }) => (
   <SubcardWrapper>
     <Subcard>
       <SubcardHeader>
         {({ isOpen }) => (
           <Fragment>
-            {isOpen ? 'Less' : 'More'}
+            <StyledHeading>
+              {isOpen ? 'Less' : 'More'}
+            </StyledHeading>
             {!!badge && !isOpen && (
               <Pull right>
                 <h5>{badge}</h5>

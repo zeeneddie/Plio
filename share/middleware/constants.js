@@ -1,13 +1,11 @@
-import {
-  branch,
-  checkFilesAccess,
-  checkGoalsAccess,
-  checkRisksAccess,
-  checkStandardsAccess,
-  checkNonconformitiesAccess,
-  checkPotentialGainsAccess,
-  checkMultipleOrgMembership,
-} from './';
+import branch from './helpers/branch';
+import checkFilesAccess from './Files/checkFilesAccess';
+import checkGoalsAccess from './Goal/checkGoalsAccess';
+import checkRisksAccess from './Risk/checkRisksAccess';
+import checkStandardsAccess from './Standard/checkStandardsAccess';
+import checkNonconformitiesAccess from './Nonconformity/checkNonconformitiesAccess';
+import checkPotentialGainsAccess from './Nonconformity/checkPotentialGainsAccess';
+import checkMultipleOrgMembership from './Auth/checkMultipleOrgMembership';
 
 export const CanvasUpdateMiddlewares = [
   checkFilesAccess(),

@@ -6,7 +6,7 @@ import { onlyUpdateForKeys } from 'recompose';
 import { joinIds } from 'plio-util';
 
 import { Icon, IconLoading, DashboardStatsExpandable } from '../../components';
-import { DashboardStatsMessageContainer } from '../containers';
+import DashboardStatsMessageContainer from '../containers/DashboardStatsMessageContainer';
 import {
   WorkspaceDefaults,
   WorkspaceDefaultsTypes,

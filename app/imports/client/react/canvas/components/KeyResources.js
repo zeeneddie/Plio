@@ -24,8 +24,15 @@ const KeyResources = ({ organizationId }) => (
         sectionName={CanvasSections[CanvasTypes.KEY_RESOURCE]}
         help={<KeyResourcesHelp />}
         items={keyResources}
-        renderModal={({ isOpen, toggle }) => (
-          <KeyResourceAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <KeyResourceAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
         )}
         renderEditModal={({ isOpen, toggle, _id }) => (
           <KeyResourceEditModal

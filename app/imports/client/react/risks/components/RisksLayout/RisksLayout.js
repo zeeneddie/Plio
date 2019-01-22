@@ -22,7 +22,7 @@ const getMenuItems = ({ filters, filter }) => (
         value={filterWithPrepend}
         active={parseInt(key, 10) === parseInt(filter, 10)}
       >
-        Risks - {filterWithPrepend}
+        {filterWithPrepend}
       </Dropdown.Item>
     );
   })

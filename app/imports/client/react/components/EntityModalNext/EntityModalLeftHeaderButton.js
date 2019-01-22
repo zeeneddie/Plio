@@ -22,7 +22,7 @@ const EntityModalLeftHeaderButton = ({ label, ...props }) => (
 );
 
 EntityModalLeftHeaderButton.defaultProps = {
-  label: 'Close',
+  label: 'Cancel',
 };
 
 EntityModalLeftHeaderButton.propTypes = {

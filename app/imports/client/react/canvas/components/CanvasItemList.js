@@ -27,6 +27,7 @@ const CanvasItemList = ({
       <Mutation mutation={Mutations.REORDER_CANVAS_ITEMS}>
         {reorderCanvasItems => (
           <CanvasSectionItems
+            className={sectionName}
             onChange={order => (
               reorderCanvasItems({
                 variables: {

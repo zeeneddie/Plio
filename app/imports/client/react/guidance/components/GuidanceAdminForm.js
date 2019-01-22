@@ -71,7 +71,7 @@ const GuidanceAdminForm = ({
 );
 
 GuidanceAdminForm.propTypes = {
-  guidance: PropTypes.object.isRequired,
+  guidance: PropTypes.object,
   documentType: PropTypes.string.isRequired,
   refetchQueries: PropTypes.func,
   save: PropTypes.func,

@@ -21,7 +21,11 @@ export const render = renderer => getComponent => options => async (...args) => 
 
 export const renderComponent = render(mount);
 
-export const renderBlazeComponent = render(BlazeLayout.render.bind(BlazeLayout));
+export const renderBlazeComponent = render(async (component, opts) => {
+  await import('../../../ui/components');
+
+  return BlazeLayout.render(component, opts);
+});
 
 /* REACT */
 
@@ -46,8 +50,18 @@ export const renderHelpDocs = renderComponent(async () =>
 export const renderTransitionalLayout = renderComponent(async () =>
   import('../../../client/react/layouts/TransitionalLayout'));
 
-export const renderCanvasLayout = renderComponent(async () =>
-  import('../../../client/react/canvas/components/CanvasLayout'));
+export const renderCanvasLayout = renderComponent(async () => {
+  const [CanvasLayout] = await Promise.all([
+    import('../../../client/react/canvas/components/CanvasLayout'),
+    // fetch necessary blaze components
+    import('../../../ui/components/dashboard/includes/user-menu'),
+  ]);
+
+  // don't wait for other blaze components because they aren't immediately needed
+  import('../../../ui/components');
+
+  return CanvasLayout;
+});
 
 export const renderCanvasReportLayout = renderComponent(async () =>
   import('../../../client/react/canvas/components/CanvasReportLayout'));

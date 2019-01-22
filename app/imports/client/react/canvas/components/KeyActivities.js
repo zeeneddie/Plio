@@ -24,8 +24,15 @@ const KeyActivities = ({ organizationId }) => (
         sectionName={CanvasSections[CanvasTypes.KEY_ACTIVITY]}
         help={<KeyActivitiesHelp />}
         items={keyActivities}
-        renderModal={({ isOpen, toggle }) => (
-          <KeyActivityAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <KeyActivityAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
         )}
         renderEditModal={({ isOpen, toggle, _id }) => (
           <KeyActivityEditModal

@@ -8,7 +8,7 @@ import {
 } from '../../middleware';
 import { Risks } from '../../../share/collections';
 import { RiskService } from '../../../share/services';
-import { checkLoggedIn } from '../../../share/middleware';
+import checkLoggedIn from '../../../share/middleware/Auth/checkLoggedIn';
 
 export default new MiddlewareMethod({
   name: 'Risks.linkStandard',

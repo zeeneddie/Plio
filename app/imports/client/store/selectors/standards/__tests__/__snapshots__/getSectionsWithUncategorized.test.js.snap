@@ -3,6 +3,16 @@
 exports[`getSectionsWithUncategorized matches snapshot 1`] = `
 Array [
   Object {
+    "_id": "StandardBookSections.Uncategorized",
+    "organizationId": undefined,
+    "standards": Array [
+      Object {
+        "_id": 5,
+      },
+    ],
+    "title": "Uncategorized",
+  },
+  Object {
     "_id": 8,
     "standards": Array [
       Object {
@@ -30,16 +40,6 @@ Array [
         "typeId": 9,
       },
     ],
-  },
-  Object {
-    "_id": "StandardBookSections.Uncategorized",
-    "organizationId": undefined,
-    "standards": Array [
-      Object {
-        "_id": 5,
-      },
-    ],
-    "title": "Uncategorized",
   },
 ]
 `;

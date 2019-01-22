@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { Collapse, Button } from 'reactstrap';
 import { StyledMixins } from 'plio-util';
 
-import { TimelineListItem, ToggleAngleIcon } from '../../components';
+import { ToggleAngleIcon } from '../../components';
+import { TimelineListItem } from '../../components/timeline';
 import { Styles } from '../../../../api/constants';
 
 const ToggleButtonWrapper = styled.div`

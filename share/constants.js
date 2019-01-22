@@ -898,6 +898,24 @@ export const Colors = {
   MUTED_CYAN: '#80DEEA',
 };
 
+export const ChartColors = {
+  TEAL: '#009688',
+  CYAN: '#00BCD4',
+  INDIGO: '#3F51B5',
+  PURPLE: '#673AB7',
+  PLUM: '#9C27B0',
+  PINK: '#F06292',
+  BLUE_GREY: '#607D8B',
+  GREY: '#757575',
+  MUTED_CYAN: '#80DEEA',
+  MUTED_BLUE: '#90CAF9',
+  MUTED_PURPLE: '#B39DDB',
+  MUTED_PLUM: '#CE93D8',
+  LIGHT_BLUE_GREY: '#B0BEC5',
+  LIGHT_GREY: '#BDBDBD',
+  MUTED_YELLOW: '#FFEF81',
+};
+
 export const GoalColors = { ...Colors };
 
 export const AllowedActionLinkedDocTypes = [

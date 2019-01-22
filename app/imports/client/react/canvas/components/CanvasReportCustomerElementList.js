@@ -2,12 +2,22 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { concatAll } from 'plio-util';
 
+import { Styles } from '../../../../api/constants';
 import CanvasReportItemList from './CanvasReportItemList';
 
 const StyledReportItemList = styled(CanvasReportItemList)`
+  margin-top: 0.2rem;
   ol, ul {
     margin: 0;
   }
+  li {
+    margin-bottom: 0.5rem;
+  }
+`;
+
+const MatchedItemList = styled.div`
+  line-height: 1.2rem;
+  color: ${Styles.color.muted};
 `;
 
 const CanvasReportCustomerElementList = props => (
@@ -26,7 +36,7 @@ const CanvasReportCustomerElementList = props => (
         <Fragment>
           {title} <span className="text-muted">({sequentialId})</span>
           {!!matchedCustomerElements.length && (
-            <div className="text-muted">
+            <MatchedItemList>
               Matched to:
               {matchedCustomerElements.map((customerElement, index) => (
                 <Fragment key={customerElement._id}>
@@ -35,7 +45,7 @@ const CanvasReportCustomerElementList = props => (
                   {matchedCustomerElements.length === index + 1 ? '.' : ','}
                 </Fragment>
               ))}
-            </div>
+            </MatchedItemList>
           )}
         </Fragment>
       );

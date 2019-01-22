@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { StyledMixins } from 'plio-util';
 
 import { Styles } from '../../../../api/constants';
-import { Icon } from '../../components';
 import Canvas from './Canvas';
 import CanvasRow from './CanvasRow';
 import CanvasCol from './CanvasCol';
@@ -23,13 +22,23 @@ import CustomerSegmentsHelp from './CustomerSegmentsHelp';
 import CostStructureHelp from './CostStructureHelp';
 import RevenueStreamsHelp from './RevenueStreamsHelp';
 import CanvasReportPrintModal from './CanvasReportPrintModal';
+import StrategyzerCopyright from './StrategyzerCopyright';
 
 const StyledReportItemList = styled(CanvasReportItemList)`
   padding: 0 0.75rem;
   margin: 0;
-  ul li {
-    display: inline-flex;
-    margin-right: 10px;
+  ul {
+    padding: 0;
+    li {
+      display: inline-flex;
+      margin-right: 10px;
+      & > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 170px;
+      }
+    }
   }
 `;
 
@@ -170,8 +179,7 @@ const CanvasReportBusinessModel = ({
       </CanvasRow>
     </StyledCanvas>
     <Copyright>
-      <Icon name="creative-commons" margin="right" />
-      Canvas by Strategyzer.com
+      <StrategyzerCopyright />
     </Copyright>
   </CanvasReportSection>
 );

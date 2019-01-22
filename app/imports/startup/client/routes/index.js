@@ -7,10 +7,13 @@ import { AccountsTemplates } from 'meteor/useraccounts:core';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { $ } from 'meteor/jquery';
-import '/imports/ui/components';
-import '/imports/ui/layouts';
-import '/imports/ui/pages';
 
+import '../../../ui/components/notifications';
+import '../../../ui/components/includes/preloader';
+import '../../../ui/components/login-header.html';
+import '../../../ui/components/useraccounts';
+import '../../../ui/layouts';
+import '../../../ui/pages';
 import './triggers';
 
 import {

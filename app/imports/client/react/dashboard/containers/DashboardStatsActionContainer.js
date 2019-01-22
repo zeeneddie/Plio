@@ -6,7 +6,7 @@ import moment from 'moment-timezone';
 import { pick } from 'ramda';
 
 import { namedCompose } from '../../helpers';
-import { DashboardStatsAction } from '../components';
+import DashboardStatsAction from '../components/DashboardStatsAction';
 import { composeWithTracker } from '../../../util';
 import { getLinkedDoc, getQueryParams } from '../../../../api/work-items/helpers';
 import { Label } from '../../components';

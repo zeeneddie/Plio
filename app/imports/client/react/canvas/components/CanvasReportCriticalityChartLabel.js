@@ -13,6 +13,12 @@ const LabelValue = styled.span`
   }
 `;
 
+const Title = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
 const CanvasReportCriticalityChartLabel = ({
   label,
   color,
@@ -20,7 +26,7 @@ const CanvasReportCriticalityChartLabel = ({
   y,
 }) => (
   <CanvasReportChartLabel {...{ color }}>
-    <span>{label}</span>
+    <Title>{label}</Title>
     <LabelValue className="text-muted">
       <span>{y}</span>
       <span>{x}</span>

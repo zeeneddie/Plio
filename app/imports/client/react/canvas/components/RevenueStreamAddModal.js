@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { getUserOptions } from 'plio-util';
+import { getUserOptions, noop } from 'plio-util';
 import { Form } from 'reactstrap';
 import { pure } from 'recompose';
 
@@ -21,6 +21,7 @@ const RevenueStreamAddModal = ({
   isOpen,
   toggle,
   organizationId,
+  onLink = noop,
 }) => (
   <Query query={Queries.CANVAS_CURRENT_USER_INFO} fetchPolicy={ApolloFetchPolicies.CACHE_ONLY}>
     {({ data: { user } }) => (
@@ -52,6 +53,7 @@ const RevenueStreamAddModal = ({
                 } = values;
 
                 return createRevenueStream({
+                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -64,9 +66,12 @@ const RevenueStreamAddModal = ({
                     },
                   },
                   refetchQueries: [
-                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+                    { query: Queries.REVENUE_STREAMS, variables: { organizationId } },
                   ],
-                }).then(toggle);
+                }).then(({ data: { createRevenueStream: { revenueStream } } }) => {
+                  onLink(revenueStream._id);
+                  toggle();
+                });
               }}
             >
               {({ handleSubmit }) => (
@@ -93,6 +98,7 @@ RevenueStreamAddModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
+  onLink: PropTypes.func,
 };
 
 export default pure(RevenueStreamAddModal);

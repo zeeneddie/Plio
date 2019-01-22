@@ -1,10 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+
 import CanvasReportChartLabel from './CanvasReportChartLabel';
+
+const Title = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 5px;
+`;
 
 const CanvasReportDoughnutChartLabel = ({ label, color, percent }) => (
   <CanvasReportChartLabel {...{ color }}>
-    <span>{label}</span>
+    <Title>{label}</Title>
     <span className="text-muted">{percent || 0}%</span>
   </CanvasReportChartLabel>
 );
