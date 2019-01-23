@@ -468,7 +468,7 @@ export const StringLimits = {
   },
   comments: {
     min: 1,
-    max: 140,
+    max: 512,
   },
   sequentialId: {
     min: 3,

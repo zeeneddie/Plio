@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import { Field } from 'react-final-form';
 import { FormGroup, Button } from 'reactstrap';
 
+import { StringLimits } from '../../../../share/constants';
 import {
   FormField,
   DatePickerAdapter,
@@ -50,6 +51,7 @@ const ActionCompletionForm = ({
       name="completionComments"
       placeholder="Enter any completion comments"
       component={TextareaAdapter}
+      maxLength={StringLimits.comments.max}
       onBlur={e => isCompleted && onChangeCompletionComments(e)}
       disabled={isVerified}
     />

@@ -1,6 +1,6 @@
 <template name="Actions_CompletionComments">
   {{#FormField label="Comments"}}
     <textarea class="form-control" rows="3" placeholder="Completion comments"
-        {{b "value: completionComments, focusout: update, enable: enabled"}}></textarea>
+        {{b "value: completionComments, focusout: update, enable: enabled, maxlength: maxLength"}}></textarea>
   {{/FormField}}
 </template>
