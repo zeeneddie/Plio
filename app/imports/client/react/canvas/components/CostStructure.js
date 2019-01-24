@@ -21,6 +21,7 @@ const CostStructure = ({ organizationId }) => (
     {({ data: { costLines: { costLines = [] } } }) => (
       <CanvasBlock
         {...{ organizationId }}
+        twoColumn
         label="Cost structure"
         sectionName={CanvasSections[CanvasTypes.COST_LINE]}
         help={<CostStructureHelp />}

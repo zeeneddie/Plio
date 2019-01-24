@@ -4,7 +4,7 @@ import { Field, FormSpy } from 'react-final-form';
 import { FormGroup, Button } from 'reactstrap';
 import { pure } from 'recompose';
 
-import { AnalysisStatuses } from '../../../../share/constants';
+import { AnalysisStatuses, StringLimits } from '../../../../share/constants';
 import { getAnalysisStatusClass } from '../../../../api/problems/helpers';
 import FormField from './FormField';
 import DatePickerField from './DatePickerField';
@@ -27,6 +27,7 @@ const AnalysisForm = ({
         <TextareaField
           name={`${prefix}.completionComments`}
           placeholder="Enter any completion comments"
+          maxLength={StringLimits.comments.max}
           onBlur={e => isCompleted && save(e)}
         />
       )}

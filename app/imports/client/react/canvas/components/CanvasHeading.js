@@ -57,8 +57,8 @@ CanvasHeading.propTypes = {
   toggle: PropTypes.func,
   help: PropTypes.node,
   icon: PropTypes.string,
-  sectionName: PropTypes.string.isRequired,
   onLink: PropTypes.func,
+  sectionName: PropTypes.string,
 };
 
 export default enhance(CanvasHeading);

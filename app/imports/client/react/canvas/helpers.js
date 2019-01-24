@@ -30,7 +30,7 @@ import {
   CustomerElementStatuses,
   Criticality,
   CriticalityLevels,
-  Colors,
+  ChartColors,
   MAX_TOTAL_PERCENT,
   DEFAULT_CANVAS_COLOR,
 } from '../../../share/constants';
@@ -100,7 +100,7 @@ const pickLinkedDocs = map(pick([
 const mergeAllWithConcat = reduce(mergeWith(compose(uniq, concat)), {});
 export const buildLinkedDocsData = compose(mergeAllWithConcat, pickLinkedDocs);
 
-const palette = Object.values(Colors);
+const palette = Object.values(ChartColors);
 const getColorByIndex = index => palette[index % palette.length];
 export const generateColors = addIndex(map)((item, index) => getColorByIndex(index));
 

@@ -2,11 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import Sortable from 'react-sortablejs';
+import is from 'styled-is';
 import { StyledMixins } from 'plio-util';
 
 import { CanvasStyles } from '../constants';
 
-const SortableList = styled(Sortable)`
+const SortableList = styled(({ twoColumn, ...rest }) => <Sortable {...rest} />)`
   list-style: none;
   margin: 0;
   padding: 0px ${CanvasStyles.sectionPadding};
@@ -42,6 +43,16 @@ const SortableList = styled(Sortable)`
     overflow: hidden;
     display: block;
   }
+  
+  ${is('twoColumn')`
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    li {
+      width: 50%;
+      margin-right: 5px;
+    }
+  `}
 `;
 
 const CanvasSectionItems = ({ children, ...props }) => (
@@ -54,6 +65,7 @@ CanvasSectionItems.propTypes = {
   tag: PropTypes.string,
   children: PropTypes.node.isRequired,
   options: PropTypes.object,
+  inline: PropTypes.bool,
 };
 
 CanvasSectionItems.defaultProps = {

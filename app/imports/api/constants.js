@@ -37,35 +37,35 @@ export const RiskFilterIndexes = {
 
 export const RiskFilters = {
   [RiskFilterIndexes.TYPE]: {
-    title: 'Risks',
+    title: '',
     name: 'type',
     prepend: 'by',
   },
   [RiskFilterIndexes.STATUS]: {
-    title: 'Risks',
+    title: '',
     name: 'status',
     prepend: 'by',
   },
   [RiskFilterIndexes.DEPARTMENT]: {
-    title: 'Risks',
+    title: '',
     name: 'department',
     prepend: 'by',
   },
   [RiskFilterIndexes.PROJECT]: {
-    title: 'Risks',
+    title: '',
     name: 'project',
     prepend: 'by',
   },
   [RiskFilterIndexes.DELETED]: {
-    title: 'Risks',
+    title: '',
     name: 'deleted',
   },
 };
 
 export const StandardFilters = {
-  1: { title: 'Standards', name: 'section', prepend: 'by' },
-  2: { title: 'Standards', name: 'type', prepend: 'by' },
-  3: { title: 'Standards', name: 'deleted', prepend: '' },
+  1: { title: '', name: 'section', prepend: 'by' },
+  2: { title: '', name: 'type', prepend: 'by' },
+  3: { title: '', name: 'deleted', prepend: '' },
 };
 
 export const WorkInboxFilterIndexes = {
@@ -78,12 +78,12 @@ export const WorkInboxFilterIndexes = {
 };
 
 export const WorkInboxFilters = {
-  [WorkInboxFilterIndexes.MY_CURRENT]: { title: 'Work', name: 'my current', prepend: '' },
-  [WorkInboxFilterIndexes.TEAM_CURRENT]: { title: 'Work', name: 'team current', prepend: '' },
-  [WorkInboxFilterIndexes.MY_COMPLETED]: { title: 'Work', name: 'my completed', prepend: '' },
-  [WorkInboxFilterIndexes.TEAM_COMPLETED]: { title: 'Work', name: 'team completed', prepend: '' },
-  [WorkInboxFilterIndexes.MY_DELETED]: { name: 'My deleted actions' },
-  [WorkInboxFilterIndexes.TEAM_DELETED]: { name: 'Team deleted actions' },
+  [WorkInboxFilterIndexes.MY_CURRENT]: { name: 'my current work', prepend: '' },
+  [WorkInboxFilterIndexes.TEAM_CURRENT]: { name: 'team current work', prepend: '' },
+  [WorkInboxFilterIndexes.MY_COMPLETED]: { name: 'my completed work', prepend: '' },
+  [WorkInboxFilterIndexes.TEAM_COMPLETED]: { name: 'team completed work', prepend: '' },
+  [WorkInboxFilterIndexes.MY_DELETED]: { name: 'my deleted actions' },
+  [WorkInboxFilterIndexes.TEAM_DELETED]: { name: 'team deleted actions' },
 };
 
 export const STANDARD_FILTER_MAP = {
@@ -373,6 +373,7 @@ export const Styles = {
   },
   color: {
     blue: '#0078d7',
+    hoverBlue: '#014c8c',
     muted: '#818a91',
     lightBlue: '#00BCF2',
     hoverLightBlue: '#59daff',

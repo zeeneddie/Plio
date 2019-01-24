@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { StyledMixins } from 'plio-util';
 
 import { Styles } from '../../../../api/constants';
-import { Icon } from '../../components';
 import Canvas from './Canvas';
 import CanvasRow from './CanvasRow';
 import CanvasCol from './CanvasCol';
@@ -23,20 +22,30 @@ import CustomerSegmentsHelp from './CustomerSegmentsHelp';
 import CostStructureHelp from './CostStructureHelp';
 import RevenueStreamsHelp from './RevenueStreamsHelp';
 import CanvasReportPrintModal from './CanvasReportPrintModal';
+import StrategyzerCopyright from './StrategyzerCopyright';
 
 const StyledReportItemList = styled(CanvasReportItemList)`
   padding: 0 0.75rem;
   margin: 0;
-  ul li {
-    display: inline-flex;
-    margin-right: 10px;
+  ul {
+    padding: 0;
+    li {
+      display: inline-flex;
+      margin-right: 10px;
+      & > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 170px;
+      }
+    }
   }
 `;
 
 const StyledCanvas = styled(Canvas)`
   padding 1px;
   ${StyledMixins.media.print`
-    min-height: calc(100vh - 88px);
+    min-height: calc(100vh - 57px);
   `}
 `;
 
@@ -44,10 +53,12 @@ const StyledCanvasSection = styled(CanvasSection)`
   min-height: auto;
 `;
 
-const Copyright = styled.div`
-  margin-top: 10px;
-  text-align: right;
-  color: ${Styles.color.muted};
+const Copyright = styled.span`
+  font-size: 1rem;
+  margin-left: 5px;
+  &, i {
+    color: ${Styles.color.muted};
+  }
 `;
 
 const CanvasReportBusinessModel = ({
@@ -66,6 +77,9 @@ const CanvasReportBusinessModel = ({
   <CanvasReportSection className="business-model-canvas">
     <CanvasReportSectionHeading>
       Business model canvas
+      <Copyright>
+        <StrategyzerCopyright />
+      </Copyright>
       <CanvasReportPrintModal {...{ printState, updatePrintState }} />
     </CanvasReportSectionHeading>
     <StyledCanvas>
@@ -169,10 +183,6 @@ const CanvasReportBusinessModel = ({
         </CanvasCol>
       </CanvasRow>
     </StyledCanvas>
-    <Copyright>
-      <Icon name="creative-commons" margin="right" />
-      Canvas by Strategyzer.com
-    </Copyright>
   </CanvasReportSection>
 );
 

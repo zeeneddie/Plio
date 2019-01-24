@@ -38,15 +38,23 @@ const NavbarStyled = styled(Navbar)`
 `;
 
 const UserMenuWrapper = styled.div`
-  flex: 1;
   ${StyledMixins.media.mobile`
+    .nav-item.open {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background: #444;
+      & > .nav-link {
+        float: right;
+        & > span {
+          display: block;
+          float: left;
+        }
+      }
+    }
     .nav-link > span {
-      display: block;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      max-width: 119px;
-      float: left;
+      display: none;
     }
   `}
 `;

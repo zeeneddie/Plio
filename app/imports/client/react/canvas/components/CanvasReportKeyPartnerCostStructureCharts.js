@@ -16,14 +16,14 @@ const CanvasReportKeyPartnerCostStructureCharts = ({ keyPartners, costLines }) =
     <hr />
     <Container fluid>
       <Row>
-        <Col xs="4" offset={{ xs: 2 }}>
+        <Col xs="4" offset={{ xs: 1 }}>
           <CanvasReportCriticalityChart
             title="Key partners"
             subtitle="% of market"
             data={getKeyPartnerChartData(keyPartners)}
           />
         </Col>
-        <Col xs="4">
+        <Col xs="4" offset={{ xs: 1 }}>
           <CanvasReportDoughnutChart
             title="Cost structure"
             subtitle="% of total costs"

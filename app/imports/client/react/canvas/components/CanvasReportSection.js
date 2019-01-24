@@ -16,7 +16,7 @@ const CanvasReportSection = styled.section`
       margin-top: 0;
     }
     @page {
-      size: landscape
+      size: landscape;
     }
   }
 `;
