@@ -45,7 +45,7 @@ const StyledReportItemList = styled(CanvasReportItemList)`
 const StyledCanvas = styled(Canvas)`
   padding 1px;
   ${StyledMixins.media.print`
-    min-height: calc(100vh - 88px);
+    min-height: calc(100vh - 57px);
   `}
 `;
 
@@ -53,10 +53,12 @@ const StyledCanvasSection = styled(CanvasSection)`
   min-height: auto;
 `;
 
-const Copyright = styled.div`
-  margin-top: 10px;
-  text-align: right;
-  color: ${Styles.color.muted};
+const Copyright = styled.span`
+  font-size: 1rem;
+  margin-left: 5px;
+  &, i {
+    color: ${Styles.color.muted};
+  }
 `;
 
 const CanvasReportBusinessModel = ({
@@ -75,6 +77,9 @@ const CanvasReportBusinessModel = ({
   <CanvasReportSection className="business-model-canvas">
     <CanvasReportSectionHeading>
       Business model canvas
+      <Copyright>
+        <StrategyzerCopyright />
+      </Copyright>
       <CanvasReportPrintModal {...{ printState, updatePrintState }} />
     </CanvasReportSectionHeading>
     <StyledCanvas>
@@ -178,9 +183,6 @@ const CanvasReportBusinessModel = ({
         </CanvasCol>
       </CanvasRow>
     </StyledCanvas>
-    <Copyright>
-      <StrategyzerCopyright />
-    </Copyright>
   </CanvasReportSection>
 );
 
