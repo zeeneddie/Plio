@@ -50,7 +50,7 @@ const OrganizationSettingsHelp = {
   riskTypes: 'Create a list of standards types for your organization.',
   riskGuidelines: 'Help users to indicate the magnitude of this risk more accurately, by giving them some clear guidelines (e.g by financial impact  minor - under $1,000; major $1k - $10k) in the context of your organization.',
   riskScoringGuidelines: 'Help users to score this risk more accurately, by giving them some clear guidelines on what the various scoring terms (e.g. minor, moderate, significant) mean in the context of your organization.',
-  homeScreenTitles: 'Plio lets you customize the labels for each of the main icons on your home screen. Just select an icon label you wish to change, click on the selection button and select an alternative name from the options provided, or create an entirely new name',
+  homeScreenTitles: 'Plio lets you set different default values for the number of items to be displayed on the Operations view screen. When this number (N) is exceeded, Plio will display the most recent N items, followed by a "More" button.\n\nPlio also lets you customize the labels for each of the main icons on your home screen. Just select an icon label you wish to change, click on the selection button and select an alternative name from the options provided, or create an entirely new name.',
 };
 
 const MyPreferencesHelp = {

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import diff from 'deep-diff';
 import { Form } from 'react-final-form';
-import { noop, lenses } from 'plio-util';
+import { noop } from 'plio-util';
 import { Mutation } from 'react-apollo';
-import { over, compose, pick } from 'ramda';
+import { pick } from 'ramda';
 
 import { swal } from '../../../util';
 import { Mutation as Mutations } from '../../../graphql';
@@ -25,15 +25,7 @@ const homeScreenOptions = [
   },
 ];
 
-const getHomeScreenOption = (value = HomeScreenTypes.OPERATIONS) => ({
-  value,
-  label: HomeScreenLabels[value],
-});
-
-const getInitialValues = compose(
-  over(lenses.homeScreenType, getHomeScreenOption),
-  pick(['homeScreenType']),
-);
+const getInitialValues = pick(['homeScreenType']);
 
 const HomeScreenForm = ({ organization }) => (
   <Mutation mutation={Mutations.UPDATE_ORGANIZATION}>
