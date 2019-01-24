@@ -17,6 +17,7 @@ const CanvasItemList = ({
   sectionName,
   renderEditModal,
   items,
+  twoColumn,
 }) => (
   <Query
     query={Queries.CANVAS_SETTINGS}
@@ -27,6 +28,7 @@ const CanvasItemList = ({
       <Mutation mutation={Mutations.REORDER_CANVAS_ITEMS}>
         {reorderCanvasItems => (
           <CanvasSectionItems
+            {...{ twoColumn }}
             className={sectionName}
             onChange={order => (
               reorderCanvasItems({
@@ -99,6 +101,7 @@ CanvasItemList.propTypes = {
   sectionName: PropTypes.string.isRequired,
   renderEditModal: PropTypes.func.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  twoColumn: PropTypes.bool,
 };
 
 export default CanvasItemList;
