@@ -26,6 +26,7 @@ const CanvasBlock = ({
   organizationId,
   sectionName,
   chartButtonIcon,
+  twoColumn,
 }) => {
   const isEmpty = !items.length;
 
@@ -53,6 +54,7 @@ const CanvasBlock = ({
               sectionName,
               renderEditModal,
               items,
+              twoColumn,
             }}
           />
           <DelayedFooter
@@ -84,6 +86,7 @@ CanvasBlock.propTypes = {
   renderEditModal: PropTypes.func,
   renderChartModal: PropTypes.func,
   chartButtonIcon: PropTypes.string,
+  twoColumn: PropTypes.bool,
 };
 
 export default CanvasBlock;

@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import { FormSpy, Field } from 'react-final-form';
 import { FormGroup, Button } from 'reactstrap';
 
+import { StringLimits } from '../../../../share/constants';
 import {
   FormField,
   DatePickerAdapter,
@@ -112,6 +113,7 @@ const ActionCompletionForm = ({
                     <Field
                       name="completionComments"
                       placeholder="Enter any completion comments"
+                      maxLength={StringLimits.comments.max}
                       component={TextareaAdapter}
                       disabled={isVerified}
                       onBlur={save}
@@ -131,6 +133,7 @@ const ActionCompletionForm = ({
                         <Field
                           name="completionComments"
                           placeholder="Enter any completion comments"
+                          maxLength={StringLimits.comments.max}
                           component={TextareaAdapter}
                           disabled={isVerified}
                         />

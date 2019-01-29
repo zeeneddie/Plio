@@ -13,7 +13,7 @@ import {
   FormInput,
 } from '../../components';
 import MilestoneSymbol from './MilestoneSymbol';
-import { MilestoneStatuses } from '../../../../share/constants';
+import { MilestoneStatuses, StringLimits } from '../../../../share/constants';
 
 const StatusField = styled.span`
   display: flex;
@@ -101,6 +101,7 @@ const MilestoneForm = ({ save }) => (
           name="completionComment"
           onBlur={save}
           placeholder="Comments"
+          maxLength={StringLimits.comments.max}
         />
       </FormField>
     </FieldCondition>

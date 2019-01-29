@@ -4,6 +4,7 @@ import { FormSpy, Field } from 'react-final-form';
 import { FormGroup, Button, InputGroupButton } from 'reactstrap';
 import styled from 'styled-components';
 
+import { StringLimits } from '../../../../share/constants';
 import {
   TextareaField,
   TextAlign,
@@ -34,6 +35,7 @@ export const GoalCompleteForm = ({ organizationId, save }) => (
         <FormGroup className="margin-top">
           <TextareaField
             name="completionComment"
+            maxLength={StringLimits.comments.max}
             placeholder="Enter any completion comments"
           />
         </FormGroup>
@@ -106,6 +108,7 @@ export const GoalCompleteForm = ({ organizationId, save }) => (
         <TextareaField
           name="completionComment"
           placeholder="Enter any completion comments"
+          maxLength={StringLimits.comments.max}
           onBlur={save}
         />
       </FormField>

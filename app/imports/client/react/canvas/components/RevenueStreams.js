@@ -21,6 +21,7 @@ const RevenueStreams = ({ organizationId }) => (
     {({ data: { revenueStreams: { revenueStreams = [] } } }) => (
       <CanvasBlock
         {...{ organizationId }}
+        twoColumn
         label="Revenue streams"
         sectionName={CanvasSections[CanvasTypes.REVENUE_STREAM]}
         help={<RevenueStreamsHelp />}
