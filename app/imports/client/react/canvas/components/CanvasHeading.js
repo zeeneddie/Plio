@@ -1,21 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import { withHandlers } from 'recompose';
 
 import { Icon } from '../../components';
 import CanvasSectionHeading from './CanvasSectionHeading';
 import CanvasSectionHelp from './CanvasSectionHelp';
 import CanvasAddButton from './CanvasAddButton';
-
-const enhance = withHandlers({
-  onLink: ({ sectionName }) => () => {
-    const section = document.querySelector(`ul.${sectionName}`);
-    if (section) {
-      section.scrollTop = section.scrollHeight;
-    }
-  },
-});
 
 const StyledIcon = styled(Icon)`
   font-size: 24px;
@@ -61,4 +51,4 @@ CanvasHeading.propTypes = {
   sectionName: PropTypes.string,
 };
 
-export default enhance(CanvasHeading);
+export default CanvasHeading;

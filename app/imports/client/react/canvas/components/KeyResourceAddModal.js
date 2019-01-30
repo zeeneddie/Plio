@@ -49,7 +49,6 @@ const KeyResourceAddModal = ({
                 } = values;
 
                 return createKeyResource({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -59,9 +58,6 @@ const KeyResourceAddModal = ({
                       notes,
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.KEY_RESOURCES, variables: { organizationId } },
-                  ],
                 }).then(({ data: { createKeyResource: { keyResource } } }) => {
                   onLink(keyResource._id);
                   toggle();

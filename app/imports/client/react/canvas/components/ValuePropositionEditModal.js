@@ -117,9 +117,6 @@ const ValuePropositionEditModal = ({
                 },
                 () => deleteValueProposition({
                   variables: { input: { _id } },
-                  refetchQueries: [
-                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
-                  ],
                 }).then(toggle),
               );
             }}

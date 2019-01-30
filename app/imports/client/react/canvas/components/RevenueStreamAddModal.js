@@ -53,7 +53,6 @@ const RevenueStreamAddModal = ({
                 } = values;
 
                 return createRevenueStream({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -65,9 +64,6 @@ const RevenueStreamAddModal = ({
                       percentOfProfit,
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.REVENUE_STREAMS, variables: { organizationId } },
-                  ],
                 }).then(({ data: { createRevenueStream: { revenueStream } } }) => {
                   onLink(revenueStream._id);
                   toggle();

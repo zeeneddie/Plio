@@ -3,9 +3,9 @@ import {
   checkLoggedIn,
   flattenInput,
   checkOrgMembership,
-  insertAfterware,
   checkValuePropositionMatchedToAccess,
 } from '../../../../../share/middleware';
+import { Subscriptions, DocChangeKinds } from '../../../constants';
 
 export const resolver = async (root, args, context) =>
   context.services.ValuePropositionService.insert(args, context);
@@ -15,8 +15,21 @@ export default applyMiddleware(
   flattenInput(),
   checkOrgMembership(),
   checkValuePropositionMatchedToAccess(),
-  insertAfterware((root, args, { collections: { ValuePropositions } }) => ({
-    collection: ValuePropositions,
-    key: 'valueProposition',
-  })),
+  async (next, root, args, context) => {
+    const _id = await next(root, args, context);
+    const { pubsub, collections: { ValuePropositions } } = context;
+    const valueProposition = ValuePropositions.findOne({ _id });
+
+    pubsub.publish(
+      Subscriptions.VALUE_PROPOSITION_CHANGED,
+      {
+        [Subscriptions.VALUE_PROPOSITION_CHANGED]: {
+          entity: valueProposition,
+          kind: DocChangeKinds.INSERT,
+        },
+      },
+    );
+
+    return { valueProposition };
+  },
 )(resolver);

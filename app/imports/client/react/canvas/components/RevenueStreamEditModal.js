@@ -101,9 +101,6 @@ const RevenueStreamEditModal = ({
                 },
                 () => deleteRevenueStream({
                   variables: { input: { _id } },
-                  refetchQueries: [
-                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
-                  ],
                 }).then(toggle),
               );
             }}

@@ -49,7 +49,6 @@ const CustomerRelationshipAddModal = ({
                 } = values;
 
                 return createCustomerRelationship({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -59,9 +58,6 @@ const CustomerRelationshipAddModal = ({
                       notes,
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.CUSTOMER_RELATIONSHIPS, variables: { organizationId } },
-                  ],
                 }).then(({ data: { createCustomerRelationship: { customerRelationship } } }) => {
                   onLink(customerRelationship._id);
                   toggle();

@@ -47,7 +47,6 @@ const KeyActivityAddModal = ({
                 } = values;
 
                 return createKeyActivity({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -57,9 +56,6 @@ const KeyActivityAddModal = ({
                       notes,
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.KEY_ACTIVITIES, variables: { organizationId } },
-                  ],
                 }).then(({ data: { createKeyActivity: { keyActivity } } }) => {
                   onLink(keyActivity._id);
                   toggle();

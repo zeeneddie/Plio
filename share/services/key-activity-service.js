@@ -55,7 +55,7 @@ export default {
     const { keyActivity, collections: { KeyActivities } } = context;
     const [res] = await Promise.all([
       KeyActivities.remove({ _id }),
-      cleanupCanvas(keyActivity),
+      cleanupCanvas(keyActivity, context),
     ]);
     return res;
   },

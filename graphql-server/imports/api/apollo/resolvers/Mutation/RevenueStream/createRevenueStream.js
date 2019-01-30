@@ -5,8 +5,8 @@ import {
   checkOrgMembership,
   checkPercentOfRevenue,
   checkPercentOfProfit,
-  insertAfterware,
 } from '../../../../../share/middleware';
+import { Subscriptions, DocChangeKinds } from '../../../constants';
 
 export const resolver = async (root, args, context) =>
   context.services.RevenueStreamService.insert(args, context);
@@ -17,8 +17,21 @@ export default applyMiddleware(
   checkOrgMembership(),
   checkPercentOfRevenue(),
   checkPercentOfProfit(),
-  insertAfterware((root, args, { collections: { RevenueStreams } }) => ({
-    collection: RevenueStreams,
-    key: 'revenueStream',
-  })),
+  async (next, root, args, context) => {
+    const _id = await next(root, args, context);
+    const { pubsub, collections: { RevenueStreams } } = context;
+    const revenueStream = RevenueStreams.findOne({ _id });
+
+    pubsub.publish(
+      Subscriptions.REVENUE_STREAM_CHANGED,
+      {
+        [Subscriptions.REVENUE_STREAM_CHANGED]: {
+          entity: revenueStream,
+          kind: DocChangeKinds.INSERT,
+        },
+      },
+    );
+
+    return { revenueStream };
+  },
 )(resolver);

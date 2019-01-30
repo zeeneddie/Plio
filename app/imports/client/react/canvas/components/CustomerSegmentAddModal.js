@@ -54,7 +54,6 @@ const CustomerSegmentAddModal = ({
                 } = values;
 
                 return createCustomerSegment({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -68,9 +67,6 @@ const CustomerSegmentAddModal = ({
                       }, matchedTo),
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.CUSTOMER_SEGMENTS, variables: { organizationId } },
-                  ],
                 }).then(({ data: { createCustomerSegment: { customerSegment } } }) => {
                   onLink(customerSegment._id);
                   toggle();

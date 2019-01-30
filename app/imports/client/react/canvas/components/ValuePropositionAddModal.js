@@ -52,7 +52,6 @@ const ValuePropositionAddModal = ({
                 } = values;
 
                 return createValueProposition({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -65,9 +64,6 @@ const ValuePropositionAddModal = ({
                       }, matchedTo),
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.VALUE_PROPOSITIONS, variables: { organizationId } },
-                  ],
                 }).then(({ data: { createValueProposition: { valueProposition } } }) => {
                   onLink(valueProposition._id);
                   toggle();

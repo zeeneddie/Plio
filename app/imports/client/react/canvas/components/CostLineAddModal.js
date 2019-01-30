@@ -50,7 +50,6 @@ const CostLineAddModal = ({
                 } = values;
 
                 return createCostLine({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -61,9 +60,6 @@ const CostLineAddModal = ({
                       notes,
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.COST_LINES, variables: { organizationId } },
-                  ],
                 }).then(toggle);
               }}
             >

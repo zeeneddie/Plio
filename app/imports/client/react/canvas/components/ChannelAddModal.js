@@ -49,7 +49,6 @@ const ChannelAddModal = ({
                 } = values;
 
                 return createChannel({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -59,9 +58,6 @@ const ChannelAddModal = ({
                       notes,
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.CHANNELS, variables: { organizationId } },
-                  ],
                 }).then(({ data: { createChannel: { channel } } }) => {
                   onLink(channel._id);
                   toggle();

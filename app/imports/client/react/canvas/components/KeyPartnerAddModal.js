@@ -54,7 +54,6 @@ const KeyPartnerAddModal = ({
                 } = values;
 
                 return createKeyPartner({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -66,9 +65,6 @@ const KeyPartnerAddModal = ({
                       notes,
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.KEY_PARTNERS, variables: { organizationId } },
-                  ],
                 }).then(({ data: { createKeyPartner: { keyPartner } } }) => {
                   onLink(keyPartner._id);
                   toggle();
