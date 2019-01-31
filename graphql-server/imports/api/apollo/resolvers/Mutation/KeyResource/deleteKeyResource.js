@@ -3,8 +3,8 @@ import {
   checkLoggedIn,
   flattenInput,
   checkKeyResourceAccess,
-  deleteAfterware,
 } from '../../../../../share/middleware';
+import { Subscriptions, DocChangeKinds } from '../../../constants';
 
 export const resolver = async (keyResource, args, context) =>
   context.services.KeyResourceService.delete(args, { ...context, keyResource });
@@ -13,7 +13,21 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkKeyResourceAccess(),
-  deleteAfterware(async (root, args, context) => ({
-    collection: context.collections.KeyResources,
-  })),
+  async (next, keyResource, args, context) => {
+    await next(keyResource, args, context);
+
+    const { pubsub } = context;
+
+    pubsub.publish(
+      Subscriptions.KEY_RESOURCE_CHANGED,
+      {
+        [Subscriptions.KEY_RESOURCE_CHANGED]: {
+          entity: keyResource,
+          kind: DocChangeKinds.DELETE,
+        },
+      },
+    );
+
+    return keyResource;
+  },
 )(resolver);

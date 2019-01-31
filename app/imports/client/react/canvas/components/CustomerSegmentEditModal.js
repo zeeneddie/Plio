@@ -32,6 +32,7 @@ import {
   RenderSwitch,
 } from '../../components';
 import CanvasSubcards from './CanvasSubcards';
+import CustomerSegmentsHelp from './CustomerSegmentsHelp';
 
 const getCustomerSegment = pathOr({}, repeat('customerSegment', 2));
 const getInitialValues = compose(
@@ -118,9 +119,6 @@ const CustomerSegmentEditModal = ({
                 },
                 () => deleteCustomerSegment({
                   variables: { input: { _id } },
-                  refetchQueries: [
-                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
-                  ],
                 }).then(toggle),
               );
             }}
@@ -184,7 +182,9 @@ const CustomerSegmentEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Customer segment" />
                   <EntityModalBody>
-                    <ModalGuidancePanel documentType={CanvasTypes.CUSTOMER_SEGMENT} />
+                    <ModalGuidancePanel documentType={CanvasTypes.CUSTOMER_SEGMENT}>
+                      <CustomerSegmentsHelp />
+                    </ModalGuidancePanel>
                     <RenderSwitch
                       require={isOpen &&
                         data.customerSegment &&

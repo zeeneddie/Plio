@@ -17,6 +17,9 @@ import {
   EntityModalForm,
 } from '../../components';
 import { getUserDefaultCanvasColor } from '../helpers';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
+import CanvasAddModalHelp from './CanvasAddModalHelp';
+import CustomerSegmentsHelp from './CustomerSegmentsHelp';
 
 const CustomerSegmentAddModal = ({
   isOpen,
@@ -54,7 +57,6 @@ const CustomerSegmentAddModal = ({
                 } = values;
 
                 return createCustomerSegment({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -68,9 +70,6 @@ const CustomerSegmentAddModal = ({
                       }, matchedTo),
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.CUSTOMER_SEGMENTS, variables: { organizationId } },
-                  ],
                 }).then(({ data: { createCustomerSegment: { customerSegment } } }) => {
                   onLink(customerSegment._id);
                   toggle();
@@ -81,6 +80,10 @@ const CustomerSegmentAddModal = ({
                 <Fragment>
                   <EntityModalHeader label="Customer segment" />
                   <EntityModalBody>
+                    <CanvasAddModalHelp>
+                      <CustomerSegmentsHelp />
+                    </CanvasAddModalHelp>
+                    <ModalGuidancePanel documentType={CanvasTypes.CUSTOMER_SEGMENT} />
                     <Form onSubmit={handleSubmit}>
                       {/* hidden input is needed for return key to work */}
                       <input hidden type="submit" />

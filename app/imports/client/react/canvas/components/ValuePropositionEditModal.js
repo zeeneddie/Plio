@@ -32,6 +32,7 @@ import {
   RenderSwitch,
 } from '../../components';
 import CanvasSubcards from './CanvasSubcards';
+import ValuePropositionsHelp from './ValuePropositionsHelp';
 
 const getValueProposition = pathOr({}, repeat('valueProposition', 2));
 const getInitialValues = compose(
@@ -117,9 +118,6 @@ const ValuePropositionEditModal = ({
                 },
                 () => deleteValueProposition({
                   variables: { input: { _id } },
-                  refetchQueries: [
-                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
-                  ],
                 }).then(toggle),
               );
             }}
@@ -181,7 +179,9 @@ const ValuePropositionEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Value proposition" />
                   <EntityModalBody>
-                    <ModalGuidancePanel documentType={CanvasTypes.VALUE_PROPOSITION} />
+                    <ModalGuidancePanel documentType={CanvasTypes.VALUE_PROPOSITION}>
+                      <ValuePropositionsHelp />
+                    </ModalGuidancePanel>
                     <RenderSwitch
                       require={isOpen &&
                         data.valueProposition &&

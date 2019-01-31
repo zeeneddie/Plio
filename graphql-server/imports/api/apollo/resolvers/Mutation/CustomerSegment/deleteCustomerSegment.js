@@ -3,8 +3,8 @@ import {
   checkLoggedIn,
   flattenInput,
   checkCustomerSegmentAccess,
-  deleteAfterware,
 } from '../../../../../share/middleware';
+import { Subscriptions, DocChangeKinds } from '../../../constants';
 
 export const resolver = async (customerSegment, args, context) =>
   context.services.CustomerSegmentService.delete(args, { ...context, customerSegment });
@@ -13,7 +13,21 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkCustomerSegmentAccess(),
-  deleteAfterware(async (root, args, context) => ({
-    collection: context.collections.CustomerSegments,
-  })),
+  async (next, customerSegment, args, context) => {
+    await next(customerSegment, args, context);
+
+    const { pubsub } = context;
+
+    pubsub.publish(
+      Subscriptions.CUSTOMER_SEGMENT_CHANGED,
+      {
+        [Subscriptions.CUSTOMER_SEGMENT_CHANGED]: {
+          entity: customerSegment,
+          kind: DocChangeKinds.DELETE,
+        },
+      },
+    );
+
+    return customerSegment;
+  },
 )(resolver);

@@ -1,0 +1,8 @@
+type CustomerRelationshipChangedResult {
+  kind: DocChangeKind!
+  entity: CustomerRelationship
+}
+
+type Subscription {
+  customerRelationshipChanged(organizationId: ID!, kind: [DocChangeKind!]): CustomerRelationshipChangedResult
+}

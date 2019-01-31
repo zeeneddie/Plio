@@ -3,8 +3,8 @@ import {
   checkLoggedIn,
   flattenInput,
   checkOrgMembership,
-  insertAfterware,
 } from '../../../../../share/middleware';
+import { Subscriptions, DocChangeKinds } from '../../../constants';
 
 export const resolver = async (root, args, context) =>
   context.services.KeyActivityService.insert(args, context);
@@ -13,8 +13,21 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkOrgMembership(),
-  insertAfterware((root, args, { collections: { KeyActivities } }) => ({
-    collection: KeyActivities,
-    key: 'keyActivity',
-  })),
+  async (next, root, args, context) => {
+    const _id = await next(root, args, context);
+    const { pubsub, collections: { KeyActivities } } = context;
+    const keyActivity = KeyActivities.findOne({ _id });
+
+    pubsub.publish(
+      Subscriptions.KEY_ACTIVITY_CHANGED,
+      {
+        [Subscriptions.KEY_ACTIVITY_CHANGED]: {
+          entity: keyActivity,
+          kind: DocChangeKinds.INSERT,
+        },
+      },
+    );
+
+    return { keyActivity };
+  },
 )(resolver);

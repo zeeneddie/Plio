@@ -13,7 +13,7 @@ import {
 } from '../../components';
 import Errors from '../../../../share/errors';
 import MainHeader from '../../main-header/components/MainHeader';
-import CanvasPage from './CanvasPage';
+import CanvasPageContainer from '../containers/CanvasPageContainer';
 
 const DelayedMainHeader = delayed({
   loader: () => Promise.resolve(MainHeader),
@@ -49,7 +49,7 @@ const CanvasLayout = () => (
               {organization => (
                 <Fragment>
                   <DelayedMainHeader {...{ organization }} />
-                  <CanvasPage {...{ organization }} />
+                  <CanvasPageContainer {...{ organization }} />
                 </Fragment>
               )}
             </RenderSwitch>

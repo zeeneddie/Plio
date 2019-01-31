@@ -1,0 +1,8 @@
+type CustomerSegmentChangedResult {
+  kind: DocChangeKind!
+  entity: CustomerSegment
+}
+
+type Subscription {
+  customerSegmentChanged(organizationId: ID!, kind: [DocChangeKind!]): CustomerSegmentChangedResult
+}
