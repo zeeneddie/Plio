@@ -17,6 +17,9 @@ import {
   EntityModalForm,
 } from '../../components';
 import { getUserDefaultCanvasColor } from '../helpers';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
+import CanvasAddModalHelp from './CanvasAddModalHelp';
+import ValuePropositionsHelp from './ValuePropositionsHelp';
 
 const ValuePropositionAddModal = ({
   isOpen,
@@ -74,6 +77,10 @@ const ValuePropositionAddModal = ({
                 <Fragment>
                   <EntityModalHeader label="Value proposition" />
                   <EntityModalBody>
+                    <CanvasAddModalHelp>
+                      <ValuePropositionsHelp />
+                    </CanvasAddModalHelp>
+                    <ModalGuidancePanel documentType={CanvasTypes.VALUE_PROPOSITION} />
                     <Form onSubmit={handleSubmit}>
                       {/* hidden input is needed for return key to work */}
                       <input hidden type="submit" />

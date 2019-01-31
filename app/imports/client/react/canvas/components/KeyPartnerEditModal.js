@@ -29,6 +29,7 @@ import { WithState, Composer } from '../../helpers';
 import KeyPartnerForm from './KeyPartnerForm';
 import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import CanvasSubcards from './CanvasSubcards';
+import KeyPartnersHelp from './KeyPartnersHelp';
 
 const keyPartnerPath = repeat('keyPartner', 2);
 const getKeyPartner = path(keyPartnerPath);
@@ -155,7 +156,9 @@ const KeyPartnerEditModal = ({
                   <Fragment>
                     <EntityModalHeader label="Key partner" />
                     <EntityModalBody>
-                      <ModalGuidancePanel documentType={CanvasTypes.KEY_PARTNER} />
+                      <ModalGuidancePanel documentType={CanvasTypes.KEY_PARTNER}>
+                        <KeyPartnersHelp />
+                      </ModalGuidancePanel>
                       <RenderSwitch
                         require={isOpen && keyPartner}
                         errorWhenMissing={noop}

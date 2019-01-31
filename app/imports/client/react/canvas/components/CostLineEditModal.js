@@ -29,6 +29,7 @@ import {
   RenderSwitch,
 } from '../../components';
 import CanvasSubcards from './CanvasSubcards';
+import CostStructureHelp from './CostStructureHelp';
 
 const getCostLine = pathOr({}, repeat('costLine', 2));
 const getInitialValues = compose(
@@ -146,7 +147,9 @@ const CostLineEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Cost line" />
                   <EntityModalBody>
-                    <ModalGuidancePanel documentType={CanvasTypes.COST_LINE} />
+                    <ModalGuidancePanel documentType={CanvasTypes.COST_LINE}>
+                      <CostStructureHelp />
+                    </ModalGuidancePanel>
                     <RenderSwitch
                       require={isOpen && data.costLine && data.costLine.costLine}
                       errorWhenMissing={noop}

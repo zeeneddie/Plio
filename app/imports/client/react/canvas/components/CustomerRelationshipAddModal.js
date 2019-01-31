@@ -5,6 +5,7 @@ import { getUserOptions, noop } from 'plio-util';
 import { Form } from 'reactstrap';
 import { pure } from 'recompose';
 
+import { CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import CanvasForm from './CanvasForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -16,6 +17,9 @@ import {
   EntityModalForm,
 } from '../../components';
 import { getUserDefaultCanvasColor } from '../helpers';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
+import CanvasAddModalHelp from './CanvasAddModalHelp';
+import CustomerRelationshipsHelp from './CustomerRelationshipsHelp';
 
 const CustomerRelationshipAddModal = ({
   isOpen,
@@ -68,6 +72,10 @@ const CustomerRelationshipAddModal = ({
                 <Fragment>
                   <EntityModalHeader label="Customer relationship" />
                   <EntityModalBody>
+                    <CanvasAddModalHelp>
+                      <CustomerRelationshipsHelp />
+                    </CanvasAddModalHelp>
+                    <ModalGuidancePanel documentType={CanvasTypes.CUSTOMER_RELATIONSHIP} />
                     <Form onSubmit={handleSubmit}>
                       {/* hidden input is needed for return key to work */}
                       <input hidden type="submit" />

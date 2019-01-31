@@ -29,6 +29,7 @@ import {
   RenderSwitch,
 } from '../../components';
 import CanvasSubcards from './CanvasSubcards';
+import KeyActivitiesHelp from './KeyActivitiesHelp';
 
 const getKeyActivity = pathOr({}, repeat('keyActivity', 2));
 const getInitialValues = compose(
@@ -143,7 +144,9 @@ const KeyActivityEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key activity" />
                   <EntityModalBody>
-                    <ModalGuidancePanel documentType={CanvasTypes.KEY_ACTIVITY} />
+                    <ModalGuidancePanel documentType={CanvasTypes.KEY_ACTIVITY}>
+                      <KeyActivitiesHelp />
+                    </ModalGuidancePanel>
                     <RenderSwitch
                       require={isOpen && data.keyActivity && data.keyActivity.keyActivity}
                       errorWhenMissing={noop}

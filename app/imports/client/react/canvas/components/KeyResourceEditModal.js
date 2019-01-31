@@ -29,6 +29,7 @@ import {
   RenderSwitch,
 } from '../../components';
 import CanvasSubcards from './CanvasSubcards';
+import KeyResourcesHelp from './KeyResourcesHelp';
 
 const getKeyResource = pathOr({}, repeat('keyResource', 2));
 const getInitialValues = compose(
@@ -143,7 +144,9 @@ const KeyResourceEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key resource" />
                   <EntityModalBody>
-                    <ModalGuidancePanel documentType={CanvasTypes.KEY_RESOURCE} />
+                    <ModalGuidancePanel documentType={CanvasTypes.KEY_RESOURCE}>
+                      <KeyResourcesHelp />
+                    </ModalGuidancePanel>
                     <RenderSwitch
                       require={isOpen && data.keyResource && data.keyResource.keyResource}
                       errorWhenMissing={noop}

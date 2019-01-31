@@ -29,6 +29,7 @@ import {
   RenderSwitch,
 } from '../../components';
 import CanvasSubcards from './CanvasSubcards';
+import CustomerRelationshipsHelp from './CustomerRelationshipsHelp';
 
 const getCustomerRelationship = pathOr({}, repeat('customerRelationship', 2));
 const getInitialValues = compose(
@@ -143,7 +144,9 @@ const CustomerRelationshipEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Customer relationship" />
                   <EntityModalBody>
-                    <ModalGuidancePanel documentType={CanvasTypes.CUSTOMER_RELATIONSHIP} />
+                    <ModalGuidancePanel documentType={CanvasTypes.CUSTOMER_RELATIONSHIP}>
+                      <CustomerRelationshipsHelp />
+                    </ModalGuidancePanel>
                     <RenderSwitch
                       require={isOpen &&
                         data.customerRelationship &&

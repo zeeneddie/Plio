@@ -5,6 +5,7 @@ import { getUserOptions, noop } from 'plio-util';
 import { Form } from 'reactstrap';
 import { pure } from 'recompose';
 
+import { CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import CanvasForm from './CanvasForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -16,6 +17,9 @@ import {
   EntityModalForm,
 } from '../../components';
 import { getUserDefaultCanvasColor } from '../helpers';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
+import CanvasAddModalHelp from './CanvasAddModalHelp';
+import ChannelsHelp from './ChannelsHelp';
 
 const ChannelAddModal = ({
   isOpen,
@@ -68,6 +72,10 @@ const ChannelAddModal = ({
                 <Fragment>
                   <EntityModalHeader label="Channel" />
                   <EntityModalBody>
+                    <CanvasAddModalHelp>
+                      <ChannelsHelp />
+                    </CanvasAddModalHelp>
+                    <ModalGuidancePanel documentType={CanvasTypes.CHANNEL} />
                     <Form onSubmit={handleSubmit}>
                       {/* hidden input is needed for return key to work */}
                       <input hidden type="submit" />

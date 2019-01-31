@@ -5,6 +5,7 @@ import { getUserOptions, noop } from 'plio-util';
 import { Form } from 'reactstrap';
 import { pure } from 'recompose';
 
+import { CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { validateKeyActivity } from '../../../validation';
@@ -16,6 +17,9 @@ import {
   EntityModalForm,
 } from '../../components';
 import { getUserDefaultCanvasColor } from '../helpers';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
+import CanvasAddModalHelp from './CanvasAddModalHelp';
+import KeyActivitiesHelp from './KeyActivitiesHelp';
 
 const KeyActivityAddModal = ({
   isOpen,
@@ -66,6 +70,10 @@ const KeyActivityAddModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key activity" />
                   <EntityModalBody>
+                    <CanvasAddModalHelp>
+                      <KeyActivitiesHelp />
+                    </CanvasAddModalHelp>
+                    <ModalGuidancePanel documentType={CanvasTypes.KEY_ACTIVITY} />
                     <Form onSubmit={handleSubmit}>
                       {/* hidden input is needed for return key to work */}
                       <input hidden type="submit" />
