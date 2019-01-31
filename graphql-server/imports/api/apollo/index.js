@@ -36,8 +36,12 @@ const getContext = async (authorizationToken) => {
 
 const server = new ApolloServer({
   schema,
+  introspection: true,
   playground: {
-    subscriptionEndpoint: `${Meteor.absoluteUrl()}/subscriptions`.replace(/https?/, 'ws'),
+    subscriptionEndpoint: Meteor.absoluteUrl('subscriptions').replace(
+      /https?/,
+      process.env.NODE_ENV === 'production' ? 'wss' : 'ws',
+    ),
   },
   context: async ({ req }) => ({
     // ...req, do we need this?
