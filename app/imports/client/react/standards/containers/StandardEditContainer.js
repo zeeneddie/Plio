@@ -137,7 +137,7 @@ const StandardEditContainer = ({
             const {
               title,
               status,
-              description,
+              description = '',
               issueNumber,
               uniqueNumber,
               source1,

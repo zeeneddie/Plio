@@ -16,6 +16,7 @@ import {
   Col,
   StandardSelectInput,
   CategorizeField,
+  UrlField,
 } from '../../components';
 import { NonConformitiesHelp } from '../../../../api/help-messages';
 import { getStatusColor } from '../helpers';
@@ -133,7 +134,7 @@ export const NonconformityEditForm = ({
             />
           </Col>
           <Col sm={8}>
-            <InputField
+            <UrlField
               name="ref.url"
               placeholder="URL"
               maxLength={StringLimits.url.max}
