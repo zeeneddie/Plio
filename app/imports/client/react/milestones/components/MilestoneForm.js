@@ -76,12 +76,12 @@ const MilestoneForm = ({ save }) => (
     <Field name="isCompleted" subscription={{ value: true }}>
       {({ input: { value: isCompleted } }) => (
         <FormField>
-          Completion - target date
+          Date
           <DatePickerField
             name="completionTargetDate"
             disabled={!!isCompleted}
             onChange={save}
-            placeholderText="Completion - target date"
+            placeholderText="Date"
           />
         </FormField>
       )}
