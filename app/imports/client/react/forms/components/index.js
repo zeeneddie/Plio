@@ -52,3 +52,4 @@ export { default as EntityArrayForm } from './EntityArrayForm';
 export { default as RelationsAdapter } from './RelationsAdapter';
 export { default as CheckboxField } from './CheckboxField';
 export { default as RiskTypeSelectInput } from './RiskTypeSelectInput';
+export { default as UrlField } from './UrlField';
