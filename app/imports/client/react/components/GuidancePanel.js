@@ -13,9 +13,10 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const StyledCardBlock = styled(CardBlock)`
-  white-space: pre-line;
-`;
+// BUG: breaks quill (menu is vertically aligned)
+// const StyledCardBlock = styled(CardBlock)`
+//   white-space: pre-line;
+// `;
 
 const GuidancePanel = ({
   isOpen,
@@ -29,7 +30,7 @@ const GuidancePanel = ({
     {...{ isOpen, ...props }}
     className={cx('guidance-panel', className)}
   >
-    <StyledCardBlock>
+    <CardBlock>
       {children}
       <ButtonWrapper>
         <Button
@@ -39,7 +40,7 @@ const GuidancePanel = ({
           {closeBtnText}
         </Button>
       </ButtonWrapper>
-    </StyledCardBlock>
+    </CardBlock>
   </Collapse>
 );
 
