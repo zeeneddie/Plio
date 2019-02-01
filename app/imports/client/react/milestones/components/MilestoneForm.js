@@ -33,6 +33,7 @@ const MilestoneForm = ({ save }) => (
         name="title"
         placeholder="Title"
         onBlur={save}
+        maxLength={StringLimits.title.max}
         autoFocus
       />
     </FormField>
@@ -42,6 +43,7 @@ const MilestoneForm = ({ save }) => (
         name="description"
         placeholder="Description"
         onBlur={save}
+        maxLength={StringLimits.description.max}
       />
     </FormField>
     <Field

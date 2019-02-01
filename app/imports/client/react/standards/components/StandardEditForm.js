@@ -44,6 +44,7 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
         name="description"
         placeholder="Description"
         onBlur={save}
+        maxLength={StringLimits.description.max}
       />
     </FormField>
     <FormField>
