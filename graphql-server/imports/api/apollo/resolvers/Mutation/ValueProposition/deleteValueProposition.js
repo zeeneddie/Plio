@@ -3,8 +3,8 @@ import {
   checkLoggedIn,
   flattenInput,
   checkValuePropositionAccess,
-  deleteAfterware,
 } from '../../../../../share/middleware';
+import { Subscriptions, DocChangeKinds } from '../../../constants';
 
 export const resolver = async (valueProposition, args, context) =>
   context.services.ValuePropositionService.delete(args, { ...context, valueProposition });
@@ -13,7 +13,21 @@ export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
   checkValuePropositionAccess(),
-  deleteAfterware(async (root, args, context) => ({
-    collection: context.collections.ValuePropositions,
-  })),
+  async (next, valueProposition, args, context) => {
+    await next(valueProposition, args, context);
+
+    const { pubsub } = context;
+
+    pubsub.publish(
+      Subscriptions.VALUE_PROPOSITION_CHANGED,
+      {
+        [Subscriptions.VALUE_PROPOSITION_CHANGED]: {
+          entity: valueProposition,
+          kind: DocChangeKinds.DELETE,
+        },
+      },
+    );
+
+    return valueProposition;
+  },
 )(resolver);

@@ -5,7 +5,7 @@ import { getUserOptions, noop } from 'plio-util';
 import { Form } from 'reactstrap';
 import { pure } from 'recompose';
 
-import { CRITICALITY_DEFAULT } from '../../../../share/constants';
+import { CRITICALITY_DEFAULT, CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import {
   EntityModalNext,
@@ -17,6 +17,9 @@ import KeyPartnerForm from './KeyPartnerForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
 import { validateKeyPartner } from '../../../validation';
 import { getUserDefaultCanvasColor } from '../helpers';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
+import CanvasAddModalHelp from './CanvasAddModalHelp';
+import KeyPartnersHelp from './KeyPartnersHelp';
 
 const KeyPartnerAddModal = ({
   isOpen,
@@ -54,7 +57,6 @@ const KeyPartnerAddModal = ({
                 } = values;
 
                 return createKeyPartner({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -66,9 +68,6 @@ const KeyPartnerAddModal = ({
                       notes,
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.KEY_PARTNERS, variables: { organizationId } },
-                  ],
                 }).then(({ data: { createKeyPartner: { keyPartner } } }) => {
                   onLink(keyPartner._id);
                   toggle();
@@ -79,6 +78,10 @@ const KeyPartnerAddModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key partner" />
                   <EntityModalBody>
+                    <CanvasAddModalHelp>
+                      <KeyPartnersHelp />
+                    </CanvasAddModalHelp>
+                    <ModalGuidancePanel documentType={CanvasTypes.KEY_PARTNER} />
                     <Form onSubmit={handleSubmit}>
                       {/* hidden input is needed for return key to work */}
                       <input hidden type="submit" />

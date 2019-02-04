@@ -1,0 +1,8 @@
+type CanvasSettingsChangedResult {
+  kind: DocChangeKind!
+  entity: CanvasSettings
+}
+
+type Subscription {
+  canvasSettingsChanged(organizationId: ID!, kind: [DocChangeKind!]): CanvasSettingsChangedResult
+}

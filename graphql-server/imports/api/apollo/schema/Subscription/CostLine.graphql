@@ -1,0 +1,8 @@
+type CostLineChangedResult {
+  kind: DocChangeKind!
+  entity: CostLine
+}
+
+type Subscription {
+  costLineChanged(organizationId: ID!, kind: [DocChangeKind!]): CostLineChangedResult
+}

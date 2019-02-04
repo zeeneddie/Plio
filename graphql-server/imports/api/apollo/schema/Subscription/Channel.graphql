@@ -1,0 +1,8 @@
+type ChannelChangedResult {
+  kind: DocChangeKind!
+  entity: Channel
+}
+
+type Subscription {
+  channelChanged(organizationId: ID!, kind: [DocChangeKind!]): ChannelChangedResult
+}

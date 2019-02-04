@@ -17,6 +17,9 @@ import {
   EntityModalForm,
 } from '../../components';
 import { getUserDefaultCanvasColor } from '../helpers';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
+import CanvasAddModalHelp from './CanvasAddModalHelp';
+import ValuePropositionsHelp from './ValuePropositionsHelp';
 
 const ValuePropositionAddModal = ({
   isOpen,
@@ -52,7 +55,6 @@ const ValuePropositionAddModal = ({
                 } = values;
 
                 return createValueProposition({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -65,9 +67,6 @@ const ValuePropositionAddModal = ({
                       }, matchedTo),
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.VALUE_PROPOSITIONS, variables: { organizationId } },
-                  ],
                 }).then(({ data: { createValueProposition: { valueProposition } } }) => {
                   onLink(valueProposition._id);
                   toggle();
@@ -78,6 +77,10 @@ const ValuePropositionAddModal = ({
                 <Fragment>
                   <EntityModalHeader label="Value proposition" />
                   <EntityModalBody>
+                    <CanvasAddModalHelp>
+                      <ValuePropositionsHelp />
+                    </CanvasAddModalHelp>
+                    <ModalGuidancePanel documentType={CanvasTypes.VALUE_PROPOSITION} />
                     <Form onSubmit={handleSubmit}>
                       {/* hidden input is needed for return key to work */}
                       <input hidden type="submit" />

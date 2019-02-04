@@ -5,6 +5,7 @@ import { getUserOptions, noop } from 'plio-util';
 import { Form } from 'reactstrap';
 import { pure } from 'recompose';
 
+import { CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import CanvasForm from './CanvasForm';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -16,6 +17,9 @@ import {
   EntityModalForm,
 } from '../../components';
 import { getUserDefaultCanvasColor } from '../helpers';
+import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
+import CanvasAddModalHelp from './CanvasAddModalHelp';
+import KeyResourcesHelp from './KeyResourcesHelp';
 
 const KeyResourceAddModal = ({
   isOpen,
@@ -49,7 +53,6 @@ const KeyResourceAddModal = ({
                 } = values;
 
                 return createKeyResource({
-                  awaitRefetchQueries: true,
                   variables: {
                     input: {
                       organizationId,
@@ -59,9 +62,6 @@ const KeyResourceAddModal = ({
                       notes,
                     },
                   },
-                  refetchQueries: [
-                    { query: Queries.KEY_RESOURCES, variables: { organizationId } },
-                  ],
                 }).then(({ data: { createKeyResource: { keyResource } } }) => {
                   onLink(keyResource._id);
                   toggle();
@@ -72,6 +72,10 @@ const KeyResourceAddModal = ({
                 <Fragment>
                   <EntityModalHeader label="Key resource" />
                   <EntityModalBody>
+                    <CanvasAddModalHelp>
+                      <KeyResourcesHelp />
+                    </CanvasAddModalHelp>
+                    <ModalGuidancePanel documentType={CanvasTypes.KEY_RESOURCE} />
                     <Form onSubmit={handleSubmit}>
                       {/* hidden input is needed for return key to work */}
                       <input hidden type="submit" />

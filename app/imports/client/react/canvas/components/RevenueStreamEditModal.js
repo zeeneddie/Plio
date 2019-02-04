@@ -29,6 +29,7 @@ import {
   RenderSwitch,
 } from '../../components';
 import CanvasSubcards from './CanvasSubcards';
+import RevenueStreamsHelp from './RevenueStreamsHelp';
 
 const getRevenueStream = pathOr({}, repeat('revenueStream', 2));
 const getInitialValues = compose(
@@ -101,9 +102,6 @@ const RevenueStreamEditModal = ({
                 },
                 () => deleteRevenueStream({
                   variables: { input: { _id } },
-                  refetchQueries: [
-                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
-                  ],
                 }).then(toggle),
               );
             }}
@@ -152,7 +150,9 @@ const RevenueStreamEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Revenue stream" />
                   <EntityModalBody>
-                    <ModalGuidancePanel documentType={CanvasTypes.REVENUE_STREAM} />
+                    <ModalGuidancePanel documentType={CanvasTypes.REVENUE_STREAM}>
+                      <RevenueStreamsHelp />
+                    </ModalGuidancePanel>
                     <RenderSwitch
                       require={isOpen && data.revenueStream && data.revenueStream.revenueStream}
                       errorWhenMissing={noop}

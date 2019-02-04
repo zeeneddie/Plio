@@ -1,0 +1,8 @@
+type KeyPartnerChangedResult {
+  kind: DocChangeKind!
+  entity: KeyPartner
+}
+
+type Subscription {
+  keyPartnerChanged(organizationId: ID!, kind: [DocChangeKind!]): KeyPartnerChangedResult
+}

@@ -7,7 +7,11 @@ import { mergeDeepRight } from 'ramda';
 import fetch from 'unfetch';
 import { Meteor } from 'meteor/meteor';
 
-global.fetch = fetch;
+Object.assign(global, {
+  fetch,
+  WebSocket: jest.fn(),
+});
+
 jest.setTimeout(30000);
 
 Meteor.settings = mergeDeepRight(Meteor.settings, {

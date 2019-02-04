@@ -29,6 +29,7 @@ import {
   RenderSwitch,
 } from '../../components';
 import CanvasSubcards from './CanvasSubcards';
+import ChannelsHelp from './ChannelsHelp';
 
 const getChannel = pathOr({}, repeat('channel', 2));
 const getInitialValues = compose(
@@ -99,9 +100,6 @@ const ChannelEditModal = ({
                 },
                 () => deleteChannel({
                   variables: { input: { _id } },
-                  refetchQueries: [
-                    { query: Queries.CANVAS_PAGE, variables: { organizationId } },
-                  ],
                 }).then(toggle),
               );
             }}
@@ -146,7 +144,9 @@ const ChannelEditModal = ({
                 <Fragment>
                   <EntityModalHeader label="Channel" />
                   <EntityModalBody>
-                    <ModalGuidancePanel documentType={CanvasTypes.CHANNEL} />
+                    <ModalGuidancePanel documentType={CanvasTypes.CHANNEL}>
+                      <ChannelsHelp />
+                    </ModalGuidancePanel>
                     <RenderSwitch
                       require={isOpen && data.channel && data.channel.channel}
                       errorWhenMissing={noop}
