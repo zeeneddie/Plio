@@ -6,12 +6,12 @@ import { FormGroup, Button } from 'reactstrap';
 import { StringLimits } from '../../../../share/constants';
 import {
   FormField,
-  DatePickerAdapter,
   ToggleComplete,
   TextareaAdapter,
   FieldCondition,
   UndoTime,
   StyledFlexFormGroup,
+  DatePickerField,
 } from '../../components';
 import { UserSelectInput } from '../../forms/components';
 
@@ -47,24 +47,22 @@ const ActionCompletionForm = ({
             <Fragment>
               <FormField>
                 Completion - target date
-                <Field
+                <DatePickerField
                   name="completionTargetDate"
                   placeholderText="Completion - target date"
                   onChange={save}
-                  render={DatePickerAdapter}
-                  disabled={isVerified || false}
+                  disabled={!!isVerified}
                 />
               </FormField>
               {isCompleted ? (
                 <Fragment>
                   <FormField>
                     Completed on
-                    <Field
+                    <DatePickerField
                       name="completedAt"
-                      onChange={save}
                       placeholderText="Completed on"
-                      render={DatePickerAdapter}
-                      disabled={isVerified}
+                      onChange={save}
+                      disabled={!!isVerified}
                     />
                   </FormField>
                   <FormField>
@@ -79,7 +77,7 @@ const ActionCompletionForm = ({
                             <FieldCondition
                               when="completedBy"
                               is={({ value }) =>
-                              !isOverdue && (value === userId || canCompleteAnyAction)}
+                                !isOverdue && (value === userId || canCompleteAnyAction)}
                               otherwise={completedBy}
                             >
                               <StyledFlexFormGroup>

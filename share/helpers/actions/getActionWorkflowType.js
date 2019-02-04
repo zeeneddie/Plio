@@ -4,10 +4,9 @@ import { pluck } from 'ramda';
 import { ActionTypes, WorkflowTypes, ProblemTypes } from '../../constants';
 import { NonConformities, Risks } from '../../collections';
 
-export default ({ type, linkedTo, isCompleted }) => {
+export default ({ type, linkedTo }) => {
   // Action has 6-step workflow if at least one linked document has 6-step workflow
-  if (!isCompleted ||
-      !linkedTo ||
+  if (!linkedTo ||
       !linkedTo.length ||
       ![ActionTypes.CORRECTIVE_ACTION, ActionTypes.PREVENTATIVE_ACTION].includes(type)) {
     return WorkflowTypes.THREE_STEP;
