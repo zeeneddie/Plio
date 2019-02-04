@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { noop, getEntityOptions } from 'plio-util';
-import moment from 'moment';
 
 import { validateMilestone } from '../../../validation';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
@@ -40,7 +39,7 @@ const MilestoneAddContainer = ({
       initialValues: {
         title: '',
         description: '',
-        completionTargetDate: moment().add(1, 'week').toDate(),
+        completionTargetDate: null,
         linkedTo: getEntityOptions(goal),
       },
       onSubmit: async (values) => {
