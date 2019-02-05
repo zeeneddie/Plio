@@ -49,6 +49,7 @@ const getInitialValues = compose(
     'source2',
     'description',
     'issueNumber',
+    'uniqueNumber',
     'departments',
     'projects',
   ]),
