@@ -51,6 +51,7 @@ export const NonconformityEditForm = ({
         name="description"
         placeholder="Description"
         onBlur={save}
+        maxLength={StringLimits.description.max}
       />
     </FormField>
     <FormField>
@@ -69,6 +70,7 @@ export const NonconformityEditForm = ({
         name="statusComment"
         placeholder="Status comment"
         onBlur={save}
+        maxLength={StringLimits.description.max}
       />
     </FormField>
     <FormField>

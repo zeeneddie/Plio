@@ -387,6 +387,7 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
     description: {
       type: String,
       optional: true,
+      max: StringLimits.description.max,
     },
     originatorId: {
       type: String,

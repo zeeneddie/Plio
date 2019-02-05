@@ -26,7 +26,11 @@ export const NonconformityAddForm = ({ organizationId, guidelines }) => (
     </FormField>
     <FormField>
       Description
-      <TextareaField name="description" placeholder="Description" />
+      <TextareaField
+        name="description"
+        placeholder="Description"
+        maxLength={StringLimits.description.max}
+      />
     </FormField>
     <FormField>
       Standard(s)
