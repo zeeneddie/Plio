@@ -56,3 +56,6 @@ export { default as UrlField } from './UrlField';
 export { default as SourceInput } from './SourceInput';
 export { default as SourceAdapter } from './SourceAdapter';
 export { default as SourceField } from './SourceField';
+export { default as FileInput } from './FileInput';
+export { default as FileAdapter } from './FileAdapter';
+export { default as FileField } from './FileField';
