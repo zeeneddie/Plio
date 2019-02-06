@@ -9,7 +9,6 @@ import StandardStatusField from './StandardStatusField';
 import {
   FormField,
   InputField,
-  CreateSourceField,
   UserSelectInput,
   SourceField,
 } from '../../components';
@@ -45,12 +44,10 @@ const StandardAddForm = ({ organizationId }) => (
       Status
       <StandardStatusField name="status" />
     </FormField>
-
     <FormField>
       Source file
       <SourceField name="source1" />
     </FormField>
-    <CreateSourceField name="source1" />
   </Fragment>
 );
 

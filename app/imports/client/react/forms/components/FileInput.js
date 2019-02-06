@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Button } from 'reactstrap';
+import { Button, ButtonGroup } from 'reactstrap';
 
 import { Icon } from '../../components';
 
@@ -24,11 +25,31 @@ const StyledButton = styled(Button)`
   }
 `;
 
-const FileInput = props => (
-  <StyledButton tag="span" color="primary">
-    <Icon name="plus" /> Add
-    <input {...props} type="file" />
-  </StyledButton>
-);
+const FileInput = ({ value, onRemove, ...rest }) => {
+  if (value) {
+    return (
+      <ButtonGroup>
+        <Button>{value.name}</Button>
+        <Button className="btn-icon">
+          <Icon name="times-circle" onClick={onRemove} />
+        </Button>
+      </ButtonGroup>
+    );
+  }
+  return (
+    <StyledButton tag="span" color="primary">
+      <Icon name="plus" /> Add
+      <input {...rest} type="file" />
+    </StyledButton>
+  );
+};
+
+FileInput.propTypes = {
+  onRemove: PropTypes.func.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+  ]),
+};
 
 export default FileInput;

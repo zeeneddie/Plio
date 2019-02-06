@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { TabContent, TabPane } from 'reactstrap';
-import { values } from 'ramda';
-import { Form } from 'react-final-form';
+import { values as valuesR } from 'ramda';
+import { Form, Field } from 'react-final-form';
 
 import { WithState } from '../../helpers';
 import SelectRadio from './SelectRadio';
@@ -33,13 +33,12 @@ const SourceInput = ({ onChange }) => (
   <WithState initialState={{ type: attachmentTypes.ATTACHMENT.value }}>
     {({ state: { type }, setState }) => (
       <Form
-        onSubmit={({ file, url, videoUrl }, form) => {
-          console.log(form);
+        onSubmit={({ file, url, videoUrl }) => {
           if (onChange) {
             onChange({
               type,
               file,
-              url: type === 'url' ? url : videoUrl,
+              url: type === attachmentTypes.URL.value ? url : videoUrl,
             });
           }
         }}
@@ -47,7 +46,7 @@ const SourceInput = ({ onChange }) => (
         {({ handleSubmit }) => (
           <Fragment>
             <SelectRadio
-              options={values(attachmentTypes)}
+              options={valuesR(attachmentTypes)}
               value={type}
               onChange={({ value }) => setState({ type: value })}
             />
@@ -57,6 +56,17 @@ const SourceInput = ({ onChange }) => (
                   name="file"
                   onChange={handleSubmit}
                 />
+                <Field name="file" subscription={{ value: true }}>
+                  {({ input: { value } }) => value && (
+                    value.name.split('.').pop().toLowerCase() === 'docx' ? (
+                      <p>
+                        File will be uploaded and rendered as HTML when you click on the Save button
+                      </p>
+                    ) : (
+                      <p>File will be uploaded when you click on the Save button</p>
+                    )
+                  )}
+                </Field>
               </TabPane>
               <TabPane tabId={attachmentTypes.URL.value}>
                 <UrlField

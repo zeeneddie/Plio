@@ -93,8 +93,6 @@ const StandardAddContainer = ({
         type: getDefaultType(standardTypes),
       },
       onSubmit: async (values) => {
-        // console.log(values.source1);
-        // return;
         const {
           active,
           title,

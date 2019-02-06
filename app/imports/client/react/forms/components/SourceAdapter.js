@@ -5,7 +5,7 @@ import SourceInput from './SourceInput';
 
 const SourceAdapter = ({ input, onChange, ...rest }) => (
   <SourceInput
-    {...rest}
+    {...{ ...rest, ...input }}
     onChange={(source) => {
       input.onChange(source);
       if (onChange) onChange(source);
