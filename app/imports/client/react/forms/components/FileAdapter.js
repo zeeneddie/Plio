@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 
 import FileInput from './FileInput';
 
-const FileAdapter = ({ input, onChange, ...rest }) => (
+const FileAdapter = ({
+  input,
+  onChange,
+  onRemove,
+  ...rest
+}) => (
   <FileInput
     {...{ ...rest, ...input }}
     onChange={(event) => {
@@ -12,8 +17,12 @@ const FileAdapter = ({ input, onChange, ...rest }) => (
       if (onChange) onChange(file);
     }}
     onRemove={() => {
-      input.onChange();
-      if (onChange) onChange();
+      if (onRemove) {
+        onRemove();
+      } else {
+        input.onChange(null);
+        if (onChange) onChange();
+      }
     }}
   />
 );
@@ -21,6 +30,7 @@ const FileAdapter = ({ input, onChange, ...rest }) => (
 FileAdapter.propTypes = {
   input: PropTypes.object,
   onChange: PropTypes.func,
+  onRemove: PropTypes.func,
 };
 
 export default FileAdapter;

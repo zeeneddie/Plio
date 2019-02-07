@@ -29,7 +29,12 @@ const StyledTabContent = styled(TabContent)`
   margin-top: 7px;
 `;
 
-const SourceInput = ({ onChange, value: source = {}, isEditMode }) => (
+const SourceInput = ({
+  value: source = {},
+  onChange,
+  onRemove,
+  isEditMode,
+}) => (
   <WithState initialState={{ type: source.type || AttachmentTypes.ATTACHMENT.value }}>
     {({ state: { type }, setState }) => (
       <Form
@@ -58,6 +63,7 @@ const SourceInput = ({ onChange, value: source = {}, isEditMode }) => (
             <StyledTabContent activeTab={type}>
               <TabPane tabId={AttachmentTypes.ATTACHMENT.value}>
                 <FileField
+                  {...{ onRemove }}
                   name="file"
                   onChange={handleSubmit}
                 />
@@ -100,6 +106,7 @@ const SourceInput = ({ onChange, value: source = {}, isEditMode }) => (
 
 SourceInput.propTypes = {
   onChange: PropTypes.func,
+  onRemove: PropTypes.func,
   isEditMode: PropTypes.bool,
   value: PropTypes.oneOfType([
     PropTypes.object,

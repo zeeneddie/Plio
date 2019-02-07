@@ -1,11 +1,11 @@
 import React from 'react';
 import { Field } from 'react-final-form';
 
-import EditSourceAdapter from './EditSourceAdapter';
+import EditSourceContainer from './EditSourceContainer';
 
 const EditSourceField = props => (
   <Field
-    component={EditSourceAdapter}
+    component={EditSourceContainer}
     {...props}
   />
 );
