@@ -122,6 +122,7 @@ export const NonconformityEditForm = ({
         placeholder="Financial impact"
         onBlur={save}
         addon={currency}
+        clearable={false}
       />
     </FormField>
     {type === ProblemTypes.NON_CONFORMITY && (
