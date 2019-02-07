@@ -10,6 +10,7 @@ import {
   EntityManagerForms,
   EntityManagerCards,
   EntityManagerCard,
+  EntityManagerItems,
   QuillField,
 } from '../../components';
 import GuidanceForm from './GuidanceForm';
@@ -20,9 +21,6 @@ import GuidanceEditContainer from '../containers/GuidanceEditContainer';
 const StyledQuillField = styled(QuillField)`
   .quill:not(.ql-expanded) {
     margin: 0 -17px 0 -17px;
-    .rich-text-controls {
-      border-top: none;
-    }
   }
 `;
 
@@ -40,16 +38,18 @@ const GuidanceAdminForm = ({
     {guidance && (
       <FormGroup>
         <EntityManager>
-          {(guidance.subguidances || []).map(subguidance => (
-            <EntityManagerItem
-              {...{ documentType, refetchQueries }}
-              guidance={subguidance}
-              key={subguidance._id}
-              itemId={subguidance._id}
-              component={GuidanceEditContainer}
-              render={GuidanceSubcard}
-            />
-          ))}
+          <EntityManagerItems>
+            {(guidance.subguidances || []).map(subguidance => (
+              <EntityManagerItem
+                {...{ documentType, refetchQueries }}
+                guidance={subguidance}
+                key={subguidance._id}
+                itemId={subguidance._id}
+                component={GuidanceEditContainer}
+                render={GuidanceSubcard}
+              />
+            ))}
+          </EntityManagerItems>
           <EntityManagerForms>
             <EntityManagerCards
               {...{ documentType, refetchQueries }}

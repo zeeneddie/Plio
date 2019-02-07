@@ -49,6 +49,7 @@ const getInitialValues = compose(
     'source2',
     'description',
     'issueNumber',
+    'uniqueNumber',
     'departments',
     'projects',
   ]),
@@ -137,7 +138,7 @@ const StandardEditContainer = ({
             const {
               title,
               status,
-              description,
+              description = '',
               issueNumber,
               uniqueNumber,
               source1,

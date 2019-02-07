@@ -7,7 +7,7 @@ import { pure } from 'recompose';
 
 import { insert as insertFile } from '../../../../api/files/methods';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { validateStandard, createFormError } from '../../../validation';
+import { validateStandardCreate, createFormError } from '../../../validation';
 import { Composer, renderComponent } from '../../helpers';
 import { uploadFile } from '../helpers';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -109,7 +109,7 @@ const StandardAddContainer = ({
           return onLink(existingStandard.value).then(toggle || noop);
         }
 
-        const errors = validateStandard(values);
+        const errors = validateStandardCreate(values);
         if (errors) return errors;
 
         let fileId;

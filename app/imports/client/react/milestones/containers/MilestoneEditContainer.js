@@ -116,7 +116,7 @@ const MilestoneEditContainer = ({
               description = '',
               completionTargetDate,
               completedAt,
-              completionComments,
+              completionComments = '',
               notify,
             } = values;
 
