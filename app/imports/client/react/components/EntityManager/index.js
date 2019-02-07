@@ -10,3 +10,4 @@ export { default as EntityForm } from './EntityForm';
 export { default as EntityDeleteButton } from './EntityDeleteButton';
 export { default as EntitySaveButton } from './EntitySaveButton';
 export { default as EntityCard } from './EntityCard';
+export { default as EntityManagerItems } from './EntityManagerItems';
