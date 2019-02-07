@@ -29,7 +29,7 @@ const StyledTabContent = styled(TabContent)`
   margin-top: 7px;
 `;
 
-const SourceInput = ({ onChange, value: source = {} }) => (
+const SourceInput = ({ onChange, value: source = {}, isEditMode }) => (
   <WithState initialState={{ type: source.type || AttachmentTypes.ATTACHMENT.value }}>
     {({ state: { type }, setState }) => (
       <Form
@@ -61,17 +61,20 @@ const SourceInput = ({ onChange, value: source = {} }) => (
                   name="file"
                   onChange={handleSubmit}
                 />
-                <Field name="file" subscription={{ value: true }}>
-                  {({ input: { value } }) => value && (
-                    value.name.split('.').pop().toLowerCase() === 'docx' ? (
-                      <p>
-                        File will be uploaded and rendered as HTML when you click on the Save button
-                      </p>
-                    ) : (
-                      <p>File will be uploaded when you click on the Save button</p>
-                    )
-                  )}
-                </Field>
+                {!isEditMode && (
+                  <Field name="file" subscription={{ value: true }}>
+                    {({ input: { value } }) => value && (
+                      value.name.split('.').pop().toLowerCase() === 'docx' ? (
+                        <p>
+                          File will be uploaded and rendered as HTML
+                          when you click on the Save button
+                        </p>
+                      ) : (
+                        <p>File will be uploaded when you click on the Save button</p>
+                      )
+                    )}
+                  </Field>
+                )}
               </TabPane>
               <TabPane tabId={AttachmentTypes.URL.value}>
                 <UrlField
@@ -97,6 +100,7 @@ const SourceInput = ({ onChange, value: source = {} }) => (
 
 SourceInput.propTypes = {
   onChange: PropTypes.func,
+  isEditMode: PropTypes.bool,
   value: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Button, ButtonGroup } from 'reactstrap';
+import { Button } from 'reactstrap';
 
 import { Icon } from '../../components';
+import FileItem from '../../fields/read/components/FileItem';
 
 const StyledButton = styled(Button)`
   position: relative;
@@ -26,16 +27,7 @@ const StyledButton = styled(Button)`
 `;
 
 const FileInput = ({ value, onRemove, ...rest }) => {
-  if (value) {
-    return (
-      <ButtonGroup>
-        <Button>{value.name}</Button>
-        <Button className="btn-icon">
-          <Icon name="times-circle" onClick={onRemove} />
-        </Button>
-      </ButtonGroup>
-    );
-  }
+  if (value) return <FileItem {...{ onRemove, ...value }} />;
   return (
     <StyledButton tag="span" color="primary">
       <Icon name="plus" /> Add

@@ -27,6 +27,7 @@ const enhance = composeWithTracker(
 const EditSourceAdapter = ({ input, onChange, ...rest }) => (
   <SourceInput
     {...{ ...rest, ...input }}
+    isEditMode
     onChange={({ file, ...source }) => {
       input.onChange(source);
       if (onChange) onChange(source);
