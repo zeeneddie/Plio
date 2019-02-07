@@ -10,7 +10,7 @@ import SelectRadio from './SelectRadio';
 import UrlField from './UrlField';
 import FileField from './FileField';
 
-const attachmentTypes = {
+const AttachmentTypes = {
   ATTACHMENT: {
     value: 'attachment',
     label: 'Attachment',
@@ -29,16 +29,21 @@ const StyledTabContent = styled(TabContent)`
   margin-top: 7px;
 `;
 
-const SourceInput = ({ onChange }) => (
-  <WithState initialState={{ type: attachmentTypes.ATTACHMENT.value }}>
+const SourceInput = ({ onChange, value: source = {} }) => (
+  <WithState initialState={{ type: source.type || AttachmentTypes.ATTACHMENT.value }}>
     {({ state: { type }, setState }) => (
       <Form
+        initialValues={{
+          file: source.file,
+          url: source.type === AttachmentTypes.URL.value ? source.url : undefined,
+          videoUrl: source.type === AttachmentTypes.VIDEO.value ? source.url : undefined,
+        }}
         onSubmit={({ file, url, videoUrl }) => {
           if (onChange) {
             onChange({
               type,
               file,
-              url: type === attachmentTypes.URL.value ? url : videoUrl,
+              url: type === AttachmentTypes.URL.value ? url : videoUrl,
             });
           }
         }}
@@ -46,12 +51,12 @@ const SourceInput = ({ onChange }) => (
         {({ handleSubmit }) => (
           <Fragment>
             <SelectRadio
-              options={valuesR(attachmentTypes)}
+              options={valuesR(AttachmentTypes)}
               value={type}
               onChange={({ value }) => setState({ type: value })}
             />
             <StyledTabContent activeTab={type}>
-              <TabPane tabId={attachmentTypes.ATTACHMENT.value}>
+              <TabPane tabId={AttachmentTypes.ATTACHMENT.value}>
                 <FileField
                   name="file"
                   onChange={handleSubmit}
@@ -68,14 +73,14 @@ const SourceInput = ({ onChange }) => (
                   )}
                 </Field>
               </TabPane>
-              <TabPane tabId={attachmentTypes.URL.value}>
+              <TabPane tabId={AttachmentTypes.URL.value}>
                 <UrlField
                   name="url"
                   placeholder="URL link"
                   onBlur={handleSubmit}
                 />
               </TabPane>
-              <TabPane tabId={attachmentTypes.VIDEO.value}>
+              <TabPane tabId={AttachmentTypes.VIDEO.value}>
                 <UrlField
                   name="videoUrl"
                   placeholder="YouTube or Vimeo URL"
@@ -92,6 +97,10 @@ const SourceInput = ({ onChange }) => (
 
 SourceInput.propTypes = {
   onChange: PropTypes.func,
+  value: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+  ]),
 };
 
 export default SourceInput;

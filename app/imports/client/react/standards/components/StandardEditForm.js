@@ -11,6 +11,7 @@ import {
   EditSourceField,
   UserSelectInput,
   CategorizeField,
+  EditSourceField2,
 } from '../../components';
 import { StandardsHelp } from '../../../../api/help-messages';
 import { StringLimits, UniqueNumberRange, IssueNumberRange } from '../../../../share/constants';
@@ -107,6 +108,14 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
       />
     </FormField>
     <hr />
+
+    <FormField>
+      Source file
+      <EditSourceField2
+        name="source1"
+        onChange={save}
+      />
+    </FormField>
     <EditSourceField
       name="source1"
       label="Source file"
