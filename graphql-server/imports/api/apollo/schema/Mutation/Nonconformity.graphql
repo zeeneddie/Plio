@@ -29,7 +29,7 @@ input UpdateNonconformityInput {
   standardsIds: [ID]
   departmentsIds: [ID]
   projectIds: [ID]
-  cost: Int,
+  cost: Float,
   ref: RefInput,
 }
 
