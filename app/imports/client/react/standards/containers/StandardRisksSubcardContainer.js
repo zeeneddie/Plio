@@ -14,6 +14,7 @@ import { Mutation as Mutations, Query as Queries } from '../../../graphql';
 import RisksSubcard from '../../risks/components/RisksSubcard';
 import EntitiesField from '../../forms/components/EntitiesField';
 import { swal } from '../../../util';
+import { DeepDiffKinds } from '../../../../api/constants';
 
 const StandardRisksSubcardContainer = ({
   organizationId,
@@ -43,7 +44,7 @@ const StandardRisksSubcardContainer = ({
 
           if (!difference) return undefined;
 
-          if (difference[0].item.kind === 'N') {
+          if (difference[0].item.kind === DeepDiffKinds.ADDED) {
             return linkStandardToRisk({
               variables: {
                 input: {
@@ -54,7 +55,7 @@ const StandardRisksSubcardContainer = ({
             }).catch(swal.error);
           }
 
-          if (difference[0].item.kind === 'D') {
+          if (difference[0].item.kind === DeepDiffKinds.DELETED) {
             return unlinkStandardFromRisk({
               variables: {
                 input: {

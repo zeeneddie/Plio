@@ -20,7 +20,7 @@ import deepDiff from 'deep-diff';
 import { swal } from '../../../util';
 import { Composer, WithState, renderComponent } from '../../helpers';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
-import { ApolloFetchPolicies } from '../../../../api/constants';
+import { ApolloFetchPolicies, DeepDiffKinds } from '../../../../api/constants';
 
 const getAction = pathOr({}, repeat('action', 2));
 
@@ -215,7 +215,7 @@ const ActionEditContainer = ({
               const linkedDiff = find(where({ path: contains('linkedTo') }), difference);
 
               if (linkedDiff) {
-                const isLinked = pathEq('N', ['item', 'kind'], linkedDiff);
+                const isLinked = pathEq(DeepDiffKinds.ADDED, ['item', 'kind'], linkedDiff);
                 const linkedId = path(['item', 'rhs', 'value'], linkedDiff);
                 if (isLinked && linkedId) {
                   return linkDocToAction({
@@ -229,7 +229,7 @@ const ActionEditContainer = ({
                   }).then(noop).catch(handleError);
                 }
 
-                const isUnlinked = pathEq('D', ['item', 'kind'], linkedDiff);
+                const isUnlinked = pathEq(DeepDiffKinds.DELETED, ['item', 'kind'], linkedDiff);
                 const unlinkedId = path(['item', 'lhs', 'value'], linkedDiff);
                 if (isUnlinked && unlinkedId) {
                   return unlinkDocFromAction({

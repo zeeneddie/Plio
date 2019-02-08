@@ -440,3 +440,8 @@ export const GroupSelectAbbreviations = {
   [CategorizeTypes.DEPARTMENT]: 'DEP',
   [CategorizeTypes.PROJECT]: 'PT',
 };
+
+export const DeepDiffKinds = {
+  ADDED: 'N',
+  DELETED: 'D',
+};
