@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { TabContent, TabPane } from 'reactstrap';
 import { values as valuesR } from 'ramda';
-import { Form, Field } from 'react-final-form';
+import { Form } from 'react-final-form';
 
 import { WithState } from '../../helpers';
 import SelectRadio from './SelectRadio';
@@ -31,8 +31,9 @@ const StyledTabContent = styled(TabContent)`
 
 const SourceInput = ({
   value: source = {},
+  slingshotContext,
+  slingshotDirective,
   onChange,
-  onRemove,
   isEditMode,
 }) => (
   <WithState initialState={{ type: source.type || AttachmentTypes.ATTACHMENT.value }}>
@@ -63,24 +64,11 @@ const SourceInput = ({
             <StyledTabContent activeTab={type}>
               <TabPane tabId={AttachmentTypes.ATTACHMENT.value}>
                 <FileField
-                  {...{ onRemove }}
+                  {...{ slingshotDirective, slingshotContext }}
                   name="file"
+                  withoutUploader={!isEditMode}
                   onChange={handleSubmit}
                 />
-                {!isEditMode && (
-                  <Field name="file" subscription={{ value: true }}>
-                    {({ input: { value } }) => value && (
-                      value.name.split('.').pop().toLowerCase() === 'docx' ? (
-                        <p>
-                          File will be uploaded and rendered as HTML
-                          when you click on the Save button
-                        </p>
-                      ) : (
-                        <p>File will be uploaded when you click on the Save button</p>
-                      )
-                    )}
-                  </Field>
-                )}
               </TabPane>
               <TabPane tabId={AttachmentTypes.URL.value}>
                 <UrlField
@@ -105,8 +93,9 @@ const SourceInput = ({
 );
 
 SourceInput.propTypes = {
+  slingshotContext: PropTypes.object,
+  slingshotDirective: PropTypes.string,
   onChange: PropTypes.func,
-  onRemove: PropTypes.func,
   isEditMode: PropTypes.bool,
   value: PropTypes.oneOfType([
     PropTypes.object,

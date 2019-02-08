@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import UploadsStore from '../../../../ui/utils/uploads/uploads-store';
-import { composeWithTracker, swal } from '../../../util';
+import { composeWithTracker } from '../../../util';
 import { Files } from '../../../../share/collections/files';
 import SourceInput from './SourceInput';
 
@@ -29,29 +28,10 @@ const EditSourceContainer = ({ input, onChange, ...rest }) => (
   <SourceInput
     {...{ ...rest, ...input }}
     isEditMode
-    onChange={({ file, ...source }) => {
+    onChange={({ file, url, type }) => {
+      const source = file || url ? { url, type, fileId: file && file._id } : null;
       input.onChange(source);
       if (onChange) onChange(source);
-    }}
-    onRemove={() => {
-      swal({
-        title: 'Are you sure?',
-        text: 'This attachment will be removed',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'OK',
-        closeOnConfirm: true,
-      }, () => {
-        const { file } = input.value;
-        const isUploading = file.progress < 1;
-        const isFailed = file.status === 'failed' || file.status === 'terminated';
-        if (isUploading && !isFailed) {
-          UploadsStore.terminateUploading(file._id);
-        }
-
-        input.onChange(null);
-        if (onChange) onChange();
-      });
     }}
   />
 );

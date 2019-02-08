@@ -5,7 +5,7 @@ import FileItem from '../FileItem';
 import Iframe from '../../../../components/Iframe';
 import IframeWrapper from '../../../../components/IframeWrapper';
 import getVideoSource from '../../../../helpers/getVideoSource';
-import { FILE_TYPE_MAP } from '/imports/api/constants';
+import { FILE_TYPE_MAP } from '../../../../../../api/constants';
 
 const getSourceTitle = (id) => {
   if (!id) return '';
@@ -31,7 +31,7 @@ const Source = ({
     case FILE_TYPE_MAP.ATTACHMENT:
       content = file ? (
         <h4 className="list-group-item-heading">
-          <FileItem {...file} />
+          <FileItem {...{ file }} />
         </h4>
       ) : null;
       break;

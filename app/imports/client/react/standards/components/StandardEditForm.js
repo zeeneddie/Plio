@@ -114,6 +114,8 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
       <EditSourceField2
         name="source1"
         onChange={save}
+        slingshotDirective="standardFiles"
+        slingshotContext={{ organizationId, standardId }}
       />
     </FormField>
     <EditSourceField

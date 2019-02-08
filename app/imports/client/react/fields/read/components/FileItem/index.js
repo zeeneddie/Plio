@@ -13,11 +13,13 @@ const isUploaded = ({ progress }) => progress === 1;
 const isFailed = ({ status }) => status === 'failed' || status === 'terminated';
 
 const FileItem = ({
-  url = '#',
-  name = null,
-  extension,
-  progress,
-  status,
+  file: {
+    url = '#',
+    name = null,
+    extension,
+    progress,
+    status,
+  },
   onRemove,
 }) => {
   const uploaded = isUploaded({ progress });
@@ -61,12 +63,14 @@ const FileItem = ({
 };
 
 FileItem.propTypes = {
-  url: PropTypes.string,
-  name: PropTypes.string,
-  extension: PropTypes.string,
-  progress: PropTypes.number,
+  file: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    url: PropTypes.string,
+    extension: PropTypes.string,
+    progress: PropTypes.number,
+    status: PropTypes.oneOf(_.values(FILE_STATUS_MAP)),
+  }).isRequired,
   onRemove: PropTypes.func,
-  status: PropTypes.oneOf(_.values(FILE_STATUS_MAP)),
 };
 
 export default FileItem;

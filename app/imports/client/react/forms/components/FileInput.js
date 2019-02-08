@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
+import { is } from 'ramda';
 
 import { Icon } from '../../components';
 import FileItem from '../../fields/read/components/FileItem';
@@ -26,20 +27,48 @@ const StyledButton = styled(Button)`
   }
 `;
 
-const FileInput = ({ value, onRemove, ...rest }) => {
-  if (value) return <FileItem {...{ onRemove, ...value }} />;
+const FileInput = ({
+  value,
+  onRemove,
+  multiple,
+  withoutUploader,
+  ...rest
+}) => {
+  const files = value && (is(Array, value) ? value : [value]);
   return (
-    <StyledButton tag="span" color="primary">
-      <Icon name="plus" /> Add
-      <input {...rest} type="file" />
-    </StyledButton>
+    <div>
+      {files && files.map(file => (
+        <Fragment key={file.name + file._id}>
+          <FileItem
+            {...{ file }}
+            onRemove={() => onRemove(file)}
+          />
+          {withoutUploader && (
+            file.name.split('.').pop().toLowerCase() === 'docx' ? (
+              <p>File will be uploaded and rendered as HTML when you click on the Save button</p>
+            ) : (
+              <p>File will be uploaded when you click on the Save button</p>
+            )
+          )}
+        </Fragment>
+      ))}
+      {multiple || !value && (
+        <StyledButton tag="span" color="primary">
+          <Icon name="plus" /> Add
+          <input {...rest} type="file" />
+        </StyledButton>
+      )}
+    </div>
   );
 };
 
 FileInput.propTypes = {
   onRemove: PropTypes.func.isRequired,
+  multiple: PropTypes.bool,
+  withoutUploader: PropTypes.bool,
   value: PropTypes.oneOfType([
     PropTypes.object,
+    PropTypes.array,
     PropTypes.string,
   ]),
 };
