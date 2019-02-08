@@ -16,16 +16,14 @@ export const render = renderer => getComponent => options => async (...args) => 
 
   if (typeof opts === 'function') opts = await options(...args);
 
+  await import('../../../ui/components');
+
   renderer(component, opts);
 };
 
 export const renderComponent = render(mount);
 
-export const renderBlazeComponent = render(async (component, opts) => {
-  await import('../../../ui/components');
-
-  return BlazeLayout.render(component, opts);
-});
+export const renderBlazeComponent = render(BlazeLayout.render.bind(BlazeLayout));
 
 /* REACT */
 

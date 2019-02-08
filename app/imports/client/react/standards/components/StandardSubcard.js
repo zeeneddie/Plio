@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { validateEditingStandard } from '../../../validation';
+import { validateStandardUpdate } from '../../../validation';
 import categorize from '../../forms/decorators/categorize';
 import shouldRenderSource2 from '../../forms/decorators/shouldRenderSource2';
 import {
@@ -30,7 +30,7 @@ const StandardSubcard = ({
     }}
     decorators={[categorize, shouldRenderSource2]}
     label={standard.title}
-    validate={validateEditingStandard}
+    validate={validateStandardUpdate}
     component={EntityCard}
   >
     {({ handleSubmit }) => (

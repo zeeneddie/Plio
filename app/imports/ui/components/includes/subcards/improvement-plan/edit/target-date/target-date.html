@@ -1,9 +1,16 @@
 <template name="IP_TargetDate_Edit">
   {{#FormField label="Target date for desired outcome" sm=7}}
-    {{> Datepicker
-        placeholder=getTodayDate
-        date=targetDate
-        onChange=onUpdateCb
-        defaultDate=false}}
+    <div class="form-group row">
+      <div class="form-group-flex col-sm-12">
+          <div class="form-group-flex-flex margin-right">
+            {{> Datepicker
+              placeholder=getTodayDate
+              date=targetDate
+              onChange=onUpdateCb
+              defaultDate=false}}
+          </div>
+          {{> DeleteButton onClick=(callback 'onDelete')}}
+        </div>
+    </div>
   {{/FormField}}
 </template>

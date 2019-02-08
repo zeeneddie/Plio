@@ -38,6 +38,7 @@ const RiskForm = ({
         name="description"
         onBlur={save}
         placeholder="Description"
+        maxLength={StringLimits.description.max}
       />
     </FormField>
     {children}

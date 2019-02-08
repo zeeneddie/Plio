@@ -33,6 +33,7 @@ const MilestoneForm = ({ save }) => (
         name="title"
         placeholder="Title"
         onBlur={save}
+        maxLength={StringLimits.title.max}
         autoFocus
       />
     </FormField>
@@ -42,6 +43,7 @@ const MilestoneForm = ({ save }) => (
         name="description"
         placeholder="Description"
         onBlur={save}
+        maxLength={StringLimits.description.max}
       />
     </FormField>
     <Field
@@ -76,12 +78,12 @@ const MilestoneForm = ({ save }) => (
     <Field name="isCompleted" subscription={{ value: true }}>
       {({ input: { value: isCompleted } }) => (
         <FormField>
-          Completion - target date
+          Date
           <DatePickerField
             name="completionTargetDate"
             disabled={!!isCompleted}
             onChange={save}
-            placeholderText="Completion - target date"
+            placeholderText="Date"
           />
         </FormField>
       )}

@@ -6,7 +6,21 @@ const isNilOrEmpty = anyPass([isNil, isEmpty]);
 export const required = curry((label, value) =>
   isNilOrEmpty(value) ? `${label} required` : undefined);
 
+export const integer = curry((label, value) =>
+  isNil(value) || Number.isInteger(value) ? undefined : `${label} must be an integer`);
+
 export const createFormError = message => ({ [FORM_ERROR]: message });
+
+export const combine = (rules, label) => (value) => {
+  let message;
+
+  rules.find((rule) => {
+    message = rule(label, value);
+    return !!message;
+  });
+
+  return message;
+};
 
 export const validate = rules => (values) => {
   const errors = new Set();

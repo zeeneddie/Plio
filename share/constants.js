@@ -901,9 +901,9 @@ export const Colors = {
 export const ChartColors = {
   TEAL: '#009688',
   CYAN: '#00BCD4',
-  INDIGO: '#3F51B5',
   PURPLE: '#673AB7',
   PLUM: '#9C27B0',
+  INDIGO: '#3F51B5',
   PINK: '#F06292',
   BLUE_GREY: '#607D8B',
   GREY: '#757575',

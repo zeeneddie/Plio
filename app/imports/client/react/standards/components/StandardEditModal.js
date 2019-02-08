@@ -16,7 +16,7 @@ import shouldRenderSource2 from '../../forms/decorators/shouldRenderSource2';
 import StandardAddForm from './StandardAddForm';
 import StandardEditForm from './StandardEditForm';
 import { StandardsHelp } from '../../../../api/help-messages';
-import { validateEditingStandard } from '../../../validation';
+import { validateStandardUpdate } from '../../../validation';
 
 export const StandardEditModal = ({
   isOpen,
@@ -43,7 +43,7 @@ export const StandardEditModal = ({
     <EntityModalForm
       {...{ initialValues, onSubmit }}
       decorators={[categorize, shouldRenderSource2]}
-      validate={validateEditingStandard}
+      validate={validateStandardUpdate}
     >
       {({ handleSubmit }) => (
         <Fragment>

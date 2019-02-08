@@ -4,6 +4,7 @@ import {
   checkOrgMembership,
   flattenInput,
   ensureCanChangeGoals,
+  ensureCanUpdateStartDate,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, context) =>
@@ -14,6 +15,7 @@ export default applyMiddleware(
   checkLoggedIn(),
   checkOrgMembership(),
   ensureCanChangeGoals((root, { organizationId }) => ({ organizationId })),
+  ensureCanUpdateStartDate((root, { startDate, endDate }) => ({ startDate, endDate })),
   async (next, root, args, context) => {
     const { collections: { Goals } } = context;
     const _id = await next(root, args, context);
