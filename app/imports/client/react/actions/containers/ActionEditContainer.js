@@ -216,34 +216,30 @@ const ActionEditContainer = ({
 
               if (linkedDiff) {
                 const isLinked = pathEq('N', ['item', 'kind'], linkedDiff);
-                if (isLinked) {
-                  const linkedId = path(['item', 'rhs', 'value'], linkedDiff);
-                  if (linkedId) {
-                    return linkDocToAction({
-                      variables: {
-                        input: {
-                          _id: action._id,
-                          documentType: linkedTo.documentType,
-                          documentId: linkedId,
-                        },
+                const linkedId = path(['item', 'rhs', 'value'], linkedDiff);
+                if (isLinked && linkedId) {
+                  return linkDocToAction({
+                    variables: {
+                      input: {
+                        _id: action._id,
+                        documentType: linkedTo.documentType,
+                        documentId: linkedId,
                       },
-                    }).then(noop).catch(handleError);
-                  }
+                    },
+                  }).then(noop).catch(handleError);
                 }
 
                 const isUnlinked = pathEq('D', ['item', 'kind'], linkedDiff);
-                if (isUnlinked) {
-                  const unlinkedId = path(['item', 'lhs', 'value'], linkedDiff);
-                  if (unlinkedId) {
-                    return unlinkDocFromAction({
-                      variables: {
-                        input: {
-                          _id: action._id,
-                          documentId: unlinkedId,
-                        },
+                const unlinkedId = path(['item', 'lhs', 'value'], linkedDiff);
+                if (isUnlinked && unlinkedId) {
+                  return unlinkDocFromAction({
+                    variables: {
+                      input: {
+                        _id: action._id,
+                        documentId: unlinkedId,
                       },
-                    }).then(noop).catch(handleError);
-                  }
+                    },
+                  }).then(noop).catch(handleError);
                 }
               }
 
