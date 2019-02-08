@@ -58,4 +58,3 @@ export { default as SourceField } from './SourceField';
 export { default as FileInput } from './FileInput';
 export { default as FileAdapter } from './FileAdapter';
 export { default as FileField } from './FileField';
-export { default as EditSourceField2 } from './EditSourceField2';

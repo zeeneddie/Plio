@@ -34,7 +34,7 @@ const EditSourceContainer = ({ input, onChange, ...rest }) => (
       input.onChange(source);
       if (onChange) onChange(source);
 
-      if (file && file._id) {
+      if (type === 'attachment' && file && file._id) {
         uploadFile({
           file,
           fileId: file._id,

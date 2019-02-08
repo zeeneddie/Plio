@@ -8,10 +8,9 @@ import {
   FormField,
   InputField,
   TextareaField,
-  EditSourceField,
   UserSelectInput,
   CategorizeField,
-  EditSourceField2,
+  EditSourceField,
 } from '../../components';
 import { StandardsHelp } from '../../../../api/help-messages';
 import { StringLimits, UniqueNumberRange, IssueNumberRange } from '../../../../share/constants';
@@ -111,27 +110,23 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
 
     <FormField>
       Source file
-      <EditSourceField2
+      <EditSourceField
         name="source1"
         onChange={save}
         {...{ organizationId, standardId }}
       />
     </FormField>
-    <EditSourceField
-      name="source1"
-      label="Source file"
-      onChange={save}
-      {...{ organizationId, standardId }}
-    />
     <Field name="shouldRenderSource2" subscription={{ value: true }}>
       {({ input }) => (
         <SourceFieldWrapper hidden={!input.value}>
-          <EditSourceField
-            name="source2"
-            label="Source file 2"
-            onChange={save}
-            {...{ organizationId, standardId }}
-          />
+          <FormField>
+            Source file 2
+            <EditSourceField
+              name="source2"
+              onChange={save}
+              {...{ organizationId, standardId }}
+            />
+          </FormField>
         </SourceFieldWrapper>
       )}
     </Field>

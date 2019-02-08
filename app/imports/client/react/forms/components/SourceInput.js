@@ -39,7 +39,7 @@ const SourceInput = ({
     {({ state: { type }, setState }) => (
       <Form
         initialValues={{
-          file: source.file,
+          file: source.type === AttachmentTypes.ATTACHMENT.value ? source.file : undefined,
           url: source.type === AttachmentTypes.URL.value ? source.url : undefined,
           videoUrl: source.type === AttachmentTypes.VIDEO.value ? source.url : undefined,
         }}

@@ -52,7 +52,7 @@ const FileInput = ({
           )}
         </Fragment>
       ))}
-      {multiple || !value && (
+      {(multiple || !value) && (
         <StyledButton tag="span" color="primary">
           <Icon name="plus" /> Add
           <input {...rest} type="file" />
