@@ -10,11 +10,12 @@ import {
   where,
   contains,
   merge,
-  difference as differenceR,
+  path,
+  pathEq,
 } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
-import { noop, getValue, getValues } from 'plio-util';
-import diff from 'deep-diff';
+import { noop, getValue } from 'plio-util';
+import deepDiff from 'deep-diff';
 
 import { swal } from '../../../util';
 import { Composer, WithState, renderComponent } from '../../helpers';
@@ -136,7 +137,7 @@ const ActionEditContainer = ({
             loading,
             onSubmit: async (values, form) => {
               const currentValues = getInitialValues(action);
-              const difference = diff(values, currentValues);
+              const difference = deepDiff(currentValues, values);
 
               if (!difference) return undefined;
 
@@ -158,14 +159,15 @@ const ActionEditContainer = ({
                 verifiedBy,
                 toBeVerifiedBy,
                 verificationTargetDate,
-                linkedTo: linkedToValue,
               } = values;
 
-              const isCompletedDiff = find(where({ path: contains('isCompleted') }), difference);
-              const errorHandler = (err) => {
+              const handleError = (err) => {
                 form.reset(currentValues);
                 throw err;
               };
+
+              // Complete/undo completion
+              const isCompletedDiff = find(where({ path: contains('isCompleted') }), difference);
 
               if (isCompletedDiff) {
                 if (isCompleted) {
@@ -176,16 +178,17 @@ const ActionEditContainer = ({
                         completionComments,
                       },
                     },
-                  }).then(noop).catch(errorHandler);
+                  }).then(noop).catch(handleError);
                 }
 
                 return undoActionCompletion({
                   variables: {
                     input: { _id: action._id },
                   },
-                }).then(noop).catch(errorHandler);
+                }).then(noop).catch(handleError);
               }
 
+              // Verify/undo verification
               const isVerifiedDiff = find(where({ path: contains('isVerified') }), difference);
 
               if (isVerifiedDiff) {
@@ -198,47 +201,53 @@ const ActionEditContainer = ({
                         isVerifiedAsEffective,
                       },
                     },
-                  }).then(noop).catch(errorHandler);
+                  }).then(noop).catch(handleError);
                 }
 
                 return undoActionVerification({
                   variables: {
                     input: { _id: action._id },
                   },
-                }).then(noop).catch(errorHandler);
+                }).then(noop).catch(handleError);
               }
 
-              const isLinkedToDiff = find(where({ path: contains('linkedTo') }), difference);
+              // Link/unlink
+              const linkedDiff = find(where({ path: contains('linkedTo') }), difference);
 
-              if (isLinkedToDiff) {
-                const docsIds = getValues(linkedToValue);
-                const currentDocsIds = getValues(currentValues.linkedTo);
-                const linkedDocId = differenceR(docsIds, currentDocsIds)[0];
-                if (linkedDocId) {
-                  return linkDocToAction({
-                    variables: {
-                      input: {
-                        _id: action._id,
-                        documentType: linkedTo.documentType,
-                        documentId: linkedDocId,
+              if (linkedDiff) {
+                const isLinked = pathEq('N', ['item', 'kind'], linkedDiff);
+                if (isLinked) {
+                  const linkedId = path(['item', 'rhs', 'value'], linkedDiff);
+                  if (linkedId) {
+                    return linkDocToAction({
+                      variables: {
+                        input: {
+                          _id: action._id,
+                          documentType: linkedTo.documentType,
+                          documentId: linkedId,
+                        },
                       },
-                    },
-                  }).then(noop).catch(errorHandler);
+                    }).then(noop).catch(handleError);
+                  }
                 }
 
-                const unlinkedDocId = differenceR(currentDocsIds, docsIds)[0];
-                if (unlinkedDocId) {
-                  return unlinkDocFromAction({
-                    variables: {
-                      input: {
-                        _id: action._id,
-                        documentId: unlinkedDocId,
+                const isUnlinked = pathEq('D', ['item', 'kind'], linkedDiff);
+                if (isUnlinked) {
+                  const unlinkedId = path(['item', 'lhs', 'value'], linkedDiff);
+                  if (unlinkedId) {
+                    return unlinkDocFromAction({
+                      variables: {
+                        input: {
+                          _id: action._id,
+                          documentId: unlinkedId,
+                        },
                       },
-                    },
-                  }).then(noop).catch(errorHandler);
+                    }).then(noop).catch(handleError);
+                  }
                 }
               }
 
+              // Update
               const args = {
                 variables: {
                   input: {
@@ -261,7 +270,7 @@ const ActionEditContainer = ({
                 },
               };
 
-              return updateAction(args).then(noop).catch(errorHandler);
+              return updateAction(args).then(noop).catch(handleError);
             },
             onDelete: () => {
               if (onDelete) return onDelete();
