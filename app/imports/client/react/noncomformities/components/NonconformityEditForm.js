@@ -16,6 +16,7 @@ import {
   Col,
   StandardSelectInput,
   CategorizeField,
+  UrlField,
 } from '../../components';
 import { NonConformitiesHelp } from '../../../../api/help-messages';
 import { getStatusColor } from '../helpers';
@@ -50,6 +51,7 @@ export const NonconformityEditForm = ({
         name="description"
         placeholder="Description"
         onBlur={save}
+        maxLength={StringLimits.description.max}
       />
     </FormField>
     <FormField>
@@ -68,6 +70,7 @@ export const NonconformityEditForm = ({
         name="statusComment"
         placeholder="Status comment"
         onBlur={save}
+        maxLength={StringLimits.description.max}
       />
     </FormField>
     <FormField>
@@ -119,6 +122,7 @@ export const NonconformityEditForm = ({
         placeholder="Financial impact"
         onBlur={save}
         addon={currency}
+        clearable={false}
       />
     </FormField>
     {type === ProblemTypes.NON_CONFORMITY && (
@@ -133,7 +137,7 @@ export const NonconformityEditForm = ({
             />
           </Col>
           <Col sm={8}>
-            <InputField
+            <UrlField
               name="ref.url"
               placeholder="URL"
               maxLength={StringLimits.url.max}

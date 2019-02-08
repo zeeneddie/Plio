@@ -18,8 +18,8 @@ const StyledHelp = styled.div`
 
 const StyledGuidanceIcon = styled(GuidanceIcon)`
   width: auto;
-  margin-right: 5px;
   padding: 0;
+  margin-right: 1.25rem;
   i {
     color: ${Styles.color.blue}
   }

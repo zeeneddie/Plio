@@ -17,7 +17,7 @@ const NotifySubcard = ({ onChange, ...props }) => (
     <SubcardHeader>
       <Pull left>
         <CardTitle>
-          Notify Changes
+          Notify changes
         </CardTitle>
       </Pull>
       <Pull right>

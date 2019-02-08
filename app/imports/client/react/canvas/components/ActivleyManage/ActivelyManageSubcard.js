@@ -82,7 +82,7 @@ const ActivelyManageSubcard = ({
   <StyledSubcard>
     <SubcardHeader>
       <CardTitle>
-        Actively Manage
+        Actively manage
       </CardTitle>
       <SubcardSubtitle>
         <FormText color="muted" tag="span">

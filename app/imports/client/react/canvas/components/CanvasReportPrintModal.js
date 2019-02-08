@@ -58,6 +58,9 @@ const CanvasReportPrintModal = ({ printState, updatePrintState }) => (
               <CardTitle>Print report</CardTitle>
             </ModalHeader>
             <ModalBody>
+              <CardBlock>
+                Make sure page orientation is set to landscape in your print options before printing
+              </CardBlock>
               <StyledCardBlock>
                 <Form
                   initialValues={printState}

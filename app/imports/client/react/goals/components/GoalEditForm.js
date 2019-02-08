@@ -8,7 +8,7 @@ import {
   TextareaField,
 } from '../../components';
 import { getStatusColor } from '../../../../api/goals/helpers';
-import { GoalStatuses } from '../../../../share/constants';
+import { GoalStatuses, StringLimits } from '../../../../share/constants';
 import GoalForm from './GoalForm';
 import GoalCompleteForm from './GoalCompleteForm';
 
@@ -32,6 +32,7 @@ export const GoalEditFrom = ({
         name="statusComment"
         placeholder="Status comment"
         onBlur={save}
+        maxLength={StringLimits.description.max}
       />
     </FormField>
     <GoalCompleteForm {...{ organizationId, save }} />

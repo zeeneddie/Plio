@@ -219,7 +219,7 @@ const enhance = compose(
     prop('valueComponent'),
     identity,
     withProps(({ multi }) => ({
-      valueComponent: multi && MultiValue,
+      valueComponent: multi ? MultiValue : undefined,
     })),
   ),
   withProps(({

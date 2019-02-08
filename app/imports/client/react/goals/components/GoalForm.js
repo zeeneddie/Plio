@@ -38,6 +38,7 @@ export const GoalForm = ({
       <TextareaField
         name="description"
         placeholder="Description"
+        maxLength={StringLimits.description.max}
         onBlur={save}
       />
     </FormField>

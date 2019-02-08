@@ -31,6 +31,7 @@ const CanvasForm = ({ organizationId, children, save }) => (
         name="originator"
         placeholder="Originator"
         onChange={save}
+        maxLength={StringLimits.description.max}
       />
     </FormField>
     <FormField>
@@ -48,6 +49,7 @@ const CanvasForm = ({ organizationId, children, save }) => (
         name="notes"
         placeholder="Notes"
         onBlur={save}
+        maxLength={StringLimits.description.max}
       />
     </FormField>
   </CardBlock>
