@@ -31,8 +31,7 @@ const StyledTabContent = styled(TabContent)`
 
 const SourceInput = ({
   value: source = {},
-  slingshotContext,
-  slingshotDirective,
+  organizationId,
   onChange,
   isEditMode,
 }) => (
@@ -64,10 +63,10 @@ const SourceInput = ({
             <StyledTabContent activeTab={type}>
               <TabPane tabId={AttachmentTypes.ATTACHMENT.value}>
                 <FileField
-                  {...{ slingshotDirective, slingshotContext }}
                   name="file"
                   withoutUploader={!isEditMode}
                   onChange={handleSubmit}
+                  {...{ organizationId }}
                 />
               </TabPane>
               <TabPane tabId={AttachmentTypes.URL.value}>
@@ -93,8 +92,7 @@ const SourceInput = ({
 );
 
 SourceInput.propTypes = {
-  slingshotContext: PropTypes.object,
-  slingshotDirective: PropTypes.string,
+  organizationId: PropTypes.string,
   onChange: PropTypes.func,
   isEditMode: PropTypes.bool,
   value: PropTypes.oneOfType([

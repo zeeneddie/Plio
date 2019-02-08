@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { composeWithTracker } from '../../../util';
+import { uploadFile } from '../../standards/helpers';
 import { Files } from '../../../../share/collections/files';
 import SourceInput from './SourceInput';
 
@@ -32,6 +33,15 @@ const EditSourceContainer = ({ input, onChange, ...rest }) => (
       const source = file || url ? { url, type, fileId: file && file._id } : null;
       input.onChange(source);
       if (onChange) onChange(source);
+
+      if (file && file._id) {
+        uploadFile({
+          file,
+          fileId: file._id,
+          standardId: rest.standardId,
+          organizationId: rest.organizationId,
+        });
+      }
     }}
   />
 );
