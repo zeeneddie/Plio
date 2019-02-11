@@ -33,7 +33,7 @@ type Nonconformity implements BaseEntity, PlioEntity {
   analysis: Analysis
   updateOfStandards: Analysis
   statusComment: String
-  cost: Int
+  cost: Float
   ref: HelpDeskRef
   # rootCauseAnalysis:
 }

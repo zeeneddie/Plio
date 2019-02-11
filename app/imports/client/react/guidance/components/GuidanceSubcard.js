@@ -1,6 +1,5 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Card } from 'reactstrap';
 
 import validateGuidance from '../../../validation/validators/validateGuidance';
 import { EntityForm, EntityCard } from '../../components';
@@ -14,26 +13,22 @@ const GuidanceSubcard = ({
   toggle,
   onDelete,
 }) => (
-  <Fragment>
-    <Card>
-      <EntityForm
-        {...{
-          isOpen,
-          toggle,
-          onDelete,
-          onSubmit,
-          initialValues,
-        }}
-        label={guidance.title}
-        validate={validateGuidance}
-        component={EntityCard}
-      >
-        {({ handleSubmit }) => (
-          <GuidanceForm save={handleSubmit} />
-        )}
-      </EntityForm>
-    </Card>
-  </Fragment>
+  <EntityForm
+    {...{
+      isOpen,
+      toggle,
+      onDelete,
+      onSubmit,
+      initialValues,
+    }}
+    label={guidance.title}
+    validate={validateGuidance}
+    component={EntityCard}
+  >
+    {({ handleSubmit }) => (
+      <GuidanceForm save={handleSubmit} />
+    )}
+  </EntityForm>
 );
 
 GuidanceSubcard.propTypes = {

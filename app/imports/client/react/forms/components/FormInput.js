@@ -1,65 +1,68 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { withHandlers } from 'recompose';
 import cx from 'classnames';
 import { Input } from 'reactstrap';
+import { pure } from 'recompose';
 
-import ClearField from '../../../fields/read/components/ClearField';
-import { onHandleBlur, onHandleClear } from './handlers';
-import { InputGroupAddon } from '../../../components';
+import ClearField from '../../fields/read/components/ClearField';
+import { InputGroupAddon } from '../../components';
 
-const enhance = withHandlers({ onHandleBlur, onHandleClear });
-
-const FormInput = enhance(({
-  value,
-  className,
+const FormInput = ({
   children,
-  onHandleBlur: onBlur,
-  onHandleClear: onClear,
   onChange,
   innerRef,
   containerClassName,
   inputGroup,
   addon,
-  autoComplete = 'off',
-  ...other
+  clearable,
+  ...props
 }) => {
-  let textInput;
+  let inputEl;
+  const Tag = clearable ? ClearField : 'div';
 
   return (
-    <ClearField
+    <Tag
       className={cx(containerClassName, { 'input-group': addon || inputGroup })}
-      onClick={e => onClear(e, textInput)}
+      onClick={(e) => {
+        if (!clearable) return false;
+
+        inputEl.value = '';
+        inputEl.focus();
+
+        return onChange && onChange({ ...e, target: inputEl });
+      }}
     >
       {addon ? (
         <InputGroupAddon addonType="prepend">{addon}</InputGroupAddon>
       ) : children}
       <Input
         innerRef={(input) => {
-          textInput = input;
+          inputEl = input;
           return innerRef && innerRef(input);
         }}
-        {...{
-          className,
-          value,
-          onChange,
-          onBlur,
-          autoComplete,
-          ...other,
-        }}
+        {...{ onChange, ...props }}
       />
-    </ClearField>
+    </Tag>
   );
-});
+};
+
+FormInput.defaultProps = {
+  clearable: true,
+  autoComplete: 'off',
+};
 
 FormInput.propTypes = {
   className: PropTypes.string,
+  containerClassName: PropTypes.string,
+  autoComplete: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   innerRef: PropTypes.func,
   children: PropTypes.node,
   inputGroup: PropTypes.bool,
+  clearable: PropTypes.bool,
+  addon: PropTypes.node,
 };
 
-export default FormInput;
+export default pure(FormInput);

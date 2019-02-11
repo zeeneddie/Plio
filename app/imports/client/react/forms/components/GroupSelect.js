@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { map, merge, append, unnest, reduce, reject, isNil, compose, prop } from 'ramda';
+import { map, merge, append, unnest, reduce, reject, isNil, compose, prop, identity } from 'ramda';
 
 import ApolloSelectInputField from './ApolloSelectInputField';
 import GroupSelectOption from './GroupSelectOption';
@@ -10,7 +10,7 @@ const concatAll = compose(
   reject(isNil),
   unnest,
 );
-const transformOptions = compose(
+const extendOptions = compose(
   reduce((options, {
     label,
     value,
@@ -37,9 +37,12 @@ const transformOptions = compose(
   prop('options'),
 );
 
-const GroupSelect = ({ onNewOptionClick, loadOptions, ...props }) => (
+const GroupSelect = ({
+  onNewOptionClick, transformOptions, loadOptions, ...props
+}) => (
   <ApolloSelectInputField
-    {...{ loadOptions, transformOptions, ...props }}
+    {...{ loadOptions, ...props }}
+    transformOptions={compose(extendOptions, transformOptions)}
     optionComponent={GroupSelectOption}
     valueRenderer={GroupSelectValue}
     filterOption={({
@@ -56,12 +59,14 @@ const GroupSelect = ({ onNewOptionClick, loadOptions, ...props }) => (
 
 GroupSelect.defaultProps = {
   multi: true,
+  transformOptions: identity,
 };
 
 GroupSelect.propTypes = {
   loadOptions: PropTypes.func.isRequired,
   multi: PropTypes.bool,
   onNewOptionClick: PropTypes.func,
+  transformOptions: PropTypes.func,
 };
 
 export default GroupSelect;

@@ -72,6 +72,7 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
         min={UniqueNumberRange.MIN}
         max={UniqueNumberRange.MAX}
         onBlur={save}
+        clearable={false}
       />
     </FormField>
     <FormField>
@@ -91,6 +92,7 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
         min={IssueNumberRange.MIN}
         max={IssueNumberRange.MAX}
         onBlur={save}
+        clearable={false}
       />
     </FormField>
     <FormField>
