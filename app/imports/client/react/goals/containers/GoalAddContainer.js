@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { pure } from 'recompose';
 import { Query, Mutation } from 'react-apollo';
 import { noop, getUserOptions } from 'plio-util';
 
@@ -101,4 +100,4 @@ GoalAddContainer.propTypes = {
   onLink: PropTypes.func,
 };
 
-export default pure(GoalAddContainer);
+export default React.memo(GoalAddContainer);

@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { pure } from 'recompose';
 
 import {
   Status,
@@ -46,4 +45,4 @@ GoalEditFrom.propTypes = {
   save: PropTypes.func.isRequired,
 };
 
-export default pure(GoalEditFrom);
+export default React.memo(GoalEditFrom);

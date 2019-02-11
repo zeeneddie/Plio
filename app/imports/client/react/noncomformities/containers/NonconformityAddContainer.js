@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { pure } from 'recompose';
 import { Query, Mutation } from 'react-apollo';
 import { noop, getUserOptions } from 'plio-util';
 import { pluck } from 'ramda';
@@ -103,4 +102,4 @@ NonconformityAddContainer.propTypes = {
   onLink: PropTypes.func,
 };
 
-export default pure(NonconformityAddContainer);
+export default React.memo(NonconformityAddContainer);

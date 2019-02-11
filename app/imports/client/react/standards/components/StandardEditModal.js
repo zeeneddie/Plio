@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { pure } from 'recompose';
 import { noop } from 'plio-util';
 
 import {
@@ -88,4 +87,4 @@ StandardEditModal.propTypes = {
   standard: PropTypes.object,
 };
 
-export default pure(StandardEditModal);
+export default React.memo(StandardEditModal);

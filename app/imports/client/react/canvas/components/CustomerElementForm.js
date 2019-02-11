@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { FormGroup } from 'reactstrap';
-import { pure } from 'recompose';
 
 import { StringLimits, CustomerElementStatuses } from '../../../../share/constants';
 import {
@@ -54,4 +53,4 @@ CustomerElementForm.propTypes = {
   status: PropTypes.number,
 };
 
-export default pure(CustomerElementForm);
+export default React.memo(CustomerElementForm);

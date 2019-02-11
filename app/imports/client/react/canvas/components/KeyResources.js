@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Query } from 'react-apollo';
-import { pure } from 'recompose';
 
 import KeyResourceAddModal from './KeyResourceAddModal';
 import KeyResourceEditModal from './KeyResourceEditModal';
@@ -53,4 +52,4 @@ KeyResources.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(KeyResources);
+export default React.memo(KeyResources);

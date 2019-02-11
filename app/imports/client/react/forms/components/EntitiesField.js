@@ -1,7 +1,6 @@
 import React from 'react';
 import { Field } from 'react-final-form';
 import { equals } from 'ramda';
-import { pure } from 'recompose';
 
 import EntitiesFieldAdapter from './EntitiesFieldAdapter';
 
@@ -14,4 +13,4 @@ const EntitiesField = props => (
   />
 );
 
-export default pure(EntitiesField);
+export default React.memo(EntitiesField);

@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { memo } from 'react';
 import connectUI from 'redux-ui';
-import { compose, pure } from 'recompose';
+import { compose } from 'recompose';
 
 import GoalEditModal from '../components/GoalEditModal';
 import GoalEditContainer from './GoalEditContainer';
 
 const enhance = compose(
-  pure,
+  memo,
   connectUI(),
 );
 

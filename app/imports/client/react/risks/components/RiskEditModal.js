@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { pure } from 'recompose';
 import { noop } from 'plio-util';
 
 import {
@@ -89,4 +88,4 @@ RiskEditModal.propTypes = {
   userId: PropTypes.string,
 };
 
-export default pure(RiskEditModal);
+export default React.memo(RiskEditModal);

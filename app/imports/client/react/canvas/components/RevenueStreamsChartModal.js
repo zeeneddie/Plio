@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Query } from 'react-apollo';
-import { pure } from 'recompose';
 import { pluck, pathOr } from 'ramda';
 import { sortByIds, noop } from 'plio-util';
 
@@ -130,4 +129,4 @@ RevenueStreamsChartModal.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(RevenueStreamsChartModal);
+export default React.memo(RevenueStreamsChartModal);

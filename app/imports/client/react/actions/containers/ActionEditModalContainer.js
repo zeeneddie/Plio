@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { withHandlers, pure, setPropTypes } from 'recompose';
+import { memo } from 'react';
+import { withHandlers, setPropTypes } from 'recompose';
 import { graphql } from 'react-apollo';
 
 import { Query, Mutation } from '../../../graphql';
@@ -18,7 +19,7 @@ export default namedCompose('ActionEditModalContainer')(
       roles: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
   }),
-  pure,
+  memo,
   graphql(Query.ACTION_CARD, {
     options: ({ actionId }) => ({
       variables: {

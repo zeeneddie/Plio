@@ -24,7 +24,7 @@ const EntityManagerCards = ({
 );
 
 EntityManagerCards.propTypes = {
-  component: PropTypes.func,
+  component: PropTypes.elementType,
   containerClassName: PropTypes.string,
   render: PropTypes.func,
 };

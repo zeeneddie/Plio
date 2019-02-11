@@ -29,7 +29,7 @@ const renderComponent = (props) => {
 
 renderComponent.propTypes = {
   render: PropTypes.func,
-  component: PropTypes.func,
+  component: PropTypes.elementType,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 };
 

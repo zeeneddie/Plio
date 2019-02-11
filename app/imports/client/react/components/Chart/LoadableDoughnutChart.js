@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Loadable from 'react-loadable';
-import { pure } from 'recompose';
 
 import { ChartDefaultOptions } from './constants';
 import { PreloaderPage } from '../';
@@ -47,4 +46,4 @@ const LoadableDoughnutChart = Loadable({
   ),
 });
 
-export default pure(LoadableDoughnutChart);
+export default React.memo(LoadableDoughnutChart);

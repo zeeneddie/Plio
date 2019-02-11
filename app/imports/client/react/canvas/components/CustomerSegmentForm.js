@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { getEntityOptions, mapEntitiesToOptions } from 'plio-util';
-import { pure } from 'recompose';
 
 import { Query } from '../../../graphql';
 import CanvasForm from './CanvasForm';
@@ -66,4 +65,4 @@ CustomerSegmentForm.propTypes = {
   save: PropTypes.func,
 };
 
-export default pure(CustomerSegmentForm);
+export default React.memo(CustomerSegmentForm);

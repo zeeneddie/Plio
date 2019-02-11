@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 
 import CanvasForm from './CanvasForm';
 import { FormField, PercentInputField } from '../../components';
@@ -26,4 +25,4 @@ RevenueStreamForm.propTypes = {
   save: PropTypes.func,
 };
 
-export default pure(RevenueStreamForm);
+export default React.memo(RevenueStreamForm);

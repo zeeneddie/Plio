@@ -1,4 +1,5 @@
-import { withProps, withHandlers, pure } from 'recompose';
+import { memo } from 'react';
+import { withProps, withHandlers } from 'recompose';
 import { mapEntitiesToOptions } from 'plio-util';
 
 import { insert, update, remove } from '../../../../api/standards-book-sections/methods';
@@ -32,5 +33,5 @@ export default namedCompose('StandardSectionsSubcardContainer')(
       }
     },
   }),
-  pure,
+  memo,
 )(StandardSectionsSubcard);

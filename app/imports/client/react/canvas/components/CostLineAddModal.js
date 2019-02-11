@@ -3,7 +3,6 @@ import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions } from 'plio-util';
 import { Form } from 'reactstrap';
-import { pure } from 'recompose';
 
 import { CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
@@ -97,4 +96,4 @@ CostLineAddModal.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(CostLineAddModal);
+export default React.memo(CostLineAddModal);

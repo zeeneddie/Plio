@@ -3,7 +3,6 @@ import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions, noop } from 'plio-util';
 import { Form } from 'reactstrap';
-import { pure } from 'recompose';
 
 import { CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
@@ -99,4 +98,4 @@ ChannelAddModal.propTypes = {
   onLink: PropTypes.func,
 };
 
-export default pure(ChannelAddModal);
+export default React.memo(ChannelAddModal);

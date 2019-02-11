@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Form, FormGroup } from 'reactstrap';
 import { ApolloProvider, Mutation } from 'react-apollo';
-import { pure } from 'recompose';
 import { noop } from 'plio-util';
 import { reject, whereEq } from 'ramda';
 
@@ -113,4 +112,4 @@ UserDeleteModal.propTypes = {
   onSuccess: PropTypes.func,
 };
 
-export default pure(UserDeleteModal);
+export default React.memo(UserDeleteModal);

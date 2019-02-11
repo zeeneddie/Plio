@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { mapEntitiesToOptions, getEntityOptions } from 'plio-util';
-import { pure } from 'recompose';
 
 import { Query } from '../../../graphql';
 import CanvasForm from './CanvasForm';
@@ -59,4 +58,4 @@ ValuePropositionForm.propTypes = {
   save: PropTypes.func,
 };
 
-export default pure(ValuePropositionForm);
+export default React.memo(ValuePropositionForm);

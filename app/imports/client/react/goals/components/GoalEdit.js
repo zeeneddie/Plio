@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { pure } from 'recompose';
 import { sort } from 'ramda';
 import { bySerialNumber, byCompletionTargetDate } from 'plio-util';
 
@@ -108,4 +107,4 @@ GoalEdit.propTypes = {
   refetchQueries: PropTypes.func,
 };
 
-export default pure(GoalEdit);
+export default React.memo(GoalEdit);

@@ -57,7 +57,7 @@ const Modal = ({
 
 Modal.propTypes = {
   ...ReactstrapModal.propTypes,
-  component: PropTypes.func,
+  component: PropTypes.elementType,
   render: PropTypes.func,
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
   className: PropTypes.string,

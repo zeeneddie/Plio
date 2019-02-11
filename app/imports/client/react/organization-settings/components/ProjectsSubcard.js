@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CardTitle } from 'reactstrap';
 import { ApolloProvider, Query } from 'react-apollo';
-import { pure } from 'recompose';
 
 import {
   CardBlock,
@@ -74,4 +73,4 @@ ProjectsSubcard.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(ProjectsSubcard);
+export default React.memo(ProjectsSubcard);

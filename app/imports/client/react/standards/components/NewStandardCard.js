@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
@@ -39,4 +38,4 @@ NewStandardCard.propTypes = {
   standardIds: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default pure(NewStandardCard);
+export default React.memo(NewStandardCard);

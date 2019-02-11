@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 import {
   pick,
   compose,
@@ -172,4 +171,4 @@ MilestoneEditContainer.propTypes = {
   onUnlink: PropTypes.func,
 };
 
-export default pure(MilestoneEditContainer);
+export default React.memo(MilestoneEditContainer);

@@ -5,10 +5,10 @@ import {
   setPropTypes,
   branch,
   compose,
-  pure,
   withHandlers,
 } from 'recompose';
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 
 import CompletedDeletedGoals from '../components/CompletedDeletedGoals';
 import { Query, Mutation } from '../../../graphql';
@@ -28,7 +28,7 @@ export default namedCompose('CompletedDeletedGoalsContainer')(
     itemsPerRow: PropTypes.number.isRequired,
     canEditGoals: PropTypes.bool,
   }),
-  pure,
+  memo,
   withToggle(),
   graphql(Query.COMPLETED_DELETED_GOALS, {
     options: ({ organizationId, itemsPerRow }) => ({

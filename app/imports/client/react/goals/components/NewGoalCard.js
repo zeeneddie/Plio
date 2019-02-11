@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
@@ -36,4 +35,4 @@ NewGoalCard.propTypes = {
   goalIds: PropTypes.array,
 };
 
-export default pure(NewGoalCard);
+export default React.memo(NewGoalCard);

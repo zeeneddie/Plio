@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
-import { pure } from 'recompose';
 import { pluck, pathOr } from 'ramda';
 import { sortByIds, noop } from 'plio-util';
 
@@ -68,4 +67,4 @@ CostStructureChartModal.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(CostStructureChartModal);
+export default React.memo(CostStructureChartModal);

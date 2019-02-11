@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { isEmpty, any } from 'ramda';
 import { CardTitle, Col, CardText, ListGroup, FormText } from 'reactstrap';
-import { pure } from 'recompose';
 
 import { Styles } from '../../../../../api/constants';
 import { DocumentTypes } from '../../../../../share/constants';
@@ -203,4 +202,4 @@ ActivelyManageSubcard.propTypes = {
   /* eslint-disable react/no-typos */
 };
 
-export default pure(ActivelyManageSubcard);
+export default React.memo(ActivelyManageSubcard);

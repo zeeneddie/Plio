@@ -3,7 +3,6 @@ import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions, noop } from 'plio-util';
 import { Form } from 'reactstrap';
-import { pure } from 'recompose';
 
 import { CRITICALITY_DEFAULT, CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
@@ -105,4 +104,4 @@ KeyPartnerAddModal.propTypes = {
   onLink: PropTypes.func,
 };
 
-export default pure(KeyPartnerAddModal);
+export default React.memo(KeyPartnerAddModal);

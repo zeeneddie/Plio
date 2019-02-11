@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Query } from 'react-apollo';
-import { pure } from 'recompose';
 
 import CustomerSegmentAddModal from './CustomerSegmentAddModal';
 import CustomerSegmentEditModal from './CustomerSegmentEditModal';
@@ -57,4 +56,4 @@ CustomerSegments.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(CustomerSegments);
+export default React.memo(CustomerSegments);

@@ -37,7 +37,7 @@ ApolloSelectInputField.defaultProps = {
 ApolloSelectInputField.propTypes = {
   loadOptions: PropTypes.func.isRequired,
   transformOptions: PropTypes.func,
-  component: PropTypes.func,
+  component: PropTypes.elementType,
   onError: PropTypes.func,
 };
 

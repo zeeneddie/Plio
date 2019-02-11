@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Query } from 'react-apollo';
-import { pure } from 'recompose';
 
 import ValuePropositionAddModal from './ValuePropositionAddModal';
 import ValuePropositionEditModal from './ValuePropositionEditModal';
@@ -53,4 +52,4 @@ ValuePropositions.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(ValuePropositions);
+export default React.memo(ValuePropositions);

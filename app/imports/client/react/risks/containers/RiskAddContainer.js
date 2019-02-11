@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Query, Mutation } from 'react-apollo';
 import { noop, getUserOptions, getEntityOptions } from 'plio-util';
-import { pure } from 'recompose';
 
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
@@ -108,4 +107,4 @@ RiskAddContainer.propTypes = {
   toggle: PropTypes.func,
 };
 
-export default pure(RiskAddContainer);
+export default React.memo(RiskAddContainer);

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Mutation } from 'react-apollo';
-import { pure } from 'recompose';
 import { noop } from 'plio-util';
 
 import {
@@ -117,4 +116,4 @@ CustomerNeeds.propTypes = {
   needs: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default pure(CustomerNeeds);
+export default React.memo(CustomerNeeds);

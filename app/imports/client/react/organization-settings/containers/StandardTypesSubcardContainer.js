@@ -1,4 +1,5 @@
-import { withProps, withHandlers, pure } from 'recompose';
+import { memo } from 'react';
+import { withProps, withHandlers } from 'recompose';
 
 import { insert, update, remove } from '../../../../api/standards-types/methods';
 import { swal } from '../../../util';
@@ -36,5 +37,5 @@ export default namedCompose('StandardTypesSubcardContainer')(
       });
     },
   }),
-  pure,
+  memo,
 )(StandardTypesSubcard);

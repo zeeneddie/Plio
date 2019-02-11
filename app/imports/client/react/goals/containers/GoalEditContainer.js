@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import { pure, withHandlers } from 'recompose';
+import React, { memo } from 'react';
+import { withHandlers } from 'recompose';
 import {
   pick,
   compose,
@@ -98,7 +98,7 @@ const enhance = compose(
       return queries;
     },
   }),
-  pure,
+  memo,
 );
 
 const GoalEditContainer = ({

@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
@@ -41,4 +40,4 @@ NewPotentialGainCard.propTypes = {
   guidelines: PropTypes.object,
 };
 
-export default pure(NewPotentialGainCard);
+export default React.memo(NewPotentialGainCard);

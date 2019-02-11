@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
@@ -47,4 +46,4 @@ NewRiskCard.propTypes = {
   linkedTo: PropTypes.object,
 };
 
-export default pure(NewRiskCard);
+export default React.memo(NewRiskCard);

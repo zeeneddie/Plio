@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Query, Mutation } from 'react-apollo';
 import { compose, view, find, propEq, either, sort } from 'ramda';
 import { noop, getUserOptions, getEntityOptions, lenses, byTitle } from 'plio-util';
-import { pure } from 'recompose';
 
 import { insert as insertFile } from '../../../../api/files/methods';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
@@ -168,4 +167,4 @@ StandardAddContainer.propTypes = {
   onLink: PropTypes.func,
 };
 
-export default pure(StandardAddContainer);
+export default React.memo(StandardAddContainer);

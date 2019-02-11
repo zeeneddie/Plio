@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { pure } from 'recompose';
 import { noop } from 'plio-util';
 
 import {
@@ -93,4 +92,4 @@ GoalForm.propTypes = {
   save: PropTypes.func,
 };
 
-export default pure(GoalForm);
+export default React.memo(GoalForm);

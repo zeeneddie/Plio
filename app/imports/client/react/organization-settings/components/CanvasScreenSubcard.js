@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { CardTitle } from 'reactstrap';
 import { ApolloProvider } from 'react-apollo';
-import { pure } from 'recompose';
 
 import {
   CardBlock,
@@ -37,4 +36,4 @@ CanvasScreenSubcard.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(CanvasScreenSubcard);
+export default React.memo(CanvasScreenSubcard);

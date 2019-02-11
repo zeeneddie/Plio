@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 
 import { getCriticalityValueLabel } from '../helpers';
 import { FormField, SliderField } from '../../components';
@@ -43,4 +42,4 @@ KeyPartnerForm.propTypes = {
   save: PropTypes.func,
 };
 
-export default pure(KeyPartnerForm);
+export default React.memo(KeyPartnerForm);

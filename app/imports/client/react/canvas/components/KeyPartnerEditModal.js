@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { compose, pick, over, pathOr, repeat, path } from 'ramda';
 import {
@@ -10,7 +10,7 @@ import {
   mapUsersToOptions,
   getIds,
 } from 'plio-util';
-import { pure, withHandlers } from 'recompose';
+import { withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -61,7 +61,7 @@ const enhance = compose(
       },
     ],
   }),
-  pure,
+  memo,
 );
 
 const KeyPartnerEditModal = ({

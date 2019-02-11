@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Field, FormSpy } from 'react-final-form';
 import { FormGroup, Button } from 'reactstrap';
-import { pure } from 'recompose';
 
 import { AnalysisStatuses, StringLimits } from '../../../../share/constants';
 import { getAnalysisStatusClass } from '../../../../api/problems/helpers';
@@ -161,4 +160,4 @@ AnalysisForm.propTypes = {
   prefix: PropTypes.string.isRequired,
 };
 
-export default pure(AnalysisForm);
+export default React.memo(AnalysisForm);

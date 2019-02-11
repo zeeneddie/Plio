@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Card } from 'reactstrap';
 import { pick } from 'ramda';
-import { pure } from 'recompose';
 
 import { EntityForm, EntityCard } from '../../components';
 import CustomerElementForm from './CustomerElementForm';
@@ -60,4 +59,4 @@ CustomerElementSubcard.propTypes = {
   onDelete: PropTypes.func,
 };
 
-export default pure(CustomerElementSubcard);
+export default React.memo(CustomerElementSubcard);

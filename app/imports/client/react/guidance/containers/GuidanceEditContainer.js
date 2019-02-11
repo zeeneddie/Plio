@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 import {
   pick,
   unless,
@@ -132,4 +131,4 @@ GuidanceEditContainer.propTypes = {
   documentType: PropTypes.string.isRequired,
 };
 
-export default pure(GuidanceEditContainer);
+export default React.memo(GuidanceEditContainer);

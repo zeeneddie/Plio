@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { compose, withProps, withHandlers, branch, pure } from 'recompose';
+import { compose, withProps, withHandlers, branch } from 'recompose';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import styled from 'styled-components';
 
@@ -13,7 +13,6 @@ const StyledDropdownMenu = styled(DropdownMenu)`
 `;
 
 const enhance = compose(
-  pure,
   withProps(({
     canRestore,
     deletedAt,
@@ -38,6 +37,7 @@ const enhance = compose(
     }),
   ),
   withToggle(),
+  memo,
 );
 
 const DashboardDeletedItem = ({

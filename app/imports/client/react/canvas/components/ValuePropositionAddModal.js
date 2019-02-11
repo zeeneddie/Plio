@@ -3,7 +3,6 @@ import React, { Fragment } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { getUserOptions, convertDocumentOptions, noop } from 'plio-util';
 import { Form } from 'reactstrap';
-import { pure } from 'recompose';
 
 import { CanvasTypes } from '../../../../share/constants';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
@@ -104,4 +103,4 @@ ValuePropositionAddModal.propTypes = {
   onLink: PropTypes.func,
 };
 
-export default pure(ValuePropositionAddModal);
+export default React.memo(ValuePropositionAddModal);

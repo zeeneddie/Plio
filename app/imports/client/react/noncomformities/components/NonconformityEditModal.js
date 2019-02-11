@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { pure } from 'recompose';
 import { noop } from 'plio-util';
 
 import {
@@ -102,4 +101,4 @@ NonconformityEditModal.propTypes = {
   currency: PropTypes.string,
 };
 
-export default pure(NonconformityEditModal);
+export default React.memo(NonconformityEditModal);

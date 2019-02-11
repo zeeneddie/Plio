@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import {
   getUserOptions,
@@ -10,7 +10,7 @@ import {
   getIds,
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
-import { pure, withHandlers } from 'recompose';
+import { withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -56,7 +56,7 @@ const enhance = compose(
       { query: Queries.COST_LINE_CARD, variables: { _id, organizationId } },
     ],
   }),
-  pure,
+  memo,
 );
 
 const CostLineEditModal = ({

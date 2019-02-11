@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { pure } from 'recompose';
 import { noop } from 'plio-util';
 import { Field } from 'react-final-form';
 import { Row } from 'reactstrap';
@@ -160,4 +159,4 @@ NonconformityEditForm.propTypes = {
   currency: PropTypes.string.isRequired,
 };
 
-export default pure(NonconformityEditForm);
+export default React.memo(NonconformityEditForm);

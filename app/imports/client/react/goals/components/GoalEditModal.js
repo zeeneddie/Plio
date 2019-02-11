@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { pure } from 'recompose';
 import { noop } from 'plio-util';
 
 import {
@@ -84,4 +83,4 @@ GoalEditModal.propTypes = {
   canEditGoals: PropTypes.bool,
 };
 
-export default pure(GoalEditModal);
+export default React.memo(GoalEditModal);

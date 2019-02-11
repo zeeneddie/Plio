@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
-import { pure } from 'recompose';
 import { pathOr } from 'ramda';
 import { noop, sortByIds } from 'plio-util';
 
@@ -72,4 +71,4 @@ KeyPartnersChartModal.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(KeyPartnersChartModal);
+export default React.memo(KeyPartnersChartModal);

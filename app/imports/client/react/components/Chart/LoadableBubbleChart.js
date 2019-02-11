@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Loadable from 'react-loadable';
-import { pure } from 'recompose';
 
 import { BubbleDefaultOptions, ChartDefaultOptions } from './constants';
 import { PreloaderPage } from '../';
@@ -87,4 +86,4 @@ const LoadableBubbleChart = Loadable({
   ),
 });
 
-export default pure(LoadableBubbleChart);
+export default React.memo(LoadableBubbleChart);

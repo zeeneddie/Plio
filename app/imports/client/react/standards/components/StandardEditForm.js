@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { pure } from 'recompose';
 import { Field } from 'react-final-form';
 import styled from 'styled-components';
 
@@ -136,4 +135,4 @@ StandardEditForm.propTypes = {
   save: PropTypes.func,
 };
 
-export default pure(StandardEditForm);
+export default React.memo(StandardEditForm);

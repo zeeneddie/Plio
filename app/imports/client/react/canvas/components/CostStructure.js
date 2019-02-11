@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Query } from 'react-apollo';
-import { pure } from 'recompose';
 
 import CostLineAddModal from './CostLineAddModal';
 import CostLineEditModal from './CostLineEditModal';
@@ -58,5 +57,5 @@ CostStructure.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(CostStructure);
+export default React.memo(CostStructure);
 

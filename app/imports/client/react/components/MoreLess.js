@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { pure } from 'recompose';
 
 import { Pull } from './Utility';
 import Subcard from './Subcard';
@@ -68,4 +67,4 @@ MoreLess.propTypes = {
   badge: PropTypes.number,
 };
 
-export default pure(MoreLess);
+export default React.memo(MoreLess);

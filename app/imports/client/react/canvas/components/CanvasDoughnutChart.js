@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { append } from 'ramda';
-import { pure } from 'recompose';
 
 import { CanvasDoughnutChartSize } from '../../../../api/constants';
 import { generateColors, getOtherPercent } from '../helpers';
@@ -47,4 +46,4 @@ CanvasDoughnutChart.propTypes = {
   labels: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default pure(CanvasDoughnutChart);
+export default React.memo(CanvasDoughnutChart);

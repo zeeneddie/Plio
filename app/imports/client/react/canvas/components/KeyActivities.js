@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Query } from 'react-apollo';
-import { pure } from 'recompose';
 
 import KeyActivityAddModal from './KeyActivityAddModal';
 import KeyActivityEditModal from './KeyActivityEditModal';
@@ -53,4 +52,4 @@ KeyActivities.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(KeyActivities);
+export default React.memo(KeyActivities);

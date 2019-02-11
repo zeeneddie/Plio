@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Query } from 'react-apollo';
-import { pure } from 'recompose';
 
 import CustomerRelationshipAddModal from './CustomerRelationshipAddModal';
 import CustomerRelationshipEditModal from './CustomerRelationshipEditModal';
@@ -53,4 +52,4 @@ CustomerRelationships.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(CustomerRelationships);
+export default React.memo(CustomerRelationships);

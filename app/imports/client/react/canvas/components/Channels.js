@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Query } from 'react-apollo';
-import { pure } from 'recompose';
 
 import ChannelAddModal from './ChannelAddModal';
 import ChannelEditModal from './ChannelEditModal';
@@ -53,4 +52,4 @@ Channels.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(Channels);
+export default React.memo(Channels);

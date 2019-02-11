@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
-import { pure } from 'recompose';
 import { pluck, pathOr } from 'ramda';
 import { sortByIds, noop } from 'plio-util';
 
@@ -69,4 +68,4 @@ CustomerSegmentsChartModal.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(CustomerSegmentsChartModal);
+export default React.memo(CustomerSegmentsChartModal);

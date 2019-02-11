@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
@@ -41,4 +40,4 @@ NewNonconformityCard.propTypes = {
   guidelines: PropTypes.object,
 };
 
-export default pure(NewNonconformityCard);
+export default React.memo(NewNonconformityCard);

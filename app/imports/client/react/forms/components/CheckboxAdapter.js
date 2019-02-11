@@ -23,7 +23,7 @@ CheckboxAdapter.propTypes = {
   meta: PropTypes.object,
   onChange: PropTypes.func,
   onBlur: PropTypes.func,
-  component: PropTypes.func,
+  component: PropTypes.elementType,
 };
 
 export default CheckboxAdapter;

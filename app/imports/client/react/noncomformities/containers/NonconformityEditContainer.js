@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 import { pick, compose, over, unless, isNil, pathOr, repeat, path } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
 import {
@@ -193,4 +192,4 @@ NonconformityEditContainer.propTypes = {
   currency: PropTypes.string,
 };
 
-export default pure(NonconformityEditContainer);
+export default React.memo(NonconformityEditContainer);

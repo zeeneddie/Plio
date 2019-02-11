@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { pure } from 'recompose';
 
 import {
   FormField,
@@ -71,4 +70,4 @@ NonconformityAddForm.propTypes = {
   guidelines: Magnitudes.propTypes.guidelines,
 };
 
-export default pure(NonconformityAddForm);
+export default React.memo(NonconformityAddForm);

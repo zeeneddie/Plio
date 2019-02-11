@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { CardTitle, Col } from 'reactstrap';
-import { pure } from 'recompose';
 
 import {
   Subcard,
@@ -68,4 +67,4 @@ ValueComponentsSubcard.propTypes = {
   }),
 };
 
-export default pure(ValueComponentsSubcard);
+export default React.memo(ValueComponentsSubcard);

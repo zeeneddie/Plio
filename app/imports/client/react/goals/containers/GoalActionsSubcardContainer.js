@@ -1,4 +1,5 @@
-import { pure, withHandlers } from 'recompose';
+import { memo } from 'react';
+import { withHandlers } from 'recompose';
 import { graphql } from 'react-apollo';
 import { viewEq, lenses, bySerialNumber } from 'plio-util';
 import { ifElse, sort } from 'ramda';
@@ -23,7 +24,6 @@ const {
 } = Mutation;
 
 export default namedCompose('GoalActionsSubcardContainer')(
-  pure,
   graphql(Query.GOAL_ACTIONS_CARD, {
     options: ({ goalId, organizationId }) => ({
       variables: { _id: goalId, organizationId },
@@ -69,4 +69,5 @@ export default namedCompose('GoalActionsSubcardContainer')(
       linkTo,
     ),
   }),
+  memo,
 )(GoalActionsSubcard);

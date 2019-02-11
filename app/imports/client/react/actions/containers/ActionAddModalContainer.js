@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { withHandlers, pure, setPropTypes } from 'recompose';
+import { memo } from 'react';
+import { withHandlers, setPropTypes } from 'recompose';
 import { graphql } from 'react-apollo';
 import { sort, ifElse, composeP } from 'ramda';
 import { bySerialNumber, viewEq, lenses } from 'plio-util';
@@ -19,7 +20,6 @@ export default namedCompose('ActionAddModalContainer')(
   setPropTypes({
     goalId: PropTypes.string.isRequired,
   }),
-  pure,
   graphql(Query.DASHBOARD_GOAL, {
     options: ({ goalId, isOpen }) => ({
       variables: {
@@ -71,4 +71,5 @@ export default namedCompose('ActionAddModalContainer')(
       ),
     ),
   }),
+  memo,
 )(ActionAddModal);

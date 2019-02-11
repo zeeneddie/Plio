@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
-import { pure } from 'recompose';
 import { _ } from 'meteor/underscore';
 
 import Collapse from '../Collapse';
@@ -58,4 +57,4 @@ CollapseBlock.propTypes = {
   onCollapseHidden: PropTypes.func,
 };
 
-export default pure(CollapseBlock);
+export default React.memo(CollapseBlock);

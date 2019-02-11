@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { CardTitle, Col } from 'reactstrap';
-import { pure } from 'recompose';
 
 import {
   Subcard,
@@ -75,4 +74,4 @@ MilestonesSubcard.propTypes = {
   onUnlink: PropTypes.func,
 };
 
-export default pure(MilestonesSubcard);
+export default React.memo(MilestonesSubcard);

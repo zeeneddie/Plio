@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
 import { Input } from 'reactstrap';
-import { pure } from 'recompose';
 
 import ClearField from '../../fields/read/components/ClearField';
 import { InputGroupAddon } from '../../components';
@@ -65,4 +64,4 @@ FormInput.propTypes = {
   addon: PropTypes.node,
 };
 
-export default pure(FormInput);
+export default React.memo(FormInput);

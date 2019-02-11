@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { isNotEmpty } from 'plio-util';
-import { pure } from 'recompose';
 import { unnest } from 'ramda';
 
 import { UserRoles, DocumentTypes } from '../../../../share/constants';
@@ -184,4 +183,4 @@ CanvasSubcards.propTypes = {
   user: PropTypes.object,
 };
 
-export default pure(CanvasSubcards);
+export default React.memo(CanvasSubcards);

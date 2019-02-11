@@ -16,7 +16,7 @@ const propTypes = {
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   guidance: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   onDelete: PropTypes.func,
-  component: PropTypes.func,
+  component: PropTypes.elementType,
   render: PropTypes.func,
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
   onClosed: PropTypes.func,

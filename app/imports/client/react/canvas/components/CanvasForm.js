@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 
 import { StringLimits } from '../../../../share/constants';
 import {
@@ -61,4 +60,4 @@ CanvasForm.propTypes = {
   save: PropTypes.func,
 };
 
-export default pure(CanvasForm);
+export default React.memo(CanvasForm);

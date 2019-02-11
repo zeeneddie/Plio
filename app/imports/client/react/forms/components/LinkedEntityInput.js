@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { InputGroup, Input } from 'reactstrap';
-import { pure } from 'recompose';
 import styled from 'styled-components';
 
 import { InputGroupAddon } from '../../components';
@@ -32,4 +31,4 @@ LinkedEntityInput.propTypes = {
   component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 };
 
-export default pure(LinkedEntityInput);
+export default React.memo(LinkedEntityInput);

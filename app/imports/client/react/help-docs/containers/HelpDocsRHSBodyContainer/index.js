@@ -1,4 +1,5 @@
-import { compose, withState, withHandlers, lifecycle, shallowEqual, pure } from 'recompose';
+import { memo } from 'react';
+import { compose, withState, withHandlers, lifecycle, shallowEqual } from 'recompose';
 import property from 'lodash.property';
 import { _ } from 'meteor/underscore';
 
@@ -9,7 +10,7 @@ const setCollapsed = _.throttle(props =>
   props.setCollapsed(() => props.hasDocxAttachment), 600);
 
 export default compose(
-  pure,
+  memo,
   withState('collapsed', 'setCollapsed', property('hasDocxAttachment')),
   withHandlers({
     onToggleCollapse: props => () => props.setCollapsed(not),

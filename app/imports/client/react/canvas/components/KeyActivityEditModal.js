@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 import diff from 'deep-diff';
 import { Query, Mutation } from 'react-apollo';
 import {
@@ -11,7 +11,7 @@ import {
   getIds,
 } from 'plio-util';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
-import { pure, withHandlers } from 'recompose';
+import { withHandlers } from 'recompose';
 
 import { swal } from '../../../util';
 import { AWSDirectives, CanvasTypes } from '../../../../share/constants';
@@ -55,7 +55,7 @@ const enhance = compose(
       { query: Queries.KEY_ACTIVITY_CARD, variables: { _id, organizationId } },
     ],
   }),
-  pure,
+  memo,
 );
 
 const KeyActivityEditModal = ({

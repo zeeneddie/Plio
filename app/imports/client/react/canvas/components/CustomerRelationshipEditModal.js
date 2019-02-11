@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { compose, pick, over, pathOr, repeat } from 'ramda';
 import {
@@ -10,7 +10,7 @@ import {
   getValues,
   getIds,
 } from 'plio-util';
-import { pure, withHandlers } from 'recompose';
+import { withHandlers } from 'recompose';
 import diff from 'deep-diff';
 
 import { swal } from '../../../util';
@@ -55,7 +55,7 @@ const enhance = compose(
       { query: Queries.CUSTOMER_RELATIONSHIP_CARD, variables: { _id, organizationId } },
     ],
   }),
-  pure,
+  memo,
 );
 
 const CustomerRelationshipEditModal = ({

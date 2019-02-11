@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { mapEntitiesToOptions, noop, byTitle } from 'plio-util';
 import { Query, Mutation } from 'react-apollo';
-import { pure } from 'recompose';
 import { sort } from 'ramda';
 
 import { Composer } from '../../helpers';
@@ -95,4 +94,4 @@ ProjectsSubcardForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
 };
 
-export default pure(ProjectsSubcardForm);
+export default React.memo(ProjectsSubcardForm);

@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 import {
   pick,
   compose,
@@ -142,4 +141,4 @@ LessonEditContainer.propTypes = {
   fetchPolicy: PropTypes.string,
 };
 
-export default pure(LessonEditContainer);
+export default React.memo(LessonEditContainer);

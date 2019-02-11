@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Query } from 'react-apollo';
-import { pure } from 'recompose';
 
 import KeyPartnerAddModal from './KeyPartnerAddModal';
 import KeyPartnerEditModal from './KeyPartnerEditModal';
@@ -58,4 +57,4 @@ KeyPartners.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default pure(KeyPartners);
+export default React.memo(KeyPartners);

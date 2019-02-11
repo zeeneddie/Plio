@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { pure } from 'recompose';
 import {
   pick,
   compose,
@@ -263,4 +262,4 @@ RiskEditContainer.propTypes = {
   fetchPolicy: PropTypes.string,
 };
 
-export default pure(RiskEditContainer);
+export default React.memo(RiskEditContainer);

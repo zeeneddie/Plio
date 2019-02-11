@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { pure } from 'recompose';
 import {
   pick,
   compose,
@@ -204,4 +203,4 @@ StandardEditContainer.propTypes = {
   fetchPolicy: PropTypes.string,
 };
 
-export default pure(enhance(StandardEditContainer));
+export default React.memo(enhance(StandardEditContainer));

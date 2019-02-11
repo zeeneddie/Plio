@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { pure, withHandlers, setPropTypes, mapProps } from 'recompose';
+import React, { memo } from 'react';
+import { withHandlers, setPropTypes, mapProps } from 'recompose';
 import { getActiveOrgUserIds } from 'plio-util';
 
 import DashboardUserStats from '../components/DashboardUserStats';
@@ -41,7 +41,7 @@ export default namedCompose('DashboardUserStatsContainer')(
     usersPerRow,
     userIds: getActiveOrgUserIds(users),
   })),
-  pure,
+  memo,
   composeWithTracker(({
     _id: organizationId,
     usersPerRow,
