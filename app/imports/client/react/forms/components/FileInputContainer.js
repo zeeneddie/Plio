@@ -39,7 +39,11 @@ const FileInputContainer = ({
           slingshotContext,
           maxFileSize: Meteor.settings.public.otherFilesMaxSize,
           hooks: {
-            afterUpload: (__, url) => onAfterUpload({ file, url, ...slingshotContext }),
+            afterUpload: (__, url) => {
+              if (onAfterUpload) {
+                onAfterUpload({ file, url, ...slingshotContext });
+              }
+            },
           },
         });
         uploadService.uploadExisting(fileId, file);

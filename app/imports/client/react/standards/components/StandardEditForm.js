@@ -10,7 +10,7 @@ import {
   TextareaField,
   UserSelectInput,
   CategorizeField,
-  EditSourceField,
+  SourceField,
 } from '../../components';
 import { StandardsHelp } from '../../../../api/help-messages';
 import { StringLimits, UniqueNumberRange, IssueNumberRange } from '../../../../share/constants';
@@ -112,9 +112,10 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
 
     <FormField>
       Source file
-      <EditSourceField
+      <SourceField
         name="source1"
         onChange={save}
+        isEditMode
         {...{ organizationId, standardId }}
       />
     </FormField>
@@ -123,9 +124,10 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
         <SourceFieldWrapper hidden={!input.value}>
           <FormField>
             Source file 2
-            <EditSourceField
+            <SourceField
               name="source2"
               onChange={save}
+              isEditMode
               {...{ organizationId, standardId }}
             />
           </FormField>

@@ -31,16 +31,16 @@ const StyledTabContent = styled(TabContent)`
 `;
 
 const SourceInput = ({
-  value: source = {},
+  value: source,
   organizationId,
   standardId,
   onChange,
   isEditMode,
 }) => (
-  <WithState initialState={{ type: source.type || AttachmentTypes.ATTACHMENT.value }}>
+  <WithState initialState={{ type: source && source.type || AttachmentTypes.ATTACHMENT.value }}>
     {({ state: { type }, setState }) => (
       <Form
-        initialValues={{
+        initialValues={source && {
           fileId: source.type === AttachmentTypes.ATTACHMENT.value ? source.fileId : undefined,
           url: source.type === AttachmentTypes.URL.value ? source.url : undefined,
           videoUrl: source.type === AttachmentTypes.VIDEO.value ? source.url : undefined,
