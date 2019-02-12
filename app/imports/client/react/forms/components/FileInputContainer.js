@@ -7,7 +7,7 @@ import UploadsStore from '../../../../ui/utils/uploads/uploads-store';
 import { Files } from '../../../../share/collections';
 import { insert as insertFile } from '../../../../api/files/methods';
 import { swal } from '../../../util';
-import FileInput from './FileInputNext';
+import FileInput from './FileInput';
 
 const FileInputContainer = ({
   onAfterCreate,
@@ -39,13 +39,14 @@ const FileInputContainer = ({
           slingshotContext,
           maxFileSize: Meteor.settings.public.otherFilesMaxSize,
           hooks: {
-            afterUpload: onAfterUpload,
+            afterUpload: (__, url) => onAfterUpload({ file, url, ...slingshotContext }),
           },
         });
         uploadService.uploadExisting(fileId, file);
-        return onAfterCreate(fileId);
+        onAfterCreate(fileId);
+      } else {
+        onAfterCreate(files);
       }
-      return onAfterCreate(files);
     }}
     onRemove={(file) => {
       if (!rest.withoutUploader) {
@@ -62,10 +63,11 @@ const FileInputContainer = ({
           if (isUploading && !isFailed) {
             UploadsStore.terminateUploading(file._id);
           }
-          return onAfterRemove(file._id);
+          onAfterRemove(file._id);
         });
+      } else {
+        onAfterRemove();
       }
-      return onAfterRemove();
     }}
   />
 );

@@ -1,27 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Files } from '../../../../share/collections';
 import { composeWithTracker } from '../../../util';
-import { uploadFile } from '../../standards/helpers';
-import { Files } from '../../../../share/collections/files';
 import SourceInput from './SourceInput';
 
 const enhance = composeWithTracker(
-  ({ input: { value: source, ...restInput } }, onData) => {
-    let props = {};
-
+  ({ input: { value: source } }, onData) => {
     if (source.fileId) {
-      props = {
-        input: {
-          ...restInput,
-          value: {
-            ...source,
-            file: Files.findOne({ _id: source.fileId }),
-          },
-        },
-      };
+      Files.findOne({ _id: source.fileId });
     }
-    onData(null, props);
+    onData(null, {});
   },
 );
 
@@ -29,19 +18,10 @@ const EditSourceContainer = ({ input, onChange, ...rest }) => (
   <SourceInput
     {...{ ...rest, ...input }}
     isEditMode
-    onChange={({ file, url, type }) => {
-      const source = file || url ? { url, type, fileId: file && file._id } : null;
+    onChange={({ fileId, url, type }) => {
+      const source = fileId || url ? { url, type, fileId } : null;
       input.onChange(source);
       if (onChange) onChange(source);
-
-      if (type === 'attachment' && file && file._id) {
-        uploadFile({
-          file,
-          fileId: file._id,
-          standardId: rest.standardId,
-          organizationId: rest.organizationId,
-        });
-      }
     }}
   />
 );

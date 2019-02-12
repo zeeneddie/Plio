@@ -5,6 +5,7 @@ import { TabContent, TabPane } from 'reactstrap';
 import { values as valuesR } from 'ramda';
 import { Form } from 'react-final-form';
 
+import { onAfterSourceUpload } from '../../standards/helpers';
 import { WithState } from '../../helpers';
 import SelectRadio from './SelectRadio';
 import UrlField from './UrlField';
@@ -32,6 +33,7 @@ const StyledTabContent = styled(TabContent)`
 const SourceInput = ({
   value: source = {},
   organizationId,
+  standardId,
   onChange,
   isEditMode,
 }) => (
@@ -39,15 +41,15 @@ const SourceInput = ({
     {({ state: { type }, setState }) => (
       <Form
         initialValues={{
-          file: source.type === AttachmentTypes.ATTACHMENT.value ? source.file : undefined,
+          fileId: source.type === AttachmentTypes.ATTACHMENT.value ? source.fileId : undefined,
           url: source.type === AttachmentTypes.URL.value ? source.url : undefined,
           videoUrl: source.type === AttachmentTypes.VIDEO.value ? source.url : undefined,
         }}
-        onSubmit={({ file, url, videoUrl }) => {
+        onSubmit={({ fileId, url, videoUrl }) => {
           if (onChange) {
             onChange({
               type,
-              file,
+              fileId,
               url: type === AttachmentTypes.URL.value ? url : videoUrl,
             });
           }
@@ -63,10 +65,15 @@ const SourceInput = ({
             <StyledTabContent activeTab={type}>
               <TabPane tabId={AttachmentTypes.ATTACHMENT.value}>
                 <FileField
-                  name="file"
+                  name="fileId"
                   withoutUploader={!isEditMode}
                   onChange={handleSubmit}
-                  {...{ organizationId }}
+                  onAfterUpload={onAfterSourceUpload}
+                  slingshotDirective="standardFiles"
+                  slingshotContext={{
+                    organizationId,
+                    standardId,
+                  }}
                 />
               </TabPane>
               <TabPane tabId={AttachmentTypes.URL.value}>
@@ -93,6 +100,7 @@ const SourceInput = ({
 
 SourceInput.propTypes = {
   organizationId: PropTypes.string,
+  standardId: PropTypes.string,
   onChange: PropTypes.func,
   isEditMode: PropTypes.bool,
   value: PropTypes.oneOfType([

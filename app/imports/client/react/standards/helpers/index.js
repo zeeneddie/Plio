@@ -290,27 +290,30 @@ const launchDocxRendering = (fileUrl, fileName, standardId) => {
   });
 };
 
+export const onAfterSourceUpload = ({ file, url, standardId }) => {
+  const fileName = file.name;
+  const extension = fileName.split('.').pop().toLowerCase();
+  if (extension === 'docx') {
+    launchDocxRendering(url, fileName, standardId);
+  }
+};
+
 export const uploadFile = ({
   file,
   fileId,
   organizationId,
   standardId,
 }) => {
+  const slingshotContext = {
+    standardId,
+    organizationId,
+  };
   const uploadService = new UploadService({
+    slingshotContext,
     slingshotDirective: 'standardFiles',
-    slingshotContext: {
-      standardId,
-      organizationId,
-    },
     maxFileSize: Meteor.settings.public.otherFilesMaxSize,
     hooks: {
-      afterUpload: (__, url) => {
-        const fileName = file.name;
-        const extension = fileName.split('.').pop().toLowerCase();
-        if (extension === 'docx') {
-          launchDocxRendering(url, fileName, standardId);
-        }
-      },
+      afterUpload: (__, url) => onAfterSourceUpload({ file, url, ...slingshotContext }),
     },
   });
 
