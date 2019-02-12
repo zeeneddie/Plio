@@ -10,6 +10,7 @@ import { WithState } from '../../helpers';
 import SelectRadio from './SelectRadio';
 import UrlField from './UrlField';
 import FileField from './FileField';
+import FileCreateField from './FileCreateField';
 
 const AttachmentTypes = {
   ATTACHMENT: {
@@ -41,15 +42,22 @@ const SourceInput = ({
     {({ state: { type }, setState }) => (
       <Form
         initialValues={source && {
+          file: source.type === AttachmentTypes.ATTACHMENT.value ? source.file : undefined,
           fileId: source.type === AttachmentTypes.ATTACHMENT.value ? source.fileId : undefined,
           url: source.type === AttachmentTypes.URL.value ? source.url : undefined,
           videoUrl: source.type === AttachmentTypes.VIDEO.value ? source.url : undefined,
         }}
-        onSubmit={({ fileId, url, videoUrl }) => {
+        onSubmit={({
+          file,
+          fileId,
+          url,
+          videoUrl,
+        }) => {
           if (onChange) {
             onChange({
               type,
               fileId,
+              file,
               url: type === AttachmentTypes.URL.value ? url : videoUrl,
             });
           }
@@ -64,17 +72,25 @@ const SourceInput = ({
             />
             <StyledTabContent activeTab={type}>
               <TabPane tabId={AttachmentTypes.ATTACHMENT.value}>
-                <FileField
-                  name="fileId"
-                  withoutUploader={!isEditMode}
-                  onChange={handleSubmit}
-                  onAfterUpload={onAfterSourceUpload}
-                  slingshotDirective="standardFiles"
-                  slingshotContext={{
-                    organizationId,
-                    standardId,
-                  }}
-                />
+                {isEditMode ? (
+                  <FileField
+                    name="fileId"
+                    withoutUploader={!isEditMode}
+                    onChange={handleSubmit}
+                    onAfterUpload={onAfterSourceUpload}
+                    slingshotDirective="standardFiles"
+                    slingshotContext={{
+                      organizationId,
+                      standardId,
+                    }}
+                  />
+                ) : (
+                  <FileCreateField
+                    name="file"
+                    withoutUploader
+                    onChange={handleSubmit}
+                  />
+                )}
               </TabPane>
               <TabPane tabId={AttachmentTypes.URL.value}>
                 <UrlField

@@ -34,7 +34,7 @@ const FileInput = ({
   withoutUploader,
 }) => (
   <div>
-    {files && files.map(file => (
+    {files.map(file => (
       <Fragment key={file.name + file._id}>
         <FileItem
           {...{ file }}

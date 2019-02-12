@@ -139,8 +139,8 @@ const StandardAddContainer = ({
               owner,
               organizationId,
               source1: {
-                fileId,
                 ...source1,
+                fileId,
               },
             },
           },

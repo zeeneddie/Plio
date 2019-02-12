@@ -15,15 +15,14 @@ const FileInputContainer = ({
   onAfterUpload,
   slingshotContext,
   slingshotDirective,
-  files,
   fileIds,
   ...rest
 }) => (
   <FileInput
     {...rest}
-    files={files || Files.find({ _id: { $in: fileIds } }).fetch()}
+    files={Files.find({ _id: { $in: fileIds } }).fetch()}
     onCreate={async (file) => {
-      if (!rest.withoutUploader && file) {
+      if (file) {
         const fileId = await new Promise((resolve, reject) => {
           insertFile.call({
             name: file.name,
@@ -48,30 +47,24 @@ const FileInputContainer = ({
         });
         uploadService.uploadExisting(fileId, file);
         onAfterCreate(fileId);
-      } else {
-        onAfterCreate(files);
       }
     }}
     onRemove={(file) => {
-      if (!rest.withoutUploader) {
-        swal({
-          title: 'Are you sure?',
-          text: 'This file will be removed',
-          type: 'warning',
-          confirmButtonText: 'Remove',
-          showCancelButton: true,
-          closeOnConfirm: true,
-        }, () => {
-          const isUploading = file.progress < 1;
-          const isFailed = file.status === 'failed' || file.status === 'terminated';
-          if (isUploading && !isFailed) {
-            UploadsStore.terminateUploading(file._id);
-          }
-          onAfterRemove(file._id);
-        });
-      } else {
-        onAfterRemove();
-      }
+      swal({
+        title: 'Are you sure?',
+        text: 'This file will be removed',
+        type: 'warning',
+        confirmButtonText: 'Remove',
+        showCancelButton: true,
+        closeOnConfirm: true,
+      }, () => {
+        const isUploading = file.progress < 1;
+        const isFailed = file.status === 'failed' || file.status === 'terminated';
+        if (isUploading && !isFailed) {
+          UploadsStore.terminateUploading(file._id);
+        }
+        onAfterRemove(file._id);
+      });
     }}
   />
 );
@@ -80,10 +73,8 @@ FileInputContainer.propTypes = {
   onAfterRemove: PropTypes.func.isRequired,
   onAfterCreate: PropTypes.func.isRequired,
   onAfterUpload: PropTypes.func,
-  withoutUploader: PropTypes.bool,
   slingshotContext: PropTypes.object,
   slingshotDirective: PropTypes.string,
-  files: PropTypes.array,
   fileIds: PropTypes.array,
 };
 
