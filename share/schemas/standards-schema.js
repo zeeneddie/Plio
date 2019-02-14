@@ -124,6 +124,25 @@ const StandardsSchema = new SimpleSchema([
       max: 10000,
       optional: true,
     },
+    readBy: {
+      type: [String],
+      minCount: 1,
+      maxCount: 999,
+      optional: true,
+      autoValue() {
+        if (this.isInsert) {
+          const owner = this.field('owner');
+
+          if (owner.isSet) {
+            return [owner.value];
+          }
+
+          return this.unset();
+        }
+
+        return undefined;
+      },
+    },
   },
 ]);
 
