@@ -278,7 +278,7 @@ export const getNotifySchema = fieldNames => new SimpleSchema({
     type: [String],
     regEx: SimpleSchema.RegEx.Id,
     optional: true,
-    // maxCount: ?
+    maxCount: 999,
     autoValue() {
       if (this.isInsert) {
         if (_.isString(fieldNames)) {
