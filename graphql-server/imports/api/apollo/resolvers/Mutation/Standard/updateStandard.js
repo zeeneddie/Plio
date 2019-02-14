@@ -11,6 +11,7 @@ import {
   checkStandardSectionAccess,
   checkStandardTypeAccess,
   checkFilesAccess,
+  checkMultipleOrgMembership,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, context) =>
@@ -31,6 +32,18 @@ export default applyMiddleware(
     (root, args) => getAllStandardFileIds(args),
     checkFilesAccess((root, args) => ({
       fileIds: getAllStandardFileIds(args),
+    })),
+  ),
+  branch(
+    (root, args) => args.notify,
+    checkMultipleOrgMembership((root, { notify }) => ({
+      userIds: notify,
+    })),
+  ),
+  branch(
+    (root, args) => args.readBy,
+    checkMultipleOrgMembership((root, { readBy }) => ({
+      userIds: readBy,
     })),
   ),
   checkStandardSectionAccess(),
