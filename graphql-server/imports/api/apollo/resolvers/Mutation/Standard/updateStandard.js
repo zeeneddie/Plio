@@ -36,13 +36,15 @@ export default applyMiddleware(
   ),
   branch(
     (root, args) => args.notify,
-    checkMultipleOrgMembership((root, { notify }) => ({
+    checkMultipleOrgMembership(({ organizationId }, { notify }) => ({
+      organizationId,
       userIds: notify,
     })),
   ),
   branch(
     (root, args) => args.readBy,
-    checkMultipleOrgMembership((root, { readBy }) => ({
+    checkMultipleOrgMembership(({ organizationId }, { readBy }) => ({
+      organizationId,
       userIds: readBy,
     })),
   ),
