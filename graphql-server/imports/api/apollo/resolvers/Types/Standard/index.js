@@ -6,7 +6,7 @@ import {
   lenses,
   loadDepartmentsById,
 } from 'plio-util';
-import { view } from 'ramda';
+import { view, prop } from 'ramda';
 
 import { resolveProjectsByIds } from '../util';
 
@@ -31,6 +31,7 @@ export default {
     organization: loadOrganizationById(view(organizationId)),
     files: loadFilesById(view(fileIds)),
     departments: loadDepartmentsById(view(departmentsIds)),
+    readBy: loadUsersById(prop('readBy')),
     projects: resolveProjectsByIds,
     type: async (root, args, context) => {
       const { typeId } = root;

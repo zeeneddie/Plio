@@ -34,4 +34,5 @@ type Standard implements BaseEntity, PlioEntity {
   source2: Source
   # lessons
   improvementPlan: ImprovementPlan
+  readBy: [User]
 }
