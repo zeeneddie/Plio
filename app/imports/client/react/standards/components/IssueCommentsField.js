@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Collapse } from 'reactstrap';
 import { Field } from 'react-final-form';
 import { OnBlur } from 'react-final-form-listeners';
+import { getTargetValue } from 'plio-util';
 
 import { parseInputValue } from '../../forms/helpers';
 import { StringLimits, IssueNumberRange } from '../../../../share/constants';
@@ -41,8 +42,13 @@ const IssueCommentsField = ({ save }) => (
             component={FormInput}
             input={issueNumberInput}
             meta={issueNumberMeta}
-            onBlur={save}
             clearable={false}
+            onBlur={save}
+            onChange={(e) => {
+              if (Number(getTargetValue(e)) < issueNumberInput.value) {
+                issueNumberInput.onChange(issueNumberInput.value);
+              }
+            }}
           />
         </FormField>
         <Field name="issueComments">
@@ -52,7 +58,7 @@ const IssueCommentsField = ({ save }) => (
           }) => (
             <Collapse
               isOpen={
-                !!issueCommentsInput.value || issueNumberInput.value !== issueNumberMeta.initial
+                !!issueCommentsInput.value || issueNumberInput.value > issueNumberMeta.initial
               }
             >
               <OnBlur name="issueNumber">
