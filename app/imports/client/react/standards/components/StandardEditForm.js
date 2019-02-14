@@ -12,7 +12,8 @@ import {
   CategorizeField,
 } from '../../components';
 import { StandardsHelp } from '../../../../api/help-messages';
-import { StringLimits, UniqueNumberRange, IssueNumberRange } from '../../../../share/constants';
+import { StringLimits, UniqueNumberRange } from '../../../../share/constants';
+import IssueCommentsField from './IssueCommentsField';
 import StandardTypeSelectInput from './StandardTypeSelectInput';
 import StandardStatusField from './StandardStatusField';
 import StandardSectionSelectInput from './StandardSectionSelectInput';
@@ -83,17 +84,7 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
         onChange={save}
       />
     </FormField>
-    <FormField>
-      Issue number
-      <NumberField
-        name="issueNumber"
-        type="number"
-        min={IssueNumberRange.MIN}
-        max={IssueNumberRange.MAX}
-        onBlur={save}
-        clearable={false}
-      />
-    </FormField>
+    <IssueCommentsField {...{ save }} />
     <FormField>
       Status
       <StandardStatusField name="status" onChange={save} />
