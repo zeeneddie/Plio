@@ -16,6 +16,7 @@ type Standard implements BaseEntity, PlioEntity {
   organization: Organization!
   uniqueNumber: Int
   issueNumber: Int
+  issueComments: String
   title: String!
   description: String
   owner: User

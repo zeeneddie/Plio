@@ -124,6 +124,12 @@ const StandardsSchema = new SimpleSchema([
       max: 10000,
       optional: true,
     },
+    issueComments: {
+      type: String,
+      min: 1,
+      max: StringLimits.comments.max,
+      optional: true,
+    },
   },
 ]);
 

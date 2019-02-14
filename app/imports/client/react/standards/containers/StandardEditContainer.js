@@ -51,6 +51,7 @@ const getInitialValues = compose(
     'uniqueNumber',
     'departments',
     'projects',
+    'issueComments',
   ]),
 );
 
@@ -139,6 +140,7 @@ const StandardEditContainer = ({
               status,
               description = '',
               issueNumber,
+              issueComments = '',
               uniqueNumber,
               source1,
               source2,
@@ -163,6 +165,7 @@ const StandardEditContainer = ({
                   typeId,
                   owner,
                   description,
+                  issueComments,
                   issueNumber,
                   uniqueNumber,
                 },

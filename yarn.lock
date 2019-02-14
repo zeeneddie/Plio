@@ -5143,6 +5143,10 @@ please-upgrade-node@^3.0.2, please-upgrade-node@^3.1.1:
   dependencies:
     semver-compare "^1.0.0"
 
+"plio-util@https://github.com/Pliohub/plio-util.git#devel":
+  version "0.2.2"
+  resolved "https://github.com/Pliohub/plio-util.git#dd7453a5705358b1b8595f6cfc3edcb7dae175d9"
+
 pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"

@@ -28,6 +28,7 @@ input UpdateStandardInput {
   source1: SourceInput
   source2: SourceInput
   description: String
+  issueComments: String
   issueNumber: Int
   uniqueNumber: Int
   departmentsIds: [ID]

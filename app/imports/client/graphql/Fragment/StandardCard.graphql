@@ -3,6 +3,7 @@ fragment StandardCard on Standard {
   title
   status
   description
+  issueComments
   issueNumber
   uniqueNumber
   owner {

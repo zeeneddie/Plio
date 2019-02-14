@@ -37,5 +37,7 @@ export default applyMiddleware(
   checkStandardTypeAccess(),
   checkDepartmentsAccess(),
   checkProjectsAccess(),
+  // TODO add issueNumber middleware "decrementing is not allowed"
+  // TODO add issueComments middleware "only owner can edit"
   standardUpdateAfterware(),
 )(resolver);
