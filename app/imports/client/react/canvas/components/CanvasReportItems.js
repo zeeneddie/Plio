@@ -14,6 +14,7 @@ const ListWrapper = styled.div`
     margin: 0;
   }
   ul {
+    padding: 0;
     list-style: disc inside;
     break-inside: avoid;
     overflow: hidden;
@@ -21,10 +22,10 @@ const ListWrapper = styled.div`
       display: list-item;
       overflow: visible;
       float: left;
-      margin-right: 25px;
+      margin: 0 25px 0 0;
       span {
         display: inline;
-        margin: -10px;
+        margin: -5px;
       }
     }
   }
