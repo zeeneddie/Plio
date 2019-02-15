@@ -35,7 +35,8 @@ export default (config = () => ({})) => async (next, root, args, context) => {
 
   invariant(
     isNotExceeded,
-    `${entityName} cannot add up to more than 100%.\nPlease reduce one or more values.`,
+    `${entityName || 'Percentages'} cannot add up to more than ` +
+      '100%.\nPlease reduce one or more values.',
   );
 
   return next(root, args, context);
