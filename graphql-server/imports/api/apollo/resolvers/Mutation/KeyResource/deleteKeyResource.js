@@ -4,7 +4,7 @@ import {
   flattenInput,
   checkKeyResourceAccess,
 } from '../../../../../share/middleware';
-import { Subscriptions, DocChangeKinds } from '../../../constants';
+import { Subscriptions, DocChangeKinds } from '../../../../../share/subscriptions/constants';
 
 export const resolver = async (keyResource, args, context) =>
   context.services.KeyResourceService.delete(args, { ...context, keyResource });

@@ -5,8 +5,14 @@ import { pure } from 'recompose';
 
 import { Query } from '../../../graphql';
 import CanvasForm from './CanvasForm';
-import { FormField, PercentInputField, GroupSelect } from '../../components';
-import { OptionNone } from '../../../../api/constants';
+import { FormField, PercentInputField } from '../../components';
+import CanvasMatchField from './CanvasMatchField';
+
+const optionGuidance = {
+  label: 'Select an unmatched proposition.\n' +
+  '(Each customer segment can only be matched to 1 value proposition)',
+  value: '',
+};
 
 const CustomerSegmentForm = ({
   organizationId,
@@ -16,10 +22,9 @@ const CustomerSegmentForm = ({
   <CanvasForm {...{ organizationId, save }}>
     <FormField>
       Matched to
-      <GroupSelect
+      <CanvasMatchField
         name="matchedTo"
         placeholder="Matched to"
-        multi={false}
         onChange={save}
         loadOptions={query => query({
           query: Query.VALUE_PROPOSITION_LIST,
@@ -30,20 +35,12 @@ const CustomerSegmentForm = ({
 
           if (matchedTo) options.push(getEntityOptions(matchedTo));
 
-          options.push(...mapEntitiesToOptions(valuePropositions));
+          options.push(
+            ...mapEntitiesToOptions(valuePropositions),
+            optionGuidance,
+          );
 
-          return {
-            options: [
-              {
-                label: 'Unmatched value propositions:',
-                options,
-              },
-              {
-                label: '(Each customer segment can only be matched to 1 value proposition)',
-                options: [OptionNone],
-              },
-            ],
-          };
+          return options;
         }}
       />
     </FormField>

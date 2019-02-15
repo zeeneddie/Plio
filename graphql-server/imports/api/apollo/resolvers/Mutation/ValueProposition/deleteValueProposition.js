@@ -4,7 +4,7 @@ import {
   flattenInput,
   checkValuePropositionAccess,
 } from '../../../../../share/middleware';
-import { Subscriptions, DocChangeKinds } from '../../../constants';
+import { Subscriptions, DocChangeKinds } from '../../../../../share/subscriptions/constants';
 
 export const resolver = async (valueProposition, args, context) =>
   context.services.ValuePropositionService.delete(args, { ...context, valueProposition });

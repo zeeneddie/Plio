@@ -4,7 +4,7 @@ import {
   flattenInput,
   checkChannelAccess,
 } from '../../../../../share/middleware';
-import { Subscriptions, DocChangeKinds } from '../../../constants';
+import { Subscriptions, DocChangeKinds } from '../../../../../share/subscriptions/constants';
 
 export const resolver = async (channel, args, context) =>
   context.services.ChannelService.delete(args, { ...context, channel });

@@ -23,6 +23,7 @@ import {
   reject,
   isNil,
   pathOr,
+  curry,
 } from 'ramda';
 
 import {
@@ -114,13 +115,21 @@ export const getKeyPartnerChartData = addIndex(map)(({
   levelOfSpend,
   criticality,
   title,
+  _id,
 }, index) => ({
   data: [{ x: levelOfSpend, y: criticality }],
   backgroundColor: getColorByIndex(index),
   label: title,
+  _id,
 }));
 
 export const getUserDefaultCanvasColor = pathOr(
   DEFAULT_CANVAS_COLOR,
   ['preferences', 'defaultCanvasColor'],
 );
+
+export const getDoughnutChartData = curry((valueProp, entityList) => map(item => ({
+  _id: item._id,
+  label: item.title,
+  value: item[valueProp],
+}), entityList));
