@@ -6,7 +6,7 @@ import {
   canvasSettingsUpdateAfterware,
   composeMiddleware,
 } from '../../../../../share/middleware';
-import { Subscriptions, DocChangeKinds } from '../../../constants';
+import { Subscriptions, DocChangeKinds } from '../../../../../share/subscriptions/constants';
 
 export const resolver = async (root, args, context) =>
   context.services.CanvasSettingsService.reorderItems(args, context);

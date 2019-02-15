@@ -4,7 +4,7 @@ import {
   flattenInput,
   checkKeyActivityAccess,
 } from '../../../../../share/middleware';
-import { Subscriptions, DocChangeKinds } from '../../../constants';
+import { Subscriptions, DocChangeKinds } from '../../../../../share/subscriptions/constants';
 
 export const resolver = async (keyActivity, args, context) =>
   context.services.KeyActivityService.delete(args, { ...context, keyActivity });
