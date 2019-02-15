@@ -21,7 +21,6 @@ const List = styled.div`
       span {
         padding: 0 !important;
         overflow: hidden;
-        display: block;
       }
     }
   }
