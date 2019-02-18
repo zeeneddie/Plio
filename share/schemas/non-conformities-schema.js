@@ -68,6 +68,7 @@ const OptionalSchema = new SimpleSchema([
     cost: {
       type: Number,
       optional: true,
+      decimal: true,
     },
     ref: {
       type: RefSchema,

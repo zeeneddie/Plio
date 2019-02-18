@@ -1,4 +1,4 @@
-import { Subscriptions } from '../../../constants';
+import { Subscriptions } from '../../../../../share/subscriptions/constants';
 import resolveEntityChanged from '../util/resolveEntityChanged';
 
 export default {

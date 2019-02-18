@@ -1,6 +1,4 @@
-import {
-  applyMiddleware,
-} from 'plio-util';
+import { applyMiddleware } from 'plio-util';
 import { checkLoggedIn, checkOrgMembership } from '../../../../../share/middleware';
 
 export const resolver = async (

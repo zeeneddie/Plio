@@ -4,7 +4,7 @@ import {
   flattenInput,
   checkKeyPartnerAccess,
 } from '../../../../../share/middleware';
-import { Subscriptions, DocChangeKinds } from '../../../constants';
+import { Subscriptions, DocChangeKinds } from '../../../../../share/subscriptions/constants';
 
 export const resolver = async (keyPartner, args, context) =>
   context.services.KeyPartnerService.delete(args, { ...context, keyPartner });

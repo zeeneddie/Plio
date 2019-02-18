@@ -5,8 +5,14 @@ import { pure } from 'recompose';
 
 import { Query } from '../../../graphql';
 import CanvasForm from './CanvasForm';
-import { FormField, ApolloSelectInputField } from '../../components';
-import { OptionNone, ApolloFetchPolicies } from '../../../../api/constants';
+import { FormField } from '../../components';
+import CanvasMatchField from './CanvasMatchField';
+
+const optionGuidance = {
+  label: 'Select an unmatched segment.\n' +
+  '(Each value proposition can only be matched to 1 customer segment)',
+  value: '',
+};
 
 const ValuePropositionForm = ({
   organizationId,
@@ -16,23 +22,23 @@ const ValuePropositionForm = ({
   <CanvasForm {...{ organizationId, save }}>
     <FormField>
       Matched to
-      <ApolloSelectInputField
+      <CanvasMatchField
         name="matchedTo"
         placeholder="Matched to"
         onChange={save}
         loadOptions={query => query({
           query: Query.CUSTOMER_SEGMENT_LIST,
           variables: { organizationId, isUnmatched: true },
-          // network only is needed because after matching an item
-          // the data would become inconsistent
-          fetchPolicy: ApolloFetchPolicies.NETWORK_ONLY,
         })}
         transformOptions={({ data: { customerSegments: { customerSegments } } }) => {
-          const options = [OptionNone];
+          const options = [];
 
           if (matchedTo) options.push(getEntityOptions(matchedTo));
 
-          options.push(...mapEntitiesToOptions(customerSegments));
+          options.push(
+            ...mapEntitiesToOptions(customerSegments),
+            optionGuidance,
+          );
 
           return options;
         }}

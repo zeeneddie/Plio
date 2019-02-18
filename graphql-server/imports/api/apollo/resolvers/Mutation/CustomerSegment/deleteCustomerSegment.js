@@ -4,7 +4,7 @@ import {
   flattenInput,
   checkCustomerSegmentAccess,
 } from '../../../../../share/middleware';
-import { Subscriptions, DocChangeKinds } from '../../../constants';
+import { Subscriptions, DocChangeKinds } from '../../../../../share/subscriptions/constants';
 
 export const resolver = async (customerSegment, args, context) =>
   context.services.CustomerSegmentService.delete(args, { ...context, customerSegment });

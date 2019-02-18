@@ -7,7 +7,7 @@ export default {
   NOT_FOUND: 'Document not found',
   USER_NOT_ORG_MEMBER: 'This user is not a member of your organization',
   USER_NOT_AUTHORIZED_FOR_EDITING: 'User is not authorized for editing this field',
-  START_DATE_GTE_END_DATE: '"Start date" cannot be greater than or equal "end date"',
+  START_DATE_GTE_END_DATE: 'Start date must come before the end date',
   END_DATE_LTE_START_DATE: '"End date" cannot be less than or equal "start date"',
   DOC_CANNOT_BE_COMPLETED: 'Document cannot be completed',
   DOC_CANNOT_BE_VERIFIED: 'Document cannot be verified',

@@ -15,6 +15,10 @@ const ButtonWrapper = styled.div`
 
 const StyledCardBlock = styled(CardBlock)`
   white-space: pre-line;
+
+  .quill .rich-text-controls {
+    white-space: normal; /* prevent quill menu to be aligned vertically */
+  }
 `;
 
 const GuidancePanel = ({

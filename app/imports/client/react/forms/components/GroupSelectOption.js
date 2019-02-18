@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
 import { merge } from 'ramda';
+import cx from 'classnames';
 
 import { Styles } from '../../../../api/constants';
 import { Icon } from '../../components';
@@ -65,6 +66,7 @@ class GroupSelectOption extends Component {
     onFocus: PropTypes.func.isRequired,
     option: PropTypes.object.isRequired,
     isFocused: PropTypes.bool.isRequired,
+    isSelected: PropTypes.bool.isRequired,
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
     inputValue: PropTypes.string,
   }
@@ -101,11 +103,13 @@ class GroupSelectOption extends Component {
       inputValue,
       children,
       option: { isGroupTitle, isCreatable },
+      isFocused,
+      isSelected,
     } = this.props;
     if (isGroupTitle) {
       return (
         <Fragment>
-          <TitleOption className="Select-option">
+          <TitleOption className="Select-option group-title">
             {children}
           </TitleOption>
           <InfoOption className="Select-option">None created yet</InfoOption>
@@ -132,7 +136,7 @@ class GroupSelectOption extends Component {
 
     return (
       <Option
-        className="Select-option"
+        className={cx('Select-option', { 'is-selected': isSelected, 'is-focused': isFocused })}
         onMouseDown={this.onMouseDown}
         onMouseEnter={this.onMouseEnter}
         onMouseMove={this.onMouseMove}

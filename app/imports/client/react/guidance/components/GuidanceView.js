@@ -1,9 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Card, FormGroup } from 'reactstrap';
+import { FormGroup } from 'reactstrap';
 import styled from 'styled-components';
 
-import { Subcard, SubcardHeader, SubcardBody, CardBlock } from '../../components';
+import {
+  Subcard,
+  SubcardHeader,
+  SubcardBody,
+  CardBlock,
+  EntityManagerItems,
+} from '../../components';
 
 const StyledDiv = styled.div`
   margin-bottom: 1rem;
@@ -13,8 +19,8 @@ const GuidanceView = ({ guidance }) => (
   <Fragment>
     <StyledDiv dangerouslySetInnerHTML={{ __html: guidance.html }} />
     <FormGroup>
-      {guidance.subguidances && guidance.subguidances.map(subguidance => (
-        <Card key={subguidance._id}>
+      <EntityManagerItems>
+        {guidance.subguidances && guidance.subguidances.map(subguidance => (
           <Subcard>
             <SubcardHeader>
               <strong>{subguidance.title}</strong>
@@ -25,8 +31,8 @@ const GuidanceView = ({ guidance }) => (
               </CardBlock>
             </SubcardBody>
           </Subcard>
-        </Card>
-      ))}
+        ))}
+      </EntityManagerItems>
     </FormGroup>
   </Fragment>
 );

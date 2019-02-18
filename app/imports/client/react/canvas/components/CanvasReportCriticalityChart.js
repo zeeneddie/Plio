@@ -21,10 +21,15 @@ const CanvasReportCriticalityChart = ({ data, ...rest }) => (
     {!!data.length && (
       <CanvasReportChartLabels>
         <CanvasReportCriticalityChartLabel x="SPEND" y="CRITICALITY" />
-        {data.map(({ label, backgroundColor, data: points }) => (
+        {data.map(({
+          _id,
+          label,
+          backgroundColor,
+          data: points,
+        }) => (
           <CanvasReportCriticalityChartLabel
             {...{ label }}
-            key={label + points[0].y + points[0].x}
+            key={_id}
             color={backgroundColor}
             x={getCriticalityLevelLabel(points[0].x)}
             y={getCriticalityLevelLabel(points[0].y)}
