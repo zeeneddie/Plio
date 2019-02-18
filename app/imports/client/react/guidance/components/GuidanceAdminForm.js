@@ -61,7 +61,7 @@ const GuidanceAdminForm = ({
               <GuidanceForm />
             </EntityManagerCards>
             <EntityManagerAddButton>
-              Add a new guidance
+              Add a new guidance section
             </EntityManagerAddButton>
           </EntityManagerForms>
         </EntityManager>

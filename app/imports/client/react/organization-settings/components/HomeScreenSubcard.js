@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import styled from 'styled-components';
 import { CardTitle } from 'reactstrap';
 import { connect } from 'react-redux';
 import { compose, withProps } from 'recompose';
@@ -23,6 +24,10 @@ import {
 import HomeScreenForm from './HomeScreenForm';
 import ImplementationViewDefaultsForm from './ImplementationViewDefaultsForm';
 import ImplementationViewTitlesForm from './ImplementationViewTitlesForm';
+
+const StyledGuidancePanel = styled(GuidancePanel)`
+  white-space: pre-line;
+`;
 
 const enhance = compose(
   withApollo,
@@ -58,12 +63,12 @@ const HomeScreenSubcard = enhance(({ loading, organization = {} }) => (
             {guidancePanelState => (
               <HelpInfo>
                 <GuidanceIcon onClick={guidancePanelState.toggle} />
-                <GuidancePanel
+                <StyledGuidancePanel
                   isOpen={guidancePanelState.isOpen}
                   toggle={guidancePanelState.toggle}
                 >
                   {OrganizationSettingsHelp.homeScreenTitles}
-                </GuidancePanel>
+                </StyledGuidancePanel>
               </HelpInfo>
             )}
           </WithToggle>
