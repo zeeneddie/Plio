@@ -48,6 +48,9 @@ const CustomerInsightsSubcard = ({
             }}
             renderPie={CustomerInsightsPie}
             renderMatcher={CustomerInsightsMatcher}
+            guidance={'Click on the arrow symbol to match to one or more elements. ' +
+              'If there are no elements listed then click on the Back button and start ' +
+              'adding some Needs and/or Wants.'}
           />
         </Col>
       </CardBlock>

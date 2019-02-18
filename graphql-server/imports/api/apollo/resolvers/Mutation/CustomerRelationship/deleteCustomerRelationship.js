@@ -4,7 +4,7 @@ import {
   flattenInput,
   checkCustomerRelationshipAccess,
 } from '../../../../../share/middleware';
-import { Subscriptions, DocChangeKinds } from '../../../constants';
+import { Subscriptions, DocChangeKinds } from '../../../../../share/subscriptions/constants';
 
 export const resolver = async (customerRelationship, args, context) =>
   context.services.CustomerRelationshipService.delete(args, { ...context, customerRelationship });

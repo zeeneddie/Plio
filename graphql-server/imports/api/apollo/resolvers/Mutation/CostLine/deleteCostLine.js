@@ -4,7 +4,7 @@ import {
   flattenInput,
   checkCostLineAccess,
 } from '../../../../../share/middleware';
-import { Subscriptions, DocChangeKinds } from '../../../constants';
+import { Subscriptions, DocChangeKinds } from '../../../../../share/subscriptions/constants';
 
 export const resolver = async (costLine, args, context) =>
   context.services.CostLineService.delete(args, { ...context, costLine });

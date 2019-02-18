@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import { reject, whereEq } from 'ramda';
+import { reject, whereEq, update } from 'ramda';
 
 import { RenderSwitch, PreloaderPage, ErrorPage } from '../../components';
 import CanvasPage from '../components/CanvasPage';
@@ -16,10 +16,13 @@ import CUSTOMER_SEGMENT_PRESENTATION
   from '../../../graphql/Fragment/CustomerSegmentPresentation.graphql';
 import CANVAS_SETTINGS from '../../../graphql/Fragment/CanvasSettings.graphql';
 import { CanvasSections, CanvasTypes } from '../../../../share/constants';
+import { DocChangeKinds } from '../../../../share/subscriptions/constants';
+
+const QUERY_POLLING_INTERVAL = 15 * 1000;
 
 const KEY_PARTNER_CHANGED = gql`
   subscription KeyPartnerChanged($organizationId: ID!) {
-    keyPartnerChanged(organizationId: $organizationId, kind: [insert, delete]) {
+    keyPartnerChanged(organizationId: $organizationId) {
       kind
       entity {
         ...CanvasEntityPresentation
@@ -30,7 +33,7 @@ const KEY_PARTNER_CHANGED = gql`
 `;
 const KEY_ACTIVITY_CHANGED = gql`
   subscription KeyActivityChanged($organizationId: ID!) {
-    keyActivityChanged(organizationId: $organizationId, kind: [insert, delete]) {
+    keyActivityChanged(organizationId: $organizationId) {
       kind
       entity {
         ...CanvasEntityPresentation
@@ -41,7 +44,7 @@ const KEY_ACTIVITY_CHANGED = gql`
 `;
 const KEY_RESOURCE_CHANGED = gql`
   subscription KeyResourceChanged($organizationId: ID!) {
-    keyResourceChanged(organizationId: $organizationId, kind: [insert, delete]) {
+    keyResourceChanged(organizationId: $organizationId) {
       kind
       entity {
         ...CanvasEntityPresentation
@@ -52,7 +55,7 @@ const KEY_RESOURCE_CHANGED = gql`
 `;
 const VALUE_PROPOSITION_CHANGED = gql`
   subscription ValuePropositionChanged($organizationId: ID!) {
-    valuePropositionChanged(organizationId: $organizationId, kind: [insert, delete]) {
+    valuePropositionChanged(organizationId: $organizationId) {
       kind
       entity {
         ...ValuePropositionPresentation
@@ -64,7 +67,7 @@ const VALUE_PROPOSITION_CHANGED = gql`
 `;
 const CUSTOMER_RELATIONSHIP_CHANGED = gql`
   subscription CustomerRelationshipChanged($organizationId: ID!) {
-    customerRelationshipChanged(organizationId: $organizationId, kind: [insert, delete]) {
+    customerRelationshipChanged(organizationId: $organizationId) {
       kind
       entity {
         ...CanvasEntityPresentation
@@ -75,7 +78,7 @@ const CUSTOMER_RELATIONSHIP_CHANGED = gql`
 `;
 const CHANNEL_CHANGED = gql`
   subscription ChannelChanged($organizationId: ID!) {
-    channelChanged(organizationId: $organizationId, kind: [insert, delete]) {
+    channelChanged(organizationId: $organizationId) {
       kind
       entity {
         ...CanvasEntityPresentation
@@ -86,7 +89,7 @@ const CHANNEL_CHANGED = gql`
 `;
 const CUSTOMER_SEGMENT_CHANGED = gql`
   subscription CustomerSegmentChanged($organizationId: ID!) {
-    customerSegmentChanged(organizationId: $organizationId, kind: [insert, delete]) {
+    customerSegmentChanged(organizationId: $organizationId) {
       kind
       entity {
         ...CustomerSegmentPresentation
@@ -98,7 +101,7 @@ const CUSTOMER_SEGMENT_CHANGED = gql`
 `;
 const COST_LINE_CHANGED = gql`
   subscription CostLineChanged($organizationId: ID!) {
-    costLineChanged(organizationId: $organizationId, kind: [insert, delete]) {
+    costLineChanged(organizationId: $organizationId) {
       kind
       entity {
         ...CanvasEntityPresentation
@@ -109,7 +112,7 @@ const COST_LINE_CHANGED = gql`
 `;
 const REVENUE_STREAM_CHANGED = gql`
   subscription RevenueStreamChanged($organizationId: ID!) {
-    revenueStreamChanged(organizationId: $organizationId, kind: [insert, delete]) {
+    revenueStreamChanged(organizationId: $organizationId) {
       kind
       entity {
         ...CanvasEntityPresentation
@@ -155,8 +158,30 @@ const subConfigs = [
   ['canvasSettingsChanged', 'canvasSettings', CANVAS_SETTINGS_CHANGED],
 ];
 
+const getNewData = (prevData, data) => {
+  // canvas settings is not an array, but an object
+  if (!Array.isArray(prevData)) return data.entity;
+
+  const findDataEntity = whereEq({ _id: data.entity._id });
+
+  switch (data.kind) {
+    case DocChangeKinds.INSERT:
+      return prevData.concat(data.entity);
+    case DocChangeKinds.UPDATE:
+      return update(prevData.findIndex(findDataEntity), data.entity, prevData);
+    case DocChangeKinds.DELETE:
+      return reject(findDataEntity, prevData);
+    default:
+      return prevData;
+  }
+};
+
 const CanvasPageContainer = ({ organization: { _id: organizationId } }) => (
-  <Query query={Queries.CANVAS_PAGE} variables={{ organizationId }}>
+  <Query
+    query={Queries.CANVAS_PAGE}
+    variables={{ organizationId }}
+    pollInterval={QUERY_POLLING_INTERVAL}
+  >
     {({ error, loading, subscribeToMore }) => (
       <RenderSwitch
         {...{ error, loading }}
@@ -176,22 +201,12 @@ const CanvasPageContainer = ({ organization: { _id: organizationId } }) => (
                     if (!subscriptionData.data) return prev;
                     const data = subscriptionData.data[name];
 
-                    if (key === 'canvasSettings') {
-                      return {
-                        ...prev,
-                        [key]: {
-                          ...prev[key],
-                          [key]: data.entity,
-                        },
-                      };
-                    }
-
-                    if (data.kind === 'insert') {
+                    if (data.kind === DocChangeKinds.INSERT) {
                       // Scroll canvas section to bottom after adding an item to it
                       // Is there a better way of doing this?
                       const sectionEl = document.querySelector(`ul.${key}`);
                       setTimeout(() => {
-                        sectionEl.scrollTop = sectionEl.scrollHeight;
+                        if (sectionEl) sectionEl.scrollTop = sectionEl.scrollHeight;
                       }, 0);
                     }
 
@@ -201,15 +216,13 @@ const CanvasPageContainer = ({ organization: { _id: organizationId } }) => (
                       key = 'costLines';
                     }
 
-                    const prevItems = prev[key][key];
+                    const prevData = prev[key][key];
 
                     return {
                       ...prev,
                       [key]: {
                         ...prev[key],
-                        [key]: data.kind === 'insert'
-                          ? prevItems.concat(data.entity)
-                          : reject(whereEq({ _id: data.entity._id }), prevItems),
+                        [key]: getNewData(prevData, data),
                       },
                     };
                   },
