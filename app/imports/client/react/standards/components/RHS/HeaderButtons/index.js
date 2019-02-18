@@ -4,10 +4,19 @@ import React from 'react';
 import ToggleExpandButton from '../../../../components/Buttons/ToggleExpandButton';
 import DiscussButton from '../../../../components/Buttons/DiscussButton';
 import Button from '../../../../components/Buttons/Button';
+import StandardMarkAsReadModalContainer from '../../../containers/StandardMarkAsReadModalContainer';
+import useToggle from '../../../../hooks/useToggle';
 
 const HeaderButtons = (props) => {
+  const [isOpen, toggle] = useToggle(false);
+
   const toggleExpandButton = props.hasDocxAttachment && (
     <ToggleExpandButton onClick={props.onToggleScreenMode} />
+  );
+
+  // TODO: don't render if already marked
+  const markAsReadButton = !props.isDeleted && (
+    <Button color="success" onClick={toggle}>Mark as read</Button>
   );
 
   const discussionButton = !props.isDiscussionOpened && (
@@ -44,7 +53,9 @@ const HeaderButtons = (props) => {
 
   return (
     <div>
+      <StandardMarkAsReadModalContainer {...{ isOpen, toggle }} standard={props.standard} />
       {toggleExpandButton}
+      {markAsReadButton}
       {discussionButton}
       {restoreButton}
       {deleteButton}
@@ -66,6 +77,7 @@ HeaderButtons.propTypes = {
   onRestore: PropTypes.func,
   onDelete: PropTypes.func,
   onModalOpen: PropTypes.func,
+  standard: PropTypes.object,
 };
 
 export default HeaderButtons;

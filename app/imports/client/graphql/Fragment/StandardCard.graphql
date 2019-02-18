@@ -38,4 +38,10 @@ fragment StandardCard on Standard {
     fileId
     url
   }
+  readBy {
+    _id
+    profile {
+      fullName
+    }
+  }
 }
