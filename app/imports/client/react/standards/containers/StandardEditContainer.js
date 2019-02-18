@@ -120,7 +120,7 @@ const StandardEditContainer = ({
           { loading, error },
           updateStandard,
           deleteStandard,
-        ]) => renderComponent({
+        ]) => initialValues && renderComponent({
           ...props,
           loading,
           error,
