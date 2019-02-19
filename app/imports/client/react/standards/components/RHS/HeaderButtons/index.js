@@ -37,7 +37,12 @@ const HeaderButtons = (props) => {
     )
   );
 
-  const editButton = !props.isDeleted && <StandardEditRHSButton standardId={props._id} />;
+  const editButton = !props.isDeleted && (
+    <StandardEditRHSButton
+      standardId={props._id}
+      organizationId={props.organizationId}
+    />
+  );
 
   return (
     <div>
@@ -52,6 +57,7 @@ const HeaderButtons = (props) => {
 
 HeaderButtons.propTypes = {
   _id: PropTypes.string.isRequired,
+  organizationId: PropTypes.string.isRequired,
   hasDocxAttachment: PropTypes.bool,
   isDiscussionOpened: PropTypes.bool,
   isDeleted: PropTypes.bool,
@@ -63,6 +69,7 @@ HeaderButtons.propTypes = {
   onDiscussionOpen: PropTypes.func,
   onRestore: PropTypes.func,
   onDelete: PropTypes.func,
+  onModalOpen: PropTypes.func,
 };
 
 export default HeaderButtons;
