@@ -1,8 +1,6 @@
 import { $ } from 'meteor/jquery';
 import { Meteor } from 'meteor/meteor';
 
-import modal from '/imports/startup/client/mixins/modal';
-import { StandardsHelp } from '/imports/api/help-messages';
 import swal from '/imports/ui/utils/swal';
 import { setIsFullScreenMode } from '/imports/client/store/actions/globalActions';
 import { restore, remove } from '/imports/api/standards/methods';
@@ -54,15 +52,6 @@ export const onDiscussionOpen = props => (event) => {
   }
   goTo('standardDiscussion')({ urlItemId: props.standard._id });
 };
-
-export const onModalOpen = ({ _id }) => () =>
-  modal.modal.open({
-    _id,
-    _title: 'Standard',
-    template: 'EditStandard',
-    helpText: StandardsHelp.standard,
-  });
-
 
 export const onRestore = ({
   _id,

@@ -4,6 +4,7 @@ import React from 'react';
 import ToggleExpandButton from '../../../../components/Buttons/ToggleExpandButton';
 import DiscussButton from '../../../../components/Buttons/DiscussButton';
 import Button from '../../../../components/Buttons/Button';
+import StandardEditRHSButton from '../../StandardEditRHSButton';
 
 const HeaderButtons = (props) => {
   const toggleExpandButton = props.hasDocxAttachment && (
@@ -36,11 +37,7 @@ const HeaderButtons = (props) => {
     )
   );
 
-  const editButton = !props.isDeleted && (
-    <Button color="primary" onClick={props.onModalOpen} >
-      Edit
-    </Button>
-  );
+  const editButton = !props.isDeleted && <StandardEditRHSButton standardId={props._id} />;
 
   return (
     <div>
@@ -54,6 +51,7 @@ const HeaderButtons = (props) => {
 };
 
 HeaderButtons.propTypes = {
+  _id: PropTypes.string.isRequired,
   hasDocxAttachment: PropTypes.bool,
   isDiscussionOpened: PropTypes.bool,
   isDeleted: PropTypes.bool,
@@ -65,7 +63,6 @@ HeaderButtons.propTypes = {
   onDiscussionOpen: PropTypes.func,
   onRestore: PropTypes.func,
   onDelete: PropTypes.func,
-  onModalOpen: PropTypes.func,
 };
 
 export default HeaderButtons;

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import {
   onDiscussionOpen,
   onToggleScreenMode,
-  onModalOpen,
   onRestore,
   onDelete,
 } from './handlers';
@@ -34,7 +33,6 @@ export default compose(
   withHandlers({
     onDiscussionOpen,
     onToggleScreenMode,
-    onModalOpen,
     onRestore,
     onDelete,
   }),
