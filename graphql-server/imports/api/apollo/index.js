@@ -36,6 +36,7 @@ const getContext = async (authorizationToken) => {
 
 const server = new ApolloServer({
   schema,
+  introspection: true,
   playground: {
     subscriptionEndpoint: Meteor.absoluteUrl('subscriptions').replace(
       /https?/,
