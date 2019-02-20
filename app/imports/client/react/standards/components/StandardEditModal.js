@@ -66,56 +66,64 @@ export const StandardEditModal = ({
               errorWhenMissing={noop}
               require={standard}
             >
-              {({ _id: standardId }) => (
-                <Fragment>
-                  <CardBlock>
-                    <StandardEditForm
-                      {...{ organizationId, standardId }}
-                      save={handleSubmit}
+              {({
+                _id: standardId,
+                nonconformities,
+                risks,
+                lessons,
+                organization: {
+                  ncGuidelines,
+                  rkGuidelines,
+                  currency,
+                },
+              }) => {
+                const linkedTo = {
+                  _id: standardId,
+                  title: standard.title,
+                };
+                return (
+                  <Fragment>
+                    <CardBlock>
+                      <StandardEditForm
+                        {...{ organizationId, standardId }}
+                        save={handleSubmit}
+                      />
+                    </CardBlock>
+                    <RelationsAdapter
+                      {...{ organizationId, refetchQueries }}
+                      documentId={standardId}
+                      nonconformities={nonconformities}
+                      documentType={DocumentTypes.STANDARD}
+                      relatedDocumentType={DocumentTypes.NON_CONFORMITY}
+                      type={DocumentTypes.NON_CONFORMITY}
+                      guidelines={ncGuidelines}
+                      currency={currency}
+                      render={NonconformitiesSubcard}
                     />
-                  </CardBlock>
-                  <RelationsAdapter
-                    {...{ organizationId, refetchQueries }}
-                    documentId={standard._id}
-                    nonconformities={standard.nonconformities}
-                    documentType={DocumentTypes.STANDARD}
-                    relatedDocumentType={DocumentTypes.NON_CONFORMITY}
-                    type={DocumentTypes.NON_CONFORMITY}
-                    guidelines={standard.organization.ncGuidelines}
-                    currency={standard.organization.currency}
-                    render={NonconformitiesSubcard}
-                  />
-                  <RelationsAdapter
-                    {...{ organizationId, refetchQueries }}
-                    documentId={standard._id}
-                    documentType={DocumentTypes.STANDARD}
-                    risks={standard.risks}
-                    relatedDocumentType={DocumentTypes.RISK}
-                    guidelines={standard.organization.rkGuidelines}
-                    render={RisksSubcard}
-                    linkedTo={{
-                      _id: standard._id,
-                      title: standard.title,
-                    }}
-                  />
-                  <EntitiesField
-                    {...{ organizationId, refetchQueries }}
-                    name="lessons"
-                    render={LessonsSubcard}
-                    lessons={standard.lessons}
-                    documentType={DocumentTypes.STANDARD}
-                    linkedTo={{
-                      _id: standard._id,
-                      title: standard.title,
-                    }}
-                  />
-                  <NotifySubcard
-                    {...{ organizationId }}
-                    onChange={handleSubmit}
-                    documentId={standard._id}
-                  />
-                </Fragment>
-              )}
+                    <RelationsAdapter
+                      {...{ organizationId, refetchQueries, linkedTo }}
+                      documentId={standardId}
+                      documentType={DocumentTypes.STANDARD}
+                      risks={risks}
+                      relatedDocumentType={DocumentTypes.RISK}
+                      guidelines={rkGuidelines}
+                      render={RisksSubcard}
+                    />
+                    <EntitiesField
+                      {...{ organizationId, refetchQueries, linkedTo }}
+                      name="lessons"
+                      render={LessonsSubcard}
+                      lessons={lessons}
+                      documentType={DocumentTypes.STANDARD}
+                    />
+                    <NotifySubcard
+                      {...{ organizationId }}
+                      onChange={handleSubmit}
+                      documentId={standardId}
+                    />
+                  </Fragment>
+                );
+              }}
             </RenderSwitch>
           </EntityModalBody>
         </Fragment>
