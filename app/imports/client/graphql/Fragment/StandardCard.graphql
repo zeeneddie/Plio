@@ -1,4 +1,6 @@
+#import "./RiskCard.graphql"
 #import './LessonCard.graphql'
+#import './NonconformityCard.graphql'
 
 fragment StandardCard on Standard {
   _id
@@ -40,6 +42,25 @@ fragment StandardCard on Standard {
     fileId
     url
   }
+  organization {
+    _id
+    currency
+    rkGuidelines {
+      minor
+      major
+      critical
+    }
+    ncGuidelines {
+      minor
+      major
+      critical
+    }
+    pgGuidelines {
+      minor
+      major
+      critical
+    }
+  }
   notify {
     _id
     profile {
@@ -48,5 +69,11 @@ fragment StandardCard on Standard {
   }
   lessons {
     ...LessonCard
+  }
+  risks {
+    ...RiskCard
+  }
+  nonconformities {
+    ...NonconformityCard
   }
 }

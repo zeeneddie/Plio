@@ -75,20 +75,23 @@ export const StandardEditModal = ({
                     />
                   </CardBlock>
                   <RelationsAdapter
-                    {...{ organizationId }}
+                    {...{ organizationId, refetchQueries }}
                     documentId={standard._id}
-                    nonconformities={standard.nonconformities || []}
+                    nonconformities={standard.nonconformities}
                     documentType={DocumentTypes.STANDARD}
                     relatedDocumentType={DocumentTypes.NON_CONFORMITY}
                     type={DocumentTypes.NON_CONFORMITY}
+                    guidelines={standard.organization.ncGuidelines}
+                    currency={standard.organization.currency}
                     render={NonconformitiesSubcard}
                   />
                   <RelationsAdapter
-                    {...{ organizationId }}
+                    {...{ organizationId, refetchQueries }}
                     documentId={standard._id}
                     documentType={DocumentTypes.STANDARD}
-                    risks={standard.risks || []}
+                    risks={standard.risks}
                     relatedDocumentType={DocumentTypes.RISK}
+                    guidelines={standard.organization.rkGuidelines}
                     render={RisksSubcard}
                     linkedTo={{
                       _id: standard._id,

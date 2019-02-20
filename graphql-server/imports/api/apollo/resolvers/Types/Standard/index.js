@@ -11,6 +11,8 @@ import { view } from 'ramda';
 import {
   resolveProjectsByIds,
   resolveLessonsById,
+  resolveLinkedRisks,
+  resolveLinkedNonconformities,
 } from '../util';
 
 const {
@@ -36,6 +38,8 @@ export default {
     departments: loadDepartmentsById(view(departmentsIds)),
     projects: resolveProjectsByIds,
     lessons: resolveLessonsById,
+    risks: resolveLinkedRisks,
+    nonconformities: resolveLinkedNonconformities,
     type: async (root, args, context) => {
       const { typeId } = root;
       const { loaders: { StandardType: { byId } } } = context;
