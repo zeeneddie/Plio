@@ -20,15 +20,27 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 });
 
 const subscriptionClient = new SubscriptionClient(
-  GRAPHQL_URL.replace('graphql', 'subscriptions').replace(/https?/, 'ws'),
+  GRAPHQL_URL.replace('graphql', 'subscriptions').replace(
+    /https?/,
+    process.env.NODE_ENV === 'production' ? 'wss' : 'ws',
+  ),
   {
     reconnect: true,
-    reconnectionAttempts: 5,
+    lazy: true,
+    inactivityTimeout: 0,
+    timeout: 30000,
     connectionParams: {
       'meteor-login-token': Accounts._storedLoginToken(),
     },
   },
 );
+
+subscriptionClient.onDisconnected((...args) => {
+  console.log('ws disconnected', ...args);
+});
+subscriptionClient.onError((error) => {
+  console.log('ws error', error);
+});
 
 const wsLink = new WebSocketLink(subscriptionClient);
 const httpLink = new BatchHttpLink({ uri: GRAPHQL_URL });
