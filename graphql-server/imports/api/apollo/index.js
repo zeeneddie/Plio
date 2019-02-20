@@ -44,7 +44,6 @@ const server = new ApolloServer({
     ),
   },
   context: async ({ req }) => ({
-    // ...req, do we need this?
     ...await getContext(req.headers['meteor-login-token']),
   }),
 });
