@@ -32,6 +32,7 @@ input UpdateStandardInput {
   uniqueNumber: Int
   departmentsIds: [ID]
   projectIds: [ID]
+  notify: [ID]
 }
 
 input DeleteStandardInput {

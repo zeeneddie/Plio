@@ -10,6 +10,8 @@ import {
   RenderSwitch,
   CardBlock,
   RelationsAdapter,
+  EntitiesField,
+  NotifySubcard,
 } from '../../components';
 import { DocumentTypes } from '../../../../share/constants';
 import categorize from '../../forms/decorators/categorize';
@@ -19,6 +21,8 @@ import StandardEditForm from './StandardEditForm';
 import NonconformitiesSubcard from '../../noncomformities/components/NonconformitiesSubcard';
 import { StandardsHelp } from '../../../../api/help-messages';
 import { validateStandardUpdate } from '../../../validation';
+import LessonsSubcard from '../../lessons/components/LessonsSubcard';
+import RisksSubcard from '../../risks/components/RisksSubcard';
 
 export const StandardEditModal = ({
   isOpen,
@@ -30,6 +34,7 @@ export const StandardEditModal = ({
   initialValues,
   onSubmit,
   standard,
+  refetchQueries,
 }) => (
   <EntityModalNext
     {...{
@@ -78,6 +83,34 @@ export const StandardEditModal = ({
                     type={DocumentTypes.NON_CONFORMITY}
                     render={NonconformitiesSubcard}
                   />
+                  <RelationsAdapter
+                    {...{ organizationId }}
+                    documentId={standard._id}
+                    documentType={DocumentTypes.STANDARD}
+                    risks={standard.risks || []}
+                    relatedDocumentType={DocumentTypes.RISK}
+                    render={RisksSubcard}
+                    linkedTo={{
+                      _id: standard._id,
+                      title: standard.title,
+                    }}
+                  />
+                  <EntitiesField
+                    {...{ organizationId, refetchQueries }}
+                    name="lessons"
+                    render={LessonsSubcard}
+                    lessons={standard.lessons || []}
+                    documentType={DocumentTypes.STANDARD}
+                    linkedTo={{
+                      _id: standard._id,
+                      title: standard.title,
+                    }}
+                  />
+                  <NotifySubcard
+                    {...{ organizationId }}
+                    onChange={handleSubmit}
+                    documentId={standard._id}
+                  />
                 </Fragment>
               )}
             </RenderSwitch>
@@ -92,6 +125,7 @@ export const StandardEditModal = ({
 StandardEditModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
+  refetchQueries: PropTypes.func,
   organizationId: PropTypes.string.isRequired,
   onDelete: PropTypes.func,
   loading: PropTypes.bool,

@@ -8,7 +8,10 @@ import {
 } from 'plio-util';
 import { view } from 'ramda';
 
-import { resolveProjectsByIds } from '../util';
+import {
+  resolveProjectsByIds,
+  resolveLessonsById,
+} from '../util';
 
 const {
   createdBy,
@@ -32,6 +35,7 @@ export default {
     files: loadFilesById(view(fileIds)),
     departments: loadDepartmentsById(view(departmentsIds)),
     projects: resolveProjectsByIds,
+    lessons: resolveLessonsById,
     type: async (root, args, context) => {
       const { typeId } = root;
       const { loaders: { StandardType: { byId } } } = context;

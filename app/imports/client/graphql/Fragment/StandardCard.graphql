@@ -1,3 +1,5 @@
+#import './LessonCard.graphql'
+
 fragment StandardCard on Standard {
   _id
   title
@@ -37,5 +39,14 @@ fragment StandardCard on Standard {
     type
     fileId
     url
+  }
+  notify {
+    _id
+    profile {
+      fullName
+    }
+  }
+  lessons {
+    ...LessonCard
   }
 }
