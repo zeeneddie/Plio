@@ -34,18 +34,18 @@ const CanvasFooterItems = ({
 
   return (
     <CanvasLabel label={pluralize(label, items.length, true)}>
-      <FlowRouterContext getParam="orgSerialNumber">
-        {({ orgSerialNumber, router }) => (
-          <StyledDropdownItem tag="a" href={router.path(RouteNames.DASHBOARD, { orgSerialNumber })}>
-            Go to Operations view
-          </StyledDropdownItem>
-        )}
-      </FlowRouterContext>
       {items.map(item => (
         <DropdownItem key={item._id} onClick={() => onClick(item)}>
           {renderItem(item)}
         </DropdownItem>
       ))}
+      <FlowRouterContext getParam="orgSerialNumber">
+        {({ orgSerialNumber, router }) => (
+          <StyledDropdownItem tag="a" href={router.path(RouteNames.DASHBOARD, { orgSerialNumber })}>
+            Shortcut to Operations view
+          </StyledDropdownItem>
+        )}
+      </FlowRouterContext>
     </CanvasLabel>
   );
 };
