@@ -9,11 +9,14 @@ import {
   EntityModalForm,
   RenderSwitch,
   CardBlock,
+  RelationsAdapter,
 } from '../../components';
+import { DocumentTypes } from '../../../../share/constants';
 import categorize from '../../forms/decorators/categorize';
 import shouldRenderSource2 from '../../forms/decorators/shouldRenderSource2';
 import StandardAddForm from './StandardAddForm';
 import StandardEditForm from './StandardEditForm';
+import NonconformitiesSubcard from '../../noncomformities/components/NonconformitiesSubcard';
 import { StandardsHelp } from '../../../../api/help-messages';
 import { validateStandardUpdate } from '../../../validation';
 
@@ -59,12 +62,23 @@ export const StandardEditModal = ({
               require={standard}
             >
               {({ _id: standardId }) => (
-                <CardBlock>
-                  <StandardEditForm
-                    {...{ organizationId, standardId }}
-                    save={handleSubmit}
+                <Fragment>
+                  <CardBlock>
+                    <StandardEditForm
+                      {...{ organizationId, standardId }}
+                      save={handleSubmit}
+                    />
+                  </CardBlock>
+                  <RelationsAdapter
+                    {...{ organizationId }}
+                    documentId={standard._id}
+                    nonconformities={standard.nonconformities || []}
+                    documentType={DocumentTypes.STANDARD}
+                    relatedDocumentType={DocumentTypes.NON_CONFORMITY}
+                    type={DocumentTypes.NON_CONFORMITY}
+                    render={NonconformitiesSubcard}
                   />
-                </CardBlock>
+                </Fragment>
               )}
             </RenderSwitch>
           </EntityModalBody>

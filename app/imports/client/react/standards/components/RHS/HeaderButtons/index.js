@@ -44,6 +44,12 @@ const HeaderButtons = (props) => {
     />
   );
 
+  const editButton2 = !props.isDeleted && (
+    <Button color="primary" onClick={props.onModalOpen} >
+      Edit
+    </Button>
+  );
+
   return (
     <div>
       {toggleExpandButton}
@@ -51,6 +57,7 @@ const HeaderButtons = (props) => {
       {restoreButton}
       {deleteButton}
       {editButton}
+      {editButton2}
     </div>
   );
 };
