@@ -99,7 +99,7 @@ export const StandardEditModal = ({
                     {...{ organizationId, refetchQueries }}
                     name="lessons"
                     render={LessonsSubcard}
-                    lessons={standard.lessons || []}
+                    lessons={standard.lessons}
                     documentType={DocumentTypes.STANDARD}
                     linkedTo={{
                       _id: standard._id,

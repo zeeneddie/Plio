@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Meteor } from 'meteor/meteor';
 import {
   pick,
@@ -81,10 +81,10 @@ const StandardEditContainer = ({
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
   ...props
 }) => {
-  const refetchQueries = () => [{
+  const refetchQueries = useCallback(() => [{
     query: Queries.STANDARD_CARD,
     variables: { _id: standardId },
-  }];
+  }], [standardId]);
   return (
     <WithState
       initialState={{
