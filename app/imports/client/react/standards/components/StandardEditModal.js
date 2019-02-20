@@ -23,6 +23,7 @@ import { StandardsHelp } from '../../../../api/help-messages';
 import { validateStandardUpdate } from '../../../validation';
 import LessonsSubcard from '../../lessons/components/LessonsSubcard';
 import RisksSubcard from '../../risks/components/RisksSubcard';
+import ReviewsSubcard from '../../reviews/components/ReviewsSubcard';
 
 export const StandardEditModal = ({
   isOpen,
@@ -71,6 +72,7 @@ export const StandardEditModal = ({
                 nonconformities,
                 risks,
                 lessons,
+                reviews,
                 organization: {
                   ncGuidelines,
                   rkGuidelines,
@@ -114,6 +116,13 @@ export const StandardEditModal = ({
                       name="lessons"
                       render={LessonsSubcard}
                       lessons={lessons}
+                      documentType={DocumentTypes.STANDARD}
+                    />
+                    <EntitiesField
+                      {...{ organizationId, refetchQueries, linkedTo }}
+                      name="reviews"
+                      render={ReviewsSubcard}
+                      reviews={reviews}
                       documentType={DocumentTypes.STANDARD}
                     />
                     <NotifySubcard
