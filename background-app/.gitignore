@@ -3,6 +3,7 @@
 node_modules/
 mup.js
 mup.json
+mup-staging.js
 settings.json
 settings-local.json
 settings-production.json
