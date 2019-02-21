@@ -8,6 +8,9 @@ import { Consumer } from '../../components/EntityModalNext/EntityModal';
 
 const StyledCardBlock = styled(CardBlock)`
   display: flex;
+  & + .guidance-panel > .card-block {
+    padding-top: 0;
+  }
 `;
 
 const StyledHelp = styled.div`

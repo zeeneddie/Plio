@@ -21,7 +21,7 @@ const GuidanceView = ({ guidance }) => (
     <FormGroup>
       <EntityManagerItems>
         {guidance.subguidances && guidance.subguidances.map(subguidance => (
-          <Subcard>
+          <Subcard key={subguidance._id}>
             <SubcardHeader>
               <strong>{subguidance.title}</strong>
             </SubcardHeader>
