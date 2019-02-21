@@ -109,10 +109,10 @@ const ReviewEditContainer = ({
           if (onDelete) return onDelete();
 
           return swal.promise({
-            text: `The review "${review.title}" will be deleted`,
+            text: 'The review will be deleted',
             confirmButtonText: 'Delete',
             successTitle: 'Deleted!',
-            successText: `The review "${review.title}" was deleted successfully.`,
+            successText: 'The review was deleted successfully.',
           }, () => deleteReview({
             variables: {
               input: { _id: review._id },

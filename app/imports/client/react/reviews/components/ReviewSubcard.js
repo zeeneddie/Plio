@@ -15,7 +15,7 @@ const ReviewSubcard = ({
   toggle,
   onDelete,
   ...rest
-}) => (
+}) => review && (
   <Fragment>
     <Card>
       <EntityForm

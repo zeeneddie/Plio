@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CardTitle, Col } from 'reactstrap';
+import { sort } from 'ramda';
+import { byReviewedAt } from 'plio-util';
 
 import {
   Subcard,
@@ -42,7 +44,7 @@ const ReviewsSubcard = ({
       <CardBlock>
         <Col sm={12}>
           <EntityManager>
-            {reviews.map(review => (
+            {sort(byReviewedAt, reviews).map(review => (
               <EntityManagerItem
                 {...{
                   organizationId,

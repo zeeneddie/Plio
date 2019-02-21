@@ -21,7 +21,10 @@ export const resolver = async (root, args, { services: { ReviewService } }) =>
 export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
-  checkOrgMembership(),
+  checkOrgMembership(({ organizationId }, { reviewedBy }) => ({
+    organizationId,
+    userId: reviewedBy,
+  })),
   checkDocExistence((root, { documentId, documentType }) => ({
     query: { _id: documentId },
     collection: getCollectionByDocType(documentType),
