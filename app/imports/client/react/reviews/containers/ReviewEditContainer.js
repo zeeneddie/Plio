@@ -86,7 +86,6 @@ const ReviewEditContainer = ({
           if (!difference) return undefined;
 
           const {
-            scheduledDate,
             reviewedAt,
             comments = '',
             reviewedBy: { value: reviewedBy },
@@ -96,7 +95,6 @@ const ReviewEditContainer = ({
             variables: {
               input: {
                 _id: review._id,
-                scheduledDate,
                 reviewedAt,
                 comments,
                 reviewedBy,

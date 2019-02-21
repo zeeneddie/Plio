@@ -15,7 +15,7 @@ const ReviewForm = ({ organizationId, save }) => (
     <CardBlock>
       <FormField>
         Scheduled review date
-        <DatePickerField name="scheduledDate" onChange={save} />
+        <DatePickerField name="scheduledDate" onChange={save} disabled />
       </FormField>
       <FormField>
         Actual review date

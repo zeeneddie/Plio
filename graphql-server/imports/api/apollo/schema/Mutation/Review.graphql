@@ -1,0 +1,30 @@
+type ReviewPayload {
+  review: Review
+}
+
+input CreateReviewInput {
+  organizationId: ID!
+  scheduledDate: DateTime!
+  reviewedAt: DateTime!
+  reviewedBy: ID!
+  documentId: ID!
+  documentType: String!
+  comments: String
+}
+
+input RemoveReviewInput {
+  _id: ID!
+}
+
+input UpdateReviewInput {
+  _id: ID!
+  reviewedAt: DateTime!
+  reviewedBy: ID!
+  comments: String
+}
+
+type Mutation {
+  createReview(input: CreateReviewInput!): ReviewPayload
+  removeReview(input: RemoveReviewInput!): ReviewPayload
+  updateReview(input: UpdateReviewInput!): Review
+}
