@@ -36,4 +36,5 @@ type Standard implements BaseEntity, PlioEntity {
   improvementPlan: ImprovementPlan
   risks: [Risk]
   nonconformities: [Nonconformity]
+  reviews: [Review]
 }

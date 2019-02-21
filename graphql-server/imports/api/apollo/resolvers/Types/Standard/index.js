@@ -11,6 +11,7 @@ import { view } from 'ramda';
 import {
   resolveProjectsByIds,
   resolveLessonsById,
+  resolveReviewById,
   resolveLinkedRisks,
   resolveLinkedNonconformities,
 } from '../util';
@@ -38,6 +39,7 @@ export default {
     departments: loadDepartmentsById(view(departmentsIds)),
     projects: resolveProjectsByIds,
     lessons: resolveLessonsById,
+    reviews: resolveReviewById,
     risks: resolveLinkedRisks,
     nonconformities: resolveLinkedNonconformities,
     type: async (root, args, context) => {

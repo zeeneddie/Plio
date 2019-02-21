@@ -1,0 +1,15 @@
+type Review implements BaseEntity {
+  _id: ID!
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime
+  updatedBy: User
+  organization: Organization!
+  documentId: ID!
+  documentType: String!
+  scheduledDate: DateTime!
+  reviewedAt: DateTime!
+  reviewedBy: User!
+  comments: String
+  #viewedBy
+}

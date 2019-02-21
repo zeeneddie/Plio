@@ -207,6 +207,13 @@ export const resolveLessonsById = async (root, args, context) => {
   return byQuery.load({ documentId });
 };
 
+export const resolveReviewById = async (root, args, context) => {
+  const { _id: documentId } = root;
+  const { loaders: { Review: { byQuery } } } = context;
+
+  return byQuery.load({ documentId });
+};
+
 export const resolveProjectsByIds = createEntityByIdsResolver(
   ({ projectIds }, args, { loaders: { Project: { byQuery } } }) => ({
     loader: byQuery,

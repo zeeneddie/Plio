@@ -62,10 +62,8 @@ const ReviewAddContainer = ({
               comments,
               reviewedBy,
               organizationId,
-              linkedTo: {
-                documentId,
-                documentType,
-              },
+              documentId,
+              documentType,
             },
           },
         }).then(({ data: { createReview: { review } } }) => onLink(review._id))
