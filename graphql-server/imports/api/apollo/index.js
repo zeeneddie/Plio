@@ -11,6 +11,8 @@ import * as collections from '../../share/collections';
 import * as services from '../../share/services';
 import getUser from './util/getUser';
 
+const KEEP_ALIVE_PING_INTERVAL = 10000;
+
 const pubsub = new PubSub();
 
 const getContext = async (authorizationToken) => {
@@ -66,6 +68,7 @@ new SubscriptionServer({
   schema,
   execute,
   subscribe,
+  keepAlive: KEEP_ALIVE_PING_INTERVAL,
   onConnect: connectionParams => getContext(connectionParams['meteor-login-token']),
 }, {
   server: WebApp.httpServer,
