@@ -36,13 +36,6 @@ const subscriptionClient = new SubscriptionClient(
   },
 );
 
-subscriptionClient.onDisconnected((...args) => {
-  console.log('ws disconnected', ...args);
-});
-subscriptionClient.onError((error) => {
-  console.log('ws error', error);
-});
-
 const wsLink = new WebSocketLink(subscriptionClient);
 const httpLink = new BatchHttpLink({ uri: GRAPHQL_URL });
 const meteorAccountsLink = new ApolloLink((operation, forward) => {
