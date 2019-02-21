@@ -17,7 +17,7 @@ const StyledHelp = styled.div`
 `;
 
 const StyledGuidanceIcon = styled(GuidanceIcon)`
-  width: auto;
+  width: 31px;
   padding: 0;
   margin-right: 1.25rem;
   i {
