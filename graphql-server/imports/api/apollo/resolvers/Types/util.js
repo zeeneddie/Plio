@@ -99,9 +99,12 @@ export const resolveCustomerElementStatus = async (root, args, context) => {
 };
 
 export const resolveLinkedGoals = createRelationResolver(
-  (root, args, { loaders: { Goal: { byId } } }) => ({
+  (root, { isDeleted = false }, { loaders: { Goal: { byQuery } } }) => ({
     documentType: DocumentTypes.GOAL,
-    loader: byId,
+    load: ids => byQuery.load({
+      isDeleted,
+      _id: { $in: ids },
+    }),
   }),
 );
 
