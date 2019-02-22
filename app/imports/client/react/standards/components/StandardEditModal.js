@@ -12,6 +12,7 @@ import {
   RelationsAdapter,
   EntitiesField,
   NotifySubcard,
+  ImprovementPlanSubcard,
 } from '../../components';
 import { DocumentTypes } from '../../../../share/constants';
 import categorize from '../../forms/decorators/categorize';
@@ -111,6 +112,7 @@ export const StandardEditModal = ({
                       guidelines={rkGuidelines}
                       render={RisksSubcard}
                     />
+                    <ImprovementPlanSubcard />
                     <EntitiesField
                       {...{ organizationId, refetchQueries, linkedTo }}
                       name="lessons"
