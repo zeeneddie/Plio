@@ -20,6 +20,8 @@ import { swal } from '../../../util';
 import { removeUser } from '../../../../api/organizations/methods';
 import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 
+const SUCCESS_ALERT_TIMER = 3500;
+
 const UserDeleteModal = ({
   isOpen,
   toggle,
@@ -41,11 +43,13 @@ const UserDeleteModal = ({
                 // right modal button will permanently show saving state and disable the button.
                 // The user then must close the modal and reopen it to proceed
                 // swal doesn't call callback on cancel for some reason
-                onSubmit={({ user: { value } = {} }) => swal.promise({
-                  text: `${userName} will be removed from the organization`,
-                  confirmButtonText: 'remove',
-                  successTitle: 'Removed!',
-                  successText: `${userName} has been removed from this organization`,
+                onSubmit={({ user: { value, label: newOwner } = {} }) => swal.promise({
+                  text: `${userName} will be deleted from the organization`,
+                  confirmButtonText: 'Delete',
+                  successTitle: 'Deleted!',
+                  successTimer: SUCCESS_ALERT_TIMER,
+                  successText: `User "${userName}" has been deleted. ` +
+                  `Documents owned by ${userName} have been reassigned to "${newOwner}"`,
                 }, () => reassignOwnership({
                   variables: {
                     input: {
