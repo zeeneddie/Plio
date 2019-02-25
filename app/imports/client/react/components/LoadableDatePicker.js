@@ -55,8 +55,8 @@ const LoadableDatePicker = Loadable.Map({
         <StyledButton
           className="btn-icon"
           onClick={() => {
-            onChange(null);
             if (onDelete) onDelete();
+            else onChange(null);
           }}
         >
           <Icon name="times-circle" />

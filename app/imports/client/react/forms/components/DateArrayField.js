@@ -5,17 +5,20 @@ import { FieldArray } from 'react-final-form-arrays';
 import { Icon, Button } from '../../components';
 import DatePickerField from './DatePickerField';
 
-const DateArrayField = ({ name, ...props }) => (
+const DateArrayField = ({ name, onChange, ...props }) => (
   <FieldArray {...{ name }} subscription={{ value: 1 }}>
     {({ fields }) => (
       <Fragment>
         {fields.map((fieldName, index) => (
           <DatePickerField
-            {...props}
+            {...{ onChange, ...props }}
             isClearable
             key={fieldName}
             name={`${fieldName}.date`}
-            onDelete={() => fields.remove(index)}
+            onDelete={() => {
+              fields.remove(index);
+              onChange();
+            }}
           />
         ))}
         <Button onClick={() => fields.push({})}>
@@ -28,6 +31,7 @@ const DateArrayField = ({ name, ...props }) => (
 
 DateArrayField.propTypes = {
   name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default DateArrayField;
