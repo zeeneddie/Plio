@@ -112,7 +112,7 @@ export const StandardEditModal = ({
                       guidelines={rkGuidelines}
                       render={RisksSubcard}
                     />
-                    <ImprovementPlanSubcard />
+                    <ImprovementPlanSubcard {...{ organizationId }} />
                     <EntitiesField
                       {...{ organizationId, refetchQueries, linkedTo }}
                       name="lessons"

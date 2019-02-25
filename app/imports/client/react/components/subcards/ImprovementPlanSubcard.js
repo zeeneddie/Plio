@@ -1,5 +1,7 @@
 import React from 'react';
-import { CardTitle, FormGroup } from 'reactstrap';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { CardTitle } from 'reactstrap';
 
 import {
   Subcard,
@@ -7,9 +9,17 @@ import {
   SubcardBody,
   Pull,
   CardBlock,
-} from '../../components';
+  Icon,
+  ImprovementPlanForm,
+} from '../';
 
-const ImprovementPlanSubcard = () => (
+const StyledIcon = styled(Icon)`
+  font-size: 14px;
+  line-height: 20px;
+  color: #777;
+`;
+
+const ImprovementPlanSubcard = ({ organizationId }) => (
   <Subcard>
     <SubcardHeader>
       <Pull left>
@@ -19,18 +29,20 @@ const ImprovementPlanSubcard = () => (
       </Pull>
       <Pull right>
         <CardTitle>
-          Icon
+          <StyledIcon name="align-left" />
         </CardTitle>
       </Pull>
     </SubcardHeader>
     <SubcardBody>
       <CardBlock>
-        <FormGroup>
-          Form of Improvement Plan
-        </FormGroup>
+        <ImprovementPlanForm {...{ organizationId }} />
       </CardBlock>
     </SubcardBody>
   </Subcard>
 );
+
+ImprovementPlanSubcard.propTypes = {
+  organizationId: PropTypes.string.isRequired,
+};
 
 export default ImprovementPlanSubcard;

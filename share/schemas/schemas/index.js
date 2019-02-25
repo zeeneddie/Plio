@@ -235,7 +235,7 @@ export const ImprovementPlanSchema = new SimpleSchema([
     desiredOutcome: {
       type: String,
       optional: true,
-      // max: ?
+      max: StringLimits.description.max,
     },
     targetDate: {
       type: Date,

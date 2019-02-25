@@ -4,8 +4,15 @@ import React from 'react';
 import Loadable from 'react-loadable';
 import moment from 'moment';
 import styled from 'styled-components';
+import { Button } from 'reactstrap';
 
+import { Icon } from './';
 import Preloader from './Preloader';
+
+const StyledButton = styled(Button)`
+  margin-left: 15px;
+  height: 35px;
+`;
 
 const LoadableDatePicker = Loadable.Map({
   loader: {
@@ -17,9 +24,13 @@ const LoadableDatePicker = Loadable.Map({
     DatePicker: { default: DatePicker },
   }, {
     selected,
+    placeholderText,
+    placeholderDate,
+    isClearable,
     dateFormat = 'DD MMM YYYY',
     className,
     readOnly = true,
+    onChange,
     ...props
   }) => (
     // trick to get around date picker unable to pass className to input wrapper...
@@ -29,8 +40,21 @@ const LoadableDatePicker = Loadable.Map({
         className="form-control"
         selected={selected ? moment(selected) : null}
         popperClassName={className}
-        {...{ dateFormat, readOnly, ...props }}
+        placeholderText={
+          placeholderDate ? moment(placeholderDate).format(dateFormat) : placeholderText
+        }
+        {...{
+          dateFormat,
+          readOnly,
+          onChange,
+          ...props,
+        }}
       />
+      {isClearable && (
+        <StyledButton className="btn-icon" onClick={() => onChange(null)}>
+          <Icon name="times-circle" />
+        </StyledButton>
+      )}
     </div>
   ),
 });
@@ -38,7 +62,9 @@ const LoadableDatePicker = Loadable.Map({
 // Default display is inline-block
 // Maybe this should be an option?
 export default styled(LoadableDatePicker)`
+  display: flex;
   & > div {
+    flex: 1;
     & > .react-datepicker-wrapper {
       display: block;
   
