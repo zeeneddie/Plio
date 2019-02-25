@@ -19,7 +19,7 @@ const StyledIcon = styled(Icon)`
   color: #777;
 `;
 
-const ImprovementPlanSubcard = ({ organizationId }) => (
+const ImprovementPlanSubcard = ({ save, name, organizationId }) => (
   <Subcard>
     <SubcardHeader>
       <Pull left>
@@ -35,13 +35,15 @@ const ImprovementPlanSubcard = ({ organizationId }) => (
     </SubcardHeader>
     <SubcardBody>
       <CardBlock>
-        <ImprovementPlanForm {...{ organizationId }} />
+        <ImprovementPlanForm {...{ save, name, organizationId }} />
       </CardBlock>
     </SubcardBody>
   </Subcard>
 );
 
 ImprovementPlanSubcard.propTypes = {
+  save: PropTypes.func,
+  name: PropTypes.string.isRequired,
   organizationId: PropTypes.string.isRequired,
 };
 

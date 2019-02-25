@@ -31,6 +31,7 @@ const LoadableDatePicker = Loadable.Map({
     className,
     readOnly = true,
     onChange,
+    onDelete,
     ...props
   }) => (
     // trick to get around date picker unable to pass className to input wrapper...
@@ -51,7 +52,13 @@ const LoadableDatePicker = Loadable.Map({
         }}
       />
       {isClearable && (
-        <StyledButton className="btn-icon" onClick={() => onChange(null)}>
+        <StyledButton
+          className="btn-icon"
+          onClick={() => {
+            onChange(null);
+            if (onDelete) onDelete();
+          }}
+        >
           <Icon name="times-circle" />
         </StyledButton>
       )}

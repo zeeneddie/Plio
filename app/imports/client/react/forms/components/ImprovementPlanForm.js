@@ -8,13 +8,14 @@ import {
   DatePickerField,
   UserSelectInput,
 } from '../../components';
+import DateArrayField from './DateArrayField';
 
-const ImprovementPlanForm = ({ save, organizationId }) => (
+const ImprovementPlanForm = ({ save, name, organizationId }) => (
   <Fragment>
     <FormField sm={7}>
       Statement of desired outcome
       <TextareaField
-        name="desiredOutcome"
+        name={`${name}.desiredOutcome`}
         onBlur={save}
         placeholder="Statement of desired outcome"
         maxLength={StringLimits.description.max}
@@ -24,16 +25,24 @@ const ImprovementPlanForm = ({ save, organizationId }) => (
       Target date for desired outcome
       <DatePickerField
         isClearable
+        name={`${name}.targetDate`}
         placeholderDate={new Date()}
-        name="targetDate"
         onChange={save}
       />
     </FormField>
-    {/* TODO add Improvement plan review dates */}
+    <FormField sm={7}>
+      Improvement plan review dates
+      <DateArrayField
+        isClearable
+        name={`${name}.reviewDates`}
+        placeholderDate={new Date()}
+        onChange={save}
+      />
+    </FormField>
     <FormField sm={7}>
       Owner
       <UserSelectInput
-        name="owner"
+        name={`${name}.owner`}
         placeholder="Owner"
         onChange={save}
         {...{ organizationId }}
@@ -45,6 +54,7 @@ const ImprovementPlanForm = ({ save, organizationId }) => (
 
 ImprovementPlanForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   save: PropTypes.func,
 };
 

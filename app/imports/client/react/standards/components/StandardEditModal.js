@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import arrayMutators from 'final-form-arrays';
 import React, { Fragment } from 'react';
 import { noop } from 'plio-util';
 
@@ -52,6 +53,7 @@ export const StandardEditModal = ({
     <EntityModalForm
       {...{ initialValues, onSubmit }}
       decorators={[categorize, shouldRenderSource2]}
+      mutators={arrayMutators}
       validate={validateStandardUpdate}
     >
       {({ handleSubmit }) => (
@@ -112,7 +114,11 @@ export const StandardEditModal = ({
                       guidelines={rkGuidelines}
                       render={RisksSubcard}
                     />
-                    <ImprovementPlanSubcard {...{ organizationId }} />
+                    <ImprovementPlanSubcard
+                      {...{ organizationId }}
+                      name="improvementPlan"
+                      save={handleSubmit}
+                    />
                     <EntitiesField
                       {...{ organizationId, refetchQueries, linkedTo }}
                       name="lessons"

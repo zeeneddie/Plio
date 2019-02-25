@@ -54,6 +54,7 @@ const getInitialValues = compose(
     'departments',
     'projects',
     'notify',
+    'improvementPlan',
   ]),
 );
 

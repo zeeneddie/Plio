@@ -68,6 +68,19 @@ fragment StandardCard on Standard {
       fullName
     }
   }
+  improvementPlan {
+    desiredOutcome
+    targetDate
+    reviewDates {
+      date
+    }
+    owner {
+      _id
+      profile {
+        fullName
+      }
+    }
+  }
   lessons {
     ...LessonCard
   }
