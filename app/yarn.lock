@@ -4096,7 +4096,7 @@ pify@^3.0.0:
 
 "plio-util@https://github.com/Pliohub/plio-util.git#I1908-rewrite-standard-edit-modal":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#000da256d020fe038d244d9de07e060212ce681b"
+  resolved "https://github.com/Pliohub/plio-util.git#53c6b5b3ccdd0764d712779373acba4c5a628775"
 
 pluralize@^2.0.0:
   version "2.0.0"

@@ -9,6 +9,7 @@ import {
   isNil,
   pathOr,
   repeat,
+  map,
 } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
 import {
@@ -31,6 +32,17 @@ import { Query as Queries, Mutation as Mutations } from '../../../graphql';
 const getSourceInitialValue = unless(isNil, pick(['type', 'fileId', 'url']));
 const getStandard = pathOr({}, repeat('standard', 2));
 
+const getImprovementPlanInitialValue = compose(
+  over(lenses.reviewDates, map(pick(['date']))),
+  over(lenses.owner, getUserOptions),
+  pick([
+    'desiredOutcome',
+    'targetDate',
+    'reviewDates',
+    'owner',
+  ]),
+);
+
 const getInitialValues = compose(
   over(lenses.projects, mapEntitiesToOptions),
   over(lenses.departments, mapEntitiesToOptions),
@@ -40,6 +52,7 @@ const getInitialValues = compose(
   over(lenses.source1, getSourceInitialValue),
   over(lenses.source2, getSourceInitialValue),
   over(lenses.notify, mapUsersToOptions),
+  over(lenses.improvementPlan, getImprovementPlanInitialValue),
   pick([
     'title',
     'owner',
@@ -158,6 +171,12 @@ const StandardEditContainer = ({
                 section: { value: sectionId } = {},
                 type: { value: typeId } = {},
                 owner: { value: owner } = {},
+                improvementPlan: {
+                  desiredOutcome,
+                  targetDate,
+                  reviewDates,
+                  owner: { value: improvementPlanOwner } = {},
+                },
               } = values;
 
               return updateStandard({
@@ -167,6 +186,12 @@ const StandardEditContainer = ({
                     departmentsIds: getValues(departments),
                     projectIds: getValues(projects),
                     notify: getValues(notify),
+                    improvementPlan: {
+                      desiredOutcome,
+                      targetDate,
+                      reviewDates,
+                      owner: improvementPlanOwner,
+                    },
                     source1,
                     source2,
                     title,

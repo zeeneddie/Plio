@@ -253,6 +253,7 @@ export const ImprovementPlanSchema = new SimpleSchema([
     'reviewDates.$._id': {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
+      optional: true,
     },
     owner: {
       type: String,
