@@ -1,5 +1,5 @@
 <template name="QuillEditor">
-  <div class="quill" {{b "focusout: update, class: { 'ql-expanded': isExpanded }"}}>
+  <div class="quill" {{b "focusout: update, input: onInput, class: { 'ql-expanded': isExpanded }"}}>
 
    <!-- Create the toolbar container -->
   <div class="rich-text-controls">
