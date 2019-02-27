@@ -10,7 +10,7 @@ import CanvasBlock from './CanvasBlock';
 import CustomerSegmentsHelp from './CustomerSegmentsHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { CanvasSections, CanvasTypes } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const CustomerSegments = ({ organizationId }) => (
   <Query
@@ -23,6 +23,7 @@ const CustomerSegments = ({ organizationId }) => (
         {...{ organizationId }}
         label="Customer segments"
         sectionName={CanvasSections[CanvasTypes.CUSTOMER_SEGMENT]}
+        documentType={DocumentTypes.CUSTOMER_SEGMENT}
         help={<CustomerSegmentsHelp />}
         items={customerSegments}
         renderModal={({ isOpen, toggle, onLink }) => (

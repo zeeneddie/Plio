@@ -8,7 +8,7 @@ type RelationPayload {
 }
 
 input RelInput {
-  documentId: ID!
+  documentId: ID
   documentType: String!
 }
 

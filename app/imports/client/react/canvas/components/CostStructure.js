@@ -10,7 +10,7 @@ import CanvasBlock from './CanvasBlock';
 import CostStructureHelp from './CostStructureHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { CanvasSections, CanvasTypes } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const CostStructure = ({ organizationId }) => (
   <Query
@@ -24,6 +24,7 @@ const CostStructure = ({ organizationId }) => (
         twoColumn
         label="Cost structure"
         sectionName={CanvasSections[CanvasTypes.COST_LINE]}
+        documentType={DocumentTypes.COST_LINE}
         help={<CostStructureHelp />}
         items={costLines}
         renderModal={({ isOpen, toggle, onLink }) => (

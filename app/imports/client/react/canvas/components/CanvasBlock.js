@@ -27,6 +27,7 @@ const CanvasBlock = ({
   sectionName,
   chartButtonIcon,
   twoColumn,
+  documentType,
 }) => {
   const isEmpty = !items.length;
 
@@ -64,6 +65,7 @@ const CanvasBlock = ({
               renderChartModal,
               chartButtonIcon,
               organizationId,
+              documentType,
             }}
           />
         </CanvasSection>
@@ -87,6 +89,7 @@ CanvasBlock.propTypes = {
   renderChartModal: PropTypes.func,
   chartButtonIcon: PropTypes.string,
   twoColumn: PropTypes.bool,
+  documentType: PropTypes.string.isRequired,
 };
 
 export default CanvasBlock;

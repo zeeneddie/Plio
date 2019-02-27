@@ -9,7 +9,7 @@ import CanvasBlock from './CanvasBlock';
 import KeyResourcesHelp from './KeyResourcesHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { CanvasSections, CanvasTypes } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const KeyResources = ({ organizationId }) => (
   <Query
@@ -22,6 +22,7 @@ const KeyResources = ({ organizationId }) => (
         {...{ organizationId }}
         label="Key resources"
         sectionName={CanvasSections[CanvasTypes.KEY_RESOURCE]}
+        documentType={DocumentTypes.KEY_RESOURCE}
         help={<KeyResourcesHelp />}
         items={keyResources}
         renderModal={({ isOpen, toggle, onLink }) => (

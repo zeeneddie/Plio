@@ -9,7 +9,7 @@ import CanvasBlock from './CanvasBlock';
 import KeyActivitiesHelp from './KeyActivitiesHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { CanvasSections, CanvasTypes } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const KeyActivities = ({ organizationId }) => (
   <Query
@@ -22,6 +22,7 @@ const KeyActivities = ({ organizationId }) => (
         {...{ organizationId }}
         label="Key activities"
         sectionName={CanvasSections[CanvasTypes.KEY_ACTIVITY]}
+        documentType={DocumentTypes.KEY_ACTIVITY}
         help={<KeyActivitiesHelp />}
         items={keyActivities}
         renderModal={({ isOpen, toggle, onLink }) => (

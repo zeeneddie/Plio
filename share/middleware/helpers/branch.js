@@ -1,5 +1,5 @@
 export default (pred, middleware1, middleware2) => async (next, root, args, context) => {
-  if (pred(root, args, context)) {
+  if (await pred(root, args, context)) {
     return middleware1(next, root, args, context);
   }
 
