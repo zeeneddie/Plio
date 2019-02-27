@@ -165,7 +165,7 @@ NonconformityEditForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   save: PropTypes.func,
-  nonconformityId: PropTypes.string.isRequired,
+  nonconformityId: PropTypes.string,
   refetchQueries: PropTypes.func,
   // eslint-disable-next-line react/no-typos
   guidelines: Magnitudes.propTypes.guidelines,

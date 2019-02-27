@@ -68,7 +68,7 @@ export const RiskEditModal = ({
                     userId,
                     refetchQueries,
                   }}
-                  riskId={risk._id}
+                  riskId={risk && risk._id}
                   save={handleSubmit}
                 />
               </CardBlock>

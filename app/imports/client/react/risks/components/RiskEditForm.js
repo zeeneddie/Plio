@@ -92,7 +92,7 @@ const RiskEditForm = ({
 RiskEditForm.propTypes = {
   sequentialId: PropTypes.string,
   organizationId: PropTypes.string.isRequired,
-  riskId: PropTypes.string.isRequired,
+  riskId: PropTypes.string,
   refetchQueries: PropTypes.func,
   userId: PropTypes.string,
   save: PropTypes.func,

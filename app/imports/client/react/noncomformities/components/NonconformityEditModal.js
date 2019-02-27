@@ -75,7 +75,7 @@ export const NonconformityEditModal = ({
                     currency,
                     refetchQueries,
                   }}
-                  nonconformityId={nonconformity._id}
+                  nonconformityId={nonconformity && nonconformity._id}
                   save={handleSubmit}
                 />
               </CardBlock>

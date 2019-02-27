@@ -21,8 +21,8 @@ const StandardSelectInput = ({
       query: Query.STANDARD_LIST,
       variables: { organizationId },
     })}
-    onSelect={({ value }) => onLink(value)}
-    onDelete={({ value }) => onUnlink(value)}
+    onSelect={onLink && (({ value }) => onLink(value))}
+    onDelete={onUnlink && (({ value }) => onUnlink(value))}
   />
 );
 
