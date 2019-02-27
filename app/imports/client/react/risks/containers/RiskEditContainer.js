@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   pick,
   compose,
@@ -71,122 +71,139 @@ const getInitialValues = compose(
 
 const RiskEditContainer = ({
   risk: _risk = null,
-  riskId,
+  riskId = _risk && _risk._id,
   organizationId,
   isOpen,
   toggle,
   onDelete,
   fetchPolicy = ApolloFetchPolicies.CACHE_AND_NETWORK,
   ...props
-}) => (
-  <WithState
-    initialState={{
-      risk: _risk,
-      initialValues: unless(isNil, getInitialValues, _risk),
-    }}
-  >
-    {({ state: { initialValues, risk }, setState }) => (
-      <Composer
-        components={[
-          /* eslint-disable react/no-children-prop */
-          <Query
-            {...{ fetchPolicy }}
-            query={Queries.RISK_CARD}
-            variables={{ _id: riskId, organizationId }}
-            skip={!isOpen || !!_risk}
-            onCompleted={data => setState({
-              initialValues: getInitialValues(getRisk(data)),
-              risk: getRisk(data),
-            })}
-            children={noop}
-          />,
-          <Mutation
-            mutation={Mutations.UPDATE_RISK}
-            children={noop}
-            onCompleted={({ updateRisk }) => setState({ risk: updateRisk })}
-          />,
-          <Mutation
-            mutation={Mutations.DELETE_RISK}
-            children={noop}
-            refetchQueries={() => [
-              { query: Queries.RISK_LIST, variables: { organizationId } },
-              { query: Queries.CANVAS_PAGE, variables: { organizationId } },
-            ]}
-          />,
-          <Mutation
-            mutation={Mutations.COMPLETE_RISK_ANALYSIS}
-            children={noop}
-            onCompleted={({ completeRiskAnalysis }) => {
-              const newRisk = mergeDeepRight(risk, completeRiskAnalysis);
-              setState({ risk: newRisk, initialValues: getInitialValues(newRisk) });
-            }}
-          />,
-          <Mutation
-            mutation={Mutations.UNDO_RISK_ANALYSIS_COMPLETION}
-            children={noop}
-            onCompleted={({ undoRiskAnalysisCompletion }) => {
-              const newRisk = mergeDeepRight(risk, undoRiskAnalysisCompletion);
-              setState({ risk: newRisk, initialValues: getInitialValues(newRisk) });
-            }}
-          />,
-          /* eslint-enable react/no-children-prop */
-        ]}
-      >
-        {([
-          { data, loading, error },
-          updateRisk,
-          deleteRisk,
-          completeRiskAnalysis,
-          undoRiskAnalysisCompletion,
-        ]) => renderComponent({
-          ...props,
-          error,
-          organizationId,
-          isOpen,
-          toggle,
-          initialValues,
-          risk,
-          loading,
-          userId: path(['user', '_id'], data),
-          guidelines: path(['organization', 'rkGuidelines'], data),
-          onSubmit: async (values, form) => {
-            const currentValues = getInitialValues(risk);
-            const difference = diff(values, currentValues);
+}) => {
+  const refetchQueries = useCallback(() => [{
+    query: Queries.RISK_CARD,
+    variables: { _id: riskId, organizationId },
+  }], [riskId]);
+  return (
+    <WithState
+      initialState={{
+        risk: _risk,
+        initialValues: unless(isNil, getInitialValues, _risk),
+      }}
+    >
+      {({ state: { initialValues, risk }, setState }) => (
+        <Composer
+          components={[
+            /* eslint-disable react/no-children-prop */
+            <Query
+              {...{ fetchPolicy }}
+              query={Queries.RISK_CARD}
+              variables={{ _id: riskId, organizationId }}
+              skip={!isOpen || !!_risk}
+              onCompleted={data => setState({
+                initialValues: getInitialValues(getRisk(data)),
+                risk: getRisk(data),
+              })}
+              children={noop}
+            />,
+            <Mutation
+              mutation={Mutations.UPDATE_RISK}
+              children={noop}
+              onCompleted={({ updateRisk }) => setState({ risk: updateRisk })}
+            />,
+            <Mutation
+              mutation={Mutations.DELETE_RISK}
+              children={noop}
+              refetchQueries={() => [
+                { query: Queries.RISK_LIST, variables: { organizationId } },
+                { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+              ]}
+            />,
+            <Mutation
+              mutation={Mutations.COMPLETE_RISK_ANALYSIS}
+              children={noop}
+              onCompleted={({ completeRiskAnalysis }) => {
+                const newRisk = mergeDeepRight(risk, completeRiskAnalysis);
+                setState({ risk: newRisk, initialValues: getInitialValues(newRisk) });
+              }}
+            />,
+            <Mutation
+              mutation={Mutations.UNDO_RISK_ANALYSIS_COMPLETION}
+              children={noop}
+              onCompleted={({ undoRiskAnalysisCompletion }) => {
+                const newRisk = mergeDeepRight(risk, undoRiskAnalysisCompletion);
+                setState({ risk: newRisk, initialValues: getInitialValues(newRisk) });
+              }}
+            />,
+            /* eslint-enable react/no-children-prop */
+          ]}
+        >
+          {([
+            { data, loading, error },
+            updateRisk,
+            deleteRisk,
+            completeRiskAnalysis,
+            undoRiskAnalysisCompletion,
+          ]) => renderComponent({
+            ...props,
+            error,
+            organizationId,
+            isOpen,
+            toggle,
+            initialValues,
+            risk,
+            loading,
+            refetchQueries,
+            userId: path(['user', '_id'], data),
+            guidelines: path(['organization', 'rkGuidelines'], data),
+            onSubmit: async (values, form) => {
+              const currentValues = getInitialValues(risk);
+              const difference = diff(values, currentValues);
 
-            if (!difference) return undefined;
+              if (!difference) return undefined;
 
-            const {
-              title,
-              description = '',
-              statusComment = '',
-              standards,
-              departments,
-              projects,
-              originator: { value: originatorId },
-              owner: { value: ownerId },
-              type: { value: typeId },
-              analysis: {
-                executor: { value: executor },
-                targetDate,
-                completedBy: { value: completedBy },
-                completedAt,
-                completionComments = '',
-                isCompleted,
-              } = {},
-            } = values;
+              const {
+                title,
+                description = '',
+                statusComment = '',
+                departments,
+                projects,
+                originator: { value: originatorId },
+                owner: { value: ownerId },
+                type: { value: typeId },
+                analysis: {
+                  executor: { value: executor },
+                  targetDate,
+                  completedBy: { value: completedBy },
+                  completedAt,
+                  completionComments = '',
+                  isCompleted,
+                } = {},
+              } = values;
 
-            const isCompletedDiff = find(
-              where({ path: equals(['analysis', 'isCompleted']) }),
-              difference,
-            );
+              const isCompletedDiff = find(
+                where({ path: equals(['analysis', 'isCompleted']) }),
+                difference,
+              );
 
-            if (isCompletedDiff) {
-              if (isCompleted) {
-                return completeRiskAnalysis({
+              if (isCompletedDiff) {
+                if (isCompleted) {
+                  return completeRiskAnalysis({
+                    variables: {
+                      input: {
+                        _id: risk._id,
+                        completionComments,
+                      },
+                    },
+                  }).then(noop).catch((err) => {
+                    form.reset(currentValues);
+                    throw err;
+                  });
+                }
+
+                return undoRiskAnalysisCompletion({
                   variables: {
                     input: {
                       _id: risk._id,
-                      completionComments,
                     },
                   },
                 }).then(noop).catch((err) => {
@@ -195,62 +212,50 @@ const RiskEditContainer = ({
                 });
               }
 
-              return undoRiskAnalysisCompletion({
+              return updateRisk({
                 variables: {
                   input: {
                     _id: risk._id,
+                    title,
+                    description,
+                    statusComment,
+                    departmentsIds: getValues(departments),
+                    projectIds: getValues(projects),
+                    originatorId,
+                    ownerId,
+                    typeId,
+                    analysis: {
+                      executor,
+                      targetDate,
+                      completedBy,
+                      completedAt,
+                      completionComments,
+                    },
                   },
                 },
               }).then(noop).catch((err) => {
                 form.reset(currentValues);
                 throw err;
               });
-            }
+            },
+            onDelete: () => {
+              if (onDelete) return onDelete();
 
-            return updateRisk({
-              variables: {
-                input: {
-                  _id: risk._id,
-                  title,
-                  description,
-                  statusComment,
-                  standardsIds: getValues(standards),
-                  departmentsIds: getValues(departments),
-                  projectIds: getValues(projects),
-                  originatorId,
-                  ownerId,
-                  typeId,
-                  analysis: {
-                    executor,
-                    targetDate,
-                    completedBy,
-                    completedAt,
-                    completionComments,
-                  },
+              return swal.promise({
+                text: `The risk "${risk.title}" will be deleted`,
+                confirmButtonText: 'Delete',
+              }, () => deleteRisk({
+                variables: {
+                  input: { _id: risk._id },
                 },
-              },
-            }).then(noop).catch((err) => {
-              form.reset(currentValues);
-              throw err;
-            });
-          },
-          onDelete: () => {
-            if (onDelete) return onDelete();
-
-            return swal.promise({
-              text: `The risk "${risk.title}" will be deleted`,
-              confirmButtonText: 'Delete',
-            }, () => deleteRisk({
-              variables: {
-                input: { _id: risk._id },
-              },
-            })).then(toggle || noop);
-          },
-        })}
-      </Composer>
-    )}
-  </WithState>
-);
+              })).then(toggle || noop);
+            },
+          })}
+        </Composer>
+      )}
+    </WithState>
+  );
+};
 
 RiskEditContainer.propTypes = {
   organizationId: PropTypes.string.isRequired,

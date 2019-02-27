@@ -9,6 +9,8 @@ const mapStandardsToOptions = ({ data: { standards: { standards } } }) =>
   mapEntitiesToOptions(standards);
 
 const StandardSelectInput = ({
+  onLink,
+  onUnlink,
   organizationId,
   transformOptions = mapStandardsToOptions,
   ...props
@@ -19,11 +21,15 @@ const StandardSelectInput = ({
       query: Query.STANDARD_LIST,
       variables: { organizationId },
     })}
+    onSelect={({ value }) => onLink(value)}
+    onDelete={({ value }) => onUnlink(value)}
   />
 );
 
 StandardSelectInput.propTypes = {
   organizationId: PropTypes.string.isRequired,
+  onLink: PropTypes.func,
+  onUnlink: PropTypes.func,
   transformOptions: PropTypes.func,
 };
 

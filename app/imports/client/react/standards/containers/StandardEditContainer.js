@@ -87,7 +87,7 @@ const enhance = composeWithTracker(
 
 const StandardEditContainer = ({
   standard: _standard = null,
-  standardId,
+  standardId = _standard && _standard._id,
   organizationId,
   isOpen,
   toggle,
