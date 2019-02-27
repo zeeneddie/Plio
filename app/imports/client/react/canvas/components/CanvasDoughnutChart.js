@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { append } from 'ramda';
 import { pure } from 'recompose';
 
-import { CanvasDoughnutChartSize } from '../../../../api/constants';
+import { DefaultChartAspectRatio } from '../../../../api/constants';
 import { generateColors, getOtherPercent } from '../helpers';
 import { LoadableDoughnutChart, CardBlock } from '../../components';
 
@@ -22,13 +22,14 @@ const CanvasDoughnutChart = ({
   ...props
 }) => {
   const otherPercent = getOtherPercent(data);
+  const aspectRatio = window.innerHeight / window.innerWidth;
 
   return (
     <StyledCardBlock>
       <LoadableDoughnutChart
         {...props}
-        width={CanvasDoughnutChartSize.WIDTH}
-        height={CanvasDoughnutChartSize.HEIGHT}
+        width={DefaultChartAspectRatio.WIDTH}
+        height={aspectRatio <= 1 ? DefaultChartAspectRatio.HEIGHT : aspectRatio}
         data={{
           datasets: [{
             data: otherPercent ? append(otherPercent, data) : data,

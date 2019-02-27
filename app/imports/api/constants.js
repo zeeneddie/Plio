@@ -416,14 +416,9 @@ export const HomeRouteNames = {
 
 export const OptionNone = { label: 'None', value: null };
 
-export const CanvasDoughnutChartSize = {
-  WIDTH: 566,
-  HEIGHT: 566,
-};
-
-export const CanvasBubbleChartSize = {
-  WIDTH: 566,
-  HEIGHT: 566,
+export const DefaultChartAspectRatio = {
+  WIDTH: 1,
+  HEIGHT: 1,
 };
 
 export const CriticalityLabels = {

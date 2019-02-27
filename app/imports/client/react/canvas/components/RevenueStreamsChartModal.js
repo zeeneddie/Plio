@@ -46,6 +46,18 @@ const StyledSwitchView = styled(SwitchView)`
   }
 `;
 
+const StyledChartModal = styled(ChartModal)`
+  .modal-body > .card-block:last-of-type {
+    height: calc(100vh - 185px);
+    width: calc(100vh - 185px);
+  }
+  @media (max-width: 600px) {
+    .modal-body .card-block:last-of-type {
+      height: calc(100vh - 126px);
+    }
+  }
+`;
+
 const RevenueStreamsChartModal = ({ isOpen, toggle, organizationId }) => (
   <WithState
     initialState={{
@@ -54,10 +66,9 @@ const RevenueStreamsChartModal = ({ isOpen, toggle, organizationId }) => (
     }}
   >
     {({ state, setState }) => (
-      <ChartModal
+      <StyledChartModal
         {...{ isOpen, toggle }}
         error={state.error}
-        bodyHeight="calc(100vh - 185px)"
         noForm
       >
         <EntityModalHeader label="Revenue streams" />
@@ -119,7 +130,7 @@ const RevenueStreamsChartModal = ({ isOpen, toggle, organizationId }) => (
             </Query>
           </StyledSwitchView>
         </EntityModalBody>
-      </ChartModal>
+      </StyledChartModal>
     )}
   </WithState>
 );

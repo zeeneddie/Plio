@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { StyledMixins } from 'plio-util';
 
 import EntityModalNext from '../EntityModalNext/EntityModal';
 
@@ -13,19 +12,20 @@ const StyledEntityModalNext = styled(({ bodyHeight, ...rest }) => <EntityModalNe
     text-align: left;
   }
   .modal-body > .card-block:last-of-type {
-    ${({ bodyHeight = 'calc(100vh - 115px)' }) => `
-      height: ${bodyHeight};
-      width: ${bodyHeight};
-      max-width: 100%;
-    `}
+    height: calc(100vh - 115px);
+    width: calc(100vh - 115px);
+    max-width: 100%;
   }
-  ${StyledMixins.media.mobile`
+  @media (max-width: 600px) {
     display: block;
     .modal-body .card-block:last-of-type {
-      height: auto;
       width: auto;
+      height: calc(100vh - 56px);
     }
-  `};
+    .modal-content {
+      margin: 0;
+    }
+  }
 `;
 
 const ChartModal = props => (
