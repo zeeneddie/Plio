@@ -30,7 +30,7 @@ export const NonconformityAddForm = ({ organizationId, guidelines }) => (
         maxLength={StringLimits.description.max}
       />
     </FormField>
-    {/* TODO fix StandardSelectInput in NonconformityAddForm or better get rid of it */}
+    {/* TODO consider the ability to get rid of StandardSelectInput in "create" forms */}
     {/* <FormField>
       Standard(s)
       <StandardSelectInput
