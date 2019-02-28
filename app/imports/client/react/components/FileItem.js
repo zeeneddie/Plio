@@ -1,16 +1,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
+import styled from 'styled-components';
 import { _ } from 'meteor/underscore';
 import { ButtonGroup, Button as ButtonRS } from 'reactstrap';
 
-import Button from '../../../../components/Buttons/Button';
-import Icon from '../../../../components/Icons/Icon';
-import { FILE_STATUS_MAP } from '../../../../../../share/constants';
+import Button from './Buttons/Button';
+import Icon from './Icons/Icon';
+import { FileStatuses } from '../../../share/constants';
 
 const isUploaded = ({ progress }) => progress === 1;
 
-const isFailed = ({ status }) => status === 'failed' || status === 'terminated';
+const isFailed = ({ status }) =>
+  status === FileStatuses.FAILED || status === FileStatuses.TERMINATED;
+
+const FileButton = styled(Button)`
+  max-width: 230px;
+`;
 
 const FileItem = ({
   file: {
@@ -37,7 +43,7 @@ const FileItem = ({
   return (
     <div className="file-item-read">
       <ButtonGroup>
-        <Button
+        <FileButton
           color="secondary"
           className={buttonCName}
           href={url}
@@ -51,7 +57,7 @@ const FileItem = ({
           <span>{name}</span>
 
           <div className={progressBarCName} style={styles} />
-        </Button>
+        </FileButton>
         {!!onRemove && (
           <ButtonRS className="btn-icon">
             <Icon name="times-circle" onClick={onRemove} />
@@ -68,7 +74,7 @@ FileItem.propTypes = {
     url: PropTypes.string,
     extension: PropTypes.string,
     progress: PropTypes.number,
-    status: PropTypes.oneOf(_.values(FILE_STATUS_MAP)),
+    status: PropTypes.oneOf(_.values(FileStatuses)),
   }).isRequired,
   onRemove: PropTypes.func,
 };

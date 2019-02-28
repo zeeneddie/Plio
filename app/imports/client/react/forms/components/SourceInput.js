@@ -75,7 +75,7 @@ const SourceInput = ({
                 {isEditMode ? (
                   <FileField
                     name="fileId"
-                    withoutUploader={!isEditMode}
+                    upload={isEditMode}
                     onChange={handleSubmit}
                     onAfterUpload={onAfterSourceUpload}
                     slingshotDirective="standardFiles"
@@ -87,7 +87,7 @@ const SourceInput = ({
                 ) : (
                   <FileCreateField
                     name="file"
-                    withoutUploader
+                    upload={false}
                     onChange={handleSubmit}
                   />
                 )}

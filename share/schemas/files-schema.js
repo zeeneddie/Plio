@@ -2,7 +2,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { _ } from 'meteor/underscore';
 
 import { BaseEntitySchema, OrganizationIdSchema, ProgressSchema } from './schemas';
-import { FILE_STATUS_MAP } from '../constants';
+import { FileStatuses } from '../constants';
 
 export const RequiredSchema = new SimpleSchema([
   OrganizationIdSchema,
@@ -37,8 +37,8 @@ export const FileIdsSchema = new SimpleSchema([
 
     status: {
       type: String,
-      defaultValue: FILE_STATUS_MAP.IN_PROGRESS,
-      allowedValues: _.values(FILE_STATUS_MAP),
+      defaultValue: FileStatuses.IN_PROGRESS,
+      allowedValues: _.values(FileStatuses),
     },
   },
 ]);

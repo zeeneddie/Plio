@@ -11,7 +11,7 @@ const FileCreateAdapter = ({
   <FileInput
     {...rest}
     files={input.value ? [input.value] : []}
-    onCreate={(file) => {
+    onChange={(file) => {
       input.onChange(file);
       if (onChange) onChange(file);
     }}

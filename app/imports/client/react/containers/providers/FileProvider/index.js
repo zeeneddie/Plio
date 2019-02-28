@@ -10,8 +10,8 @@ import {
 import { connect } from 'react-redux';
 import property from 'lodash.property';
 
-import { identity } from '/imports/api/helpers';
-import FileItem from '../../../fields/read/components/FileItem';
+import { identity } from '../../../../../api/helpers';
+import { FileItem } from '../../../components';
 
 const enhance = compose(
   setPropTypes({

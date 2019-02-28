@@ -33,7 +33,7 @@ const FilesSubcard = ({
           onAfterCreate={onLink}
           onAfterRemove={onUnlink}
           slingshotContext={uploaderMetaContext}
-          multiple
+          multi
         />
       </CardBlock>
     </SubcardBody>

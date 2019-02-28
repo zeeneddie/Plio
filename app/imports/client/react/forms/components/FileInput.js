@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Button } from 'reactstrap';
 
 import { Icon } from '../../components';
-import FileItem from '../../fields/read/components/FileItem';
+import FileItem from '../../components/FileItem';
 
 const StyledButton = styled(Button)`
   position: relative;
@@ -29,18 +29,18 @@ const StyledButton = styled(Button)`
 const FileInput = ({
   files,
   onRemove,
-  onCreate,
-  multiple,
-  withoutUploader,
+  onChange,
+  multi,
+  upload,
 }) => (
-  <div>
+  <Fragment>
     {files.map(file => (
       <Fragment key={file.name + file._id}>
         <FileItem
           {...{ file }}
           onRemove={() => onRemove(file)}
         />
-        {withoutUploader && (
+        {!upload && (
           file.name.split('.').pop().toLowerCase() === 'docx' ? (
             <p>File will be uploaded and rendered as HTML when you click on the Save button</p>
           ) : (
@@ -49,26 +49,32 @@ const FileInput = ({
         )}
       </Fragment>
     ))}
-    {(multiple || !files.length) && (
+    {(multi || !files.length) && (
       <StyledButton tag="span" color="primary">
-        <Icon name="plus" /> Add
+        <Icon name="plus" />
+        {' '}
+        Add
         <input
           type="file"
           onChange={(event) => {
-            onCreate(event.currentTarget.files[0]);
+            onChange(event.currentTarget.files[0]);
           }}
         />
       </StyledButton>
     )}
-  </div>
+  </Fragment>
 );
+
+FileInput.defaultProps = {
+  upload: true,
+};
 
 FileInput.propTypes = {
   files: PropTypes.array.isRequired,
-  onCreate: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
-  multiple: PropTypes.bool,
-  withoutUploader: PropTypes.bool,
+  multi: PropTypes.bool,
+  upload: PropTypes.bool,
 };
 
 export default FileInput;

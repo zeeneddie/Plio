@@ -21,7 +21,7 @@ const FileInputContainer = ({
   <FileInput
     {...rest}
     files={Files.find({ _id: { $in: fileIds } }).fetch()}
-    onCreate={async (file) => {
+    onChange={async (file) => {
       if (file) {
         const fileId = await new Promise((resolve, reject) => {
           insertFile.call({

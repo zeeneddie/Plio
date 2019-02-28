@@ -765,7 +765,7 @@ export const EmailsForPlioReporting = [
   'mike@jssolutionsdev.com',
 ];
 
-export const FILE_STATUS_MAP = {
+export const FileStatuses = {
   UPLOADING: 'uploading',
   UPLOADED: 'uploaded',
   TERMINATED: 'terminated',
