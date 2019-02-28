@@ -38,7 +38,9 @@ const enhance = compose(
   mapProps(({ usersByOrgIds, organization, ...props }) => ({
     ...props,
     organization,
-    users: usersByOrgIds[getId(organization)],
+    // temporary solution
+    users: (usersByOrgIds[getId(organization)] || [])
+      .filter(user => user.profile && (user.profile.fullName || user.profile.firstName)),
   })),
   withHandlers({
     onFrequencyChanged,

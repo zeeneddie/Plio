@@ -473,6 +473,9 @@ export const StringLimits = {
   sequentialId: {
     min: 3,
   },
+  markdown: {
+    max: 4096,
+  },
 };
 
 export const SystemName = 'Plio';

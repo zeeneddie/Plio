@@ -3,6 +3,8 @@ import React from 'react';
 import Blaze from 'meteor/gadicc:blaze-react-component';
 import { Field } from 'react-final-form';
 
+import { StringLimits } from '../../../../share/constants';
+
 const renderQuill = ({ input, onBlur, ...rest }) => (
   <Blaze
     {...{ ...input, ...rest }}
@@ -14,9 +16,14 @@ const renderQuill = ({ input, onBlur, ...rest }) => (
   />
 );
 
+renderQuill.defaultProps = {
+  maxLength: StringLimits.markdown.max,
+};
+
 renderQuill.propTypes = {
   input: PropTypes.object,
   onBlur: PropTypes.func,
+  maxLength: PropTypes.number,
 };
 
 const QuillField = props => (

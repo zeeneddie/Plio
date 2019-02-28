@@ -10,7 +10,7 @@ import CanvasBlock from './CanvasBlock';
 import RevenueStreamsHelp from './RevenueStreamsHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { CanvasSections, CanvasTypes } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const RevenueStreams = ({ organizationId }) => (
   <Query
@@ -24,6 +24,7 @@ const RevenueStreams = ({ organizationId }) => (
         twoColumn
         label="Revenue streams"
         sectionName={CanvasSections[CanvasTypes.REVENUE_STREAM]}
+        documentType={DocumentTypes.REVENUE_STREAM}
         help={<RevenueStreamsHelp />}
         items={revenueStreams}
         renderModal={({ isOpen, toggle, onLink }) => (

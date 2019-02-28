@@ -10,6 +10,9 @@ const StyledCardBlock = styled(CardBlock)`
   display: flex;
   & + .guidance-panel > .card-block {
     padding-top: 0;
+    .guidance-html {
+      padding-top: 0;
+    }
   }
 `;
 

@@ -30,9 +30,9 @@ const subscriptionClient = new SubscriptionClient(
     lazy: true,
     inactivityTimeout: 0,
     timeout: 30000,
-    connectionParams: {
+    connectionParams: () => ({
       'meteor-login-token': Accounts._storedLoginToken(),
-    },
+    }),
   },
 );
 

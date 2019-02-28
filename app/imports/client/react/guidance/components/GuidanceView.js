@@ -13,11 +13,12 @@ import {
 
 const StyledDiv = styled.div`
   margin-bottom: 1rem;
+  padding-top: 1.25rem; 
 `;
 
 const GuidanceView = ({ guidance }) => (
   <Fragment>
-    <StyledDiv dangerouslySetInnerHTML={{ __html: guidance.html }} />
+    <StyledDiv className="guidance-html" dangerouslySetInnerHTML={{ __html: guidance.html }} />
     <FormGroup>
       <EntityManagerItems>
         {guidance.subguidances && guidance.subguidances.map(subguidance => (

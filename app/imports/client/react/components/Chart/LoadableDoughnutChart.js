@@ -18,6 +18,8 @@ const LoadableDoughnutChart = Loadable({
   }) => (
     <Doughnut
       options={{
+        maintainAspectRatio: false,
+        aspectRatio: 1,
         title: {
           display: !!title,
           text: title,
