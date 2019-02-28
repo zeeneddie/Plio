@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { Meteor } from 'meteor/meteor';
 
 import {
   updateViewedBy,
@@ -26,6 +27,10 @@ Template.Risk_Card_Edit_Main.viewmodel({
   mixin: ['organization', 'getChildrenData'],
   standardFieldHelp: RisksHelp.standards,
   departmentsFieldHelp: RisksHelp.departments,
+
+  autorun() {
+    console.log('autorun');
+  },
 
   onRendered(template) {
     const doc = template.data.risk;
