@@ -22,6 +22,8 @@ const LoadableBubbleChart = Loadable({
   }) => (
     <Bubble
       options={{
+        maintainAspectRatio: false,
+        aspectRatio: 1,
         layout: {
           padding: {
             left: 0,
