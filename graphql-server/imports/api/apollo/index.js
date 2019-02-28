@@ -3,17 +3,15 @@ import { WebApp } from 'meteor/webapp';
 import { ApolloServer } from 'apollo-server-express';
 import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
-import { PubSub } from 'graphql-subscriptions';
 
 import schema from './apiSchema';
 import { createLoaders } from './loaders';
 import * as collections from '../../share/collections';
 import * as services from '../../share/services';
 import getUser from './util/getUser';
+import pubsub from './pubsub';
 
 const KEEP_ALIVE_PING_INTERVAL = 10000;
-
-const pubsub = new PubSub();
 
 const getContext = async (authorizationToken) => {
   const context = {
