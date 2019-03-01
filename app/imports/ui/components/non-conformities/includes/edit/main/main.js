@@ -1,7 +1,8 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
-import { WorkflowTypes, ProblemIndexes } from '/imports/share/constants';
-import { isViewed } from '/imports/api/checkers';
+import { WorkflowTypes, ProblemIndexes, DocumentTypes } from '../../../../../../share/constants';
+import { isViewed } from '../../../../../../api/checkers';
 import {
   updateViewedBy,
   setAnalysisExecutor,
@@ -18,11 +19,19 @@ import {
   setStandardsUpdateCompletedBy,
   setStandardsUpdateCompletedDate,
   setStandardsUpdateComments,
-} from '/imports/api/non-conformities/methods';
-import { AnalysisTitles } from '../../../../../../api/constants';
+} from '../../../../../../api/non-conformities/methods';
+import { Relations } from '../../../../../../share/collections/relations';
 
 Template.NC_Card_Edit_Main.viewmodel({
   mixin: ['organization', 'getChildrenData', 'nonconformity'],
+
+  autorun() {
+    Meteor.subscribe('relations', {
+      rel1: { documentId: this.NC()._id },
+      rel2: { documentType: DocumentTypes.STANDARD },
+    });
+  },
+
   onRendered(templateInstance) {
     const doc = templateInstance.data.NC;
     const userId = Meteor.userId();
@@ -71,6 +80,12 @@ Template.NC_Card_Edit_Main.viewmodel({
       setStandardsUpdateCompletedDate,
       setStandardsUpdateComments,
     };
+  },
+  standardsIds() {
+    const relations = Relations.find().fetch();
+    return relations.map(({ rel1, rel2 }) => (
+      rel1.documentType === DocumentTypes.STANDARD ? rel1.documentId : rel2.documentId
+    ));
   },
   showRootCauseAnalysis() {
     const NC = this.NC && this.NC();
