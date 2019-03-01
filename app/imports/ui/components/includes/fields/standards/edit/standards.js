@@ -1,8 +1,12 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { sortArrayByTitlePrefix } from '/imports/api/helpers';
-
+import { DocumentTypes } from '../../../../../../share/constants';
+import { sortArrayByTitlePrefix } from '../../../../../../api/helpers';
+import {
+  insert as insertRelation,
+  remove as removeRelation,
+} from '../../../../../../api/relations/methods';
 
 Template.Fields_Standards_Edit.viewmodel({
   mixin: ['organization', 'search', 'standard'],
@@ -25,10 +29,19 @@ Template.Fields_Standards_Edit.viewmodel({
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { selectedItemId, selected } = viewmodel.getData();
+    const { selectedItemId } = viewmodel.getData();
     if (this.areIdsIncludesItemId(selectedItemId)) return;
 
-    this.callUpdate(selectedItemId, selected, '$addToSet');
+    this.parent().parent().modal().callMethod(insertRelation, {
+      rel1: {
+        documentId: this._id(),
+        documentType: this.documentType(),
+      },
+      rel2: {
+        documentId: selectedItemId,
+        documentType: DocumentTypes.STANDARD,
+      },
+    });
   },
   callUpdate(selectedItemId, selected, option) {
     if (selected.length === this.selected().count() &&
@@ -54,11 +67,14 @@ Template.Fields_Standards_Edit.viewmodel({
     return this.remove.bind(this);
   },
   remove(viewmodel) {
-    const { selectedItemId, selected } = viewmodel.getData();
+    const { selectedItemId } = viewmodel.getData();
 
     if (!this.areIdsIncludesItemId(selectedItemId)) return;
 
-    this.callUpdate(selectedItemId, selected, '$pull');
+    this.parent().parent().modal().callMethod(removeRelation, {
+      rel1: { documentId: this._id() },
+      rel2: { documentId: selectedItemId },
+    });
   },
   areIdsIncludesItemId(selectedItemId) {
     const standardsIds = this.standardsIds() || [];

@@ -579,3 +579,19 @@ export const homeScreenTypeSchemaObj = {
   optional: true,
   allowedValues: Object.values(HomeScreenTypes),
 };
+
+const RelSchema = new SimpleSchema({
+  documentId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+  },
+});
+
+export const IdsRelationSchema = new SimpleSchema({
+  rel1: {
+    type: RelSchema,
+  },
+  rel2: {
+    type: RelSchema,
+  },
+});

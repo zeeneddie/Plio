@@ -24,6 +24,7 @@ import { Relations } from '../../../../../../share/collections/relations';
 
 Template.NC_Card_Edit_Main.viewmodel({
   mixin: ['organization', 'getChildrenData', 'nonconformity'],
+  documentType: DocumentTypes.NON_CONFORMITY,
 
   autorun() {
     Meteor.subscribe('relations', {

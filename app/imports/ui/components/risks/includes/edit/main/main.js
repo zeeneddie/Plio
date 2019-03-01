@@ -28,6 +28,7 @@ Template.Risk_Card_Edit_Main.viewmodel({
   mixin: ['organization', 'getChildrenData', 'relations'],
   standardFieldHelp: RisksHelp.standards,
   departmentsFieldHelp: RisksHelp.departments,
+  documentType: DocumentTypes.RISK,
 
   autorun() {
     Meteor.subscribe('relations', {

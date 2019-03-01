@@ -3,6 +3,7 @@
     <div class="relative">
       {{#with risk}}
         {{> Risk_Card_Edit_Main
+            callModalMethod=callModalMethodFn
             risk=this}}
 
         {{> Subcards_RiskScoring_Edit
