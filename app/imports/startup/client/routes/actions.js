@@ -64,6 +64,9 @@ export const renderCanvasLayout = renderComponent(async () => {
 export const renderCanvasReportLayout = renderComponent(async () =>
   import('../../../client/react/canvas/components/CanvasReportLayout'));
 
+export const renderDashboard = renderComponent(async () =>
+  import('../../../client/react/dashboard/components/DashboardLayout'));
+
 /* BLAZE */
 
 export const renderNcs = renderBlazeComponent(async () => {
@@ -94,12 +97,3 @@ export const renderUserDirectory = renderBlazeComponent(async () => {
 
   return 'UserDirectory_Layout';
 })({ content: 'UserDirectory_Page' });
-
-export const renderDashboard = renderBlazeComponent(async () => {
-  await Promise.all([
-    import('../../../ui/layouts/dashboard-layout'),
-    import('../../../ui/pages/dashboard-page'),
-  ]);
-
-  return 'Dashboard_Layout';
-})({ content: 'Dashboard_Page' });

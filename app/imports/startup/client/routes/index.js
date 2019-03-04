@@ -4,9 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { Meteor } from 'meteor/meteor';
 import { AccountsTemplates } from 'meteor/useraccounts:core';
-import ReactDOM from 'react-dom';
 import React from 'react';
-import { $ } from 'meteor/jquery';
 
 import '../../../ui/components/notifications';
 import '../../../ui/components/includes/preloader';
@@ -266,13 +264,7 @@ FlowRouter.route('/:orgSerialNumber/risks/:urlItemId/discussion', {
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.reset();
-
-    $(() => ReactDOM.unmountComponentAtNode(document.getElementById('app')));
-
-    renderDashboard();
-  },
+  action: renderDashboard(),
 });
 
 FlowRouter.route('/:orgSerialNumber/users', {
