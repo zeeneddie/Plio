@@ -264,16 +264,6 @@ export const ImprovementPlanSchema = new SimpleSchema([
   FileIdsSchema,
 ]);
 
-export const standardsIdsSchema = new SimpleSchema({
-  standardsIds: {
-    type: [String],
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true,
-    index: 1,
-    // maxCount: ?
-  },
-});
-
 export const getNotifySchema = fieldNames => new SimpleSchema({
   notify: {
     type: [String],
@@ -372,7 +362,6 @@ export const FileSchema = new SimpleSchema({
 export const BaseProblemsRequiredSchema = new SimpleSchema([
   OrganizationIdSchema,
   FileIdsSchema,
-  standardsIdsSchema,
   {
     title: {
       type: String,

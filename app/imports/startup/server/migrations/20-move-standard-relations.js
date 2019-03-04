@@ -83,6 +83,6 @@ export const down = async () => {
 Migrations.add({
   up,
   down,
-  version: 19,
+  version: 20,
   name: 'Moves standard relations to Relations collection',
 });
