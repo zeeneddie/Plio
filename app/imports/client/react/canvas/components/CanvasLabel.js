@@ -12,6 +12,10 @@ import {
 
 import { WithToggle } from '../../helpers';
 
+const StyledDropdownToggle = styled(DropdownToggle)`
+  border-radius: .2rem !important;
+`;
+
 const StyledDropdownMenu = styled(DropdownMenu)`
   transform: none !important;
   top: auto !important;
@@ -20,6 +24,10 @@ const StyledDropdownMenu = styled(DropdownMenu)`
   button:focus {
     outline: none;
   }
+`;
+
+const StyledButton = styled(Button)`
+  border-radius: .2rem !important;
 `;
 
 const CanvasLabel = ({
@@ -40,18 +48,18 @@ const CanvasLabel = ({
           size="sm"
           {...{ ...props, isOpen, toggle }}
         >
-          <DropdownToggle>
+          <StyledDropdownToggle>
             {label}
-          </DropdownToggle>
+          </StyledDropdownToggle>
           <StyledDropdownMenu>
             {children}
           </StyledDropdownMenu>
         </ButtonDropdown>
       ) : (
         <ButtonGroup {...props}>
-          <Button color="secondary" size="sm" {...{ id }}>
+          <StyledButton color="secondary" size="sm" {...{ id }}>
             {label}
-          </Button>
+          </StyledButton>
           {tooltip && (
             <Tooltip placement="top" target={id} {...{ isOpen, toggle }}>
               {tooltip}
