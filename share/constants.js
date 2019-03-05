@@ -226,22 +226,38 @@ export const DefaultHelpSections = [
   },
   {
     index: 4,
-    title: 'Managing risks',
+    title: 'Creating your business model canvas',
   },
   {
     index: 5,
-    title: 'Managing nonconformities',
+    title: 'Managing nonconformities & gains',
   },
   {
     index: 6,
-    title: 'Managing workflows',
+    title: 'Managing risks',
   },
   {
     index: 7,
-    title: 'User management',
+    title: 'Managing training',
   },
   {
     index: 8,
+    title: 'Managing key goals',
+  },
+  {
+    index: 9,
+    title: 'Managing workflows',
+  },
+  {
+    index: 10,
+    title: 'User management',
+  },
+  {
+    index: 11,
+    title: 'Customizing Plio',
+  },
+  {
+    index: 12,
     title: 'FAQs',
   },
 ];
