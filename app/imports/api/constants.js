@@ -369,6 +369,7 @@ export const Styles = {
   border: {
     color: {
       grey: '#ddd',
+      darkGrey: '#aaa',
     },
   },
   color: {
@@ -385,6 +386,7 @@ export const Styles = {
   },
   background: {
     color: {
+      grey: '#f5f7f9',
       lightGrey: '#f5f5f5',
       white: '#fff',
     },

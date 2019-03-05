@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Loadable from 'react-loadable';
+import styled from 'styled-components';
 import Blaze from 'meteor/gadicc:blaze-react-component';
 
+import { Styles } from '../../../../api/constants';
 import { PreloaderPage } from '../../components';
 import DashboardCard from './DashboardCard';
 import DashboardUserStatsContainer from '../containers/DashboardUserStatsContainer';
@@ -16,8 +18,12 @@ const LoadableDashboardGoalsContainer = Loadable({
   loading: () => <PreloaderPage size={2} />,
 });
 
+const DashboardPageWrapper = styled.div`
+  background-color: ${Styles.background.color.white};
+`;
+
 const DashboardPage = ({ items = [], organization }) => (
-  <div>
+  <DashboardPageWrapper>
     <MainHeader isDashboard {...{ organization }} />
     <div className="content no-flex scroll">
       <div className="container">
@@ -39,7 +45,7 @@ const DashboardPage = ({ items = [], organization }) => (
         </div>
       </div>
     </div>
-  </div>
+  </DashboardPageWrapper>
 );
 
 DashboardPage.propTypes = {
