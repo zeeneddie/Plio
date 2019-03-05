@@ -21,8 +21,11 @@ const LinkedItem = styled.div`
   justify-content: space-between;
 `;
 
-const SpacedDiv = styled.div`
+const LinkedItemTitle = styled.div`
   margin-right: .7em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 220px;
 `;
 
 const UnlinkIcon = styled(({ onClick, ...props }) => (
@@ -36,6 +39,7 @@ const UnlinkIcon = styled(({ onClick, ...props }) => (
     {...props}
   />
 ))`
+  margin-top: 1px;
   &:hover {
     color: ${Styles.color.hoverBlue};
   }
@@ -55,7 +59,7 @@ const CanvasFooterItems = ({
       <CanvasLabel
         label={(
           <LinkedItem>
-            <SpacedDiv>{renderItem(items[0])}</SpacedDiv>
+            <LinkedItemTitle>{renderItem(items[0])}</LinkedItemTitle>
             <UnlinkIcon onClick={() => onDelete(items[0])} />
           </LinkedItem>
         )}
@@ -69,7 +73,7 @@ const CanvasFooterItems = ({
       {items.map(item => (
         <DropdownItem key={item._id} onClick={() => onClick(item)}>
           <LinkedItem>
-            <div>{renderItem(item)}</div>
+            <LinkedItemTitle>{renderItem(item)}</LinkedItemTitle>
             <UnlinkIcon onClick={() => onDelete(item)} />
           </LinkedItem>
         </DropdownItem>
