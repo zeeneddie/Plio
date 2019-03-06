@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import FileItem from '../../../../components/FileItem';
+import FileItem from '../../../../files/components/FileItem';
 import Iframe from '../../../../components/Iframe';
 import IframeWrapper from '../../../../components/IframeWrapper';
 import getVideoSource from '../../../../helpers/getVideoSource';

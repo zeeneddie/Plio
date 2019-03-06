@@ -10,10 +10,10 @@ import {
   TextareaField,
   UserSelectInput,
   CategorizeField,
-  SourceField,
 } from '../../components';
 import { StandardsHelp } from '../../../../api/help-messages';
 import { StringLimits, UniqueNumberRange, IssueNumberRange } from '../../../../share/constants';
+import SourceField from '../../files/components/SourceField';
 import StandardTypeSelectInput from './StandardTypeSelectInput';
 import StandardStatusField from './StandardStatusField';
 import StandardSectionSelectInput from './StandardSectionSelectInput';

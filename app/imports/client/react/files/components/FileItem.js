@@ -5,9 +5,8 @@ import styled from 'styled-components';
 import { _ } from 'meteor/underscore';
 import { ButtonGroup } from 'reactstrap';
 
-import Button from './Buttons/Button';
-import Icon from './Icons/Icon';
-import { FileStatuses } from '../../../share/constants';
+import { Button, Icon } from '../../components';
+import { FileStatuses } from '../../../../share/constants';
 
 const isUploaded = ({ progress }) => progress === 1;
 

@@ -8,8 +8,8 @@ import { AWSDirectives } from '../../../../share/constants';
 import { FileTypes } from '../../../../api/constants';
 import { onAfterSourceUpload } from '../../standards/helpers';
 import { WithState } from '../../helpers';
-import SelectRadio from './SelectRadio';
-import UrlField from './UrlField';
+import { SelectRadio } from '../../components';
+import UrlField from '../../forms/components/UrlField';
 import FileField from './FileField';
 import FileCreateField from './FileCreateField';
 

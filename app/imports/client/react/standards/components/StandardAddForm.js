@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import { StringLimits } from '../../../../share/constants';
+import SourceField from '../../files/components/SourceField';
 import StandardTypeSelectInput from './StandardTypeSelectInput';
 import StandardSectionSelectInput from './StandardSectionSelectInput';
 import StandardStatusField from './StandardStatusField';
@@ -10,7 +11,6 @@ import {
   FormField,
   InputField,
   UserSelectInput,
-  SourceField,
 } from '../../components';
 
 const StandardAddForm = ({ organizationId }) => (

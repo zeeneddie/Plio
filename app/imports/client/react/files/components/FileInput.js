@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Button } from 'reactstrap';
 
 import { Icon } from '../../components';
-import FileItem from '../../components/FileItem';
+import FileItem from './FileItem';
 
 const StyledButton = styled(Button)`
   position: relative;

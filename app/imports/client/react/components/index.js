@@ -47,4 +47,3 @@ export { default as NotFoundPage } from './NotFoundPage';
 export { default as EntityLabel } from './EntityLabel';
 export { default as Col } from './Col';
 export { default as MoreLess } from './MoreLess';
-export { default as FileItem } from './FileItem';

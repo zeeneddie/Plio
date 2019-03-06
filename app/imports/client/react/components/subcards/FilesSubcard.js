@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { CardTitle } from 'reactstrap';
 
 import { CardBlock, Pull, Subcard, SubcardBody, SubcardHeader } from '../';
-import FileInputContainer from '../../forms/components/FileInputContainer';
+import FileInputContainer from '../../files/components/FileInputContainer';
 
 const FilesSubcard = ({
   input,
