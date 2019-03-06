@@ -5,9 +5,15 @@ import { Meteor } from 'meteor/meteor';
 import UploadService from '../../../../ui/utils/uploads/UploadService';
 import UploadsStore from '../../../../ui/utils/uploads/uploads-store';
 import { Files } from '../../../../share/collections';
-import { swal } from '../../../util';
+import { swal, composeWithTracker } from '../../../util';
 import { isFailed, isUploaded } from '../helpers';
 import FileInput from './FileInput';
+
+const enhance = composeWithTracker(({ fileIds }, onData) => {
+  onData(null, {
+    files: Files.find({ _id: { $in: fileIds } }).fetch(),
+  });
+});
 
 const FileInputContainer = ({
   onAfterCreate,
@@ -15,12 +21,10 @@ const FileInputContainer = ({
   onAfterUpload,
   slingshotContext,
   slingshotDirective,
-  fileIds,
   ...rest
 }) => (
   <FileInput
     {...rest}
-    files={Files.find({ _id: { $in: fileIds } }).fetch()}
     onChange={async (file) => {
       const uploadService = new UploadService({
         slingshotDirective,
@@ -68,4 +72,4 @@ FileInputContainer.propTypes = {
   fileIds: PropTypes.array,
 };
 
-export default FileInputContainer;
+export default enhance(FileInputContainer);
