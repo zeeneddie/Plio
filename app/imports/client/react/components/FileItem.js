@@ -3,7 +3,7 @@ import React from 'react';
 import cx from 'classnames';
 import styled from 'styled-components';
 import { _ } from 'meteor/underscore';
-import { ButtonGroup, Button as ButtonRS } from 'reactstrap';
+import { ButtonGroup } from 'reactstrap';
 
 import Button from './Buttons/Button';
 import Icon from './Icons/Icon';
@@ -59,9 +59,9 @@ const FileItem = ({
           <div className={progressBarCName} style={styles} />
         </FileButton>
         {!!onRemove && (
-          <ButtonRS className="btn-icon">
+          <Button color="secondary" className="btn-icon">
             <Icon name="times-circle" onClick={onRemove} />
-          </ButtonRS>
+          </Button>
         )}
       </ButtonGroup>
     </div>

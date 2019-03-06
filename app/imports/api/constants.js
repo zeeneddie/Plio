@@ -256,7 +256,7 @@ export const MarginMap = {
 export const UNIQUE_FIELD_MONGO_ERROR_CODE = 11000;
 export const MOBILE_BREAKPOINT = 768;
 
-export const FILE_TYPE_MAP = {
+export const FileTypes = {
   URL: 'url',
   ATTACHMENT: 'attachment',
   VIDEO: 'video',

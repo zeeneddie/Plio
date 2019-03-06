@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import FileItem from '../FileItem';
+import FileItem from '../../../../components/FileItem';
 import Iframe from '../../../../components/Iframe';
 import IframeWrapper from '../../../../components/IframeWrapper';
 import getVideoSource from '../../../../helpers/getVideoSource';
-import { FILE_TYPE_MAP } from '../../../../../../api/constants';
+import { FileTypes } from '../../../../../../api/constants';
 
 const getSourceTitle = (id) => {
   if (!id) return '';
@@ -20,22 +20,22 @@ const Source = ({
   let content;
 
   switch (type) {
-    case FILE_TYPE_MAP.URL:
+    case FileTypes.URL:
       content = (
         <h4 className="list-group-item-heading">
           <i className="fa fa-link margin-right" />
-          <a target="_blank" href={url}>{url}</a>
+          <a target="_blank" rel="noreferrer noopener" href={url}>{url}</a>
         </h4>
       );
       break;
-    case FILE_TYPE_MAP.ATTACHMENT:
+    case FileTypes.ATTACHMENT:
       content = file ? (
         <h4 className="list-group-item-heading">
           <FileItem {...{ file }} />
         </h4>
       ) : null;
       break;
-    case FILE_TYPE_MAP.VIDEO:
+    case FileTypes.VIDEO:
       content = (
         <IframeWrapper className="video">
           <Iframe src={getVideoSource(url)} />

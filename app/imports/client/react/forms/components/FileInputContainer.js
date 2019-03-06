@@ -5,7 +5,6 @@ import { Meteor } from 'meteor/meteor';
 import UploadService from '../../../../ui/utils/uploads/UploadService';
 import UploadsStore from '../../../../ui/utils/uploads/uploads-store';
 import { Files } from '../../../../share/collections';
-import { insert as insertFile } from '../../../../api/files/methods';
 import { swal } from '../../../util';
 import FileInput from './FileInput';
 
@@ -22,32 +21,24 @@ const FileInputContainer = ({
     {...rest}
     files={Files.find({ _id: { $in: fileIds } }).fetch()}
     onChange={async (file) => {
-      if (file) {
-        const fileId = await new Promise((resolve, reject) => {
-          insertFile.call({
-            name: file.name,
-            organizationId: slingshotContext.organizationId,
-          }, (error, result) => {
-            if (error) reject(error);
-            resolve(result);
-          });
-        });
-
-        const uploadService = new UploadService({
-          slingshotDirective,
-          slingshotContext,
-          maxFileSize: Meteor.settings.public.otherFilesMaxSize,
-          hooks: {
-            afterUpload: (__, url) => {
-              if (onAfterUpload) {
-                onAfterUpload({ file, url, ...slingshotContext });
-              }
-            },
+      const uploadService = new UploadService({
+        slingshotDirective,
+        slingshotContext,
+        maxFileSize: Meteor.settings.public.otherFilesMaxSize,
+        fileData: {
+          name: file.name,
+          organizationId: slingshotContext.organizationId,
+        },
+        hooks: {
+          afterUpload: (__, url) => {
+            if (onAfterUpload) {
+              onAfterUpload({ file, url, ...slingshotContext });
+            }
           },
-        });
-        uploadService.uploadExisting(fileId, file);
-        onAfterCreate(fileId);
-      }
+          afterInsert: onAfterCreate,
+        },
+      });
+      uploadService.upload(file);
     }}
     onRemove={(file) => {
       swal({
