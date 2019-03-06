@@ -6,6 +6,7 @@ import UploadService from '../../../../ui/utils/uploads/UploadService';
 import UploadsStore from '../../../../ui/utils/uploads/uploads-store';
 import { Files } from '../../../../share/collections';
 import { swal } from '../../../util';
+import { isFailed, isUploaded } from '../helpers';
 import FileInput from './FileInput';
 
 const FileInputContainer = ({
@@ -49,9 +50,7 @@ const FileInputContainer = ({
         showCancelButton: true,
         closeOnConfirm: true,
       }, () => {
-        const isUploading = file.progress < 1;
-        const isFailed = file.status === 'failed' || file.status === 'terminated';
-        if (isUploading && !isFailed) {
+        if (!isUploaded(file.progress) && !isFailed(file.status)) {
           UploadsStore.terminateUploading(file._id);
         }
         onAfterRemove(file._id);

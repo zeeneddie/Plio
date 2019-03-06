@@ -11,8 +11,13 @@ import {
   UserSelectInput,
   CategorizeField,
 } from '../../components';
+import {
+  StringLimits,
+  UniqueNumberRange,
+  IssueNumberRange,
+  AWSDirectives,
+} from '../../../../share/constants';
 import { StandardsHelp } from '../../../../api/help-messages';
-import { StringLimits, UniqueNumberRange, IssueNumberRange } from '../../../../share/constants';
 import SourceField from '../../files/components/SourceField';
 import StandardTypeSelectInput from './StandardTypeSelectInput';
 import StandardStatusField from './StandardStatusField';
@@ -116,7 +121,11 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
         name="source1"
         onChange={save}
         isEditMode
-        {...{ organizationId, standardId }}
+        slingshotDirective={AWSDirectives.STANDARD_FILES}
+        slingshotContext={{
+          organizationId,
+          standardId,
+        }}
       />
     </FormField>
     <Field name="shouldRenderSource2" subscription={{ value: true }}>
@@ -128,7 +137,11 @@ export const StandardEditForm = ({ organizationId, standardId, save }) => (
               name="source2"
               onChange={save}
               isEditMode
-              {...{ organizationId, standardId }}
+              slingshotDirective={AWSDirectives.STANDARD_FILES}
+              slingshotContext={{
+                organizationId,
+                standardId,
+              }}
             />
           </FormField>
         </SourceFieldWrapper>

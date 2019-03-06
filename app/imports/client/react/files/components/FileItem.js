@@ -5,13 +5,9 @@ import styled from 'styled-components';
 import { _ } from 'meteor/underscore';
 import { ButtonGroup } from 'reactstrap';
 
-import { Button, Icon } from '../../components';
 import { FileStatuses } from '../../../../share/constants';
-
-const isUploaded = ({ progress }) => progress === 1;
-
-const isFailed = ({ status }) =>
-  status === FileStatuses.FAILED || status === FileStatuses.TERMINATED;
+import { Button, Icon } from '../../components';
+import { isFailed, isUploaded } from '../helpers';
 
 const FileButton = styled(Button)`
   max-width: 230px;
@@ -27,8 +23,8 @@ const FileItem = ({
   },
   onRemove,
 }) => {
-  const uploaded = isUploaded({ progress });
-  const failed = isFailed({ status });
+  const uploaded = isUploaded(progress);
+  const failed = isFailed(status);
   const buttonCName = cx(
     'file-label text-xs-left',
     { uploaded, failed, 'no-pointer-events': !uploaded },

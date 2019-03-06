@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { TabContent, TabPane } from 'reactstrap';
 import { Form } from 'react-final-form';
 
-import { AWSDirectives } from '../../../../share/constants';
 import { FileTypes } from '../../../../api/constants';
 import { onAfterSourceUpload } from '../../standards/helpers';
 import { WithState } from '../../helpers';
@@ -34,10 +33,10 @@ const StyledTabContent = styled(TabContent)`
 
 const SourceInput = ({
   value: source,
-  organizationId,
-  standardId,
   onChange,
   isEditMode,
+  slingshotDirective,
+  slingshotContext,
 }) => (
   <WithState initialState={{ type: source && source.type || FileTypes.ATTACHMENT }}>
     {({ state: { type }, setState }) => (
@@ -78,11 +77,7 @@ const SourceInput = ({
                     name="fileId"
                     onChange={handleSubmit}
                     onAfterUpload={onAfterSourceUpload}
-                    slingshotDirective={AWSDirectives.STANDARD_FILES}
-                    slingshotContext={{
-                      organizationId,
-                      standardId,
-                    }}
+                    {...{ slingshotDirective, slingshotContext }}
                   />
                 ) : (
                   <FileCreateField
@@ -115,8 +110,8 @@ const SourceInput = ({
 );
 
 SourceInput.propTypes = {
-  organizationId: PropTypes.string,
-  standardId: PropTypes.string,
+  slingshotDirective: PropTypes.string,
+  slingshotContext: PropTypes.object,
   onChange: PropTypes.func,
   isEditMode: PropTypes.bool,
   value: PropTypes.oneOfType([
