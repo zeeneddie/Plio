@@ -10,6 +10,9 @@ import {
   pathOr,
   repeat,
   map,
+  lensProp,
+  view,
+  defaultTo,
 } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
 import {
@@ -20,6 +23,7 @@ import {
   mapEntitiesToOptions,
   getValues,
   mapUsersToOptions,
+  renameKeys,
 } from 'plio-util';
 import diff from 'deep-diff';
 
@@ -67,6 +71,47 @@ const getInitialValues = compose(
     'departments',
     'projects',
     'notify',
+    'improvementPlan',
+  ]),
+);
+
+const getInput = compose(
+  renameKeys({
+    section: 'sectionId',
+    type: 'typeId',
+    departments: 'departmentsIds',
+    projects: 'projectIds',
+  }),
+  over(lensProp('improvementPlan'), compose(
+    over(lensProp('owner'), view(lensProp('value'))),
+    pick([
+      'desiredOutcome',
+      'targetDate',
+      'reviewDates',
+      'owner',
+    ]),
+  )),
+  over(lensProp('owner'), view(lensProp('value'))),
+  over(lensProp('type'), view(lensProp('value'))),
+  over(lensProp('section'), view(lensProp('value'))),
+  over(lensProp('departments'), unless(isNil, getValues)),
+  over(lensProp('projectIds'), unless(isNil, getValues)),
+  over(lensProp('notify'), unless(isNil, getValues)),
+  over(lensProp('description'), defaultTo('')),
+  pick([
+    'title',
+    'status',
+    'description',
+    'issueNumber',
+    'uniqueNumber',
+    'source1',
+    'source2',
+    'departments',
+    'projects',
+    'notify',
+    'section',
+    'type',
+    'owner',
     'improvementPlan',
   ]),
 );
@@ -153,51 +198,13 @@ const StandardEditContainer = ({
 
           if (!difference) return undefined;
 
-          const {
-            title,
-            status,
-            description = '',
-            issueNumber,
-            uniqueNumber,
-            source1,
-            source2,
-            departments,
-            projects,
-            notify = [],
-            section: { value: sectionId } = {},
-            type: { value: typeId } = {},
-            owner: { value: owner } = {},
-            improvementPlan: {
-              desiredOutcome,
-              targetDate,
-              reviewDates,
-              owner: { value: improvementPlanOwner } = {},
-            },
-          } = values;
+          console.log(getInput(values));
 
           return updateStandard({
             variables: {
               input: {
                 _id: standard._id,
-                departmentsIds: getValues(departments),
-                projectIds: getValues(projects),
-                notify: getValues(notify),
-                improvementPlan: {
-                  desiredOutcome,
-                  targetDate,
-                  reviewDates,
-                  owner: improvementPlanOwner,
-                },
-                source1,
-                source2,
-                title,
-                status,
-                sectionId,
-                typeId,
-                owner,
-                description,
-                issueNumber,
-                uniqueNumber,
+                ...getInput(values),
               },
             },
           }).then(noop).catch((err) => {

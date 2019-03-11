@@ -16,7 +16,7 @@ input ImprovementPlanInput {
   desiredOutcome: String
   targetDate: DateTime
   reviewDates: [ImprovementPlanReviewDateInput]
-  owner: ID!
+  owner: ID
 }
 
 input CreateStandardInput {
