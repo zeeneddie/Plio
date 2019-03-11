@@ -4,7 +4,6 @@ type ReviewPayload {
 
 input CreateReviewInput {
   organizationId: ID!
-  scheduledDate: DateTime!
   reviewedAt: DateTime!
   reviewedBy: ID!
   documentId: ID!
@@ -13,6 +12,10 @@ input CreateReviewInput {
 }
 
 input RemoveReviewInput {
+  _id: ID!
+}
+
+input ViewReviewInput {
   _id: ID!
 }
 
@@ -27,4 +30,5 @@ type Mutation {
   createReview(input: CreateReviewInput!): ReviewPayload
   removeReview(input: RemoveReviewInput!): ReviewPayload
   updateReview(input: UpdateReviewInput!): Review
+  viewReview(input: ViewReviewInput!): Review
 }

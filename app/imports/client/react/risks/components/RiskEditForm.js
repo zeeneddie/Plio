@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Field } from 'react-final-form';
 
-import { ProblemsStatuses } from '../../../../share/constants';
+import { ProblemsStatuses, DocumentTypes } from '../../../../share/constants';
 import { getClassByStatus } from '../../../../api/problems/helpers';
 import RiskForm from './RiskForm';
 import {
@@ -12,6 +12,7 @@ import {
   CardBlock,
   AnalysisForm,
   CategorizeField,
+  RelationsAdapter,
 } from '../../components';
 import { StandardSelectInput } from '../../forms/components';
 
@@ -20,7 +21,9 @@ const RiskEditForm = ({
   organizationId,
   guidelines,
   userId,
+  riskId,
   save,
+  refetchQueries,
 }) => (
   <Fragment>
     <RiskForm
@@ -52,12 +55,15 @@ const RiskEditForm = ({
       </FormField>
       <FormField>
         Standard(s)
-        <StandardSelectInput
-          {...{ organizationId }}
+        <RelationsAdapter
+          {...{ organizationId, refetchQueries }}
           multi
           name="standards"
           placeholder="Standard(s)"
-          onChange={save}
+          documentId={riskId}
+          documentType={DocumentTypes.RISK}
+          relatedDocumentType={DocumentTypes.STANDARD}
+          render={StandardSelectInput}
         />
       </FormField>
       <FormField>
@@ -86,6 +92,8 @@ const RiskEditForm = ({
 RiskEditForm.propTypes = {
   sequentialId: PropTypes.string,
   organizationId: PropTypes.string.isRequired,
+  riskId: PropTypes.string,
+  refetchQueries: PropTypes.func,
   userId: PropTypes.string,
   save: PropTypes.func,
   guidelines: PropTypes.object,

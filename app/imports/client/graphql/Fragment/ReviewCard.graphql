@@ -3,6 +3,7 @@ fragment ReviewCard on Review {
   scheduledDate,
   reviewedAt,
   comments,
+  isViewed,
   reviewedBy {
     _id
     profile {

@@ -18,6 +18,7 @@ const NonconformitySubcard = ({
   onSubmit,
   organizationId,
   initialValues,
+  refetchQueries,
   ...rest
 }) => (
   <EntityForm
@@ -42,7 +43,8 @@ const NonconformitySubcard = ({
     {({ handleSubmit }) => (
       <CardBlock>
         <NonconformityEditForm
-          {...{ organizationId, ...rest }}
+          {...{ organizationId, refetchQueries, ...rest }}
+          nonconformityId={nonconformity._id}
           type={nonconformity.type}
           save={handleSubmit}
         />
@@ -59,6 +61,7 @@ NonconformitySubcard.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
   onDelete: PropTypes.func,
+  refetchQueries: PropTypes.func,
 };
 
 export default NonconformitySubcard;

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 
 import { StringLimits } from '../../../../share/constants';
 import {
@@ -48,4 +48,4 @@ ReviewForm.propTypes = {
   save: PropTypes.func,
 };
 
-export default ReviewForm;
+export default memo(ReviewForm);

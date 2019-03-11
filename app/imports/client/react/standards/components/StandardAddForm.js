@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 import PropTypes from 'prop-types';
 
 import { StringLimits } from '../../../../share/constants';
@@ -52,4 +52,4 @@ StandardAddForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default StandardAddForm;
+export default memo(StandardAddForm);

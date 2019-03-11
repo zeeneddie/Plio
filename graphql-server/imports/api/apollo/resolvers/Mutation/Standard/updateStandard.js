@@ -11,6 +11,7 @@ import {
   checkStandardSectionAccess,
   checkStandardTypeAccess,
   checkFilesAccess,
+  checkMultipleOrgMembership,
 } from '../../../../../share/middleware';
 
 export const resolver = async (root, args, context) =>
@@ -37,5 +38,12 @@ export default applyMiddleware(
   checkStandardTypeAccess(),
   checkDepartmentsAccess(),
   checkProjectsAccess(),
+  branch(
+    (root, args) => args.notify,
+    checkMultipleOrgMembership(({ organizationId }, { notify }) => ({
+      userIds: notify,
+      organizationId,
+    })),
+  ),
   standardUpdateAfterware(),
 )(resolver);
