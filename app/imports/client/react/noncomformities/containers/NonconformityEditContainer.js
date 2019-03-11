@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { pick, compose, over, unless, isNil, pathOr, repeat, path } from 'ramda';
 import { Query, Mutation } from 'react-apollo';
 import {
@@ -46,7 +46,7 @@ const getInitialValues = compose(
 
 const NonconformityEditContainer = ({
   nonconformity: _nonconformity = null,
-  nonconformityId,
+  nonconformityId = _nonconformity && _nonconformity._id,
   organizationId,
   isOpen,
   toggle,
@@ -56,128 +56,133 @@ const NonconformityEditContainer = ({
   guidelines,
   currency,
   ...props
-}) => (
-  <WithState
-    initialState={{
-      nonconformity: _nonconformity,
-      initialValues: unless(isNil, getInitialValues, _nonconformity),
-    }}
-  >
-    {({ state: { initialValues, nonconformity }, setState }) => (
-      <Composer
-        components={[
-          /* eslint-disable react/no-children-prop */
-          <Query
-            {...{ fetchPolicy }}
-            query={Queries.NONCONFORMITY_CARD}
-            variables={{ _id: nonconformityId, organizationId }}
-            skip={!isOpen || !!_nonconformity}
-            onCompleted={data => setState({
-              initialValues: getInitialValues(getNonconformity(data)),
-              nonconformity: getNonconformity(data),
-            })}
-            children={noop}
-          />,
-          <Mutation
-            mutation={Mutations.UPDATE_NONCONFORMITY}
-            onCompleted={({ updateNonconformity }) =>
-              setState({ nonconformity: updateNonconformity })}
-            children={noop}
-          />,
-          <Mutation
-            mutation={Mutations.DELETE_NONCONFORMITY}
-            children={noop}
-            refetchQueries={() => [
-              type === ProblemTypes.NON_CONFORMITY
-                ? { query: Queries.NONCONFORMITY_LIST, variables: { organizationId } }
-                : { query: Queries.POTENTIAL_GAIN_LIST, variables: { organizationId } },
-              { query: Queries.CANVAS_PAGE, variables: { organizationId } },
-            ]}
-          />,
-          /* eslint-enable react/no-children-prop */
-        ]}
-      >
-        {([
-          { data, loading, error },
-          updateNonconformity,
-          deleteNonconformity,
-        ]) => renderComponent({
-          ...props,
-          loading,
-          error,
-          organizationId,
-          isOpen,
-          toggle,
-          nonconformity,
-          initialValues,
-          type,
-          guidelines: guidelines || path(['organization', 'ncGuidelines'], data),
-          currency: currency || path(['organization', 'currency'], data),
-          onSubmit: async (values, form) => {
-            const currentValues = getInitialValues(nonconformity);
-            const difference = diff(values, currentValues);
+}) => {
+  const refetchQueries = useCallback(() => [{
+    query: Queries.NONCONFORMITY_CARD,
+    variables: { _id: nonconformityId, organizationId },
+  }], [nonconformityId]);
+  return (
+    <WithState
+      initialState={{
+        nonconformity: _nonconformity,
+        initialValues: unless(isNil, getInitialValues, _nonconformity),
+      }}
+    >
+      {({ state: { initialValues, nonconformity }, setState }) => (
+        <Composer
+          components={[
+            /* eslint-disable react/no-children-prop */
+            <Query
+              {...{ fetchPolicy }}
+              query={Queries.NONCONFORMITY_CARD}
+              variables={{ _id: nonconformityId, organizationId }}
+              skip={!isOpen || !!_nonconformity}
+              onCompleted={data => setState({
+                initialValues: getInitialValues(getNonconformity(data)),
+                nonconformity: getNonconformity(data),
+              })}
+              children={noop}
+            />,
+            <Mutation
+              mutation={Mutations.UPDATE_NONCONFORMITY}
+              onCompleted={({ updateNonconformity }) =>
+                setState({ nonconformity: updateNonconformity })}
+              children={noop}
+            />,
+            <Mutation
+              mutation={Mutations.DELETE_NONCONFORMITY}
+              children={noop}
+              refetchQueries={() => [
+                type === ProblemTypes.NON_CONFORMITY
+                  ? { query: Queries.NONCONFORMITY_LIST, variables: { organizationId } }
+                  : { query: Queries.POTENTIAL_GAIN_LIST, variables: { organizationId } },
+                { query: Queries.CANVAS_PAGE, variables: { organizationId } },
+              ]}
+            />,
+            /* eslint-enable react/no-children-prop */
+          ]}
+        >
+          {([
+            { data, loading, error },
+            updateNonconformity,
+            deleteNonconformity,
+          ]) => renderComponent({
+            ...props,
+            loading,
+            error,
+            organizationId,
+            isOpen,
+            toggle,
+            nonconformity,
+            initialValues,
+            type,
+            refetchQueries,
+            guidelines: guidelines || path(['organization', 'ncGuidelines'], data),
+            currency: currency || path(['organization', 'currency'], data),
+            onSubmit: async (values, form) => {
+              const currentValues = getInitialValues(nonconformity);
+              const difference = diff(values, currentValues);
 
-            if (!difference) return undefined;
+              if (!difference) return undefined;
 
-            const {
-              title,
-              magnitude,
-              standards,
-              description = '',
-              statusComment = '',
-              cost = null,
-              departments,
-              projects,
-              ref: { url = null, text = null },
-              owner: { value: ownerId } = {},
-              originator: { value: originatorId } = {},
-            } = values;
+              const {
+                title,
+                magnitude,
+                description = '',
+                statusComment = '',
+                cost = null,
+                departments,
+                projects,
+                ref: { url = null, text = null },
+                owner: { value: ownerId } = {},
+                originator: { value: originatorId } = {},
+              } = values;
 
-            return updateNonconformity({
-              variables: {
-                input: {
-                  _id: nonconformity._id,
-                  title,
-                  description,
-                  ownerId,
-                  originatorId,
-                  magnitude,
-                  statusComment,
-                  cost,
-                  ref: { url, text },
-                  standardsIds: getValues(standards || []),
-                  departmentsIds: getValues(departments),
-                  projectIds: getValues(projects),
+              return updateNonconformity({
+                variables: {
+                  input: {
+                    _id: nonconformity._id,
+                    title,
+                    description,
+                    ownerId,
+                    originatorId,
+                    magnitude,
+                    statusComment,
+                    cost,
+                    ref: { url, text },
+                    departmentsIds: getValues(departments),
+                    projectIds: getValues(projects),
+                  },
                 },
-              },
-            }).then(noop).catch((err) => {
-              form.reset(currentValues);
-              throw err;
-            });
-          },
-          onDelete: () => {
-            if (onDelete) return onDelete();
-            const nonconformityName = type === ProblemTypes.NON_CONFORMITY ?
-              'nonconformity' : 'potential gain';
-            return swal.promise({
-              text: `The ${nonconformityName} "${nonconformity.title}" will be deleted`,
-              confirmButtonText: 'Delete',
-              successTitle: 'Deleted!',
-              successText: `The ${nonconformityName} "${nonconformity.title}" ` +
+              }).then(noop).catch((err) => {
+                form.reset(currentValues);
+                throw err;
+              });
+            },
+            onDelete: () => {
+              if (onDelete) return onDelete();
+              const nonconformityName = type === ProblemTypes.NON_CONFORMITY ?
+                'nonconformity' : 'potential gain';
+              return swal.promise({
+                text: `The ${nonconformityName} "${nonconformity.title}" will be deleted`,
+                confirmButtonText: 'Delete',
+                successTitle: 'Deleted!',
+                successText: `The ${nonconformityName} "${nonconformity.title}" ` +
                 'was deleted successfully.',
-            }, () => deleteNonconformity({
-              variables: {
-                input: {
-                  _id: nonconformity._id,
+              }, () => deleteNonconformity({
+                variables: {
+                  input: {
+                    _id: nonconformity._id,
+                  },
                 },
-              },
-            }).then(toggle));
-          },
-        })}
-      </Composer>
-    )}
-  </WithState>
-);
+              }).then(toggle));
+            },
+          })}
+        </Composer>
+      )}
+    </WithState>
+  );
+};
 
 NonconformityEditContainer.propTypes = {
   organizationId: PropTypes.string.isRequired,

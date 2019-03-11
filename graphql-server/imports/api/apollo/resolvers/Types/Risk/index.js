@@ -8,7 +8,7 @@ import {
 } from 'plio-util';
 import { view } from 'ramda';
 
-import { resolveStandardsByIds, resolveProjectsByIds } from '../util';
+import { resolveProjectsByIds, resolveLinkedStandards } from '../util';
 
 const {
   createdBy,
@@ -34,7 +34,7 @@ export default {
     files: loadFilesById(view(fileIds)),
     departments: loadDepartmentsById(view(departmentsIds)),
     type: ({ typeId }, args, { loaders: { RiskType: { byId } } }) => byId.load(typeId),
-    standards: resolveStandardsByIds,
+    standards: resolveLinkedStandards,
     projects: resolveProjectsByIds,
   },
 };

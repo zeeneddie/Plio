@@ -76,6 +76,7 @@ export const StandardEditModal = ({
                 risks,
                 lessons,
                 reviews,
+                reviewWorkflow,
                 organization: {
                   ncGuidelines,
                   rkGuidelines,
@@ -114,6 +115,10 @@ export const StandardEditModal = ({
                       guidelines={rkGuidelines}
                       render={RisksSubcard}
                     />
+                    {/*
+                      TODO add corrective action and preventative action subcards
+                      when https://github.com/Pliohub/Plio/pull/1786 branch will be merged
+                    */}
                     <ImprovementPlanSubcard
                       {...{ organizationId }}
                       name="improvementPlan"
@@ -127,7 +132,12 @@ export const StandardEditModal = ({
                       documentType={DocumentTypes.STANDARD}
                     />
                     <EntitiesField
-                      {...{ organizationId, refetchQueries, linkedTo }}
+                      {...{
+                        organizationId,
+                        refetchQueries,
+                        linkedTo,
+                        reviewWorkflow,
+                      }}
                       name="reviews"
                       render={ReviewsSubcard}
                       reviews={reviews}

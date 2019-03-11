@@ -16,10 +16,16 @@ import {
   StandardSelectInput,
   CategorizeField,
   UrlField,
+  RelationsAdapter,
 } from '../../components';
 import { NonConformitiesHelp } from '../../../../api/help-messages';
 import { getStatusColor } from '../helpers';
-import { StringLimits, ProblemsStatuses, ProblemTypes } from '../../../../share/constants';
+import {
+  StringLimits,
+  ProblemsStatuses,
+  ProblemTypes,
+  DocumentTypes,
+} from '../../../../share/constants';
 
 export const NonconformityEditForm = ({
   organizationId,
@@ -27,6 +33,8 @@ export const NonconformityEditForm = ({
   guidelines,
   save = noop,
   currency,
+  refetchQueries,
+  nonconformityId,
 }) => (
   <Fragment>
     <FormField>
@@ -74,12 +82,15 @@ export const NonconformityEditForm = ({
     </FormField>
     <FormField>
       Standard(s)
-      <StandardSelectInput
+      <RelationsAdapter
+        {...{ organizationId, refetchQueries }}
         multi
         name="standards"
         placeholder="Link to standard(s)"
-        onChange={save}
-        {...{ organizationId }}
+        documentId={nonconformityId}
+        documentType={DocumentTypes.NON_CONFORMITY}
+        relatedDocumentType={DocumentTypes.STANDARD}
+        render={StandardSelectInput}
       />
     </FormField>
     <hr />
@@ -154,6 +165,8 @@ NonconformityEditForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   save: PropTypes.func,
+  nonconformityId: PropTypes.string,
+  refetchQueries: PropTypes.func,
   // eslint-disable-next-line react/no-typos
   guidelines: Magnitudes.propTypes.guidelines,
   currency: PropTypes.string.isRequired,

@@ -5,6 +5,7 @@ import {
   checkOrgMembership,
   flattenInput,
   checkDocExistence,
+  ensureCanUpdateReviewedAt,
 } from '../../../../../share/middleware';
 import { getCollectionByDocType } from '../../../../../share/helpers';
 
@@ -15,13 +16,13 @@ const afterware = () => async (next, root, args, context) => {
   return { review };
 };
 
-export const resolver = async (root, args, { services: { ReviewService } }) =>
-  ReviewService.insert(args);
+export const resolver = async (root, args, context) =>
+  context.services.ReviewService.insert(args, context);
 
 export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
-  checkOrgMembership(({ organizationId }, { reviewedBy }) => ({
+  checkOrgMembership((root, { organizationId, reviewedBy }) => ({
     organizationId,
     userId: reviewedBy,
   })),
@@ -29,5 +30,6 @@ export default applyMiddleware(
     query: { _id: documentId },
     collection: getCollectionByDocType(documentType),
   })),
+  ensureCanUpdateReviewedAt(),
   afterware(),
 )(resolver);

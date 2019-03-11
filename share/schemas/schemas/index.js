@@ -253,6 +253,7 @@ export const ImprovementPlanSchema = new SimpleSchema([
     'reviewDates.$._id': {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
+      optional: true,
     },
     owner: {
       type: String,
@@ -262,16 +263,6 @@ export const ImprovementPlanSchema = new SimpleSchema([
   },
   FileIdsSchema,
 ]);
-
-export const standardsIdsSchema = new SimpleSchema({
-  standardsIds: {
-    type: [String],
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true,
-    index: 1,
-    // maxCount: ?
-  },
-});
 
 export const getNotifySchema = fieldNames => new SimpleSchema({
   notify: {
@@ -371,7 +362,6 @@ export const FileSchema = new SimpleSchema({
 export const BaseProblemsRequiredSchema = new SimpleSchema([
   OrganizationIdSchema,
   FileIdsSchema,
-  standardsIdsSchema,
   {
     title: {
       type: String,
@@ -578,3 +568,19 @@ export const homeScreenTypeSchemaObj = {
   optional: true,
   allowedValues: Object.values(HomeScreenTypes),
 };
+
+const RelSchema = new SimpleSchema({
+  documentId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+  },
+});
+
+export const IdsRelationSchema = new SimpleSchema({
+  rel1: {
+    type: RelSchema,
+  },
+  rel2: {
+    type: RelSchema,
+  },
+});
