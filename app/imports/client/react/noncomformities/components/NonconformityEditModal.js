@@ -10,7 +10,7 @@ import {
   RenderSwitch,
   CardBlock,
 } from '../../components';
-import { NonConformitiesHelp } from '../../../../api/help-messages';
+import { NonConformitiesHelp, PotentialGainsHelp } from '../../../../api/help-messages';
 import { validateNonConformity } from '../../../validation';
 import categorize from '../../forms/decorators/categorize';
 import NonconformityAddForm from './NonconformityAddForm';
@@ -42,7 +42,11 @@ export const NonconformityEditModal = ({
       onDelete,
     }}
     isEditMode
-    guidance={NonConformitiesHelp.nonConformity}
+    guidance={(
+      type === ProblemTypes.NON_CONFORMITY
+        ? NonConformitiesHelp.nonConformity
+        : PotentialGainsHelp.potentialGain
+    )}
   >
     <EntityModalForm
       {...{ initialValues, onSubmit }}

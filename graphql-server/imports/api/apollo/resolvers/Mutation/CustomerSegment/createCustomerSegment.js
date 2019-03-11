@@ -6,7 +6,7 @@ import {
   checkPercentOfMarketSize,
   checkCustomerSegmentMatchedToAccess,
 } from '../../../../../share/middleware';
-import { Subscriptions, DocChangeKinds } from '../../../constants';
+import { Subscriptions, DocChangeKinds } from '../../../../../share/subscriptions/constants';
 
 export const resolver = async (root, args, context) =>
   context.services.CustomerSegmentService.insert(args, context);

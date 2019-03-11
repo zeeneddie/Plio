@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { BaseEntitySchema } from './schemas';
-import { CanvasTypes } from '../constants';
+import { CanvasTypes, StringLimits } from '../constants';
 
 const GuidanceSchema = new SimpleSchema([
   BaseEntitySchema,
@@ -14,6 +14,7 @@ const GuidanceSchema = new SimpleSchema([
     html: {
       type: String,
       min: 1,
+      max: StringLimits.markdown.max,
     },
     title: {
       type: String,

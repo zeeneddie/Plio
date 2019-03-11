@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { pluck } from 'ramda';
 import { Container, Row } from 'reactstrap';
 
-import { getKeyPartnerChartData } from '../helpers';
+import { getKeyPartnerChartData, getDoughnutChartData } from '../helpers';
 import { Col } from '../../components';
 import CanvasReportSection from './CanvasReportSection';
 import CanvasReportDoughnutChart from './CanvasReportDoughnutChart';
@@ -19,7 +18,7 @@ const CanvasReportKeyPartnerCostStructureCharts = ({ keyPartners, costLines }) =
         <Col xs="4" offset={{ xs: 1 }}>
           <CanvasReportCriticalityChart
             title="Key partners"
-            subtitle="% of market"
+            subtitle="criticality vs spend"
             data={getKeyPartnerChartData(keyPartners)}
           />
         </Col>
@@ -28,8 +27,7 @@ const CanvasReportKeyPartnerCostStructureCharts = ({ keyPartners, costLines }) =
             title="Cost structure"
             subtitle="% of total costs"
             icon="tags"
-            data={pluck('percentOfTotalCost', costLines)}
-            labels={pluck('title', costLines)}
+            data={getDoughnutChartData('percentOfTotalCost', costLines)}
           />
         </Col>
       </Row>

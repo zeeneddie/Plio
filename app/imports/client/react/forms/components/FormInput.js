@@ -28,7 +28,7 @@ const FormInput = ({
         inputEl.value = '';
         inputEl.focus();
 
-        return onChange && onChange({ ...e, target: inputEl });
+        return onChange && onChange({ ...e, target: inputEl, cleared: true });
       }}
     >
       {addon ? (

@@ -11,18 +11,23 @@ const StyledEntityModalNext = styled(({ bodyHeight, ...rest }) => <EntityModalNe
   height: calc(100vh - 60px);
   .guidance-panel {
     text-align: left;
+    & > .card-block {
+      padding-top: 0;
+    }
+  }
+  .modal-content {
+    margin: 0;
   }
   .modal-body > .card-block:last-of-type {
-    ${({ bodyHeight = 'calc(100vh - 115px)' }) => `
-      height: ${bodyHeight};
-      width: ${bodyHeight};
-      max-width: 100%;
-    `}
+    position: relative;
+    height: calc(100vh - 115px);
+    width: calc(100vh - 115px);
   }
   ${StyledMixins.media.mobile`
     display: block;
-    .modal-body .card-block:last-of-type {
-      height: auto;
+    margin: 0;
+    .modal-body > .card-block:last-of-type {
+      height: calc(100vh - 56px);
       width: auto;
     }
   `};
@@ -30,7 +35,10 @@ const StyledEntityModalNext = styled(({ bodyHeight, ...rest }) => <EntityModalNe
 
 const ChartModal = props => (
   /* wrapClassName is chartjs prop. It is needed for creating wrapper element under chart canvas */
-  <StyledEntityModalNext wrapClassName="chart-modal" {...props} />
+  <StyledEntityModalNext
+    {...props}
+    wrapClassName="chart-modal"
+  />
 );
 
 export default ChartModal;

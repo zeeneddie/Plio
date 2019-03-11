@@ -8,6 +8,12 @@ import { Consumer } from '../../components/EntityModalNext/EntityModal';
 
 const StyledCardBlock = styled(CardBlock)`
   display: flex;
+  & + .guidance-panel > .card-block {
+    padding-top: 0;
+    .guidance-html {
+      padding-top: 0;
+    }
+  }
 `;
 
 const StyledHelp = styled.div`
@@ -17,7 +23,7 @@ const StyledHelp = styled.div`
 `;
 
 const StyledGuidanceIcon = styled(GuidanceIcon)`
-  width: auto;
+  width: 31px;
   padding: 0;
   margin-right: 1.25rem;
   i {

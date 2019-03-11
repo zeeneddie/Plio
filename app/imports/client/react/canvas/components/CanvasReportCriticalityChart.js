@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import { getCriticalityLevelLabel } from '../helpers';
+import { CANVAS_REPORT_CHART_SIZE } from '../constants';
 import CriticalityChart from './CriticalityChart';
 import CanvasReportChart from './CanvasReportChart';
 import CanvasReportChartLabels from './CanvasReportChartLabels';
@@ -15,16 +16,25 @@ const CanvasReportCriticalityChart = ({ data, ...rest }) => (
         options={{
           tooltips: false,
           legend: false,
+          maintainAspectRatio: true,
+          layout: {},
         }}
+        width={CANVAS_REPORT_CHART_SIZE}
+        height={CANVAS_REPORT_CHART_SIZE}
       />
     </CanvasReportChart>
     {!!data.length && (
       <CanvasReportChartLabels>
         <CanvasReportCriticalityChartLabel x="SPEND" y="CRITICALITY" />
-        {data.map(({ label, backgroundColor, data: points }) => (
+        {data.map(({
+          _id,
+          label,
+          backgroundColor,
+          data: points,
+        }) => (
           <CanvasReportCriticalityChartLabel
             {...{ label }}
-            key={label + points[0].y + points[0].x}
+            key={_id}
             color={backgroundColor}
             x={getCriticalityLevelLabel(points[0].x)}
             y={getCriticalityLevelLabel(points[0].y)}

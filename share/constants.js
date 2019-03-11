@@ -226,22 +226,38 @@ export const DefaultHelpSections = [
   },
   {
     index: 4,
-    title: 'Managing risks',
+    title: 'Creating your business model canvas',
   },
   {
     index: 5,
-    title: 'Managing nonconformities',
+    title: 'Managing nonconformities & gains',
   },
   {
     index: 6,
-    title: 'Managing workflows',
+    title: 'Managing risks',
   },
   {
     index: 7,
-    title: 'User management',
+    title: 'Managing training',
   },
   {
     index: 8,
+    title: 'Managing key goals',
+  },
+  {
+    index: 9,
+    title: 'Managing workflows',
+  },
+  {
+    index: 10,
+    title: 'User management',
+  },
+  {
+    index: 11,
+    title: 'Customizing Plio',
+  },
+  {
+    index: 12,
     title: 'FAQs',
   },
 ];
@@ -308,7 +324,7 @@ export const ProblemsStatuses = {
   [ProblemIndexes.ACTIONS_UPDATE_PAST_DUE]: 'Open - action(s) verified as effective, approval past due',
   [ProblemIndexes.ACTIONS_FAILED_VERIFICATION]: 'Open - action(s) failed verification',
   [ProblemIndexes.CLOSED_ACTIONS_COMPLETED]: 'Closed - action(s) completed',
-  [ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED]: 'Closed - action(s) verified, approval given, and notification(s) sent to Owner(s) of standard(s) to remind them to update standards',
+  [ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED]: 'Closed - action(s) verified',
   [ProblemIndexes.DELETED]: 'Deleted',
 };
 
@@ -472,6 +488,9 @@ export const StringLimits = {
   },
   sequentialId: {
     min: 3,
+  },
+  markdown: {
+    max: 4096,
   },
 };
 

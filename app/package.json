@@ -6,7 +6,7 @@
     "start:bundle-visualize": "yarn start --extra-packages bundle-visualizer --production",
     "debug": "meteor debug --settings settings-local.json",
     "deploy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy app.pliohub.com --settings settings-production.json",
-    "deploy-staging": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy staging.pliohub.com --settings settings-staging.json"
+    "deploy:staging": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy staging.pliohub.com --settings settings-staging.json"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
@@ -16,7 +16,7 @@
     "apollo-link": "^1.0.7",
     "apollo-link-batch-http": "^1.2.1",
     "apollo-link-http": "^1.5.3",
-    "apollo-link-ws": "^1.0.12",
+    "apollo-link-ws": "^1.0.14",
     "apollo-server-express": "^1.3.2",
     "autolinker": "^1.4.0",
     "aws-sdk": "^2.4.3",

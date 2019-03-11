@@ -18,7 +18,7 @@ import {
   UrlField,
   RelationsAdapter,
 } from '../../components';
-import { NonConformitiesHelp } from '../../../../api/help-messages';
+import { NonConformitiesHelp, PotentialGainsHelp } from '../../../../api/help-messages';
 import { getStatusColor } from '../helpers';
 import {
   StringLimits,
@@ -124,7 +124,13 @@ export const NonconformityEditForm = ({
     <Magnitudes label="Magnitude" {...{ guidelines }}>
       <Magnitudes.Select disabled name="magnitude" component={SelectField} />
     </Magnitudes>
-    <FormField guidance={NonConformitiesHelp.costPerOccurance}>
+    <FormField
+      guidance={(
+        type === ProblemTypes.NON_CONFORMITY
+          ? NonConformitiesHelp.costPerOccurance
+          : PotentialGainsHelp.costPerOccurance
+      )}
+    >
       Financial impact
       <InputField
         name="cost"

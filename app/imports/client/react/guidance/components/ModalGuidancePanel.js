@@ -6,16 +6,19 @@ import { EntityModalGuidance, GuidancePanel } from '../../components';
 import GuidanceContainer from '../containers/GuidanceContainer';
 
 const StyledChildren = styled.div`
-  p { 
+  p {
     margin: 0;
   }
+  margin-bottom: 14px;
 `;
 
 const ModalGuidancePanel = ({ documentType, children }) => (
   <EntityModalGuidance>
     {({ isOpen, toggle }) => (
       <GuidancePanel {...{ isOpen, toggle }}>
-        <StyledChildren>{children}</StyledChildren>
+        {!!children && (
+          <StyledChildren>{children}</StyledChildren>
+        )}
         <GuidanceContainer
           {...{ documentType }}
           skip={!isOpen}

@@ -5,5 +5,4 @@ export default (config = () => ({})) =>
     ...await config(root, args, context),
     collection: context.collections.RevenueStreams,
     key: 'percentOfProfit',
-    entityName: 'Revenue streams',
   }));

@@ -10,7 +10,6 @@ import {
 
 import { StringLimits } from '../constants';
 
-
 const RequiredSchema = new SimpleSchema({
   title: {
     type: String,
@@ -23,6 +22,7 @@ const RequiredSchema = new SimpleSchema({
   notes: {
     type: String,
     min: 1,
+    max: StringLimits.markdown.max,
   },
   owner: {
     type: String,

@@ -58,7 +58,7 @@ const getInitialValues = compose(
     'notify',
   ]),
 );
-const getRefetchQueries = () => [
+const GOAL_REFETCH_QUERIES = [
   Queries.DASHBOARD_GOALS.name,
   Queries.COMPLETED_DELETED_GOALS.name,
   Queries.GOAL_LIST.name,
@@ -140,11 +140,12 @@ const GoalEditContainer = ({
           />,
           <Mutation
             mutation={Mutations.DELETE_GOAL}
+            refetchQueries={GOAL_REFETCH_QUERIES}
             children={noop}
           />,
           <Mutation
             mutation={Mutations.COMPLETE_GOAL}
-            refetchQueries={getRefetchQueries}
+            refetchQueries={GOAL_REFETCH_QUERIES}
             children={noop}
             onCompleted={({ completeGoal }) => {
               const newGoal = merge(goal, completeGoal);
@@ -153,7 +154,7 @@ const GoalEditContainer = ({
           />,
           <Mutation
             mutation={Mutations.UNDO_GOAL_COMPLETION}
-            refetchQueries={getRefetchQueries}
+            refetchQueries={GOAL_REFETCH_QUERIES}
             children={noop}
             onCompleted={
               ({ undoGoalCompletion }) => {

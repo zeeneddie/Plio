@@ -6,7 +6,9 @@
     "start:mock": "MOCK_SCHEMA=1 MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor run --port 5000 --settings settings-local.json",
     "debug": "MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor debug --settings settings-local.json",
     "start:windows": "cmd /c \"SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&meteor --port 5000 --settings settings-local.json\"",
-    "start:windows:mock": "cmd /c \"SET MOCK_SCHEMA=1&&SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&meteor --port 5000 --settings settings-local.json\""
+    "start:windows:mock": "cmd /c \"SET MOCK_SCHEMA=1&&SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&meteor --port 5000 --settings settings-local.json\"",
+    "deploy": "mup deploy --config=mup.js --settings=settings-production.json",
+    "deploy:staging": "mup deploy --config=mup-staging.js --settings=settings-staging.json"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.46",
@@ -25,10 +27,12 @@
     "graphql": "^0.12.3",
     "graphql-iso-date": "^3.3.0",
     "graphql-loader": "^1.2.1",
+    "graphql-redis-subscriptions": "^2.0.0",
     "graphql-subscriptions": "^1.0.0",
     "graphql-tools": "^2.18.0",
     "graphql-type-json": "^0.1.4",
     "invariant": "^2.2.4",
+    "ioredis": "^4.6.2",
     "lodash.get": "^4.4.2",
     "meteor-node-stubs": "^0.3.2",
     "moment-timezone": "^0.5.14",

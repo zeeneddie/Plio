@@ -26,6 +26,7 @@ import './15-enable-simplified-completion-of-actions';
 import './16-create-canvas-settings';
 import './17-move-goals-relations';
 import './18-add-notify-to-canvas-settings';
+import './19-updating-of-help-sections';
 import './20-move-standard-relations';
 
 Migrations.add({

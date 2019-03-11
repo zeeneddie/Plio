@@ -4,7 +4,9 @@
   "scripts": {
     "start": "MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor run --port 4000 --settings settings-local.json",
     "debug": "MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor debug --settings settings-local.json",
-    "start:windows": "cmd /c \"SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&meteor --port 4000 --settings settings-local.json\""
+    "start:windows": "cmd /c \"SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&meteor --port 4000 --settings settings-local.json\"",
+    "deploy": "mup deploy --config=mup.js --settings=settings-production.json",
+    "deploy:staging": "mup deploy --config=mup-staging.js --settings=settings-staging.json"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.46",

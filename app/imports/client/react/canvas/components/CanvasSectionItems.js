@@ -12,6 +12,7 @@ const SortableList = styled(({ twoColumn, ...rest }) => <Sortable {...rest} />)`
   margin: 0;
   padding: 0px ${CanvasStyles.sectionPadding};
   flex: 1;
+  align-items: flex-start;
   ${StyledMixins.scroll};
 
     background: linear-gradient(white 30%, rgba(255,255,255,0)),

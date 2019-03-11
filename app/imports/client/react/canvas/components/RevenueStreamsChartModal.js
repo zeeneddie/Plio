@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Query } from 'react-apollo';
 import { pluck, pathOr } from 'ramda';
-import { sortByIds, noop } from 'plio-util';
+import { StyledMixins, sortByIds, noop } from 'plio-util';
 
 import { WithState } from '../../helpers';
 import { Query as Queries } from '../../../graphql';
@@ -17,7 +17,6 @@ import {
   ChartModal,
 } from '../../components';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
-import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 
 const chartTabs = {
   PERCENT_OF_REVENUE: 0,
@@ -45,6 +44,19 @@ const StyledSwitchView = styled(SwitchView)`
   }
 `;
 
+const StyledChartModal = styled(ChartModal)`
+  .modal-body > .card-block:last-of-type {
+    height: calc(100vh - 185px);
+    width: calc(100vh - 185px);
+  }
+  ${StyledMixins.media.mobile`
+    .modal-body > .card-block:last-of-type {
+      height: calc(100vh - 127px);
+      width: auto;
+    }
+  `};
+`;
+
 const RevenueStreamsChartModal = ({ isOpen, toggle, organizationId }) => (
   <WithState
     initialState={{
@@ -53,15 +65,13 @@ const RevenueStreamsChartModal = ({ isOpen, toggle, organizationId }) => (
     }}
   >
     {({ state, setState }) => (
-      <ChartModal
+      <StyledChartModal
         {...{ isOpen, toggle }}
         error={state.error}
-        bodyHeight="calc(100vh - 185px)"
         noForm
       >
-        <EntityModalHeader label="Revenue streams" />
+        <EntityModalHeader label="Revenue streams" renderLeftButton={null} />
         <EntityModalBody>
-          <ModalGuidancePanel documentType={CanvasTypes.REVENUE_STREAM} />
           <StyledSwitchView
             active={state.activeTab}
             onChange={idx => setState({ activeTab: idx, error: null })}
@@ -118,7 +128,7 @@ const RevenueStreamsChartModal = ({ isOpen, toggle, organizationId }) => (
             </Query>
           </StyledSwitchView>
         </EntityModalBody>
-      </ChartModal>
+      </StyledChartModal>
     )}
   </WithState>
 );

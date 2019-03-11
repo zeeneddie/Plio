@@ -1,30 +1,36 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { pluck } from 'ramda';
 
 import { generateColors, getOtherPercent } from '../helpers';
+import { CANVAS_REPORT_CHART_SIZE } from '../constants';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
 import CanvasReportChart from './CanvasReportChart';
 import CanvasReportChartLabels from './CanvasReportChartLabels';
 import CanvasReportDoughnutChartLabel from './CanvasReportDoughnutChartLabel';
 
-const CanvasReportDoughnutChart = ({ data, labels, ...rest }) => {
-  const otherPercent = getOtherPercent(data);
-  const colors = generateColors(data);
+const CanvasReportDoughnutChart = ({ data, ...rest }) => {
+  const chartData = pluck('value', data);
+  const otherPercent = getOtherPercent(chartData);
+  const colors = generateColors(chartData);
   return (
     <Fragment>
       <CanvasReportChart {...rest}>
         <CanvasDoughnutChart
-          {...{ data, colors }}
-          options={{ tooltips: false }}
+          {...{ colors }}
+          data={chartData}
+          options={{ tooltips: false, maintainAspectRatio: true, layout: {} }}
+          width={CANVAS_REPORT_CHART_SIZE}
+          height={CANVAS_REPORT_CHART_SIZE}
         />
       </CanvasReportChart>
       <CanvasReportChartLabels>
-        {labels.map((label, index) => (
+        {data.map(({ label, value, _id }, index) => (
           <CanvasReportDoughnutChartLabel
             {...{ label }}
-            key={label + data[index]}
+            key={_id}
+            percent={value}
             color={colors[index]}
-            percent={data[index]}
           />
         ))}
         {!!otherPercent && (
@@ -40,8 +46,7 @@ const CanvasReportDoughnutChart = ({ data, labels, ...rest }) => {
 };
 
 CanvasReportDoughnutChart.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.number).isRequired,
-  labels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default CanvasReportDoughnutChart;

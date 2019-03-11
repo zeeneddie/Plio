@@ -8,7 +8,7 @@ import CanvasBlock from './CanvasBlock';
 import ChannelsHelp from './ChannelsHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { CanvasSections, CanvasTypes } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const Channels = ({ organizationId }) => (
   <Query
@@ -21,6 +21,7 @@ const Channels = ({ organizationId }) => (
         {...{ organizationId }}
         label="Channels"
         sectionName={CanvasSections[CanvasTypes.CHANNEL]}
+        documentType={DocumentTypes.CHANNEL}
         help={<ChannelsHelp />}
         items={channels}
         renderModal={({ isOpen, toggle, onLink }) => (

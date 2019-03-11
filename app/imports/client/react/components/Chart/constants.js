@@ -1,10 +1,20 @@
 import { Styles } from '../../../../api/constants';
 
 export const ChartDefaultOptions = {
+  LAYOUT: {
+    padding: {
+      top: 16,
+      right: 16,
+      bottom: 0,
+      left: 16,
+    },
+  },
   LEGEND: {
     position: 'bottom',
     labels: {
       usePointStyle: true,
+      padding: 20,
+      fontFamily: Styles.font.family.segoe.regular,
     },
   },
   TITLE: {

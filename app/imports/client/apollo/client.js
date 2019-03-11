@@ -11,6 +11,10 @@ import introspectionQueryResultData from '../../../fragmentTypes.json';
 
 const GRAPHQL_URL = Meteor.settings.public.graphql.url;
 
+const SUBSCRIPTIONS_URL = GRAPHQL_URL
+  .replace('graphql', 'subscriptions')
+  .replace(/https?/, process.env.NODE_ENV === 'production' ? 'wss' : 'ws');
+
 const isSubscriptionOperation = ({ query: { definitions } }) =>
   definitions.some(({ kind, operation }) =>
     kind === 'OperationDefinition' && operation === 'subscription');
@@ -20,13 +24,15 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 });
 
 const subscriptionClient = new SubscriptionClient(
-  GRAPHQL_URL.replace('graphql', 'subscriptions').replace(/https?/, 'ws'),
+  SUBSCRIPTIONS_URL,
   {
     reconnect: true,
-    reconnectionAttempts: 5,
-    connectionParams: {
+    lazy: true,
+    inactivityTimeout: 0,
+    timeout: 30000,
+    connectionParams: () => ({
       'meteor-login-token': Accounts._storedLoginToken(),
-    },
+    }),
   },
 );
 

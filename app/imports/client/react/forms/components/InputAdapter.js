@@ -18,7 +18,14 @@ const InputAdapter = ({
       if (onChange) onChange(e);
     }}
     onBlur={(e) => {
-      input.onBlur(getTargetValue(e));
+      const value = getTargetValue(e);
+      const trimmedValue = value.trim();
+
+      if (trimmedValue !== value) {
+        input.onChange(trimmedValue);
+      }
+
+      input.onBlur(trimmedValue);
       if ((dirty || dirtySinceLastSubmit) && onBlur) {
         onBlur(e);
       }

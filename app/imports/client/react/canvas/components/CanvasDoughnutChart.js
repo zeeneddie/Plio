@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { append } from 'ramda';
 
-import { CanvasDoughnutChartSize } from '../../../../api/constants';
 import { generateColors, getOtherPercent } from '../helpers';
 import { LoadableDoughnutChart, CardBlock } from '../../components';
 
@@ -26,8 +25,6 @@ const CanvasDoughnutChart = ({
     <StyledCardBlock>
       <LoadableDoughnutChart
         {...props}
-        width={CanvasDoughnutChartSize.WIDTH}
-        height={CanvasDoughnutChartSize.HEIGHT}
         data={{
           datasets: [{
             data: otherPercent ? append(otherPercent, data) : data,

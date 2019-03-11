@@ -16,7 +16,7 @@ const GoalSubcardContainer = ({
 }) => (
   <Mutation
     mutation={Mutations.DELETE_GOAL}
-    refetchQueries={() => [
+    refetchQueries={[
       Queries.DASHBOARD_GOALS.name,
       Queries.COMPLETED_DELETED_GOALS.name,
       Queries.GOAL_LIST.name,

@@ -8,7 +8,7 @@ import CanvasBlock from './CanvasBlock';
 import CustomerRelationshipsHelp from './CustomerRelationshipsHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { CanvasSections, CanvasTypes } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const CustomerRelationships = ({ organizationId }) => (
   <Query
@@ -21,6 +21,7 @@ const CustomerRelationships = ({ organizationId }) => (
         {...{ organizationId }}
         label="Customer relationships"
         sectionName={CanvasSections[CanvasTypes.CUSTOMER_RELATIONSHIP]}
+        documentType={DocumentTypes.CUSTOMER_RELATIONSHIP}
         help={<CustomerRelationshipsHelp />}
         items={customerRelationships}
         renderModal={({ isOpen, toggle, onLink }) => (

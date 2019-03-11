@@ -4,6 +4,12 @@ import { $ } from 'meteor/jquery';
 Template.QuillEditor.viewmodel({
   editor: null,
   isExpanded: false,
+  maxLength: Infinity,
+  onInput() {
+    if (this.editor().getLength() > this.maxLength()) {
+      this.editor().deleteText(this.maxLength(), this.editor().getLength());
+    }
+  },
   async onRendered(tpl) {
     const { default: Quill } = await import('quill');
     const containerElement = this.templateInstance.find('.editor-container');

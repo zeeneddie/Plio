@@ -8,7 +8,7 @@ import CanvasBlock from './CanvasBlock';
 import ValuePropositionsHelp from './ValuePropositionsHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
-import { CanvasSections, CanvasTypes } from '../../../../share/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const ValuePropositions = ({ organizationId }) => (
   <Query
@@ -21,6 +21,7 @@ const ValuePropositions = ({ organizationId }) => (
         {...{ organizationId }}
         label="Value propositions"
         sectionName={CanvasSections[CanvasTypes.VALUE_PROPOSITION]}
+        documentType={DocumentTypes.VALUE_PROPOSITION}
         help={<ValuePropositionsHelp />}
         items={valuePropositions}
         renderModal={({ isOpen, toggle, onLink }) => (

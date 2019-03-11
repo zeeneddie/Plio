@@ -73,12 +73,13 @@ swal.promise = ({
   successTitle = 'Success',
   successText = '',
   errorTitle,
+  successTimer,
   showLoaderOnConfirm = true,
   ...props
 }, cb) => new Promise((resolve, reject) => {
   swal({ showLoaderOnConfirm, ...props }, callbackValue => cb(callbackValue)
     .then((res) => {
-      swal.success(successTitle, successText);
+      swal.success(successTitle, successText, { timer: successTimer });
       resolve(res);
     })
     .catch((err) => {

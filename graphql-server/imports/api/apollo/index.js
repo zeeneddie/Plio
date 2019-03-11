@@ -3,15 +3,15 @@ import { WebApp } from 'meteor/webapp';
 import { ApolloServer } from 'apollo-server-express';
 import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
-import { PubSub } from 'graphql-subscriptions';
 
 import schema from './apiSchema';
 import { createLoaders } from './loaders';
 import * as collections from '../../share/collections';
 import * as services from '../../share/services';
 import getUser from './util/getUser';
+import pubsub from './pubsub';
 
-const pubsub = new PubSub();
+const KEEP_ALIVE_PING_INTERVAL = 10000;
 
 const getContext = async (authorizationToken) => {
   const context = {
@@ -36,11 +36,14 @@ const getContext = async (authorizationToken) => {
 
 const server = new ApolloServer({
   schema,
+  introspection: true,
   playground: {
-    subscriptionEndpoint: `${Meteor.absoluteUrl()}/subscriptions`.replace(/https?/, 'ws'),
+    subscriptionEndpoint: Meteor.absoluteUrl('subscriptions').replace(
+      /https?/,
+      process.env.NODE_ENV === 'production' ? 'wss' : 'ws',
+    ),
   },
   context: async ({ req }) => ({
-    // ...req, do we need this?
     ...await getContext(req.headers['meteor-login-token']),
   }),
 });
@@ -63,6 +66,7 @@ new SubscriptionServer({
   schema,
   execute,
   subscribe,
+  keepAlive: KEEP_ALIVE_PING_INTERVAL,
   onConnect: connectionParams => getContext(connectionParams['meteor-login-token']),
 }, {
   server: WebApp.httpServer,

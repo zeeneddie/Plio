@@ -16,7 +16,7 @@ const GoalEditModalContainer = ({
   organizationId,
   isOpen,
   toggle,
-}) => activeGoal && (
+}) => activeGoal ? (
   <GoalEditContainer
     {...{
       organizationId,
@@ -26,7 +26,7 @@ const GoalEditModalContainer = ({
     goalId={activeGoal}
     component={GoalEditModal}
   />
-);
+) : null;
 
 GoalEditModalContainer.propTypes = {
   ui: PropTypes.object.isRequired,

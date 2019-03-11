@@ -18,7 +18,6 @@ import {
   CardBlock,
   ChartModal,
 } from '../../components';
-import ModalGuidancePanel from '../../guidance/components/ModalGuidancePanel';
 import CriticalityChart from './CriticalityChart';
 
 const getChartData = ({
@@ -41,9 +40,8 @@ const KeyPartnersChartModal = ({ isOpen, toggle, organizationId }) => (
         {...{ isOpen, toggle, error }}
         noForm
       >
-        <EntityModalHeader label="Key partners" />
+        <EntityModalHeader label="Key partners" renderLeftButton={null} />
         <EntityModalBody>
-          <ModalGuidancePanel documentType={CanvasTypes.KEY_PARTNER} />
           <RenderSwitch
             {...{ loading, error }}
             errorWhenMissing={noop}

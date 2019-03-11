@@ -1,6 +1,6 @@
 import { HomeScreenTypes } from '../share/constants';
 
-export const APP_VERSION = '0.3.40';
+export const APP_VERSION = '0.3.62';
 
 export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
 export const ALERT_AUTOHIDE_TIME = 1500;
@@ -369,6 +369,7 @@ export const Styles = {
   border: {
     color: {
       grey: '#ddd',
+      darkGrey: '#aaa',
     },
   },
   color: {
@@ -385,6 +386,7 @@ export const Styles = {
   },
   background: {
     color: {
+      grey: '#f5f7f9',
       lightGrey: '#f5f5f5',
       white: '#fff',
     },
@@ -415,16 +417,6 @@ export const HomeRouteNames = {
 };
 
 export const OptionNone = { label: 'None', value: null };
-
-export const CanvasDoughnutChartSize = {
-  WIDTH: 566,
-  HEIGHT: 566,
-};
-
-export const CanvasBubbleChartSize = {
-  WIDTH: 566,
-  HEIGHT: 566,
-};
 
 export const CriticalityLabels = {
   LOW: 'Low',

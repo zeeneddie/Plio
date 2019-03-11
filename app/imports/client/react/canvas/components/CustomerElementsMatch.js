@@ -18,7 +18,12 @@ const HelpText = styled.p`
   border-bottom: 1px solid ${Styles.border.color.grey};
 `;
 
-const CustomerElementsMatch = ({ renderPie, renderMatcher, ...props }) => (
+const CustomerElementsMatch = ({
+  renderPie,
+  renderMatcher,
+  guidance,
+  ...props
+}) => (
   <WithState initialState={{ activeTab: Tabs.PIE }}>
     {({ state, setState }) => (
       <TabContent activeTab={state.activeTab}>
@@ -29,11 +34,7 @@ const CustomerElementsMatch = ({ renderPie, renderMatcher, ...props }) => (
           })}
         </TabPane>
         <TabPane tabId={Tabs.MATCHER}>
-          <HelpText>
-            Click on the arrow symbol to match to one or more elements.
-            If there are no elements listed then click on the Back button
-            and start adding some Features and/or Benefits.
-          </HelpText>
+          <HelpText>{guidance}</HelpText>
           {renderMatcher(props)}
           <Pull right>
             <Button onClick={() => setState({ activeTab: Tabs.PIE })}>
@@ -50,6 +51,7 @@ const CustomerElementsMatch = ({ renderPie, renderMatcher, ...props }) => (
 CustomerElementsMatch.propTypes = {
   renderPie: PropTypes.func.isRequired,
   renderMatcher: PropTypes.func.isRequired,
+  guidance: PropTypes.string.isRequired,
 };
 
 export default CustomerElementsMatch;
