@@ -27,7 +27,7 @@ const GoalAddContainer = ({
       />,
       <Mutation
         mutation={Mutations.CREATE_GOAL}
-        refetchQueries={() => [
+        refetchQueries={[
           Queries.DASHBOARD_GOALS.name,
           Queries.GOAL_LIST.name,
         ]}

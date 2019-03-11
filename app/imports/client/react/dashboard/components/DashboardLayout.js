@@ -1,6 +1,5 @@
 import React from 'react';
 import { ApolloProvider, Query } from 'react-apollo';
-import { Meteor } from 'meteor/meteor';
 import { Provider } from 'react-redux';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { propOr } from 'ramda';
@@ -17,6 +16,7 @@ import PreloaderPage from '../../components/PreloaderPage';
 import { withUpdateLastAccessedDate } from '../../helpers';
 import DashboardPage from '../components/DashboardPage';
 import { getMetrics, getRouteName, getIconName, getMetricText } from '../helpers';
+import { OrgSubs } from '../../../../startup/client/subsmanagers';
 
 const COUNT_QUERY_POLL_INTERVAL = 60000;
 
@@ -38,7 +38,7 @@ const enhance = composeWithTracker(({ orgSerialNumber }, onData) => {
     onData(null, { organization: null, loading: true, error: null });
 
     const serialNumber = parseInt(orgSerialNumber, 10);
-    const subscription = Meteor.subscribe(
+    const subscription = OrgSubs.subscribe(
       'currentUserOrganizationBySerialNumber',
       serialNumber,
       {

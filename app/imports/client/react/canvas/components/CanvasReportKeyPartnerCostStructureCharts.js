@@ -18,7 +18,7 @@ const CanvasReportKeyPartnerCostStructureCharts = ({ keyPartners, costLines }) =
         <Col xs="4" offset={{ xs: 1 }}>
           <CanvasReportCriticalityChart
             title="Key partners"
-            subtitle="% of market"
+            subtitle="criticality vs spend"
             data={getKeyPartnerChartData(keyPartners)}
           />
         </Col>

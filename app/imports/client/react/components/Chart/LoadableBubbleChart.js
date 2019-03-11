@@ -24,14 +24,7 @@ const LoadableBubbleChart = Loadable({
       options={{
         maintainAspectRatio: false,
         aspectRatio: 1,
-        layout: {
-          padding: {
-            left: 0,
-            right: 0,
-            top: 10,
-            bottom: 0,
-          },
-        },
+        layout: ChartDefaultOptions.LAYOUT,
         title: {
           display: !!title,
           text: title,

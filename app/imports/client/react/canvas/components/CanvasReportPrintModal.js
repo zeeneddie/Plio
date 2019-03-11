@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { StyledMixins } from 'plio-util';
+import { StyledMixins, noop } from 'plio-util';
 import { Form } from 'react-final-form';
 import { keys } from 'ramda';
 import { CardTitle } from 'reactstrap';
@@ -30,6 +30,7 @@ const ReportSectionLabels = {
 };
 
 const StyledButton = styled(Button)`
+  margin-left: 15px;
   ${StyledMixins.media.print`
     display: none;
   `}
@@ -66,9 +67,21 @@ const CanvasReportPrintModal = ({ printState, updatePrintState }) => (
                 <Form
                   initialValues={printState}
                   onSubmit={(values) => {
+                    const { title } = document;
+
                     updatePrintState(values);
                     toggle();
-                    setTimeout(window.print, 0);
+
+                    window.onafterprint = () => {
+                      // revert title to its original
+                      document.title = title;
+                      window.onafterprint = noop;
+                    };
+
+                    setTimeout(() => {
+                      document.title = 'Plio canvas report';
+                      window.print();
+                    }, 0);
                   }}
                 >
                   {({ handleSubmit }) => (

@@ -21,8 +21,11 @@ const StyledDropdownMenu = styled(DropdownMenu)`
   top: auto !important;
   left: auto !important;
   min-width: 0;
-  button:focus {
-    outline: none;
+  button.dropdown-item {
+    padding: 10px;
+    &:focus {
+      outline: none;
+    }
   }
 `;
 
@@ -82,7 +85,7 @@ const StyledCanvasLabel = styled(CanvasLabel)`
   display: inline-block;
 
   & > button {
-    padding: 0.1rem 0.7rem 0.15rem !important;
+    padding: 0.1rem 0.3rem 0.15rem !important;
   }
 `;
 
