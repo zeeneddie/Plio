@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { pluck } from 'ramda';
 
 import { generateColors, getOtherPercent } from '../helpers';
+import { CANVAS_REPORT_CHART_SIZE } from '../constants';
 import CanvasDoughnutChart from './CanvasDoughnutChart';
 import CanvasReportChart from './CanvasReportChart';
 import CanvasReportChartLabels from './CanvasReportChartLabels';
@@ -18,7 +19,9 @@ const CanvasReportDoughnutChart = ({ data, ...rest }) => {
         <CanvasDoughnutChart
           {...{ colors }}
           data={chartData}
-          options={{ tooltips: false }}
+          options={{ tooltips: false, maintainAspectRatio: true, layout: {} }}
+          width={CANVAS_REPORT_CHART_SIZE}
+          height={CANVAS_REPORT_CHART_SIZE}
         />
       </CanvasReportChart>
       <CanvasReportChartLabels>

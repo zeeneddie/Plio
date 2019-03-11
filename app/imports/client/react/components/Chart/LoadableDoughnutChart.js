@@ -20,6 +20,7 @@ const LoadableDoughnutChart = Loadable({
       options={{
         maintainAspectRatio: false,
         aspectRatio: 1,
+        layout: ChartDefaultOptions.LAYOUT,
         title: {
           display: !!title,
           text: title,

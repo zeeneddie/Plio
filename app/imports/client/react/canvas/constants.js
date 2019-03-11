@@ -12,3 +12,5 @@ export const CanvasReportSections = {
   VALUE_COMPONENTS: 'valueComponents',
   OPERATIONAL_ELEMENTS: 'operationalElements',
 };
+
+export const CANVAS_REPORT_CHART_SIZE = 566;
