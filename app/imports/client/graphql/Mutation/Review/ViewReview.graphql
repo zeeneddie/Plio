@@ -1,0 +1,7 @@
+#import "../../Fragment/ReviewCard.graphql"
+
+mutation viewReview($input: ViewReviewInput!) {
+  viewReview(input: $input) {
+    ...ReviewCard
+  }
+}

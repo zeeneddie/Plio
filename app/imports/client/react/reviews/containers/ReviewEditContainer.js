@@ -1,5 +1,5 @@
-import PropTypes, { useState } from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types';
+import React, { useState, memo } from 'react';
 import {
   pick,
   compose,
@@ -63,6 +63,11 @@ const ReviewEditContainer = ({
           mutation={Mutations.REMOVE_REVIEW}
           children={noop}
         />,
+        <Mutation
+          mutation={Mutations.VIEW_REVIEW}
+          children={noop}
+          onCompleted={({ viewReview }) => setReview(viewReview)}
+        />,
         /* eslint-enable react/no-children-prop */
       ]}
     >
@@ -70,15 +75,25 @@ const ReviewEditContainer = ({
         { loading, error },
         updateReview,
         deleteReview,
+        viewReview,
       ]) => renderComponent({
         ...props,
         error,
         organizationId,
         isOpen,
-        toggle,
         initialValues,
         review,
         loading,
+        toggle: () => {
+          if (!review.isViewed && !isOpen) {
+            viewReview({
+              variables: {
+                input: { _id: review._id },
+              },
+            });
+          }
+          toggle();
+        },
         onSubmit: async (values, form) => {
           const currentValues = getInitialValues(review);
           const difference = diff(values, currentValues);
@@ -86,7 +101,6 @@ const ReviewEditContainer = ({
           if (!difference) return undefined;
 
           const {
-            scheduledDate,
             reviewedAt,
             comments = '',
             reviewedBy: { value: reviewedBy },
@@ -96,7 +110,6 @@ const ReviewEditContainer = ({
             variables: {
               input: {
                 _id: review._id,
-                scheduledDate,
                 reviewedAt,
                 comments,
                 reviewedBy,
@@ -111,10 +124,10 @@ const ReviewEditContainer = ({
           if (onDelete) return onDelete();
 
           return swal.promise({
-            text: `The review "${review.title}" will be deleted`,
+            text: 'The review will be deleted',
             confirmButtonText: 'Delete',
             successTitle: 'Deleted!',
-            successText: `The review "${review.title}" was deleted successfully.`,
+            successText: 'The review was deleted successfully.',
           }, () => deleteReview({
             variables: {
               input: { _id: review._id },
@@ -137,4 +150,4 @@ ReviewEditContainer.propTypes = {
   fetchPolicy: PropTypes.string,
 };
 
-export default React.memo(ReviewEditContainer);
+export default memo(ReviewEditContainer);

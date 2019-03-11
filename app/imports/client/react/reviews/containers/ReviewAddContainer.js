@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Query, Mutation } from 'react-apollo';
 import { noop, getUserOptions } from 'plio-util';
@@ -16,6 +16,7 @@ const ReviewAddContainer = ({
   refetchQueries,
   onLink,
   onUnlink,
+  reviewWorkflow,
   ...props
 }) => (
   <Composer
@@ -40,15 +41,13 @@ const ReviewAddContainer = ({
       toggle,
       organizationId,
       initialValues: {
-        // TODO get right scheduledDate
-        scheduledDate: Date.now(),
+        scheduledDate: reviewWorkflow.scheduledDate || Date.now(),
         reviewedAt: Date.now(),
         reviewedBy: getUserOptions(user),
         comments: '',
       },
       onSubmit: (values) => {
         const {
-          scheduledDate,
           reviewedAt,
           comments = '',
           reviewedBy: { value: reviewedBy },
@@ -57,15 +56,12 @@ const ReviewAddContainer = ({
         return createReview({
           variables: {
             input: {
-              scheduledDate,
               reviewedAt,
               comments,
               reviewedBy,
               organizationId,
-              linkedTo: {
-                documentId,
-                documentType,
-              },
+              documentId,
+              documentType,
             },
           },
         }).then(({ data: { createReview: { review } } }) => onLink(review._id))
@@ -84,6 +80,7 @@ ReviewAddContainer.propTypes = {
   onUnlink: PropTypes.func.isRequired,
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
+  reviewWorkflow: PropTypes.object,
 };
 
-export default ReviewAddContainer;
+export default memo(ReviewAddContainer);

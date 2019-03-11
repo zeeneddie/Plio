@@ -1,8 +1,8 @@
-import { Organizations } from '/imports/share/collections/organizations';
-import { Reviews } from '/imports/share/collections/reviews';
-import { getDocByIdAndType, getReviewConfig } from '/imports/share/helpers';
-import BaseEntityService from '/imports/share/services/base-entity-service.js';
-import ReviewWorkflow from '/imports/share/utils/ReviewWorkflow';
+import { Organizations } from '../collections/organizations';
+import { Reviews } from '../collections/reviews';
+import { getDocByIdAndType, getReviewConfig } from '../helpers';
+import BaseEntityService from './base-entity-service.js';
+import ReviewWorkflow from '../utils/ReviewWorkflow';
 
 
 export default {

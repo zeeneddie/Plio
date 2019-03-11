@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Card } from 'reactstrap';
 
 import { getFormattedDate } from '../../../../share/helpers';
-import { EntityForm, EntityCard } from '../../components';
+import { EntityForm, EntityCard, Label } from '../../components';
 import ReviewForm from './ReviewForm';
 
 const ReviewSubcard = ({
@@ -29,6 +29,12 @@ const ReviewSubcard = ({
         label={(
           <Fragment>
             <strong>Review on {getFormattedDate(review.reviewedAt)}</strong>
+            {!review.isViewed && (
+              <Fragment>
+                {' '}
+                <Label names="primary">New</Label>
+              </Fragment>
+            )}
           </Fragment>
         )}
         component={EntityCard}

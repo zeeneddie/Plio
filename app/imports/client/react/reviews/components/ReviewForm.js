@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 
 import { StringLimits } from '../../../../share/constants';
 import {
@@ -15,7 +15,7 @@ const ReviewForm = ({ organizationId, save }) => (
     <CardBlock>
       <FormField>
         Scheduled review date
-        <DatePickerField name="scheduledDate" onChange={save} />
+        <DatePickerField name="scheduledDate" onChange={save} disabled />
       </FormField>
       <FormField>
         Actual review date
@@ -48,4 +48,4 @@ ReviewForm.propTypes = {
   save: PropTypes.func,
 };
 
-export default ReviewForm;
+export default memo(ReviewForm);

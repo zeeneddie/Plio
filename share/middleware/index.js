@@ -31,3 +31,4 @@ export * from './Nonconformity';
 export * from './StandardSection';
 export * from './StandardType';
 export * from './RiskType';
+export * from './Review';
