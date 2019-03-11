@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import {
   pick,
   compose,
@@ -63,6 +63,11 @@ const ReviewEditContainer = ({
           mutation={Mutations.REMOVE_REVIEW}
           children={noop}
         />,
+        <Mutation
+          mutation={Mutations.VIEW_REVIEW}
+          children={noop}
+          onCompleted={({ viewReview }) => setReview(viewReview)}
+        />,
         /* eslint-enable react/no-children-prop */
       ]}
     >
@@ -70,15 +75,25 @@ const ReviewEditContainer = ({
         { loading, error },
         updateReview,
         deleteReview,
+        viewReview,
       ]) => renderComponent({
         ...props,
         error,
         organizationId,
         isOpen,
-        toggle,
         initialValues,
         review,
         loading,
+        toggle: () => {
+          if (!review.isViewed && !isOpen) {
+            viewReview({
+              variables: {
+                input: { _id: review._id },
+              },
+            });
+          }
+          toggle();
+        },
         onSubmit: async (values, form) => {
           const currentValues = getInitialValues(review);
           const difference = diff(values, currentValues);
@@ -135,4 +150,4 @@ ReviewEditContainer.propTypes = {
   fetchPolicy: PropTypes.string,
 };
 
-export default React.memo(ReviewEditContainer);
+export default memo(ReviewEditContainer);

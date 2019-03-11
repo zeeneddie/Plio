@@ -34,8 +34,8 @@ export const up = async () => {
   await riskPromises;
   await nonconformityPromises;
 
-  Risks.update(query, modifier, options);
-  NonConformities.update(query, modifier, options);
+  await Risks.update(query, modifier, options);
+  await NonConformities.update(query, modifier, options);
 };
 
 export const down = async () => {

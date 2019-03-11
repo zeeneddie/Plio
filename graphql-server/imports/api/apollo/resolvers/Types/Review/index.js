@@ -14,5 +14,7 @@ export default {
     updatedBy: loadUserById(view(updatedBy)),
     reviewedBy: loadUserById(view(reviewedBy)),
     organization: loadOrganizationById(view(organizationId)),
+    isViewed: (root, args, { userId }) =>
+      root.reviewedBy === userId || root.viewedBy.includes(userId),
   },
 };

@@ -81,6 +81,10 @@ fragment StandardCard on Standard {
       }
     }
   }
+  reviewWorkflow {
+    scheduledDate
+    status
+  }
   lessons {
     ...LessonCard
   }

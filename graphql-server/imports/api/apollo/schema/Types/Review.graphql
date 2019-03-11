@@ -11,5 +11,5 @@ type Review implements BaseEntity {
   reviewedAt: DateTime!
   reviewedBy: User!
   comments: String
-  #viewedBy
+  isViewed: Boolean
 }
