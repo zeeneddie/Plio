@@ -23,6 +23,7 @@ import StandardType from './StandardType';
 import StandardSection from './StandardSection';
 import Nonconformity from './Nonconformity';
 import Guidance from './Guidance';
+import Review from './Review';
 
 const loaders = {
   User,
@@ -48,6 +49,7 @@ const loaders = {
   Nonconformity,
   Project,
   Guidance,
+  Review,
 };
 
 export const createLoaders = (ctx) => {

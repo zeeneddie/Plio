@@ -8,6 +8,17 @@ input SourceInput {
   url: String
 }
 
+input ImprovementPlanReviewDateInput {
+  date: DateTime!
+}
+
+input ImprovementPlanInput {
+  desiredOutcome: String
+  targetDate: DateTime
+  reviewDates: [ImprovementPlanReviewDateInput]
+  owner: ID!
+}
+
 input CreateStandardInput {
   organizationId: ID!
   title: String!
@@ -33,6 +44,7 @@ input UpdateStandardInput {
   departmentsIds: [ID]
   projectIds: [ID]
   notify: [ID]
+  improvementPlan: ImprovementPlanInput
 }
 
 input DeleteStandardInput {

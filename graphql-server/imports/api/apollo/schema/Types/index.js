@@ -30,6 +30,7 @@ import Guidance from './Guidance.graphql';
 import StandardType from './StandardType.graphql';
 import StandardSection from './StandardSection.graphql';
 import Nonconformity from './Nonconformity.graphql';
+import Review from './Review.graphql';
 
 export default [
   User,
@@ -64,4 +65,5 @@ export default [
   StandardType,
   StandardSection,
   Nonconformity,
+  Review,
 ];

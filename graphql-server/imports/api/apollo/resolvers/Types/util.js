@@ -166,14 +166,6 @@ export const resolveLinkedPotentialGains = createRelationResolver(
   }),
 );
 
-export const resolveStandardsByIds = createEntityByIdsResolver(
-  ({ standardsIds }, { isDeleted = false }, { loaders: { Standard: { byQuery } } }) => ({
-    loader: byQuery,
-    ids: standardsIds,
-    isDeleted,
-  }),
-);
-
 export const resolveRisksByIds = createEntityByIdsResolver(
   ({ riskIds }, { isDeleted = false }, { loaders: { Risk: { byQuery } } }) => ({
     loader: byQuery,
@@ -203,6 +195,13 @@ export const resolvePotentialGainsByIds = createEntityByIdsResolver(
 export const resolveLessonsById = async (root, args, context) => {
   const { _id: documentId } = root;
   const { loaders: { Lesson: { byQuery } } } = context;
+
+  return byQuery.load({ documentId });
+};
+
+export const resolveReviewById = async (root, args, context) => {
+  const { _id: documentId } = root;
+  const { loaders: { Review: { byQuery } } } = context;
 
   return byQuery.load({ documentId });
 };

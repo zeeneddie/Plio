@@ -6,3 +6,4 @@ export { default as checkDocExistence } from './checkDocExistence';
 export { default as ensureCanUpdateEndDate } from './ensureCanUpdateEndDate';
 export { default as ensureCanUpdateStartDate } from './ensureCanUpdateStartDate';
 export { default as checkPercentField } from './checkPercentField';
+export { default as ensureCanUpdateReviewedAt } from './ensureCanUpdateReviewedAt';

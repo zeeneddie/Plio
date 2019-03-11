@@ -1,0 +1,13 @@
+fragment ReviewCard on Review {
+  _id
+  scheduledDate,
+  reviewedAt,
+  comments,
+  isViewed,
+  reviewedBy {
+    _id
+    profile {
+      fullName
+    }
+  }
+}

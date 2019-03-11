@@ -24,6 +24,7 @@ import CUSTOMER_ELEMENT_PRESENTATION from './CustomerElementPresentation.graphql
 import CUSTOMER_SEGMENT_RELATIONS from './CustomerSegmentRelations.graphql';
 import VALUE_PROPOSITION_RELATIONS from './ValuePropositionRelations.graphql';
 import NONCONFORMITY_CARD from './NonconformityCard.graphql';
+import REVIEW_CARD from './ReviewCard.graphql';
 
 DASHBOARD_GOAL.fragmentName = 'DashboardGoal';
 GOAL_CARD.fragmentName = 'GoalCard';
@@ -78,4 +79,5 @@ export default {
   CUSTOMER_SEGMENT_RELATIONS,
   VALUE_PROPOSITION_RELATIONS,
   NONCONFORMITY_CARD,
+  REVIEW_CARD,
 };

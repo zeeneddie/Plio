@@ -2,12 +2,12 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidationError } from 'meteor/mdg:validation-error';
 import property from 'lodash.property';
 
-import { ReviewSchema } from '/imports/share/schemas/review-schema';
-import { Reviews } from '/imports/share/collections/reviews';
-import { IdSchema } from '/imports/share/schemas/schemas';
+import { ReviewSchema } from '../../share/schemas/review-schema';
+import { Reviews } from '../../share/collections/reviews';
+import { IdSchema } from '../../share/schemas/schemas';
 import { exists, checkOrgMembership } from '../checkers';
 import Method from '../method';
-import ReviewService from './review-service';
+import ReviewService from '../../share/services/review-service';
 import { compose } from '../helpers';
 
 const checkReviewExistance = exists(Reviews);

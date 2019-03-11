@@ -8,9 +8,11 @@ import {
 } from 'plio-util';
 import { view } from 'ramda';
 
+import ReviewWorkflow from '../../../../../share/utils/ReviewWorkflow';
 import {
   resolveProjectsByIds,
   resolveLessonsById,
+  resolveReviewById,
   resolveLinkedRisks,
   resolveLinkedNonconformities,
 } from '../util';
@@ -38,6 +40,7 @@ export default {
     departments: loadDepartmentsById(view(departmentsIds)),
     projects: resolveProjectsByIds,
     lessons: resolveLessonsById,
+    reviews: resolveReviewById,
     risks: resolveLinkedRisks,
     nonconformities: resolveLinkedNonconformities,
     type: async (root, args, context) => {
@@ -53,6 +56,21 @@ export default {
       if (!sectionId) return null;
 
       return byId.load(sectionId);
+    },
+    reviewWorkflow: (root, args, { collections: { Organizations } }) => {
+      const organization = Organizations.findOne({ _id: root.organizationId });
+      const reviewWorkflow = new ReviewWorkflow(
+        root,
+        organization.review.standards,
+        organization.timezone,
+      );
+      if (reviewWorkflow) {
+        return {
+          status: reviewWorkflow.getStatus(),
+          scheduledDate: reviewWorkflow.getReviewSchedule(),
+        };
+      }
+      return {};
     },
   },
 };

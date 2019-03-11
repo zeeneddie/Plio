@@ -1,6 +1,7 @@
-#import "./RiskCard.graphql"
+#import './RiskCard.graphql'
 #import './LessonCard.graphql'
 #import './NonconformityCard.graphql'
+#import './ReviewCard.graphql'
 
 fragment StandardCard on Standard {
   _id
@@ -67,6 +68,23 @@ fragment StandardCard on Standard {
       fullName
     }
   }
+  improvementPlan {
+    desiredOutcome
+    targetDate
+    reviewDates {
+      date
+    }
+    owner {
+      _id
+      profile {
+        fullName
+      }
+    }
+  }
+  reviewWorkflow {
+    scheduledDate
+    status
+  }
   lessons {
     ...LessonCard
   }
@@ -75,5 +93,8 @@ fragment StandardCard on Standard {
   }
   nonconformities {
     ...NonconformityCard
+  }
+  reviews {
+    ...ReviewCard
   }
 }

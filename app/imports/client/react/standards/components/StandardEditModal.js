@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import arrayMutators from 'final-form-arrays';
 import React, { Fragment } from 'react';
 import { noop } from 'plio-util';
 
@@ -12,6 +13,7 @@ import {
   RelationsAdapter,
   EntitiesField,
   NotifySubcard,
+  ImprovementPlanSubcard,
 } from '../../components';
 import { DocumentTypes } from '../../../../share/constants';
 import categorize from '../../forms/decorators/categorize';
@@ -23,6 +25,7 @@ import { StandardsHelp } from '../../../../api/help-messages';
 import { validateStandardUpdate } from '../../../validation';
 import LessonsSubcard from '../../lessons/components/LessonsSubcard';
 import RisksSubcard from '../../risks/components/RisksSubcard';
+import ReviewsSubcard from '../../reviews/components/ReviewsSubcard';
 
 export const StandardEditModal = ({
   isOpen,
@@ -50,6 +53,7 @@ export const StandardEditModal = ({
     <EntityModalForm
       {...{ initialValues, onSubmit }}
       decorators={[categorize, shouldRenderSource2]}
+      mutators={arrayMutators}
       validate={validateStandardUpdate}
     >
       {({ handleSubmit }) => (
@@ -71,6 +75,8 @@ export const StandardEditModal = ({
                 nonconformities,
                 risks,
                 lessons,
+                reviews,
+                reviewWorkflow,
                 organization: {
                   ncGuidelines,
                   rkGuidelines,
@@ -109,11 +115,32 @@ export const StandardEditModal = ({
                       guidelines={rkGuidelines}
                       render={RisksSubcard}
                     />
+                    {/*
+                      TODO add corrective action and preventative action subcards
+                      when https://github.com/Pliohub/Plio/pull/1786 branch will be merged
+                    */}
+                    <ImprovementPlanSubcard
+                      {...{ organizationId }}
+                      name="improvementPlan"
+                      save={handleSubmit}
+                    />
                     <EntitiesField
                       {...{ organizationId, refetchQueries, linkedTo }}
                       name="lessons"
                       render={LessonsSubcard}
                       lessons={lessons}
+                      documentType={DocumentTypes.STANDARD}
+                    />
+                    <EntitiesField
+                      {...{
+                        organizationId,
+                        refetchQueries,
+                        linkedTo,
+                        reviewWorkflow,
+                      }}
+                      name="reviews"
+                      render={ReviewsSubcard}
+                      reviews={reviews}
                       documentType={DocumentTypes.STANDARD}
                     />
                     <NotifySubcard

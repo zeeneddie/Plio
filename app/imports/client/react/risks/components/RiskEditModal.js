@@ -28,6 +28,7 @@ export const RiskEditModal = ({
   risk,
   guidelines,
   userId,
+  refetchQueries,
 }) => (
   <EntityModalNext
     {...{
@@ -61,7 +62,13 @@ export const RiskEditModal = ({
             >
               <CardBlock>
                 <RiskEditForm
-                  {...{ organizationId, guidelines, userId }}
+                  {...{
+                    organizationId,
+                    guidelines,
+                    userId,
+                    refetchQueries,
+                  }}
+                  riskId={risk && risk._id}
                   save={handleSubmit}
                 />
               </CardBlock>
@@ -78,6 +85,7 @@ RiskEditModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
+  refetchQueries: PropTypes.func,
   onDelete: PropTypes.func,
   loading: PropTypes.bool,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),

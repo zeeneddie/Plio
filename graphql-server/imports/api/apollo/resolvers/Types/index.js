@@ -27,6 +27,7 @@ import Want from './Want';
 import Guidance from './Guidance';
 import CanvasSettings from './CanvasSettings';
 import Nonconformity from './Nonconformity';
+import Review from './Review';
 
 export default {
   ...User,
@@ -58,4 +59,5 @@ export default {
   ...Guidance,
   ...CanvasSettings,
   ...Nonconformity,
+  ...Review,
 };

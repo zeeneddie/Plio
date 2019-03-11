@@ -1,19 +1,9 @@
-import { ReviewStatuses } from '/imports/share/constants.js';
+import { ReviewStatuses } from '../../../share/constants.js';
+import { getClassByStatus } from '../../../client/react/reviews/helpers';
 
 export default {
   getStatusName(status) {
     return ReviewStatuses[status];
   },
-  getClassByStatus(status) {
-    switch (status) {
-      case 0:
-        return 'danger';
-      case 1:
-        return 'warning';
-      case 2:
-        return 'success';
-      default:
-        return '';
-    }
-  },
+  getClassByStatus,
 };
