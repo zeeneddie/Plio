@@ -4094,9 +4094,9 @@ pify@^3.0.0:
   resolved "https://registry.yarnpkg.com/pify/-/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
   integrity sha1-5aSs0sEB/fPZpNB/DbxNtJ3SgXY=
 
-"plio-util@https://github.com/Pliohub/plio-util.git#devel":
+"plio-util@https://github.com/Pliohub/plio-util.git#I1908-rewrite-standard-edit-modal":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#498a282c5040a8f70ee65913c9cf4768cb101a63"
+  resolved "https://github.com/Pliohub/plio-util.git#53c6b5b3ccdd0764d712779373acba4c5a628775"
 
 pluralize@^2.0.0:
   version "2.0.0"

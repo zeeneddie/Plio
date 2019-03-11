@@ -15,6 +15,7 @@ const RiskSubcard = ({
   onSubmit,
   organizationId,
   initialValues,
+  refetchQueries,
   ...rest
 }) => (
   <Card>
@@ -39,7 +40,8 @@ const RiskSubcard = ({
     >
       {({ handleSubmit }) => (
         <RiskEditForm
-          {...{ organizationId, ...rest }}
+          {...{ organizationId, refetchQueries, ...rest }}
+          riskId={risk._id}
           save={handleSubmit}
         />
       )}
@@ -54,6 +56,7 @@ RiskSubcard.propTypes = {
   initialValues: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
+  refetchQueries: PropTypes.func,
   onDelete: PropTypes.func,
 };
 

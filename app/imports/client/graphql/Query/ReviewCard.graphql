@@ -1,0 +1,9 @@
+#import "../Fragment/ReviewCard.graphql"
+
+query ReviewCard($_id: ID!) {
+  review(_id: $_id) {
+    review {
+      ...ReviewCard
+    }
+  }
+}

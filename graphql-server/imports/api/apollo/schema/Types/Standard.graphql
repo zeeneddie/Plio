@@ -4,6 +4,11 @@ type Source {
   url: String
 }
 
+type ReviewWorkflow {
+  status: Int
+  scheduledDate: DateTime
+}
+
 # Incomplete
 type Standard implements BaseEntity, PlioEntity {
   _id: ID!
@@ -32,6 +37,10 @@ type Standard implements BaseEntity, PlioEntity {
   # review: StandardReview
   source1: Source
   source2: Source
-  # lessons
+  lessons: [Lesson]
   improvementPlan: ImprovementPlan
+  risks: [Risk]
+  nonconformities: [Nonconformity]
+  reviews: [Review]
+  reviewWorkflow: ReviewWorkflow
 }

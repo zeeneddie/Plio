@@ -6,4 +6,10 @@ query StandardCard($_id: ID!) {
       ...StandardCard
     }
   }
+  user: me {
+    _id
+    profile {
+      fullName
+    }
+  }
 }

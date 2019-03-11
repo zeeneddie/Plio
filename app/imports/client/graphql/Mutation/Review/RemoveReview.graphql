@@ -1,0 +1,7 @@
+mutation removeReview($input: RemoveReviewInput!) {
+  removeReview(input: $input) {
+    review {
+      _id
+    }
+  }
+}

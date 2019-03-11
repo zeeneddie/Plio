@@ -26,6 +26,7 @@ import Guidance from './Guidance.graphql';
 import Standard from './Standard.graphql';
 import StandardSection from './StandardSection.graphql';
 import Nonconformity from './Nonconformity.graphql';
+import Review from './Review.graphql';
 
 export default [
   Goal,
@@ -56,4 +57,5 @@ export default [
   Standard,
   StandardSection,
   Nonconformity,
+  Review,
 ];

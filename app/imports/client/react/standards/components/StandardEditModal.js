@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import arrayMutators from 'final-form-arrays';
 import React, { Fragment } from 'react';
 import { noop } from 'plio-util';
 
@@ -9,13 +10,22 @@ import {
   EntityModalForm,
   RenderSwitch,
   CardBlock,
+  RelationsAdapter,
+  EntitiesField,
+  NotifySubcard,
+  ImprovementPlanSubcard,
 } from '../../components';
+import { DocumentTypes } from '../../../../share/constants';
 import categorize from '../../forms/decorators/categorize';
 import shouldRenderSource2 from '../../forms/decorators/shouldRenderSource2';
 import StandardAddForm from './StandardAddForm';
 import StandardEditForm from './StandardEditForm';
+import NonconformitiesSubcard from '../../noncomformities/components/NonconformitiesSubcard';
 import { StandardsHelp } from '../../../../api/help-messages';
 import { validateStandardUpdate } from '../../../validation';
+import LessonsSubcard from '../../lessons/components/LessonsSubcard';
+import RisksSubcard from '../../risks/components/RisksSubcard';
+import ReviewsSubcard from '../../reviews/components/ReviewsSubcard';
 
 export const StandardEditModal = ({
   isOpen,
@@ -27,6 +37,7 @@ export const StandardEditModal = ({
   initialValues,
   onSubmit,
   standard,
+  refetchQueries,
 }) => (
   <EntityModalNext
     {...{
@@ -42,6 +53,7 @@ export const StandardEditModal = ({
     <EntityModalForm
       {...{ initialValues, onSubmit }}
       decorators={[categorize, shouldRenderSource2]}
+      mutators={arrayMutators}
       validate={validateStandardUpdate}
     >
       {({ handleSubmit }) => (
@@ -58,14 +70,87 @@ export const StandardEditModal = ({
               errorWhenMissing={noop}
               require={standard}
             >
-              {({ _id: standardId }) => (
-                <CardBlock>
-                  <StandardEditForm
-                    {...{ organizationId, standardId }}
-                    save={handleSubmit}
-                  />
-                </CardBlock>
-              )}
+              {({
+                _id: standardId,
+                nonconformities,
+                risks,
+                lessons,
+                reviews,
+                reviewWorkflow,
+                organization: {
+                  ncGuidelines,
+                  rkGuidelines,
+                  currency,
+                },
+              }) => {
+                const linkedTo = {
+                  _id: standardId,
+                  title: standard.title,
+                };
+                return (
+                  <Fragment>
+                    <CardBlock>
+                      <StandardEditForm
+                        {...{ organizationId, standardId }}
+                        save={handleSubmit}
+                      />
+                    </CardBlock>
+                    <RelationsAdapter
+                      {...{ organizationId, refetchQueries }}
+                      documentId={standardId}
+                      nonconformities={nonconformities}
+                      documentType={DocumentTypes.STANDARD}
+                      relatedDocumentType={DocumentTypes.NON_CONFORMITY}
+                      type={DocumentTypes.NON_CONFORMITY}
+                      guidelines={ncGuidelines}
+                      currency={currency}
+                      render={NonconformitiesSubcard}
+                    />
+                    <RelationsAdapter
+                      {...{ organizationId, refetchQueries, linkedTo }}
+                      documentId={standardId}
+                      documentType={DocumentTypes.STANDARD}
+                      risks={risks}
+                      relatedDocumentType={DocumentTypes.RISK}
+                      guidelines={rkGuidelines}
+                      render={RisksSubcard}
+                    />
+                    {/*
+                      TODO add corrective action and preventative action subcards
+                      when https://github.com/Pliohub/Plio/pull/1786 branch will be merged
+                    */}
+                    <ImprovementPlanSubcard
+                      {...{ organizationId }}
+                      name="improvementPlan"
+                      save={handleSubmit}
+                    />
+                    <EntitiesField
+                      {...{ organizationId, refetchQueries, linkedTo }}
+                      name="lessons"
+                      render={LessonsSubcard}
+                      lessons={lessons}
+                      documentType={DocumentTypes.STANDARD}
+                    />
+                    <EntitiesField
+                      {...{
+                        organizationId,
+                        refetchQueries,
+                        linkedTo,
+                        reviewWorkflow,
+                      }}
+                      name="reviews"
+                      render={ReviewsSubcard}
+                      reviews={reviews}
+                      documentType={DocumentTypes.STANDARD}
+                    />
+                    <NotifySubcard
+                      {...{ organizationId }}
+                      onChange={handleSubmit}
+                      documentId={standardId}
+                    />
+                  </Fragment>
+                );
+              }}
             </RenderSwitch>
           </EntityModalBody>
         </Fragment>
@@ -78,6 +163,7 @@ export const StandardEditModal = ({
 StandardEditModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
+  refetchQueries: PropTypes.func,
   organizationId: PropTypes.string.isRequired,
   onDelete: PropTypes.func,
   loading: PropTypes.bool,
