@@ -35,7 +35,10 @@ const StyledEntityModalNext = styled(({ bodyHeight, ...rest }) => <EntityModalNe
 
 const ChartModal = props => (
   /* wrapClassName is chartjs prop. It is needed for creating wrapper element under chart canvas */
-  <StyledEntityModalNext wrapClassName="chart-modal" {...props} />
+  <StyledEntityModalNext
+    {...props}
+    wrapClassName="chart-modal"
+  />
 );
 
 export default ChartModal;
