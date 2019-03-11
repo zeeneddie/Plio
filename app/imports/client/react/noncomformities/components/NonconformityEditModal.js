@@ -31,6 +31,7 @@ export const NonconformityEditModal = ({
   userId,
   type,
   currency,
+  refetchQueries,
 }) => (
   <EntityModalNext
     {...{
@@ -72,7 +73,9 @@ export const NonconformityEditModal = ({
                     userId,
                     type,
                     currency,
+                    refetchQueries,
                   }}
+                  nonconformityId={nonconformity && nonconformity._id}
                   save={handleSubmit}
                 />
               </CardBlock>
@@ -99,6 +102,7 @@ NonconformityEditModal.propTypes = {
   userId: PropTypes.string,
   type: PropTypes.string.isRequired,
   currency: PropTypes.string,
+  refetchQueries: PropTypes.func,
 };
 
 export default React.memo(NonconformityEditModal);

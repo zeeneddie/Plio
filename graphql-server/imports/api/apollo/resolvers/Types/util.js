@@ -166,14 +166,6 @@ export const resolveLinkedPotentialGains = createRelationResolver(
   }),
 );
 
-export const resolveStandardsByIds = createEntityByIdsResolver(
-  ({ standardsIds }, { isDeleted = false }, { loaders: { Standard: { byQuery } } }) => ({
-    loader: byQuery,
-    ids: standardsIds,
-    isDeleted,
-  }),
-);
-
 export const resolveRisksByIds = createEntityByIdsResolver(
   ({ riskIds }, { isDeleted = false }, { loaders: { Risk: { byQuery } } }) => ({
     loader: byQuery,

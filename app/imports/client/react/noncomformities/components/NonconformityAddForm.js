@@ -8,7 +8,6 @@ import {
   Magnitudes,
   SelectField,
   UserSelectInput,
-  StandardSelectInput,
 } from '../../components';
 import { StringLimits } from '../../../../share/constants';
 
@@ -31,7 +30,8 @@ export const NonconformityAddForm = ({ organizationId, guidelines }) => (
         maxLength={StringLimits.description.max}
       />
     </FormField>
-    <FormField>
+    {/* TODO consider the ability to get rid of StandardSelectInput in "create" forms */}
+    {/* <FormField>
       Standard(s)
       <StandardSelectInput
         multi
@@ -39,7 +39,7 @@ export const NonconformityAddForm = ({ organizationId, guidelines }) => (
         placeholder="Link to standard(s)"
         {...{ organizationId }}
       />
-    </FormField>
+    </FormField> */}
     <FormField>
       Originator
       <UserSelectInput

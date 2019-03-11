@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Query, Mutation } from 'react-apollo';
 import { noop, getUserOptions } from 'plio-util';
-import { pluck } from 'ramda';
 
 import { validateNonConformity, createFormError } from '../../../validation';
 import { Composer, renderComponent } from '../../helpers';
@@ -47,7 +46,6 @@ const NonconformityAddContainer = ({
         active: 0,
         title: '',
         description: '',
-        standardsIds: [],
         owner: getUserOptions(user),
         originator: getUserOptions(user),
         magnitude: ProblemMagnitudes.MINOR,
@@ -57,7 +55,6 @@ const NonconformityAddContainer = ({
           active,
           title,
           magnitude,
-          standards,
           description = '',
           owner: { value: ownerId } = {},
           originator: { value: originatorId } = {},
@@ -82,7 +79,6 @@ const NonconformityAddContainer = ({
               originatorId,
               magnitude,
               type,
-              standardsIds: pluck('value', standards || []),
             },
           },
         }).then(({ data: { createNonconformity: { nonconformity } } }) => {

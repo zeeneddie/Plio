@@ -33,4 +33,5 @@ export default {
   ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED: 'Cannot set executor for completed action',
   ST_CANNOT_CHANGE_DEFAULT: 'Cannot change or delete the default standard type',
   CANNOT_REASSIGN_OWNERSHIP_TO_YOURSELF: 'Cannot reassign ownership to yourself',
+  REVIEW_DATE_GTE_CURRENT_DATE: 'Review date is not a valid date',
 };
