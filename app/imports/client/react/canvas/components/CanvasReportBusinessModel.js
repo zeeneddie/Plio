@@ -28,6 +28,7 @@ const StyledReportItemList = styled(CanvasReportItemList)`
   padding: 0 0.75rem;
   margin: 0;
   ul {
+    flex: 1;
     padding: 0;
     li {
       display: inline-flex;
@@ -35,8 +36,6 @@ const StyledReportItemList = styled(CanvasReportItemList)`
       & > span {
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
-        max-width: 170px;
       }
     }
   }
