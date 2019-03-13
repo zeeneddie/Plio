@@ -11,6 +11,9 @@ const List = styled.div`
   ul {
     padding: 0 0 0 8px;
     margin-bottom: 1rem;
+    @media print {
+      margin-bottom: .5rem !important;
+    }
     li {
       cursor: auto;
       overflow: hidden;

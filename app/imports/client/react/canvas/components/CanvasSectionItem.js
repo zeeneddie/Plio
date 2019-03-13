@@ -17,6 +17,8 @@ const CanvasSectionItem = styled.li`
 
   & > span:not(.drag-handle) {
     padding: 4px 0;
+    max-width: 200px;
+    text-overflow: ellipsis;
   }
 
   ${is('placeholder')`

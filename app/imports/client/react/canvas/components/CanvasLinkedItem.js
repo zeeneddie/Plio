@@ -8,7 +8,7 @@ import { Icon } from '../../components';
 const CanvasLinkedItem = ({ children, ...props }) => (
   <div {...props}>
     <Icon name="long-arrow-right" />
-    {children}
+    <span>{children}</span>
   </div>
 );
 

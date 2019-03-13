@@ -25,7 +25,7 @@ const LinkedItemTitle = styled.div`
   margin-right: .7em;
   text-overflow: ellipsis;
   overflow: hidden;
-  max-width: 220px;
+  max-width: 170px;
 `;
 
 const UnlinkIcon = styled(({ onClick, ...props }) => (
