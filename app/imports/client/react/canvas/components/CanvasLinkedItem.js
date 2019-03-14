@@ -5,22 +5,12 @@ import styled from 'styled-components';
 import { Styles } from '../../../../api/constants';
 import { Icon } from '../../components';
 
-const CanvasLinkedItem = ({ children, ...props }) => (
-  <div {...props}>
-    <Icon name="long-arrow-right" />
-    <span>{children}</span>
-  </div>
-);
-
-CanvasLinkedItem.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-};
-
-const StyledCanvasLinkedItem = styled(CanvasLinkedItem)`
+const StyledCanvasLinkedItem = styled.div`
   overflow: hidden;
   color: ${Styles.color.muted};
   line-height: 1.4;
   padding: 2px 7px 5px 7px;
+  display: flex;
 
   i {
     line-height: inherit;
@@ -29,4 +19,15 @@ const StyledCanvasLinkedItem = styled(CanvasLinkedItem)`
   }
 `;
 
-export default StyledCanvasLinkedItem;
+const CanvasLinkedItem = ({ children, ...props }) => (
+  <StyledCanvasLinkedItem {...props}>
+    <Icon name="long-arrow-right" />
+    <div>{children}</div>
+  </StyledCanvasLinkedItem>
+);
+
+CanvasLinkedItem.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+};
+
+export default CanvasLinkedItem;
