@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { StyledMixins } from 'plio-util';
+import is from 'styled-is';
 
 import { Styles } from '../../../../api/constants';
 import Canvas from './Canvas';
@@ -32,6 +33,10 @@ const StyledReportItemList = styled(CanvasReportItemList)`
     li {
       display: inline-flex;
       margin-right: 10px;
+      word-break: break-word;
+      ${is('noflex')`
+        display: inline-block;
+      `}
       & > span {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -41,7 +46,6 @@ const StyledReportItemList = styled(CanvasReportItemList)`
 `;
 
 const StyledCanvas = styled(Canvas)`
-  padding: 1px;
   ${StyledMixins.media.print`
     min-height: calc(100vh - 57px);
   `}
@@ -170,7 +174,7 @@ const CanvasReportBusinessModel = ({
               help={<CostStructureHelp />}
               isEmpty={!costLines.length}
             />
-            <StyledReportItemList items={costLines} />
+            <StyledReportItemList noflex items={costLines} />
           </StyledCanvasSection>
         </CanvasCol>
         <CanvasCol sm>
@@ -181,7 +185,7 @@ const CanvasReportBusinessModel = ({
               help={<RevenueStreamsHelp />}
               isEmpty={!revenueStreams.length}
             />
-            <StyledReportItemList items={revenueStreams} />
+            <StyledReportItemList noflex items={revenueStreams} />
           </StyledCanvasSection>
         </CanvasCol>
       </CanvasRow>
