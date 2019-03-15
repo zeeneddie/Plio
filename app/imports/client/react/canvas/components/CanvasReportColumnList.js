@@ -18,9 +18,9 @@ const Wrapper = styled.div`
 
 const ColumnItem = styled.div`
   break-inside: avoid;
-  float: left;
   width: 50%;
   padding-right: 10px;
+  display: inline-block;
 `;
 
 const CanvasReportColumnList = ({ items, renderItem }) => (

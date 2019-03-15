@@ -22,6 +22,9 @@ const DelayedCanvasReportSections = delayed({
 const getDisplayValue = reportSection => props => props[reportSection] ? 'block' : 'none';
 const ReportWrapper = styled.div`
   overflow: auto;
+  @media print {
+    overflow: hidden;
+  }
   color: ${Styles.color.black};
   
   ${StyledMixins.media.print`

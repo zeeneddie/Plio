@@ -37,22 +37,18 @@ const StyledReportItemList = styled(CanvasReportItemList)`
       ${is('noflex')`
         display: inline-block;
       `}
-      & > span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
     }
   }
 `;
 
 const StyledCanvas = styled(Canvas)`
   ${StyledMixins.media.print`
-    min-height: calc(100vh - 57px);
+    min-height: 0;
   `}
 `;
 
 const StyledCanvasSection = styled(CanvasSection)`
-  min-height: auto;
+  min-height: 0;
 `;
 
 const Copyright = styled.span`

@@ -39,11 +39,6 @@ const SortableList = styled(({ twoColumn, ...rest }) => <Sortable {...rest} />)`
       display: none;
     }
   }
-
-  li span {
-    overflow: hidden;
-    display: block;
-  }
   
   ${is('twoColumn')`
     display: flex;

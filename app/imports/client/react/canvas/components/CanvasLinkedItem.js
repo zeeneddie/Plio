@@ -11,6 +11,7 @@ const StyledCanvasLinkedItem = styled.div`
   line-height: 1.4;
   padding: 2px 7px 5px 7px;
   display: flex;
+  margin-left: -30px;
 
   i {
     line-height: inherit;
