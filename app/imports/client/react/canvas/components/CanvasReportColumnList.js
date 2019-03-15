@@ -20,7 +20,7 @@ const ColumnItem = styled.div`
   break-inside: avoid;
   width: 50%;
   padding-right: 10px;
-  display: inline-block;
+  float: left;
 `;
 
 const CanvasReportColumnList = ({ items, renderItem }) => (
