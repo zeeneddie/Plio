@@ -33,7 +33,6 @@ const StyledReportItemList = styled(CanvasReportItemList)`
     li {
       display: inline-flex;
       margin-right: 10px;
-      word-break: break-word;
       ${is('noflex')`
         display: inline-block;
       `}
