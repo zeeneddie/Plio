@@ -9,3 +9,4 @@ settings.json
 settings-local.json
 settings-production.json
 yarn-error.log
+.deploy*
