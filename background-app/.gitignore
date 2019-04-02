@@ -8,4 +8,3 @@ settings.json
 settings-local.json
 settings-production.json
 npm-debug.log
-.deploy*
