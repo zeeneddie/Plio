@@ -68,8 +68,11 @@ function checkEmailVerified(context, redirect) {
   }
 }
 
-const addBackRouteQueryParam = ({ queryParams = {}, oldRoute = {} }) => {
+const addBackRouteQueryParam = ({ queryParams = {}, oldRoute = {}, route }) => {
   const oldRouteName = oldRoute.name;
+  const usersRegex = /users/;
+
+  if (usersRegex.test(oldRoute.path) && usersRegex.test(route.path)) return;
 
   if (oldRouteName && !queryParams.backRoute) {
     FlowRouter.setQueryParams({ backRoute: oldRouteName });

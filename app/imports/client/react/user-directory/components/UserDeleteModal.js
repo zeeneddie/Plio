@@ -71,7 +71,11 @@ const UserDeleteModal = ({
                   variables: { organizationId },
                 }))
                 .then(toggle)
-                .then(() => router.go('userDirectoryPage', { orgSerialNumber }))
+                .then(() => router.go(
+                  'userDirectoryPage',
+                  { orgSerialNumber },
+                  { backRoute: router.getQueryParam('backRoute') },
+                ))
                 .then(onSuccess))}
               >
                 {({ handleSubmit }) => (
