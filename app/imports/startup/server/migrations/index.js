@@ -27,6 +27,7 @@ import './16-create-canvas-settings';
 import './17-move-goals-relations';
 import './18-add-notify-to-canvas-settings';
 import './19-updating-of-help-sections';
+import './20-append-updated-help-sections';
 
 Migrations.add({
   version: 1,
