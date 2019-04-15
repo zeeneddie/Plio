@@ -24,27 +24,28 @@ const ReportWrapper = styled.div`
   overflow: auto;
   @media print {
     overflow: hidden;
+    transform: scale(.99);
   }
   color: ${Styles.color.black};
   
   ${StyledMixins.media.print`
     .business-model-canvas {
-      display: ${getDisplayValue(CanvasReportSections.BUSINESS_MODEL_CANVAS)}
+      display: ${getDisplayValue(CanvasReportSections.BUSINESS_MODEL_CANVAS)};
     }
     .canvas-items {
-      display: ${getDisplayValue(CanvasReportSections.CANVAS_ITEMS)}
+      display: ${getDisplayValue(CanvasReportSections.CANVAS_ITEMS)};
     }
     .canvas-charts {
-      display: ${getDisplayValue(CanvasReportSections.CANVAS_CHARTS)}
+      display: ${getDisplayValue(CanvasReportSections.CANVAS_CHARTS)};
     }
     .value-components {
-      display: ${getDisplayValue(CanvasReportSections.VALUE_COMPONENTS)}
+      display: ${getDisplayValue(CanvasReportSections.VALUE_COMPONENTS)};
     }
     .customer-insights {
-      display: ${getDisplayValue(CanvasReportSections.CUSTOMER_INSIGHTS)}
+      display: ${getDisplayValue(CanvasReportSections.CUSTOMER_INSIGHTS)};
     }
     .operational-elements {
-      display: ${getDisplayValue(CanvasReportSections.OPERATIONAL_ELEMENTS)}
+      display: ${getDisplayValue(CanvasReportSections.OPERATIONAL_ELEMENTS)};
     }
   `}
 `;
