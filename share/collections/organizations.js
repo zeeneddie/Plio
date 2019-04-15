@@ -1,4 +1,5 @@
 import { Mongo } from 'meteor/mongo';
+import { _ } from 'meteor/underscore';
 
 import { OrganizationSchema } from '../schemas/organization-schema';
 import { UserMembership, ProblemMagnitudes, CollectionNames } from '../constants';
@@ -10,9 +11,7 @@ Organizations.attachSchema(OrganizationSchema);
 
 Organizations.helpers({
   ownerId() {
-    const ownerDoc = _.find(this.users, (doc) => {
-      return doc.role === UserMembership.ORG_OWNER
-    });
+    const ownerDoc = _.find(this.users, doc => doc.role === UserMembership.ORG_OWNER);
 
     return ownerDoc ? ownerDoc.userId : null;
   },
@@ -20,7 +19,7 @@ Organizations.helpers({
     const keyMapping = {
       [ProblemMagnitudes.MINOR]: 'minorProblem',
       [ProblemMagnitudes.MAJOR]: 'majorProblem',
-      [ProblemMagnitudes.CRITICAL]: 'criticalProblem'
+      [ProblemMagnitudes.CRITICAL]: 'criticalProblem',
     };
 
     return this.workflowDefaults[keyMapping[problemMagnitude]].workflowType;
@@ -29,7 +28,7 @@ Organizations.helpers({
     const keyMapping = {
       [ProblemMagnitudes.MINOR]: 'minorProblem',
       [ProblemMagnitudes.MAJOR]: 'majorProblem',
-      [ProblemMagnitudes.CRITICAL]: 'criticalProblem'
+      [ProblemMagnitudes.CRITICAL]: 'criticalProblem',
     };
 
     return this.workflowDefaults[keyMapping[problemMagnitude]].stepTime;
@@ -40,6 +39,7 @@ Organizations.helpers({
       if (!member.isRemoved) {
         return member.userId;
       }
+      return undefined;
     });
 
     return memberIds;
@@ -64,6 +64,7 @@ Organizations.cardFields = {
   ...Organizations.listFields,
   timezone: 1,
   currency: 1,
+  homeScreenType: 1,
 };
 
 export { Organizations };

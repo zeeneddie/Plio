@@ -14,6 +14,7 @@ import Wrapper from '../../../../components/Wrapper';
 import createReadFields from '../../../../helpers/createReadFields';
 import SequentialId from '../../../fields/read/components/SequentialId';
 import Label from '../../../../components/Labels/Label';
+import { SignupPaths } from '../../../constants';
 
 const CustomersRHSBody = ({
   name,
@@ -25,6 +26,7 @@ const CustomersRHSBody = ({
   timezone,
   lastAccessedDate,
   owner,
+  homeScreenType,
 }) => {
   const tz = getFormattedTzDate(timezone);
   const orgTimezone = `${tz} ${timezone}`;
@@ -46,6 +48,7 @@ const CustomersRHSBody = ({
     { label: 'Last accessed', text: lastAccessedDateText },
     { label: 'Created date', text: getFormattedDate(createdAt) },
     { label: 'Type', text: CustomerTypesNames[customerType] },
+    { label: 'Sign-up path', text: SignupPaths[homeScreenType] },
   ];
   const fields = _.values(createReadFields(data)).map((field, i) => ({
     ...field,
@@ -72,6 +75,7 @@ CustomersRHSBody.propTypes = {
   timezone: PropTypes.string,
   lastAccessedDate: PropTypes.instanceOf(Date),
   owner: PropTypes.object,
+  homeScreenType: PropTypes.string,
 };
 
 export default CustomersRHSBody;
