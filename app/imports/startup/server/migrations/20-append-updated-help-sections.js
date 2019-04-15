@@ -3,16 +3,17 @@ import { Migrations } from 'meteor/percolate:migrations';
 import { HelpSections } from '../../../share/collections';
 
 const HELP_SECTIONS = [
-  '1. How to get help',
-  '2. Getting started',
-  '3. Managing standards',
-  '4. Managing risks',
-  '5. Managing nonconformities and gains',
-  '6. Managing workflows',
-  '7. Managing key goals',
+  '1. Getting started with Plio',
+  '2. Managing standards',
+  '3. Managing risks',
+  '4. Managing nonconformities & gains',
+  '5. Managing workflows',
+  '6. Managing key goals',
+  '7. Creating a business model canvas',
   '8. User management',
-  '9. Customizing Plio',
-  '10. FAQs',
+  '9. Configuring to fit your business',
+  'FAQs',
+  'How to get help',
 ];
 
 export const up = async () => {

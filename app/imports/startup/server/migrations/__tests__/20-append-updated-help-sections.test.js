@@ -28,7 +28,7 @@ describe('Migration: Appends new list of help sections', () => {
     const options = { sort: { index: 1 } };
     const helpSections = await context.collections.HelpSections.find(query, options).fetch();
 
-    await expect(helpSections).toHaveLength(15);
+    await expect(helpSections).toHaveLength(16);
     helpSections.forEach((helpSection, n) => expect(helpSection).toEqual({
       _id: expect.anything(),
       title: expect.any(String),
@@ -41,7 +41,7 @@ describe('Migration: Appends new list of help sections', () => {
 
     await up();
 
-    await expect(context.collections.HelpSections.find().count()).resolves.toBe(10);
+    await expect(context.collections.HelpSections.find().count()).resolves.toBe(11);
 
     await down();
 
