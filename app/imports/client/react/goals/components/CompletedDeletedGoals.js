@@ -40,7 +40,7 @@ const CompletedDeletedGoals = ({
       </div>
     )}
   >
-    {totalCount} completed & deleted {pluralize('goal', totalCount)}
+    {totalCount} completed or deleted {pluralize('goal', totalCount)}
   </DashboardStatsExpandable>
 );
 
