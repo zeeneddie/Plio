@@ -64,6 +64,12 @@ const StyledCanvasReportSectionHeading = styled(CanvasReportSectionHeading)`
   align-items: center;
 `;
 
+const StyledCanvasReportSection = styled(CanvasReportSection)`
+  @media print {
+    transform: scale(.99);
+  }
+`;
+
 const CanvasReportBusinessModel = ({
   keyPartners,
   keyActivities,
@@ -77,7 +83,7 @@ const CanvasReportBusinessModel = ({
   printState,
   updatePrintState,
 }) => (
-  <CanvasReportSection className="business-model-canvas">
+  <StyledCanvasReportSection className="business-model-canvas">
     <StyledCanvasReportSectionHeading>
       <Copyright>
         <StrategyzerCopyright />
@@ -185,7 +191,7 @@ const CanvasReportBusinessModel = ({
         </CanvasCol>
       </CanvasRow>
     </StyledCanvas>
-  </CanvasReportSection>
+  </StyledCanvasReportSection>
 );
 
 CanvasReportBusinessModel.propTypes = {

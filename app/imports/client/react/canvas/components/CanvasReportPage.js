@@ -24,7 +24,6 @@ const ReportWrapper = styled.div`
   overflow: auto;
   @media print {
     overflow: hidden;
-    transform: scale(.99);
   }
   color: ${Styles.color.black};
   
