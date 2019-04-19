@@ -23,7 +23,7 @@ export const createGeneralAction = ({
   completionTargetDate,
   owner: { value: ownerId },
   toBeCompletedBy: { value: toBeCompletedBy },
-}) => {
+}, form) => {
   if (!title) throw new Error('Title is required');
 
   return mutateWithState(mutate({
@@ -46,7 +46,12 @@ export const createGeneralAction = ({
       query: Query.DASHBOARD_GOAL,
       variables: { _id: goalId },
     }],
-  }));
+  })).finally(() => {
+    form.setConfig('keepDirtyOnReinitialize', false);
+    setTimeout(() => {
+      form.setConfig('keepDirtyOnReinitialize', true);
+    }, 0);
+  });
 };
 
 export const onDelete = ({ [DELETE_ACTION.name]: mutate, goalId }) =>
