@@ -148,10 +148,16 @@ const KeyActivityEditModal = ({
                       <KeyActivitiesHelp />
                     </ModalGuidancePanel>
                     <RenderSwitch
-                      require={isOpen && data.keyActivity && data.keyActivity.keyActivity}
+                      require={(
+                        isOpen && !query.loading && data.keyActivity && data.keyActivity.keyActivity
+                      )}
                       errorWhenMissing={noop}
                       loading={query.loading}
-                      renderLoading={<CanvasForm {...{ organizationId }} />}
+                      renderLoading={(
+                        <fieldset disabled>
+                          <CanvasForm {...{ organizationId }} />
+                        </fieldset>
+                      )}
                     >
                       {keyActivity => (
                         <Fragment>

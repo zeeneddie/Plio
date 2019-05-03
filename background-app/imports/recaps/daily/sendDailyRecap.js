@@ -160,8 +160,15 @@ const makeDocsData = async (args, config) => {
   const len = logsById && Object.keys(logsById).length;
   const ids = Object.keys(logsById);
   const query = { _id: { $in: ids } };
-  const title = configTitle || `${len} ${pluralize(description, len)} ` +
-    `${pluralize('was', len)} updated:`;
+  let title = configTitle;
+
+  if (typeof configTitle === 'function') {
+    title = configTitle({ count: len, description });
+  }
+
+  if (!configTitle) {
+    title = `${len} ${pluralize(description, len)} ${pluralize('was', len)} updated:`;
+  }
 
   const promises = await collection.find(query).map(async (doc) => {
     const docLogs = logsById[doc._id];

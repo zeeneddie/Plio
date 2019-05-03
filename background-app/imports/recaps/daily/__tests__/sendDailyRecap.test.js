@@ -251,9 +251,9 @@ describe('sendDailyRecap', () => {
 
     const data = NotificationSender.mock.calls[0][0].templateData.recapData;
 
-    expect(data[0].title).toEqual(expect.stringMatching(/3 .+ were updated:/));
+    expect(data[0].title).toEqual(expect.stringMatching(/3 .+ were updated(.+)?:/));
 
-    expect(data[1].title).toEqual(expect.stringMatching(/1 .+ was updated:/));
+    expect(data[1].title).toEqual(expect.stringMatching(/1 .+ was updated(.+)?:/));
   });
 
   it('matches snapshot', async () => {

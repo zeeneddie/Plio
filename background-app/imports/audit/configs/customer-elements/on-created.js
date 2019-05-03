@@ -1,9 +1,9 @@
-import onCreated from '../common/on-created';
+import onCreated from '../canvas/on-created';
 import { getReceivers } from './helpers';
 import { getLinkedDocName, getLinkedDocDescription } from '../../utils/helpers';
 
 export default {
-  logs: [onCreated.logs.default],
+  logs: onCreated.logs,
   notifications: [
     {
       text: '{{{userName}}} has added the {{{docDesc}}} {{{docName}}} ' +

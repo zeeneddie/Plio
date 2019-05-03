@@ -1,9 +1,10 @@
-import onCreated from '../common/on-created';
 import { getReceivers } from './helpers';
 
 export default {
   logs: [
-    onCreated.logs.default,
+    {
+      message: 'New canvas item created',
+    },
   ],
   notifications: [
     {

@@ -160,10 +160,14 @@ const KeyPartnerEditModal = ({
                         <KeyPartnersHelp />
                       </ModalGuidancePanel>
                       <RenderSwitch
-                        require={isOpen && keyPartner}
+                        require={isOpen && !query.loading && keyPartner}
                         errorWhenMissing={noop}
                         loading={query.loading}
-                        renderLoading={<KeyPartnerForm {...{ organizationId }} />}
+                        renderLoading={(
+                          <fieldset disabled>
+                            <KeyPartnerForm {...{ organizationId }} />
+                          </fieldset>
+                        )}
                       >
                         {() => (
                           <Fragment>

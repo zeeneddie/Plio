@@ -186,12 +186,19 @@ const CustomerSegmentEditModal = ({
                       <CustomerSegmentsHelp />
                     </ModalGuidancePanel>
                     <RenderSwitch
-                      require={isOpen &&
+                      require={(
+                        isOpen &&
+                        !query.loading &&
                         data.customerSegment &&
-                        data.customerSegment.customerSegment}
+                        data.customerSegment.customerSegment
+                      )}
                       errorWhenMissing={noop}
                       loading={query.loading}
-                      renderLoading={<CustomerSegmentForm {...{ organizationId }} />}
+                      renderLoading={(
+                        <fieldset disabled>
+                          <CustomerSegmentForm {...{ organizationId }} />
+                        </fieldset>
+                      )}
                     >
                       {customerSegment => (
                         <Fragment>

@@ -154,10 +154,19 @@ const RevenueStreamEditModal = ({
                       <RevenueStreamsHelp />
                     </ModalGuidancePanel>
                     <RenderSwitch
-                      require={isOpen && data.revenueStream && data.revenueStream.revenueStream}
+                      require={(
+                        isOpen &&
+                        !query.loading &&
+                        data.revenueStream &&
+                        data.revenueStream.revenueStream
+                      )}
                       errorWhenMissing={noop}
                       loading={query.loading}
-                      renderLoading={<RevenueStreamForm {...{ organizationId }} />}
+                      renderLoading={(
+                        <fieldset disabled>
+                          <RevenueStreamForm {...{ organizationId }} />
+                        </fieldset>
+                      )}
                     >
                       {revenueStream => (
                         <Fragment>

@@ -183,12 +183,19 @@ const ValuePropositionEditModal = ({
                       <ValuePropositionsHelp />
                     </ModalGuidancePanel>
                     <RenderSwitch
-                      require={isOpen &&
+                      require={(
+                        isOpen &&
+                        !query.loading &&
                         data.valueProposition &&
-                        data.valueProposition.valueProposition}
+                        data.valueProposition.valueProposition
+                      )}
                       errorWhenMissing={noop}
                       loading={query.loading}
-                      renderLoading={<ValuePropositionForm {...{ organizationId }} />}
+                      renderLoading={(
+                        <fieldset disabled>
+                          <ValuePropositionForm {...{ organizationId }} />
+                        </fieldset>
+                      )}
                     >
                       {valueProposition => (
                         <Fragment>

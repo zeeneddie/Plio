@@ -148,10 +148,14 @@ const ChannelEditModal = ({
                       <ChannelsHelp />
                     </ModalGuidancePanel>
                     <RenderSwitch
-                      require={isOpen && data.channel && data.channel.channel}
+                      require={isOpen && !query.loading && data.channel && data.channel.channel}
                       errorWhenMissing={noop}
                       loading={query.loading}
-                      renderLoading={<CanvasForm {...{ organizationId }} />}
+                      renderLoading={(
+                        <fieldset disabled>
+                          <CanvasForm {...{ organizationId }} />
+                        </fieldset>
+                      )}
                     >
                       {channel => (
                         <Fragment>

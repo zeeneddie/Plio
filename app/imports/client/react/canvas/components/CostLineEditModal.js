@@ -151,10 +151,14 @@ const CostLineEditModal = ({
                       <CostStructureHelp />
                     </ModalGuidancePanel>
                     <RenderSwitch
-                      require={isOpen && data.costLine && data.costLine.costLine}
+                      require={isOpen && !query.loading && data.costLine && data.costLine.costLine}
                       errorWhenMissing={noop}
                       loading={query.loading}
-                      renderLoading={<CostLineForm {...{ organizationId }} />}
+                      renderLoading={(
+                        <fieldset disabled>
+                          <CostLineForm {...{ organizationId }} />
+                        </fieldset>
+                      )}
                     >
                       {costLine => (
                         <Fragment>

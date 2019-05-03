@@ -148,12 +148,19 @@ const CustomerRelationshipEditModal = ({
                       <CustomerRelationshipsHelp />
                     </ModalGuidancePanel>
                     <RenderSwitch
-                      require={isOpen &&
+                      require={(
+                        isOpen &&
+                        !query.loading &&
                         data.customerRelationship &&
-                        data.customerRelationship.customerRelationship}
+                        data.customerRelationship.customerRelationship
+                      )}
                       errorWhenMissing={noop}
                       loading={query.loading}
-                      renderLoading={<CanvasForm {...{ organizationId }} />}
+                      renderLoading={(
+                        <fieldset disabled>
+                          <CanvasForm {...{ organizationId }} />
+                        </fieldset>
+                      )}
                     >
                       {customerRelationship => (
                         <Fragment>

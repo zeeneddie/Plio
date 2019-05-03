@@ -148,10 +148,16 @@ const KeyResourceEditModal = ({
                       <KeyResourcesHelp />
                     </ModalGuidancePanel>
                     <RenderSwitch
-                      require={isOpen && data.keyResource && data.keyResource.keyResource}
+                      require={(
+                        isOpen && !query.loading && data.keyResource && data.keyResource.keyResource
+                      )}
                       errorWhenMissing={noop}
                       loading={query.loading}
-                      renderLoading={<CanvasForm {...{ organizationId }} />}
+                      renderLoading={(
+                        <fieldset disabled>
+                          <CanvasForm {...{ organizationId }} />
+                        </fieldset>
+                      )}
                     >
                       {keyResource => (
                         <Fragment>
