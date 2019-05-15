@@ -46,7 +46,8 @@ const UsersInviteForm = ({ onSubmit, initialValues }) => (
 UsersInviteForm.defaultProps = {
   initialValues: {
     welcome: 'Hi there.\nWe\'ll be using Plio to share standards documents, ' +
-    'to record nonconformities and risks and to track actions. See you soon.',
+    'to record nonconformities and risks and to track actions. ' +
+    'Please accept this invitation to join Plio as a user. See you there soon.',
     options: range(0, 4).map(i => ({
       value: undefined,
       src: AvatarPlaceholders[i],
