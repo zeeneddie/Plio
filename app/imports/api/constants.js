@@ -1,6 +1,6 @@
 import { HomeScreenTypes } from '../share/constants';
 
-export const APP_VERSION = '0.4.2';
+export const APP_VERSION = '0.4.3';
 
 export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
 export const ALERT_AUTOHIDE_TIME = 1500;
