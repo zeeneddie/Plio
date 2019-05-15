@@ -19,3 +19,4 @@ export * from './gadicc_blaze-react-component';
 export * from './matb33_collection-hooks';
 export * from './chrismbeckett_toastr';
 export * from './edgee_slingshot';
+export * from './percolate_synced-cron';
