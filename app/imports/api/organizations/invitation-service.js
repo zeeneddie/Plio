@@ -125,7 +125,7 @@ class InvitationSender {
 
   _sendNewUserInvite(userIdToInvite, emailSubject, basicNotificationData) {
     const sender = Meteor.user();
-    const invitationExpirationInHours = InvitationSender.getInvitationExpirationTime();
+    const invitationExpiration = InvitationSender.getInvitationExpirationTime();
     const receiver = Meteor.users.findOne({ _id: userIdToInvite });
     const invitationId = receiver && receiver.invitationId || this._invitationId;
 
@@ -142,7 +142,7 @@ class InvitationSender {
         label: 'Accept the invitation',
         url: NotificationSender.getAbsoluteUrl(`accept-invitation/${invitationId}`),
       },
-      footerText: `This invitation expires on ${moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')}.`,
+      footerText: `This invitation expires on ${moment().add(invitationExpiration, 'days').format('MMMM Do YYYY')}.`,
     }, basicNotificationData);
 
     new NotificationSender({
