@@ -40,4 +40,31 @@ describe('Cron: cleanup organization members', () => {
       { userId: 3 },
     ]);
   });
+
+  it('does not remove any existing users', async () => {
+    const { job } = require('../cleanup-organization-members');
+    const _id = await context.collections.Organizations.insert({
+      users: [
+        { userId: 1 },
+        { userId: 2 },
+        { userId: 3 },
+      ],
+    });
+
+    await context.collections.Users.rawCollection().insertMany([
+      { _id: 1 },
+      { _id: 2 },
+      { _id: 3 },
+    ]);
+
+    await job();
+
+    const organization = await context.collections.Organizations.findOne({ _id });
+
+    expect(organization.users).toEqual([
+      { userId: 1 },
+      { userId: 2 },
+      { userId: 3 },
+    ]);
+  });
 });

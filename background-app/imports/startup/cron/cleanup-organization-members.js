@@ -5,26 +5,26 @@ import { pluck } from 'ramda';
 import { Organizations } from '../../share/collections';
 
 export const job = async () => {
-  const options = { fields: { users: 1 } };
-  const promises = await Organizations.find({}, options).map(async (organization) => {
+  const opts = { fields: { users: 1 } };
+  const promises = await Organizations.find({}, opts).map(async (organization) => {
     const memberIds = pluck('userId', organization.users);
     const users = await Meteor.users.find(
       { _id: { $in: memberIds } },
       { fields: { _id: 1 } },
     ).fetch();
     const userIds = pluck('_id', users);
-    const removedUserIds = memberIds.filter(id => !userIds.includes(id));
+
+    if (userIds.length === memberIds.length) return undefined;
+
+    const members = organization.users.filter(({ userId }) => userIds.includes(userId));
     const query = { _id: organization._id };
     const modifier = {
-      $pull: {
-        users: {
-          userId: {
-            $in: removedUserIds,
-          },
-        },
+      $set: {
+        users: members,
       },
     };
-    return Organizations.update(query, modifier);
+
+    return Organizations.rawCollection().update(query, modifier);
   });
 
   return Promise.all(promises);
@@ -33,7 +33,7 @@ export const job = async () => {
 SyncedCron.add({
   name: 'Removes organization members that are no longer Plio users',
   schedule(parser) {
-    return parser.text('every 1 day');
+    return parser.text('every 1 minute');
   },
   job,
 });
