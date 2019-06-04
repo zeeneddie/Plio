@@ -798,6 +798,7 @@ export const CustomerTypes = {
   FREE_TRIAL: 2,
   TEST_ACCOUNT: 3,
   PAST_CUSTOMER: 4,
+  TEMPLATE: 5,
 };
 
 export const CustomerTypesNames = {
@@ -805,6 +806,7 @@ export const CustomerTypesNames = {
   [CustomerTypes.FREE_TRIAL]: 'Free trial',
   [CustomerTypes.TEST_ACCOUNT]: 'Test account',
   [CustomerTypes.PAST_CUSTOMER]: 'Past customer',
+  [CustomerTypes.TEMPLATE]: 'Template',
 };
 
 export const PossibleReviewFrequencies = [
