@@ -67,6 +67,7 @@ const OrganizationService = {
     currency,
     ownerId,
     homeScreenType,
+    template,
   }) {
     const serialNumber = generateSerialNumber(this.collection, {}, 100);
 
@@ -97,6 +98,7 @@ const OrganizationService = {
       rkGuidelines,
       rkScoringGuidelines,
       review,
+      template,
       createdBy: ownerId,
     });
 

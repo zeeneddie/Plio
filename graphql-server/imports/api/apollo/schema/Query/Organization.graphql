@@ -18,5 +18,5 @@ type OrganizationsPayload {
 type Query {
   organization(_id: ID, serialNumber: Int): Organization
   counts(organizationId: ID!): CountsQueryPayload
-  organizations: OrganizationsPayload
+  organizations(customerType: Int): OrganizationsPayload
 }

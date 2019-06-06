@@ -52,6 +52,7 @@ const OrganizationSettingsHelp = {
   riskGuidelines: 'Help users to categorize the Risk magnitude more accurately by giving them some clear guidelines on what these terms mean in the context of your organization (e.g. quantify the ranges of potential cost impact or impact on customers)',
   riskScoringGuidelines: 'Help users to score this Risk more accurately by giving them a brief summary on what the various scoring terms (e.g. minor impact, moderate impact, significant impact) mean in the context of your organization (e.g. quantify the ranges of potential cost impact or impact on customers).',
   homeScreenTitles: 'You can change the default screen view that first appears when you log in to Plio, between the Operations view and the Canvas view.\n\nIn the Operations view screen, Plio lets you set different default values for numbers of items to be displayed. Whenever these default values are exceeded, Plio will display a "More” button next to each item list. Plio also lets you customize the labels for each of the main icons on your home screen. In the "Operations view - titles” section, just select an icon label you wish to change, then click on the selection button and select an alternative name or create an entirely new name.',
+  template: 'Plio provides a selection of pre-configured organization settings (called templates) suitable for different industry sectors. Choose the template that matches your own industry sector or select "General purpose".',
 };
 
 const MyPreferencesHelp = {

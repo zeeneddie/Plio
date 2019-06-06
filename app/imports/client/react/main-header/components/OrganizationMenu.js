@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { memo, Fragment } from 'react';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Query } from 'react-apollo';
-import { find, propEq } from 'ramda';
+import { prop, propEq } from 'ramda';
 import {
   Dropdown,
   DropdownToggle,
@@ -19,9 +19,13 @@ import { OrganizationSettingsHelp } from '../../../../api/help-messages';
 import { OrgCurrencies, UserRoles } from '../../../../share/constants';
 import { Query as Queries } from '../../../graphql';
 import { FlowRouterContext, RenderSwitch, Preloader } from '../../components';
-import { WithToggle } from '../../helpers';
 import HeaderMenuItem from './HeaderMenuItem';
 import StrategyzerCopyright from '../../canvas/components/StrategyzerCopyright';
+import OrganizationAddModal
+  from '../../organization-settings/components/OrganizationAddModal';
+import useToggle from '../../hooks/useToggle';
+import { insert } from '../../../../api/organizations/methods';
+import validateOrganization from '../../../validation/validators/validateOrganization';
 
 const RouteLabels = {
   [RouteNames.CANVAS]: 'Canvas view',
@@ -67,166 +71,197 @@ const Copyright = styled.div`
   margin-top: 10px;
 `;
 
-const OrganizationMenu = ({ organization: currentOrg, isDashboard }) => (
-  <FlowRouterContext getParam="orgSerialNumber" getRouteName>
-    {({ orgSerialNumber, routeName, router }) => (
-      <StyledNav navbar className="nav pull-xs-left">
-        <WithToggle>
-          {({ isOpen, toggle }) => (
-            <Dropdown {...{ isOpen, toggle }}>
-              <DropdownToggle nav caret>
-                <OrganizationName>{currentOrg.name}</OrganizationName>
-                <span className="secondary-label"> {RouteLabels[routeName]}</span>
-              </DropdownToggle>
+const OrganizationMenu = memo(({ organization: currentOrg, isDashboard }) => {
+  const [isOpen, toggle] = useToggle(false);
+  const [isCreateModalOpen, toggleCreateModal] = useToggle(false);
 
-              <DropdownMenuStyled>
-                <Query
-                  query={Queries.ORGANIZATIONS_MENU}
-                  variables={{ organizationId: currentOrg._id }}
-                  skip={!isOpen}
-                >
-                  {({
-                    error, loading, refetch,
-                    data: {
-                      organizations: { organizations = [] } = {},
-                      me: {
-                        roles = [],
-                        profile = {},
-                        _id: userId,
-                        isPlioUser,
-                      } = {},
-                    },
-                  }) => (
-                    <RenderSwitch
-                      {...{ error, loading }}
-                      renderLoading={<PreloaderStyled />}
-                    >
-                      <Fragment>
-                        <HeaderMenuItem
+  return (
+    <FlowRouterContext getParam="orgSerialNumber" getRouteName>
+      {({ orgSerialNumber, routeName, router }) => (
+        <StyledNav navbar className="nav pull-xs-left">
+          <Dropdown {...{ isOpen, toggle }}>
+            <DropdownToggle nav caret>
+              <OrganizationName>{currentOrg.name}</OrganizationName>
+              <span className="secondary-label"> {RouteLabels[routeName]}</span>
+            </DropdownToggle>
+
+            <DropdownMenuStyled>
+              <Query
+                query={Queries.ORGANIZATIONS_MENU}
+                variables={{ organizationId: currentOrg._id }}
+                skip={!isOpen}
+              >
+                {({
+                  error,
+                  loading,
+                  refetch,
+                  client,
+                  data: {
+                    organizations: { organizations = [] } = {},
+                    me: {
+                      roles = [],
+                      profile = {},
+                      _id: userId,
+                      email,
+                      isPlioUser,
+                    } = {},
+                  },
+                }) => (
+                  <RenderSwitch
+                    {...{ error, loading }}
+                    renderLoading={<PreloaderStyled />}
+                  >
+                    <Fragment>
+                      <OrganizationAddModal
+                        isOpen={isCreateModalOpen}
+                        toggle={toggleCreateModal}
+                        initialValues={{
+                          email,
+                          timezone: moment.tz.guess(),
+                          name: '',
+                          owner: profile.fullName,
+                          currency: OrgCurrencies.GBP,
+                        }}
+                        onSubmit={async (values) => {
+                          const errors = validateOrganization(values);
+
+                          if (errors) return errors;
+
+                          const {
+                            name,
+                            timezone,
+                            template: { value: template } = {},
+                            currency,
+                          } = values;
+                          const args = {
+                            name,
+                            timezone,
+                            template,
+                            currency,
+                          };
+
+                          const organizationId = await insert.callP(args);
+                          // we're using client.query with 'network-only' here
+                          // because "skip" prop above doesn't let us call refetch
+                          const {
+                            data: {
+                              organizations: {
+                                organizations: newOrganizations = [],
+                              },
+                            },
+                          } = await client.query({
+                            query: Queries.ORGANIZATIONS_MENU,
+                            variables: { organizationId: currentOrg._id },
+                            fetchPolicy: 'network-only',
+                          });
+                          const newOrg = newOrganizations.find(propEq('_id', organizationId));
+                          const serialNumber = prop('serialNumber', newOrg);
+                          if (serialNumber) router.setParams({ orgSerialNumber: serialNumber });
+
+                          return undefined;
+                        }}
+                      />
+                      <HeaderMenuItem
+                        tag="a"
+                        href={router.path(RouteNames.CANVAS, { orgSerialNumber })}
+                        active={routeName === RouteNames.CANVAS}
+                      >
+                        {RouteLabels[RouteNames.CANVAS]}
+                      </HeaderMenuItem>
+                      {routeName === RouteNames.CANVAS && (
+                        <EmbeddedHeaderMenuItem
                           tag="a"
-                          href={router.path(RouteNames.CANVAS, { orgSerialNumber })}
-                          active={routeName === RouteNames.CANVAS}
+                          target="_blank"
+                          href={router.path(RouteNames.CANVAS_REPORT, { orgSerialNumber })}
                         >
-                          {RouteLabels[RouteNames.CANVAS]}
-                        </HeaderMenuItem>
-                        {routeName === RouteNames.CANVAS && (
-                          <EmbeddedHeaderMenuItem
-                            tag="a"
-                            target="_blank"
-                            href={router.path(RouteNames.CANVAS_REPORT, { orgSerialNumber })}
-                          >
-                            {RouteLabels[RouteNames.CANVAS_REPORT]}
-                          </EmbeddedHeaderMenuItem>
-                        )}
+                          {RouteLabels[RouteNames.CANVAS_REPORT]}
+                        </EmbeddedHeaderMenuItem>
+                      )}
+                      <HeaderMenuItem
+                        tag="a"
+                        href={router.path(RouteNames.DASHBOARD, { orgSerialNumber })}
+                        active={routeName === RouteNames.DASHBOARD}
+                      >
+                        {RouteLabels[RouteNames.DASHBOARD]}
+                      </HeaderMenuItem>
+
+                      <DropdownItem divider />
+
+                      {organizations.map(({ _id, name, serialNumber }) => (
                         <HeaderMenuItem
-                          tag="a"
-                          href={router.path(RouteNames.DASHBOARD, { orgSerialNumber })}
-                          active={routeName === RouteNames.DASHBOARD}
+                          key={_id}
+                          // TODO delete line below when dashboard page will be on React
+                          toggle={!isDashboard}
+                          onClick={() => {
+                            setSelectedOrgSerialNumber(serialNumber, userId);
+                            router.setParams({ orgSerialNumber: serialNumber });
+                          }}
+                          active={currentOrg._id === _id}
                         >
-                          {RouteLabels[RouteNames.DASHBOARD]}
+                          {name}
                         </HeaderMenuItem>
+                      ))}
 
-                        <DropdownItem divider />
+                      <DropdownItem divider />
 
-                        {organizations.map(({ _id, name, serialNumber }) => (
-                          <HeaderMenuItem
-                            key={_id}
-                            // TODO delete line below when dashboard page will be on React
-                            toggle={!isDashboard}
-                            onClick={() => {
-                              setSelectedOrgSerialNumber(serialNumber, userId);
-                              router.setParams({ orgSerialNumber: serialNumber });
-                            }}
-                            active={currentOrg._id === _id}
-                          >
-                            {name}
-                          </HeaderMenuItem>
-                        ))}
-
-                        <DropdownItem divider />
-
-                        {roles.includes(UserRoles.CHANGE_ORG_SETTINGS) && (
-                          <HeaderMenuItem
-                            onClick={async () => {
-                              // eslint-disable-next-line max-len
-                              await import('../../../../ui/components/dashboard/includes/organization-menu/settings');
-
-                              ModalMixin.modal.open({
-                                template: 'OrgSettings',
-                                _title: 'Organization settings',
-                                helpText: OrganizationSettingsHelp.organizationSettings,
-                                organizationId: currentOrg._id,
-                                onDeleteOrg: () => {
-                                  refetch();
-                                  router.go(RouteNames.HELLO);
-                                },
-                              });
-                            }}
-                          >
-                            Organization settings
-                          </HeaderMenuItem>
-                        )}
-
+                      {roles.includes(UserRoles.CHANGE_ORG_SETTINGS) && (
                         <HeaderMenuItem
                           onClick={async () => {
                             // eslint-disable-next-line max-len
                             await import('../../../../ui/components/dashboard/includes/organization-menu/settings');
 
                             ModalMixin.modal.open({
-                              template: 'Organizations_Create',
-                              _title: 'New organization',
-                              variation: 'save',
-                              timezone: moment.tz.guess(),
-                              ownerName: profile.fullName,
-                              currency: OrgCurrencies.GBP,
-                              onCreateOrg: organizationId => refetch().then(({
-                                data: {
-                                  organizations: { organizations: newOrganizations = [] } = {},
-                                },
-                              }) => {
-                                const findOrganization = find(propEq('_id', organizationId));
-                                const { serialNumber } = findOrganization(newOrganizations);
-                                router.setParams({ orgSerialNumber: serialNumber });
-                              }),
+                              template: 'OrgSettings',
+                              _title: 'Organization settings',
+                              helpText: OrganizationSettingsHelp.organizationSettings,
+                              organizationId: currentOrg._id,
+                              onDeleteOrg: () => {
+                                refetch();
+                                router.go(RouteNames.HELLO);
+                              },
                             });
                           }}
                         >
-                          Create new Plio organization
+                          Organization settings
                         </HeaderMenuItem>
+                      )}
 
-                        {isPlioUser && (
-                          <Fragment>
-                            <DropdownItem divider />
-                            <HeaderMenuItem
-                              tag="a"
-                              href={router.path(RouteNames.CUSTOMERS)}
-                            >
-                              Plio organizations
-                            </HeaderMenuItem>
-                          </Fragment>
+                      <HeaderMenuItem onClick={toggleCreateModal}>
+                        Create new Plio organization
+                      </HeaderMenuItem>
+
+                      {isPlioUser && (
+                        <Fragment>
+                          <DropdownItem divider />
+                          <HeaderMenuItem
+                            tag="a"
+                            href={router.path(RouteNames.CUSTOMERS)}
+                          >
+                            Plio organizations
+                          </HeaderMenuItem>
+                        </Fragment>
+                      )}
+
+                      <DropdownItem divider />
+                      <HeaderMenuItem disabled>
+                        Plio version {APP_VERSION}
+                        {routeName === RouteNames.CANVAS && (
+                          <Copyright>
+                            <StrategyzerCopyright />
+                          </Copyright>
                         )}
-
-                        <DropdownItem divider />
-                        <HeaderMenuItem disabled>
-                          Plio version {APP_VERSION}
-                          {routeName === RouteNames.CANVAS && (
-                            <Copyright>
-                              <StrategyzerCopyright />
-                            </Copyright>
-                          )}
-                        </HeaderMenuItem>
-                      </Fragment>
-                    </RenderSwitch>
-                  )}
-                </Query>
-              </DropdownMenuStyled>
-            </Dropdown>
-          )}
-        </WithToggle>
-      </StyledNav>
-    )}
-  </FlowRouterContext>
-);
+                      </HeaderMenuItem>
+                    </Fragment>
+                  </RenderSwitch>
+                )}
+              </Query>
+            </DropdownMenuStyled>
+          </Dropdown>
+        </StyledNav>
+      )}
+    </FlowRouterContext>
+  );
+});
 
 OrganizationMenu.propTypes = {
   organization: PropTypes.shape({

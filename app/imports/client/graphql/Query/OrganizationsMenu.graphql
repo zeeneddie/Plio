@@ -1,6 +1,7 @@
 query OrganizationsMenu($organizationId: ID!) {
   me {
     _id
+    email
     isPlioUser
     profile {
       fullName

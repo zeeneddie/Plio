@@ -2,13 +2,24 @@ import { applyMiddleware } from 'plio-util';
 
 import { createOrgQueryWhereUserIsMember } from '../../../../../share/mongo';
 import { checkLoggedIn } from '../../../../../share/middleware';
+import { CustomerTypes } from '../../../../../share/constants';
 
 export const resolver = async (
   root,
-  vars,
+  { customerType },
   { collections: { Organizations }, userId },
 ) => {
-  const cursor = Organizations.find(createOrgQueryWhereUserIsMember(userId));
+  let query;
+
+  if (customerType === CustomerTypes.TEMPLATE) {
+    query = {
+      customerType,
+    };
+  } else {
+    query = createOrgQueryWhereUserIsMember(userId);
+  }
+
+  const cursor = Organizations.find(query);
 
   return {
     totalCount: cursor.count(),

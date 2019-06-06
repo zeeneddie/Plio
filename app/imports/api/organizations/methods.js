@@ -76,6 +76,13 @@ export const insert = new Method({
       nameSchema,
       TimezoneSchema,
       OrganizationCurrencySchema,
+      {
+        template: {
+          type: String,
+          regEx: SimpleSchema.RegEx.Id,
+          optional: true,
+        },
+      },
     ]);
 
     schema.clean(doc, {
@@ -89,12 +96,15 @@ export const insert = new Method({
     return checker(ORG_EnsureNameIsUnique);
   },
 
-  run({ name, timezone, currency }) {
+  run({
+    name, timezone, currency, template,
+  }) {
     if (Meteor.isServer) {
       return OrganizationService.insert({
         name,
         timezone,
         currency,
+        template,
         ownerId: this.userId,
       });
     }

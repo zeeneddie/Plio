@@ -21,6 +21,7 @@ type Organization implements BaseEntity {
   lastAccessedDate: DateTime
   workflowDefaults: WorkflowDefaults
   homeScreenType: String
+  template: ID
 }
 
 type WorkspaceDefaults {
