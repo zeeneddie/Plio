@@ -4530,12 +4530,12 @@ react-dom@^16.8.6:
     prop-types "^15.6.2"
     scheduler "^0.13.6"
 
-react-final-form-arrays@^1.0.4:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/react-final-form-arrays/-/react-final-form-arrays-1.0.6.tgz#cf845f99965cbf8200f28ccb4cba471f25655691"
-  integrity sha512-0FdV8t4NTC6cKuxfSatOy9++HfpKeMNX07SZD5ih+/JJa/8pHMZFbjDJipTjxDlnFrpDR0oNJJrM4T9F8LzQXA==
+react-final-form-arrays@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-final-form-arrays/-/react-final-form-arrays-3.0.0.tgz#c0b0c472fb42c7459d612f39703b8f5a65002f4a"
+  integrity sha512-XTPCCgL4clnpn7z/DSHQleMyJt6UowuJ2aMonFecdkeT1EvjJ0KZjKjFSU0niFjjMIRdUUjVfeZtMJurF8DUsg==
   dependencies:
-    react-lifecycles-compat "^3.0.4"
+    "@babel/runtime" "^7.4.5"
 
 react-final-form@^6.0.1:
   version "6.0.1"

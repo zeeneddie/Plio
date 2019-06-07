@@ -20,7 +20,10 @@ import {
 import { generateSerialNumber } from '../../../share/helpers';
 import OrgNotificationsSender from '../org-notifications-sender';
 import importDocuments from './importDocuments';
-import {
+import * as Collections from '../../../share/collections';
+import { OrganizationService as SharedOrganizationService } from '../../../share/services';
+
+const {
   Organizations,
   Actions,
   AuditLogs,
@@ -54,7 +57,35 @@ import {
   Needs,
   Wants,
   Projects,
-} from '../../../share/collections';
+} = Collections;
+
+const insertDefaultOrgSettings = ({ organizationId, ownerId }) => {
+  _.each(DefaultStandardSections, ({ title }) => {
+    StandardsBookSectionService.insert({
+      title,
+      organizationId,
+      createdBy: ownerId,
+    });
+  });
+
+  _.each(Object.values(DefaultStandardTypes), ({ title, abbreviation }) => {
+    StandardsTypeService.insert({
+      title,
+      abbreviation,
+      organizationId,
+      createdBy: ownerId,
+      isDefault: true,
+    });
+  });
+
+  _.each(DefaultRiskTypes, ({ title }) => {
+    RisksTypeService.insert({
+      title,
+      organizationId,
+      createdBy: ownerId,
+    });
+  });
+};
 
 const OrganizationService = {
   importDocuments,
@@ -102,31 +133,21 @@ const OrganizationService = {
       createdBy: ownerId,
     });
 
-    _.each(DefaultStandardSections, ({ title }) => {
-      StandardsBookSectionService.insert({
-        title,
-        organizationId,
-        createdBy: ownerId,
-      });
-    });
+    if (template) {
+      const importArgs = { to: organizationId, from: template };
+      const context = {
+        userId: ownerId,
+        collections: Collections,
+      };
 
-    _.each(Object.values(DefaultStandardTypes), ({ title, abbreviation }) => {
-      StandardsTypeService.insert({
-        title,
-        abbreviation,
-        organizationId,
-        createdBy: ownerId,
-        isDefault: true,
-      });
-    });
-
-    _.each(DefaultRiskTypes, ({ title }) => {
-      RisksTypeService.insert({
-        title,
-        organizationId,
-        createdBy: ownerId,
-      });
-    });
+      try {
+        SharedOrganizationService.importFromTemplate(importArgs, context);
+      } catch (err) {
+        insertDefaultOrgSettings({ organizationId, ownerId });
+      }
+    } else {
+      insertDefaultOrgSettings({ organizationId, ownerId });
+    }
 
     Roles.addUsersToRoles(ownerId, OrgOwnerRoles, organizationId);
 
