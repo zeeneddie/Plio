@@ -69,6 +69,7 @@ export default {
         organizationId: to,
         createdBy: userId,
         isDefault: true,
+        reservedTitle: title,
       }),
     );
     const standardSections = await StandardsBookSections.find(query, options).map(({ title }) => ({
