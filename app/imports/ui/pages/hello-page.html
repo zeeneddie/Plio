@@ -3,7 +3,8 @@
     {{> Preloader size=3}}
   {{else}}
     <p>Sorry, your account is not associated with any organization.</p>
-    <p><a class="pointer" {{b "click: openCreateNewOrgModal"}}>You can create a new organization</a> or ask the administrator of the existing organization to send you an invite.</p>
+    <div>{{> React component=(callback 'Modal')}}</div>
+    <p><a class="pointer" {{b "click: toggle"}}>You can create a new organization</a> or ask the administrator of the existing organization to send you an invite.</p>
     <p><a class="text-danger pointer" {{b "click: deleteAccount"}}>I want to delete my account permanently.</a></p>
   {{/unless}}
 </template>

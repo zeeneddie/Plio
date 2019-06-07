@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 import { Form } from 'reactstrap';
 
 import {
@@ -11,7 +11,7 @@ import {
 } from '../../components';
 import OrganizationForm from './OrganizationForm';
 
-const OrganizationCreateModal = ({
+const OrganizationCreateModal = memo(({
   isOpen,
   toggle,
   onSubmit,
@@ -38,7 +38,7 @@ const OrganizationCreateModal = ({
       )}
     </EntityModalForm>
   </EntityModalNext>
-);
+));
 
 OrganizationCreateModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,

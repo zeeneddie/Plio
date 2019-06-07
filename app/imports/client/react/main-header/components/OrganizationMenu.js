@@ -1,9 +1,7 @@
 import React, { memo, Fragment } from 'react';
-import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Query } from 'react-apollo';
-import { prop, propEq } from 'ramda';
 import {
   Dropdown,
   DropdownToggle,
@@ -16,16 +14,16 @@ import ModalMixin from '../../../../startup/client/mixins/modal';
 import { setSelectedOrgSerialNumber } from '../../../../api/helpers';
 import { APP_VERSION, RouteNames } from '../../../../api/constants';
 import { OrganizationSettingsHelp } from '../../../../api/help-messages';
-import { OrgCurrencies, UserRoles } from '../../../../share/constants';
+import { UserRoles } from '../../../../share/constants';
 import { Query as Queries } from '../../../graphql';
 import { FlowRouterContext, RenderSwitch, Preloader } from '../../components';
 import HeaderMenuItem from './HeaderMenuItem';
 import StrategyzerCopyright from '../../canvas/components/StrategyzerCopyright';
 import OrganizationAddModal
   from '../../organization-settings/components/OrganizationAddModal';
+import OrganizationAddContainer
+  from '../../organization-settings/containers/OrganizationAddContainer';
 import useToggle from '../../hooks/useToggle';
-import { insert } from '../../../../api/organizations/methods';
-import validateOrganization from '../../../validation/validators/validateOrganization';
 
 const RouteLabels = {
   [RouteNames.CANVAS]: 'Canvas view',
@@ -95,16 +93,9 @@ const OrganizationMenu = memo(({ organization: currentOrg, isDashboard }) => {
                   error,
                   loading,
                   refetch,
-                  client,
                   data: {
                     organizations: { organizations = [] } = {},
-                    me: {
-                      roles = [],
-                      profile = {},
-                      _id: userId,
-                      email,
-                      isPlioUser,
-                    } = {},
+                    me: user = {},
                   },
                 }) => (
                   <RenderSwitch
@@ -112,55 +103,15 @@ const OrganizationMenu = memo(({ organization: currentOrg, isDashboard }) => {
                     renderLoading={<PreloaderStyled />}
                   >
                     <Fragment>
-                      <OrganizationAddModal
-                        isOpen={isCreateModalOpen}
-                        toggle={toggleCreateModal}
-                        initialValues={{
-                          email,
-                          timezone: moment.tz.guess(),
-                          name: '',
-                          owner: profile.fullName,
-                          currency: OrgCurrencies.GBP,
-                        }}
-                        onSubmit={async (values) => {
-                          const errors = validateOrganization(values);
-
-                          if (errors) return errors;
-
-                          const {
-                            name,
-                            timezone,
-                            template: { value: template } = {},
-                            currency,
-                          } = values;
-                          const args = {
-                            name,
-                            timezone,
-                            template,
-                            currency,
-                          };
-
-                          const organizationId = await insert.callP(args);
-                          // we're using client.query with 'network-only' here
-                          // because "skip" prop above doesn't let us call refetch
-                          const {
-                            data: {
-                              organizations: {
-                                organizations: newOrganizations = [],
-                              },
-                            },
-                          } = await client.query({
-                            query: Queries.ORGANIZATIONS_MENU,
-                            variables: { organizationId: currentOrg._id },
-                            fetchPolicy: 'network-only',
-                          });
-                          const newOrg = newOrganizations.find(propEq('_id', organizationId));
-                          const serialNumber = prop('serialNumber', newOrg);
-                          if (serialNumber) router.setParams({ orgSerialNumber: serialNumber });
-
-                          return undefined;
-                        }}
-                      />
+                      {currentOrg && user && user._id && (
+                        <OrganizationAddContainer
+                          {...{ user }}
+                          isOpen={isCreateModalOpen}
+                          toggle={toggleCreateModal}
+                          component={OrganizationAddModal}
+                          organizationId={currentOrg._id}
+                        />
+                      )}
                       <HeaderMenuItem
                         tag="a"
                         href={router.path(RouteNames.CANVAS, { orgSerialNumber })}
@@ -193,7 +144,7 @@ const OrganizationMenu = memo(({ organization: currentOrg, isDashboard }) => {
                           // TODO delete line below when dashboard page will be on React
                           toggle={!isDashboard}
                           onClick={() => {
-                            setSelectedOrgSerialNumber(serialNumber, userId);
+                            setSelectedOrgSerialNumber(serialNumber, user._id);
                             router.setParams({ orgSerialNumber: serialNumber });
                           }}
                           active={currentOrg._id === _id}
@@ -204,7 +155,7 @@ const OrganizationMenu = memo(({ organization: currentOrg, isDashboard }) => {
 
                       <DropdownItem divider />
 
-                      {roles.includes(UserRoles.CHANGE_ORG_SETTINGS) && (
+                      {user && user.roles && user.roles.includes(UserRoles.CHANGE_ORG_SETTINGS) && (
                         <HeaderMenuItem
                           onClick={async () => {
                             // eslint-disable-next-line max-len
@@ -230,7 +181,7 @@ const OrganizationMenu = memo(({ organization: currentOrg, isDashboard }) => {
                         Create new Plio organization
                       </HeaderMenuItem>
 
-                      {isPlioUser && (
+                      {user.isPlioUser && (
                         <Fragment>
                           <DropdownItem divider />
                           <HeaderMenuItem
