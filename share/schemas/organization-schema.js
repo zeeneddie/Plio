@@ -369,6 +369,18 @@ const OrganizationSchema = new SimpleSchema([
       optional: true,
       regEx: SimpleSchema.RegEx.Id,
     },
+    signupPath: {
+      type: String,
+      optional: true,
+      autoValue() {
+        const customerType = this.field('customerType');
+        if (customerType.isSet && customerType.value === CustomerTypes.TEMPLATE) {
+          return undefined;
+        }
+
+        return this.unset();
+      },
+    },
   },
 ]);
 

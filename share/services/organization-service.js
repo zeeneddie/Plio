@@ -23,12 +23,16 @@ export default {
     _id,
     homeScreenType,
     lastAccessedDate,
+    customerType,
+    signupPath,
   }, { userId, collections: { Organizations } }) {
     const query = { _id };
     const modifier = {
       $set: {
         homeScreenType,
         lastAccessedDate,
+        customerType,
+        signupPath,
         updatedBy: userId,
       },
     };

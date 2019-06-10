@@ -22,6 +22,7 @@ type Organization implements BaseEntity {
   workflowDefaults: WorkflowDefaults
   homeScreenType: String
   template: ID
+  signupPath: String
 }
 
 type WorkspaceDefaults {

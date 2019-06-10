@@ -15,6 +15,8 @@ input UpdateOrganizationLastAccessedDateInput {
 input UpdateOrganizationInput {
   _id: ID!
   homeScreenType: String
+  customerType: String
+  signupPath: String
 }
 
 type Mutation {

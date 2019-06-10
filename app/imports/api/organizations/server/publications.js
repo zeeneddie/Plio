@@ -192,7 +192,10 @@ Meteor.publishComposite('customersLayout', {
     }
 
     return Organizations.find({}, {
-      fields: Organizations.listFields,
+      fields: {
+        ...Organizations.listFields,
+        signupPath: 1,
+      },
     });
   },
   children: [{

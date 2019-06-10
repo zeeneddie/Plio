@@ -3,7 +3,7 @@ import React from 'react';
 
 import ListItemLink from '../../../components/ListItemLink';
 import ListItem from '../../../components/ListItem';
-import SequentialId from '../../fields/read/components/SequentialId';
+import { CUSTOMER_SEQUENTIAL_ID } from '../../constants';
 
 const CustomersListItem = ({
   isActive, onClick, href, name, owner, createdAt, serialNumber,
@@ -13,7 +13,7 @@ const CustomersListItem = ({
       <div className="flexbox-row">
         <ListItem.Heading>
           <span className="margin-right">
-            <SequentialId {...{ serialNumber }} />
+            <span>{CUSTOMER_SEQUENTIAL_ID}{serialNumber}</span>
             <span> {name}</span>
           </span>
         </ListItem.Heading>
