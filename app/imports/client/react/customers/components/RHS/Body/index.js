@@ -51,7 +51,7 @@ const CustomersRHSBody = ({
     { label: 'Created date', text: getFormattedDate(createdAt) },
     { label: 'Type', text: CustomerTypesNames[customerType] },
     { label: 'Sign-up path', text: SignupPaths[homeScreenType] },
-    { label: 'Customer sign-up path', text: signupPath },
+    { label: 'Sign-up URL', text: signupPath },
   ];
   const fields = _.values(createReadFields(data)).map((field, i) => ({
     ...field,

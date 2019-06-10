@@ -37,10 +37,10 @@ const CustomerForm = ({ save }) => {
         is={CustomerTypes.TEMPLATE}
       >
         <FormField>
-          Sign-up path
+          Sign-up URL
           <InputField
             name="signupPath"
-            placeholder="Sign-up path"
+            placeholder="Sign-up URL"
             onBlur={save}
           />
         </FormField>
