@@ -2,6 +2,8 @@ import moment from 'moment-timezone';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { AccountsTemplates } from 'meteor/useraccounts:core';
 
+import { Organizations } from '../../share/collections';
+
 AccountsTemplates.configure({
   texts: {
     signInLink_pre: 'Already have an account?',
@@ -82,9 +84,13 @@ AccountsTemplates.addField({
 
 AccountsTemplates.configure({
   preSignUpHook(userPassword, info) {
-    /* eslint-disable no-param-reassign */
-    info.profile.organizationHomeScreen = FlowRouter.getQueryParam('type');
-    info.profile.organizationTimezone = moment.tz.guess();
-    /* eslint-disable no-param-reassign */
+    const template = FlowRouter.getQueryParam('template');
+    const templateOrg = Organizations.findOne({ signupPath: template });
+
+    Object.assign(info.profile, {
+      organizationHomeScreen: FlowRouter.getQueryParam('type'),
+      organizationTimezone: moment.tz.guess(),
+      organizationTemplate: templateOrg ? templateOrg._id : undefined,
+    });
   },
 });

@@ -3,7 +3,11 @@ import { Roles } from 'meteor/alanning:roles';
 import { AccountsTemplates } from 'meteor/useraccounts:core';
 
 import OrganizationService from '../../api/organizations/organization-service';
-import { OrgOwnerRoles, HomeScreenTypes, DEFAULT_ORG_TIMEZONE } from '../../share/constants';
+import {
+  OrgOwnerRoles,
+  HomeScreenTypes,
+  DEFAULT_ORG_TIMEZONE,
+} from '../../share/constants';
 // eslint-disable-next-line camelcase
 import { ORG_EnsureNameIsUnique } from '../../api/checkers';
 
@@ -12,6 +16,7 @@ function postSignUpHook(userId, {
     organizationName,
     organizationTimezone = DEFAULT_ORG_TIMEZONE,
     organizationHomeScreen = HomeScreenTypes.OPERATIONS,
+    organizationTemplate,
   },
 }) {
   let organizationId;
@@ -23,6 +28,7 @@ function postSignUpHook(userId, {
       timezone: organizationTimezone,
       homeScreenType: organizationHomeScreen,
       ownerId: userId,
+      template: organizationTemplate,
     });
   } catch (err) {
     Meteor.users.remove({ _id: userId });

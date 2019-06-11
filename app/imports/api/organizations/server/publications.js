@@ -12,7 +12,7 @@ import {
 import { getUserOrganizations } from '../utils';
 import { isPlioUser, isOrgMember } from '../../checkers';
 import { createOrgQueryWhereUserIsOwner } from '../../../share/mongo/queries';
-import { WORKSPACE_DEFAULTS } from '../../../share/constants';
+import { WORKSPACE_DEFAULTS, CustomerTypes } from '../../../share/constants';
 
 Meteor.publish('invitationInfo', function (invitationId) {
   check(invitationId, String);
@@ -223,4 +223,17 @@ Meteor.publish('customerCard', function getCustomerData(organizationId) {
   return Organizations.find({ _id: organizationId }, {
     fields: Organizations.cardFields,
   });
+});
+
+Meteor.publish('templateOrganization', (signupPath) => {
+  check(signupPath, String);
+
+  const query = { customerType: CustomerTypes.TEMPLATE, signupPath };
+  const options = {
+    fields: {
+      signupPath: 1,
+    },
+  };
+
+  return Organizations.find(query, options);
 });

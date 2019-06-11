@@ -1048,3 +1048,5 @@ export const IssueNumberRange = {
   MIN: 1,
   MAX: 1000,
 };
+
+export const DEFAULT_TEMPLATE_ORGANIZATION_ID = 'jJFkbgKjhzfbMyvRe';

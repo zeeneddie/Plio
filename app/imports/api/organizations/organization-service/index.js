@@ -3,19 +3,13 @@ import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
 import { _ } from 'meteor/underscore';
 
-import StandardsBookSectionService from
-  '../../standards-book-sections/standards-book-section-service';
-import StandardsTypeService from '../../standards-types/standards-type-service';
-import RisksTypeService from '../../risk-types/risk-types-service';
 import {
-  DefaultStandardSections,
-  DefaultStandardTypes,
-  DefaultRiskTypes,
   OrganizationDefaults,
   OrgOwnerRoles,
   OrgMemberRoles,
   UserMembership,
   UserRoles,
+  DEFAULT_TEMPLATE_ORGANIZATION_ID,
 } from '../../../share/constants';
 import { generateSerialNumber } from '../../../share/helpers';
 import OrgNotificationsSender from '../org-notifications-sender';
@@ -59,34 +53,6 @@ const {
   Projects,
 } = Collections;
 
-const insertDefaultOrgSettings = ({ organizationId, ownerId }) => {
-  _.each(DefaultStandardSections, ({ title }) => {
-    StandardsBookSectionService.insert({
-      title,
-      organizationId,
-      createdBy: ownerId,
-    });
-  });
-
-  _.each(Object.values(DefaultStandardTypes), ({ title, abbreviation }) => {
-    StandardsTypeService.insert({
-      title,
-      abbreviation,
-      organizationId,
-      createdBy: ownerId,
-      isDefault: true,
-    });
-  });
-
-  _.each(DefaultRiskTypes, ({ title }) => {
-    RisksTypeService.insert({
-      title,
-      organizationId,
-      createdBy: ownerId,
-    });
-  });
-};
-
 const OrganizationService = {
   importDocuments,
 
@@ -98,7 +64,7 @@ const OrganizationService = {
     currency,
     ownerId,
     homeScreenType,
-    template,
+    template = DEFAULT_TEMPLATE_ORGANIZATION_ID,
   }) {
     const serialNumber = generateSerialNumber(this.collection, {}, 100);
 
@@ -133,21 +99,13 @@ const OrganizationService = {
       createdBy: ownerId,
     });
 
-    if (template) {
-      const importArgs = { to: organizationId, from: template };
-      const context = {
-        userId: ownerId,
-        collections: Collections,
-      };
+    const importArgs = { to: organizationId, from: template };
+    const context = {
+      userId: ownerId,
+      collections: Collections,
+    };
 
-      try {
-        SharedOrganizationService.importFromTemplate(importArgs, context);
-      } catch (err) {
-        insertDefaultOrgSettings({ organizationId, ownerId });
-      }
-    } else {
-      insertDefaultOrgSettings({ organizationId, ownerId });
-    }
+    SharedOrganizationService.importFromTemplate(importArgs, context);
 
     Roles.addUsersToRoles(ownerId, OrgOwnerRoles, organizationId);
 

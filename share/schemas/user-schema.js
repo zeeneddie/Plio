@@ -68,6 +68,10 @@ const UserProfileSchema = new SimpleSchema({
   },
   organizationHomeScreen: homeScreenTypeSchemaObj,
   organizationTimezone: TimezoneSchema.getDefinition('timezone'),
+  organizationTemplate: {
+    type: String,
+    optional: true,
+  },
 });
 
 const UserPreferencesSchema = new SimpleSchema({
