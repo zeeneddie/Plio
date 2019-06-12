@@ -5,6 +5,7 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
 
 import { PlioS3Logos, EmailsForPlioReporting } from '../../../share/constants';
 import NotificationSender from '../../../share/utils/NotificationSender';
+import { isProduction } from '../../../share/helpers';
 
 const isRequired = () => {
   throw new Error('Missing parameter');
@@ -50,3 +51,5 @@ export const checkServerStatusAndReport = ({
     }).sendEmail();
   });
 };
+
+export const getStage = () => isProduction() ? 'Live' : 'Staging';

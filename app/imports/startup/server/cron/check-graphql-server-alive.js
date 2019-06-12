@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { SyncedCron } from 'meteor/percolate:synced-cron';
 
-import { checkServerStatusAndReport } from './helpers';
+import { checkServerStatusAndReport, getStage } from './helpers';
 
 const GRAPHQL_SERVER_URL = Meteor.settings.public.graphql.url;
 
@@ -16,7 +16,7 @@ SyncedCron.add({
     checkServerStatusAndReport({
       url: GRAPHQL_SERVER_URL.replace('/graphql', ''),
       tmpFileName: 'graphql_server_prev_is_crashed',
-      appName: 'GraphQL server',
+      appName: `${getStage()} GraphQL server`,
     });
   },
 });
