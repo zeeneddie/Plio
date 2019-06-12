@@ -366,7 +366,6 @@ const OrganizationSchema = new SimpleSchema([
     homeScreenType: homeScreenTypeSchemaObj,
     templateId: {
       type: String,
-      optional: true,
       regEx: SimpleSchema.RegEx.Id,
     },
     signupPath: {

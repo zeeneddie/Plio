@@ -78,7 +78,6 @@ export const insert = new Method({
         templateId: {
           type: String,
           regEx: SimpleSchema.RegEx.Id,
-          optional: true,
         },
       },
     ]);
