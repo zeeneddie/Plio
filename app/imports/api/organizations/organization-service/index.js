@@ -64,7 +64,7 @@ const OrganizationService = {
     currency,
     ownerId,
     homeScreenType,
-    template = DEFAULT_TEMPLATE_ORGANIZATION_ID,
+    templateId = DEFAULT_TEMPLATE_ORGANIZATION_ID,
   }) {
     const serialNumber = generateSerialNumber(this.collection, {}, 100);
 
@@ -95,11 +95,11 @@ const OrganizationService = {
       rkGuidelines,
       rkScoringGuidelines,
       review,
-      template,
+      templateId,
       createdBy: ownerId,
     });
 
-    const importArgs = { to: organizationId, from: template };
+    const importArgs = { to: organizationId, from: templateId };
     const context = {
       userId: ownerId,
       collections: Collections,

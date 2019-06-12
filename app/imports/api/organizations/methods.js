@@ -75,7 +75,7 @@ export const insert = new Method({
       TimezoneSchema,
       OrganizationCurrencySchema,
       {
-        template: {
+        templateId: {
           type: String,
           regEx: SimpleSchema.RegEx.Id,
           optional: true,
@@ -95,14 +95,17 @@ export const insert = new Method({
   },
 
   run({
-    name, timezone, currency, template,
+    name,
+    timezone,
+    currency,
+    templateId,
   }) {
     if (Meteor.isServer) {
       return OrganizationService.insert({
         name,
         timezone,
         currency,
-        template,
+        templateId,
         ownerId: this.userId,
       });
     }

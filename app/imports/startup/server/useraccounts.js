@@ -28,7 +28,7 @@ function postSignUpHook(userId, {
       timezone: organizationTimezone,
       homeScreenType: organizationHomeScreen,
       ownerId: userId,
-      template: organizationTemplate,
+      templateId: organizationTemplate,
     });
   } catch (err) {
     Meteor.users.remove({ _id: userId });

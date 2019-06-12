@@ -37,13 +37,13 @@ const OrganizationAddContainer = memo(({
             const {
               name,
               timezone,
-              template: { value: template } = {},
               currency,
+              template: { value: templateId } = {},
             } = values;
             const args = {
               name,
               timezone,
-              template,
+              templateId,
               currency,
             };
 

@@ -232,6 +232,7 @@ Meteor.publish('templateOrganization', (signupPath) => {
   const options = {
     fields: {
       signupPath: 1,
+      name: 1,
     },
   };
 

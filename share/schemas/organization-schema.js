@@ -364,7 +364,7 @@ const OrganizationSchema = new SimpleSchema([
       },
     },
     homeScreenType: homeScreenTypeSchemaObj,
-    template: {
+    templateId: {
       type: String,
       optional: true,
       regEx: SimpleSchema.RegEx.Id,
