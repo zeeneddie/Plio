@@ -18,10 +18,15 @@ class InvitationSender {
     this._userEmail = userEmail;
     this._welcomeMessage = welcomeMessage;
     this._invitationId = Random.id();
+    if (this._organization && this._organization.templateId) {
+      this._template = Organizations.findOne({ _id: this._organization.templateId });
+    }
   }
 
   _findExistingUser() {
-    const existingUser = Meteor.users.findOne({ emails: { address: this._userEmail, verified: true } });
+    const existingUser = Meteor.users.findOne({
+      emails: { address: this._userEmail, verified: true },
+    });
 
     if (existingUser && !existingUser.invitationId) {
       // check if user already invited
@@ -37,7 +42,10 @@ class InvitationSender {
         },
       });
       if (isOrgMember) {
-        throw new Meteor.Error(500, `User with email ${this._userEmail} is already invited to organization`);
+        throw new Meteor.Error(
+          500,
+          `User with email ${this._userEmail} is already invited to organization`,
+        );
       }
     }
 
@@ -65,7 +73,9 @@ class InvitationSender {
     try {
       const newUserId = Accounts.createUser(userDoc);
       const invitationExpirationDate = new Date();
-      invitationExpirationDate.setDate(invitationExpirationDate.getDate() + InvitationSender.getInvitationExpirationTime());
+      invitationExpirationDate.setDate(
+        invitationExpirationDate.getDate() + InvitationSender.getInvitationExpirationTime(),
+      );
       Meteor.users.update({
         _id: newUserId,
       }, {
@@ -128,6 +138,8 @@ class InvitationSender {
     const invitationExpiration = InvitationSender.getInvitationExpirationTime();
     const receiver = Meteor.users.findOne({ _id: userIdToInvite });
     const invitationId = receiver && receiver.invitationId || this._invitationId;
+    const queryString = this._template ? `?template%3D${this._template.signupPath}` : '';
+    const path = `accept-invitation/${invitationId}`;
 
     // send invitation
     const templateData = Object.assign({
@@ -140,7 +152,7 @@ class InvitationSender {
       },
       button: {
         label: 'Accept the invitation',
-        url: NotificationSender.getAbsoluteUrl(`accept-invitation/${invitationId}`),
+        url: `${NotificationSender.getAbsoluteUrl(path)}${queryString}`,
       },
       footerText: `This invitation expires on ${moment().add(invitationExpiration, 'days').format('MMMM Do YYYY')}.`,
     }, basicNotificationData);

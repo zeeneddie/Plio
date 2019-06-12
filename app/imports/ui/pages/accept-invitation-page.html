@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 no-padding">
-        <img src="/plio-text-logo.png" alt="plio logo" id="at-plio-logo">
+        {{> atFormLogo}}
 
         {{#if Template.subscriptionsReady}}
           {{#unless organization}}
@@ -107,7 +107,6 @@
         {{else}}
           {{> PreloaderPage}}
         {{/if}}
-        <img src="/p-logo.png" alt="plio logo" id="at-p-logo">
       </div>
     </div>
   </div>
