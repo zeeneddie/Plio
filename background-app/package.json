@@ -5,8 +5,8 @@
     "start": "MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor run --port 4000 --settings settings-local.json",
     "debug": "MONGO_URL=mongodb://127.0.0.1:3001/meteor MONGO_OPLOG_URL=mongodb://127.0.0.1:3001/local meteor debug --settings settings-local.json",
     "start:windows": "cmd /c \"SET MONGO_URL=mongodb://127.0.0.1:3001/meteor&&meteor --port 4000 --settings settings-local.json\"",
-    "deploy": "cd .deploy && pm2-meteor deploy",
-    "deploy:staging": "cd .deploy-staging && pm2-meteor deploy"
+    "deploy": "yarn install && cd .deploy && pm2-meteor deploy",
+    "deploy:staging": "yarn install && cd .deploy-staging && pm2-meteor deploy"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.46",
