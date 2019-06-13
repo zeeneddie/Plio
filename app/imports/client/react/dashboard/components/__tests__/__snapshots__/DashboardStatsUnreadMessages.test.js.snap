@@ -825,16 +825,16 @@ exports[`DashboardStatsUnreadMessages renders messages correctly 1`] = `
               toggle={[MockFunction]}
             >
               <Component
-                className="sc-ckVGcZ jEodHE"
+                className="sc-jAaTju iuUmrE"
                 onClick={[MockFunction]}
                 toggle={[MockFunction]}
               >
                 <DashboardStatsTitle
-                  className="sc-ckVGcZ jEodHE"
+                  className="sc-jAaTju iuUmrE"
                   onClick={[MockFunction]}
                 >
                   <h4
-                    className="dashboard-stats-title sc-ckVGcZ jEodHE"
+                    className="dashboard-stats-title sc-jAaTju iuUmrE"
                     onClick={[MockFunction]}
                   >
                     24 unread messages
