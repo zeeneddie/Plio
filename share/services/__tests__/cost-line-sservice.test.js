@@ -1,7 +1,7 @@
 import { __setupDB, __closeDB, Mongo } from 'meteor/mongo';
 
 import CostLineService from '../cost-line-service';
-import { CostLineColors } from '../../constants';
+import { CanvasColors } from '../../constants';
 
 describe('Cost line service', () => {
   let CostLines;
@@ -18,7 +18,7 @@ describe('Cost line service', () => {
     const args = {
       title: 'Hello World',
       organizationId: 1,
-      color: CostLineColors.INDIGO,
+      color: CanvasColors.INDIGO,
       percentOfTotalCost: 50,
       originatorId: userId,
       notes: 'dlsadsad',

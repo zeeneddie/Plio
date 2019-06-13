@@ -32,3 +32,5 @@ import './at_signup_link.js';
 import './at_title.html';
 import './at_title.js';
 import './full_page_at_form.html';
+import './at_form_logo.html';
+import './at_form_logo';

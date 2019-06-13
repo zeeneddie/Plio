@@ -18,6 +18,7 @@ import {
 } from '../../helpers';
 import { getPublishCompositeOrganizationUsers } from '../../../server/helpers/pub-helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
+import { getProjectsCursorByIds } from '../../projects/utils';
 import { getActionsWithLimitedFields } from '../../actions/utils';
 import { getProblemsWithLimitedFields } from '../../problems/utils';
 import {
@@ -33,9 +34,8 @@ const getNCLayoutPub = (userId, serialNumber, isDeleted = false) => [
       return NonConformities.find(query, options);
     },
     children: [
-      {
-        find: getDepartmentsCursorByIds,
-      },
+      { find: getDepartmentsCursorByIds },
+      { find: getProjectsCursorByIds },
     ],
   },
 ];

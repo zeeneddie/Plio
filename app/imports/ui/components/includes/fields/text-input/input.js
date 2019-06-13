@@ -5,5 +5,13 @@ Template.TextInput.viewmodel({
   className: '',
   enable: true,
   placeholder: '',
+  autoComplete: 'off',
+  autoFocus: false,
   onFocusOut() {},
+  onRendered(templateInstance) {
+    if (this.autoFocus()) {
+      const input = templateInstance.firstNode;
+      setTimeout(() => input.focus(), 500);
+    }
+  },
 });

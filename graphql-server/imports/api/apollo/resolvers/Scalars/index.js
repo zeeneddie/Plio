@@ -15,5 +15,9 @@ export default {
       const date = GraphQLDateTime.serialize(value);
       return new Date(date).getTime();
     },
+    parseValue(value) {
+      const date = new Date(value).toISOString();
+      return GraphQLDateTime.parseValue(date);
+    },
   },
 };

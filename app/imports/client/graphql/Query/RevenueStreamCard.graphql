@@ -1,0 +1,13 @@
+#import "../Fragment/RevenueStreamCard.graphql"
+
+query RevenueStreamCard($_id: ID!, $organizationId: ID!) {
+  revenueStream(_id: $_id) {
+    revenueStream {
+      ...RevenueStreamCard
+    }
+  }
+  user: me {
+    _id
+    roles(organizationId: $organizationId)
+  }
+}

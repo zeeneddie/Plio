@@ -1,5 +1,7 @@
 import { Template } from 'meteor/templating';
 
+import { StringLimits } from '../../../../../share/constants';
+
 Template.Completion_Edit.viewmodel({
   isButtonVisible: true,
   isFormVisible: false,
@@ -9,12 +11,13 @@ Template.Completion_Edit.viewmodel({
   buttonSuccessText: 'Complete',
   buttonFailText: 'Assessed as ineffective',
   canButtonBeShown: false,
+  maxLength: StringLimits.comments.max,
   getButtonText() {
     return this.isFormVisible()
       ? 'Cancel'
       : this.buttonDefaultText();
   },
-  onComplete(vm) {},
+  onComplete() {},
   complete() {
     this.onComplete(this);
   },
@@ -22,9 +25,9 @@ Template.Completion_Edit.viewmodel({
     return !!this.onFail;
   },
   fail() {
-    this.onFail && this.onFail(this);
+    return this.onFail && this.onFail(this);
   },
-  onUndo(vm) {},
+  onUndo() {},
   undo() {
     this.onUndo();
   },

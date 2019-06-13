@@ -1,0 +1,13 @@
+#import "../Fragment/ChannelCard.graphql"
+
+query ChannelCard($_id: ID!, $organizationId: ID!) {
+  channel(_id: $_id) {
+    channel {
+      ...ChannelCard
+    }
+  }
+  user: me {
+    _id
+    roles(organizationId: $organizationId)
+  }
+}

@@ -6,10 +6,9 @@ import {
   FormField,
   CardBlock,
   TextareaAdapter,
-  SelectInputField,
   InputField,
 } from '../../components';
-import { OrgUsersSelectInputContainer } from '../../containers';
+import { UserSelectInput } from '../../forms/components';
 import ActionCompletionForm from './ActionCompletionForm';
 import { StringLimits } from '../../../../share/constants';
 // import ActionPlan from './ActionPlan';
@@ -34,6 +33,7 @@ const ActionForm = ({
           placeholder="Title"
           addon={sequentialId}
           maxLength={StringLimits.longTitle.max}
+          autoFocus
         />
       </FormField>
       <FormField>
@@ -48,11 +48,10 @@ const ActionForm = ({
       {children}
       <FormField>
         Owner
-        <OrgUsersSelectInputContainer
+        <UserSelectInput
           name="owner"
           placeholder="Owner"
           onChange={onChangeOwner}
-          component={SelectInputField}
           {...{ organizationId }}
         />
       </FormField>

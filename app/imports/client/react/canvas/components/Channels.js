@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import ChannelAddModal from './ChannelAddModal';
+import ChannelEditModal from './ChannelEditModal';
 import CanvasBlock from './CanvasBlock';
+import ChannelsHelp from './ChannelsHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const Channels = ({ organizationId }) => (
   <Query
@@ -15,16 +19,31 @@ const Channels = ({ organizationId }) => (
   >
     {({ data: { channels: { channels = [] } } }) => (
       <CanvasBlock
+        {...{ organizationId }}
         label="Channels"
-        help={(
-          <Fragment>
-            <p>Through which channels do each of our segments want to be reached?</p>
-            <p>Which ones are most cost-efficient?</p>
-          </Fragment>
-        )}
+        sectionName={CanvasSections[CanvasTypes.CHANNEL]}
+        documentType={DocumentTypes.CHANNEL}
+        help={<ChannelsHelp />}
         items={channels}
-        renderModal={({ isOpen, toggle }) => (
-          <ChannelAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <ChannelAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
+        )}
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <ChannelEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
         )}
       />
     )}
@@ -35,4 +54,4 @@ Channels.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default Channels;
+export default pure(Channels);

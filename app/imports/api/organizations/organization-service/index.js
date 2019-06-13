@@ -3,25 +3,22 @@ import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
 import { _ } from 'meteor/underscore';
 
-import { Organizations } from '/imports/share/collections/organizations';
-import StandardsBookSectionService from
-  '../../standards-book-sections/standards-book-section-service';
-import StandardsTypeService from '../../standards-types/standards-type-service';
-import RisksTypeService from '../../risk-types/risk-types-service';
 import {
-  DefaultStandardSections,
-  DefaultStandardTypes,
-  DefaultRiskTypes,
   OrganizationDefaults,
   OrgOwnerRoles,
   OrgMemberRoles,
   UserMembership,
   UserRoles,
+  DEFAULT_TEMPLATE_ORGANIZATION_ID,
 } from '../../../share/constants';
 import { generateSerialNumber } from '../../../share/helpers';
 import OrgNotificationsSender from '../org-notifications-sender';
 import importDocuments from './importDocuments';
-import {
+import * as Collections from '../../../share/collections';
+import { OrganizationService as SharedOrganizationService } from '../../../share/services';
+
+const {
+  Organizations,
   Actions,
   AuditLogs,
   Departments,
@@ -39,7 +36,22 @@ import {
   WorkItems,
   Goals,
   Milestones,
-} from '../../../share/collections';
+  CanvasSettings,
+  KeyPartners,
+  KeyActivities,
+  KeyResources,
+  ValuePropositions,
+  CustomerRelationships,
+  Channels,
+  CustomerSegments,
+  CostLines,
+  RevenueStreams,
+  Benefits,
+  Features,
+  Needs,
+  Wants,
+  Projects,
+} = Collections;
 
 const OrganizationService = {
   importDocuments,
@@ -47,7 +59,12 @@ const OrganizationService = {
   collection: Organizations,
 
   insert({
-    name, timezone, currency, ownerId,
+    name,
+    timezone,
+    currency,
+    ownerId,
+    homeScreenType,
+    templateId = DEFAULT_TEMPLATE_ORGANIZATION_ID,
   }) {
     const serialNumber = generateSerialNumber(this.collection, {}, 100);
 
@@ -66,6 +83,7 @@ const OrganizationService = {
       timezone,
       currency,
       serialNumber,
+      homeScreenType,
       users: [{
         userId: ownerId,
         role: UserMembership.ORG_OWNER,
@@ -77,38 +95,26 @@ const OrganizationService = {
       rkGuidelines,
       rkScoringGuidelines,
       review,
+      templateId,
       createdBy: ownerId,
     });
 
-    _.each(DefaultStandardSections, ({ title }) => {
-      StandardsBookSectionService.insert({
-        title,
-        organizationId,
-        createdBy: ownerId,
-      });
-    });
+    const importArgs = { to: organizationId, from: templateId };
+    const context = {
+      userId: ownerId,
+      collections: Collections,
+    };
 
-    _.each(Object.values(DefaultStandardTypes), ({ title, abbreviation }) => {
-      StandardsTypeService.insert({
-        title,
-        abbreviation,
-        organizationId,
-        createdBy: ownerId,
-        isDefault: true,
-      });
-    });
-
-    _.each(DefaultRiskTypes, ({ title }) => {
-      RisksTypeService.insert({
-        title,
-        organizationId,
-        createdBy: ownerId,
-      });
-    });
+    SharedOrganizationService.importFromTemplate(importArgs, context);
 
     Roles.addUsersToRoles(ownerId, OrgOwnerRoles, organizationId);
 
     new OrgNotificationsSender(organizationId).orgCreated();
+
+    CanvasSettings.insert({
+      organizationId,
+      notify: [ownerId],
+    });
 
     return organizationId;
   },
@@ -377,22 +383,25 @@ const OrganizationService = {
       WorkItems,
       Goals,
       Milestones,
+      KeyPartners,
+      KeyActivities,
+      KeyResources,
+      ValuePropositions,
+      CustomerRelationships,
+      Channels,
+      CustomerSegments,
+      CostLines,
+      RevenueStreams,
+      Benefits,
+      Features,
+      Needs,
+      Wants,
+      Projects,
     ];
 
     _(collections).each(coll => coll.direct.remove({ organizationId }));
 
     return this.collection.remove({ _id: organizationId });
-  },
-
-  changeCustomerType({ organizationId, customerType }) {
-    const query = { _id: organizationId };
-    const modifier = {
-      $set: {
-        customerType,
-      },
-    };
-
-    return this.collection.update(query, modifier);
   },
 
   unsubscribeFromDailyRecap({ orgSerialNumber, userId }) {

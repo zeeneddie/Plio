@@ -1,17 +1,28 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
+import React from 'react';
+import { ApolloProvider } from 'react-apollo';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import moment from 'moment-timezone';
 
-import { Organizations } from '/imports/share/collections/organizations';
-import { remove } from '/imports/api/users/methods';
-import { OrgCurrencies } from '/imports/share/constants';
-import { getSelectedOrgSerialNumber } from '/imports/api/helpers';
+import { swal } from '../../client/util';
+import { Organizations } from '../../share/collections/organizations';
+import { remove } from '../../api/users/methods';
+import { getSelectedOrgSerialNumber, setSelectedOrgSerialNumber } from '../../api/helpers';
 import { createOrgQueryWhereUserIsMember } from '../../share/mongo/queries';
-
+import { ALERT_AUTOHIDE_TIME } from '../../api/constants';
+import OrganizationAddModal
+  from '../../client/react/organization-settings/components/OrganizationAddModal';
+import OrganizationAddContainer
+  from '../../client/react/organization-settings/containers/OrganizationAddContainer';
+import { client } from '../../client/apollo';
+import { getFullName, getEmail } from '../../api/users/helpers';
 
 Template.HelloPage.viewmodel({
   mixin: ['router', 'modal'],
+  isOpen: false,
+  toggle() {
+    this.isOpen(!this.isOpen());
+  },
   onCreated(template) {
     template.autorun(() => {
       const currentUser = Meteor.user();
@@ -21,18 +32,15 @@ Template.HelloPage.viewmodel({
           const query = createOrgQueryWhereUserIsMember(currentUser._id);
           const selectedOrganizationSerialNumber = getSelectedOrgSerialNumber();
           const serialNumber = parseInt(selectedOrganizationSerialNumber, 10);
-          const orgExists = !!Organizations.findOne({ ...query, serialNumber });
+          const organization = Organizations.findOne({ ...query, serialNumber });
 
-          if (serialNumber && orgExists) {
-            this.goToDashboard(serialNumber);
+          if (serialNumber && organization) {
+            this.goToHomePageOfOrg(organization);
           } else {
             const org = Organizations.findOne(query);
             if (org) {
-              localStorage.setItem(
-                `${Meteor.userId()}: selectedOrganizationSerialNumber`,
-                org.serialNumber,
-              );
-              this.goToDashboard(org.serialNumber);
+              setSelectedOrgSerialNumber(org.serialNumber);
+              this.goToHomePageOfOrg(org);
             }
           }
         } else {
@@ -41,18 +49,6 @@ Template.HelloPage.viewmodel({
           });
         }
       }
-    });
-  },
-  openCreateNewOrgModal(e) {
-    e.preventDefault();
-
-    this.modal().open({
-      template: 'Organizations_Create',
-      _title: 'New organization',
-      variation: 'save',
-      timezone: moment.tz.guess(),
-      ownerName: Meteor.user().fullName(),
-      currency: OrgCurrencies.GBP,
     });
   },
   deleteAccount(e) {
@@ -86,5 +82,28 @@ Template.HelloPage.viewmodel({
         }
       });
     });
+  },
+  Modal() {
+    const user = { ...Meteor.user() };
+    Object.assign(user, {
+      email: getEmail(user),
+      profile: {
+        fullName: getFullName(user),
+      },
+    });
+    const toggle = () => this.toggle();
+
+    return (
+      <ApolloProvider {...{ client }}>
+        <OrganizationAddContainer
+          {...{ user }}
+          isOpen={this.isOpen()}
+          toggle={toggle}
+          organizationId={null}
+          component={OrganizationAddModal}
+          onLink={toggle}
+        />
+      </ApolloProvider>
+    );
   },
 });

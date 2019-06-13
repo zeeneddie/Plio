@@ -1,0 +1,8 @@
+type ValuePropositionChangedResult {
+  kind: DocChangeKind!
+  entity: ValueProposition
+}
+
+type Subscription {
+  valuePropositionChanged(organizationId: ID!, kind: [DocChangeKind!]): ValuePropositionChangedResult
+}

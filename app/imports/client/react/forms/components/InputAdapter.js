@@ -4,7 +4,7 @@ import { getTargetValue } from 'plio-util';
 import { Input } from 'reactstrap';
 
 const InputAdapter = ({
-  meta: { dirty },
+  meta: { dirty, dirtySinceLastSubmit },
   input,
   onChange,
   onBlur,
@@ -18,8 +18,15 @@ const InputAdapter = ({
       if (onChange) onChange(e);
     }}
     onBlur={(e) => {
-      input.onBlur(e);
-      if (dirty && onBlur) {
+      const value = getTargetValue(e);
+      const trimmedValue = value.trim();
+
+      if (trimmedValue !== value) {
+        input.onChange(trimmedValue);
+      }
+
+      input.onBlur(trimmedValue);
+      if ((dirty || dirtySinceLastSubmit) && onBlur) {
         onBlur(e);
       }
     }}

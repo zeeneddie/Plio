@@ -10,6 +10,28 @@ input CreateKeyActivityInput {
   notes: String
 }
 
+input UpdateKeyActivityInput {
+  _id: ID!
+  title: String
+  originatorId: ID
+  color: String
+  notes: String
+  fileIds: [String]
+  notify: [ID]
+  goalIds: [ID]
+  standardsIds: [ID]
+  fileIds: [ID]
+  riskIds: [ID]
+  nonconformityIds: [ID]
+  potentialGainIds: [ID]
+}
+
+input DeleteKeyActivityInput {
+  _id: ID!
+}
+
 type Mutation {
   createKeyActivity(input: CreateKeyActivityInput!): KeyActivityPayload
+  updateKeyActivity(input: UpdateKeyActivityInput!): KeyActivity
+  deleteKeyActivity(input: DeleteKeyActivityInput!): KeyActivity
 }

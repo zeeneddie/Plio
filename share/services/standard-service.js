@@ -8,20 +8,23 @@ export default {
 
   _service: new BaseEntityService(Standards),
 
-  insert({ ...args }) {
-    return this.collection.insert(args);
+  insert(args, { userId } = {}) {
+    return this.collection.insert({ ...args, createdBy: userId });
   },
 
-  update({ ...args }) {
-    return this._service.update({ ...args });
+  update(args, { userId } = {}) {
+    return this._service.update({ ...args, updatedBy: userId });
   },
 
   updateViewedBy({ _id, userId: viewedBy }) {
     return this._service.updateViewedBy({ _id, viewedBy });
   },
 
-  remove({ _id, deletedBy }) {
-    return this._service.remove({ _id, deletedBy });
+  remove({ _id, deletedBy }, { userId } = {}) {
+    return this._service.remove({
+      _id,
+      deletedBy: deletedBy || userId,
+    });
   },
 
   restore({ _id }) {

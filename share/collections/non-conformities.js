@@ -43,6 +43,7 @@ NonConformities.publicFields = {
   magnitude: 1,
   status: 1,
   departmentsIds: 1,
+  projectIds: 1,
   viewedBy: 1,
   isDeleted: 1,
   deletedAt: 1,

@@ -7,14 +7,14 @@ import {
   IconLoading,
   PlusButton,
 } from '../../components';
-import {
-  GoalsChartContainer,
-  GoalAddModalContainer,
-  GoalEditModalContainer,
-  CompletedDeletedGoalsContainer,
-} from '../../goals';
-import { MilestoneModalContainer } from '../../milestones';
-import { ActionModalContainer } from '../../actions';
+import { WithToggle } from '../../helpers';
+import GoalsChartContainer from '../../goals/containers/GoalsChartContainer';
+import GoalAddContainer from '../../goals/containers/GoalAddContainer';
+import GoalEditModalContainer from '../../goals/containers/GoalEditModalContainer';
+import CompletedDeletedGoalsContainer from '../../goals/containers/CompletedDeletedGoalsContainer';
+import GoalAddModal from '../../goals/components/GoalAddModal';
+import MilestoneModalContainer from '../../milestones/containers/MilestoneModalContainer';
+import ActionModalContainer from '../../actions/containers/ActionModalContainer';
 
 const DashboardGoals = ({
   totalCount,
@@ -23,8 +23,6 @@ const DashboardGoals = ({
   toggle,
   isOpen,
   loading,
-  isAddModalOpen,
-  toggleAddModal,
   user,
   organizationId,
   isEditModalOpen,
@@ -37,63 +35,65 @@ const DashboardGoals = ({
   isActionModalOpen,
   toggleActionModal,
 }) => (
-  <Fragment>
-    {canEditGoals && (
-      <GoalAddModalContainer
-        isOpen={isAddModalOpen}
-        toggle={toggleAddModal}
-        owner={user}
-        {...{ organizationId }}
-      />
-    )}
-    {!!goals.length && (
+  <WithToggle>
+    {addModalToggleState => (
       <Fragment>
-        <GoalEditModalContainer
-          isOpen={isEditModalOpen}
-          toggle={toggleEditModal}
-          {...{ organizationId, canEditGoals }}
-        />
-        <MilestoneModalContainer
-          isOpen={isMilestoneModalOpen}
-          toggle={toggleMilestoneModal}
-          {...{ organizationId }}
-        />
-        <ActionModalContainer
-          isOpen={isActionModalOpen}
-          toggle={toggleActionModal}
-          {...{ organizationId, user }}
-        />
+        {canEditGoals && (
+          <GoalAddContainer
+            {...{ ...addModalToggleState, organizationId }}
+            component={GoalAddModal}
+          />
+        )}
+        {!!goals.length && (
+          <Fragment>
+            <GoalEditModalContainer
+              isOpen={isEditModalOpen}
+              toggle={toggleEditModal}
+              {...{ organizationId }}
+            />
+            <MilestoneModalContainer
+              isOpen={isMilestoneModalOpen}
+              toggle={toggleMilestoneModal}
+              {...{ organizationId }}
+            />
+            <ActionModalContainer
+              isOpen={isActionModalOpen}
+              toggle={toggleActionModal}
+              {...{ organizationId, user }}
+            />
+          </Fragment>
+        )}
+        <DashboardStatsExpandable
+          items={goals}
+          total={completedDeletedTotalCount ? Infinity : totalCount}
+          itemsPerRow={goals.length}
+          renderIcon={loading ? () => <IconLoading /> : undefined}
+          render={({ items }) => (
+            <Fragment>
+              {!!items.length && (
+                <GoalsChartContainer
+                  {...{ timeScale }}
+                  goals={items}
+                />
+              )}
+              {isOpen && !!completedDeletedTotalCount && (
+                <CompletedDeletedGoalsContainer
+                  {...{ canEditGoals, organizationId }}
+                  itemsPerRow={completedDeletedItemsPerRow}
+                />
+              )}
+            </Fragment>
+          )}
+          {...{ toggle, isOpen }}
+        >
+          {canEditGoals && <PlusButton size="1" onClick={addModalToggleState.toggle} />}
+          {totalCount
+            ? pluralize('Key goal', totalCount || goals.length, true)
+            : 'Add a key goal'}
+        </DashboardStatsExpandable>
       </Fragment>
     )}
-    <DashboardStatsExpandable
-      items={goals}
-      total={completedDeletedTotalCount ? Infinity : totalCount}
-      itemsPerRow={goals.length}
-      renderIcon={loading ? () => <IconLoading /> : undefined}
-      render={({ items }) => (
-        <Fragment>
-          {!!items.length && (
-            <GoalsChartContainer
-              {...{ timeScale }}
-              goals={items}
-            />
-          )}
-          {isOpen && !!completedDeletedTotalCount && (
-            <CompletedDeletedGoalsContainer
-              {...{ canEditGoals, organizationId }}
-              itemsPerRow={completedDeletedItemsPerRow}
-            />
-          )}
-        </Fragment>
-      )}
-      {...{ toggle, isOpen }}
-    >
-      {canEditGoals && <PlusButton size="1" onClick={toggleAddModal} />}
-      {totalCount
-        ? pluralize('Key goal', totalCount || goals.length, true)
-        : 'Add a key goal'}
-    </DashboardStatsExpandable>
-  </Fragment>
+  </WithToggle>
 );
 
 DashboardGoals.propTypes = {
@@ -101,8 +101,6 @@ DashboardGoals.propTypes = {
   goals: PropTypes.arrayOf(PropTypes.object).isRequired,
   toggle: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  isAddModalOpen: PropTypes.bool.isRequired,
-  toggleAddModal: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   user: PropTypes.object.isRequired,
   organizationId: PropTypes.string.isRequired,

@@ -1,0 +1,5 @@
+mutation unlinkStandardFromRisk($input: UnlinkStandardFromRiskInput!) {
+  unlinkStandardFromRisk(input: $input) {
+    _id
+  }
+}

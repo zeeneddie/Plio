@@ -26,6 +26,19 @@ import {
   Discussions,
   Goals,
   Milestones,
+  KeyPartners,
+  KeyActivities,
+  KeyResources,
+  ValuePropositions,
+  CustomerRelationships,
+  Channels,
+  CustomerSegments,
+  CostLines,
+  RevenueStreams,
+  Benefits,
+  Features,
+  Needs,
+  Wants,
 } from '../collections';
 
 export * from './actions';
@@ -85,6 +98,45 @@ export const getCollectionByDocType = (docType) => {
     case AllDocumentTypes.MILESTONE:
       return Milestones;
 
+    case AllDocumentTypes.KEY_PARTNER:
+      return KeyPartners;
+
+    case AllDocumentTypes.KEY_ACTIVITY:
+      return KeyActivities;
+
+    case AllDocumentTypes.KEY_RESOURCE:
+      return KeyResources;
+
+    case AllDocumentTypes.VALUE_PROPOSITION:
+      return ValuePropositions;
+
+    case AllDocumentTypes.CUSTOMER_RELATIONSHIP:
+      return CustomerRelationships;
+
+    case AllDocumentTypes.CHANNEL:
+      return Channels;
+
+    case AllDocumentTypes.CUSTOMER_SEGMENT:
+      return CustomerSegments;
+
+    case AllDocumentTypes.COST_LINE:
+      return CostLines;
+
+    case AllDocumentTypes.REVENUE_STREAM:
+      return RevenueStreams;
+
+    case AllDocumentTypes.BENEFIT:
+      return Benefits;
+
+    case AllDocumentTypes.FEATURE:
+      return Features;
+
+    case AllDocumentTypes.NEED:
+      return Needs;
+
+    case AllDocumentTypes.WANT:
+      return Wants;
+
     default:
       return undefined;
   }
@@ -94,6 +146,10 @@ export const getCollectionNameByDocType = docType => ({
   [DocumentTypes.STANDARD]: CollectionNames.STANDARDS,
   [DocumentTypes.NON_CONFORMITY]: CollectionNames.NCS,
   [DocumentTypes.RISK]: CollectionNames.RISKS,
+  [DocumentTypes.BENEFIT]: CollectionNames.BENEFITS,
+  [DocumentTypes.FEATURE]: CollectionNames.FEATURES,
+  [DocumentTypes.NEED]: CollectionNames.NEEDS,
+  [DocumentTypes.WANT]: CollectionNames.WANTS,
 })[docType];
 
 export const getFormattedDate = (date, stringFormat) => {
@@ -227,7 +283,7 @@ export const getUserFullNameOrEmail = (userOrId) => {
     user = getUser(userOrId);
   }
 
-  return (user && user.fullNameOrEmail()) || '';
+  return (user && user.fullNameOrEmail && user.fullNameOrEmail()) || '';
 };
 
 export const htmlToPlainText = (html) => {
@@ -279,3 +335,10 @@ export const removeRolesFromAllUsers = roles =>
   });
 
 export const getWorkspaceDefaultsUpdater = mapKeys(concat(`${WORKSPACE_DEFAULTS}.`));
+
+export const getNestingLevel = (title) => {
+  const number = title.match(/^[\d.]*\d/);
+  return (number && number[0].split('.').length) || 1;
+};
+
+export const isProduction = () => process.env.NODE_ENV === 'production';

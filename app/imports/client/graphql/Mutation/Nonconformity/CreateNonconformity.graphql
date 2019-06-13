@@ -1,0 +1,9 @@
+#import "../../Fragment/NonconformityCard.graphql"
+
+mutation createNonconformity($input: CreateNonconformityInput!) {
+  createNonconformity(input: $input) {
+    nonconformity {
+      ...NonconformityCard
+    }
+  }
+}

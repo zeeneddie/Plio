@@ -76,7 +76,6 @@
 }
 
 #at-plio-logo {
-  display: block;
   margin: 4rem auto;
   max-width: 150px;
 
@@ -91,11 +90,22 @@
 }
 
 #at-p-logo {
-  display: block;
   margin: 4rem auto;
-  max-width: 30px;
 
   @media (max-width: 767px) {
     margin: 3rem auto;
+    max-width: 50px;
+  }
+
+  @media (max-height: 500px) and (max-width: 767px) {
+    display: none;
+  }
+}
+
+#at-plio-template {
+  margin: -2rem auto 2rem;
+
+  @media (max-height: 500px) and (max-width: 767px) {
+    margin: 2rem auto;
   }
 }

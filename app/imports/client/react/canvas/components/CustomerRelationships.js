@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import CustomerRelationshipAddModal from './CustomerRelationshipAddModal';
+import CustomerRelationshipEditModal from './CustomerRelationshipEditModal';
 import CanvasBlock from './CanvasBlock';
+import CustomerRelationshipsHelp from './CustomerRelationshipsHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const CustomerRelationships = ({ organizationId }) => (
   <Query
@@ -15,16 +19,31 @@ const CustomerRelationships = ({ organizationId }) => (
   >
     {({ data: { customerRelationships: { customerRelationships = [] } } }) => (
       <CanvasBlock
+        {...{ organizationId }}
         label="Customer relationships"
-        help={(
-          <Fragment>
-            <p>What type of relationship do you want with customers?</p>
-            <p>Which fits best with each segment?</p>
-          </Fragment>
-        )}
+        sectionName={CanvasSections[CanvasTypes.CUSTOMER_RELATIONSHIP]}
+        documentType={DocumentTypes.CUSTOMER_RELATIONSHIP}
+        help={<CustomerRelationshipsHelp />}
         items={customerRelationships}
-        renderModal={({ isOpen, toggle }) => (
-          <CustomerRelationshipAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <CustomerRelationshipAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
+        )}
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <CustomerRelationshipEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
         )}
       />
     )}
@@ -35,4 +54,4 @@ CustomerRelationships.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default CustomerRelationships;
+export default pure(CustomerRelationships);

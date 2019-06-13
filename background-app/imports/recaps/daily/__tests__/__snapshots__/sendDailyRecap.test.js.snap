@@ -1,0 +1,509 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sendDailyRecap matches snapshot 1`] = `
+Object {
+  "emailSubject": "Daily recap for January 01, 2018",
+  "recipients": Array [
+    "bb463b8b-b76c-4f6a-9726-65ab5730b69b",
+  ],
+  "templateData": Object {
+    "organizationName": "Peru",
+    "recapData": Array [
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "Actions",
+                "date": "3:00 AM",
+                "documentId": "922d73f3-603c-4e39-8ba8-105cdf5b8ccd",
+                "executor": "",
+                "message": "Intuitive circuit",
+              },
+              Object {
+                "collection": "Actions",
+                "date": "3:00 AM",
+                "documentId": "922d73f3-603c-4e39-8ba8-105cdf5b8ccd",
+                "executor": "",
+                "message": "Quality",
+              },
+            ],
+            "title": "best-of-breed \\"Investor\\"",
+            "url": "99173/work-inbox?id=ef3875c5-6e69-4c69-8689-3d35420f4a93",
+          },
+        ],
+        "title": "1 action was updated:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "Channels",
+                "date": "3:00 AM",
+                "documentId": "9d43762e-2b19-41b8-8c6c-5fe2f2d7bdec",
+                "executor": "",
+                "message": "flexibility",
+              },
+              Object {
+                "collection": "Channels",
+                "date": "3:00 AM",
+                "documentId": "9d43762e-2b19-41b8-8c6c-5fe2f2d7bdec",
+                "executor": "",
+                "message": "communities",
+              },
+            ],
+            "title": "incentivize",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Channel was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "CostLines",
+                "date": "3:00 AM",
+                "documentId": "61bc5205-9ab2-4ba2-85c6-66e116180b09",
+                "executor": "",
+                "message": "Sleek Steel Computer Iran",
+              },
+              Object {
+                "collection": "CostLines",
+                "date": "3:00 AM",
+                "documentId": "61bc5205-9ab2-4ba2-85c6-66e116180b09",
+                "executor": "",
+                "message": "ivory transmitter",
+              },
+            ],
+            "title": "Towels",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Cost Line was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "CustomerRelationships",
+                "date": "3:00 AM",
+                "documentId": "97faddae-e1f8-43fb-8e30-fca1ce6972d0",
+                "executor": "",
+                "message": "Awesome 3rd generation",
+              },
+              Object {
+                "collection": "CustomerRelationships",
+                "date": "3:00 AM",
+                "documentId": "97faddae-e1f8-43fb-8e30-fca1ce6972d0",
+                "executor": "",
+                "message": "directional facilitate",
+              },
+            ],
+            "title": "Tools",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Customer Relationship was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "CustomerSegments",
+                "date": "3:00 AM",
+                "documentId": "f814d36a-d7c8-4d37-8bc5-40d3d0154780",
+                "executor": "",
+                "message": "infomediaries Small Concrete Fish SCSI",
+              },
+              Object {
+                "collection": "CustomerSegments",
+                "date": "3:00 AM",
+                "documentId": "f814d36a-d7c8-4d37-8bc5-40d3d0154780",
+                "executor": "",
+                "message": "Assistant Louisiana JBOD",
+              },
+            ],
+            "title": "Bacon",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Customer Segment was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "KeyActivities",
+                "date": "3:00 AM",
+                "documentId": "181171bd-f347-4171-9331-b04442d0651d",
+                "executor": "",
+                "message": "SMS",
+              },
+              Object {
+                "collection": "KeyActivities",
+                "date": "3:00 AM",
+                "documentId": "181171bd-f347-4171-9331-b04442d0651d",
+                "executor": "",
+                "message": "Checking Account Branding",
+              },
+            ],
+            "title": "red",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Key Activity was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "KeyPartners",
+                "date": "3:00 AM",
+                "documentId": "bf07f52e-bc67-4d1f-a37d-481ffa0953ab",
+                "executor": "",
+                "message": "Small Cotton Mouse Concrete Ergonomic",
+              },
+              Object {
+                "collection": "KeyPartners",
+                "date": "3:00 AM",
+                "documentId": "bf07f52e-bc67-4d1f-a37d-481ffa0953ab",
+                "executor": "",
+                "message": "monitor",
+              },
+            ],
+            "title": "Grove",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Key Partner was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "KeyResources",
+                "date": "3:00 AM",
+                "documentId": "ff04f552-70e2-4c03-81bd-0bad368727b5",
+                "executor": "",
+                "message": "withdrawal indigo EXE",
+              },
+              Object {
+                "collection": "KeyResources",
+                "date": "3:00 AM",
+                "documentId": "ff04f552-70e2-4c03-81bd-0bad368727b5",
+                "executor": "",
+                "message": "Legacy system yellow",
+              },
+            ],
+            "title": "copy",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Key Resource was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "NonConformities",
+                "date": "3:00 AM",
+                "documentId": "74872e70-45d9-4581-800d-bd6ed196063d",
+                "executor": "",
+                "message": "Accountability British Indian Ocean Territory (Chagos Archipelago)",
+              },
+              Object {
+                "collection": "NonConformities",
+                "date": "3:00 AM",
+                "documentId": "74872e70-45d9-4581-800d-bd6ed196063d",
+                "executor": "",
+                "message": "payment Solomon Islands Dollar Rustic",
+              },
+            ],
+            "title": "discrete \\"Strategist\\"",
+            "url": "99173/non-conformities/74872e70-45d9-4581-800d-bd6ed196063d",
+          },
+        ],
+        "title": "1 nonconformity was updated:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "RevenueStreams",
+                "date": "3:00 AM",
+                "documentId": "cad6dec8-5ab3-4f8e-af60-1993e35d6cd5",
+                "executor": "",
+                "message": "SCSI",
+              },
+              Object {
+                "collection": "RevenueStreams",
+                "date": "3:00 AM",
+                "documentId": "cad6dec8-5ab3-4f8e-af60-1993e35d6cd5",
+                "executor": "",
+                "message": "incremental",
+              },
+            ],
+            "title": "Kentucky",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Revenue Stream was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "Risks",
+                "date": "3:00 AM",
+                "documentId": "b523afb3-2237-4b4c-afd4-f82276a405bc",
+                "executor": "",
+                "message": "Intelligent Games Home",
+              },
+              Object {
+                "collection": "Risks",
+                "date": "3:00 AM",
+                "documentId": "b523afb3-2237-4b4c-afd4-f82276a405bc",
+                "executor": "",
+                "message": "Fresh Home",
+              },
+            ],
+            "title": "Plastic \\"Indiana\\"",
+            "url": "99173/risks/b523afb3-2237-4b4c-afd4-f82276a405bc",
+          },
+        ],
+        "title": "1 risk was updated:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "Standards",
+                "date": "3:00 AM",
+                "documentId": "114cf37d-9b0c-48eb-8011-151f63c0aced",
+                "executor": "",
+                "message": "invoice Associate projection",
+              },
+              Object {
+                "collection": "Standards",
+                "date": "3:00 AM",
+                "documentId": "114cf37d-9b0c-48eb-8011-151f63c0aced",
+                "executor": "",
+                "message": "Shoes Turks and Caicos Islands Pants",
+              },
+            ],
+            "title": "\\"schemas\\"",
+            "url": "99173/standards/114cf37d-9b0c-48eb-8011-151f63c0aced",
+          },
+        ],
+        "title": "1 standard was updated:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "ValuePropositions",
+                "date": "3:00 AM",
+                "documentId": "09e6bc87-0667-4682-92e2-79a1133f331c",
+                "executor": "",
+                "message": "Sports Switchable Compatible",
+              },
+              Object {
+                "collection": "ValuePropositions",
+                "date": "3:00 AM",
+                "documentId": "09e6bc87-0667-4682-92e2-79a1133f331c",
+                "executor": "",
+                "message": "Awesome Frozen Keyboard",
+              },
+            ],
+            "title": "payment",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Value Proposition was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "Goals",
+                "date": "3:00 AM",
+                "documentId": "2b480f94-ea93-416b-8a52-0d1e7654395f",
+                "executor": "",
+                "message": "Cross-group Ghana",
+              },
+              Object {
+                "collection": "Goals",
+                "date": "3:00 AM",
+                "documentId": "2b480f94-ea93-416b-8a52-0d1e7654395f",
+                "executor": "",
+                "message": "teal front-end",
+              },
+            ],
+            "title": "Pataca",
+            "url": "99173",
+          },
+        ],
+        "title": "1 key goal was updated:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "Milestones",
+                "date": "3:00 AM",
+                "documentId": "c6fada47-3a35-4373-beff-f101ad790397",
+                "executor": "",
+                "message": "navigating Corporate deposit",
+              },
+              Object {
+                "collection": "Milestones",
+                "date": "3:00 AM",
+                "documentId": "c6fada47-3a35-4373-beff-f101ad790397",
+                "executor": "",
+                "message": "deposit Accountability",
+              },
+            ],
+            "title": "Assurance",
+            "url": "99173",
+          },
+        ],
+        "title": "1 milestone was updated:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "Benefits",
+                "date": "3:00 AM",
+                "documentId": "23c2f4b2-1999-420d-badf-f247c8814a09",
+                "executor": "",
+                "message": "e-enable",
+              },
+              Object {
+                "collection": "Benefits",
+                "date": "3:00 AM",
+                "documentId": "23c2f4b2-1999-420d-badf-f247c8814a09",
+                "executor": "",
+                "message": "product Mouse",
+              },
+            ],
+            "title": "BE65843 \\"approach\\"",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Benefit was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "Features",
+                "date": "3:00 AM",
+                "documentId": "c45ffee6-12db-4ac0-bf4d-ddbe7e23fec0",
+                "executor": "",
+                "message": "Court Money Market Account",
+              },
+              Object {
+                "collection": "Features",
+                "date": "3:00 AM",
+                "documentId": "c45ffee6-12db-4ac0-bf4d-ddbe7e23fec0",
+                "executor": "",
+                "message": "Computers",
+              },
+            ],
+            "title": "FE94474 \\"even-keeled\\"",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Feature was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "Needs",
+                "date": "3:00 AM",
+                "documentId": "4bccc111-e5d6-49cb-a5b7-c2c71c88925d",
+                "executor": "",
+                "message": "Vision-oriented reboot reboot",
+              },
+              Object {
+                "collection": "Needs",
+                "date": "3:00 AM",
+                "documentId": "4bccc111-e5d6-49cb-a5b7-c2c71c88925d",
+                "executor": "",
+                "message": "Latvian Lats",
+              },
+            ],
+            "title": "NE77261 \\"Refined Cotton Table\\"",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Need was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "Wants",
+                "date": "3:00 AM",
+                "documentId": "c8df8e65-10df-4065-a5de-a75ec18d9968",
+                "executor": "",
+                "message": "system",
+              },
+              Object {
+                "collection": "Wants",
+                "date": "3:00 AM",
+                "documentId": "c8df8e65-10df-4065-a5de-a75ec18d9968",
+                "executor": "",
+                "message": "orchid",
+              },
+            ],
+            "title": "WA92244 \\"Credit Card Account\\"",
+            "url": "99173/canvas",
+          },
+        ],
+        "title": "1 Want was updated in the business model canvas:",
+      },
+      Object {
+        "data": Array [
+          Object {
+            "logs": Array [
+              Object {
+                "collection": "Organizations",
+                "date": "3:00 AM",
+                "documentId": "280cf0c1-71a0-44e6-8df9-b84dfdd0262e",
+                "executor": "",
+                "message": "Kyat",
+              },
+            ],
+          },
+        ],
+        "title": "Organization settings were updated:",
+      },
+    ],
+    "title": "Daily recap for January 01, 2018",
+    "unsubscribeUrl": "99173/unsubscribe",
+  },
+  "templateName": "recapEmail",
+}
+`;

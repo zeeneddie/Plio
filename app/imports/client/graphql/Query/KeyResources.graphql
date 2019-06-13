@@ -1,9 +1,9 @@
+#import "../Fragment/CanvasEntityPresentation.graphql"
+
 query KeyResources($organizationId: ID!) {
   keyResources(organizationId: $organizationId) {
     keyResources {
-      _id
-      title
-      color
+      ...CanvasEntityPresentation
     }
   }
 }

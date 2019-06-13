@@ -1,11 +1,16 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import RevenueStreamAddModal from './RevenueStreamAddModal';
+import RevenueStreamEditModal from './RevenueStreamEditModal';
+import RevenueStreamsChartModal from './RevenueStreamsChartModal';
 import CanvasBlock from './CanvasBlock';
+import RevenueStreamsHelp from './RevenueStreamsHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const RevenueStreams = ({ organizationId }) => (
   <Query
@@ -15,16 +20,35 @@ const RevenueStreams = ({ organizationId }) => (
   >
     {({ data: { revenueStreams: { revenueStreams = [] } } }) => (
       <CanvasBlock
+        {...{ organizationId }}
+        twoColumn
         label="Revenue streams"
-        help={(
-          <Fragment>
-            <p>From which channels and segments?</p>
-            <p>How much does each contribute to overall revenue?</p>
-          </Fragment>
-        )}
+        sectionName={CanvasSections[CanvasTypes.REVENUE_STREAM]}
+        documentType={DocumentTypes.REVENUE_STREAM}
+        help={<RevenueStreamsHelp />}
         items={revenueStreams}
-        renderModal={({ isOpen, toggle }) => (
-          <RevenueStreamAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <RevenueStreamAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
+        )}
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <RevenueStreamEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
+        )}
+        renderChartModal={({ isOpen, toggle }) => (
+          <RevenueStreamsChartModal {...{ isOpen, toggle, organizationId }} />
         )}
       />
     )}
@@ -35,4 +59,4 @@ RevenueStreams.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default RevenueStreams;
+export default pure(RevenueStreams);

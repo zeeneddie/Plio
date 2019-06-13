@@ -8,12 +8,11 @@ import {
   StandardTypes,
   StandardsBookSections,
   RiskTypes,
-  Departments,
 } from '../../../share/collections';
 import { getUserOrganizations } from '../utils';
 import { isPlioUser, isOrgMember } from '../../checkers';
 import { createOrgQueryWhereUserIsOwner } from '../../../share/mongo/queries';
-import { WORKSPACE_DEFAULTS } from '../../../share/constants';
+import { WORKSPACE_DEFAULTS, CustomerTypes } from '../../../share/constants';
 
 Meteor.publish('invitationInfo', function (invitationId) {
   check(invitationId, String);
@@ -45,7 +44,11 @@ Meteor.publish('invitationInfo', function (invitationId) {
       'users.userId': invitedUserId,
     }, {
       limit: 1,
-      fields: { name: 1, serialNumber: 1 },
+      fields: {
+        name: 1,
+        serialNumber: 1,
+        homeScreenType: 1,
+      },
     }),
   ];
 });
@@ -56,6 +59,7 @@ Meteor.publish('currentUserOrganizations', function () {
       fields: {
         name: 1,
         serialNumber: 1,
+        homeScreenType: 1,
         'users.userId': 1,
         'users.role': 1,
         'users.isRemoved': 1,
@@ -94,6 +98,7 @@ Meteor.publish('currentUserOrganizationBySerialNumber', function (serialNumber) 
     updatedBy: 1,
     lastAccessedDate: 1,
     transfer: 1,
+    homeScreenType: 1,
     [WORKSPACE_DEFAULTS]: 1,
   };
 
@@ -168,7 +173,6 @@ Meteor.publish('organizationDeps', function (organizationId) {
   });
   const standardsTypes = StandardTypes.find(query, { fields: StandardTypes.publicFields });
   const riskTypes = RiskTypes.find(query);
-  const departments = Departments.find(query, { fields: Departments.publicFields });
   const users = Meteor.users.find({ _id: { $in: userIds } }, {
     fields: Meteor.users.publicFields,
   });
@@ -177,7 +181,6 @@ Meteor.publish('organizationDeps', function (organizationId) {
     standardsBookSections,
     standardsTypes,
     riskTypes,
-    departments,
     users,
   ];
 });
@@ -189,7 +192,10 @@ Meteor.publishComposite('customersLayout', {
     }
 
     return Organizations.find({}, {
-      fields: Organizations.listFields,
+      fields: {
+        ...Organizations.listFields,
+        signupPath: 1,
+      },
     });
   },
   children: [{
@@ -217,4 +223,18 @@ Meteor.publish('customerCard', function getCustomerData(organizationId) {
   return Organizations.find({ _id: organizationId }, {
     fields: Organizations.cardFields,
   });
+});
+
+Meteor.publish('templateOrganization', (signupPath) => {
+  check(signupPath, String);
+
+  const query = { customerType: CustomerTypes.TEMPLATE, signupPath };
+  const options = {
+    fields: {
+      signupPath: 1,
+      name: 1,
+    },
+  };
+
+  return Organizations.find(query, options);
 });

@@ -1,0 +1,9 @@
+#import "./CanvasCard.graphql"
+
+fragment KeyPartnerCard on KeyPartner {
+  criticality
+  levelOfSpend
+  ... on CanvasEntity {
+    ...CanvasCard
+  }
+}

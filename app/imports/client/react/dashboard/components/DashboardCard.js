@@ -4,6 +4,7 @@ import { Card, CardBody, CardTitle, CardFooter, CardImg } from 'reactstrap';
 import cx from 'classnames';
 import styled from 'styled-components';
 
+import { Styles } from '../../../../api/constants';
 import { CardBlock, Icon } from '../../components';
 
 const Wrapper = styled.div`
@@ -12,6 +13,11 @@ const Wrapper = styled.div`
   @media (max-width: 767px) {
     min-height:auto;
   }
+`;
+
+const StyledCard = styled(Card)`
+  background-color: ${Styles.background.color.grey};
+  border-color: ${Styles.border.color.darkGrey};
 `;
 
 const DashboardCard = ({
@@ -24,7 +30,7 @@ const DashboardCard = ({
   label,
   ...props
 }) => (
-  <Card
+  <StyledCard
     tag="a"
     className={cx(
       className,
@@ -52,7 +58,7 @@ const DashboardCard = ({
         {label && (<span className="label label-danger margin-left">{label}</span>)}
       </CardFooter>
     </CardBlock>
-  </Card>
+  </StyledCard>
 );
 
 DashboardCard.propTypes = {

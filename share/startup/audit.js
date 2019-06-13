@@ -11,6 +11,21 @@ import {
   WorkItems,
   Goals,
   Milestones,
+  KeyPartners,
+  KeyActivities,
+  KeyResources,
+  ValuePropositions,
+  CustomerRelationships,
+  Channels,
+  CustomerSegments,
+  CostLines,
+  RevenueStreams,
+  Benefits,
+  Features,
+  Needs,
+  Wants,
+  Relations,
+  CanvasSettings,
 } from '../collections';
 import AuditManager from '../utils/audit-manager';
 
@@ -26,6 +41,21 @@ const collections = {
   [CollectionNames.WORK_ITEMS]: WorkItems,
   [CollectionNames.GOALS]: Goals,
   [CollectionNames.MILESTONES]: Milestones,
+  [CollectionNames.KEY_PARTNERS]: KeyPartners,
+  [CollectionNames.KEY_ACTIVITIES]: KeyActivities,
+  [CollectionNames.KEY_RESOURCES]: KeyResources,
+  [CollectionNames.VALUE_PROPOSITIONS]: ValuePropositions,
+  [CollectionNames.CUSTOMER_RELATIONSHIPS]: CustomerRelationships,
+  [CollectionNames.CHANNELS]: Channels,
+  [CollectionNames.CUSTOMER_SEGMENTS]: CustomerSegments,
+  [CollectionNames.COST_LINES]: CostLines,
+  [CollectionNames.REVENUE_STREAMS]: RevenueStreams,
+  [CollectionNames.BENEFITS]: Benefits,
+  [CollectionNames.FEATURES]: Features,
+  [CollectionNames.NEEDS]: Needs,
+  [CollectionNames.WANTS]: Wants,
+  [CollectionNames.RELATIONS]: Relations,
+  [CollectionNames.CANVAS_SETTINGS]: CanvasSettings,
 };
 
 Object.keys(collections).forEach(name => AuditManager.registerCollection(collections[name], name));

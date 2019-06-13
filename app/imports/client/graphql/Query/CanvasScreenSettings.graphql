@@ -1,0 +1,13 @@
+query CanvasScreenSettings($organizationId: ID!) {
+  canvasSettings(organizationId: $organizationId) {
+    canvasSettings {
+      _id
+      notify {
+        _id
+        profile {
+          fullName
+        }
+      }
+    }
+  }
+}

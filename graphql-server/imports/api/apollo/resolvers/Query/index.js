@@ -5,6 +5,7 @@ import RiskType from './RiskType';
 import Risk from './Risk';
 import Standard from './Standard';
 import Department from './Department';
+import Project from './Project';
 import Action from './Action';
 import Milestone from './Milestone';
 import ValueProposition from './ValueProposition';
@@ -16,6 +17,15 @@ import CustomerRelationship from './CustomerRelationship';
 import CostLine from './CostLine';
 import RevenueStream from './RevenueStream';
 import Channel from './Channel';
+import CanvasSettings from './CanvasSettings';
+import Benefit from './Benefit';
+import Feature from './Feature';
+import Need from './Need';
+import Want from './Want';
+import Guidance from './Guidance';
+import StandardType from './StandardType';
+import StandardSection from './StandardSection';
+import Nonconformity from './Nonconformity';
 
 export default {
   ...User,
@@ -36,4 +46,14 @@ export default {
   ...CostLine,
   ...RevenueStream,
   ...Channel,
+  ...CanvasSettings,
+  ...Benefit,
+  ...Feature,
+  ...Need,
+  ...Want,
+  ...Guidance,
+  ...StandardType,
+  ...StandardSection,
+  ...Nonconformity,
+  ...Project,
 };

@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import KeyActivityAddModal from './KeyActivityAddModal';
+import KeyActivityEditModal from './KeyActivityEditModal';
 import CanvasBlock from './CanvasBlock';
+import KeyActivitiesHelp from './KeyActivitiesHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const KeyActivities = ({ organizationId }) => (
   <Query
@@ -15,15 +19,31 @@ const KeyActivities = ({ organizationId }) => (
   >
     {({ data: { keyActivities: { keyActivities = [] } } }) => (
       <CanvasBlock
+        {...{ organizationId }}
         label="Key activities"
-        help={(
-          <Fragment>
-            <p>What are the key activities we need to create our value propositions?</p>
-          </Fragment>
-        )}
+        sectionName={CanvasSections[CanvasTypes.KEY_ACTIVITY]}
+        documentType={DocumentTypes.KEY_ACTIVITY}
+        help={<KeyActivitiesHelp />}
         items={keyActivities}
-        renderModal={({ isOpen, toggle }) => (
-          <KeyActivityAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <KeyActivityAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
+        )}
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <KeyActivityEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
         )}
       />
     )}
@@ -34,4 +54,4 @@ KeyActivities.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default KeyActivities;
+export default pure(KeyActivities);

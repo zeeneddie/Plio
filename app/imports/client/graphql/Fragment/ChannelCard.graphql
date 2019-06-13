@@ -1,0 +1,7 @@
+#import "./CanvasCard.graphql"
+
+fragment ChannelCard on Channel {
+  ... on CanvasEntity {
+    ...CanvasCard
+  }
+}

@@ -1,25 +1,56 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { ApolloProvider, Query } from 'react-apollo';
+import { delayed } from 'libreact/lib/delayed';
 
 import { client } from '../../../apollo';
 import { Query as Queries } from '../../../graphql';
-import { PreloaderPage, FlowRouterContext, RenderSwitch } from '../../components';
-import CanvasPage from './CanvasPage';
+import {
+  PreloaderPage,
+  FlowRouterContext,
+  RenderSwitch,
+  NotFoundPage,
+  ErrorPage,
+} from '../../components';
+import Errors from '../../../../share/errors';
+import MainHeader from '../../main-header/components/MainHeader';
+import CanvasPageContainer from '../containers/CanvasPageContainer';
+
+const DelayedMainHeader = delayed({
+  loader: () => Promise.resolve(MainHeader),
+  idle: true,
+  delay: 200,
+});
 
 const CanvasLayout = () => (
   <ApolloProvider {...{ client }}>
     <FlowRouterContext getParam="orgSerialNumber">
       {({ orgSerialNumber }) => (
-        <Query query={Queries.CANVAS_LAYOUT} variables={{ orgSerialNumber }}>
+        <Query
+          query={Queries.CANVAS_LAYOUT}
+          variables={{ orgSerialNumber }}
+          skip={!orgSerialNumber}
+        >
           {({ loading, error, data }) => (
             <RenderSwitch
               {...{ loading, error }}
               require={data && data.organization}
               renderLoading={<PreloaderPage />}
-              // TODO: handle errors
+              renderError={queryError =>
+                queryError === Errors.NOT_ORG_MEMBER ? (
+                  <NotFoundPage
+                    subject="organization"
+                    subjectId={orgSerialNumber}
+                  />
+                ) : (
+                  <ErrorPage error={queryError} />
+                )
+              }
             >
-              {({ _id: organizationId }) => (
-                <CanvasPage {...{ organizationId }} />
+              {organization => (
+                <Fragment>
+                  <DelayedMainHeader {...{ organization }} />
+                  <CanvasPageContainer {...{ organization }} />
+                </Fragment>
               )}
             </RenderSwitch>
           )}

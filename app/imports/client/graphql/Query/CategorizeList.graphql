@@ -1,0 +1,18 @@
+query CategorizeList($organizationId: ID!) {
+  departments(input: { organizationId: $organizationId }) {
+    departments {
+      _id
+      title
+    }
+  }
+  projects(input: { organizationId: $organizationId }) {
+    projects {
+      _id
+      title
+    }
+  }
+  user: me {
+    _id
+    roles(organizationId: $organizationId)
+  }
+}

@@ -1,0 +1,7 @@
+#import "./CanvasCard.graphql"
+
+fragment CustomerRelationshipCard on CustomerRelationship {
+  ... on CanvasEntity {
+    ...CanvasCard
+  }
+}

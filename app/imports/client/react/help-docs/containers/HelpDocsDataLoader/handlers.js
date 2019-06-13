@@ -1,8 +1,9 @@
 import ReactDOM from 'react-dom';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { setShowCard } from '/imports/client/store/actions/mobileActions';
 import { goTo } from '../../../../../ui/utils/router/actions';
+import { MOBILE_BREAKPOINT, HomeRouteNames } from '../../../../../api/constants';
 
 export const onHandleReturn = props => () => {
   if (props.width <= MOBILE_BREAKPOINT && props.showCard) {
@@ -12,5 +13,8 @@ export const onHandleReturn = props => () => {
   // remove when dashboard is written in react
   ReactDOM.unmountComponentAtNode(document.getElementById('app'));
 
-  return goTo('dashboardPage')();
+  const organization = props.organizations && props.organizations[0];
+  const backRoute = FlowRouter.getQueryParam('backRoute');
+  const homeRoute = HomeRouteNames[organization.homeScreenType];
+  return goTo(backRoute || homeRoute)();
 };

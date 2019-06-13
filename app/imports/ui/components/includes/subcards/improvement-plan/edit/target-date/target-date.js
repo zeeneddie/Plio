@@ -18,6 +18,11 @@ Template.IP_TargetDate_Edit.viewmodel({
   getTodayDate() {
     return this.renderDate(new Date());
   },
+  onDelete() {
+    this.targetDate(null);
+
+    this.parent().update({ 'improvementPlan.targetDate': this.targetDate() });
+  },
   getData() {
     const { targetDate } = this.data();
     return { targetDate };

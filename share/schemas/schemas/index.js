@@ -6,6 +6,7 @@ import {
   ReminderTimeUnits, DocumentTypes, AnalysisStatuses,
   ReviewStatuses, SystemName, StringLimits,
   StandardStatuses, TimeUnits, ProblemMagnitudes,
+  HomeScreenTypes,
 } from '../../constants';
 
 export { default as WorkspaceDefaultsSchema } from './workspace-defaults';
@@ -96,6 +97,7 @@ export const ProgressSchema = new SimpleSchema({
 export const idSchemaDoc = {
   type: String,
   regEx: SimpleSchema.RegEx.Id,
+  index: 1,
 };
 
 export const OrganizationIdSchema = new SimpleSchema({
@@ -149,8 +151,13 @@ export const CreatedAtSchema = new SimpleSchema({
         return new Date();
       }
 
+      if (this.isUpsert) {
+        return { $setOnInsert: new Date() };
+      }
+
       return this.unset();
     },
+    index: 1,
   },
 });
 
@@ -164,9 +171,11 @@ export const CreatedBySchema = new SimpleSchema({
     regEx: dbChangeExecutor,
     optional: true,
     autoValue() {
-      if (this.isInsert) {
-        return this.userId || (this.isSet && this.value) || SystemName;
-      }
+      const value = this.userId || (this.isSet && this.value) || SystemName;
+
+      if (this.isInsert) return value;
+
+      if (this.isUpsert) return { $setOnInsert: value };
 
       return this.unset();
     },
@@ -180,7 +189,7 @@ export const UpdatedAtSchema = new SimpleSchema({
     type: Date,
     optional: true,
     autoValue() {
-      if (this.isUpdate) {
+      if (this.isUpdate || this.isUpsert) {
         return new Date();
       }
 
@@ -195,7 +204,7 @@ export const UpdatedBySchema = new SimpleSchema({
     regEx: dbChangeExecutor,
     optional: true,
     autoValue() {
-      if (this.isUpdate) {
+      if (this.isUpdate || this.isUpsert) {
         return this.userId || (this.isSet && this.value) || SystemName;
       }
 
@@ -259,6 +268,7 @@ export const standardsIdsSchema = new SimpleSchema({
     type: [String],
     regEx: SimpleSchema.RegEx.Id,
     optional: true,
+    index: 1,
     // maxCount: ?
   },
 });
@@ -294,7 +304,7 @@ export const getNotifySchema = fieldNames => new SimpleSchema({
         return this.unset();
       }
 
-      return this.unset();
+      return undefined;
     },
   },
 });
@@ -304,6 +314,7 @@ export const ViewedBySchema = new SimpleSchema({
     type: [String],
     regEx: SimpleSchema.RegEx.Id,
     optional: true,
+    index: 1,
     // maxCount: ?
     autoValue() {
       if (this.isInsert) {
@@ -320,6 +331,7 @@ export const DeletedSchema = new SimpleSchema({
     type: Boolean,
     optional: true,
     defaultValue: false,
+    index: 1,
   },
   deletedBy: {
     type: String,
@@ -365,14 +377,17 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
       type: String,
       min: StringLimits.title.min,
       max: StringLimits.title.max,
+      index: 1,
     },
     magnitude: {
       type: String,
       allowedValues: Object.values(ProblemMagnitudes),
+      index: 1,
     },
     description: {
       type: String,
       optional: true,
+      max: StringLimits.description.max,
     },
     originatorId: {
       type: String,
@@ -457,6 +472,7 @@ export const BaseProblemsOptionalSchema = ((() => {
         regEx: SimpleSchema.RegEx.Id,
         defaultValue: [],
         optional: true,
+        index: 1,
         // maxCount: ?
       },
       improvementPlan: {
@@ -468,7 +484,6 @@ export const BaseProblemsOptionalSchema = ((() => {
     },
   ]);
 })());
-
 
 export const TimezoneSchema = new SimpleSchema({
   timezone: {
@@ -556,4 +571,10 @@ export const issueNumberSchema = new SimpleSchema({
 export const pwdSchemaObj = {
   type: String,
   regEx: /^[A-Fa-f0-9]{64}$/,
+};
+
+export const homeScreenTypeSchemaObj = {
+  type: String,
+  optional: true,
+  allowedValues: Object.values(HomeScreenTypes),
 };

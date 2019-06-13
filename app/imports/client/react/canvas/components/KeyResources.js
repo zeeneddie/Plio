@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import KeyResourceAddModal from './KeyResourceAddModal';
+import KeyResourceEditModal from './KeyResourceEditModal';
 import CanvasBlock from './CanvasBlock';
+import KeyResourcesHelp from './KeyResourcesHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const KeyResources = ({ organizationId }) => (
   <Query
@@ -15,15 +19,31 @@ const KeyResources = ({ organizationId }) => (
   >
     {({ data: { keyResources: { keyResources = [] } } }) => (
       <CanvasBlock
+        {...{ organizationId }}
         label="Key resources"
-        help={(
-          <Fragment>
-            <p>What key resources do our key activities require?</p>
-          </Fragment>
-        )}
+        sectionName={CanvasSections[CanvasTypes.KEY_RESOURCE]}
+        documentType={DocumentTypes.KEY_RESOURCE}
+        help={<KeyResourcesHelp />}
         items={keyResources}
-        renderModal={({ isOpen, toggle }) => (
-          <KeyResourceAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <KeyResourceAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
+        )}
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <KeyResourceEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
         )}
       />
     )}
@@ -34,4 +54,4 @@ KeyResources.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default KeyResources;
+export default pure(KeyResources);

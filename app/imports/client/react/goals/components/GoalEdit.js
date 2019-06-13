@@ -1,61 +1,111 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
+import { pure } from 'recompose';
+import { sort } from 'ramda';
+import { bySerialNumber, byCompletionTargetDate } from 'plio-util';
 
-import GoalForm from './GoalForm';
-import { CardBlock } from '../../components';
-
-import GoalMilestonesSubcardContainer from '../containers/GoalMilestonesSubcardContainer';
-import GoalFilesSubcardContainer from '../containers/GoalFilesSubcardContainer';
-import GoalRisksSubcardContainer from '../containers/GoalRisksSubcardContainer';
-import GoalLessonsSubcardContainer from '../containers/GoalLessonsSubcardContainer';
-import GoalNotifySubcardContainer from '../containers/GoalNotifySubcardContainer';
+import { AWSDirectives, DocumentTypes } from '../../../../share/constants';
+import { CardBlock, NotifySubcard, EntitiesField, RelationsAdapter } from '../../components';
+import MilestonesSubcard from '../../milestones/components/MilestonesSubcard';
 import GoalActionsSubcardContainer from '../containers/GoalActionsSubcardContainer';
 import GoalEditForm from './GoalEditForm';
-import GoalCompleteForm from './GoalCompleteForm';
+import FilesSubcardContainer from '../../canvas/components/FilesSubcardContainer';
+import RisksSubcard from '../../risks/components/RisksSubcard';
+import LessonsSubcard from '../../lessons/components/LessonsSubcard';
 
-const propTypes = {
-  ...GoalForm.propTypes,
-  status: PropTypes.number.isRequired,
-  statusComment: PropTypes.string,
-  onChangeStatusComment: PropTypes.func.isRequired,
-  onComplete: PropTypes.func,
-  completionComment: PropTypes.string,
-  isCompleted: PropTypes.bool.isRequired,
-  completedAt: PropTypes.number,
-  completedBy: PropTypes.object,
-  onChangeCompletedAt: PropTypes.func,
-  onChangeCompletedBy: PropTypes.func,
-  organizationId: PropTypes.string,
-  onUndoCompletion: PropTypes.func,
-};
+export const GoalEdit = ({
+  status,
+  organizationId,
+  sequentialId,
+  title,
+  save,
+  _id: goalId,
+  canEditGoals,
+  risks,
+  milestones,
+  lessons,
+  organization: { rkGuidelines } = {},
+  refetchQueries,
+}) => {
+  const linkedTo = { _id: goalId, title, sequentialId };
 
-export const GoalEdit = (props) => {
-  const {
-    onComplete,
-    organizationId,
-    _id: goalId,
-    canEditGoals,
-    completionComment,
-    isCompleted,
-  } = props;
   return (
     <Fragment>
       <CardBlock>
-        <GoalEditForm {...props} />
-        {onComplete && !isCompleted && (
-          <GoalCompleteForm {...{ onComplete }} initialValues={{ completionComment }} />
-        )}
+        <GoalEditForm
+          {...{
+            status,
+            organizationId,
+            sequentialId,
+            save,
+          }}
+        />
       </CardBlock>
       <GoalActionsSubcardContainer {...{ organizationId, goalId }} />
-      <GoalMilestonesSubcardContainer {...{ goalId }} />
-      {canEditGoals && (<GoalRisksSubcardContainer {...{ organizationId, goalId }} />)}
-      <GoalLessonsSubcardContainer {...{ goalId }} />
-      <GoalFilesSubcardContainer {...{ organizationId, goalId }} />
-      <GoalNotifySubcardContainer {...{ organizationId, goalId }} />
+      <RelationsAdapter
+        {...{ refetchQueries, goalId, organizationId }}
+        documentId={goalId}
+        documentType={DocumentTypes.GOAL}
+        relatedDocumentType={DocumentTypes.MILESTONE}
+        component={MilestonesSubcard}
+        milestones={sort(byCompletionTargetDate, milestones)}
+      />
+      {canEditGoals && (
+        <RelationsAdapter
+          {...{ organizationId, refetchQueries, linkedTo }}
+          documentId={goalId}
+          documentType={DocumentTypes.GOAL}
+          relatedDocumentType={DocumentTypes.RISK}
+          render={RisksSubcard}
+          guidelines={rkGuidelines}
+          risks={sort(bySerialNumber, risks)}
+        />
+      )}
+      <EntitiesField
+        name="lessons"
+        render={LessonsSubcard}
+        documentType={DocumentTypes.GOAL}
+        lessons={sort(bySerialNumber, lessons)}
+        linkedTo={{
+          _id: goalId,
+          sequentialId,
+          title,
+        }}
+        {...{ organizationId, refetchQueries }}
+      />
+      <EntitiesField
+        {...{ organizationId }}
+        name="files"
+        render={props => <FilesSubcardContainer {...props} />}
+        documentId={goalId}
+        onChange={save}
+        slingshotDirective={AWSDirectives.GOAL_FILES}
+        documentType={DocumentTypes.GOAL}
+      />
+      <NotifySubcard
+        {...{ organizationId }}
+        documentId={goalId}
+        onChange={save}
+      />
     </Fragment>
   );
 };
 
-GoalEdit.propTypes = propTypes;
+GoalEdit.propTypes = {
+  _id: PropTypes.string.isRequired,
+  status: PropTypes.number.isRequired,
+  organizationId: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  sequentialId: PropTypes.string.isRequired,
+  save: PropTypes.func.isRequired,
+  canEditGoals: PropTypes.bool,
+  risks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  lessons: PropTypes.arrayOf(PropTypes.object).isRequired,
+  organization: PropTypes.shape({
+    rkGuidelines: PropTypes.object,
+  }).isRequired,
+  milestones: PropTypes.arrayOf(PropTypes.object).isRequired,
+  refetchQueries: PropTypes.func,
+};
 
-export default GoalEdit;
+export default pure(GoalEdit);

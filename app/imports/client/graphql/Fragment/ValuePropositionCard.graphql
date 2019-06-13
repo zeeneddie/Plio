@@ -1,0 +1,11 @@
+#import "./CanvasCard.graphql"
+
+fragment ValuePropositionCard on ValueProposition {
+  matchedTo {
+    _id
+    title
+  }
+  ... on CanvasEntity {
+    ...CanvasCard
+  }
+}

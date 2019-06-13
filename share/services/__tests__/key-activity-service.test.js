@@ -1,7 +1,7 @@
 import { __setupDB, __closeDB, Mongo } from 'meteor/mongo';
 
 import KeyActivityService from '../key-activity-service';
-import { KeyActivityColors } from '../../constants';
+import { CanvasColors } from '../../constants';
 
 describe('Key activity service', () => {
   let KeyActivities;
@@ -18,7 +18,7 @@ describe('Key activity service', () => {
     const args = {
       title: 'Hello World',
       organizationId: 1,
-      color: KeyActivityColors.INDIGO,
+      color: CanvasColors.INDIGO,
       originatorId: userId,
       notes: 'dlsadsad',
     };

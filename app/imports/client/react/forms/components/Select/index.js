@@ -50,13 +50,13 @@ class Select extends Component {
 
     return (
       <Input
-        type="select"
-        className={cx('c-select', className)}
         {...{ value, onChange, ...rest }}
+        className={cx('c-select', className)}
+        type="select"
       >
         {options.map(option => (
           <option key={`${option.text}-${option.value}`} value={option.value}>
-            {option.text}
+            {option.label || option.text}
           </option>
         ))}
       </Input>
@@ -68,7 +68,8 @@ Select.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   options: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    label: PropTypes.string,
   })),
   onChange: PropTypes.func.isRequired,
   className: PropTypes.string,

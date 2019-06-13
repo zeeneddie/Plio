@@ -15,6 +15,7 @@ const Meteor = {
   bindEnvironment: jest.fn(),
   wrapAsync: jest.fn(),
   Error: jest.fn(Error),
+  absoluteUrl: jest.fn(url => url),
 };
 
 module.exports = { Meteor };

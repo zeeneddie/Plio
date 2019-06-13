@@ -14,7 +14,7 @@ import { sort, either, when, always, slice, compose, mergeDeepLeft } from 'ramda
 import connectUI from 'redux-ui';
 
 import { namedCompose, withHr, withApolloPreloader } from '../../helpers';
-import { DashboardGoals } from '../components';
+import DashboardGoals from '../components/DashboardGoals';
 import {
   WORKSPACE_DEFAULTS,
   WorkspaceDefaultsTypes,
@@ -58,7 +58,6 @@ export default namedCompose('DashboardGoalsContainer')(
   connectUI({
     state: {
       isOpen: false,
-      isAddModalOpen: false,
       isEditModalOpen: false,
       isMilestoneModalOpen: false,
       isActionModalOpen: false,
@@ -92,7 +91,6 @@ export default namedCompose('DashboardGoalsContainer')(
       ownProps: {
         ui: {
           isOpen,
-          isAddModalOpen,
           isEditModalOpen,
           isMilestoneModalOpen,
           isActionModalOpen,
@@ -103,7 +101,6 @@ export default namedCompose('DashboardGoalsContainer')(
       },
     }) => ({
       isOpen,
-      isAddModalOpen,
       isEditModalOpen,
       isMilestoneModalOpen,
       isActionModalOpen,
@@ -125,11 +122,6 @@ export default namedCompose('DashboardGoalsContainer')(
           });
         }
         updateUI({ isOpen: !isOpen });
-      },
-      toggleAddModal: (e) => {
-        if (!isAddModalOpen) e.stopPropagation();
-
-        updateUI('isAddModalOpen', !isAddModalOpen);
       },
       toggleEditModal: () => updateUI('isEditModalOpen', !isEditModalOpen),
       toggleMilestoneModal: () =>

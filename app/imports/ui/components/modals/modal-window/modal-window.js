@@ -36,6 +36,7 @@ Template.ModalWindow.viewmodel({
   submitCaptionOnSave: 'Saving...',
   closeCaption: 'Close',
   closeCaptionOnSave: 'Saving...',
+  cancelCaption: 'Cancel',
   // closeCaptionOnUpload: 'Uploading...',
   closeAfterCall: false,
 
@@ -59,8 +60,10 @@ Template.ModalWindow.viewmodel({
 
   callMethod(method, args, cb) {
     if (_.isFunction(args)) {
+      /* eslint-disable no-param-reassign */
       cb = args;
       args = {};
+      /* eslint-disable no-param-reassign */
     }
 
     this.clearError();
@@ -89,7 +92,7 @@ Template.ModalWindow.viewmodel({
       this.timeout = Meteor.setTimeout(() => {
         this.isSaving(false);
 
-        const errors = this.errors;
+        const { errors } = this;
         let error;
         if (errors.length === 1 && !errors[0].isFromSubcard) {
           error = errors[0].reason || 'Internal server error';

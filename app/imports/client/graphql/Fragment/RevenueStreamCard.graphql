@@ -1,0 +1,9 @@
+#import "./CanvasCard.graphql"
+
+fragment RevenueStreamCard on RevenueStream {
+  percentOfRevenue
+  percentOfProfit
+  ... on CanvasEntity {
+    ...CanvasCard
+  }
+}

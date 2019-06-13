@@ -1,0 +1,6 @@
+mutation updateOrganization($input: UpdateOrganizationInput!) {
+  updateOrganization(input: $input) {
+    _id
+    homeScreenType
+  }
+}

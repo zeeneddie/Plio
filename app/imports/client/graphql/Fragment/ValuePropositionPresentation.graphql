@@ -1,0 +1,9 @@
+#import "../Fragment/CanvasEntityPresentation.graphql"
+
+fragment ValuePropositionPresentation on ValueProposition {
+  ...CanvasEntityPresentation
+  matchedTo {
+    _id
+    title
+  }
+}

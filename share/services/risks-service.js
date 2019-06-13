@@ -1,16 +1,10 @@
 import { Meteor } from 'meteor/meteor';
-import Random from 'meteor/random';
+import { Random } from 'meteor/random';
 
 import { Risks } from '../collections';
-import { ProblemTypes } from '../constants';
+import { ProblemTypes, Abbreviations } from '../constants';
 import BaseEntityService from './base-entity-service';
 import ProblemsService from './problems-service';
-import GoalService from './goal-service';
-
-if (Meteor.isServer) {
-  // import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
-}
-
 
 export default Object.assign({}, ProblemsService, {
   collection: Risks,
@@ -19,7 +13,7 @@ export default Object.assign({}, ProblemsService, {
 
   _getDocType: () => ProblemTypes.RISK,
 
-  _getAbbr: () => 'RK',
+  _getAbbr: () => Abbreviations.RISK,
 
   async insert({
     organizationId,
@@ -44,15 +38,56 @@ export default Object.assign({}, ProblemsService, {
 
     if (goalId) {
       Object.assign(args, { goalId });
-    } else {
+    } else if (standardsIds) {
       Object.assign(args, { standardsIds });
     }
 
-    const _id = await ProblemsService.insert.call(this, args);
+    return ProblemsService.insert.call(this, args);
+  },
 
-    if (goalId) await GoalService.linkRisk({ _id: goalId, riskId: _id });
+  update(args) {
+    const {
+      _id,
+      title,
+      description,
+      statusComment,
+      standardsIds,
+      departmentsIds,
+      projectIds,
+      originatorId,
+      ownerId,
+      typeId,
+      options,
+      analysis: {
+        executor,
+        targetDate,
+        completedBy,
+        completedAt,
+        completionComments,
+      } = {},
+    } = args;
+    const query = { _id };
+    const modifier = {
+      $set: {
+        title,
+        description,
+        statusComment,
+        standardsIds,
+        departmentsIds,
+        projectIds,
+        originatorId,
+        ownerId,
+        typeId,
+        'analysis.executor': executor,
+        'analysis.targetDate': targetDate,
+        'analysis.completedBy': completedBy,
+        'analysis.completedAt': completedAt,
+        'analysis.completionComments': completionComments,
+      },
+      ...options,
+    };
 
-    return _id;
+    return Risks.update(query, modifier);
   },
 
   'scores.insert': function ({ _id, ...args }) {

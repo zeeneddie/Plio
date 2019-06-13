@@ -3,8 +3,8 @@ import getTitlePrefix from './getTitlePrefix';
 
 // 1, 1.2, 3, 10.3, a, b, c
 export default sort((a, b) => {
-  const at = getTitlePrefix(`${a.titlePrefix}`.toLowerCase());
-  const bt = getTitlePrefix(`${b.titlePrefix}`.toLowerCase());
+  const at = getTitlePrefix(`${a.titlePrefix || a.title}`.toLowerCase());
+  const bt = getTitlePrefix(`${b.titlePrefix || b.title}`.toLowerCase());
 
   if (typeof at === 'number' && typeof bt !== 'number') {
     return -1;

@@ -2,17 +2,17 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { pick } from 'ramda';
 
-import { Departments } from '/imports/share/collections/departments';
-import { StandardTypes } from '/imports/share/collections/standards-types';
-import { RiskTypes } from '/imports/share/collections/risk-types';
-import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
-import { isOrgOwner } from '/imports/api/checkers';
+import { StandardTypes } from '../../../../../../share/collections/standards-types';
+import { RiskTypes } from '../../../../../../share/collections/risk-types';
+import { StandardsBookSections } from '../../../../../../share/collections/standards-book-sections';
+import { isOrgOwner } from '../../../../../../api/checkers';
 
-import WorkspaceContainer
-  from '/imports/client/react/organization-settings/containers/WorkspaceContainer';
+import HomeScreenSubcard from
+  '../../../../../../client/react/organization-settings/components/HomeScreenSubcard';
 import ReviewContainer
-  from '/imports/client/react/organization-settings/containers/ReviewContainer';
-import KeyGoalsSettingsContainer from '/imports/client/react/organization-settings/containers/KeyGoals';
+  from '../../../../../../client/react/organization-settings/containers/ReviewContainer';
+import KeyGoalsSettingsContainer from
+  '../../../../../../client/react/organization-settings/containers/KeyGoals';
 import { DocumentTypes } from '../../../../../../share/constants';
 import { OrganizationSettingsHelp } from '../../../../../../api/help-messages';
 import {
@@ -22,9 +22,15 @@ import {
 } from '../../../../../../api/organizations/methods';
 import { OrgSettingsDocSubs } from '../../../../../../startup/client/subsmanagers';
 import StandardSectionsSubcardContainer from
-  '../../../../../../client/react/organization-settings/containers/StandardSectionsSubcardContainer';
+  '../../../../../../client/react/organization-settings/containers/StandardSectionsSubcardContainer'; // eslint-disable-line max-len
 import StandardTypesSubcardContainer from
   '../../../../../../client/react/organization-settings/containers/StandardTypesSubcardContainer';
+import CanvasScreenSubcard from
+  '../../../../../../client/react/organization-settings/components/CanvasScreenSubcard';
+import ProjectsSubcard from
+  '../../../../../../client/react/organization-settings/components/ProjectsSubcard';
+import DepartmentsSubcard from
+  '../../../../../../client/react/organization-settings/components/DepartmentsSubcard';
 
 Template.OrgSettings.viewmodel({
   mixin: 'organization',
@@ -33,6 +39,10 @@ Template.OrgSettings.viewmodel({
   timezone: '',
   OrganizationSettingsHelp,
   onCreated(template) {
+    OrgSettingsDocSubs.subscribe(
+      'currentUserOrganizationBySerialNumber',
+      this.organizationSerialNumber(),
+    );
     template.autorun(() => {
       const organization = this.organization();
 
@@ -43,12 +53,8 @@ Template.OrgSettings.viewmodel({
       }
     });
   },
-  workspaceSubcard() {
-    return WorkspaceContainer;
-  },
-  departments() {
-    const query = { organizationId: this.organizationId() };
-    return Departments.find(query);
+  homeScreenSubcard() {
+    return HomeScreenSubcard;
   },
   standardsTypes() {
     const query = { organizationId: this.organizationId() };
@@ -111,4 +117,7 @@ Template.OrgSettings.viewmodel({
   DocumentTypes: () => DocumentTypes,
   StandardSectionsSubcardContainer: () => StandardSectionsSubcardContainer,
   StandardTypesSubcardContainer: () => StandardTypesSubcardContainer,
+  CanvasScreenSubcard: () => CanvasScreenSubcard,
+  ProjectsSubcard: () => ProjectsSubcard,
+  DepartmentsSubcard: () => DepartmentsSubcard,
 });

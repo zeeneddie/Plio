@@ -9,8 +9,12 @@ Roles.addUsersToRoles = jest.fn((userId, inputRoles, key) => {
   return roles[userId][key];
 });
 
-Roles.userIsInRole = jest.fn((userId, role, key) =>
-  !!roles[userId] && !!roles[userId][key] && roles[userId][key].includes(role));
+Roles.userIsInRole = jest.fn((userId, role, key) => {
+  const _roles = Array.isArray(role) ? role : [role];
+  return !!roles[userId] &&
+    !!roles[userId][key] &&
+    _roles.some(r => roles[userId][key].includes(r));
+});
 
 Roles.__clear = jest.fn(() => {
   roles = {};

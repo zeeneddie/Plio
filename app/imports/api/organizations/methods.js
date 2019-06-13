@@ -11,7 +11,6 @@ import InvitationService from './invitation-service';
 import {
   OrganizationCurrencySchema,
   UserSettingsSchema,
-  CustomerTypeSchema,
   reviewFrequencySchema,
   reviewAnnualDateSchema,
   reviewReviewerIdSchema,
@@ -39,13 +38,12 @@ import {
   ORG_EnsureCanDelete,
   ORG_EnsureCanBeDeleted,
   USR_EnsureIsPlioAdmin,
-  USR_EnsureIsPlioUser,
 } from '../checkers';
 import { USR_EnsurePasswordIsValid, ensureCanChangeRoles } from '../users/checkers';
 import { ensureCanUnsubscribeFromDailyRecap, ensureThereIsNoDocuments } from './checkers';
 import { CANNOT_IMPORT_DOCS } from './errors';
 import { checkOrgMembership as checkOrgMembershipMiddleware } from '../middleware';
-import { checkLoggedIn } from '../../share/middleware';
+import checkLoggedIn from '../../share/middleware/Auth/checkLoggedIn';
 
 const nameSchema = new SimpleSchema({ name: { type: String } });
 
@@ -76,6 +74,12 @@ export const insert = new Method({
       nameSchema,
       TimezoneSchema,
       OrganizationCurrencySchema,
+      {
+        templateId: {
+          type: String,
+          regEx: SimpleSchema.RegEx.Id,
+        },
+      },
     ]);
 
     schema.clean(doc, {
@@ -89,12 +93,18 @@ export const insert = new Method({
     return checker(ORG_EnsureNameIsUnique);
   },
 
-  run({ name, timezone, currency }) {
+  run({
+    name,
+    timezone,
+    currency,
+    templateId,
+  }) {
     if (Meteor.isServer) {
       return OrganizationService.insert({
         name,
         timezone,
         currency,
+        templateId,
         ownerId: this.userId,
       });
     }
@@ -687,23 +697,6 @@ export const deleteCustomerOrganization = new Method({
     }
 
     return OrganizationService.deleteOrganization({ organizationId });
-  },
-});
-
-export const changeCustomerType = new Method({
-  name: 'Organizations.changeCustomerType',
-
-  validate: new SimpleSchema([
-    OrganizationIdSchema,
-    CustomerTypeSchema,
-  ]).validator(),
-
-  check(checker) {
-    return checker(() => USR_EnsureIsPlioUser(this.userId));
-  },
-
-  run(args) {
-    return OrganizationService.changeCustomerType(args);
   },
 });
 

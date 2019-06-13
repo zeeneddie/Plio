@@ -1,0 +1,8 @@
+type RevenueStreamChangedResult {
+  kind: DocChangeKind!
+  entity: RevenueStream
+}
+
+type Subscription {
+  revenueStreamChanged(organizationId: ID!, kind: [DocChangeKind!]): RevenueStreamChangedResult
+}

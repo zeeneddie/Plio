@@ -7,10 +7,9 @@ import moment from 'moment-timezone';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { OrgMemberRoles, UserMembership } from '/imports/share/constants.js';
 import { getRandomAvatarUrl, generateUserInitials } from '/imports/share/helpers';
-
-import OrgNotificationsSender from './org-notifications-sender.js';
 import NotificationSender from '/imports/share/utils/NotificationSender';
 
+import OrgNotificationsSender from './org-notifications-sender.js';
 
 class InvitationSender {
   constructor(organizationId, userEmail, welcomeMessage) {
@@ -19,10 +18,15 @@ class InvitationSender {
     this._userEmail = userEmail;
     this._welcomeMessage = welcomeMessage;
     this._invitationId = Random.id();
+    if (this._organization && this._organization.templateId) {
+      this._template = Organizations.findOne({ _id: this._organization.templateId });
+    }
   }
 
   _findExistingUser() {
-    const existingUser = Meteor.users.findOne({ emails: { address: this._userEmail, verified: true } });
+    const existingUser = Meteor.users.findOne({
+      emails: { address: this._userEmail, verified: true },
+    });
 
     if (existingUser && !existingUser.invitationId) {
       // check if user already invited
@@ -38,7 +42,10 @@ class InvitationSender {
         },
       });
       if (isOrgMember) {
-        throw new Meteor.Error(500, `User with email ${this._userEmail} is already invited to organization`);
+        throw new Meteor.Error(
+          500,
+          `User with email ${this._userEmail} is already invited to organization`,
+        );
       }
     }
 
@@ -66,7 +73,9 @@ class InvitationSender {
     try {
       const newUserId = Accounts.createUser(userDoc);
       const invitationExpirationDate = new Date();
-      invitationExpirationDate.setDate(invitationExpirationDate.getDate() + InvitationSender.getInvitationExpirationTime());
+      invitationExpirationDate.setDate(
+        invitationExpirationDate.getDate() + InvitationSender.getInvitationExpirationTime(),
+      );
       Meteor.users.update({
         _id: newUserId,
       }, {
@@ -126,13 +135,15 @@ class InvitationSender {
 
   _sendNewUserInvite(userIdToInvite, emailSubject, basicNotificationData) {
     const sender = Meteor.user();
-    const invitationExpirationInHours = InvitationSender.getInvitationExpirationTime();
+    const invitationExpiration = InvitationSender.getInvitationExpirationTime();
     const receiver = Meteor.users.findOne({ _id: userIdToInvite });
     const invitationId = receiver && receiver.invitationId || this._invitationId;
+    const queryString = this._template ? `?template%3D${this._template.signupPath}` : '';
+    const path = `accept-invitation/${invitationId}`;
 
     // send invitation
     const templateData = Object.assign({
-      title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to join the ${this._organization.name} compliance management system.`,
+      title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to join the ${this._organization.name} management system.`,
       secondaryText: this._welcomeMessage,
       avatar: {
         alt: `${sender.profile.firstName} ${sender.profile.lastName}`,
@@ -141,9 +152,9 @@ class InvitationSender {
       },
       button: {
         label: 'Accept the invitation',
-        url: NotificationSender.getAbsoluteUrl(`accept-invitation/${invitationId}`),
+        url: `${NotificationSender.getAbsoluteUrl(path)}${queryString}`,
       },
-      footerText: `This invitation expires on ${moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')}.`,
+      footerText: `This invitation expires on ${moment().add(invitationExpiration, 'days').format('MMMM Do YYYY')}.`,
     }, basicNotificationData);
 
     new NotificationSender({
@@ -191,7 +202,6 @@ class InvitationSender {
 
     Roles.addUsersToRoles(userIdToInvite, OrgMemberRoles, this._organizationId);
 
-    const sender = Meteor.user();
     let notificationSubject;
     const basicNotificationData = {
       organizationName: this._organization.name,
@@ -229,7 +239,7 @@ class InvitationSender {
   }
 }
 
-export default InvitationService = {
+export default {
   inviteUserByEmail(organizationId, userEmail, welcomeMessage) {
     const ret = new InvitationSender(organizationId, userEmail, welcomeMessage).invite();
 
@@ -241,12 +251,12 @@ export default InvitationService = {
   },
 
   acceptInvitation(invitationId, userData) {
-    const password = userData.password;
-    delete userData.password;
+    const { password } = userData;
+    delete userData.password; // eslint-disable-line no-param-reassign
 
     const invitedUser = Meteor.users.findOne({ invitationId });
 
-    userData.initials = generateUserInitials(userData);
+    Object.assign(userData, { initials: generateUserInitials(userData) });
 
     if (invitedUser) {
       Accounts.setPassword(invitedUser._id, password);

@@ -1,11 +1,16 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import CustomerSegmentAddModal from './CustomerSegmentAddModal';
+import CustomerSegmentEditModal from './CustomerSegmentEditModal';
+import CustomerSegmentsChartModal from './CustomerSegmentsChartModal';
 import CanvasBlock from './CanvasBlock';
+import CustomerSegmentsHelp from './CustomerSegmentsHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const CustomerSegments = ({ organizationId }) => (
   <Query
@@ -15,16 +20,34 @@ const CustomerSegments = ({ organizationId }) => (
   >
     {({ data: { customerSegments: { customerSegments = [] } } }) => (
       <CanvasBlock
+        {...{ organizationId }}
         label="Customer segments"
-        help={(
-          <Fragment>
-            <p>For whom are we creating value?</p>
-            <p>Who are our most important customers?</p>
-          </Fragment>
-        )}
+        sectionName={CanvasSections[CanvasTypes.CUSTOMER_SEGMENT]}
+        documentType={DocumentTypes.CUSTOMER_SEGMENT}
+        help={<CustomerSegmentsHelp />}
         items={customerSegments}
-        renderModal={({ isOpen, toggle }) => (
-          <CustomerSegmentAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <CustomerSegmentAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
+        )}
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <CustomerSegmentEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
+        )}
+        renderChartModal={({ isOpen, toggle }) => (
+          <CustomerSegmentsChartModal {...{ isOpen, toggle, organizationId }} />
         )}
       />
     )}
@@ -35,4 +58,4 @@ CustomerSegments.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default CustomerSegments;
+export default pure(CustomerSegments);

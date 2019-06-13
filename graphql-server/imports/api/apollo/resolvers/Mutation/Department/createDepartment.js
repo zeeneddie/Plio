@@ -13,9 +13,9 @@ export const resolver = async (root, args, { services: { DepartmentService } }) 
 export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
-  ensureCanChangeOrgSettings({
-    getOrgId: (root, args) => args.organizationId,
-    error: Errors.DEP_CREATE_NOT_AUTHORIZED,
-  }),
+  ensureCanChangeOrgSettings((root, { organizationId }) => ({
+    organizationId,
+    errorMessage: Errors.DEP_CREATE_NOT_AUTHORIZED,
+  })),
   departmentInsertAfterware(),
 )(resolver);

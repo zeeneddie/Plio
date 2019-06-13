@@ -4,6 +4,7 @@ import Organization from './Organization';
 import Risk from './Risk';
 import Lesson from './Lesson';
 import Department from './Department';
+import Project from './Project';
 import Action from './Action';
 import KeyPartner from './KeyPartner';
 import KeyActivity from './KeyActivity';
@@ -14,6 +15,17 @@ import Channel from './Channel';
 import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
 import RevenueStream from './RevenueStream';
+import CanvasSettings from './CanvasSettings';
+import Benefit from './Benefit';
+import Feature from './Feature';
+import Need from './Need';
+import Want from './Want';
+import Relation from './Relation';
+import Guidance from './Guidance';
+import Standard from './Standard';
+import StandardSection from './StandardSection';
+import Nonconformity from './Nonconformity';
+import User from './User';
 
 export default {
   ...Goal,
@@ -32,4 +44,16 @@ export default {
   ...ValueProposition,
   ...CustomerSegment,
   ...RevenueStream,
+  ...CanvasSettings,
+  ...Benefit,
+  ...Feature,
+  ...Need,
+  ...Want,
+  ...Relation,
+  ...Guidance,
+  ...Standard,
+  ...StandardSection,
+  ...Nonconformity,
+  ...User,
+  ...Project,
 };

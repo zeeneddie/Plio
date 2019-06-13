@@ -11,6 +11,7 @@ import {
   BaseEntitySchema, ReminderTimePeriodSchema,
   TimezoneSchema, TimePeriodSchema,
   idSchemaDoc, WorkspaceDefaultsSchema,
+  homeScreenTypeSchemaObj,
 } from './schemas';
 
 export const HomeTitlesSchema = new SimpleSchema({
@@ -46,10 +47,12 @@ const OrgUserSchema = new SimpleSchema([
     userId: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
+      index: 1,
     },
     role: {
       type: String,
       allowedValues: _.values(UserMembership),
+      index: 1,
     },
     joinedAt: {
       autoValue() {
@@ -70,6 +73,7 @@ const OrgUserSchema = new SimpleSchema([
 
         return undefined;
       },
+      index: 1,
     },
     removedAt: {
       type: Date,
@@ -260,6 +264,8 @@ const OrganizationEditableFields = {
     type: String,
     min: 1,
     max: 40,
+    index: 1,
+    unique: true,
   },
   workflowDefaults: {
     type: workflowDefaultsSchema,
@@ -298,6 +304,7 @@ const transferSchema = new SimpleSchema({
   _id: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
+    index: 1,
   },
   newOwnerId: {
     type: String,
@@ -334,6 +341,7 @@ const OrganizationSchema = new SimpleSchema([
     serialNumber: {
       type: Number,
       min: 0,
+      index: 1,
     },
     users: {
       type: [OrgUserSchema],
@@ -353,6 +361,23 @@ const OrganizationSchema = new SimpleSchema([
         }
 
         return undefined;
+      },
+    },
+    homeScreenType: homeScreenTypeSchemaObj,
+    templateId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+    },
+    signupPath: {
+      type: String,
+      optional: true,
+      autoValue() {
+        const customerType = this.field('customerType');
+        if (customerType.isSet && customerType.value === CustomerTypes.TEMPLATE) {
+          return undefined;
+        }
+
+        return this.unset();
       },
     },
   },

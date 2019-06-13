@@ -1,0 +1,64 @@
+#import "./RiskCard.graphql"
+#import './LessonCard.graphql'
+#import './GoalCard.graphql'
+#import './StandardCard.graphql'
+#import './NonconformityCard.graphql'
+
+fragment CanvasCard on CanvasEntity {
+  _id
+  title
+  color
+  notes
+  originator {
+    _id
+    profile {
+      fullName
+    }
+  }
+  notify {
+    _id
+    profile {
+      fullName
+    }
+  }
+  organization {
+    _id
+    currency
+    rkGuidelines {
+      minor
+      major
+      critical
+    }
+    ncGuidelines {
+      minor
+      major
+      critical
+    }
+    pgGuidelines {
+      minor
+      major
+      critical
+    }
+  }
+  files {
+    _id
+  }
+  goals {
+    ...GoalCard
+  }
+  standards {
+    ...StandardCard
+  }
+  risks {
+    ...RiskCard
+  }
+  lessons {
+    ...LessonCard
+  }
+  nonconformities {
+    ...NonconformityCard
+  }
+  potentialGains {
+    ...NonconformityCard
+  }
+}

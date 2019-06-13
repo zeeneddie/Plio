@@ -4,8 +4,11 @@ import {
   loadOrganizationById,
   loadFilesById,
   lenses,
+  loadDepartmentsById,
 } from 'plio-util';
 import { view } from 'ramda';
+
+import { resolveProjectsByIds } from '../util';
 
 const {
   createdBy,
@@ -15,6 +18,7 @@ const {
   notify,
   organizationId,
   fileIds,
+  departmentsIds,
 } = lenses;
 
 export default {
@@ -26,5 +30,21 @@ export default {
     notify: loadUsersById(view(notify)),
     organization: loadOrganizationById(view(organizationId)),
     files: loadFilesById(view(fileIds)),
+    departments: loadDepartmentsById(view(departmentsIds)),
+    projects: resolveProjectsByIds,
+    type: async (root, args, context) => {
+      const { typeId } = root;
+      const { loaders: { StandardType: { byId } } } = context;
+      if (!typeId) return null;
+
+      return byId.load(typeId);
+    },
+    section: async (root, args, context) => {
+      const { sectionId } = root;
+      const { loaders: { StandardSection: { byId } } } = context;
+      if (!sectionId) return null;
+
+      return byId.load(sectionId);
+    },
   },
 };

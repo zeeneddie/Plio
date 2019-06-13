@@ -20,6 +20,9 @@ type Organization implements BaseEntity {
   homeScreenTitles: HomeScreenTitles
   lastAccessedDate: DateTime
   workflowDefaults: WorkflowDefaults
+  homeScreenType: String
+  template: ID
+  signupPath: String
 }
 
 type WorkspaceDefaults {
@@ -65,6 +68,6 @@ type Guidelines {
 type HomeScreenTitles {
   standards: String
   risks: String
-  nonConformities: String
+  nonconformities: String
   workInbox: String
 }

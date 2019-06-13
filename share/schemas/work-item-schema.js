@@ -9,12 +9,13 @@ const { TYPES, LINKED_TYPES, STATUSES } = WorkItemsStore;
 const linkedDocSchema = new SimpleSchema({
   _id: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    regEx: SimpleSchema.RegEx.Id,
+    index: 1,
   },
   type: {
     type: String,
-    allowedValues: _.values(LINKED_TYPES)
-  }
+    allowedValues: _.values(LINKED_TYPES),
+  },
 });
 
 const WorkItemsSchema = new SimpleSchema([
@@ -25,28 +26,28 @@ const WorkItemsSchema = new SimpleSchema([
   {
     targetDate: {
       type: Date,
-      optional: true
+      optional: true,
     },
     linkedDoc: {
-      type: linkedDocSchema
+      type: linkedDocSchema,
     },
     type: {
       type: String,
-      allowedValues: _.values(TYPES)
+      allowedValues: _.values(TYPES),
     },
     status: {
       type: Number,
       allowedValues: _.keys(STATUSES).map(status => parseInt(status, 10)),
       defaultValue: 0,
-      optional: true
+      optional: true,
     },
     assigneeId: {
       type: String,
-      regEx: SimpleSchema.RegEx.Id
+      regEx: SimpleSchema.RegEx.Id,
     },
     isCompleted: {
       type: Boolean,
-      defaultValue: false
+      defaultValue: false,
     },
     completedAt: {
       type: Date,
@@ -55,12 +56,11 @@ const WorkItemsSchema = new SimpleSchema([
         const isCompleted = this.field('isCompleted');
         if (this.isUpdate && isCompleted.isSet && !!isCompleted.value) {
           return new Date();
-        } else {
-          this.unset();
         }
-      }
-    }
-  }
+        return this.unset();
+      },
+    },
+  },
 ]);
 
 export { WorkItemsSchema };

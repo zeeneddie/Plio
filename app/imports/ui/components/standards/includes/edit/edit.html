@@ -18,7 +18,10 @@
 
         {{> StandardStatus_Edit status=standard.status _id=standard._id}}
 
-        {{> Departments_Edit _id=standard._id departmentsIds=standard.departmentsIds}}
+        {{> Categorize
+            _id=standard._id
+            departmentsIds=standard.departmentsIds
+            projectIds=standard.projectIds}}
 
         <hr>
 

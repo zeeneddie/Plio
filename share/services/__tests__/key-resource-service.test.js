@@ -1,7 +1,7 @@
 import { __setupDB, __closeDB, Mongo } from 'meteor/mongo';
 
 import KeyResourceService from '../key-resource-service';
-import { KeyResourceColors } from '../../constants';
+import { CanvasColors } from '../../constants';
 
 describe('Key resource service', () => {
   let KeyResources;
@@ -18,7 +18,7 @@ describe('Key resource service', () => {
     const args = {
       title: 'Hello World',
       organizationId: 1,
-      color: KeyResourceColors.INDIGO,
+      color: CanvasColors.INDIGO,
       originatorId: userId,
       notes: 'dlsadsad',
     };

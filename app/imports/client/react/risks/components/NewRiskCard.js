@@ -1,30 +1,25 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { pure } from 'recompose';
+import { mapRejectedEntitiesByIdsToOptions } from 'plio-util';
 
 import {
-  SwitchViewField,
   CardBlock,
   FormField,
-  SelectInputField,
   LinkedEntityInput,
+  NewExistingSwitchField,
+  RiskSelectInput,
 } from '../../components';
-import RiskSelectInputContainer from '../containers/RiskSelectInputContainer';
 import RiskForm from './RiskForm';
 
 const NewRiskCard = ({
   organizationId,
-  risks = [],
+  riskIds = [],
+  guidelines,
   linkedTo = {},
-  ...props
 }) => (
-  <SwitchViewField
-    name="active"
-    buttons={[
-      <span key="new">New</span>,
-      <span key="existing">Existing</span>,
-    ]}
-  >
-    <RiskForm {...{ ...props, organizationId }}>
+  <NewExistingSwitchField name="active">
+    <RiskForm {...{ guidelines, organizationId }}>
       <FormField>
         Linked to
         <LinkedEntityInput disabled value={linkedTo.title} sequentialId={linkedTo.sequentialId} />
@@ -33,21 +28,23 @@ const NewRiskCard = ({
     <CardBlock>
       <FormField>
         Existing risk
-        <RiskSelectInputContainer
+        <RiskSelectInput
           name="risk"
-          component={SelectInputField}
           placeholder="Existing risk"
-          {...{ organizationId, risks }}
+          transformOptions={({ data: { risks: { risks } } }) =>
+            mapRejectedEntitiesByIdsToOptions(riskIds, risks)}
+          {...{ organizationId }}
         />
       </FormField>
     </CardBlock>
-  </SwitchViewField>
+  </NewExistingSwitchField>
 );
 
 NewRiskCard.propTypes = {
   organizationId: PropTypes.string.isRequired,
-  risks: PropTypes.arrayOf(PropTypes.object),
+  riskIds: PropTypes.arrayOf(PropTypes.string),
+  guidelines: PropTypes.object,
   linkedTo: PropTypes.object,
 };
 
-export default NewRiskCard;
+export default pure(NewRiskCard);

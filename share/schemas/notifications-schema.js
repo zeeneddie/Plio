@@ -4,11 +4,12 @@ import { CreatedAtSchema } from './schemas';
 
 const RequiredSchema = new SimpleSchema({
   recipientIds: {
-    type: [String]
+    type: [String],
+    index: 1,
   },
   title: {
-    type: String
-  }
+    type: String,
+  },
 });
 
 const NotificationsSchema = new SimpleSchema([
@@ -17,22 +18,22 @@ const NotificationsSchema = new SimpleSchema([
   {
     body: {
       type: String,
-      optional: true
+      optional: true,
     },
     icon: {
       type: SimpleSchema.RegEx.Url,
-      optional: true
+      optional: true,
     },
     url: {
       type: SimpleSchema.RegEx.Url,
-      optional: true
+      optional: true,
     },
     viewedBy: {
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
-      optional: true
-    }
-  }
+      optional: true,
+    },
+  },
 ]);
 
 export { NotificationsSchema, RequiredSchema };

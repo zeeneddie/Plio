@@ -174,6 +174,8 @@ export const SET_USERS_BY_ORG_IDS = 'SET_USERS_BY_ORG_IDS';
 
 export const SET_REVIEWS = 'SET_REVIEWS';
 
+export const SET_PROJECTS = 'SET_PROJECTS';
+
 // window
 
 export const SET_WINDOW_WIDTH = 'SET_WINDOW_WIDTH';

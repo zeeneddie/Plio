@@ -1,0 +1,11 @@
+mutation updateCanvasSettings($input: UpdateCanvasSettingsInput!) {
+  updateCanvasSettings(input: $input) {
+    _id
+    notify {
+      _id
+      profile {
+        fullName
+      }
+    }
+  }
+}

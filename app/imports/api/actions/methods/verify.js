@@ -8,7 +8,9 @@ import {
 } from '../../middleware';
 import { Actions } from '../../../share/collections';
 import { ActionService } from '../../../share/services';
-import { checkLoggedIn, ensureActionCanBeVerified } from '../../../share/middleware';
+import checkLoggedIn from '../../../share/middleware/Auth/checkLoggedIn';
+import ensureActionCanBeVerified
+  from '../../../share/middleware/Action/ensureActionCanBeVerified';
 
 export default new MiddlewareMethod({
   name: 'Actions.verify',

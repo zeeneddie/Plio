@@ -19,6 +19,14 @@ import CustomerRelationship from './CustomerRelationship';
 import ValueProposition from './ValueProposition';
 import CustomerSegment from './CustomerSegment';
 import RevenueStream from './RevenueStream';
+import Channel from './Channel';
+import Benefit from './Benefit';
+import Feature from './Feature';
+import Need from './Need';
+import Want from './Want';
+import Guidance from './Guidance';
+import CanvasSettings from './CanvasSettings';
+import Nonconformity from './Nonconformity';
 
 export default {
   ...User,
@@ -42,4 +50,12 @@ export default {
   ...ValueProposition,
   ...CustomerSegment,
   ...RevenueStream,
+  ...Channel,
+  ...Benefit,
+  ...Feature,
+  ...Need,
+  ...Want,
+  ...Guidance,
+  ...CanvasSettings,
+  ...Nonconformity,
 };

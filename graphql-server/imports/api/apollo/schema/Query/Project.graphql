@@ -1,0 +1,12 @@
+type ProjectsQueryPayload {
+  totalCount: Int
+  projects: [Project]!
+}
+
+input ProjectsQueryInput {
+  organizationId: ID!
+}
+
+type Query {
+  projects(input: ProjectsQueryInput!): ProjectsQueryPayload
+}

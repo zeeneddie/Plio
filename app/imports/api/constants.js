@@ -1,3 +1,7 @@
+import { HomeScreenTypes } from '../share/constants';
+
+export const APP_VERSION = '0.4.4';
+
 export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
 export const ALERT_AUTOHIDE_TIME = 1500;
 
@@ -7,46 +11,61 @@ export const DocumentTitles = {
   RISK: 'Risk',
 };
 
+export const NonconformityFilterIndexes = {
+  MAGNITUDE: 1,
+  STATUS: 2,
+  DEPARTMENT: 3,
+  PROJECT: 4,
+  DELETED: 5,
+};
+
 export const NonConformityFilters = {
-  1: { title: '', name: 'magnitude', prepend: 'by' },
-  2: { title: '', name: 'status', prepend: 'by' },
-  3: { title: '', name: 'department', prepend: 'by' },
-  4: { title: '', name: 'deleted' },
+  [NonconformityFilterIndexes.MAGNITUDE]: { title: '', name: 'magnitude', prepend: 'by' },
+  [NonconformityFilterIndexes.STATUS]: { title: '', name: 'status', prepend: 'by' },
+  [NonconformityFilterIndexes.DEPARTMENT]: { title: '', name: 'department', prepend: 'by' },
+  [NonconformityFilterIndexes.PROJECT]: { title: '', name: 'project', prepend: 'by' },
+  [NonconformityFilterIndexes.DELETED]: { title: '', name: 'deleted' },
 };
 
 export const RiskFilterIndexes = {
   TYPE: 1,
   STATUS: 2,
   DEPARTMENT: 3,
-  DELETED: 4,
+  PROJECT: 4,
+  DELETED: 5,
 };
 
 export const RiskFilters = {
   [RiskFilterIndexes.TYPE]: {
-    title: 'Risks',
+    title: '',
     name: 'type',
     prepend: 'by',
   },
   [RiskFilterIndexes.STATUS]: {
-    title: 'Risks',
+    title: '',
     name: 'status',
     prepend: 'by',
   },
   [RiskFilterIndexes.DEPARTMENT]: {
-    title: 'Risks',
+    title: '',
     name: 'department',
     prepend: 'by',
   },
+  [RiskFilterIndexes.PROJECT]: {
+    title: '',
+    name: 'project',
+    prepend: 'by',
+  },
   [RiskFilterIndexes.DELETED]: {
-    title: 'Risks',
+    title: '',
     name: 'deleted',
   },
 };
 
 export const StandardFilters = {
-  1: { title: 'Standards', name: 'section', prepend: 'by' },
-  2: { title: 'Standards', name: 'type', prepend: 'by' },
-  3: { title: 'Standards', name: 'deleted', prepend: '' },
+  1: { title: '', name: 'section', prepend: 'by' },
+  2: { title: '', name: 'type', prepend: 'by' },
+  3: { title: '', name: 'deleted', prepend: '' },
 };
 
 export const WorkInboxFilterIndexes = {
@@ -59,12 +78,12 @@ export const WorkInboxFilterIndexes = {
 };
 
 export const WorkInboxFilters = {
-  [WorkInboxFilterIndexes.MY_CURRENT]: { title: 'Work', name: 'my current', prepend: '' },
-  [WorkInboxFilterIndexes.TEAM_CURRENT]: { title: 'Work', name: 'team current', prepend: '' },
-  [WorkInboxFilterIndexes.MY_COMPLETED]: { title: 'Work', name: 'my completed', prepend: '' },
-  [WorkInboxFilterIndexes.TEAM_COMPLETED]: { title: 'Work', name: 'team completed', prepend: '' },
-  [WorkInboxFilterIndexes.MY_DELETED]: { name: 'My deleted actions' },
-  [WorkInboxFilterIndexes.TEAM_DELETED]: { name: 'Team deleted actions' },
+  [WorkInboxFilterIndexes.MY_CURRENT]: { name: 'my current work', prepend: '' },
+  [WorkInboxFilterIndexes.TEAM_CURRENT]: { name: 'team current work', prepend: '' },
+  [WorkInboxFilterIndexes.MY_COMPLETED]: { name: 'my completed work', prepend: '' },
+  [WorkInboxFilterIndexes.TEAM_COMPLETED]: { name: 'team completed work', prepend: '' },
+  [WorkInboxFilterIndexes.MY_DELETED]: { name: 'my deleted actions' },
+  [WorkInboxFilterIndexes.TEAM_DELETED]: { name: 'team deleted actions' },
 };
 
 export const STANDARD_FILTER_MAP = {
@@ -258,6 +277,7 @@ export const KeyMap = {
 };
 
 export const DEPARTMENT_UNCATEGORIZED = 'DEPARTMENTS.UNCATEGORIZED';
+export const PROJECT_UNCATEGORIZED = 'PROJECTS.UNCATEGORIZED';
 
 export const UserPresenceStatuses = {
   ONLINE: 'online',
@@ -270,6 +290,12 @@ export const TransitionTimeouts = {
 };
 
 export const TransitionBaseActiveClass = 'in';
+
+export const ProblemStatusTypes = {
+  AMBER: 'amber',
+  RED: 'red',
+  GREEN: 'green',
+};
 
 export const StatusColors = {
   DEFAULT: 'default',
@@ -290,6 +316,8 @@ export const DEFAULT_UPDATE_TIMEOUT = 1200;
 
 export const ApolloFetchPolicies = {
   CACHE_ONLY: 'cache-only',
+  CACHE_AND_NETWORK: 'cache-and-network',
+  NETWORK_ONLY: 'network-only',
 };
 
 export const MilestoneStatusColors = {
@@ -334,14 +362,73 @@ export const Styles = {
     family: {
       segoe: {
         semibold: '"Segoe UI Semibold WestEuropean", "Segoe UI Semibold", "Segoe WP Semibold", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif',
+        regular: '"Segoe UI Regular WestEuropean", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif',
       },
+    },
+  },
+  border: {
+    color: {
+      grey: '#ddd',
+      darkGrey: '#aaa',
     },
   },
   color: {
     blue: '#0078d7',
+    hoverBlue: '#014c8c',
     muted: '#818a91',
+    lightBlue: '#00BCF2',
+    hoverLightBlue: '#59daff',
+    white: '#fff',
+    lightGrey: '#eee',
+    darkGrey: '#373a3c',
+    brandPrimary: '#0275d8',
+    black: '#000',
+  },
+  background: {
+    color: {
+      grey: '#f5f7f9',
+      lightGrey: '#f5f5f5',
+      white: '#fff',
+    },
   },
 };
 /* eslint-enable max-len */
 
 export const SUPPORT_EMAIL = 'hello@pliohub.com';
+
+export const GraphQLTypenames = {
+  MUTATION: 'Mutation',
+  CANVAS_SETTINGS: 'CanvasSettings',
+  CANVAS_SECTION_SETTINGS: 'CanvasSectionSettings',
+  ORGANIZATION: 'Organization',
+};
+
+export const RouteNames = {
+  CANVAS: 'canvas',
+  CANVAS_REPORT: 'canvasReport',
+  DASHBOARD: 'dashboardPage',
+  CUSTOMERS: 'customers',
+  HELLO: 'hello',
+};
+
+export const HomeRouteNames = {
+  [HomeScreenTypes.OPERATIONS]: RouteNames.DASHBOARD,
+  [HomeScreenTypes.CANVAS]: RouteNames.CANVAS,
+};
+
+export const OptionNone = { label: 'None', value: null };
+
+export const CriticalityLabels = {
+  LOW: 'Low',
+  HIGH: 'High',
+};
+
+export const CategorizeTypes = {
+  DEPARTMENT: 'department',
+  PROJECT: 'project',
+};
+
+export const GroupSelectAbbreviations = {
+  [CategorizeTypes.DEPARTMENT]: 'DEP',
+  [CategorizeTypes.PROJECT]: 'PT',
+};

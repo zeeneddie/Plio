@@ -49,7 +49,7 @@ export const SelectWrapper = styled.div`
   .Select-loading-zone {
     position: absolute;
     top: 6px;
-    left: 10px;
+    right: 50px;
   }
   .Select-option,
   .Select-create-option-placeholder {
@@ -128,7 +128,7 @@ export const SelectWrapper = styled.div`
         border-radius: 0 4px 0 0;
       }
     }
-    &.has-value.is-open {
+    &.is-open {
       .Select-input:before {
         content: '';
       }
@@ -137,7 +137,7 @@ export const SelectWrapper = styled.div`
   ${({ type }) => type === 'creatable' ? css`
     .Select-menu-outer {
       max-height: none;
-      &:after {
+      .Select-menu:after {
         content: 'Start typing...';
         display: block;
         padding: 8px 10px;
@@ -171,8 +171,8 @@ const TextCreatorWrapper = styled.span`
 `;
 
 const MultiValue = compose(
-  withProps(({ value }) => ({
-    label: value.label,
+  withProps(({ children }) => ({
+    label: children,
   })),
   withHandlers({
     onRemove: ({ value, onRemove, onRemoveMultiValue }) => (event) => {
@@ -219,7 +219,7 @@ const enhance = compose(
     prop('valueComponent'),
     identity,
     withProps(({ multi }) => ({
-      valueComponent: multi && MultiValue,
+      valueComponent: multi ? MultiValue : undefined,
     })),
   ),
   withProps(({

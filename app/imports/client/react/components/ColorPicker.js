@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { GithubPicker } from 'react-color';
+import GithubPicker from 'react-color/lib/components/github/Github';
 import styled, { css } from 'styled-components';
 import { Popover } from 'reactstrap';
 import { StyledMixins } from 'plio-util';
@@ -146,17 +146,17 @@ const ColorPicker = ({
   triangle = 'hide',
   value,
   onChange,
+  id,
   ...props
 }) => (
   <Fragment>
     <StyledColorPickerIcon
-      id="colorpicker"
       onClick={toggle}
-      {...{ value }}
+      {...{ value, id }}
     />
     <StyledPopover
       placement="bottom-start"
-      target="colorpicker"
+      target={id}
       {...{ isOpen, toggle }}
     >
       <StyledGithubPicker
@@ -180,6 +180,7 @@ ColorPicker.defaultProps = {
 ColorPicker.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
   colors: PropTypes.arrayOf(PropTypes.string),
   width: PropTypes.number,
   triangle: PropTypes.string,

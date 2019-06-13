@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { compose as kompose } from '@storybook/react-komposer';
 import get from 'lodash.get';
 
-import { pickC, pickDeep } from '/imports/api/helpers';
+import { pickC, pickDeep } from '../../../../../api/helpers';
 import { redirectToHelpDoc, expandHelpSection } from './helpers';
 import { onHandleReturn } from './handlers';
 import loadGlobalData from '../../loaders/loadGlobalData';
@@ -66,7 +66,7 @@ export default compose(
     },
   }),
 
-  connect(pickDeep(['window.width', 'mobile.showCard'])),
+  connect(pickDeep(['window.width', 'mobile.showCard', 'collections.organizations'])),
 
   withHandlers({
     onHandleReturn,

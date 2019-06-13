@@ -20,31 +20,16 @@ input RemoveLessonInput {
   _id: ID!
 }
 
-input UpdateLessonTitleInput {
+input UpdateLessonInput {
   _id: ID!
-  title: String!
-}
-
-input UpdateLessonDateInput {
-  _id: ID!
-  date: DateTime!
-}
-
-input UpdateLessonOwnerInput {
-  _id: ID!
-  owner: ID!
-}
-
-input UpdateLessonNotesInput {
-  _id: ID!
-  notes: String!
+  title: String
+  notes: String
+  ownerId: ID
+  date: DateTime
 }
 
 type Mutation {
   createLesson(input: CreateLessonInput!): LessonPayload
   removeLesson(input: RemoveLessonInput!): LessonPayload
-  updateLessonTitle(input: UpdateLessonTitleInput!): LessonPayload
-  updateLessonDate(input: UpdateLessonDateInput!): LessonPayload
-  updateLessonOwner(input: UpdateLessonOwnerInput!): LessonPayload
-  updateLessonNotes(input: UpdateLessonNotesInput!): LessonPayload
+  updateLesson(input: UpdateLessonInput!): Lesson
 }

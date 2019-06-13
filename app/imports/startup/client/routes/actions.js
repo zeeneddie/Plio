@@ -16,6 +16,8 @@ export const render = renderer => getComponent => options => async (...args) => 
 
   if (typeof opts === 'function') opts = await options(...args);
 
+  await import('../../../ui/components');
+
   renderer(component, opts);
 };
 
@@ -46,8 +48,24 @@ export const renderHelpDocs = renderComponent(async () =>
 export const renderTransitionalLayout = renderComponent(async () =>
   import('../../../client/react/layouts/TransitionalLayout'));
 
-export const renderCanvasLayout = renderComponent(async () =>
-  import('../../../client/react/canvas/components/CanvasLayout'));
+export const renderCanvasLayout = renderComponent(async () => {
+  const [CanvasLayout] = await Promise.all([
+    import('../../../client/react/canvas/components/CanvasLayout'),
+    // fetch necessary blaze components
+    import('../../../ui/components/dashboard/includes/user-menu'),
+  ]);
+
+  // don't wait for other blaze components because they aren't immediately needed
+  import('../../../ui/components');
+
+  return CanvasLayout;
+});
+
+export const renderCanvasReportLayout = renderComponent(async () =>
+  import('../../../client/react/canvas/components/CanvasReportLayout'));
+
+export const renderDashboard = renderComponent(async () =>
+  import('../../../client/react/dashboard/components/DashboardLayout'));
 
 /* BLAZE */
 
@@ -79,12 +97,3 @@ export const renderUserDirectory = renderBlazeComponent(async () => {
 
   return 'UserDirectory_Layout';
 })({ content: 'UserDirectory_Page' });
-
-export const renderDashboard = renderBlazeComponent(async () => {
-  await Promise.all([
-    import('../../../ui/layouts/dashboard-layout'),
-    import('../../../ui/pages/dashboard-page'),
-  ]);
-
-  return 'Dashboard_Layout';
-})({ content: 'Dashboard_Page' });

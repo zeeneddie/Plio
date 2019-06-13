@@ -1,5 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+import { getNestingLevel } from '../helpers';
 import { StringLimits, SourceTypes } from '../constants';
 import {
   BaseEntitySchema, OrganizationIdSchema,
@@ -59,6 +60,14 @@ const StandardsSchema = new SimpleSchema([
     nestingLevel: {
       type: Number,
       max: 4,
+      autoValue() {
+        const title = this.field('title').value;
+        if (!this.isSet && title) {
+          return getNestingLevel(title);
+        }
+
+        return undefined;
+      },
     },
     owner: {
       type: String,
@@ -78,6 +87,13 @@ const StandardsSchema = new SimpleSchema([
       optional: true,
     },
     departmentsIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      defaultValue: [],
+      optional: true,
+      // maxCount: ?
+    },
+    projectIds: {
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       defaultValue: [],

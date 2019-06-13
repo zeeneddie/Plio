@@ -1,0 +1,3 @@
+mutation reassignUserOwnership($input: ReassignUserOwnershipInput!) {
+  reassignUserOwnership(input: $input)
+}

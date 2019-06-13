@@ -7,81 +7,73 @@ import {
   CardBlock,
   InputField,
   TextareaField,
-  SelectInputField,
   SelectField,
 } from '../../components';
-import {
-  OrgUsersSelectInputContainer,
-  RiskTypeSelectContainer,
-} from '../../containers';
+import { UserSelectInput, RiskTypeSelectInput } from '../../forms/components';
 import { StringLimits } from '../../../../share/constants';
 
 const RiskForm = ({
-  onChangeTitle,
-  onChangeDescription,
-  onChangeOriginator,
-  onChangeOwner,
-  onChangeMagnitude,
-  onChangeType,
   children,
   organizationId,
   guidelines,
   sequentialId,
+  save,
+  isEditMode,
 }) => (
   <CardBlock>
     <FormField>
       Risk name
       <InputField
         name="title"
-        onBlur={onChangeTitle}
+        onBlur={save}
         placeholder="Risk name"
         addon={sequentialId}
         maxLength={StringLimits.title.max}
+        autoFocus
       />
     </FormField>
     <FormField>
       Description
       <TextareaField
         name="description"
-        onBlur={onChangeDescription}
+        onBlur={save}
         placeholder="Description"
+        maxLength={StringLimits.description.max}
       />
     </FormField>
     {children}
     <FormField>
       Originator
-      <OrgUsersSelectInputContainer
+      <UserSelectInput
         name="originator"
         placeholder="originator"
-        component={SelectInputField}
-        onChange={onChangeOriginator}
+        onChange={save}
         {...{ organizationId }}
       />
     </FormField>
     <FormField>
       Owner
-      <OrgUsersSelectInputContainer
+      <UserSelectInput
         name="owner"
         placeholder="Owner"
-        component={SelectInputField}
-        onChange={onChangeOwner}
+        onChange={save}
         {...{ organizationId }}
       />
     </FormField>
     <Magnitudes label="Initial categorization" {...{ guidelines }}>
       <Magnitudes.Select
-        disabled
+        disabled={isEditMode}
         name="magnitude"
-        onChange={onChangeMagnitude}
+        onChange={save}
         component={SelectField}
       />
     </Magnitudes>
     <FormField>
       Risk type
-      <RiskTypeSelectContainer
+      <RiskTypeSelectInput
         name="type"
-        onChange={onChangeType}
-        component={SelectField}
+        placeholder="Risk type"
+        onChange={save}
         {...{ organizationId }}
       />
     </FormField>
@@ -89,17 +81,13 @@ const RiskForm = ({
 );
 
 RiskForm.propTypes = {
-  onChangeTitle: PropTypes.func,
-  onChangeDescription: PropTypes.func,
-  onChangeOriginator: PropTypes.func,
-  onChangeOwner: PropTypes.func,
-  onChangeMagnitude: PropTypes.func,
-  onChangeType: PropTypes.func,
   organizationId: PropTypes.string.isRequired,
   // eslint-disable-next-line react/no-typos
   guidelines: Magnitudes.propTypes.guidelines,
   sequentialId: PropTypes.string,
   children: PropTypes.node,
+  save: PropTypes.func,
+  isEditMode: PropTypes.bool,
 };
 
 export default RiskForm;

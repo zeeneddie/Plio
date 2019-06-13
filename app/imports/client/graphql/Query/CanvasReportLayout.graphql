@@ -1,0 +1,6 @@
+query CanvasReportLayout($orgSerialNumber: Int!) {
+  organization(serialNumber: $orgSerialNumber) {
+    _id
+    name
+  }
+}

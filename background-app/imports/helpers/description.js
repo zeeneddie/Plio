@@ -1,8 +1,9 @@
-import { getTitle } from 'plio-util';
+import { getTitle, generateSequentialId } from 'plio-util';
 
 import {
   ActionTypes,
   ProblemTypes,
+  Abbreviations,
 } from '../share/constants';
 
 // actions
@@ -58,3 +59,28 @@ export const getGoalName = getTitle;
 // milestones
 export const getMilestoneDesc = () => 'milestone';
 export const getMilestoneName = getTitle;
+
+// canvas
+export const getCanvasDocName = getTitle;
+export const getKeyPartnerDesc = () => 'Key Partner';
+export const getKeyActivityDesc = () => 'Key Activity';
+export const getKeyResourceDesc = () => 'Key Resource';
+export const getValuePropositionDesc = () => 'Value Proposition';
+export const getCustomerRelationshipDesc = () => 'Customer Relationship';
+export const getChannelDesc = () => 'Channel';
+export const getCustomerSegmentDesc = () => 'Customer Segment';
+export const getCostLineDesc = () => 'Cost Line';
+export const getRevenueStreamDesc = () => 'Revenue Stream';
+
+// customer elements
+export const getBenefitDesc = () => 'Benefit';
+export const getFeatureDesc = () => 'Feature';
+export const getNeedDesc = () => 'Need';
+export const getWantDesc = () => 'Want';
+
+export const getCustomerElementName = abbr => ({ title, serialNumber }) =>
+  `${generateSequentialId(abbr, { serialNumber })} "${title}"`;
+export const getBenefitName = getCustomerElementName(Abbreviations.BENEFIT);
+export const getFeatureName = getCustomerElementName(Abbreviations.FEATURE);
+export const getNeedName = getCustomerElementName(Abbreviations.NEED);
+export const getWantName = getCustomerElementName(Abbreviations.WANT);

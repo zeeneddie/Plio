@@ -1,11 +1,18 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, OrganizationIdSchema, idSchemaDoc } from './schemas';
+import {
+  BaseEntitySchema,
+  OrganizationIdSchema,
+  idSchemaDoc,
+  FileIdsSchema,
+} from './schemas';
 import { StringLimits, CanvasColors } from '../constants';
+import { CanvasSettings } from '../collections';
 
 const CanvasSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
+  FileIdsSchema,
   {
     title: {
       type: String,
@@ -21,6 +28,29 @@ const CanvasSchema = new SimpleSchema([
     color: {
       type: String,
       allowedValues: Object.values(CanvasColors),
+    },
+    notify: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+      autoValue() {
+        if (this.isInsert) {
+          const organizationId = this.field('organizationId');
+
+          if (organizationId.isSet) {
+            const settings = CanvasSettings.findOne({ organizationId: organizationId.value }, {
+              fields: { notify: 1 },
+            }) || {};
+            const { notify } = settings;
+
+            if (notify && notify.length) return notify;
+          }
+
+          return [];
+        }
+
+        return undefined;
+      },
     },
   },
 ]);

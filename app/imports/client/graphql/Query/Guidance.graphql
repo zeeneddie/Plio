@@ -1,0 +1,16 @@
+query Guidance($documentType: String!) {
+  user: me {
+    _id
+    isPlioAdmin
+  }
+
+  guidance(documentType: $documentType) {
+    _id
+    html
+    subguidances {
+      _id
+      title
+      html
+    }
+  }
+}

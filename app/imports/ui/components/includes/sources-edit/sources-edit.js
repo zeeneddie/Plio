@@ -4,9 +4,10 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import { check } from 'meteor/check';
 import { _ } from 'meteor/underscore';
 
-import { Files } from '/imports/share/collections/files';
-import { remove as removeFile } from '/imports/api/files/methods';
-import UploadsStore from '/imports/ui/utils/uploads/uploads-store';
+import { swal } from '../../../../client/util';
+import { Files } from '../../../../share/collections/files';
+import { remove as removeFile } from '../../../../api/files/methods';
+import UploadsStore from '../../../utils/uploads/uploads-store';
 
 Template.Sources_Edit.viewmodel({
   mixin: ['urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
@@ -56,7 +57,9 @@ Template.Sources_Edit.viewmodel({
     this.update();
   },
   update(e, cb) {
-    let { type, fileId, url } = this.getData();
+    const data = this.getData();
+    const { type, fileId } = data;
+    let { url } = data;
 
     if (!this.shouldUpdate()) {
       return;
@@ -91,6 +94,9 @@ Template.Sources_Edit.viewmodel({
         }
       });
     }
+  },
+  clear() {
+    this.sourceUrl('');
   },
   renderDocx(url) {
     check(url, String);

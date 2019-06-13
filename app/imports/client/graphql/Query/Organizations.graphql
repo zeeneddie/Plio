@@ -1,0 +1,9 @@
+query Organizations($customerType: Int) {
+  organizations(customerType: $customerType) {
+    organizations {
+      _id
+      name
+      serialNumber
+    }
+  }
+}

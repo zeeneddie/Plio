@@ -23,6 +23,16 @@
       orgOwnerLabel=orgOwnerLabel}}
 
   {{#if isDeleteButtonEnabled}}
-    {{> ModalDeleteButton onClick=removeUserFn}}
+    <div>
+      {{> React
+        component=UserDeleteModal
+        isOpen=isDeleteModalOpen
+        toggle=(callback 'toggleDeleteModal')
+        organizationId=organizationId
+        userId=userId
+        userName=user.fullNameOrEmail
+        onSuccess=(callback 'closeModal')}}
+    </div>
+    {{> ModalDeleteButton onClick=(callback 'onDelete')}}
   {{/if}}
 </template>

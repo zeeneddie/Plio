@@ -1,9 +1,9 @@
+#import "../Fragment/CanvasEntityPresentation.graphql"
+
 query Channels($organizationId: ID!) {
   channels(organizationId: $organizationId) {
     channels {
-      _id
-      title
-      color
+      ...CanvasEntityPresentation
     }
   }
 }

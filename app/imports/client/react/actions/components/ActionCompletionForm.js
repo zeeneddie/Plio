@@ -3,9 +3,9 @@ import React, { Fragment } from 'react';
 import { Field } from 'react-final-form';
 import { FormGroup, Button } from 'reactstrap';
 
+import { StringLimits } from '../../../../share/constants';
 import {
   FormField,
-  SelectInputField,
   DatePickerAdapter,
   ToggleComplete,
   TextareaAdapter,
@@ -13,7 +13,7 @@ import {
   UndoTime,
   StyledFlexFormGroup,
 } from '../../components';
-import { OrgUsersSelectInputContainer } from '../../containers';
+import { UserSelectInput } from '../../forms/components';
 
 const ActionCompletionForm = ({
   organizationId,
@@ -30,20 +30,18 @@ const ActionCompletionForm = ({
   onChangeCompletedBy,
 }) => {
   const toBeCompletedBy = (
-    <OrgUsersSelectInputContainer
+    <UserSelectInput
       name="toBeCompletedBy"
       placeholder="To be completed by"
       onChange={onChangeToBeCompletedBy}
-      component={SelectInputField}
       {...{ organizationId }}
     />
   );
   const completedBy = (
-    <OrgUsersSelectInputContainer
+    <UserSelectInput
       name="completedBy"
       placeholder="Completed by"
       onChange={onChangeCompletedBy}
-      component={SelectInputField}
       disabled={isVerified}
       {...{ organizationId }}
     />
@@ -53,6 +51,7 @@ const ActionCompletionForm = ({
       name="completionComments"
       placeholder="Enter any completion comments"
       component={TextareaAdapter}
+      maxLength={StringLimits.comments.max}
       onBlur={e => isCompleted && onChangeCompletionComments(e)}
       disabled={isVerified}
     />

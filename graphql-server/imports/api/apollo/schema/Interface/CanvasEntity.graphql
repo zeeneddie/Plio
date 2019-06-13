@@ -1,6 +1,16 @@
 interface CanvasEntity {
+  _id: ID!
   title: String!
   originator: User!
   color: String!
   notes: String
+  notify: [User]
+  organization: Organization!
+  files: [File]
+  goals: [Goal]
+  standards: [Standard]
+  risks: [Risk]
+  lessons: [Lesson]
+  nonconformities: [Nonconformity]
+  potentialGains: [Nonconformity]
 }

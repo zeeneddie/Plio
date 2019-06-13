@@ -10,27 +10,41 @@ Template.CardOrgChangelog.viewmodel({
   },
   onCreated(template) {
     template.autorun(() => {
-      template.subscribe('lastHumanLog', this.organizationId(), CollectionNames.ORGANIZATIONS);
+      const organizationId = this.organizationId();
+      if (organizationId) {
+        template.subscribe('lastHumanLog', organizationId, CollectionNames.ORGANIZATIONS);
+      }
     });
   },
   subscribeForFirstLogs(onReady) {
     const organizationId = this.organizationId();
     const tpl = this.templateInstance;
 
-    tpl.subscribe(
-      'auditLogsCount',
-      `audit-logs-count-${organizationId}`,
-      organizationId,
-      CollectionNames.ORGANIZATIONS,
-    );
+    if (organizationId) {
+      tpl.subscribe(
+        'auditLogsCount',
+        `audit-logs-count-${organizationId}`,
+        organizationId,
+        CollectionNames.ORGANIZATIONS,
+      );
 
-    tpl.subscribe('auditLogs', organizationId, CollectionNames.ORGANIZATIONS, { onReady });
+      tpl.subscribe('auditLogs', organizationId, CollectionNames.ORGANIZATIONS, { onReady });
+    }
   },
   subscribeForAllLogs(skip, onReady) {
     const organizationId = this.organizationId();
     const tpl = this.templateInstance;
 
-    tpl.subscribe('auditLogs', organizationId, CollectionNames.ORGANIZATIONS, skip, 0, { onReady });
+    if (organizationId) {
+      tpl.subscribe(
+        'auditLogs',
+        organizationId,
+        CollectionNames.ORGANIZATIONS,
+        skip,
+        0,
+        { onReady },
+      );
+    }
   },
   logsLength() {
     return this.get(`audit-logs-count-${this.organizationId()}`);

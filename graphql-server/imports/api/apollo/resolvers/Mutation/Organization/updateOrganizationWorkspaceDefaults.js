@@ -3,13 +3,17 @@ import {
   checkLoggedIn,
   flattenInput,
   ensureCanChangeOrgSettings,
+  organizationUpdateAfterware,
 } from '../../../../../share/middleware';
 
-export const resolver = async (root, args, { services: { OrganizationService } }) =>
-  OrganizationService.updateWorkspaceDefaults(args);
+export const resolver = async (root, args, context) =>
+  context.services.OrganizationService.updateWorkspaceDefaults(args, context);
 
 export default applyMiddleware(
   checkLoggedIn(),
   flattenInput(),
-  ensureCanChangeOrgSettings(),
+  ensureCanChangeOrgSettings(((root, { _id }) => ({
+    organizationId: _id,
+  }))),
+  organizationUpdateAfterware(),
 )(resolver);

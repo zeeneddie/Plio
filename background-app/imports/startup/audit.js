@@ -13,6 +13,25 @@ import OrgAuditConfig from '/imports/audit/configs/organizations/org-audit-confi
 import WorkItemAuditConfig from '/imports/audit/configs/work-items/work-item-audit-config';
 import GoalAuditConfig from '../audit/configs/goals/goal-audit-config';
 import MilestoneAuditConfig from '../audit/configs/milestones/milestone-audit-config';
+import KeyPartnerAuditConfig from '../audit/configs/key-partners/key-partner-audit-config';
+import KeyActivityAuditConfig from '../audit/configs/key-activities/key-activity-audit-config';
+import KeyResourceAuditConfig from '../audit/configs/key-resources/key-resource-audit-config';
+import ValuePropositionAuditConfig from
+  '../audit/configs/value-propositions/value-proposition-audit-config';
+import CustomerRelationshipAuditConfig from
+  '../audit/configs/customer-relationships/customer-relationship-audit-config';
+import ChannelAuditConfig from '../audit/configs/channels/channel-audit-config';
+import CustomerSegmentAuditConfig from
+  '../audit/configs/customer-segments/customer-segment-audit-config';
+import CostLineAuditConfig from '../audit/configs/cost-lines/cost-line-audit-config';
+import RevenueStreamAuditConfig from '../audit/configs/revenue-streams/revenue-stream-audit-config';
+import BenefitAuditConfig from '../audit/configs/benefits/benefit-audit-config';
+import FeatureAuditConfig from '../audit/configs/features/feature-audit-config';
+import NeedAuditConfig from '../audit/configs/needs/need-audit-config';
+import WantAuditConfig from '../audit/configs/wants/want-audit-config';
+import RelationAuditConfig from '../audit/configs/relations/relation-audit-config';
+import CanvasSettingsAuditConfig from
+  '../audit/configs/canvas-settings/canvas-settings-audit-config';
 
 const auditConfigs = [
   ActionAuditConfig,
@@ -26,6 +45,21 @@ const auditConfigs = [
   WorkItemAuditConfig,
   GoalAuditConfig,
   MilestoneAuditConfig,
+  KeyPartnerAuditConfig,
+  KeyActivityAuditConfig,
+  KeyResourceAuditConfig,
+  ValuePropositionAuditConfig,
+  CustomerRelationshipAuditConfig,
+  ChannelAuditConfig,
+  CustomerSegmentAuditConfig,
+  CostLineAuditConfig,
+  RevenueStreamAuditConfig,
+  BenefitAuditConfig,
+  FeatureAuditConfig,
+  NeedAuditConfig,
+  WantAuditConfig,
+  RelationAuditConfig,
+  CanvasSettingsAuditConfig,
 ];
 
 auditConfigs.forEach((config) => {

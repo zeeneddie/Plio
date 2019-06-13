@@ -1,32 +1,25 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { onlyUpdateForKeys } from 'recompose';
+import { pure } from 'recompose';
+import { noop } from 'plio-util';
 
 import {
   FormField,
   InputField,
   TextareaField,
-  SelectInputField,
   DatePickerField,
   Magnitudes,
   SelectField,
   ColorPickerField,
 } from '../../components';
-import { OrgUsersSelectInputContainer } from '../../containers';
+import { UserSelectInput } from '../../forms/components';
 import { StringLimits } from '../../../../share/constants';
-
-const enhance = onlyUpdateForKeys(['sequentialId', 'organizationId', 'isEditMode']);
 
 export const GoalForm = ({
   organizationId,
   sequentialId,
-  onChangeTitle,
-  onChangeDescription,
-  onChangeOwner,
-  onChangeStartDate,
-  onChangeEndDate,
-  onChangePriority,
-  onChangeColor,
+  isEditMode,
+  save = noop,
 }) => (
   <Fragment>
     <FormField>
@@ -34,9 +27,10 @@ export const GoalForm = ({
       <InputField
         name="title"
         placeholder="Key goal name"
-        onBlur={onChangeTitle}
+        onBlur={save}
         addon={sequentialId}
         maxLength={StringLimits.title.max}
+        autoFocus
       />
     </FormField>
     <FormField>
@@ -44,16 +38,16 @@ export const GoalForm = ({
       <TextareaField
         name="description"
         placeholder="Description"
-        onBlur={onChangeDescription}
+        maxLength={StringLimits.description.max}
+        onBlur={save}
       />
     </FormField>
     <FormField>
       Owner
-      <OrgUsersSelectInputContainer
+      <UserSelectInput
         name="owner"
         placeholder="Owner"
-        component={SelectInputField}
-        onChange={onChangeOwner}
+        onChange={save}
         {...{ organizationId }}
       />
     </FormField>
@@ -61,7 +55,7 @@ export const GoalForm = ({
       Start date
       <DatePickerField
         name="startDate"
-        onChange={onChangeStartDate}
+        onChange={save}
         placeholderText="Start date"
       />
     </FormField>
@@ -69,7 +63,7 @@ export const GoalForm = ({
       End date
       <DatePickerField
         name="endDate"
-        onChange={onChangeEndDate}
+        onChange={save}
         placeholderText="End date"
       />
     </FormField>
@@ -77,7 +71,7 @@ export const GoalForm = ({
       Priority
       <Magnitudes.Select
         name="priority"
-        onChange={onChangePriority}
+        onChange={save}
         component={SelectField}
       />
     </FormField>
@@ -85,7 +79,8 @@ export const GoalForm = ({
       Color
       <ColorPickerField
         name="color"
-        onChange={onChangeColor}
+        id={isEditMode ? 'goal' : 'newGoal'}
+        onChange={save}
       />
     </FormField>
   </Fragment>
@@ -94,13 +89,8 @@ export const GoalForm = ({
 GoalForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
   sequentialId: PropTypes.string,
-  onChangeTitle: PropTypes.func,
-  onChangeDescription: PropTypes.func,
-  onChangeOwner: PropTypes.func,
-  onChangeStartDate: PropTypes.func,
-  onChangeEndDate: PropTypes.func,
-  onChangePriority: PropTypes.func,
-  onChangeColor: PropTypes.func,
+  isEditMode: PropTypes.bool,
+  save: PropTypes.func,
 };
 
-export default enhance(GoalForm);
+export default pure(GoalForm);

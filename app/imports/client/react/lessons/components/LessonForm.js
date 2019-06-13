@@ -8,19 +8,11 @@ import {
   InputField,
   DatePickerField,
   LinkedEntityInput,
-  SelectInputField,
   QuillField,
 } from '../../components';
-import { OrgUsersSelectInputContainer } from '../../containers';
+import { UserSelectInput } from '../../forms/components';
 
-const LessonForm = ({
-  organizationId,
-  linkedTo,
-  onChangeTitle,
-  onChangeDate,
-  onChangeOwner,
-  onChangeNotes,
-}) => (
+const LessonForm = ({ organizationId, linkedTo, save }) => (
   <Fragment>
     <CardBlock>
       <FormField>
@@ -28,7 +20,7 @@ const LessonForm = ({
         <InputField
           name="title"
           placeholder="Title"
-          onBlur={onChangeTitle}
+          onBlur={save}
         />
       </FormField>
       <FormField>
@@ -39,24 +31,23 @@ const LessonForm = ({
         Created date
         <DatePickerField
           name="date"
-          onChange={onChangeDate}
+          onChange={save}
           placeholderText="Created date"
         />
       </FormField>
       <FormField>
         Created by
-        <OrgUsersSelectInputContainer
+        <UserSelectInput
           name="owner"
           placeholder="Created by"
-          component={SelectInputField}
-          onChange={onChangeOwner}
+          onChange={save}
           {...{ organizationId }}
         />
       </FormField>
     </CardBlock>
     <QuillField
       name="notes"
-      onBlur={onChangeNotes}
+      onBlur={save}
     />
   </Fragment>
 );
@@ -64,10 +55,7 @@ const LessonForm = ({
 LessonForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
   linkedTo: PropTypes.object,
-  onChangeTitle: PropTypes.func,
-  onChangeDate: PropTypes.func,
-  onChangeOwner: PropTypes.func,
-  onChangeNotes: PropTypes.func,
+  save: PropTypes.func,
 };
 
 export default LessonForm;

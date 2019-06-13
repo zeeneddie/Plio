@@ -12,8 +12,8 @@ import { notRemoved } from '/imports/api/organizations/helpers';
 import { getFullNameOrEmail, getEmail } from '/imports/api/users/helpers';
 import Wrapper from '../../../../components/Wrapper';
 import createReadFields from '../../../../helpers/createReadFields';
-import SequentialId from '../../../fields/read/components/SequentialId';
 import Label from '../../../../components/Labels/Label';
+import { SignupPaths, CUSTOMER_SEQUENTIAL_ID } from '../../../constants';
 
 const CustomersRHSBody = ({
   name,
@@ -25,6 +25,8 @@ const CustomersRHSBody = ({
   timezone,
   lastAccessedDate,
   owner,
+  homeScreenType,
+  signupPath,
 }) => {
   const tz = getFormattedTzDate(timezone);
   const orgTimezone = `${tz} ${timezone}`;
@@ -33,7 +35,9 @@ const CustomersRHSBody = ({
   const orgName = (
     <span>
       <span>{name}</span>
-      <Label margin="left"><SequentialId {...{ serialNumber }} /></Label>
+      <Label margin="left">
+        <span>{CUSTOMER_SEQUENTIAL_ID}{serialNumber}</span>
+      </Label>
     </span>
   );
   const data = [
@@ -46,6 +50,8 @@ const CustomersRHSBody = ({
     { label: 'Last accessed', text: lastAccessedDateText },
     { label: 'Created date', text: getFormattedDate(createdAt) },
     { label: 'Type', text: CustomerTypesNames[customerType] },
+    { label: 'Sign-up path', text: SignupPaths[homeScreenType] },
+    { label: 'Sign-up URL', text: signupPath },
   ];
   const fields = _.values(createReadFields(data)).map((field, i) => ({
     ...field,
@@ -72,6 +78,8 @@ CustomersRHSBody.propTypes = {
   timezone: PropTypes.string,
   lastAccessedDate: PropTypes.instanceOf(Date),
   owner: PropTypes.object,
+  homeScreenType: PropTypes.string,
+  signupPath: PropTypes.string,
 };
 
 export default CustomersRHSBody;

@@ -10,6 +10,28 @@ input CreateKeyResourceInput {
   notes: String
 }
 
+input UpdateKeyResourceInput {
+  _id: ID!
+  title: String
+  originatorId: ID
+  color: String
+  notes: String
+  fileIds: [String]
+  notify: [ID]
+  goalIds: [ID]
+  standardsIds: [ID]
+  fileIds: [ID]
+  riskIds: [ID]
+  nonconformityIds: [ID]
+  potentialGainIds: [ID]
+}
+
+input DeleteKeyResourceInput {
+  _id: ID!
+}
+
 type Mutation {
   createKeyResource(input: CreateKeyResourceInput!): KeyResourcePayload
+  updateKeyResource(input: UpdateKeyResourceInput!): KeyResource
+  deleteKeyResource(input: DeleteKeyResourceInput!): KeyResource
 }

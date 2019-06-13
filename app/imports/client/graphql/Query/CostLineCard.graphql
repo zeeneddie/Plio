@@ -1,0 +1,13 @@
+#import "../Fragment/CostLineCard.graphql"
+
+query CostLineCard($_id: ID!, $organizationId: ID!) {
+  costLine(_id: $_id) {
+    costLine {
+      ...CostLineCard
+    }
+  }
+  user: me {
+    _id
+    roles(organizationId: $organizationId)
+  }
+}

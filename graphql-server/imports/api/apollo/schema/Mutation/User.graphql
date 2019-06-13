@@ -1,3 +1,20 @@
-type UserPayload {
-  user: User
+input ReassignUserOwnershipInput {
+  organizationId: ID!
+  # user which ownership to reassign from
+  userId: ID!
+  # new owner id
+  ownerId: ID
+}
+
+input UpdateUserPreferencesInput {
+  areNotificationsEnabled: Boolean
+  areEmailNotificationsEnabled: Boolean
+  notificationSound: String
+  defaultCanvasColor: String
+}
+
+type Mutation {
+  # reassign all organization documents ownership to the given user
+  reassignUserOwnership(input: ReassignUserOwnershipInput!): Boolean
+  updateUserPreferences(input: UpdateUserPreferencesInput!): User
 }

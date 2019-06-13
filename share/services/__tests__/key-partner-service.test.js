@@ -1,6 +1,6 @@
 import { __setupDB, __closeDB, Mongo } from 'meteor/mongo';
 
-import { Criticality, LevelOfSpend, KeyPartnerColors } from '../../constants';
+import { CRITICALITY_DEFAULT, CanvasColors } from '../../constants';
 import KeyPartnerService from '../key-partner-service';
 
 describe('Key partner service', () => {
@@ -19,9 +19,9 @@ describe('Key partner service', () => {
       title: 'Hello World',
       organizationId: 1,
       originatorId: userId,
-      color: KeyPartnerColors.INDIGO,
-      criticality: Criticality.LOW,
-      levelOfSpend: LevelOfSpend.HIGH,
+      color: CanvasColors.INDIGO,
+      criticality: CRITICALITY_DEFAULT,
+      levelOfSpend: CRITICALITY_DEFAULT,
       notes: 'dlsadsad',
     };
     const context = {

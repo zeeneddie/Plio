@@ -1,0 +1,22 @@
+#import "../Fragment/RiskCard.graphql"
+
+query RiskCard($_id: ID!, $organizationId: ID!) {
+  risk(_id: $_id) {
+    risk {
+      ...RiskCard
+    }
+  }
+
+  user: me {
+    _id
+  }
+
+  organization(_id: $organizationId) {
+    _id
+    rkGuidelines {
+      minor
+      major
+      critical
+    }
+  }
+}

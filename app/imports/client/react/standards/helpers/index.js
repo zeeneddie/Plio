@@ -1,7 +1,10 @@
 import { _ } from 'meteor/underscore';
+import { Meteor } from 'meteor/meteor';
 import { withProps } from 'recompose';
+import { toastr } from 'meteor/chrismbeckett:toastr';
 import curry from 'lodash.curry';
 
+import UploadService from '../../../../ui/utils/uploads/UploadService';
 import { CollectionNames } from '../../../../share/constants';
 import { STANDARD_FILTER_MAP } from '../../../../api/constants';
 import {
@@ -165,7 +168,8 @@ export const expandCollapsedStandard = (_id) => {
       action = addCollapsed({ ...sectionItem, close: { type: sectionItem.type } });
       break;
     case STANDARD_FILTER_MAP.TYPE:
-      action = chainActions([typeItem, sectionItem].map(item => addCollapsed({ ...item, close: { type: item.type } })));
+      action = chainActions([typeItem, sectionItem].map(item =>
+        addCollapsed({ ...item, close: { type: item.type } })));
       break;
     default:
       return false;
@@ -210,7 +214,9 @@ export const expandCollapsedStandards = (ids) => {
         ? types.concat(uncategorizedType)
         : types;
 
-      return store.dispatch(chainActions(types.map(addCollapsedType).concat(sections.map(addCollapsedSection))));
+      return store
+        .dispatch(chainActions(types.map(addCollapsedType)
+          .concat(sections.map(addCollapsedSection))));
     }
     default:
       return false;
@@ -266,3 +272,47 @@ export const getSelectedStandardDeletedState = state => ({
     state.collections.standardsByIds[state.global.urlItemId],
   ),
 });
+
+const launchDocxRendering = (fileUrl, fileName, standardId) => {
+  Meteor.call('Mammoth.convertStandardFileToHtml', {
+    fileUrl,
+    htmlFileName: `${fileName}.html`,
+    source: 'source1',
+    standardId,
+  }, (error, result) => {
+    if (error) {
+      // HTTP errors
+      toastr.error(`Failed to get .docx file: ${error}`);
+    } else if (result.error) {
+      // Mammoth errors
+      toastr.error(`Rendering document: ${result.error}`);
+    }
+  });
+};
+
+export const uploadFile = ({
+  file,
+  fileId,
+  organizationId,
+  standardId,
+}) => {
+  const uploadService = new UploadService({
+    slingshotDirective: 'standardFiles',
+    slingshotContext: {
+      standardId,
+      organizationId,
+    },
+    maxFileSize: Meteor.settings.public.otherFilesMaxSize,
+    hooks: {
+      afterUpload: (__, url) => {
+        const fileName = file.name;
+        const extension = fileName.split('.').pop().toLowerCase();
+        if (extension === 'docx') {
+          launchDocxRendering(url, fileName, standardId);
+        }
+      },
+    },
+  });
+
+  uploadService.uploadExisting(fileId, file);
+};

@@ -25,7 +25,8 @@
             <button type="button" class="btn btn-secondary"
                 {{b "class: { disabled: isDisabled }, disable: isCloseButtonDisabled, click: closeModal"}}>
               <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: showCloseButtonSpinner"}}></i>
-              <span {{b "text: closeCaptionText"}}></span>
+              <span {{b "unless: isVariation('save'), text: closeCaptionText"}}></span>
+              <span {{b "if: isVariation('save'), text: cancelCaption"}}></span>
             </button>
           </div>
         </div>

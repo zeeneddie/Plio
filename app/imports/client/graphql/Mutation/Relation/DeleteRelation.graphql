@@ -1,0 +1,10 @@
+mutation deleteRelation($input: RelationInput!) {
+  deleteRelation(input: $input) {
+    rel1 {
+      documentType
+    }
+    rel2 {
+      documentType
+    }
+  }
+}

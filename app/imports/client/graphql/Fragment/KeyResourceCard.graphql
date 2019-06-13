@@ -1,0 +1,7 @@
+#import "./CanvasCard.graphql"
+
+fragment KeyResourceCard on KeyResource {
+  ... on CanvasEntity {
+    ...CanvasCard
+  }
+}

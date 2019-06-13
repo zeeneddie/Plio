@@ -1,9 +1,0 @@
-mutation setRiskAnalysisCompletedAt($input: SetRiskAnalysisCompletedAtInput!) {
-  setRiskAnalysisCompletedAt(input: $input) {
-    risk {
-      analysis {
-        completedAt
-      }
-    }
-  }
-}

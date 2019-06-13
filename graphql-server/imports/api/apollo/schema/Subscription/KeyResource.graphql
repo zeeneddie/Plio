@@ -1,0 +1,8 @@
+type KeyResourceChangedResult {
+  kind: DocChangeKind!
+  entity: KeyResource
+}
+
+type Subscription {
+  keyResourceChanged(organizationId: ID!, kind: [DocChangeKind!]): KeyResourceChangedResult
+}

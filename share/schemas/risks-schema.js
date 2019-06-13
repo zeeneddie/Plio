@@ -63,6 +63,7 @@ const RiskScoresSchema = new SimpleSchema({
     type: [RiskScoreSchema],
     defaultValue: [],
     optional: true,
+    index: 1,
   },
 });
 
@@ -121,15 +122,25 @@ const RisksSchema = new SimpleSchema([
     sequentialId: {
       type: String,
       min: StringLimits.sequentialId.min,
+      index: 1,
     },
     status: {
       type: Number,
       allowedValues: Object.keys(ProblemsStatuses).map(key => parseInt(key, 10)),
       defaultValue: 1,
+      index: 1,
     },
     workflowType: {
       type: String,
       allowedValues: Object.values(WorkflowTypes),
+    },
+    projectIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      defaultValue: [],
+      optional: true,
+      index: 1,
+      // maxCount: ?
     },
   },
 ]);

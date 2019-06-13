@@ -1,0 +1,23 @@
+type ProjectPayload {
+  project: Project
+}
+
+input CreateProjectInput {
+  organizationId: ID!
+  title: String!
+}
+
+input UpdateProjectInput {
+  _id: ID!
+  title: String!
+}
+
+input DeleteProjectInput {
+  _id: ID!
+}
+
+type Mutation {
+  createProject(input: CreateProjectInput!): ProjectPayload
+  updateProject(input: UpdateProjectInput!): Project
+  deleteProject(input: DeleteProjectInput!): Project
+}

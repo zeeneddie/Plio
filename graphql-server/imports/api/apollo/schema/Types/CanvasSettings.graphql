@@ -1,0 +1,23 @@
+type CanvasSectionSettings {
+  order: [ID]!
+}
+
+type CanvasSettings implements BaseEntity {
+  _id: ID!
+  organization: Organization!
+  keyPartners: CanvasSectionSettings
+  keyActivities: CanvasSectionSettings
+  keyResources: CanvasSectionSettings
+  valuePropositions: CanvasSectionSettings
+  customerRelationships: CanvasSectionSettings
+  channels: CanvasSectionSettings
+  customerSegments: CanvasSectionSettings
+  costStructure: CanvasSectionSettings
+  revenueStreams: CanvasSectionSettings
+  createdAt: DateTime!
+  createdBy: User!
+  updatedAt: DateTime!
+  updatedBy: User!
+  # default list of users to notify about canvas item changes
+  notify: [User]!
+}

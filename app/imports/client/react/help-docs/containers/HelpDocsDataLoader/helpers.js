@@ -1,10 +1,10 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 
-import { propEqId } from '/imports/api/helpers';
-import { addCollapsed } from '/imports/client/store/actions/globalActions';
+import { propEqId } from '../../../../../api/helpers';
+import { addCollapsed } from '../../../../../client/store/actions/globalActions';
 import { createHelpSectionsData, createHelpSectionItem } from '../../helpers';
-import { goTo } from '/imports/ui/utils/router/actions';
+import { goTo } from '../../../../../ui/utils/router/actions';
 
 export const redirectToHelpDoc = ({
   urlItemId,
@@ -19,17 +19,20 @@ export const redirectToHelpDoc = ({
     || !helpDoc
     || (searchText && helpDocsFiltered.length);
 
-  helpDocs = (searchText && helpDocsFiltered.length)
+  const helpDocsFilteredByHelpId = (searchText && helpDocsFiltered.length)
     ? helpDocs.filter(help => helpDocsFiltered.includes(help._id))
     : helpDocs;
 
-  const helpSectionsData = createHelpSectionsData(helpSections, helpDocs);
+  const helpSectionsData = createHelpSectionsData(helpSections, helpDocsFilteredByHelpId);
 
   if (shouldRedirect && helpSectionsData.length) {
     const params = {
       helpId: helpSectionsData[0].helpDocs[0]._id,
     };
-    Meteor.defer(() => goTo('helpDoc')(params));
+    const queryParams = {
+      backRoute: FlowRouter.getQueryParam('backRoute'),
+    };
+    Meteor.defer(() => goTo('helpDoc')(params, queryParams));
   }
 };
 

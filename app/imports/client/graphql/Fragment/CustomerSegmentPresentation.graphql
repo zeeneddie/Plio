@@ -1,0 +1,9 @@
+#import "../Fragment/CanvasEntityPresentation.graphql"
+
+fragment CustomerSegmentPresentation on CustomerSegment {
+  ...CanvasEntityPresentation
+  matchedTo {
+    _id
+    title
+  }
+}

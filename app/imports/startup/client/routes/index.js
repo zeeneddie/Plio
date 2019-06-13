@@ -1,15 +1,17 @@
+/* global toastr */
+
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { Meteor } from 'meteor/meteor';
 import { AccountsTemplates } from 'meteor/useraccounts:core';
-import { toastr } from 'meteor/chrismbeckett:toastr';
-import ReactDOM from 'react-dom';
 import React from 'react';
-import { $ } from 'meteor/jquery';
-import '/imports/ui/components';
-import '/imports/ui/layouts';
-import '/imports/ui/pages';
 
+import '../../../ui/components/notifications';
+import '../../../ui/components/includes/preloader';
+import '../../../ui/components/login-header.html';
+import '../../../ui/components/useraccounts';
+import '../../../ui/layouts';
+import '../../../ui/pages';
 import './triggers';
 
 import {
@@ -19,12 +21,12 @@ import {
   renderHelpDocs,
   renderTransitionalLayout,
   renderCanvasLayout,
+  renderCanvasReportLayout,
   renderNcs,
   renderWorkInbox,
   renderUserDirectory,
   renderDashboard,
 } from './actions';
-import { DOCUMENT_TYPE_BY_ROUTE_MAP } from './constants';
 
 BlazeLayout.setRoot('#app');
 
@@ -65,6 +67,17 @@ function checkEmailVerified(context, redirect) {
     }
   }
 }
+
+const addBackRouteQueryParam = ({ queryParams = {}, oldRoute = {}, route }) => {
+  const oldRouteName = oldRoute.name;
+  const duplicateRouteRegex = /users|help-center/;
+
+  if (duplicateRouteRegex.test(oldRoute.path) && duplicateRouteRegex.test(route.path)) return;
+
+  if (oldRouteName && !queryParams.backRoute) {
+    FlowRouter.setQueryParams({ backRoute: oldRouteName });
+  }
+};
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
@@ -205,13 +218,13 @@ FlowRouter.route('/customers/:urlItemId', {
 
 FlowRouter.route('/help-center', {
   name: 'helpDocs',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, addBackRouteQueryParam],
   action: renderHelpDocs(),
 });
 
 FlowRouter.route('/help-center/:helpId', {
   name: 'helpDoc',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, addBackRouteQueryParam],
   action: renderHelpDocs(),
 });
 
@@ -254,24 +267,18 @@ FlowRouter.route('/:orgSerialNumber/risks/:urlItemId/discussion', {
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    BlazeLayout.reset();
-
-    $(() => ReactDOM.unmountComponentAtNode(document.getElementById('app')));
-
-    renderDashboard();
-  },
+  action: renderDashboard(),
 });
 
 FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, addBackRouteQueryParam],
   action: renderUserDirectory,
 });
 
 FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, addBackRouteQueryParam],
   action: renderUserDirectory,
 });
 
@@ -305,11 +312,10 @@ FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   action: renderWorkInbox,
 });
 
-FlowRouter.route('/:orgSerialNumber/:route/:documentId/unsubscribe', {
+FlowRouter.route('/:orgSerialNumber/:documentType/:documentId/unsubscribe', {
   name: 'unsubscribeFromNotifications',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action: renderTransitionalLayout(async ({ documentId, route, orgSerialNumber }) => {
-    const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
+  action: renderTransitionalLayout(async ({ documentId, documentType, orgSerialNumber }) => {
     const { default: UnsubscribeFromNotifications } =
       await import('../../../client/react/pages/components/Unsubscribe/Notifications');
 
@@ -336,11 +342,10 @@ FlowRouter.route('/:orgSerialNumber/unsubscribe', {
   }),
 });
 
-FlowRouter.route('/:orgSerialNumber/:route/:documentId/discussion/unsubscribe', {
+FlowRouter.route('/:orgSerialNumber/:documentType/:documentId/discussion/unsubscribe', {
   name: 'unsubscribeFromDiscussionNotifications',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action: renderTransitionalLayout(async ({ documentId, route, orgSerialNumber }) => {
-    const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
+  action: renderTransitionalLayout(async ({ documentId, documentType, orgSerialNumber }) => {
     const { default: UnsubscribeFromDiscussion } =
       await import('../../../client/react/pages/components/Unsubscribe/Discussion');
 
@@ -358,4 +363,10 @@ FlowRouter.route('/:orgSerialNumber/canvas', {
   name: 'canvas',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action: renderCanvasLayout(),
+});
+
+FlowRouter.route('/:orgSerialNumber/canvas/report', {
+  name: 'canvasReport',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action: renderCanvasReportLayout(),
 });

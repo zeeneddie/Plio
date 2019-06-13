@@ -1,5 +1,8 @@
 import moment from 'moment-timezone';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { AccountsTemplates } from 'meteor/useraccounts:core';
 
+import { Organizations } from '../../share/collections';
 
 AccountsTemplates.configure({
   texts: {
@@ -21,13 +24,15 @@ AccountsTemplates.configure({
       pwdChanged: 'info.passwordChanged',
       pwdReset: 'info.passwordReset',
       pwdSet: 'info.passwordReset',
-      signUpVerifyEmail: 'Successful Registration! Please check your email and follow the instructions.',
-      verificationEmailSent: "A new email has been sent to you. If the email doesn't show up in your inbox, be sure to check your spam folder.",
+      signUpVerifyEmail:
+        'Successful Registration! Please check your email and follow the instructions.',
+      verificationEmailSent: 'A new email has been sent to you. If the email doesn\'t ' +
+        'show up in your inbox, be sure to check your spam folder.',
     },
   },
 });
 
-const email = AccountsTemplates.removeField('email');
+AccountsTemplates.removeField('email');
 const password = AccountsTemplates.removeField('password');
 
 AccountsTemplates.addField({
@@ -78,7 +83,14 @@ AccountsTemplates.addField({
 });
 
 AccountsTemplates.configure({
-  preSignUpHook(password, info) {
-    info.profile.organizationTimezone = moment.tz.guess();
+  preSignUpHook(userPassword, info) {
+    const template = FlowRouter.getQueryParam('template');
+    const templateOrg = Organizations.findOne({ signupPath: template });
+
+    Object.assign(info.profile, {
+      organizationHomeScreen: FlowRouter.getQueryParam('type'),
+      organizationTimezone: moment.tz.guess(),
+      organizationTemplate: templateOrg ? templateOrg._id : undefined,
+    });
   },
 });

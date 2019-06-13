@@ -25,7 +25,7 @@ const SelectRadio = ({
         className={cx({ active: value === inputValue })}
         onClick={() => onChange({ label, value })}
       >
-        <Input type="radio" {...{ value, ...props }} />
+        <Input {...{ value, ...props }} type="radio" />
         {label}
       </Button>
     ))}

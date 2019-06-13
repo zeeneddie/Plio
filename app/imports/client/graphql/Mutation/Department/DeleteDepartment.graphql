@@ -1,0 +1,5 @@
+mutation deleteDepartment($input: DeleteDepartmentInput!) {
+  deleteDepartment(input: $input) {
+    _id
+  }
+}

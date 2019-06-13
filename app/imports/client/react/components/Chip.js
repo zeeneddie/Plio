@@ -17,7 +17,7 @@ const Chip = ({ label, onRemove }) => (
 
 Chip.propTypes = {
   onRemove: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
 };
 
 export default Chip;

@@ -28,6 +28,7 @@
               afterInsert=afterInsertFn
               afterUpload=afterUploadCb
               fileData=fileData
+              organizationId=organizationId
               slingshotDirective=slingshotDirective
               metaContext=metaContext
               buttonText=uploaderButtonText
@@ -35,12 +36,12 @@
         </div>
       {{/if}}
     </div>
-    {{#ClearableField field="sourceUrl"}}
+    {{#ClearableField clearFn="clear" field="sourceUrl"}}
       <input type="text" class="form-control" placeholder="URL link"
           {{b "if: sourceType === 'url', value: sourceUrl, focusout: update"}} />
     {{/ClearableField}}
-    {{#ClearableField field="sourceUrl"}}
-      <input type="text" class="form-control" placeholder="Video"
+    {{#ClearableField clearFn="clear" field="sourceUrl"}}
+      <input type="text" class="form-control" placeholder="YouTube or Vimeo URL"
           {{b "if: sourceType === 'video', value: sourceUrl, focusout: update"}} />
     {{/ClearableField}}
   {{/FormField}}

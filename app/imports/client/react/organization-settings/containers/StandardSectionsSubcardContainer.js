@@ -5,11 +5,12 @@ import { insert, update, remove } from '../../../../api/standards-book-sections/
 import { swal } from '../../../util';
 import { namedCompose } from '../../helpers';
 import StandardSectionsSubcard from '../components/StandardSectionsSubcard';
+import sortByTitlePrefix from '../../../../api/helpers/sortByTitlePrefix';
 
 export default namedCompose('StandardSectionsSubcardContainer')(
   withProps(({ standardSections = [] }) => ({
     initialValues: {
-      standardSections: mapEntitiesToOptions(standardSections),
+      standardSections: mapEntitiesToOptions(sortByTitlePrefix(standardSections)),
     },
   })),
   withHandlers({

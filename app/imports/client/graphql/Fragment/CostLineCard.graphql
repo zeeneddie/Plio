@@ -1,0 +1,8 @@
+#import "./CanvasCard.graphql"
+
+fragment CostLineCard on CostLine {
+  percentOfTotalCost
+  ... on CanvasEntity {
+    ...CanvasCard
+  }
+}

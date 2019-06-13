@@ -1,0 +1,23 @@
+type RelationType {
+  documentType: String!
+}
+
+type RelationPayload {
+  rel1: RelationType!
+  rel2: RelationType!
+}
+
+input RelInput {
+  documentId: ID
+  documentType: String!
+}
+
+input RelationInput {
+  rel1: RelInput!
+  rel2: RelInput!
+}
+
+type Mutation {
+  createRelation(input: RelationInput!): RelationPayload
+  deleteRelation(input: RelationInput!): RelationPayload
+}

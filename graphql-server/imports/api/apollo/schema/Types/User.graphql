@@ -15,6 +15,8 @@ type User {
   # User status (online/offline/away)
   status: String
   statusConnection: String
+  isPlioUser: Boolean
+  isPlioAdmin: Boolean
 }
 
 type UserEmail {
@@ -44,4 +46,5 @@ type UserPreferences {
   areNotificationsEnabled: Boolean
   notificationSound: String
   areEmailNotificationsEnabled: Boolean
+  defaultCanvasColor: String
 }

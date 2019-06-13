@@ -4,9 +4,14 @@ query CanvasLayout($orgSerialNumber: Int!) {
     profile {
       fullName
     }
+    preferences {
+      defaultCanvasColor
+    }
   }
 
   organization(serialNumber: $orgSerialNumber) {
     _id
+    name
+    lastAccessedDate
   }
 }

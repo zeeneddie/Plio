@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { pure } from 'recompose';
 
 import { StringLimits } from '../../../../share/constants';
 import {
@@ -11,7 +12,7 @@ import {
   TextareaField,
 } from '../../components';
 
-const CanvasForm = ({ organizationId, children }) => (
+const CanvasForm = ({ organizationId, children, save }) => (
   <CardBlock>
     <FormField>
       Title
@@ -19,6 +20,8 @@ const CanvasForm = ({ organizationId, children }) => (
         name="title"
         placeholder="Title"
         maxLength={StringLimits.title.max}
+        onBlur={save}
+        autoFocus
       />
     </FormField>
     <FormField>
@@ -27,16 +30,27 @@ const CanvasForm = ({ organizationId, children }) => (
         {...{ organizationId }}
         name="originator"
         placeholder="Originator"
+        onChange={save}
+        maxLength={StringLimits.description.max}
       />
     </FormField>
     <FormField>
       Color
-      <ColorPickerField name="color" />
+      <ColorPickerField
+        name="color"
+        id="canvas"
+        onChange={save}
+      />
     </FormField>
     {children}
     <FormField>
       Notes
-      <TextareaField name="notes" placeholder="Notes" />
+      <TextareaField
+        name="notes"
+        placeholder="Notes"
+        onBlur={save}
+        maxLength={StringLimits.description.max}
+      />
     </FormField>
   </CardBlock>
 );
@@ -44,6 +58,7 @@ const CanvasForm = ({ organizationId, children }) => (
 CanvasForm.propTypes = {
   organizationId: PropTypes.string.isRequired,
   children: PropTypes.node,
+  save: PropTypes.func,
 };
 
-export default CanvasForm;
+export default pure(CanvasForm);

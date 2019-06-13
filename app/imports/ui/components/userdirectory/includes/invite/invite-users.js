@@ -12,6 +12,7 @@ const getEmails = compose(uniq, reject(isNil), pluck('value'));
 
 Template.UserDirectory_InviteUsers.viewmodel({
   mixin: ['modal', 'organization'],
+  initialValues: undefined,
   UsersInviteForm: () => UsersInviteForm,
   save() {
     const event = new Event('submit', { cancelable: true });
@@ -31,7 +32,7 @@ Template.UserDirectory_InviteUsers.viewmodel({
 
     return this.modal().callMethod(inviteMultipleUsersByEmail, args, (err, res) => {
       if (!err) {
-        const { name: organizationName = 'organization' } = this.organization();
+        const { organizationName = 'organization' } = this.data();
         const { invitedEmails = [], addedEmails = [] } = res;
         const invitedEmailsText = invitedEmails.length
           // eslint-disable-next-line max-len

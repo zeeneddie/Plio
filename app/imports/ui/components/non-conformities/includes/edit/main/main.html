@@ -22,9 +22,10 @@
     </div>
 
     <div class="card-block">
-        {{> Departments_Edit
+        {{> Categorize
           _id=this._id
-          departmentsIds=this.departmentsIds}}
+          departmentsIds=this.departmentsIds
+          projectIds=this.projectIds}}
 
       {{> NC_Originator_Edit
           _id=this._id
@@ -42,7 +43,8 @@
 
       {{> NC_Cost_Edit
           _id=this._id
-          cost=this.cost}}
+          cost=this.cost
+          type=this.type}}
 
       {{#unless (isPG this)}}
         {{> NC_Ref_Edit

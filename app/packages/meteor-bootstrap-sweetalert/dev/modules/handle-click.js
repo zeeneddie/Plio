@@ -10,6 +10,7 @@ var handleButton = function(event, params, modal) {
   var target = e.target || e.srcElement;
 
   var targetedConfirm = target.className.indexOf('confirm') !== -1;
+  var targetedExtraBtn = target.className.indexOf('extra-button') !== -1;
   var targetedOverlay = target.className.indexOf('sweet-overlay') !== -1;
   var modalIsVisible  = hasClass(modal, 'visible');
   var doneFunctionExists = (params.doneFunction && modal.getAttribute('data-has-done-function') === 'true');
@@ -41,12 +42,24 @@ var handleButton = function(event, params, modal) {
 
       if (targetedConfirm && doneFunctionExists && modalIsVisible) {
         handleConfirm(modal, params);
+      } else if (targetedExtraBtn && doneFunctionExists && modalIsVisible) {
+        handleExtraBtn(modal, params);
       } else if (doneFunctionExists && modalIsVisible || targetedOverlay) {
         handleCancel(modal, params);
       } else if (isDescendant(modal, target) && target.tagName === 'BUTTON') {
         sweetAlert.close();
       }
       break;
+  }
+};
+
+var closeModal = function(params) {
+  if (params.closeOnConfirm) {
+    sweetAlert.close();
+  }
+  // Disable cancel and confirm button if the parameter is true
+  if (params.showLoaderOnConfirm) {
+    sweetAlert.disableButtons();
   }
 };
 
@@ -65,14 +78,12 @@ var handleConfirm = function(modal, params) {
   }
 
   params.doneFunction(callbackValue);
+  closeModal(params);
+};
 
-  if (params.closeOnConfirm) {
-    sweetAlert.close();
-  }
-  // Disable cancel and confirm button if the parameter is true
-  if (params.showLoaderOnConfirm) {
-    sweetAlert.disableButtons();
-  }
+var handleExtraBtn = function(modal, params) {
+  params.doneFunction('extraButton');
+  closeModal(params);
 };
 
 /*
@@ -95,5 +106,6 @@ var handleCancel = function(modal, params) {
 export {
   handleButton,
   handleConfirm,
+  handleExtraBtn,
   handleCancel
 };

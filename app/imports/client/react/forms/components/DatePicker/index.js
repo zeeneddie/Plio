@@ -46,11 +46,11 @@ export default class DatePicker extends React.Component {
       <input
         type="text"
         className={cx('form-control', 'datepicker', this.props.className)}
-        readOnly="true"
+        readOnly
         placeholder={this.props.placeholder}
         disabled={this.props.disabled}
         value={this._dateString()}
-        ref={node => (this.datepicker = node)}
+        ref={(node) => { this.datepicker = node; }}
       />
     );
   }

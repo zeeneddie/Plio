@@ -1,11 +1,15 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import Blaze from 'meteor/gadicc:blaze-react-component';
-import { CardTitle, Col } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { CardTitle, FormGroup } from 'reactstrap';
+import { CardBlock, Pull, Subcard, SubcardBody, SubcardHeader } from '../';
 
-import { Subcard, SubcardHeader, SubcardBody, Pull, CardBlock } from '../../components';
-
-const FilesSubcard = ({ fileIds, ...props }) => (
+const FilesSubcard = ({
+  input,
+  onLink,
+  onUnlink,
+  ...props
+}) => (
   <Subcard>
     <SubcardHeader>
       <Pull left>
@@ -15,27 +19,30 @@ const FilesSubcard = ({ fileIds, ...props }) => (
       </Pull>
       <Pull right>
         <CardTitle>
-          {fileIds.length || ''}
+          {input.value.length || ''}
         </CardTitle>
       </Pull>
     </SubcardHeader>
     <SubcardBody>
       <CardBlock>
-        <Col xs={12} sm={12}>
+        <FormGroup>
           <Blaze
             template="FileUploader_Wrapper"
-            {...{ fileIds, ...props }}
+            {...props}
+            fileIds={input.value}
+            onAfterInsert={onLink}
+            onAfterRemove={file => onUnlink(file._id)}
           />
-        </Col>
+        </FormGroup>
       </CardBlock>
     </SubcardBody>
   </Subcard>
 );
 
 FilesSubcard.propTypes = {
-  fileIds: PropTypes.arrayOf(PropTypes.string),
-  slingshotDirective: PropTypes.string,
-  uploaderMetaContext: PropTypes.object,
+  onLink: PropTypes.func.isRequired,
+  onUnlink: PropTypes.func.isRequired,
+  input: PropTypes.object.isRequired,
 };
 
 export default FilesSubcard;

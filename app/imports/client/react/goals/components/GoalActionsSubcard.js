@@ -3,11 +3,10 @@ import React from 'react';
 import { Form } from 'react-final-form';
 
 import { getGeneralActionValuesByAction } from '../../actions/helpers';
-import {
-  ActionsSubcard,
-  ActionSubcardContainer,
-  GeneralActionEditFormContainer,
-} from '../../actions';
+import ActionsSubcard from '../../actions/components/ActionsSubcard';
+import ActionSubcardContainer from '../../actions/containers/ActionSubcardContainer';
+import GeneralActionEditFormContainer from
+  '../../actions/containers/GeneralActionEditFormContainer';
 
 const GoalActionsSubcard = ({
   onDelete,

@@ -5,6 +5,7 @@ import RiskType from './RiskType.graphql';
 import Risk from './Risk.graphql';
 import Standard from './Standard.graphql';
 import Department from './Department.graphql';
+import Project from './Project.graphql';
 import Action from './Action.graphql';
 import Milestone from './Milestone.graphql';
 import ValueProposition from './ValueProposition.graphql';
@@ -16,6 +17,15 @@ import CustomerRelationship from './CustomerRelationship.graphql';
 import CostLine from './CostLine.graphql';
 import RevenueStream from './RevenueStream.graphql';
 import Channel from './Channel.graphql';
+import CanvasSettings from './CanvasSettings.graphql';
+import Benefit from './Benefit.graphql';
+import Feature from './Feature.graphql';
+import Need from './Need.graphql';
+import Want from './Want.graphql';
+import Guidance from './Guidance.graphql';
+import StandardType from './StandardType.graphql';
+import StandardSection from './StandardSection.graphql';
+import Nonconformity from './Nonconformity.graphql';
 
 export default [
   User,
@@ -25,6 +35,7 @@ export default [
   Risk,
   Standard,
   Department,
+  Project,
   Action,
   Milestone,
   ValueProposition,
@@ -36,4 +47,13 @@ export default [
   CostLine,
   RevenueStream,
   Channel,
+  CanvasSettings,
+  Benefit,
+  Feature,
+  Need,
+  Want,
+  Guidance,
+  StandardType,
+  StandardSection,
+  Nonconformity,
 ];

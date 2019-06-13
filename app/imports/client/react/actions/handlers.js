@@ -1,9 +1,8 @@
-import { Cache, toDate, mapRejectedEntitiesToOptions } from 'plio-util';
+import { mapRejectedEntitiesToOptions } from 'plio-util';
 import { identity } from 'ramda';
 
 import { swal } from '../../util';
-import { Mutation, Fragment, Query } from '../../graphql';
-import { updateGoalFragment } from '../../apollo/utils';
+import { Mutation, Query } from '../../graphql';
 import { client } from '../../apollo';
 import { DocumentTypes, ActionTypes } from '../../../share/constants';
 
@@ -24,7 +23,7 @@ export const createGeneralAction = ({
   completionTargetDate,
   owner: { value: ownerId },
   toBeCompletedBy: { value: toBeCompletedBy },
-}) => {
+}, form) => {
   if (!title) throw new Error('Title is required');
 
   return mutateWithState(mutate({
@@ -35,7 +34,7 @@ export const createGeneralAction = ({
         ownerId,
         organizationId,
         toBeCompletedBy,
-        completionTargetDate: toDate(completionTargetDate),
+        completionTargetDate,
         type: ActionTypes.GENERAL_ACTION,
         linkedTo: [{
           documentId: goalId,
@@ -43,15 +42,16 @@ export const createGeneralAction = ({
         }],
       },
     },
-    update: (proxy, { data: { [CREATE_ACTION.name]: { action } } }) => updateGoalFragment(
-      Cache.addAction(action),
-      {
-        id: goalId,
-        fragment: Fragment.GOAL_CARD,
-      },
-      proxy,
-    ),
-  }));
+    refetchQueries: [{
+      query: Query.DASHBOARD_GOAL,
+      variables: { _id: goalId },
+    }],
+  })).finally(() => {
+    form.setConfig('keepDirtyOnReinitialize', false);
+    setTimeout(() => {
+      form.setConfig('keepDirtyOnReinitialize', true);
+    }, 0);
+  });
 };
 
 export const onDelete = ({ [DELETE_ACTION.name]: mutate, goalId }) =>
@@ -65,10 +65,10 @@ export const onDelete = ({ [DELETE_ACTION.name]: mutate, goalId }) =>
       variables: {
         input: { _id },
       },
-      update: updateGoalFragment(Cache.deleteActionById(_id), {
-        id: goalId,
-        fragment: Fragment.GOAL_CARD,
-      }),
+      refetchQueries: [{
+        query: Query.DASHBOARD_GOAL,
+        variables: { _id: goalId },
+      }],
     }))
   );
 
@@ -87,15 +87,10 @@ export const linkGoalToAction = ({
         documentType: DocumentTypes.GOAL,
       },
     },
-    update: (proxy, { data: { [LINK_DOC_TO_ACTION.name]: { action } } }) =>
-      updateGoalFragment(
-        Cache.addAction(action),
-        {
-          id: goalId,
-          fragment: Fragment.GOAL_CARD,
-        },
-        proxy,
-      ),
+    refetchQueries: [{
+      query: Query.DASHBOARD_GOAL,
+      variables: { _id: goalId },
+    }],
   }));
 };
 

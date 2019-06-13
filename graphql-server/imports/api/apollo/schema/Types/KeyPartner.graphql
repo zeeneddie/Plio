@@ -11,4 +11,12 @@ type KeyPartner implements BaseEntity, CanvasEntity {
   criticality: Int!
   levelOfSpend: Int!
   notes: String
+  files: [File]
+  notify: [User]
+  goals: [Goal]
+  standards: [Standard]
+  risks: [Risk]
+  lessons: [Lesson]
+  nonconformities: [Nonconformity]
+  potentialGains: [Nonconformity]
 }

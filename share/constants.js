@@ -88,6 +88,7 @@ export const CollectionNames = {
   AUDIT_LOGS: 'AuditLogs',
   CHANGELOG: 'Changelog',
   DEPARTMENTS: 'Departments',
+  PROJECTS: 'Projects',
   DISCUSSIONS: 'Discussions',
   FILES: 'Files',
   HELP_DOCS: 'HelpDocs',
@@ -117,6 +118,13 @@ export const CollectionNames = {
   VALUE_PROPOSITIONS: 'ValuePropositions',
   CUSTOMER_SEGMENTS: 'CustomerSegments',
   REVENUE_STREAMS: 'RevenueStreams',
+  CANVAS_SETTINGS: 'CanvasSettings',
+  BENEFITS: 'Benefits',
+  FEATURES: 'Features',
+  NEEDS: 'Needs',
+  WANTS: 'Wants',
+  RELATIONS: 'Relations',
+  GUIDANCES: 'Guidances',
 };
 
 export const DefaultRiskTypes = [
@@ -218,22 +226,38 @@ export const DefaultHelpSections = [
   },
   {
     index: 4,
-    title: 'Managing risks',
+    title: 'Creating your business model canvas',
   },
   {
     index: 5,
-    title: 'Managing nonconformities',
+    title: 'Managing nonconformities & gains',
   },
   {
     index: 6,
-    title: 'Managing workflows',
+    title: 'Managing risks',
   },
   {
     index: 7,
-    title: 'User management',
+    title: 'Managing training',
   },
   {
     index: 8,
+    title: 'Managing key goals',
+  },
+  {
+    index: 9,
+    title: 'Managing workflows',
+  },
+  {
+    index: 10,
+    title: 'User management',
+  },
+  {
+    index: 11,
+    title: 'Customizing Plio',
+  },
+  {
+    index: 12,
     title: 'FAQs',
   },
 ];
@@ -300,8 +324,20 @@ export const ProblemsStatuses = {
   [ProblemIndexes.ACTIONS_UPDATE_PAST_DUE]: 'Open - action(s) verified as effective, approval past due',
   [ProblemIndexes.ACTIONS_FAILED_VERIFICATION]: 'Open - action(s) failed verification',
   [ProblemIndexes.CLOSED_ACTIONS_COMPLETED]: 'Closed - action(s) completed',
-  [ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED]: 'Closed - action(s) verified, approval given, and notification(s) sent to Owner(s) of standard(s) to remind them to update standards',
+  [ProblemIndexes.ACTIONS_VERIFIED_STANDARDS_REVIEWED]: 'Closed - action(s) verified',
   [ProblemIndexes.DELETED]: 'Deleted',
+};
+
+export const Abbreviations = {
+  GOAL: 'KG',
+  LESSON: 'LL',
+  NONCONFORMITY: 'NC',
+  POTENTIAL_GAIN: 'PG',
+  BENEFIT: 'BE',
+  FEATURE: 'FE',
+  NEED: 'NE',
+  WANT: 'WA',
+  RISK: 'RK',
 };
 
 export const ProblemTypes = {
@@ -322,12 +358,33 @@ export const CanvasTypes = {
   REVENUE_STREAM: 'revenue-stream',
 };
 
+export const CanvasSections = {
+  [CanvasTypes.KEY_PARTNER]: 'keyPartners',
+  [CanvasTypes.KEY_ACTIVITY]: 'keyActivities',
+  [CanvasTypes.KEY_RESOURCE]: 'keyResources',
+  [CanvasTypes.VALUE_PROPOSITION]: 'valuePropositions',
+  [CanvasTypes.CUSTOMER_RELATIONSHIP]: 'customerRelationships',
+  [CanvasTypes.CHANNEL]: 'channels',
+  [CanvasTypes.CUSTOMER_SEGMENT]: 'customerSegments',
+  [CanvasTypes.COST_LINE]: 'costStructure',
+  [CanvasTypes.REVENUE_STREAM]: 'revenueStreams',
+};
+
+export const CustomerElementTypes = {
+  BENEFIT: Abbreviations.BENEFIT,
+  FEATURE: Abbreviations.FEATURE,
+  NEED: Abbreviations.NEED,
+  WANT: Abbreviations.WANT,
+};
+
 export const DocumentTypes = {
   STANDARD: 'standard',
   GOAL: 'goal',
   MILESTONE: 'milestone',
   ...ProblemTypes,
   ...ActionTypes,
+  ...CanvasTypes,
+  ...CustomerElementTypes,
 };
 
 export const DocumentTypesPlural = {
@@ -340,6 +397,19 @@ export const DocumentTypesPlural = {
 export const AllDocumentTypes = {
   ...DocumentTypes,
   DISCUSSION: 'discussion',
+};
+
+export const UploaderMetaIdNames = {
+  [CanvasTypes.KEY_PARTNER]: 'keyPartnerId',
+  [CanvasTypes.KEY_ACTIVITY]: 'keyActivityId',
+  [CanvasTypes.KEY_RESOURCE]: 'keyResourceId',
+  [CanvasTypes.VALUE_PROPOSITION]: 'valuePropositionId',
+  [CanvasTypes.CUSTOMER_RELATIONSHIP]: 'customerRelationshipId',
+  [CanvasTypes.CHANNEL]: 'channelId',
+  [CanvasTypes.CUSTOMER_SEGMENT]: 'customerSegmentId',
+  [CanvasTypes.COST_LINE]: 'costLineId',
+  [CanvasTypes.REVENUE_STREAM]: 'revenueStreamId',
+  [DocumentTypes.GOAL]: 'goalId',
 };
 
 export const ReviewStatuses = {
@@ -382,9 +452,14 @@ export const SourceTypes = {
   VIDEO: 'video',
 };
 
+export const StandardStatusTypes = {
+  ISSUED: 'issued',
+  DRAFT: 'draft',
+};
+
 export const StandardStatuses = {
-  issued: 'Issued',
-  draft: 'Draft',
+  [StandardStatusTypes.ISSUED]: 'Issued',
+  [StandardStatusTypes.DRAFT]: 'Draft',
 };
 
 export const StringLimits = {
@@ -401,7 +476,7 @@ export const StringLimits = {
     max: 120,
   },
   description: {
-    max: 240,
+    max: 500,
   },
   url: {
     min: 1,
@@ -409,10 +484,13 @@ export const StringLimits = {
   },
   comments: {
     min: 1,
-    max: 140,
+    max: 512,
   },
   sequentialId: {
     min: 3,
+  },
+  markdown: {
+    max: 4096,
   },
 };
 
@@ -692,6 +770,15 @@ export const HomeScreenTitlesTypes = {
   WORK_INBOX: 'workInbox',
 };
 
+export const HomeScreenTitlesTypesLabels = {
+  [HomeScreenTitlesTypes.STANDARDS]: 'Standards',
+  [HomeScreenTitlesTypes.RISKS]: 'Risk register',
+  [HomeScreenTitlesTypes.NON_CONFORMITIES]: 'Nonconformities',
+  [HomeScreenTitlesTypes.WORK_INBOX]: 'Work inbox',
+};
+
+export const HOME_SCREEN_TITLES = 'homeScreenTitles';
+
 export const EmailsForPlioReporting = [
   'steve.ives@pliohub.com',
   'mike@jssolutionsdev.com',
@@ -711,6 +798,7 @@ export const CustomerTypes = {
   FREE_TRIAL: 2,
   TEST_ACCOUNT: 3,
   PAST_CUSTOMER: 4,
+  TEMPLATE: 5,
 };
 
 export const CustomerTypesNames = {
@@ -718,6 +806,7 @@ export const CustomerTypesNames = {
   [CustomerTypes.FREE_TRIAL]: 'Free trial',
   [CustomerTypes.TEST_ACCOUNT]: 'Test account',
   [CustomerTypes.PAST_CUSTOMER]: 'Past customer',
+  [CustomerTypes.TEMPLATE]: 'Template',
 };
 
 export const PossibleReviewFrequencies = [
@@ -771,7 +860,7 @@ export const WorkspaceDefaults = {
 export const WorkspaceDefaultsLabels = {
   [WorkspaceDefaultsTypes.DISPLAY_USERS]: 'Users online',
   [WorkspaceDefaultsTypes.DISPLAY_MESSAGES]: 'Unread messages',
-  [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 'Overdue actions',
+  [WorkspaceDefaultsTypes.DISPLAY_ACTIONS]: 'Overdue items',
   [WorkspaceDefaultsTypes.DISPLAY_GOALS]: 'Key goals displayed by default',
   [WorkspaceDefaultsTypes.DISPLAY_COMPLETED_DELETED_GOALS]: 'Completed/deleted goals displayed by default',
   [WorkspaceDefaultsTypes.TIME_SCALE]: 'Horizontal scale',
@@ -811,24 +900,44 @@ export const GoalStatuses = {
   3: 'Closed - marked as complete',
 };
 
-export const GoalColors = {
-  PINK: '#F06292',
+export const Colors = {
+  YELLOW: '#FCCF31',
+  GREY: '#757575',
+  BLUE_GREY: '#607D8B',
   PLUM: '#9C27B0',
   PURPLE: '#673AB7',
   INDIGO: '#3F51B5',
   BLUE: '#2196F3',
-  LIGHT_BLUE: '#4FC3F7',
   CYAN: '#00BCD4',
-  TEAL: '#009688',
-  MUTED_PINK: '#F8BBD0',
+  MUTED_YELLOW: '#FFEF81',
+  LIGHT_GREY: '#BDBDBD',
+  LIGHT_BLUE_GREY: '#B0BEC5',
   MUTED_PLUM: '#CE93D8',
   MUTED_PURPLE: '#B39DDB',
   MUTED_INDIGO: '#9FA8DA',
   MUTED_BLUE: '#90CAF9',
-  MUTED_LIGHT_BLUE: '#B3E5FC',
   MUTED_CYAN: '#80DEEA',
-  MUTED_TEAL: '#80CBC4',
 };
+
+export const ChartColors = {
+  TEAL: '#009688',
+  CYAN: '#00BCD4',
+  PURPLE: '#673AB7',
+  PLUM: '#9C27B0',
+  INDIGO: '#3F51B5',
+  PINK: '#F06292',
+  BLUE_GREY: '#607D8B',
+  GREY: '#757575',
+  MUTED_CYAN: '#80DEEA',
+  MUTED_BLUE: '#90CAF9',
+  MUTED_PURPLE: '#B39DDB',
+  MUTED_PLUM: '#CE93D8',
+  LIGHT_BLUE_GREY: '#B0BEC5',
+  LIGHT_GREY: '#BDBDBD',
+  MUTED_YELLOW: '#FFEF81',
+};
+
+export const GoalColors = { ...Colors };
 
 export const AllowedActionLinkedDocTypes = [
   ...Object.values(ProblemTypes),
@@ -847,14 +956,6 @@ export const MilestoneStatuses = {
   4: 'Completed',
 };
 
-// fill in other stuff
-export const Abbreviations = {
-  GOAL: 'KG',
-  LESSON: 'LL',
-  NONCONFORMITY: 'NC',
-  POTENTIAL_GAIN: 'PG',
-};
-
 export const AWSDirectives = {
   DISCUSSION_FILES: 'discussionFiles',
   USER_AVATARS: 'userAvatars',
@@ -867,23 +968,85 @@ export const AWSDirectives = {
   ROOT_CAUSE_ANALYSIS_FILES: 'rootCauseAnalysisFiles',
   HELP_DOC_FILES: 'helpDocFiles',
   GOAL_FILES: 'goalFiles',
+  KEY_PARTNER_FILES: 'keyPartnerFiles',
+  KEY_ACTIVITY_FILES: 'keyActivityFiles',
+  KEY_RESOURCE_FILES: 'keyResourceFiles',
+  VALUE_PROPOSITION_FILES: 'valuePropositionFiles',
+  CUSTOMER_RELATIONSHIP_FILES: 'customerRelationshipFiles',
+  CHANNEL_FILES: 'channelFiles',
+  CUSTOMER_SEGMENT_FILES: 'customerSegmentFiles',
+  COST_LINE_FILES: 'costLineFiles',
+  REVENUE_STREAM_FILES: 'revenueStreamFiles',
 };
+
+export const CRITICALITY_DEFAULT = 50;
 
 export const Criticality = {
-  LOW: 1,
-  MEDIUM: 2,
-  HIGH: 3,
-  VERY_HIGH: 4,
+  VERY_LOW: 1,
+  LOW: 2,
+  MEDIUM: 3,
+  HIGH: 4,
+  VERY_HIGH: 5,
 };
 
-export const LevelOfSpend = { ...Criticality };
+export const CriticalityLevels = {
+  [Criticality.VERY_LOW]: {
+    label: 'Very low',
+    max: 20,
+  },
+  [Criticality.LOW]: {
+    label: 'Low',
+    max: 40,
+  },
+  [Criticality.MEDIUM]: {
+    label: 'Medium',
+    max: 60,
+  },
+  [Criticality.HIGH]: {
+    label: 'High',
+    max: 80,
+  },
+  [Criticality.VERY_HIGH]: {
+    label: 'Very high',
+    max: 100,
+  },
+};
 
-export const KeyPartnerColors = { ...GoalColors };
+export const CanvasColors = { ...Colors };
 
-export const KeyActivityColors = { ...GoalColors };
+export const DEFAULT_CANVAS_COLOR = CanvasColors.YELLOW;
 
-export const KeyResourceColors = { ...GoalColors };
+export const MAX_TOTAL_PERCENT = 100;
 
-export const CostLineColors = { ...GoalColors };
+export const CustomerElementStatuses = {
+  UNMATCHED: 1,
+  MATCHED: 2,
+  1: 'Unmatched',
+  2: 'Matched',
+};
 
-export const CanvasColors = { ...GoalColors };
+export const ImportanceValues = [1, 2, 3, 4, 5];
+
+export const HomeScreenTypes = {
+  OPERATIONS: 'operations',
+  CANVAS: 'canvas',
+};
+
+export const HomeScreenLabels = {
+  [HomeScreenTypes.OPERATIONS]: 'Operations view',
+  [HomeScreenTypes.CANVAS]: 'Canvas view',
+};
+
+export const DEFAULT_ORG_TIMEZONE = 'Europe/London';
+
+export const UniqueNumberRange = {
+  MIN: 1,
+  MAX: 10000,
+};
+
+export const IssueNumberRange = {
+  MIN: 1,
+  MAX: 1000,
+};
+
+export const DEFAULT_TEMPLATE_ORGANIZATION_ID = 'jJFkbgKjhzfbMyvRe';

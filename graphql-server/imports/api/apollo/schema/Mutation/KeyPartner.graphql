@@ -12,6 +12,29 @@ input CreateKeyPartnerInput {
   notes: String
 }
 
+input UpdateKeyPartnerInput {
+  _id: ID!
+  title: String
+  originatorId: ID
+  color: String
+  criticality: Int
+  levelOfSpend: Int
+  notes: String
+  notify: [ID]
+  goalIds: [ID]
+  standardsIds: [ID]
+  fileIds: [ID]
+  riskIds: [ID]
+  nonconformityIds: [ID]
+  potentialGainIds: [ID]
+}
+
+input DeleteKeyPartnerInput {
+  _id: ID!
+}
+
 type Mutation {
   createKeyPartner(input: CreateKeyPartnerInput!): KeyPartnerPayload
+  updateKeyPartner(input: UpdateKeyPartnerInput!): KeyPartner
+  deleteKeyPartner(input: DeleteKeyPartnerInput!): KeyPartner
 }

@@ -1,11 +1,16 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from 'react-apollo';
+import { pure } from 'recompose';
 
 import CostLineAddModal from './CostLineAddModal';
+import CostLineEditModal from './CostLineEditModal';
+import CostStructureChartModal from './CostStructureChartModal';
 import CanvasBlock from './CanvasBlock';
+import CostStructureHelp from './CostStructureHelp';
 import { Query as Queries } from '../../../graphql';
 import { ApolloFetchPolicies } from '../../../../api/constants';
+import { CanvasSections, CanvasTypes, DocumentTypes } from '../../../../share/constants';
 
 const CostStructure = ({ organizationId }) => (
   <Query
@@ -15,19 +20,35 @@ const CostStructure = ({ organizationId }) => (
   >
     {({ data: { costLines: { costLines = [] } } }) => (
       <CanvasBlock
+        {...{ organizationId }}
+        twoColumn
         label="Cost structure"
-        help={(
-          <Fragment>
-            <p>
-              What are the main elements of operational expense
-              {' '}
-              (including variable costs, inventory, WIP and capital assets)?
-            </p>
-          </Fragment>
-        )}
+        sectionName={CanvasSections[CanvasTypes.COST_LINE]}
+        documentType={DocumentTypes.COST_LINE}
+        help={<CostStructureHelp />}
         items={costLines}
-        renderModal={({ isOpen, toggle }) => (
-          <CostLineAddModal {...{ isOpen, toggle, organizationId }} />
+        renderModal={({ isOpen, toggle, onLink }) => (
+          <CostLineAddModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              onLink,
+            }}
+          />
+        )}
+        renderEditModal={({ isOpen, toggle, _id }) => (
+          <CostLineEditModal
+            {...{
+              isOpen,
+              toggle,
+              organizationId,
+              _id,
+            }}
+          />
+        )}
+        renderChartModal={({ isOpen, toggle }) => (
+          <CostStructureChartModal {...{ isOpen, toggle, organizationId }} />
         )}
       />
     )}
@@ -38,5 +59,5 @@ CostStructure.propTypes = {
   organizationId: PropTypes.string.isRequired,
 };
 
-export default CostStructure;
+export default pure(CostStructure);
 

@@ -18,7 +18,7 @@ const CanvasCol = styled.div`
       display: flex;
     `}
 
-    ${StyledMixins.media.desktop`
+    ${StyledMixins.media.printAndDesktop`
       display: flex;
       flex: 1;
       flex-direction: column;

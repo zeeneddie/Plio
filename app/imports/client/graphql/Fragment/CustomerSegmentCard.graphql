@@ -1,0 +1,12 @@
+#import "./CanvasCard.graphql"
+
+fragment CustomerSegmentCard on CustomerSegment {
+  percentOfMarketSize
+  matchedTo {
+    _id
+    title
+  }
+  ... on CanvasEntity {
+    ...CanvasCard
+  }
+}

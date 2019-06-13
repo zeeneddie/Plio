@@ -8,6 +8,14 @@ type CostLine implements BaseEntity, CanvasEntity {
   title: String!
   originator: User!
   color: String!
-  percentOfTotalCost: Int!
+  percentOfTotalCost: Int
   notes: String
+  files: [File]
+  notify: [User]
+  goals: [Goal]
+  standards: [Standard]
+  risks: [Risk]
+  lessons: [Lesson]
+  nonconformities: [Nonconformity]
+  potentialGains: [Nonconformity]
 }
