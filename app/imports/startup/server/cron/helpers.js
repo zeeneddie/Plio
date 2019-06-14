@@ -2,10 +2,11 @@ import { HTTP } from 'meteor/http';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { Meteor } from 'meteor/meteor';
 
 import { PlioS3Logos, EmailsForPlioReporting } from '../../../share/constants';
 import NotificationSender from '../../../share/utils/NotificationSender';
-import { isProduction } from '../../../share/helpers';
+import { capitalize } from '../../../share/helpers';
 
 const isRequired = () => {
   throw new Error('Missing parameter');
@@ -52,4 +53,4 @@ export const checkServerStatusAndReport = ({
   });
 };
 
-export const getStage = () => isProduction() ? 'Live' : 'Staging';
+export const getStage = () => capitalize(Meteor.settings.public.stage);
