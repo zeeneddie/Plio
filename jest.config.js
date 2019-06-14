@@ -17,4 +17,7 @@ module.exports = {
   ],
   setupFilesAfterEnv: ['<rootDir>/app/imports/client/util/setupTests.js'],
   testURL: 'http://localhost/',
+  globals: {
+    E2E_TIMEOUT: 180000,
+  },
 };

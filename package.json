@@ -9,7 +9,8 @@
     "lint:graphql-server": "yarn lint graphql-server",
     "jest": "./node_modules/.bin/jest",
     "test": "yarn jest test.js --testPathIgnorePatterns=.e2e.test.js",
-    "test:e2e": "yarn jest --config=jest.puppeteer.config.js .e2e.test.js"
+    "test:e2e": "yarn jest --config=jest.puppeteer.config.js .e2e.test.js",
+    "kill:meteor": "kill `ps ax | grep node | grep meteor | awk '{print $1}'`"
   },
   "lint-staged": {
     "*.js": [
