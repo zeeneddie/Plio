@@ -1,6 +1,6 @@
 import { __setupDB, __closeDB, Mongo } from 'meteor/mongo';
 
-describe('meteor/mongo', async () => {
+describe('meteor/mongo', () => {
   beforeEach(async () => __setupDB());
   afterEach(async () => __closeDB());
 

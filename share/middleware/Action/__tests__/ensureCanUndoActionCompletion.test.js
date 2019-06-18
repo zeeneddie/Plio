@@ -4,7 +4,7 @@ import { Roles } from 'meteor/alanning:roles';
 import ensureCanUndoActionCompletion from '../ensureCanUndoActionCompletion';
 import { UserRoles } from '../../../../share/constants';
 
-describe('ensureCanUndoActionCompletion', async () => {
+describe('ensureCanUndoActionCompletion', () => {
   it('throws', async () => {
     const root = {};
     const args = {};

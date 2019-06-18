@@ -50,5 +50,10 @@
   },
   "settings": {
     "import/resolver": "meteor"
+  },
+  "globals": {
+    "page": true,
+    "browser": true,
+    "jestPuppeteer": true
   }
 }

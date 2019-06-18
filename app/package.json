@@ -4,6 +4,7 @@
   "scripts": {
     "start": "meteor run --settings settings-local.json",
     "start:bundle-visualize": "yarn start --extra-packages bundle-visualizer --production",
+    "start:test": "MONGO_URL=mongodb://127.0.0.1:27017/test meteor run --settings settings-test.json --port 1337",
     "debug": "meteor debug --settings settings-local.json",
     "deploy": "yarn install && DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy app.pliohub.com --settings settings-production.json",
     "deploy:staging": "yarn install && DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy staging.pliohub.com --settings settings-staging.json"
@@ -97,8 +98,5 @@
     "victory": "^0.24.5",
     "warning": "^3.0.0"
   },
-  "devDependencies": {
-    "jest-enzyme": "^4.0.2",
-    "unfetch": "^3.0.0"
-  }
+  "devDependencies": {}
 }

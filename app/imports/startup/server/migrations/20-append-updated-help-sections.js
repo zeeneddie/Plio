@@ -24,7 +24,7 @@ export const up = async () => {
     return HelpSections.insert({
       title,
       index,
-    });
+    }, { validate: false });
   });
 
   return Promise.all(promises);
