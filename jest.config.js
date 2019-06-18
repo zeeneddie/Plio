@@ -15,9 +15,6 @@ module.exports = {
     '/^imports\\/.*\\.jsx?$/',
     '/^node_modules/',
   ],
-  setupFilesAfterEnv: ['<rootDir>/app/imports/client/util/setupTests.js'],
+  setupFilesAfterEnv: ['<rootDir>/config/tests/setupTests.js'],
   testURL: 'http://localhost/',
-  globals: {
-    E2E_TIMEOUT: 180000,
-  },
 };
