@@ -18,3 +18,4 @@ import './default-help-sections';
 // as an API to the client.
 import './register-api';
 import './browser-versions';
+import './backdoor';
