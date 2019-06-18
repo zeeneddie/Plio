@@ -9,7 +9,6 @@ module.exports = {
       command: 'yarn --cwd app start:test',
       launchTimeout: 180000,
       port: 1337,
-      debug: true,
     },
     {
       command: 'yarn --cwd background-app start:test',
@@ -23,7 +22,7 @@ module.exports = {
     },
   ],
   launch: {
-    headless: false,
+    headless: true,
     timeout: 0,
     dumpio: true,
   },
