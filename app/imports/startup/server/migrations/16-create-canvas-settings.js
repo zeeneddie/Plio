@@ -6,7 +6,8 @@ export const up = () => {
   CanvasSettings.remove();
   const organization = Organizations.find().fetch();
 
-  organization.forEach(({ _id }) => CanvasSettings.insert({ organizationId: _id }));
+  organization.forEach(({ _id }) =>
+    CanvasSettings.insert({ organizationId: _id }, { validate: false }));
 
   console.log('Created canvas settings for all organizations');
 };
