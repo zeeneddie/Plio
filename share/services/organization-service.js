@@ -1,4 +1,5 @@
 import invariant from 'invariant';
+import { Random } from 'meteor/random';
 
 import { getWorkspaceDefaultsUpdater } from '../helpers';
 import { CustomerTypes } from '../constants';
@@ -68,6 +69,7 @@ export default {
     const options = { fields: { title: 1, abbreviation: 1 } };
     const standardTypes = await StandardTypes.find(query, options).map(
       ({ title, abbreviation }) => ({
+        _id: Random.id(),
         title,
         abbreviation,
         organizationId: to,
@@ -77,12 +79,14 @@ export default {
       }),
     );
     const standardSections = await StandardsBookSections.find(query, options).map(({ title }) => ({
+      _id: Random.id(),
       title,
       organizationId: to,
       createdBy: userId,
       isDefault: true,
     }));
     const riskTypes = await RiskTypes.find(query, options).map(({ title }) => ({
+      _id: Random.id(),
       title,
       organizationId: to,
       createdBy: userId,
