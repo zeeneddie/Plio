@@ -8,10 +8,14 @@ import { MongoInternals } from 'meteor/mongo';
 // DO NOT TOUCH BY ANY MEANS
 if (process.env.NODE_ENV !== 'production') {
   Meteor.methods({
-    async clearDatabase() {
+    clearDatabase() {
       const { db } = MongoInternals.defaultRemoteCollectionDriver().mongo;
-      const collections = await db.collections();
-      return Promise.all(collections.map(collection => collection.drop()));
+      const getCollections = Meteor.wrapAsync(db.collections, db);
+      const collections = getCollections();
+      collections.forEach((collection) => {
+        const remove = Meteor.wrapAsync(collection.remove, collection);
+        remove({}, {});
+      });
     },
     async backdoor(func, ...args) {
       check(func, String);
