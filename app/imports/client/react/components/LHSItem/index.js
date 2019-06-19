@@ -1,8 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import styled from 'styled-components';
+import { ListGroupItemText } from 'reactstrap';
 
 import { propEqKey } from '/imports/api/helpers';
 import CollapseBlock from '../CollapseBlock';
+
+const StyledRightContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
 const propTypeItem = PropTypes.shape({
   key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -17,6 +25,7 @@ const propTypes = {
   rText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   hideRTextOnExpand: PropTypes.bool,
   item: propTypeItem,
+  count: PropTypes.number,
 };
 
 const LHSItem = ({
@@ -26,6 +35,7 @@ const LHSItem = ({
   lText,
   rText,
   hideRTextOnExpand,
+  count,
   children,
 }) => {
   let rContent = null;
@@ -51,7 +61,14 @@ const LHSItem = ({
     >
       <div>
         <h4 className="list-group-item-heading pull-left">{lText}</h4>
-        <span className="pull-right">{rContent}</span>
+        <div className="pull-right">
+          {count ? (
+            <StyledRightContent>
+              {rContent}
+              <ListGroupItemText className="margin-left">{count}</ListGroupItemText>
+            </StyledRightContent>
+          ) : rContent}
+        </div>
       </div>
       <div className="list-group">
         {children}

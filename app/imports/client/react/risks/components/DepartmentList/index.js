@@ -8,18 +8,18 @@ import LHSItemContainer from '../../../containers/LHSItemContainer';
 import RisksListContainer from '../../containers/RisksListContainer';
 import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
 
-const TypeList = ({ departments, onToggleCollapse }) => (
+const RiskDepartmentList = ({ departments, onToggleCollapse }) => (
   <div>
     {departments.map(department => (
       <LHSItemContainer
+        hideRTextOnCollapse
         key={department._id}
         item={createTypeItem(CollectionNames.DEPARTMENTS, department._id)}
-        // TODO: move to separated helper
         lText={cx(department.name)}
-        rText={department.unreadMessagesCount && (
+        rText={department.unreadMessagesCount ? (
           <LabelMessagesCount count={department.unreadMessagesCount} />
-        )}
-        hideRTextOnCollapse
+        ) : null}
+        count={department.risks.length}
         onToggleCollapse={onToggleCollapse}
       >
         <div className="sub">
@@ -30,9 +30,9 @@ const TypeList = ({ departments, onToggleCollapse }) => (
   </div>
 );
 
-TypeList.propTypes = {
+RiskDepartmentList.propTypes = {
   departments: PropTypes.array.isRequired,
   onToggleCollapse: PropTypes.func.isRequired,
 };
 
-export default TypeList;
+export default RiskDepartmentList;

@@ -12,6 +12,7 @@ const StatusListItem = ({ status, onToggleCollapse }) => (
     item={createTypeItem(RISK_STATUSES, status.value)}
     lText={status.text}
     rText={status.indicator}
+    count={status.risks.length}
   >
     <div className="sub">
       <RisksListContainer risks={status.risks} />

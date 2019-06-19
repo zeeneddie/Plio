@@ -4,6 +4,9 @@
     {{#if collapsed}}
       {{> MessagesCounter unreadMessagesCount=unreadMessagesCount pull="right"}}
     {{/if}}
+    {{#if count}}
+      <p class="list-group-item-text pull-right margin-left">{{count}}</p>
+    {{/if}}
     <p class="list-group-item-text text-danger pull-right" {{b "if: isRTextDisplayed, html: this.rText"}}></p>
   </a>
   <div class="list-group-collapse collapse" {{b "ref: collapse"}}>

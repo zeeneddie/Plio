@@ -10,7 +10,11 @@ import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
 const TypeListItem = ({
   onToggleCollapse,
   type: {
-    _id, abbreviation, unreadMessagesCount, title, risks,
+    _id,
+    abbreviation,
+    unreadMessagesCount,
+    title,
+    risks,
   },
 }) => (
   <LHSItemContainer
@@ -18,9 +22,10 @@ const TypeListItem = ({
     {...{ onToggleCollapse }}
     item={createRiskTypeItem(_id)}
     lText={cx(title, abbreviation && `(${abbreviation})`)}
-    rText={!!unreadMessagesCount && (
+    rText={unreadMessagesCount ? (
       <LabelMessagesCount count={unreadMessagesCount} />
-    )}
+    ) : null}
+    count={risks.length}
   >
     <div className="sub">
       <RisksListContainer {...{ risks }} />

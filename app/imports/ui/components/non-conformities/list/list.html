@@ -15,7 +15,8 @@
               magnitude=this.value
               hideRTextOnExpand=true
               unreadMessagesCount=this.unreadMessagesCount
-              rText=(calculateTotalCost this.items)}}
+              rText=(calculateTotalCost this.items)
+              count=this.items.length}}
         {{/each}}
       {{/if}}
 
@@ -27,7 +28,8 @@
               title=(getStatusName this.status)
               hideRTextOnExpand=true
               unreadMessagesCount=this.unreadMessagesCount
-              rText=(calculateTotalCost this.items)}}
+              rText=(calculateTotalCost this.items)
+              count=this.items.length}}
         {{/each}}
       {{/if}}
 
@@ -40,7 +42,8 @@
               closeAllOnCollapse=false
               hideRTextOnExpand=true
               unreadMessagesCount=this.unreadMessagesCount
-              rText=(calculateTotalCost this.items)}}
+              rText=(calculateTotalCost this.items)
+              count=this.items.length}}
         {{/each}}
       {{/if}}
 
@@ -53,7 +56,8 @@
             closeAllOnCollapse=false
             hideRTextOnExpand=true
             unreadMessagesCount=this.unreadMessagesCount
-            rText=(calculateTotalCost this.items)}}
+            rText=(calculateTotalCost this.items)
+            count=this.items.length}}
         {{/each}}
       {{/if}}
 

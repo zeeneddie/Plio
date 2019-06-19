@@ -20,6 +20,7 @@ const TypeList = ({ projects, onToggleCollapse }) => (
         )}
         hideRTextOnCollapse
         onToggleCollapse={onToggleCollapse}
+        count={project.risks.length}
       >
         <div className="sub">
           <RisksListContainer risks={project.risks} />
