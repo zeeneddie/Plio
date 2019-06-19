@@ -26,7 +26,7 @@ import OrganizationAddContainer
 import useToggle from '../../hooks/useToggle';
 
 const RouteLabels = {
-  [RouteNames.CANVAS]: 'Canvas view',
+  [RouteNames.CANVAS]: 'CEO view',
   [RouteNames.DASHBOARD]: 'Operations view',
   [RouteNames.CANVAS_REPORT]: 'Print report',
 };
@@ -114,6 +114,13 @@ const OrganizationMenu = memo(({ organization: currentOrg, isDashboard }) => {
                       )}
                       <HeaderMenuItem
                         tag="a"
+                        href={router.path(RouteNames.DASHBOARD, { orgSerialNumber })}
+                        active={routeName === RouteNames.DASHBOARD}
+                      >
+                        {RouteLabels[RouteNames.DASHBOARD]}
+                      </HeaderMenuItem>
+                      <HeaderMenuItem
+                        tag="a"
                         href={router.path(RouteNames.CANVAS, { orgSerialNumber })}
                         active={routeName === RouteNames.CANVAS}
                       >
@@ -128,13 +135,6 @@ const OrganizationMenu = memo(({ organization: currentOrg, isDashboard }) => {
                           {RouteLabels[RouteNames.CANVAS_REPORT]}
                         </EmbeddedHeaderMenuItem>
                       )}
-                      <HeaderMenuItem
-                        tag="a"
-                        href={router.path(RouteNames.DASHBOARD, { orgSerialNumber })}
-                        active={routeName === RouteNames.DASHBOARD}
-                      >
-                        {RouteLabels[RouteNames.DASHBOARD]}
-                      </HeaderMenuItem>
 
                       <DropdownItem divider />
 

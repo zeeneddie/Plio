@@ -8,11 +8,16 @@ import { pick } from 'ramda';
 
 import { swal } from '../../../util';
 import { Mutation as Mutations } from '../../../graphql';
-import { HomeScreenTypes, HomeScreenLabels } from '../../../../share/constants';
+import { HomeScreenTypes } from '../../../../share/constants';
 import {
   SelectInputField,
   FormField,
 } from '../../components';
+
+const HomeScreenLabels = {
+  [HomeScreenTypes.OPERATIONS]: 'Operations view',
+  [HomeScreenTypes.CANVAS]: 'CEO view',
+};
 
 const homeScreenOptions = [
   {

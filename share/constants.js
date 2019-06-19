@@ -1032,11 +1032,6 @@ export const HomeScreenTypes = {
   CANVAS: 'canvas',
 };
 
-export const HomeScreenLabels = {
-  [HomeScreenTypes.OPERATIONS]: 'Operations view',
-  [HomeScreenTypes.CANVAS]: 'Canvas view',
-};
-
 export const DEFAULT_ORG_TIMEZONE = 'Europe/London';
 
 export const UniqueNumberRange = {
