@@ -28,7 +28,7 @@ const OrganizationAddContainer = memo(({
             name: '',
             owner: user.profile.fullName,
             currency: OrgCurrencies.GBP,
-            template: null,
+            template: { label: '', value: null },
           },
           onSubmit: async (values) => {
             const errors = validateOrganization(values);

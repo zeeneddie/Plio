@@ -44,6 +44,7 @@ function postSignUpHook(userId, {
       'profile.organizationName': '',
       'profile.organizationHomeScreen': '',
       'profile.organizationTimezone': '',
+      'profile.organizationTemplate': '',
     },
   });
 }

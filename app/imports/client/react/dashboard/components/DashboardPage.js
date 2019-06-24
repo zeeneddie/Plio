@@ -23,7 +23,7 @@ const DashboardPageWrapper = styled.div`
 `;
 
 const DashboardPage = ({ items = [], organization }) => (
-  <DashboardPageWrapper>
+  <DashboardPageWrapper id="DashboardPage">
     <MainHeader isDashboard {...{ organization }} />
     <div className="content no-flex scroll">
       <div className="container">

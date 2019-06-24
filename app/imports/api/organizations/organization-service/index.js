@@ -59,6 +59,7 @@ const OrganizationService = {
   collection: Organizations,
 
   insert({
+    _id,
     name,
     timezone,
     currency,
@@ -77,8 +78,7 @@ const OrganizationService = {
       rkScoringGuidelines,
       review,
     } = OrganizationDefaults;
-
-    const organizationId = this.collection.insert({
+    const orgObj = {
       name,
       timezone,
       currency,
@@ -97,7 +97,13 @@ const OrganizationService = {
       review,
       templateId,
       createdBy: ownerId,
-    });
+    };
+
+    if (Meteor.settings.public.stage === 'test') {
+      Object.assign(orgObj, { _id });
+    }
+
+    const organizationId = this.collection.insert(orgObj);
 
     const importArgs = { to: organizationId, from: templateId };
     const context = {
@@ -105,7 +111,11 @@ const OrganizationService = {
       collections: Collections,
     };
 
-    SharedOrganizationService.importFromTemplate(importArgs, context);
+    try {
+      SharedOrganizationService.importFromTemplate(importArgs, context);
+    } catch (err) {
+      console.error(err);
+    }
 
     Roles.addUsersToRoles(ownerId, OrgOwnerRoles, organizationId);
 

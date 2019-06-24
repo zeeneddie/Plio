@@ -8,9 +8,10 @@
     "lint:background-app": "yarn lint background-app",
     "lint:graphql-server": "yarn lint graphql-server",
     "jest": "./node_modules/.bin/jest",
+    "jest:e2e": "yarn jest --config=jest.puppeteer.config.js",
     "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "yarn jest test.js --testPathIgnorePatterns=.e2e.test.js",
-    "test:e2e": "yarn jest --config=jest.puppeteer.config.js .e2e.test.js",
+    "test:e2e": "yarn jest:e2e .e2e.test.js --runInBand",
     "kill:meteor": "kill `ps ax | grep node | grep meteor | awk '{print $1}'`",
     "kill:mongo": "kill `ps ax | grep mongod | grep port | awk '{print $1}'`"
   },
@@ -56,6 +57,7 @@
     "husky": "^1.1.2",
     "jest": "^24.8.0",
     "jest-css-modules-transform": "^1.0.5",
+    "jest-enzyme": "^7.0.2",
     "jest-puppeteer": "^4.2.0",
     "jest-styled-components": "^4.11.0-1",
     "jest-transform-graphql": "^2.1.0",
@@ -73,10 +75,8 @@
     "regenerator-runtime": "^0.13.2",
     "sift": "^6.0.0",
     "styled-components": "^3.1.5",
+    "unfetch": "^4.1.0",
     "xolvio-ddp": "^0.12.3"
   },
-  "dependencies": {
-    "jest-enzyme": "^7.0.2",
-    "unfetch": "^4.1.0"
-  }
+  "dependencies": {}
 }

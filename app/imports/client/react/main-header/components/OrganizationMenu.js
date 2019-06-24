@@ -76,7 +76,7 @@ const OrganizationMenu = memo(({ organization: currentOrg, isDashboard }) => {
   return (
     <FlowRouterContext getParam="orgSerialNumber" getRouteName>
       {({ orgSerialNumber, routeName, router }) => (
-        <StyledNav navbar className="nav pull-xs-left">
+        <StyledNav navbar className="nav pull-xs-left" id="OrganizationMenu">
           <Dropdown {...{ isOpen, toggle }}>
             <DropdownToggle nav caret>
               <OrganizationName>{currentOrg.name}</OrganizationName>

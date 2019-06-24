@@ -36,7 +36,7 @@ Template.UserDirectory_InviteUsers.viewmodel({
         const { invitedEmails = [], addedEmails = [] } = res;
         const invitedEmailsText = invitedEmails.length
           // eslint-disable-next-line max-len
-          ? `${pluralize('Invite', invitedEmails.length)} to ${invitedEmails.join(', ')} ${invitedEmails.length ? 'were' : 'was'} sent successfully.\n`
+          ? `${pluralize('Invite', invitedEmails.length)} to ${invitedEmails.join(', ')} ${invitedEmails.length > 1 ? 'were' : 'was'} sent successfully.\n`
           : '';
         const addedEmailsText = addedEmails.length
           // eslint-disable-next-line max-len

@@ -26,6 +26,7 @@ const UsersInviteForm = ({ onSubmit, initialValues }) => (
               <InputField
                 name={`${name}.value`}
                 placeholder="Email address"
+                autoFocus={index === 0}
               />
             </FormField>
           ))}
