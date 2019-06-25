@@ -128,6 +128,7 @@ export default (ctx) => {
         Organizations.update({ _id: organizationId }, {
           $set: {
             customerType: CustomerTypes.TEMPLATE,
+            signupPath: 'my-template',
           },
         });
       }, organizationId);

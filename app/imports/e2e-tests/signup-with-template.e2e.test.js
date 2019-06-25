@@ -1,6 +1,6 @@
 import createContext from './createContext.e2e';
 
-describe('e2e: sign-up', () => {
+describe('e2e: sign-up with template', () => {
   const context = createContext({});
 
   beforeAll(async () => {
@@ -9,11 +9,10 @@ describe('e2e: sign-up', () => {
     await context.clearDB();
   });
 
-  it('registers new user and imports document from "General purpose" organization', async () => {
+  it('registers new user and imports documents from template organization', async () => {
     await context.registerUsers();
     await context.createFixtures();
-    await context.execute(async (userId) => {
-      const { DEFAULT_TEMPLATE_ORGANIZATION_ID } = require('/imports/share/constants');
+    const template = await context.execute((userId) => {
       const { Organizations } = require('/imports/share/collections');
       const {
         default: StandardSectionService,
@@ -24,25 +23,30 @@ describe('e2e: sign-up', () => {
       const {
         default: RiskTypeService,
       } = require('/imports/api/risk-types/risk-types-service');
-      const templ = Organizations.findOne({ _id: DEFAULT_TEMPLATE_ORGANIZATION_ID });
-      const organizationId = templ._id;
+      const { CustomerTypes } = require('/imports/share/constants');
+      const templ = Organizations.findOne({
+        customerType: CustomerTypes.TEMPLATE,
+        signupPath: { $exists: true },
+      });
       StandardSectionService.insert({
-        organizationId,
+        organizationId: templ._id,
         title: 'Template',
       }, { userId });
       StandardTypeService.insert({
-        organizationId,
+        organizationId: templ._id,
         title: 'Template',
         abbreviation: 'TPL',
         createdBy: userId,
       });
       RiskTypeService.insert({
-        organizationId,
+        organizationId: templ._id,
         title: 'Template',
         abbreviation: 'TPL',
       });
+      return templ;
     }, context.state.users[1]._id);
-    await page.goto(`${process.env.ROOT_URL}/sign-up`);
+    await page.goto(`${process.env.ROOT_URL}/sign-up?template=${template.signupPath}`);
+    await expect(page).toMatch(template.name);
     await page.waitFor('#at-field-firstName');
     await page.type('#at-field-firstName', 'Hello');
     await page.type('#at-field-lastName', 'World');
@@ -51,31 +55,21 @@ describe('e2e: sign-up', () => {
     await page.type('#at-field-password_again', 'password');
     await page.type('#at-field-organizationName', 'Hello World');
     await page.click('#at-btn');
-    // eslint-disable-next-line max-len
-    await expect(page).toMatch('The verification email has been sent to john@doe.com. It will expire in 3 days');
-    const user = await context.execute(() => {
-      const { Meteor } = require('meteor/meteor');
-      return Meteor.users.findOne({ 'emails.address': 'john@doe.com' });
-    });
-    const { services: { email: { verificationTokens: [{ token }] } } } = user;
-    await page.goto(`${process.env.ROOT_URL}/verify-email/${token}`);
-    await expect(page).toMatch('Email verified! Thanks!');
-    const docs = await context.execute(async () => {
+    await page.waitFor(3000);
+    const docs = await context.execute(() => {
       const {
         Organizations,
         StandardsBookSections,
         StandardTypes,
         RiskTypes,
       } = require('/imports/share/collections');
-      const organization = Organizations.findOne({ name: 'Hello World' });
-      const organizationId = organization._id;
+      const { _id: organizationId } = Organizations.findOne({ name: 'Hello World' });
       return [
         StandardsBookSections.findOne({ organizationId, title: 'Template' }),
         StandardTypes.findOne({ organizationId, title: 'Template' }),
         RiskTypes.findOne({ organizationId, title: 'Template' }),
       ];
     });
-
     docs.forEach(doc => expect(doc).toEqual(expect.anything()));
   });
 });

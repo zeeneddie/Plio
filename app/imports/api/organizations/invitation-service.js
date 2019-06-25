@@ -211,7 +211,7 @@ class InvitationSender {
       notificationSubject = `You have been added to the ${this._organization.name} management system`;
       this._sendExistingUserInvite(userIdToInvite, notificationSubject, basicNotificationData);
     } else {
-      notificationSubject = `You have been invited to to join the ${this._organization.name} management system`;
+      notificationSubject = `You have been invited to join the ${this._organization.name} management system`;
       this._sendNewUserInvite(userIdToInvite, notificationSubject, basicNotificationData);
     }
   }
