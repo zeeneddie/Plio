@@ -107,6 +107,11 @@ AccountsTemplates.configureRoute('verifyEmail', {
   template: 'VerifyEmailPage',
   contentRegion: 'content',
   redirect() {
+    if (process.env.NODE_ENV === 'production') {
+      window.gtag('event', 'sign-up', {
+        send_to: 'AW-744004634/RTBeCLKwsaMBEJq44uIC',
+      });
+    }
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('hello');
     });
