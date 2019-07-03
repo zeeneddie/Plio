@@ -18,6 +18,7 @@ const SectionListItem = ({
     )}
     hideRTextOnCollapse
     onToggleCollapse={onToggleCollapse}
+    count={section.standards.length}
   >
 
     <StandardListContainer

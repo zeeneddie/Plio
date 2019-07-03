@@ -21,6 +21,7 @@ const TypeList = ({ types, onToggleCollapse }) => (
         )}
         hideRTextOnCollapse
         onToggleCollapse={onToggleCollapse}
+        count={type.standards.length}
       >
         <div className="sub">
           {type._id === TYPE_UNCATEGORIZED ? (
