@@ -263,7 +263,7 @@ const OrganizationEditableFields = {
   name: {
     type: String,
     min: 1,
-    max: 40,
+    max: 64,
     index: 1,
     unique: true,
   },
