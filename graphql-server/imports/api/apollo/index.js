@@ -55,7 +55,7 @@ server.applyMiddleware({
     origin: Meteor.settings.mainApp.url,
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   },
-  bodyParser: {
+  bodyParserConfig: {
     limit: '16mb',
     extended: false,
   },
