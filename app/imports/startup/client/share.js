@@ -12,4 +12,7 @@ ViewModel.share({
   uploader: {
     uploads: new ReactiveArray(),
   },
+  workInbox: {
+    isListRendered: false,
+  },
 });

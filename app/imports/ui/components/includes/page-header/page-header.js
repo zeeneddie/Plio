@@ -43,14 +43,19 @@ Template.PageHeader.viewmodel({
 
     const filters = Object.keys(filterMap).map((key) => {
       const filter = filterMap[key];
-      const { title = '', name = '', prepend = '' } = filter;
+      const {
+        title = '',
+        name = '',
+        prepend = '',
+        append = '',
+      } = filter;
       const header = title ? `${title} - ` : '';
 
       return {
         ...filter,
         header,
         value: key,
-        text: `${prepend} ${name}`,
+        text: `${prepend} ${name} ${append}`.trim(),
       };
     });
     const activeFilter = filters.find(({ value }) => isActiveFilter(value));

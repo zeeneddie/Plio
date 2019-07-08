@@ -13,7 +13,7 @@ import { getLinkedDoc } from '../../../../api/work-items/helpers';
 
 
 Template.WorkInbox_List.viewmodel({
-  share: 'search',
+  share: ['search', 'workInbox'],
   mixin: [
     'search', 'collapsing', 'organization',
     'modal', 'workInbox', 'router',
@@ -76,6 +76,10 @@ Template.WorkInbox_List.viewmodel({
         }
       }
     }
+  },
+  onRendered() {
+    // shared prop
+    this.isListRendered(true);
   },
   _findWorkItemForFilter(_id, filter = this.activeWorkInboxFilterId()) {
     const allItems = Object.assign({}, this.items());
