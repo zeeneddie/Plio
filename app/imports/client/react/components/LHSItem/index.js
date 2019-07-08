@@ -65,7 +65,7 @@ const LHSItem = ({
           {count ? (
             <StyledRightContent>
               {rContent}
-              <ListGroupItemText className="margin-left">{count}</ListGroupItemText>
+              <ListGroupItemText className="margin-left-2x">{count}</ListGroupItemText>
             </StyledRightContent>
           ) : rContent}
         </div>
