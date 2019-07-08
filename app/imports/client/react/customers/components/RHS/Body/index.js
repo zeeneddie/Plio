@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { _ } from 'meteor/underscore';
 import { ListGroup } from 'reactstrap';
+import { Meteor } from 'meteor/meteor';
 
 import { CustomerTypesNames } from '/imports/share/constants';
 import {
@@ -51,7 +52,7 @@ const CustomersRHSBody = ({
     { label: 'Created date', text: getFormattedDate(createdAt) },
     { label: 'Type', text: CustomerTypesNames[customerType] },
     { label: 'Sign-up path', text: SignupPaths[homeScreenType] },
-    { label: 'Sign-up URL', text: signupPath },
+    { label: 'Sign-up URL', text: Meteor.absoluteUrl(`sign-up?template=${signupPath}`) },
   ];
   const fields = _.values(createReadFields(data)).map((field, i) => ({
     ...field,
