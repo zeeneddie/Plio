@@ -2001,7 +2001,7 @@ performance-now@^2.1.0:
 
 "plio-util@https://github.com/Pliohub/plio-util.git#devel":
   version "0.2.2"
-  resolved "https://github.com/Pliohub/plio-util.git#dd7453a5705358b1b8595f6cfc3edcb7dae175d9"
+  resolved "https://github.com/Pliohub/plio-util.git#fad9f6350cf0bff1d8fe81bbc9c0420a44b0b89b"
 
 postcss-value-parser@^3.3.0:
   version "3.3.0"
