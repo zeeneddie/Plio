@@ -37,7 +37,7 @@ const CustomerForm = ({ save }) => {
         is={CustomerTypes.TEMPLATE}
       >
         <FormField>
-          Sign-up URL
+          Sign-up URL suffix
           <InputField
             name="signupPath"
             placeholder="Sign-up URL"
