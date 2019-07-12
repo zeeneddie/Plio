@@ -9,12 +9,13 @@ import {
   DropdownItem,
   Nav,
 } from 'reactstrap';
+import { propEq, ascend, prop } from 'ramda';
 
 import ModalMixin from '../../../../startup/client/mixins/modal';
 import { setSelectedOrgSerialNumber } from '../../../../api/helpers';
 import { APP_VERSION, RouteNames } from '../../../../api/constants';
 import { OrganizationSettingsHelp } from '../../../../api/help-messages';
-import { UserRoles } from '../../../../share/constants';
+import { UserRoles, CustomerTypes } from '../../../../share/constants';
 import { Query as Queries } from '../../../graphql';
 import { FlowRouterContext, RenderSwitch, Preloader } from '../../components';
 import HeaderMenuItem from './HeaderMenuItem';
@@ -30,6 +31,8 @@ const RouteLabels = {
   [RouteNames.DASHBOARD]: 'Operations view',
   [RouteNames.CANVAS_REPORT]: 'Print report',
 };
+
+const byName = ascend(prop('name'));
 
 const DropdownMenuStyled = styled(DropdownMenu)`
   min-width: 330px;
@@ -138,20 +141,23 @@ const OrganizationMenu = memo(({ organization: currentOrg, isDashboard }) => {
 
                       <DropdownItem divider />
 
-                      {organizations.map(({ _id, name, serialNumber }) => (
-                        <HeaderMenuItem
-                          key={_id}
-                          // TODO delete line below when dashboard page will be on React
-                          toggle={!isDashboard}
-                          onClick={() => {
-                            setSelectedOrgSerialNumber(serialNumber, user._id);
-                            router.setParams({ orgSerialNumber: serialNumber });
-                          }}
-                          active={currentOrg._id === _id}
-                        >
-                          {name}
-                        </HeaderMenuItem>
-                      ))}
+                      {organizations
+                        .filter(({ customerType }) => customerType !== CustomerTypes.TEMPLATE)
+                        .sort(byName)
+                        .map(({ _id, name, serialNumber }) => (
+                          <HeaderMenuItem
+                            key={_id}
+                            // TODO delete line below when dashboard page will be on React
+                            toggle={!isDashboard}
+                            onClick={() => {
+                              setSelectedOrgSerialNumber(serialNumber, user._id);
+                              router.setParams({ orgSerialNumber: serialNumber });
+                            }}
+                            active={currentOrg._id === _id}
+                          >
+                            {name}
+                          </HeaderMenuItem>
+                        ))}
 
                       <DropdownItem divider />
 
@@ -192,6 +198,30 @@ const OrganizationMenu = memo(({ organization: currentOrg, isDashboard }) => {
                           </HeaderMenuItem>
                         </Fragment>
                       )}
+
+                      {user.isPlioUser ? (
+                        <Fragment>
+                          <DropdownItem divider />
+
+                          {organizations
+                            .sort(byName)
+                            .filter(propEq('customerType', CustomerTypes.TEMPLATE))
+                            .map(({ _id, name, serialNumber }) => (
+                              <HeaderMenuItem
+                                key={_id}
+                                // TODO delete line below when dashboard page will be on React
+                                toggle={!isDashboard}
+                                onClick={() => {
+                                  setSelectedOrgSerialNumber(serialNumber, user._id);
+                                  router.setParams({ orgSerialNumber: serialNumber });
+                                }}
+                                active={currentOrg._id === _id}
+                              >
+                                {name}
+                              </HeaderMenuItem>
+                            ))}
+                        </Fragment>
+                      ) : null}
 
                       <DropdownItem divider />
                       <HeaderMenuItem disabled>

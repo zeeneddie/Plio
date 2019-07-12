@@ -16,7 +16,7 @@ type Organization implements BaseEntity {
   rkGuidelines: Guidelines
   pgGuidelines: Guidelines
   rkScoringGuidelines: String
-  # customerType - hide for security reasons?
+  customerType: Int
   homeScreenTitles: HomeScreenTitles
   lastAccessedDate: DateTime
   workflowDefaults: WorkflowDefaults

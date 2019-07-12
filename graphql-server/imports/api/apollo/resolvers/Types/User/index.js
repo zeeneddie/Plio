@@ -1,4 +1,7 @@
-import { createOrgQueryWhereUserIsOwner } from '../../../../../share/mongo';
+import {
+  createOrgQueryWhereUserIsOwner,
+  createOrgQueryWhereUserIsMember,
+} from '../../../../../share/mongo';
 
 export default {
   User: {
@@ -7,7 +10,10 @@ export default {
     isPlioUser: async (root, args, context) => {
       const { _id: userId } = root;
       const { loaders: { Organization: { byQuery } } } = context;
-      const organizations = await byQuery.load({ isAdminOrg: true, 'users.userId': userId });
+      const organizations = await byQuery.load({
+        isAdminOrg: true,
+        ...createOrgQueryWhereUserIsMember(userId),
+      });
       return !!organizations.length;
     },
     isPlioAdmin: async (root, args, context) => {
