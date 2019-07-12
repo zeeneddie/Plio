@@ -109,6 +109,7 @@ const OrganizationMenu = memo(({ organization: currentOrg, isDashboard }) => {
                       {currentOrg && user && user._id && (
                         <OrganizationAddContainer
                           {...{ user }}
+                          skip={!isCreateModalOpen}
                           isOpen={isCreateModalOpen}
                           toggle={toggleCreateModal}
                           component={OrganizationAddModal}

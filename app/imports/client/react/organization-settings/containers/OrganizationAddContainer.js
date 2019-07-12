@@ -1,34 +1,68 @@
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
 import moment from 'moment-timezone';
-import { ApolloConsumer } from 'react-apollo';
-import { propEq, prop } from 'ramda';
+import {
+  propEq,
+  prop,
+  pathOr,
+} from 'ramda';
+import { Query } from 'react-apollo';
 
 import { renderComponent } from '../../helpers';
-import { OrgCurrencies } from '../../../../share/constants';
+import {
+  OrgCurrencies,
+  CustomerTypes,
+  DEFAULT_TEMPLATE_ORGANIZATION_ID,
+} from '../../../../share/constants';
 import { insert } from '../../../../api/organizations/methods';
 import { Query as Queries } from '../../../graphql';
 import validateOrganization from '../../../validation/validators/validateOrganization';
 import FlowRouterContext from '../../components/FlowRouter/FlowRouterContext';
 
+const getDefaultTemplate = (data) => {
+  const organizations = pathOr([], ['organizations', 'organizations'], data);
+  const template = organizations.find(propEq('_id', DEFAULT_TEMPLATE_ORGANIZATION_ID));
+  return template ? {
+    label: template.name,
+    value: template._id,
+  } : {
+    label: '',
+    value: null,
+  };
+};
+
 const OrganizationAddContainer = memo(({
   organizationId,
   user,
   onLink,
+  skip,
   ...props
 }) => (
   <FlowRouterContext>
     {({ router }) => (
-      <ApolloConsumer>
-        {client => renderComponent({
+      <Query
+        {...{ skip }}
+        query={Queries.ORGANIZATIONS}
+        variables={{
+          customerType: CustomerTypes.TEMPLATE,
+        }}
+      >
+        {({
+          client,
+          data,
+          loading,
+          error,
+        }) => renderComponent({
           ...props,
+          loading,
+          error,
           initialValues: {
             email: user.email,
             timezone: moment.tz.guess(),
             name: '',
             owner: user.profile.fullName,
             currency: OrgCurrencies.GBP,
-            template: { label: '', value: null },
+            template: getDefaultTemplate(data),
           },
           onSubmit: async (values) => {
             const errors = validateOrganization(values);
@@ -73,7 +107,7 @@ const OrganizationAddContainer = memo(({
             return undefined;
           },
         })}
-      </ApolloConsumer>
+      </Query>
     )}
   </FlowRouterContext>
 ));

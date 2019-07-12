@@ -97,6 +97,7 @@ Template.HelloPage.viewmodel({
       <ApolloProvider {...{ client }}>
         <OrganizationAddContainer
           {...{ user }}
+          skip={!this.isOpen()}
           isOpen={this.isOpen()}
           toggle={toggle}
           organizationId={null}

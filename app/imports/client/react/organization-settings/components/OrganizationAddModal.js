@@ -8,6 +8,7 @@ import {
   EntityModalBody,
   EntityModalForm,
   CardBlock,
+  RenderSwitch,
 } from '../../components';
 import OrganizationForm from './OrganizationForm';
 
@@ -16,8 +17,17 @@ const OrganizationCreateModal = memo(({
   toggle,
   onSubmit,
   initialValues,
+  loading,
+  error,
 }) => (
-  <EntityModalNext {...{ isOpen, toggle }}>
+  <EntityModalNext
+    {...{
+      isOpen,
+      toggle,
+      loading,
+      error,
+    }}
+  >
     <EntityModalForm
       {...{ initialValues, onSubmit }}
       keepDirtyOnReinitialize
@@ -26,13 +36,24 @@ const OrganizationCreateModal = memo(({
         <Fragment>
           <EntityModalHeader label="New organization" />
           <EntityModalBody>
-            <CardBlock>
-              <Form onSubmit={handleSubmit}>
-                {/* hidden input is needed for return key to work */}
-                <input hidden type="submit" />
-                <OrganizationForm />
-              </Form>
-            </CardBlock>
+            <RenderSwitch
+              {...{ loading }}
+              renderLoading={(
+                <CardBlock>
+                  <OrganizationForm />
+                </CardBlock>
+              )}
+            >
+              {() => (
+                <CardBlock>
+                  <Form onSubmit={handleSubmit}>
+                    {/* hidden input is needed for return key to work */}
+                    <input hidden type="submit" />
+                    <OrganizationForm />
+                  </Form>
+                </CardBlock>
+              )}
+            </RenderSwitch>
           </EntityModalBody>
         </Fragment>
       )}
