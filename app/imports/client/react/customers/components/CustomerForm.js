@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 import { useField } from 'react-final-form';
 
 import { FormField, InputField, SelectField, FieldCondition } from '../../components';
@@ -11,7 +11,7 @@ const customerTypes = Object.values(CustomerTypes).map(type => ({
   text: CustomerTypesNames[type],
 }));
 
-const CustomerForm = ({ save }) => {
+const CustomerForm = memo(({ save }) => {
   const { input: { value: serialNumber } } = useField('serialNumber');
 
   return (
@@ -40,14 +40,14 @@ const CustomerForm = ({ save }) => {
           Sign-up URL suffix
           <InputField
             name="signupPath"
-            placeholder="Sign-up URL"
+            placeholder="Sign-up URL suffix"
             onBlur={save}
           />
         </FormField>
       </FieldCondition>
     </Fragment>
   );
-};
+});
 
 CustomerForm.propTypes = {
   save: PropTypes.func,
