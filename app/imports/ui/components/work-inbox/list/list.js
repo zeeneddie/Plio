@@ -81,6 +81,9 @@ Template.WorkInbox_List.viewmodel({
     // shared prop
     this.isListRendered(true);
   },
+  onDestroyed() {
+    this.isListRendered(false);
+  },
   _findWorkItemForFilter(_id, filter = this.activeWorkInboxFilterId()) {
     const allItems = Object.assign({}, this.items());
     const itemsForFilter = this._getWorkItemsForFilter(allItems, filter);
