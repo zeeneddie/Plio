@@ -28,7 +28,8 @@ export default {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +
-            '{{{userName}}} completed root cause analysis of {{{docDesc}}} {{{docName}}}' +
+            '{{{userName}}} completed root cause analysis of {{{docDesc}}} {{{docName}}}.' +
+            'Now add corrective or preventative actions in order to manage this nonconformity.' +
           '{{else}}' +
             '{{{userName}}} canceled root cause analysis of {{{docDesc}}} {{{docName}}}' +
           '{{/if}}',
