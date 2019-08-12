@@ -33,7 +33,7 @@ export const job = async () => {
 SyncedCron.add({
   name: 'Removes organization members that are no longer Plio users',
   schedule(parser) {
-    return parser.text('every 1 minute');
+    return parser.text('every 1 day');
   },
   job,
 });
