@@ -19,3 +19,4 @@ import './default-help-sections';
 import './register-api';
 import './browser-versions';
 import './backdoor';
+import './mongo';
