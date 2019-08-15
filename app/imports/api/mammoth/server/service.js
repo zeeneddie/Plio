@@ -55,7 +55,7 @@ export default {
               </head>
               <body>
                 <div id="content">
-                  ${res2.value}
+                  ${res2.value.replace(/<a/g, '<a target="_blank"')}
                 </div>
               </body>
             </html>
