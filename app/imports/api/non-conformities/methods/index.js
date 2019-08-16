@@ -314,7 +314,7 @@ export const remove = new CheckedMethod({
   check: checker => injectNC(checker)(onRemoveChecker),
 
   run({ _id }) {
-    return NonConformitiesService.remove({ _id, deletedBy: this.userId });
+    return NonConformitiesService.remove({ _id }, { userId: this.userId });
   },
 });
 
