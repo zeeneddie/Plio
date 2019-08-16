@@ -87,7 +87,7 @@ export default Object.assign({}, ProblemsService, {
     return this.collection.update(query, modifier);
   },
   remove({ _id }, { userId } = {}) {
-    return this._service.remove({
+    return ProblemsService.remove.call(this, {
       _id,
       deletedBy: userId,
     });
