@@ -1,14 +1,14 @@
-# PLIO
+# Plio
 
-The first on-demand system for compliance management in the enterprise, using lean principles
+A software tool for managing continuous improvement processes, including quality improvement and compliance management
 
-Plio is built using the Meteor JS framework, following the architecture, style guide and best practices defined in [Meteor Guide 1.3](https://guide.meteor.com).
+Plio is built using the Meteor JS and Apollo frameworks.
 
-# MOTIVATION
+# Motivation
 
-Plio is a collaborative software tool designed to support a new approach to compliance management based on the principles of continuous improvement.
+Plio is a tool that integrates document management, workflow and team collaboration to provide a more streamlined way of managing continuous improvement processes.
 
-Regulated organizations face particular challenges. Not only do they need to meet the requirements of customers but also the requirements of their regulatory agency. By applying the principles of continuous improvement, businesses can streamline the compliance management process whilst simultaneously finding ways to reduce cost and waste.
+With Plio, teams can eliminate the drudgery from running quality improvement and compliance management processes whilst simultaneously finding ways to reduce cost and waste.
 
 Plio helps an organization to create and maintain a standards book for its key processes and policies, supporting real-time discussion around each process.  It also helps streamline the management of corrective and preventative actions that are implemented to improve these processes and policies.
 
@@ -18,7 +18,7 @@ Source: https://www.getvetter.com/posts/129-define-continuous-improvement-8-expe
 
 Also see: http://www.oceg.org/resources/leangrc-lean-grc-series/
 
-# GETTING STARTED
+# Getting started
 
 ## 1. Clone this repository ##
 
@@ -55,9 +55,6 @@ This means that someone added a new npm module and you need to install it.
 
 #DEVELOPMENT
 
-## UI prototype
-The latest ui prototype:
-[http://ui2.isometrica.io/ui1-3/index.html](http://ui2.isometrica.io/ui1-3/index.html)
 
 ## Contribution process
 
@@ -143,7 +140,7 @@ update.call({ _id, name }, handleMethodResult((err, res) => {
 
 ## Fixtures
 
-All fixure documents are defined in the json format in `app/private/fixtures`.
+All fixture documents are defined in the json format in `app/private/fixtures`.
 
 To add a new document, you need to create a new json file under the proper directory.
 Each directory stands for a Meteor collection.
